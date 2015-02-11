@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,14 +25,15 @@ import java.util.Map;
  */
 public class Swagger2AsciiDocConverter {
     private static final Logger logger = LoggerFactory.getLogger(Swagger2AsciiDocConverter.class);
-    public static final String VERSION = "Version: ";
-    public static final String SUMMARY = "Summary";
-    public static final String DESCRIPTION = "Description";
-    public static final String PARAMETERS = "Parameters";
-    public static final String PRODUCES = "Produces";
-    public static final String CONSUMES = "Consumes";
-    public static final String RESPONSES = "Responses";
-    public static final String DEFINITIONS = "Definitions";
+    private static final String VERSION = "Version: ";
+    private static final String SUMMARY = "Summary";
+    private static final String DESCRIPTION = "Description";
+    private static final String PARAMETERS = "Parameters";
+    private static final String PRODUCES = "Produces";
+    private static final String CONSUMES = "Consumes";
+    private static final String RESPONSES = "Responses";
+    private static final String DEFINITIONS = "Definitions";
+    private static final List<String> IGNORED_DEFINITIONS = Arrays.asList("Void");
     private final AsciiDocBuilder asciiDocBuilder;
     private final Swagger swagger;
     private final String asciiDocFileLocation;
@@ -147,8 +149,6 @@ public class Swagger2AsciiDocConverter {
         }
     }
 
-
-
     private void responses(Operation operation) {
         Map<String, Response> responses = operation.getResponses();
         if(MapUtils.isNotEmpty(responses)){
@@ -172,19 +172,21 @@ public class Swagger2AsciiDocConverter {
             asciiDocBuilder.sectionTitleLevel1(DEFINITIONS);
             for(Map.Entry<String, Model> definitionsEntry : definitions.entrySet()){
                 String definitionName = definitionsEntry.getKey();
-                asciiDocBuilder.sectionTitleLevel2(definitionName);
-                Model response = definitionsEntry.getValue();
-                Map<String, Property> properties = response.getProperties();
-                List<String> csvContent = new ArrayList<>();
-                csvContent.add("Name,Type,Required");
-                for(Map.Entry<String, Property> propertyEntry : properties.entrySet()){
-                    Property property = propertyEntry.getValue();
-                    StringBuilder rowBuilder = new StringBuilder();
-                    rowBuilder.append(propertyEntry.getKey()).append(",").
-                            append(property.getType()).append(",").append(property.getRequired());
-                    csvContent.add(rowBuilder.toString());
+                if(!IGNORED_DEFINITIONS.contains(definitionName)) {
+                    asciiDocBuilder.sectionTitleLevel2(definitionName);
+                    Model model = definitionsEntry.getValue();
+                    Map<String, Property> properties = model.getProperties();
+                    List<String> csvContent = new ArrayList<>();
+                    csvContent.add("Name,Type,Required");
+                    for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
+                        Property property = propertyEntry.getValue();
+                        StringBuilder rowBuilder = new StringBuilder();
+                        rowBuilder.append(propertyEntry.getKey()).append(",").
+                                append(property.getType()).append(",").append(property.getRequired());
+                        csvContent.add(rowBuilder.toString());
+                    }
+                    asciiDocBuilder.tableWithHeaderRow(csvContent);
                 }
-                asciiDocBuilder.tableWithHeaderRow(csvContent);
             }
         }
     }

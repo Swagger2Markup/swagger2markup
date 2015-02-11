@@ -1,0 +1,43 @@
+= swagger2AsciiDoc
+This project is a Swagger to AsciiDoc converter. It takes an swagger.json or swagger.yaml as an input file 
+and generates an AsciiDoc file.
+The primary goal of this project is to simplify the documentation of RESTful APIs. For example, you could
+generate your AsciiDoc documentation using Spring Boot and swagger-springmvc as follows:
+
+[source,java]
+----
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = SpringBootSwaggerConfig.class)
+@IntegrationTest
+@WebAppConfiguration
+public class Swagger2AsciiDocTest {
+
+    @Test
+    public void convertSwaggerToAsciiDoc() {
+        Swagger2AsciiDocConverter.newInstance("http://localhost:8080/api-docs", "src/docs/asciidoc/example.adoc").convertSwagger2AsciiDoc();
+    }
+
+}
+----
+
+You can then generate HTML5 and PDF documentation via Asciidoctorj or even better via the asciidoctor-gradle-plugin.
+
+== Example swagger.json
+image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG
+
+== Example generated AsciiDoc file
+image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PNG
+
+== Example generated HTML
+image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG
+
+== License
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at [apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

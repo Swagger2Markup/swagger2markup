@@ -14,13 +14,21 @@ apply plugin: 'maven'
 apply plugin: 'org.asciidoctor.convert'
 
 version = '0.1.0'
-group = 'io.swagger2AsciiDoc'
+group = 'io.swagger2asciidoc'
 
 repositories {
     jcenter()
     mavenCentral()
     mavenLocal()
     maven {url "https://oss.sonatype.org/content/repositories/snapshots"}
+}
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "1.7"
+    targetCompatibility = "1.7"
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked"
 }
 
 dependencies {
