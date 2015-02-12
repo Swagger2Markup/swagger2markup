@@ -19,7 +19,8 @@ public class Swagger2AsciiDocTest {
 
     @Test
     public void convertSwaggerToAsciiDoc() {
-        Swagger2AsciiDocConverter.newInstance("http://localhost:8080/api-docs", "src/docs/asciidoc/example.adoc").convertSwagger2AsciiDoc();
+        Swagger2AsciiDocConverter.from("http://localhost:8080/api-docs")
+            .convertTo("src/docs/asciidoc/swagger.adoc");
     }
 
 }

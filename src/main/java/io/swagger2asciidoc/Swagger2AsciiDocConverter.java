@@ -36,19 +36,18 @@ public class Swagger2AsciiDocConverter {
     private static final List<String> IGNORED_DEFINITIONS = Arrays.asList("Void");
     private final AsciiDocBuilder asciiDocBuilder;
     private final Swagger swagger;
-    private final String asciiDocFileLocation;
 
-    private Swagger2AsciiDocConverter(String swaggerFileLocation, String asciiDocFileLocation){
+    private Swagger2AsciiDocConverter(String swaggerFileLocation){
         swagger =  new SwaggerParser().read(swaggerFileLocation);
-        this.asciiDocFileLocation = asciiDocFileLocation;
+
         asciiDocBuilder = new AsciiDocBuilder();
     }
 
-    public static Swagger2AsciiDocConverter newInstance(String swaggerFileLocation, String asciiDocFileLocation){
-        return new Swagger2AsciiDocConverter(swaggerFileLocation, asciiDocFileLocation);
+    public static Swagger2AsciiDocConverter from(String swaggerFileLocation){
+        return new Swagger2AsciiDocConverter(swaggerFileLocation);
     }
 
-    public void convertSwagger2AsciiDoc(){
+    public void convertTo(String asciiDocFileLocation){
         documentHeader(swagger.getInfo());
         paths(swagger.getPaths());
         definitions(swagger.getDefinitions());
