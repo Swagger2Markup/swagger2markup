@@ -57,6 +57,7 @@ public class SpringBootSwaggerConfig {
 
 You can then generate HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin].
 
+
 == Example
 == swagger.json
 image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG[swagger_json]
