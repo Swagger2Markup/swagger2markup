@@ -6,12 +6,15 @@ buildscript {
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
         classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
+        classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'jacoco'
+apply plugin: 'com.github.kt3k.coveralls'
 
 version = '0.1.0'
 group = 'io.swagger2asciidoc'
@@ -43,4 +46,11 @@ asciidoctor {
             toc: 'left',
             toclevels: '1'
     ]
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
 }
