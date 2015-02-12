@@ -1,4 +1,5 @@
 image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"]
+image:https://coveralls.io/repos/RobWin/swagger2asciidoc/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2asciidoc"]
 
 = swagger2AsciiDoc
 This project is a Swagger to AsciiDoc converter. It takes an swagger.json or swagger.yaml as an input file 
