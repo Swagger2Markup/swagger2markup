@@ -4,7 +4,7 @@ and generates an AsciiDoc file.
 The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to 
 be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation].
 
-You could generate your AsciiDoc documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:
+For example, you can generate your AsciiDoc documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:
 
 [source,java]
 ----
