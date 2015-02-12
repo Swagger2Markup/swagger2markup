@@ -57,14 +57,20 @@ public class SpringBootSwaggerConfig {
 
 You can then generate HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin].
 
-== Example swagger.json
+== Example
+== swagger.json
 image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG[swagger_json]
 
-== Example generated AsciiDoc file
+=== Generated AsciiDoc file
 image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PNG[asciidoc]
 
-== Example generated HTML
+=== Generated HTML
 image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG[asciidoc_html]
+
+== Build
+The project is build and tested with Travis CI. Build status of master branch is:
+
+image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"]
 
 == License
 Licensed under the Apache License, Version 2.0 (the "License");
