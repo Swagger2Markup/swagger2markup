@@ -124,10 +124,10 @@ public class Swagger2AsciiDocConverter {
     }
 
     private void produces(Operation operation) {
-        List<String> consumes = operation.getProduces();
-        if(CollectionUtils.isNotEmpty(consumes)){
+        List<String> produces = operation.getProduces();
+        if(CollectionUtils.isNotEmpty(produces)){
             asciiDocBuilder.sectionTitleLevel2(PRODUCES);
-            asciiDocBuilder.unorderedList(consumes);
+            asciiDocBuilder.unorderedList(produces);
         }
     }
 
