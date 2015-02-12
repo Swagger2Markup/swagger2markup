@@ -1,8 +1,10 @@
 = swagger2AsciiDoc
 This project is a Swagger to AsciiDoc converter. It takes an swagger.json or swagger.yaml as an input file 
-and generates an AsciiDoc file.
-The primary goal of this project is to simplify the documentation of RESTful APIs. For example, you could
-generate your AsciiDoc documentation using Spring Boot and swagger-springmvc as follows:
+and generates an AsciiDoc file. 
+The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to 
+be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation].
+
+You could generate your AsciiDoc documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:
 
 [source,java]
 ----
@@ -20,16 +22,49 @@ public class Swagger2AsciiDocTest {
 }
 ----
 
-You can then generate HTML5 and PDF documentation via Asciidoctorj or even better via the asciidoctor-gradle-plugin.
+[source,java]
+----
+@SpringBootApplication
+@EnableSwagger
+public class SpringBootSwaggerConfig {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringBootTestConfig.class, args);
+    }
+
+    @Autowired
+    private SpringSwaggerConfig springSwaggerConfig;
+
+    @Bean
+    public SwaggerSpringMvcPlugin customImplementation(){
+        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
+                .apiInfo(apiInfo()).excludeAnnotations(Controller.class);
+    }
+
+    private ApiInfo apiInfo() {
+        ApiInfo apiInfo = new ApiInfo(
+                "My Apps API Title",
+                "My Apps API Description",
+                "My Apps API terms of service",
+                "My Apps API Contact Email",
+                "My Apps API Licence Type",
+                "My Apps API License URL"
+        );
+        return apiInfo;
+    }
+}
+----
+
+You can then generate HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin].
 
 == Example swagger.json
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG
+image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG[swagger_json]
 
 == Example generated AsciiDoc file
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PNG
+image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PNG[asciidoc]
 
 == Example generated HTML
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG
+image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG[asciidoc_html]
 
 == License
 Licensed under the Apache License, Version 2.0 (the "License");
