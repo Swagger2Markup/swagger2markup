@@ -1,3 +1,5 @@
+image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"]
+
 = swagger2AsciiDoc
 This project is a Swagger to AsciiDoc converter. It takes an swagger.json or swagger.yaml as an input file 
 and generates an AsciiDoc file. 
@@ -67,11 +69,6 @@ image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PN
 
 === Generated HTML
 image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG[asciidoc_html]
-
-== Build
-The project is build and tested with Travis CI. Build status of master branch is:
-
-image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"]
 
 == License
 Licensed under the Apache License, Version 2.0 (the "License");
