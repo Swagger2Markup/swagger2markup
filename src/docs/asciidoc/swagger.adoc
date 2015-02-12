@@ -80,7 +80,7 @@ status,query,Status values that need to be considered for filter,false
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.ArrayProperty@699bc508
+200,successful operation,com.wordnik.swagger.models.properties.ArrayProperty@35c98ec9
 400,Invalid status value,null
 |===
 
@@ -107,7 +107,7 @@ tags,query,Tags to filter by,false
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.ArrayProperty@5f259e0f
+200,successful operation,com.wordnik.swagger.models.properties.ArrayProperty@7932b9a0
 400,Invalid tag value,null
 |===
 
@@ -134,7 +134,7 @@ petId,path,ID of pet that needs to be fetched,true
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@7db471e1
+200,successful operation,com.wordnik.swagger.models.properties.RefProperty@7abec52d
 400,Invalid ID supplied,null
 404,Pet not found,null
 |===
@@ -208,7 +208,7 @@ body,body,order placed for purchasing the pet,false
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@e2df24b
+200,successful operation,com.wordnik.swagger.models.properties.RefProperty@42a22692
 400,Invalid Order,null
 |===
 
@@ -235,7 +235,7 @@ orderId,path,ID of pet that needs to be fetched,true
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@3929d503
+200,successful operation,com.wordnik.swagger.models.properties.RefProperty@3b6447c9
 400,Invalid ID supplied,null
 404,Order not found,null
 |===
@@ -357,7 +357,7 @@ password,query,The password for login in clear text,false
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.StringProperty@4a8fe1cf
+200,successful operation,com.wordnik.swagger.models.properties.StringProperty@577716bc
 400,Invalid username/password supplied,null
 |===
 
@@ -395,7 +395,7 @@ username,path,The name that needs to be fetched. Use user1 for testing.,true
 [format="csv", options="header"]
 |===
 Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@146aaa06
+200,successful operation,com.wordnik.swagger.models.properties.RefProperty@5b6c26d2
 400,Invalid username supplied,null
 404,User not found,null
 |===

@@ -54,3 +54,7 @@ jacocoTestReport {
         html.enabled = true
     }
 }
+
+tasks.coveralls {
+    dependsOn 'check'
+}
