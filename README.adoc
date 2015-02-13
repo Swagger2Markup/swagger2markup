@@ -3,7 +3,7 @@
 :version: 0.1.0
 :hardbreaks:
 
-image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"] image:https://coveralls.io/repos/RobWin/swagger2asciidoc/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2asciidoc"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="http://semver.org"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="http://semver.org"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
 
 WARNING: Still under heavy development
 
