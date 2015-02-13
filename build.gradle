@@ -15,6 +15,7 @@ buildscript {
         classpath 'org.asciidoctor:asciidoctorj:1.5.2'
         classpath 'org.freemarker:freemarker:2.3.19'
         classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
 description = 'swagger2markup Build'
@@ -27,6 +28,7 @@ subprojects{
     apply plugin: 'jacoco'
     apply plugin: 'com.github.kt3k.coveralls'
     apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'com.jfrog.bintray'
 
     version = '0.1.0'
     group = 'io.swagger2markup'
