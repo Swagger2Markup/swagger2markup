@@ -76,16 +76,16 @@ and https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin].
 
 == Example
 == swagger.json
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG[swagger_json]
+image::https://github.com/RobWin/swagger2markup/blob/master/images/swagger_json.PNG[swagger_json]
 
 === Generated AsciiDoc file
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PNG[asciidoc]
+image::https://github.com/RobWin/swagger2markup/blob/master/images/asciidoc.PNG[asciidoc]
 
 === Generated Markdown file
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/markdown.PNG[asciidoc]
+image::https://github.com/RobWin/swagger2markup/blob/master/images/markdown.PNG[asciidoc]
 
 === Generated HTML
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG[asciidoc_html]
+image::https://github.com/RobWin/swagger2markup/blob/master/images/asciidoc_html.PNG[asciidoc_html]
 
 == Document Builder
 The converter allows to build an AsciiDoc or Markdown document via the Builder pattern:
