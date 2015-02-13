@@ -1,0 +1,13 @@
+description = 'Example Spring Boot MVC'
+
+apply plugin: 'spring-boot'
+apply plugin: 'me.champeau.jbake'
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'com.mangofactory:swagger-springmvc'
+    testCompile 'org.springframework.restdocs:spring-restdocs-core'
+    testCompile 'com.jayway.restassured:spring-mock-mvc'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile project(":swagger2markup-core")
+}

@@ -1,0 +1,6 @@
+description = 'swagger2markup core library'
+
+dependencies {
+    compile 'io.swagger:swagger-legacy-spec-parser'
+    compile 'commons-collections:commons-collections'
+}

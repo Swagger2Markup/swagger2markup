@@ -2,59 +2,91 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
+        maven { url 'http://dl.bintray.com/content/aalmiray/kordamp' }
     }
     dependencies {
+        classpath 'org.kordamp:markdown-gradle-plugin:0.1.1'
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
         classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
+        classpath 'io.spring.gradle:dependency-management-plugin:0.3.1.RELEASE'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
+        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
+        classpath 'org.jbake:jbake-core:2.3.2'
+        classpath 'org.asciidoctor:asciidoctorj:1.5.2'
+        classpath 'org.freemarker:freemarker:2.3.19'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE'
+    }
+}
+description = 'swagger2markup Build'
+
+subprojects{
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'org.asciidoctor.convert'
+    apply plugin: 'org.kordamp.gradle.markdown'
+    apply plugin: 'jacoco'
+    apply plugin: 'com.github.kt3k.coveralls'
+    apply plugin: 'io.spring.dependency-management'
+
+    version = '0.1.0'
+    group = 'io.swagger2markup'
+
+    tasks.withType(JavaCompile) {
+        sourceCompatibility = "1.7"
+        targetCompatibility = "1.7"
+        options.deprecation = true
+        options.encoding = 'UTF-8'
+        options.compilerArgs << "-Xlint:unchecked"
+    }
+
+    repositories {
+        jcenter()
+        mavenCentral()
+        mavenLocal()
+        maven { url 'https://repo.spring.io/snapshot' }
+        maven {url "https://oss.sonatype.org/content/repositories/snapshots"}
+    }
+
+    dependencies {
+        testCompile 'junit:junit'
+    }
+
+    dependencyManagement {
+        dependencies {
+            "io.swagger:swagger-legacy-spec-parser" "1.0.0-SNAPSHOT"
+            "commons-collections:commons-collections" "3.2.1"
+            "com.mangofactory:swagger-springmvc" "0.9.5"
+            "org.springframework.restdocs:spring-restdocs-core" "0.1.0.BUILD-SNAPSHOT"
+            "com.jayway.restassured:spring-mock-mvc" "2.4.0"
+            "junit:junit" "4.11"
+        }
+    }
+
+    asciidoctor {
+        attributes = [
+                doctype: 'book',
+                toc: 'left',
+                toclevels: '1'
+        ]
+    }
+
+    markdownToHtml {
+        sourceDir = file('src/docs/markdown')
+       // [hardwraps: true, fencedCodeBlocks: true, tables: true]
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled = true // coveralls plugin depends on xml format report
+            html.enabled = true
+        }
+    }
+
+    tasks.coveralls {
+        dependsOn 'check'
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'maven'
-apply plugin: 'org.asciidoctor.convert'
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
-
-version = '0.1.0'
-group = 'io.swagger2asciidoc'
-
-repositories {
-    jcenter()
-    mavenCentral()
-    mavenLocal()
-    maven {url "https://oss.sonatype.org/content/repositories/snapshots"}
-}
-
-tasks.withType(JavaCompile) {
-    sourceCompatibility = "1.7"
-    targetCompatibility = "1.7"
-    options.deprecation = true
-    options.encoding = 'UTF-8'
-    options.compilerArgs << "-Xlint:unchecked"
-}
-
-dependencies {
-    compile 'io.swagger:swagger-legacy-spec-parser:1.0.0-SNAPSHOT'
-    compile 'commons-collections:commons-collections:3.2.1'
-    testCompile 'junit:junit:4.11'
-}
-
-asciidoctor {
-    attributes = [
-            doctype: 'book',
-            toc: 'left',
-            toclevels: '1'
-    ]
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
-
-tasks.coveralls {
-    dependsOn 'check'
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2.1'
 }

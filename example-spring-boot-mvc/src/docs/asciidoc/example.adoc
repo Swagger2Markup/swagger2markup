@@ -1,0 +1,149 @@
+= My Apps API Title
+My Apps API Description
+Version: 1.0
+
+== Create a quota.
+=== Description
+:hardbreaks:
+Create a quota allows bla bla bla bla
+
+----
+PUT /quotas
+----
+=== Parameters
+[format="csv", options="header"]
+|===
+Name,Located in,Description,Required
+body,body,MailStorageQuota,true
+|===
+
+=== Responses
+[format="csv", options="header"]
+|===
+Code,Description,Schema
+200,success,com.wordnik.swagger.models.properties.RefProperty@4c4d513a
+201,Created,null
+401,Unauthorized,null
+204,null,null
+403,Forbidden,null
+404,Not Found,null
+|===
+
+=== Consumes
+* application/json
+
+=== Produces
+* */*
+
+== Get a quotas.
+=== Description
+:hardbreaks:
+Get a quota allows bla bla bla bla
+
+----
+GET /quotas/quotas/{quotaId}
+----
+=== Parameters
+[format="csv", options="header"]
+|===
+Name,Located in,Description,Required
+quotaId,path,quotaId,true
+|===
+
+=== Responses
+[format="csv", options="header"]
+|===
+Code,Description,Schema
+200,success,com.wordnik.swagger.models.properties.RefProperty@38543ec
+401,Unauthorized,null
+403,Forbidden,null
+404,Not Found,null
+|===
+
+=== Consumes
+* application/json
+
+=== Produces
+* */*
+
+== Delete a quota.
+=== Description
+:hardbreaks:
+Delete a quotas allows bla bla bla bla
+
+----
+DELETE /quotas/quotas/{quotaId}
+----
+=== Parameters
+[format="csv", options="header"]
+|===
+Name,Located in,Description,Required
+quotaId,path,quotaId,true
+|===
+
+=== Responses
+[format="csv", options="header"]
+|===
+Code,Description,Schema
+200,success,com.wordnik.swagger.models.properties.RefProperty@d2e9338
+401,Unauthorized,null
+204,No Content,null
+403,Forbidden,null
+|===
+
+=== Consumes
+* application/json
+
+=== Produces
+* */*
+
+== Update a quota.
+=== Description
+:hardbreaks:
+Update a quota allows bla bla bla bla
+
+----
+POST /quotas/quotas/{quotaId}
+----
+=== Parameters
+[format="csv", options="header"]
+|===
+Name,Located in,Description,Required
+quotaId,path,quotaId,true
+body,body,MailStorageQuota,true
+|===
+
+=== Responses
+[format="csv", options="header"]
+|===
+Code,Description,Schema
+200,success,com.wordnik.swagger.models.properties.RefProperty@18542940
+201,Created,null
+401,Unauthorized,null
+204,null,null
+403,Forbidden,null
+404,Not Found,null
+|===
+
+=== Consumes
+* application/json
+
+=== Produces
+* */*
+
+== Definitions
+=== MailStorageQuota
+[format="csv", options="header"]
+|===
+Name,Type,Required
+mailStorageQuotaValue,string,false
+quotaValueType,string,false
+|===
+
+=== MailStorageQuotaResponse
+[format="csv", options="header"]
+|===
+Name,Type,Required
+mailStorageQuota,ref,false
+|===
+
