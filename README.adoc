@@ -86,3 +86,16 @@ image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/markdown.PN
 
 === Generated HTML
 image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG[asciidoc_html]
+
+== Document Builder
+The converter allows to build an AsciiDoc or Markdown file via the Builder pattern:
+[source,java]
+----
+        String asciiDoc = new AsciiDocBuilder().documentTitle("Title")
+                .sectionTitleLevel1("Section1").paragraph("Text text")
+                .sectionTitleLevel2("Code examples").listing("Code example").toString();
+
+        String markdown = new MarkdownBuilder().documentTitle("Title")
+                .sectionTitleLevel1("Section1").paragraph("Text text")
+                .sectionTitleLevel2("Code examples").listing("Code example").toString();
+--
