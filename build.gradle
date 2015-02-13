@@ -28,7 +28,6 @@ subprojects{
     apply plugin: 'jacoco'
     apply plugin: 'com.github.kt3k.coveralls'
     apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'com.jfrog.bintray'
 
     version = '0.1.0'
     group = 'io.swagger2markup'

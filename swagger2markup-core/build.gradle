@@ -1,3 +1,6 @@
+apply plugin: 'com.jfrog.bintray'
+apply from: '../gradle/publishing.gradle'
+
 description = 'swagger2markup core library'
 
 dependencies {

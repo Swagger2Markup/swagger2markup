@@ -1,0 +1,33 @@
+import java.text.SimpleDateFormat
+
+Date buildTimeAndDate = new Date()
+ext {
+    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+
+def projectArtifactId = 'swagger2markup'
+
+jar {
+    manifest {
+        attributes(
+                'Built-By': 'Robert Winkler',
+                'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+                'Build-Date': project.buildDate,
+                'Build-Time': project.buildTime,
+                'Specification-Title': projectArtifactId,
+                'Specification-Version': project.version,
+                'Implementation-Title': projectArtifactId,
+                'Implementation-Version': project.version
+        )
+    }
+}
+
+if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
+if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
+
+bintray {
+    user = project.bintrayUsername
+    key = project.bintrayApiKey
+    pkg.repo = 'swagger2markup'
+}
