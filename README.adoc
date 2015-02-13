@@ -1,6 +1,7 @@
 = Swagger2Markup
 :author: Robert Winkler
 :version: 0.1.0
+:hardbreaks:
 
 image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"]
 image:https://coveralls.io/repos/RobWin/swagger2asciidoc/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2asciidoc"]
@@ -9,9 +10,10 @@ image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link
 
 WARNING: Still under heavy development
 
-This project is a Swagger to Markup (AsciiDoc and Markdown) converter. It takes an swagger.json or swagger.yaml as an input file
-and generates an AsciiDoc or Markdown file.
-The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to 
+This project is a Swagger to Markup (AsciiDoc and Markdown) converter. It takes a swagger.json or swagger.yaml file as input
+and converts it into an AsciiDoc or Markdown file. The Swagger2Markup converter supports the Swagger 1.2 and 2.0 specification.
+
+The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to
 be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation].
 
 For example, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:

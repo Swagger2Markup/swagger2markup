@@ -60,13 +60,13 @@ POST /pets
 * application/xml
 
 ## Finds Pets by status
-### Description
-
-Multiple status values can be provided with comma seperated strings
-
 ```
 GET /pets/findByStatus
 ```
+
+### Description
+
+Multiple status values can be provided with comma seperated strings
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -86,13 +86,13 @@ GET /pets/findByStatus
 * application/xml
 
 ## Finds Pets by tags
-### Description
-
-Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
-
 ```
 GET /pets/findByTags
 ```
+
+### Description
+
+Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -112,13 +112,13 @@ GET /pets/findByTags
 * application/xml
 
 ## Find pet by ID
-### Description
-
-Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
-
 ```
 GET /pets/{petId}
 ```
+
+### Description
+
+Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -209,13 +209,13 @@ POST /stores/order
 * application/xml
 
 ## Find purchase order by ID
-### Description
-
-For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
-
 ```
 GET /stores/order/{orderId}
 ```
+
+### Description
+
+For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -236,13 +236,13 @@ GET /stores/order/{orderId}
 * application/xml
 
 ## Delete purchase order by ID
-### Description
-
-For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
-
 ```
 DELETE /stores/order/{orderId}
 ```
+
+### Description
+
+For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -262,13 +262,13 @@ DELETE /stores/order/{orderId}
 * application/xml
 
 ## Create user
-### Description
-
-This can only be done by the logged in user.
-
 ```
 POST /users
 ```
+
+### Description
+
+This can only be done by the logged in user.
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -390,13 +390,13 @@ GET /users/{username}
 * application/xml
 
 ## Updated user
-### Description
-
-This can only be done by the logged in user.
-
 ```
 PUT /users/{username}
 ```
+
+### Description
+
+This can only be done by the logged in user.
 
 ### Parameters
 |Name|Located in|Description|Required|
@@ -417,13 +417,13 @@ PUT /users/{username}
 * application/xml
 
 ## Delete user
-### Description
-
-This can only be done by the logged in user.
-
 ```
 DELETE /users/{username}
 ```
+
+### Description
+
+This can only be done by the logged in user.
 
 ### Parameters
 |Name|Located in|Description|Required|

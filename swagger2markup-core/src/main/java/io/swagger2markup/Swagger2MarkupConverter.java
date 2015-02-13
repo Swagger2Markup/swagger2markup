@@ -97,7 +97,8 @@ public class Swagger2MarkupConverter {
 
     private void path(String httpMethod, String resourcePath, Operation operation) {
         if(operation != null){
-            pathTitleAndDescription(httpMethod, resourcePath, operation);
+            pathTitle(httpMethod, resourcePath, operation);
+            descriptionSection(operation);
             parametersSection(operation);
             responsesSection(operation);
             consumesSection(operation);
@@ -105,19 +106,17 @@ public class Swagger2MarkupConverter {
         }
     }
 
-    private void pathTitleAndDescription(String httpMethod, String resourcePath, Operation operation) {
+    private void pathTitle(String httpMethod, String resourcePath, Operation operation) {
         String summary = operation.getSummary();
         if(StringUtils.isNotBlank(summary)) {
             documentBuilder.sectionTitleLevel1(operation.getSummary());
-            description(operation);
             documentBuilder.listing(httpMethod + " " + resourcePath);
         }else{
             documentBuilder.sectionTitleLevel1(httpMethod + " " + resourcePath);
-            description(operation);
         }
     }
 
-    private void description(Operation operation) {
+    private void descriptionSection(Operation operation) {
         String description = operation.getDescription();
         if(StringUtils.isNotBlank(description)){
             documentBuilder.sectionTitleLevel2(DESCRIPTION);
