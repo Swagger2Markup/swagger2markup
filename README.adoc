@@ -93,4 +93,4 @@ The converter allows to build an AsciiDoc or Markdown file via the Builder patte
         String markdown = new MarkdownBuilder().documentTitle("Title")
                 .sectionTitleLevel1("Section1").paragraph("Text text")
                 .sectionTitleLevel2("Code examples").listing("Code example").toString();
---
+----

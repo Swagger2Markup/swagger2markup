@@ -3,13 +3,14 @@ My Apps API Description
 Version: 1.0
 
 == Create a quota.
+----
+PUT /quotas
+----
+
 === Description
 :hardbreaks:
 Create a quota allows bla bla bla bla
 
-----
-PUT /quotas
-----
 === Parameters
 [format="csv", options="header"]
 |===
@@ -20,13 +21,13 @@ body,body,MailStorageQuota,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,success,com.wordnik.swagger.models.properties.RefProperty@4c4d513a
-201,Created,null
-401,Unauthorized,null
-204,null,null
-403,Forbidden,null
-404,Not Found,null
+Code,Description
+200,success
+201,Created
+401,Unauthorized
+204,null
+403,Forbidden
+404,Not Found
 |===
 
 === Consumes
@@ -36,13 +37,14 @@ Code,Description,Schema
 * */*
 
 == Get a quotas.
+----
+GET /quotas/quotas/{quotaId}
+----
+
 === Description
 :hardbreaks:
 Get a quota allows bla bla bla bla
 
-----
-GET /quotas/quotas/{quotaId}
-----
 === Parameters
 [format="csv", options="header"]
 |===
@@ -53,11 +55,11 @@ quotaId,path,quotaId,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,success,com.wordnik.swagger.models.properties.RefProperty@38543ec
-401,Unauthorized,null
-403,Forbidden,null
-404,Not Found,null
+Code,Description
+200,success
+401,Unauthorized
+403,Forbidden
+404,Not Found
 |===
 
 === Consumes
@@ -67,13 +69,14 @@ Code,Description,Schema
 * */*
 
 == Delete a quota.
+----
+DELETE /quotas/quotas/{quotaId}
+----
+
 === Description
 :hardbreaks:
 Delete a quotas allows bla bla bla bla
 
-----
-DELETE /quotas/quotas/{quotaId}
-----
 === Parameters
 [format="csv", options="header"]
 |===
@@ -84,11 +87,11 @@ quotaId,path,quotaId,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,success,com.wordnik.swagger.models.properties.RefProperty@d2e9338
-401,Unauthorized,null
-204,No Content,null
-403,Forbidden,null
+Code,Description
+200,success
+401,Unauthorized
+204,No Content
+403,Forbidden
 |===
 
 === Consumes
@@ -98,13 +101,14 @@ Code,Description,Schema
 * */*
 
 == Update a quota.
+----
+POST /quotas/quotas/{quotaId}
+----
+
 === Description
 :hardbreaks:
 Update a quota allows bla bla bla bla
 
-----
-POST /quotas/quotas/{quotaId}
-----
 === Parameters
 [format="csv", options="header"]
 |===
@@ -116,13 +120,13 @@ body,body,MailStorageQuota,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,success,com.wordnik.swagger.models.properties.RefProperty@18542940
-201,Created,null
-401,Unauthorized,null
-204,null,null
-403,Forbidden,null
-404,Not Found,null
+Code,Description
+200,success
+201,Created
+401,Unauthorized
+204,null
+403,Forbidden
+404,Not Found
 |===
 
 === Consumes
