@@ -164,13 +164,12 @@ public class Swagger2MarkupConverter {
         Map<String, Response> responses = operation.getResponses();
         if(MapUtils.isNotEmpty(responses)){
             List<String> csvContent = new ArrayList<>();
-            csvContent.add("Code,Description,Schema");
+            csvContent.add("Code,Description");
             for(Map.Entry<String, Response> entry : responses.entrySet()){
                 Response response = entry.getValue();
                 StringBuilder rowBuilder = new StringBuilder();
                 rowBuilder.append(entry.getKey()).append(",").
-                        append(response.getDescription()).append(",").
-                        append(response.getSchema());
+                        append(response.getDescription());
                 csvContent.add(rowBuilder.toString());
             }
             documentBuilder.sectionTitleLevel2(RESPONSES);

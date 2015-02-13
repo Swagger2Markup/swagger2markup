@@ -96,6 +96,7 @@ public class MarkdownBuilder extends AbstractDocumentBuilder
             for(String columnText : columns){
                 documentBuilder.append(columnText).append(Markdown.TABLE_COLUMN);
             }
+            newLine();
         }
         newLine().newLine();
         return this;

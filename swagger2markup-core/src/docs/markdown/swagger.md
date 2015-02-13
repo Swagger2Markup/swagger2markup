@@ -17,10 +17,14 @@ PUT /pets
 |----|----|----|----|
 |body|body|Pet object that needs to be added to the store|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|400|Invalid ID supplied|null||404|Pet not found|null||405|Validation exception|null|
+|Code|Description|
+|----|----|
+|400|Invalid ID supplied|
+|404|Pet not found|
+|405|Validation exception|
+
 
 ### Consumes
 * application/json
@@ -40,10 +44,12 @@ POST /pets
 |----|----|----|----|
 |body|body|Pet object that needs to be added to the store|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|405|Invalid input|null|
+|Code|Description|
+|----|----|
+|405|Invalid input|
+
 
 ### Consumes
 * application/json
@@ -67,10 +73,13 @@ GET /pets/findByStatus
 |----|----|----|----|
 |status|query|Status values that need to be considered for filter|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.ArrayProperty@42cc43ea||400|Invalid status value|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid status value|
+
 
 ### Produces
 * application/json
@@ -90,10 +99,13 @@ GET /pets/findByTags
 |----|----|----|----|
 |tags|query|Tags to filter by|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.ArrayProperty@3f17a74f||400|Invalid tag value|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid tag value|
+
 
 ### Produces
 * application/json
@@ -113,10 +125,14 @@ GET /pets/{petId}
 |----|----|----|----|
 |petId|path|ID of pet that needs to be fetched|true|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.RefProperty@2347fe11||400|Invalid ID supplied|null||404|Pet not found|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid ID supplied|
+|404|Pet not found|
+
 
 ### Produces
 * application/json
@@ -130,12 +146,15 @@ DELETE /pets/{petId}
 ### Parameters
 |Name|Located in|Description|Required|
 |----|----|----|----|
-|api_key|header||true||petId|path|Pet id to delete|true|
+|api_key|header||true|
+|petId|path|Pet id to delete|true|
+
 
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|400|Invalid pet value|null|
+|Code|Description|
+|----|----|
+|400|Invalid pet value|
+
 
 ### Produces
 * application/json
@@ -149,12 +168,16 @@ POST /pets/{petId}
 ### Parameters
 |Name|Located in|Description|Required|
 |----|----|----|----|
-|petId|path|ID of pet that needs to be updated|true||name|formData|Updated name of the pet|true||status|formData|Updated status of the pet|true|
+|petId|path|ID of pet that needs to be updated|true|
+|name|formData|Updated name of the pet|true|
+|status|formData|Updated status of the pet|true|
+
 
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|405|Invalid input|null|
+|Code|Description|
+|----|----|
+|405|Invalid input|
+
 
 ### Consumes
 * application/x-www-form-urlencoded
@@ -173,10 +196,13 @@ POST /stores/order
 |----|----|----|----|
 |body|body|order placed for purchasing the pet|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.RefProperty@3115cf36||400|Invalid Order|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid Order|
+
 
 ### Produces
 * application/json
@@ -196,10 +222,14 @@ GET /stores/order/{orderId}
 |----|----|----|----|
 |orderId|path|ID of pet that needs to be fetched|true|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.RefProperty@11e609ed||400|Invalid ID supplied|null||404|Order not found|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid ID supplied|
+|404|Order not found|
+
 
 ### Produces
 * application/json
@@ -219,10 +249,13 @@ DELETE /stores/order/{orderId}
 |----|----|----|----|
 |orderId|path|ID of the order that needs to be deleted|true|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|400|Invalid ID supplied|null||404|Order not found|null|
+|Code|Description|
+|----|----|
+|400|Invalid ID supplied|
+|404|Order not found|
+
 
 ### Produces
 * application/json
@@ -242,10 +275,12 @@ POST /users
 |----|----|----|----|
 |body|body|Created user object|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|default|successful operation|null|
+|Code|Description|
+|----|----|
+|default|successful operation|
+
 
 ### Produces
 * application/json
@@ -261,10 +296,12 @@ POST /users/createWithArray
 |----|----|----|----|
 |body|body|List of user object|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|default|successful operation|null|
+|Code|Description|
+|----|----|
+|default|successful operation|
+
 
 ### Produces
 * application/json
@@ -280,10 +317,12 @@ POST /users/createWithList
 |----|----|----|----|
 |body|body|List of user object|false|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|default|successful operation|null|
+|Code|Description|
+|----|----|
+|default|successful operation|
+
 
 ### Produces
 * application/json
@@ -297,12 +336,16 @@ GET /users/login
 ### Parameters
 |Name|Located in|Description|Required|
 |----|----|----|----|
-|username|query|The user name for login|false||password|query|The password for login in clear text|false|
+|username|query|The user name for login|false|
+|password|query|The password for login in clear text|false|
+
 
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.StringProperty@1349f941||400|Invalid username/password supplied|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid username/password supplied|
+
 
 ### Produces
 * application/json
@@ -314,9 +357,10 @@ GET /users/logout
 ```
 
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|default|successful operation|null|
+|Code|Description|
+|----|----|
+|default|successful operation|
+
 
 ### Produces
 * application/json
@@ -332,10 +376,14 @@ GET /users/{username}
 |----|----|----|----|
 |username|path|The name that needs to be fetched. Use user1 for testing.|true|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|200|successful operation|com.wordnik.swagger.models.properties.RefProperty@fe22a4f||400|Invalid username supplied|null||404|User not found|null|
+|Code|Description|
+|----|----|
+|200|successful operation|
+|400|Invalid username supplied|
+|404|User not found|
+
 
 ### Produces
 * application/json
@@ -353,12 +401,16 @@ PUT /users/{username}
 ### Parameters
 |Name|Located in|Description|Required|
 |----|----|----|----|
-|username|path|name that need to be deleted|true||body|body|Updated user object|false|
+|username|path|name that need to be deleted|true|
+|body|body|Updated user object|false|
+
 
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|400|Invalid user supplied|null||404|User not found|null|
+|Code|Description|
+|----|----|
+|400|Invalid user supplied|
+|404|User not found|
+
 
 ### Produces
 * application/json
@@ -378,10 +430,13 @@ DELETE /users/{username}
 |----|----|----|----|
 |username|path|The name that needs to be deleted|true|
 
+
 ### Responses
-|Code|Description|Schema|
-|----|----|----|
-|400|Invalid username supplied|null||404|User not found|null|
+|Code|Description|
+|----|----|
+|400|Invalid username supplied|
+|404|User not found|
+
 
 ### Produces
 * application/json
@@ -391,25 +446,49 @@ DELETE /users/{username}
 ### User
 |Name|Type|Required|
 |----|----|----|
-|id|integer|false||username|string|false||firstName|string|false||lastName|string|false||email|string|false||password|string|false||phone|string|false||userStatus|integer|false|
+|id|integer|false|
+|username|string|false|
+|firstName|string|false|
+|lastName|string|false|
+|email|string|false|
+|password|string|false|
+|phone|string|false|
+|userStatus|integer|false|
+
 
 ### Category
 |Name|Type|Required|
 |----|----|----|
-|id|integer|false||name|string|false|
+|id|integer|false|
+|name|string|false|
+
 
 ### Pet
 |Name|Type|Required|
 |----|----|----|
-|id|integer|false||category|ref|false||name|string|true||photoUrls|array|true||tags|array|false||status|string|false|
+|id|integer|false|
+|category|ref|false|
+|name|string|true|
+|photoUrls|array|true|
+|tags|array|false|
+|status|string|false|
+
 
 ### Tag
 |Name|Type|Required|
 |----|----|----|
-|id|integer|false||name|string|false|
+|id|integer|false|
+|name|string|false|
+
 
 ### Order
 |Name|Type|Required|
 |----|----|----|
-|id|integer|false||petId|integer|false||quantity|integer|false||shipDate|string|false||status|string|false||complete|boolean|false|
+|id|integer|false|
+|petId|integer|false|
+|quantity|integer|false|
+|shipDate|string|false|
+|status|string|false|
+|complete|boolean|false|
+
 

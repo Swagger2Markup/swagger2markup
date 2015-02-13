@@ -22,10 +22,10 @@ body,body,Pet object that needs to be added to the store,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-400,Invalid ID supplied,null
-404,Pet not found,null
-405,Validation exception,null
+Code,Description
+400,Invalid ID supplied
+404,Pet not found
+405,Validation exception
 |===
 
 === Consumes
@@ -51,8 +51,8 @@ body,body,Pet object that needs to be added to the store,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-405,Invalid input,null
+Code,Description
+405,Invalid input
 |===
 
 === Consumes
@@ -82,9 +82,9 @@ status,query,Status values that need to be considered for filter,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.ArrayProperty@79fc30a5
-400,Invalid status value,null
+Code,Description
+200,successful operation
+400,Invalid status value
 |===
 
 === Produces
@@ -110,9 +110,9 @@ tags,query,Tags to filter by,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.ArrayProperty@669fdb50
-400,Invalid tag value,null
+Code,Description
+200,successful operation
+400,Invalid tag value
 |===
 
 === Produces
@@ -138,10 +138,10 @@ petId,path,ID of pet that needs to be fetched,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@7729ecff
-400,Invalid ID supplied,null
-404,Pet not found,null
+Code,Description
+200,successful operation
+400,Invalid ID supplied
+404,Pet not found
 |===
 
 === Produces
@@ -164,8 +164,8 @@ petId,path,Pet id to delete,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-400,Invalid pet value,null
+Code,Description
+400,Invalid pet value
 |===
 
 === Produces
@@ -189,8 +189,8 @@ status,formData,Updated status of the pet,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-405,Invalid input,null
+Code,Description
+405,Invalid input
 |===
 
 === Consumes
@@ -215,9 +215,9 @@ body,body,order placed for purchasing the pet,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@121f512d
-400,Invalid Order,null
+Code,Description
+200,successful operation
+400,Invalid Order
 |===
 
 === Produces
@@ -243,10 +243,10 @@ orderId,path,ID of pet that needs to be fetched,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@afe22d3
-400,Invalid ID supplied,null
-404,Order not found,null
+Code,Description
+200,successful operation
+400,Invalid ID supplied
+404,Order not found
 |===
 
 === Produces
@@ -272,9 +272,9 @@ orderId,path,ID of the order that needs to be deleted,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-400,Invalid ID supplied,null
-404,Order not found,null
+Code,Description
+400,Invalid ID supplied
+404,Order not found
 |===
 
 === Produces
@@ -300,8 +300,8 @@ body,body,Created user object,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-default,successful operation,null
+Code,Description
+default,successful operation
 |===
 
 === Produces
@@ -323,8 +323,8 @@ body,body,List of user object,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-default,successful operation,null
+Code,Description
+default,successful operation
 |===
 
 === Produces
@@ -346,8 +346,8 @@ body,body,List of user object,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-default,successful operation,null
+Code,Description
+default,successful operation
 |===
 
 === Produces
@@ -370,9 +370,9 @@ password,query,The password for login in clear text,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.StringProperty@12a33d87
-400,Invalid username/password supplied,null
+Code,Description
+200,successful operation
+400,Invalid username/password supplied
 |===
 
 === Produces
@@ -387,8 +387,8 @@ GET /users/logout
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-default,successful operation,null
+Code,Description
+default,successful operation
 |===
 
 === Produces
@@ -410,10 +410,10 @@ username,path,The name that needs to be fetched. Use user1 for testing.,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-200,successful operation,com.wordnik.swagger.models.properties.RefProperty@2a556538
-400,Invalid username supplied,null
-404,User not found,null
+Code,Description
+200,successful operation
+400,Invalid username supplied
+404,User not found
 |===
 
 === Produces
@@ -440,9 +440,9 @@ body,body,Updated user object,false
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-400,Invalid user supplied,null
-404,User not found,null
+Code,Description
+400,Invalid user supplied
+404,User not found
 |===
 
 === Produces
@@ -468,9 +468,9 @@ username,path,The name that needs to be deleted,true
 === Responses
 [format="csv", options="header"]
 |===
-Code,Description,Schema
-400,Invalid username supplied,null
-404,User not found,null
+Code,Description
+400,Invalid username supplied
+404,User not found
 |===
 
 === Produces
