@@ -28,9 +28,9 @@ The primary goal of this project is to simplify the documentation of RESTful API
 </repositories>
 
 <dependency>
-    <groupId>com.mangofactory</groupId>
-    <artifactId>swagger-springmvc</artifactId>
-    <version>0.9.5</version>
+    <groupId>io.swagger2markup</groupId>
+    <artifactId>swagger2markup</artifactId>
+    <version>0.1.0</version>
 </dependency>
 ----
 
@@ -42,7 +42,7 @@ repositories {
     jcenter()
 }
 
-compile "com.mangofactory:swagger-springmvc:0.9.5"
+compile "io.swagger2markup:swagger2markup:0.1.0"
 ----
 
 === Using Swagger2MarkupConverter
