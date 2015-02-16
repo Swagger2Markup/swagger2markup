@@ -112,18 +112,21 @@ You can generate your HTML5 and PDF documentation via https://github.com/asciido
 You can also use https://github.com/tomchristie/mkdocs[MkDocs] and https://github.com/rtfd/readthedocs.org[ReadTheDocs] to publish your Markdown documentation.
 See http://spring-swagger2markup-demo.readthedocs.org/[ReadTheDocs-demo]
 
-== Example
-== swagger.json
+== Examples
+== Swagger source file
 image::images/swagger_json.PNG[swagger_json]
 
 === Generated AsciiDoc file
 image::images/asciidoc.PNG[asciidoc]
 
 === Generated Markdown file
-image::images/markdown.PNG[asciidoc]
+image::images/markdown.PNG[markdown]
 
-=== Generated HTML
+=== Generated HTML via AsciidoctorJ
 image::images/asciidoc_html.PNG[asciidoc_html]
+
+=== Generated HTML via Mkdocs
+image::images/mkdocs_html.PNG[mkdocs_html]
 
 == Document Builder
 The converter allows to build an AsciiDoc or Markdown document via the Builder pattern:
