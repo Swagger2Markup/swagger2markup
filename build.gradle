@@ -78,9 +78,6 @@ tasks.coveralls {
     dependsOn 'check'
 }
 
-
-
-
 task wrapper(type: Wrapper) {
     gradleVersion = '2.2.1'
 }
