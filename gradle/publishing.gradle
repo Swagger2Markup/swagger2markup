@@ -29,5 +29,8 @@ if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
 bintray {
     user = project.bintrayUsername
     key = project.bintrayApiKey
-    pkg.repo = 'swagger2markup'
+    pkg {
+        repo = 'maven'
+        name = 'swagger2markup'
+    }
 }
