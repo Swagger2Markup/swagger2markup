@@ -13,7 +13,7 @@ The primary goal of this project is to simplify the documentation of RESTful API
 
 == Usage
 
-=== Adding Swagger2MarkupConverter
+=== Adding Swagger2Markup to your project
 
 ==== Maven
 
@@ -45,7 +45,7 @@ repositories {
 compile "io.swagger2markup:swagger2markup:0.1.0"
 ----
 
-=== Using Swagger2MarkupConverter
+=== Using Swagger2Markup
 
 Using the Swagger2MarkupConverter is simple. For instance, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows.
 See demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo].
