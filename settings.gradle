@@ -1,4 +1,1 @@
 rootProject.name = 'swagger2markup'
-include 'example-spring-boot-mvc'
-include 'swagger2markup-core'
-

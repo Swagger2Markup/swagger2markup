@@ -3,15 +3,19 @@
 :version: 0.1.0
 :hardbreaks:
 
-image:https://travis-ci.org/RobWin/swagger2asciidoc.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2asciidoc"] image:https://coveralls.io/repos/RobWin/swagger2asciidoc/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2asciidoc"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="http://semver.org"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="http://semver.org"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
 
 WARNING: Still under heavy development
 
-This project is a Swagger to Markup (AsciiDoc and Markdown) converter. It takes a swagger.json or swagger.yaml file as input and converts it into an AsciiDoc or Markdown file. The file can be located locally or remotely accessible via HTTP. The Swagger2Markup converter supports the Swagger 1.2 and 2.0 specification.
+== Overview
 
-The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation].
+This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely accessible via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser].
 
-For example, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:
+The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
+
+== Usage
+
+Using the Swagger2MarkupConverter is simple. For instance, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:
 
 [source,java]
 ----
@@ -71,21 +75,20 @@ public class SpringBootSwaggerConfig {
 }
 ----
 
-You can then generate HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]
-and https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin].
+You can then generate HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] and https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin].
 
 == Example
 == swagger.json
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/swagger_json.PNG[swagger_json]
+image::images/swagger_json.PNG[swagger_json]
 
 === Generated AsciiDoc file
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc.PNG[asciidoc]
+image::images/asciidoc.PNG[asciidoc]
 
 === Generated Markdown file
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/markdown.PNG[asciidoc]
+image::images/markdown.PNG[asciidoc]
 
 === Generated HTML
-image::https://github.com/RobWin/swagger2AsciiDoc/blob/master/images/asciidoc_html.PNG[asciidoc_html]
+image::images/asciidoc_html.PNG[asciidoc_html]
 
 == Document Builder
 The converter allows to build an AsciiDoc or Markdown document via the Builder pattern:
