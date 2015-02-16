@@ -21,7 +21,7 @@ version = '0.1.0'
 group = 'io.swagger2markup'
 
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
@@ -40,7 +40,6 @@ tasks.withType(JavaCompile) {
 repositories {
     jcenter()
     mavenCentral()
-    mavenLocal()
 }
 
 dependencies {

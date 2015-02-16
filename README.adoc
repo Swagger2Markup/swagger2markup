@@ -3,9 +3,7 @@
 :version: 0.1.0
 :hardbreaks:
 
-image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="http://semver.org"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
-
-WARNING: Still under heavy development
+image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="https://bintray.com/robwin/maven/swagger2markup/0.1.0/view"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
 
 == Overview
 
@@ -14,6 +12,40 @@ This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swag
 The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
 
 == Usage
+
+=== Adding Swagger2MarkupConverter
+
+==== Maven
+
+[source,xml]
+----
+<repositories>
+    <repository>
+      <id>jcenter-release</id>
+      <name>jcenter</name>
+      <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.mangofactory</groupId>
+    <artifactId>swagger-springmvc</artifactId>
+    <version>0.9.5</version>
+</dependency>
+----
+
+==== Gradle
+
+[source,groovy]
+----
+repositories {
+    jcenter()
+}
+
+compile "com.mangofactory:swagger-springmvc:0.9.5"
+----
+
+=== Using Swagger2MarkupConverter
 
 Using the Swagger2MarkupConverter is simple. For instance, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows:
 
