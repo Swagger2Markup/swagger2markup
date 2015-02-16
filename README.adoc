@@ -128,6 +128,9 @@ image::images/asciidoc_html.PNG[asciidoc_html]
 === Generated HTML via Mkdocs
 image::images/mkdocs_html.PNG[mkdocs_html]
 
+=== Generated PDF via AsciidoctorJ
+image::images/asciidoc_pdf.PNG[asciidoc_pdf]
+
 == Document Builder
 The converter allows to build an AsciiDoc or Markdown document via the Builder pattern:
 [source,java]

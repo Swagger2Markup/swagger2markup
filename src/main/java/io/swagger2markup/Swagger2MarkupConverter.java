@@ -29,7 +29,7 @@ import java.util.Map;
 public class Swagger2MarkupConverter {
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConverter.class);
     private static final String VERSION = "Version: ";
-    private static final String SUMMARY = "Summary";
+    private static final String FEATURES = "Features";
     private static final String DESCRIPTION = "Description";
     private static final String PARAMETERS = "Parameters";
     private static final String PRODUCES = "Produces";
@@ -77,13 +77,16 @@ public class Swagger2MarkupConverter {
     }
 
     private void paths(Map<String, Path> paths) {
-        for(Map.Entry<String, Path> entry : paths.entrySet()){
-            Path path = entry.getValue();
-            path("GET", entry.getKey(), path.getGet());
-            path("PUT", entry.getKey(), path.getPut());
-            path("DELETE", entry.getKey(), path.getDelete());
-            path("POST", entry.getKey(), path.getPost());
-            path("PATCH", entry.getKey(), path.getPatch());
+        if(MapUtils.isNotEmpty(paths)) {
+            documentBuilder.sectionTitleLevel1(FEATURES);
+            for (Map.Entry<String, Path> entry : paths.entrySet()) {
+                Path path = entry.getValue();
+                path("GET", entry.getKey(), path.getGet());
+                path("PUT", entry.getKey(), path.getPut());
+                path("DELETE", entry.getKey(), path.getDelete());
+                path("POST", entry.getKey(), path.getPost());
+                path("PATCH", entry.getKey(), path.getPatch());
+            }
         }
     }
 
@@ -109,7 +112,7 @@ public class Swagger2MarkupConverter {
     private void pathTitle(String httpMethod, String resourcePath, Operation operation) {
         String summary = operation.getSummary();
         if(StringUtils.isNotBlank(summary)) {
-            documentBuilder.sectionTitleLevel1(operation.getSummary());
+            documentBuilder.sectionTitleLevel2(operation.getSummary());
             documentBuilder.listing(httpMethod + " " + resourcePath);
         }else{
             documentBuilder.sectionTitleLevel1(httpMethod + " " + resourcePath);
@@ -119,7 +122,7 @@ public class Swagger2MarkupConverter {
     private void descriptionSection(Operation operation) {
         String description = operation.getDescription();
         if(StringUtils.isNotBlank(description)){
-            documentBuilder.sectionTitleLevel2(DESCRIPTION);
+            documentBuilder.sectionTitleLevel3(DESCRIPTION);
             documentBuilder.paragraph(description);
         }
     }
@@ -127,7 +130,7 @@ public class Swagger2MarkupConverter {
     private void consumesSection(Operation operation) {
         List<String> consumes = operation.getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
-            documentBuilder.sectionTitleLevel2(CONSUMES);
+            documentBuilder.sectionTitleLevel3(CONSUMES);
             documentBuilder.unorderedList(consumes);
         }
 
@@ -136,7 +139,7 @@ public class Swagger2MarkupConverter {
     private void producesSection(Operation operation) {
         List<String> produces = operation.getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
-            documentBuilder.sectionTitleLevel2(PRODUCES);
+            documentBuilder.sectionTitleLevel3(PRODUCES);
             documentBuilder.unorderedList(produces);
         }
     }
@@ -154,7 +157,7 @@ public class Swagger2MarkupConverter {
                         append(parameter.getRequired());
                 csvContent.add(rowBuilder.toString());
             }
-            documentBuilder.sectionTitleLevel2(PARAMETERS);
+            documentBuilder.sectionTitleLevel3(PARAMETERS);
             documentBuilder.tableWithHeaderRow(csvContent);
         }
     }
@@ -171,7 +174,7 @@ public class Swagger2MarkupConverter {
                         append(response.getDescription());
                 csvContent.add(rowBuilder.toString());
             }
-            documentBuilder.sectionTitleLevel2(RESPONSES);
+            documentBuilder.sectionTitleLevel3(RESPONSES);
             documentBuilder.tableWithHeaderRow(csvContent);
         }
     }

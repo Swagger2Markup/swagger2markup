@@ -7,7 +7,8 @@ For this sample, you can use the api key `special-key` to test the authorization
 
 Version: 1.0.0
 
-## Update an existing pet
+## Features
+### Update an existing pet
 ```
 PUT /pets
 ```
@@ -34,7 +35,7 @@ PUT /pets
 * application/json
 * application/xml
 
-## Add a new pet to the store
+### Add a new pet to the store
 ```
 POST /pets
 ```
@@ -59,7 +60,7 @@ POST /pets
 * application/json
 * application/xml
 
-## Finds Pets by status
+### Finds Pets by status
 ```
 GET /pets/findByStatus
 ```
@@ -85,7 +86,7 @@ Multiple status values can be provided with comma seperated strings
 * application/json
 * application/xml
 
-## Finds Pets by tags
+### Finds Pets by tags
 ```
 GET /pets/findByTags
 ```
@@ -111,7 +112,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 * application/json
 * application/xml
 
-## Find pet by ID
+### Find pet by ID
 ```
 GET /pets/{petId}
 ```
@@ -138,7 +139,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 * application/json
 * application/xml
 
-## Deletes a pet
+### Deletes a pet
 ```
 DELETE /pets/{petId}
 ```
@@ -160,7 +161,7 @@ DELETE /pets/{petId}
 * application/json
 * application/xml
 
-## Updates a pet in the store with form data
+### Updates a pet in the store with form data
 ```
 POST /pets/{petId}
 ```
@@ -186,7 +187,7 @@ POST /pets/{petId}
 * application/json
 * application/xml
 
-## Place an order for a pet
+### Place an order for a pet
 ```
 POST /stores/order
 ```
@@ -208,7 +209,7 @@ POST /stores/order
 * application/json
 * application/xml
 
-## Find purchase order by ID
+### Find purchase order by ID
 ```
 GET /stores/order/{orderId}
 ```
@@ -235,7 +236,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 * application/json
 * application/xml
 
-## Delete purchase order by ID
+### Delete purchase order by ID
 ```
 DELETE /stores/order/{orderId}
 ```
@@ -261,7 +262,7 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 * application/json
 * application/xml
 
-## Create user
+### Create user
 ```
 POST /users
 ```
@@ -286,7 +287,7 @@ This can only be done by the logged in user.
 * application/json
 * application/xml
 
-## Creates list of users with given input array
+### Creates list of users with given input array
 ```
 POST /users/createWithArray
 ```
@@ -307,7 +308,7 @@ POST /users/createWithArray
 * application/json
 * application/xml
 
-## Creates list of users with given input array
+### Creates list of users with given input array
 ```
 POST /users/createWithList
 ```
@@ -328,7 +329,7 @@ POST /users/createWithList
 * application/json
 * application/xml
 
-## Logs user into the system
+### Logs user into the system
 ```
 GET /users/login
 ```
@@ -351,7 +352,7 @@ GET /users/login
 * application/json
 * application/xml
 
-## Logs out current logged in user session
+### Logs out current logged in user session
 ```
 GET /users/logout
 ```
@@ -366,7 +367,7 @@ GET /users/logout
 * application/json
 * application/xml
 
-## Get user by user name
+### Get user by user name
 ```
 GET /users/{username}
 ```
@@ -389,7 +390,7 @@ GET /users/{username}
 * application/json
 * application/xml
 
-## Updated user
+### Updated user
 ```
 PUT /users/{username}
 ```
@@ -416,7 +417,7 @@ This can only be done by the logged in user.
 * application/json
 * application/xml
 
-## Delete user
+### Delete user
 ```
 DELETE /users/{username}
 ```

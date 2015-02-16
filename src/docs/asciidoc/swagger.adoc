@@ -7,19 +7,20 @@ For this sample, you can use the api key `special-key` to test the authorization
 
 Version: 1.0.0
 
-== Update an existing pet
+== Features
+=== Update an existing pet
 ----
 PUT /pets
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 body,body,Pet object that needs to be added to the store,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -28,58 +29,58 @@ Code,Description
 405,Validation exception
 |===
 
-=== Consumes
+==== Consumes
 * application/json
 * application/xml
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Add a new pet to the store
+=== Add a new pet to the store
 ----
 POST /pets
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 body,body,Pet object that needs to be added to the store,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 405,Invalid input
 |===
 
-=== Consumes
+==== Consumes
 * application/json
 * application/xml
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Finds Pets by status
+=== Finds Pets by status
 ----
 GET /pets/findByStatus
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 Multiple status values can be provided with comma seperated strings
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 status,query,Status values that need to be considered for filter,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -87,27 +88,27 @@ Code,Description
 400,Invalid status value
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Finds Pets by tags
+=== Finds Pets by tags
 ----
 GET /pets/findByTags
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 tags,query,Tags to filter by,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -115,27 +116,27 @@ Code,Description
 400,Invalid tag value
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Find pet by ID
+=== Find pet by ID
 ----
 GET /pets/{petId}
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 petId,path,ID of pet that needs to be fetched,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -144,16 +145,16 @@ Code,Description
 404,Pet not found
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Deletes a pet
+=== Deletes a pet
 ----
 DELETE /pets/{petId}
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
@@ -161,23 +162,23 @@ api_key,header,,true
 petId,path,Pet id to delete,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 400,Invalid pet value
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Updates a pet in the store with form data
+=== Updates a pet in the store with form data
 ----
 POST /pets/{petId}
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
@@ -186,33 +187,33 @@ name,formData,Updated name of the pet,true
 status,formData,Updated status of the pet,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 405,Invalid input
 |===
 
-=== Consumes
+==== Consumes
 * application/x-www-form-urlencoded
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Place an order for a pet
+=== Place an order for a pet
 ----
 POST /stores/order
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 body,body,order placed for purchasing the pet,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -220,27 +221,27 @@ Code,Description
 400,Invalid Order
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Find purchase order by ID
+=== Find purchase order by ID
 ----
 GET /stores/order/{orderId}
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 orderId,path,ID of pet that needs to be fetched,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -249,27 +250,27 @@ Code,Description
 404,Order not found
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Delete purchase order by ID
+=== Delete purchase order by ID
 ----
 DELETE /stores/order/{orderId}
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 orderId,path,ID of the order that needs to be deleted,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -277,89 +278,89 @@ Code,Description
 404,Order not found
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Create user
+=== Create user
 ----
 POST /users
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 This can only be done by the logged in user.
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 body,body,Created user object,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 default,successful operation
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Creates list of users with given input array
+=== Creates list of users with given input array
 ----
 POST /users/createWithArray
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 body,body,List of user object,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 default,successful operation
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Creates list of users with given input array
+=== Creates list of users with given input array
 ----
 POST /users/createWithList
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 body,body,List of user object,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 default,successful operation
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Logs user into the system
+=== Logs user into the system
 ----
 GET /users/login
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
@@ -367,7 +368,7 @@ username,query,The user name for login,false
 password,query,The password for login in clear text,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -375,39 +376,39 @@ Code,Description
 400,Invalid username/password supplied
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Logs out current logged in user session
+=== Logs out current logged in user session
 ----
 GET /users/logout
 ----
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
 default,successful operation
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Get user by user name
+=== Get user by user name
 ----
 GET /users/{username}
 ----
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 username,path,The name that needs to be fetched. Use user1 for testing.,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -416,20 +417,20 @@ Code,Description
 404,User not found
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Updated user
+=== Updated user
 ----
 PUT /users/{username}
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 This can only be done by the logged in user.
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
@@ -437,7 +438,7 @@ username,path,name that need to be deleted,true
 body,body,Updated user object,false
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -445,27 +446,27 @@ Code,Description
 404,User not found
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
-== Delete user
+=== Delete user
 ----
 DELETE /users/{username}
 ----
 
-=== Description
+==== Description
 :hardbreaks:
 This can only be done by the logged in user.
 
-=== Parameters
+==== Parameters
 [format="csv", options="header"]
 |===
 Name,Located in,Description,Required
 username,path,The name that needs to be deleted,true
 |===
 
-=== Responses
+==== Responses
 [format="csv", options="header"]
 |===
 Code,Description
@@ -473,7 +474,7 @@ Code,Description
 404,User not found
 |===
 
-=== Produces
+==== Produces
 * application/json
 * application/xml
 
