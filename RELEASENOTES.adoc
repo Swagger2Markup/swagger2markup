@@ -2,3 +2,6 @@
 
 == Version 0.1.0
 * Initial version with support for AsciiDoc and Markdown
+
+== Version 0.2.0
+* This version is not downward compatible. This version supports includes of example files and JSON/XML Schema files. See documentation.

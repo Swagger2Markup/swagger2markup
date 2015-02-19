@@ -183,7 +183,7 @@ public class PathsDocument extends MarkupDocument {
         if(examplesEnabled){
             String summary = operation.getSummary();
             if(StringUtils.isNotBlank(summary)) {
-                String exampleFolder = summary.replace(" ", "_").toLowerCase();
+                String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
                 example(EXAMPLE_REQUEST, exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
                 example(EXAMPLE_RESPONSE, exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
             }

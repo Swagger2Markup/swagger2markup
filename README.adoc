@@ -62,16 +62,19 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToMarkup() {
         //Remote
         Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-            toAsciiDoc("src/docs/asciidoc/example.adoc");
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).
+                withExamples("docs/generated").withSchemas("docs/schemas").build()
+                .intoFolder("src/docs/markdown");
 
         Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-            toMarkdown("src/docs/markdown/example.md");
+                withExamples("docs").withSchemas("docs/schemas").build()
+                .intoFolder("src/docs/asciidoc");
 
         //Local
         File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).toAsciiDoc("src/docs/asciidoc/swagger.adoc")
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                        .intoFolder("src/docs/asciidoc");
     }
-
 }
 ----
 
@@ -132,14 +135,12 @@ image::images/mkdocs_html.PNG[mkdocs_html]
 image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 == Document Builder
-The converter allows to build an AsciiDoc or Markdown document via the Builder pattern:
+The Swagger2Markup library allows to build an AsciiDoc or Markdown document via the Builder pattern:
 [source,java]
 ----
-        String asciiDoc = new AsciiDocBuilder().documentTitle("Title")
-                .sectionTitleLevel1("Section1").paragraph("Text text")
-                .sectionTitleLevel2("Code examples").listing("Code example").toString();
+        DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 
-        String markdown = new MarkdownBuilder().documentTitle("Title")
-                .sectionTitleLevel1("Section1").paragraph("Text text")
-                .sectionTitleLevel2("Code examples").listing("Code example").toString();
+        DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 ----
