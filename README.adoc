@@ -175,9 +175,7 @@ Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
                 .intoFolder("src/docs/asciidoc");
 ```
 
-The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  for example files and includes the _request.asciidoc_ and _response.asciidoc_ files, if they are available.
-
-Now my question: Could you please enhance spring-restdocs so that it can generate AsciiDoc and/or Markdown files? Maybe configurable via gradle? That would be great. In that way, I could generated AsciiDoc and Markdown documents with examples.
+The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  and includes the _request.asciidoc_ and _response.asciidoc_ files, if they are available.
 
 == Integration of JSON and XML Schema files.
 Swagger2Markup can also include JSON and XML Schema files into the generated document.
