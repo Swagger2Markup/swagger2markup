@@ -6,7 +6,7 @@ ext {
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
 }
 
-def projectArtifactId = 'swagger2markup'
+def projectArtifactId = 'markup-document-builder'
 
 jar {
     manifest {
@@ -32,7 +32,7 @@ bintray {
     publications = ['mavenJava']
     pkg {
         repo = 'maven'
-        name = 'swagger2markup'
+        name = 'markup-document-builder'
         websiteUrl = 'https://github.com/RobWin/markup-document-builder'
         issueTrackerUrl = 'https://github.com/RobWin/markup-document-builder/issues'
         vcsUrl = 'https://github.com/RobWin/markup-document-builder.git'
