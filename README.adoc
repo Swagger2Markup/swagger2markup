@@ -198,14 +198,15 @@ I create the Schemas files in Unit-Tests as follows:
 I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder "docs/schemas".
 The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as Input or Output.
 
+See example: http://spring-swagger2markup-demo.readthedocs.org/en/latest/generated/definitions/[ReadTheDocs-demo]
 
 == Document Builder
 The Swagger2Markup library allows to build an AsciiDoc or Markdown document via the Builder pattern:
 [source,java]
 ----
-        DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
-        builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 
-        DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
-        builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 ----
