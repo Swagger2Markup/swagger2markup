@@ -1,15 +1,17 @@
 = Swagger2Markup
 :author: Robert Winkler
-:version: 0.1.0
+:version: 0.2.0
 :hardbreaks:
 
-image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="https://bintray.com/robwin/maven/swagger2markup/0.1.0/view"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="https://bintray.com/robwin/maven/swagger2markup/0.2.0/view"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
 
 == Overview
 
 This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely accessible via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser].
 
 The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
+
+The project requires at least JDK 7.
 
 == Usage
 
@@ -205,8 +207,8 @@ The Swagger2Markup library allows to build an AsciiDoc or Markdown document via 
 [source,java]
 ----
 MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
-builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test", StandardCharsets.UTF_8);
 
 MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.Markdown);
-builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test", StandardCharsets.UTF_8);
 ----
