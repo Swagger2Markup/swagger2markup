@@ -1,0 +1,77 @@
+import java.text.SimpleDateFormat
+
+Date buildTimeAndDate = new Date()
+ext {
+    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+}
+
+def projectArtifactId = 'swagger2markup'
+
+jar {
+    manifest {
+        attributes(
+                'Built-By': 'Robert Winkler',
+                'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+                'Build-Date': project.buildDate,
+                'Build-Time': project.buildTime,
+                'Specification-Title': projectArtifactId,
+                'Specification-Version': project.version,
+                'Implementation-Title': projectArtifactId,
+                'Implementation-Version': project.version
+        )
+    }
+}
+
+if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
+if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
+
+bintray {
+    user = project.bintrayUsername
+    key = project.bintrayApiKey
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = 'swagger2markup'
+        websiteUrl = 'https://github.com/RobWin/markup-document-builder'
+        issueTrackerUrl = 'https://github.com/RobWin/markup-document-builder/issues'
+        vcsUrl = 'https://github.com/RobWin/markup-document-builder.git'
+        desc = 'A Markup (Markdown, AsciiDoc) document builder.'
+        licenses = ['Apache-2.0']
+        version {
+            vcsTag = project.version
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom.withXml {
+                def devs = ['RobWin': 'Robert Winkler']
+                def root = asNode()
+                root.appendNode('name', 'markup-document-builder')
+                root.appendNode('packaging', 'jar')
+                root.appendNode('url', 'https://github.com/RobWin/markup-document-builder')
+                root.appendNode('description', 'A Markup (Markdown, AsciiDoc) document builder.')
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'Apache-2.0')
+                license.appendNode('url', 'https://github.com/RobWin/markup-document-builder/blob/master/LICENSE.txt')
+                license.appendNode('distribution', 'repo')
+
+                root.appendNode('scm').appendNode('url', 'https://github.com/RobWin/markup-document-builder.git')
+
+                def developers = root.appendNode('developers')
+                devs.each {
+                    def d = developers.appendNode('developer')
+                    d.appendNode('id', it.key)
+                    d.appendNode('name', it.value)
+                }
+            }
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}

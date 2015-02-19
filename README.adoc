@@ -1,0 +1,31 @@
+= MarkupDocBuilder
+:author: Robert Winkler
+:version: 0.1.0
+:hardbreaks:
+
+== Overview
+
+This project is a Markup document builder (AsciiDoc and Markdown). The primary goal of this project is to simplify the creation of Markup documents.
+
+The project requires at least JDK 7.
+
+=== Usage
+The MarkupDocBuilder allows to build an AsciiDoc or Markdown document via the Builder pattern. You can create
+[source,java]
+----
+MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+
+MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.Markdown);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+----
+
+It can also create Tables and source code listings.
+
+```java
+DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+
+DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+builder.documentTitle("Test title").source("Java code", "java").paragraph("Long text paragaph with line breaks").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
+```
