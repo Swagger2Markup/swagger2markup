@@ -1,7 +1,7 @@
 package io.github.robwin.swagger2markup.builder.markup.markdown;
 
-import io.github.robwin.swagger2markup.builder.markup.AbstractDocumentBuilder;
-import io.github.robwin.swagger2markup.builder.markup.DocumentBuilder;
+import io.github.robwin.swagger2markup.builder.markup.AbstractMarkupDocBuilder;
+import io.github.robwin.swagger2markup.builder.markup.MarkupDocBuilder;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -9,52 +9,48 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Project:   swagger2asciidoc
- * Copyright: Deutsche Telekom AG
- *
- * @author Robert Winkler <robert.winkler@telekom.de>
- * @since 2.0.0
+ * @author Robert Winkler
  */
-public class MarkdownBuilder extends AbstractDocumentBuilder
+public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
     @Override
-    public DocumentBuilder documentTitle(String title){
+    public MarkupDocBuilder documentTitle(String title){
         documentTitle(Markdown.DOCUMENT_TITLE, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder sectionTitleLevel1(String title){
+    public MarkupDocBuilder sectionTitleLevel1(String title){
         sectionTitleLevel1(Markdown.SECTION_TITLE_LEVEL1, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder sectionTitleLevel2(String title){
+    public MarkupDocBuilder sectionTitleLevel2(String title){
         sectionTitleLevel2(Markdown.SECTION_TITLE_LEVEL2, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder sectionTitleLevel3(String title){
+    public MarkupDocBuilder sectionTitleLevel3(String title){
         sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL3, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder paragraph(String text){
+    public MarkupDocBuilder paragraph(String text){
         paragraph(Markdown.HARDBREAKS, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder listing(String text){
+    public MarkupDocBuilder listing(String text){
         listing(Markdown.LISTING, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder source(String text, String language){
+    public MarkupDocBuilder source(String text, String language){
         documentBuilder.append(Markdown.LISTING).append(language).append(newLine).
                 append(text).append(newLine).
                 append(Markdown.LISTING).append(newLine).append(newLine);
@@ -62,25 +58,25 @@ public class MarkdownBuilder extends AbstractDocumentBuilder
     }
 
     @Override
-    public DocumentBuilder boldTextLine(String text){
+    public MarkupDocBuilder boldTextLine(String text){
         boldTextLine(Markdown.BOLD, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder italicTextLine(String text) {
+    public MarkupDocBuilder italicTextLine(String text) {
         italicTextLine(Markdown.ITALIC, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder unorderedList(List<String> list){
+    public MarkupDocBuilder unorderedList(List<String> list){
         unorderedList(Markdown.LIST_ENTRY, list);
         return this;
     }
 
     @Override
-    public DocumentBuilder tableWithHeaderRow(List<String> rowsInCSV){
+    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInCSV){
         String headersInCSV = rowsInCSV.get(0);
         List<String> contentRowsInCSV = rowsInCSV.subList(1, rowsInCSV.size());
         List<String> headers = Arrays.asList(headersInCSV.split(","));

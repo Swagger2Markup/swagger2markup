@@ -1,7 +1,7 @@
 package io.github.robwin.swagger2markup.builder.markup.asciidoc;
 
-import io.github.robwin.swagger2markup.builder.markup.AbstractDocumentBuilder;
-import io.github.robwin.swagger2markup.builder.markup.DocumentBuilder;
+import io.github.robwin.swagger2markup.builder.markup.AbstractMarkupDocBuilder;
+import io.github.robwin.swagger2markup.builder.markup.MarkupDocBuilder;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -10,71 +10,71 @@ import java.util.List;
 /**
  * @author Robert Winkler
  */
-public class AsciiDocBuilder extends AbstractDocumentBuilder{
+public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
-    public DocumentBuilder documentTitle(String title){
+    public MarkupDocBuilder documentTitle(String title){
         documentTitle(AsciiDoc.DOCUMENT_TITLE, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder sectionTitleLevel1(String title){
+    public MarkupDocBuilder sectionTitleLevel1(String title){
         sectionTitleLevel1(AsciiDoc.SECTION_TITLE_LEVEL1, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder sectionTitleLevel2(String title){
+    public MarkupDocBuilder sectionTitleLevel2(String title){
         sectionTitleLevel2(AsciiDoc.SECTION_TITLE_LEVEL2, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder sectionTitleLevel3(String title){
+    public MarkupDocBuilder sectionTitleLevel3(String title){
         sectionTitleLevel3(AsciiDoc.SECTION_TITLE_LEVEL3, title);
         return this;
     }
 
     @Override
-    public DocumentBuilder paragraph(String text){
+    public MarkupDocBuilder paragraph(String text){
         paragraph(AsciiDoc.HARDBREAKS, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder listing(String text){
+    public MarkupDocBuilder listing(String text){
         listing(AsciiDoc.LISTING, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder boldTextLine(String text){
+    public MarkupDocBuilder boldTextLine(String text){
         boldTextLine(AsciiDoc.BOLD, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder italicTextLine(String text) {
+    public MarkupDocBuilder italicTextLine(String text) {
         italicTextLine(AsciiDoc.ITALIC, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder unorderedList(List<String> list){
+    public MarkupDocBuilder unorderedList(List<String> list){
         unorderedList(AsciiDoc.LIST_ENTRY, list);
         return this;
     }
 
     @Override
-    public DocumentBuilder source(String text, String language){
+    public MarkupDocBuilder source(String text, String language){
         documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
         listing(AsciiDoc.LISTING, text);
         return this;
     }
 
     @Override
-    public DocumentBuilder tableWithHeaderRow(List<String> rowsInCSV){
+    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInCSV){
         documentBuilder.append("[format=\"csv\", options=\"header\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         for(String row : rowsInCSV){

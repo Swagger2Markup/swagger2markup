@@ -204,9 +204,9 @@ See example: http://spring-swagger2markup-demo.readthedocs.org/en/latest/generat
 The Swagger2Markup library allows to build an AsciiDoc or Markdown document via the Builder pattern:
 [source,java]
 ----
-DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
 builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 
-DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.Markdown);
 builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 ----

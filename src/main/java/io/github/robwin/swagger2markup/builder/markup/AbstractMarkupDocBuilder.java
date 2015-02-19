@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author Robert Winkler
  */
-public abstract class AbstractDocumentBuilder implements DocumentBuilder {
+public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -36,7 +36,7 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
     }
 
     @Override
-    public DocumentBuilder textLine(String text){
+    public MarkupDocBuilder textLine(String text){
         documentBuilder.append(text).append(newLine);
         return this;
     }
@@ -73,7 +73,7 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
     }
 
     @Override
-    public DocumentBuilder newLine(){
+    public MarkupDocBuilder newLine(){
         documentBuilder.append(newLine);
         return this;
     }

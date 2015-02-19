@@ -1,8 +1,8 @@
 package io.github.robwin.swagger2markup.builder.document;
 
 import com.wordnik.swagger.models.Swagger;
-import io.github.robwin.swagger2markup.builder.markup.DocumentBuilder;
-import io.github.robwin.swagger2markup.builder.markup.DocumentBuilders;
+import io.github.robwin.swagger2markup.builder.markup.MarkupDocBuilder;
+import io.github.robwin.swagger2markup.builder.markup.MarkupDocBuilders;
 import io.github.robwin.swagger2markup.builder.markup.MarkupLanguage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,11 +11,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
- * Project:   swagger2markup
- * Copyright: Deutsche Telekom AG
- *
- * @author Robert Winkler <robert.winkler@telekom.de>
- * @since 2.0.0
+ * @author Robert Winkler
  */
 public abstract class MarkupDocument {
 
@@ -24,12 +20,12 @@ public abstract class MarkupDocument {
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;
-    protected DocumentBuilder documentBuilder;
+    protected MarkupDocBuilder markupDocBuilder;
 
     MarkupDocument(Swagger swagger, MarkupLanguage markupLanguage){
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
-        this.documentBuilder = DocumentBuilders.documentBuilder(markupLanguage);
+        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
     }
 
     /**
@@ -44,7 +40,7 @@ public abstract class MarkupDocument {
      * Returns a string representation of the document.
      */
     public String toString(){
-        return documentBuilder.toString();
+        return markupDocBuilder.toString();
     }
 
     /**
@@ -56,6 +52,6 @@ public abstract class MarkupDocument {
      * @throws IOException if the file cannot be written
      */
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException{
-        documentBuilder.writeToFile(directory, fileName, charset);
+        markupDocBuilder.writeToFile(directory, fileName, charset);
     }
 }

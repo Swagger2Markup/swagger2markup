@@ -18,11 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Project:   swagger2markup
- * Copyright: Deutsche Telekom AG
- *
- * @author Robert Winkler <robert.winkler@telekom.de>
- * @since 2.0.0
+ * @author Robert Winkler
  */
 public class DefinitionsDocument extends MarkupDocument {
 
@@ -69,7 +65,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void definitions(Map<String, Model> definitions) throws IOException {
         if(MapUtils.isNotEmpty(definitions)){
-            this.documentBuilder.sectionTitleLevel1(DEFINITIONS);
+            this.markupDocBuilder.sectionTitleLevel1(DEFINITIONS);
             for(Map.Entry<String, Model> definitionsEntry : definitions.entrySet()){
                 String definitionName = definitionsEntry.getKey();
                 if(StringUtils.isNotBlank(definitionName)) {
@@ -106,7 +102,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param model the Swagger Model of the definition
      */
     private void definition(String definitionName, Model model) {
-        this.documentBuilder.sectionTitleLevel2(definitionName);
+        this.markupDocBuilder.sectionTitleLevel2(definitionName);
         Map<String, Property> properties = model.getProperties();
         List<String> csvContent = new ArrayList<>();
         csvContent.add(NAME_COLUMN + DELIMITER + TYPE_COLUMN + DELIMITER + REQUIRED_COLUMN);
@@ -114,7 +110,7 @@ public class DefinitionsDocument extends MarkupDocument {
             Property property = propertyEntry.getValue();
             csvContent.add(propertyEntry.getKey() + DELIMITER + property.getType() + DELIMITER + property.getRequired());
         }
-        this.documentBuilder.tableWithHeaderRow(csvContent);
+        this.markupDocBuilder.tableWithHeaderRow(csvContent);
     }
 
     private void definitionSchema(String definitionName) throws IOException {
@@ -129,8 +125,8 @@ public class DefinitionsDocument extends MarkupDocument {
     private void schema(String title, String schemasFolderPath, String schemaName, String language) throws IOException {
         java.nio.file.Path path = Paths.get(schemasFolderPath, schemaName);
         if (Files.isReadable(path)) {
-            this.documentBuilder.sectionTitleLevel3(title);
-            this.documentBuilder.source(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim(), language);
+            this.markupDocBuilder.sectionTitleLevel3(title);
+            this.markupDocBuilder.source(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim(), language);
             if (logger.isInfoEnabled()) {
                 logger.info("Schema file processed: {}", path);
             }

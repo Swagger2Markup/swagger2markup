@@ -7,32 +7,32 @@ import java.util.List;
 /**
  * @author Robert Winkler
  */
-public interface DocumentBuilder {
-    DocumentBuilder documentTitle(String title);
+public interface MarkupDocBuilder {
+    MarkupDocBuilder documentTitle(String title);
 
-    DocumentBuilder sectionTitleLevel1(String title);
+    MarkupDocBuilder sectionTitleLevel1(String title);
 
-    DocumentBuilder sectionTitleLevel2(String title);
+    MarkupDocBuilder sectionTitleLevel2(String title);
 
-    DocumentBuilder sectionTitleLevel3(String title);
+    MarkupDocBuilder sectionTitleLevel3(String title);
 
-    DocumentBuilder textLine(String text);
+    MarkupDocBuilder textLine(String text);
 
-    DocumentBuilder paragraph(String text);
+    MarkupDocBuilder paragraph(String text);
 
-    DocumentBuilder listing(String text);
+    MarkupDocBuilder listing(String text);
 
-    DocumentBuilder source(String text, String language);
+    MarkupDocBuilder source(String text, String language);
 
-    DocumentBuilder boldTextLine(String text);
+    MarkupDocBuilder boldTextLine(String text);
 
-    DocumentBuilder italicTextLine(String text);
+    MarkupDocBuilder italicTextLine(String text);
 
-    DocumentBuilder unorderedList(List<String> list);
+    MarkupDocBuilder unorderedList(List<String> list);
 
-    DocumentBuilder tableWithHeaderRow(List<String> rowsInCSV);
+    MarkupDocBuilder tableWithHeaderRow(List<String> rowsInCSV);
 
-    DocumentBuilder newLine();
+    MarkupDocBuilder newLine();
 
     /**
      * Returns a string representation of the document.

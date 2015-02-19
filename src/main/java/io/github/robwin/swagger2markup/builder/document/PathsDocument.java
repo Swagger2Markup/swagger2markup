@@ -17,11 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Project:   swagger2markup
- * Copyright: Deutsche Telekom AG
- *
- * @author Robert Winkler <robert.winkler@telekom.de>
- * @since 2.0.0
+ * @author Robert Winkler
  */
 public class PathsDocument extends MarkupDocument {
 
@@ -73,7 +69,7 @@ public class PathsDocument extends MarkupDocument {
      * @param info the Swagger Info
      */
     private void documentHeader(Info info) {
-        this.documentBuilder
+        this.markupDocBuilder
                 .documentTitle(info.getTitle())
                 .textLine(info.getDescription())
                 .textLine(VERSION + info.getVersion())
@@ -124,11 +120,11 @@ public class PathsDocument extends MarkupDocument {
         String title;
         if(StringUtils.isNotBlank(summary)) {
             title = summary;
-            this.documentBuilder.sectionTitleLevel1(title);
-            this.documentBuilder.listing(httpMethod + " " + resourcePath);
+            this.markupDocBuilder.sectionTitleLevel1(title);
+            this.markupDocBuilder.listing(httpMethod + " " + resourcePath);
         }else{
             title = httpMethod + " " + resourcePath;
-            this.documentBuilder.sectionTitleLevel1(title);
+            this.markupDocBuilder.sectionTitleLevel1(title);
         }
         if (logger.isInfoEnabled()) {
             logger.info("Path processed: {}", title);
@@ -138,8 +134,8 @@ public class PathsDocument extends MarkupDocument {
     private void descriptionSection(Operation operation) {
         String description = operation.getDescription();
         if(StringUtils.isNotBlank(description)){
-            this.documentBuilder.sectionTitleLevel2(DESCRIPTION);
-            this.documentBuilder.paragraph(description);
+            this.markupDocBuilder.sectionTitleLevel2(DESCRIPTION);
+            this.markupDocBuilder.paragraph(description);
         }
     }
 
@@ -151,16 +147,16 @@ public class PathsDocument extends MarkupDocument {
             for(Parameter parameter : parameters){
                 csvContent.add(parameter.getName() + DELIMITER + parameter.getIn() + DELIMITER + parameter.getDescription() + DELIMITER + parameter.getRequired());
             }
-            this.documentBuilder.sectionTitleLevel2(PARAMETERS);
-            this.documentBuilder.tableWithHeaderRow(csvContent);
+            this.markupDocBuilder.sectionTitleLevel2(PARAMETERS);
+            this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
     }
 
     private void consumesSection(Operation operation) {
         List<String> consumes = operation.getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
-            this.documentBuilder.sectionTitleLevel2(CONSUMES);
-            this.documentBuilder.unorderedList(consumes);
+            this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
+            this.markupDocBuilder.unorderedList(consumes);
         }
 
     }
@@ -168,8 +164,8 @@ public class PathsDocument extends MarkupDocument {
     private void producesSection(Operation operation) {
         List<String> produces = operation.getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
-            this.documentBuilder.sectionTitleLevel2(PRODUCES);
-            this.documentBuilder.unorderedList(produces);
+            this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
+            this.markupDocBuilder.unorderedList(produces);
         }
     }
 
@@ -202,8 +198,8 @@ public class PathsDocument extends MarkupDocument {
         for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
             java.nio.file.Path path = Paths.get(examplesFolderPath, exampleFolder, exampleFileName + fileNameExtension);
             if (Files.isReadable(path)) {
-                this.documentBuilder.sectionTitleLevel2(title);
-                this.documentBuilder.paragraph(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                this.markupDocBuilder.sectionTitleLevel2(title);
+                this.markupDocBuilder.paragraph(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 if (logger.isInfoEnabled()) {
                     logger.info("Example file processed: {}", path);
                 }
@@ -225,8 +221,8 @@ public class PathsDocument extends MarkupDocument {
                 Response response = entry.getValue();
                 csvContent.add(entry.getKey() + DELIMITER + response.getDescription());
             }
-            this.documentBuilder.sectionTitleLevel2(RESPONSES);
-            this.documentBuilder.tableWithHeaderRow(csvContent);
+            this.markupDocBuilder.sectionTitleLevel2(RESPONSES);
+            this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
     }
 
