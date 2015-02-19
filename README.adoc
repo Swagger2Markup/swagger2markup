@@ -74,3 +74,4 @@ public class MarkupDocBuilderTest {
 You can generate your PDF or HTML documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin].
 
 image::images/asciidoc_html.jpg[asciidoc_html]
+
