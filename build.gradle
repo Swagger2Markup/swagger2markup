@@ -13,8 +13,8 @@ buildscript {
     }
 }
 description = 'swagger2markup Build'
-version = '0.1.0'
-group = 'io.swagger2markup'
+version = '0.2.0'
+group = 'io.github.robwin'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
@@ -41,6 +41,8 @@ repositories {
 dependencies {
     compile 'io.swagger:swagger-compat-spec-parser'
     compile 'commons-collections:commons-collections'
+    compile 'commons-io:commons-io'
+    compile 'ch.qos.logback:logback-classic'
     testCompile 'junit:junit'
 }
 
@@ -48,8 +50,10 @@ dependencyManagement {
     dependencies {
         "io.swagger:swagger-compat-spec-parser" "1.0.0"
         "commons-collections:commons-collections" "3.2.1"
+        "commons-io:commons-io" "2.4"
         "com.mangofactory:swagger-springmvc" "0.9.5"
         "com.jayway.restassured:spring-mock-mvc" "2.4.0"
+        "ch.qos.logback:logback-classic" "1.1.2"
         "junit:junit" "4.11"
     }
 }

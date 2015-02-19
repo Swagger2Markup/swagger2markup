@@ -1,6 +1,6 @@
-package io.swagger2markup.builder.markdown;
+package io.github.robwin.swagger2markup.builder.markup.markdown;
 
-import io.swagger2markup.builder.Markup;
+import io.github.robwin.swagger2markup.builder.markup.Markup;
 
 /**
  * Project:   swagger2asciidoc

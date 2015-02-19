@@ -28,7 +28,7 @@ The primary goal of this project is to simplify the documentation of RESTful API
 </repositories>
 
 <dependency>
-    <groupId>io.swagger2markup</groupId>
+    <groupId>io.github.robwin.swagger2markup</groupId>
     <artifactId>swagger2markup</artifactId>
     <version>0.1.0</version>
 </dependency>
@@ -42,7 +42,7 @@ repositories {
     jcenter()
 }
 
-compile "io.swagger2markup:swagger2markup:0.1.0"
+compile "io.github.robwin:swagger2markup:0.1.0"
 ----
 
 === Using Swagger2Markup
@@ -122,13 +122,13 @@ image::images/asciidoc.PNG[asciidoc]
 === Generated Markdown file
 image::images/markdown.PNG[markdown]
 
-=== Generated HTML via AsciidoctorJ
+=== Generated HTML using AsciidoctorJ
 image::images/asciidoc_html.PNG[asciidoc_html]
 
-=== Generated HTML via Mkdocs
+=== Generated HTML using Mkdocs
 image::images/mkdocs_html.PNG[mkdocs_html]
 
-=== Generated PDF via AsciidoctorJ
+=== Generated PDF using AsciidoctorJ
 image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 == Document Builder

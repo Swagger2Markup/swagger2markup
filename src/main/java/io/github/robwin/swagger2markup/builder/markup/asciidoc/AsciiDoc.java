@@ -1,6 +1,6 @@
-package io.swagger2markup.builder.asciidoc;
+package io.github.robwin.swagger2markup.builder.markup.asciidoc;
 
-import io.swagger2markup.builder.Markup;
+import io.github.robwin.swagger2markup.builder.markup.Markup;
 
 /**
  * @author Robert Winkler

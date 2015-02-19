@@ -1,5 +1,13 @@
-package io.swagger2markup.builder;
+package io.github.robwin.swagger2markup.builder.markup;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -9,6 +17,7 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
     
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected void documentTitle(Markup markup, String title){
         documentBuilder.append(markup).append(title).append(newLine);
@@ -26,6 +35,7 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
+    @Override
     public DocumentBuilder textLine(String text){
         documentBuilder.append(text).append(newLine);
         return this;
@@ -39,7 +49,7 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
         delimitedTextLine(markup, text);
     }
 
-    private void delimitedTextLine(Markup markup, String text){
+    protected void delimitedTextLine(Markup markup, String text){
         documentBuilder.append(markup).append(newLine).append(text).append(newLine).append(markup).append(newLine).append(newLine);
     }
 
@@ -62,6 +72,7 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
         documentBuilder.append(newLine);
     }
 
+    @Override
     public DocumentBuilder newLine(){
         documentBuilder.append(newLine);
         return this;
@@ -70,5 +81,17 @@ public abstract class AbstractDocumentBuilder implements DocumentBuilder {
     @Override
     public String toString(){
         return documentBuilder.toString();
+    }
+
+    @Override
+    public void writeToFile(String directory, String fileNameWithExtension, Charset charset) throws IOException {
+        Files.createDirectories(Paths.get(directory));
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileNameWithExtension), charset)){
+            writer.write(documentBuilder.toString());
+        }
+        if (logger.isInfoEnabled()) {
+            logger.info("{} was written to: {}", fileNameWithExtension, directory);
+        }
+        documentBuilder = new StringBuilder();
     }
 }
