@@ -138,28 +138,31 @@ image::images/mkdocs_html.PNG[mkdocs_html]
 image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 
-== Integration with spring-restdocs.
-spring-restdocs can be used together with Swagger2Markup.
+== Integration with spring-restdocs
+https://github.com/spring-projects/spring-restdocs[spring-restdocs] can be used together with Swagger2Markup.
 Swagger2Markup can include the generated examples from spring-restdocs into the generated AsciiDoc document.
-Currently it does not work for Markdown, since spring-restdocs generates AsciiDoc files.
+Currently it does not work for Markdown, since spring-restdocs generates only AsciiDoc files.
 
-Let's say I have a Swagger-annotated Controller method with a ApiOperation value _"Create a quota"_
+Let's say I have a Swagger-annotated Spring RestController method with an ApiOperation value: _"Create a quota"_
 
 ```java
-@ApiOperation(value = "Create a quota.", notes =  "Create a quota allows bla bla bla bla")
-public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota", value = "MailStorageQuota", required = true) @RequestBody MailStorageQuota mailStorageQuota) {
+@ApiOperation(value = "Create a quota", notes =  "Create a quota allows bla bla bla bla")
+public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota",
+    value = "MailStorageQuota", required = true) @RequestBody MailStorageQuota mailStorageQuota) {
 }
 ```
 
 I'm using spring-restdocs in combination with https://github.com/jayway/rest-assured to test the Controller.
-The target folder of the generated request and response example files must be _"create_a_quota"_.
+The target folder of the generated request and response example files must be _"create_a_quota"_ (similar to the value of the ApiOperation).
 
 ```java
 given().contentType(ContentType.XML).body(storageQuota).resultHandlers(document("create_a_quota")).
 when().put("/quotas").
 then().statusCode(204);
 ```
-The output directory is configured as follows:
+
+The spring-restdocs output directory is configured as follows:
+
 ```
 io.restdocumented.outputDir = docs/generated
 ```
@@ -172,7 +175,7 @@ Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
                 .intoFolder("src/docs/asciidoc");
 ```
 
-The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  for example files and includes the request.asciidoc and response.asciidoc files, if they are available.
+The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  for example files and includes the _request.asciidoc_ and _response.asciidoc_ files, if they are available.
 
 Now my question: Could you please enhance spring-restdocs so that it can generate AsciiDoc and/or Markdown files? Maybe configurable via gradle? That would be great. In that way, I could generated AsciiDoc and Markdown documents with examples.
 
