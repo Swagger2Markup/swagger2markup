@@ -11,8 +11,21 @@ This project is a Markup document builder (AsciiDoc and Markdown). The primary g
 
 The project requires at least JDK 7.
 
+=== Gradle
+
+[source,groovy]
+----
+repositories {
+    jcenter()
+}
+
+compile "io.github.robwin:markup-document-builder:0.1.0"
+----
+
 === Usage
 The MarkupDocBuilder allows to build an AsciiDoc or Markdown document via the Builder pattern.
+
+
 
 [source,java]
 ----
