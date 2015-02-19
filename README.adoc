@@ -64,7 +64,7 @@ If you’d like an enhancement to be made to Swagger2Markup, pull requests are m
 * http://www.qaware.de/[QAware GmbH]
 * http://www.appdirect.com/[AppDirect] -- The leading commerce platform for selling cloud services.
 * http://www.wescale.com[wescale]
-* http://taskassure.com[TaskAssure] 
+* http://taskassure.com[TaskAssure]
 * https://www.isaac.nl[ISAAC]
 * https://www.spreadshirt.de[Spreadshirt]
 
