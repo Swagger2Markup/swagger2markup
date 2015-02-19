@@ -30,7 +30,7 @@ The primary goal of this project is to simplify the documentation of RESTful API
 <dependency>
     <groupId>io.github.robwin.swagger2markup</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ----
 
@@ -42,7 +42,7 @@ repositories {
     jcenter()
 }
 
-compile "io.github.robwin:swagger2markup:0.1.0"
+compile "io.github.robwin:swagger2markup:0.2.0"
 ----
 
 === Using Swagger2Markup
