@@ -1,8 +1,10 @@
-package io.swagger2markup.builder.markdown;
+package io.github.robwin.swagger2markup.builder.markup.markdown;
 
-import io.swagger2markup.builder.AbstractDocumentBuilder;
-import io.swagger2markup.builder.DocumentBuilder;
+import io.github.robwin.swagger2markup.builder.markup.AbstractDocumentBuilder;
+import io.github.robwin.swagger2markup.builder.markup.DocumentBuilder;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,6 +50,14 @@ public class MarkdownBuilder extends AbstractDocumentBuilder
     @Override
     public DocumentBuilder listing(String text){
         listing(Markdown.LISTING, text);
+        return this;
+    }
+
+    @Override
+    public DocumentBuilder source(String text, String language){
+        documentBuilder.append(Markdown.LISTING).append(language).append(newLine).
+                append(text).append(newLine).
+                append(Markdown.LISTING).append(newLine).append(newLine);
         return this;
     }
 
@@ -100,5 +110,11 @@ public class MarkdownBuilder extends AbstractDocumentBuilder
         }
         newLine().newLine();
         return this;
+    }
+
+    @Override
+    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
+        String fileNameWithExtension = fileName + ".md";
+        super.writeToFile(directory, fileNameWithExtension, charset);
     }
 }

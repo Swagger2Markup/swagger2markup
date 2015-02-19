@@ -28,9 +28,9 @@ The primary goal of this project is to simplify the documentation of RESTful API
 </repositories>
 
 <dependency>
-    <groupId>io.swagger2markup</groupId>
+    <groupId>io.github.robwin.swagger2markup</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
 </dependency>
 ----
 
@@ -42,7 +42,7 @@ repositories {
     jcenter()
 }
 
-compile "io.swagger2markup:swagger2markup:0.1.0"
+compile "io.github.robwin:swagger2markup:0.2.0"
 ----
 
 === Using Swagger2Markup
@@ -62,16 +62,19 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToMarkup() {
         //Remote
         Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-            toAsciiDoc("src/docs/asciidoc/example.adoc");
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).
+                withExamples("docs/generated").withSchemas("docs/schemas").build()
+                .intoFolder("src/docs/markdown");
 
         Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-            toMarkdown("src/docs/markdown/example.md");
+                withExamples("docs").withSchemas("docs/schemas").build()
+                .intoFolder("src/docs/asciidoc");
 
         //Local
         File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).toAsciiDoc("src/docs/asciidoc/swagger.adoc")
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                        .intoFolder("src/docs/asciidoc");
     }
-
 }
 ----
 
@@ -110,29 +113,34 @@ public class SpringBootSwaggerConfig {
 
 You can generate your HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin].
 You can also use https://github.com/tomchristie/mkdocs[MkDocs] and https://github.com/rtfd/readthedocs.org[ReadTheDocs] to publish your Markdown documentation.
+See http://spring-swagger2markup-demo.readthedocs.org/[ReadTheDocs-demo]
 
-== Example
-== swagger.json
+== Examples
+== Swagger source file
 image::images/swagger_json.PNG[swagger_json]
 
 === Generated AsciiDoc file
 image::images/asciidoc.PNG[asciidoc]
 
 === Generated Markdown file
-image::images/markdown.PNG[asciidoc]
+image::images/markdown.PNG[markdown]
 
-=== Generated HTML
+=== Generated HTML using AsciidoctorJ
 image::images/asciidoc_html.PNG[asciidoc_html]
 
+=== Generated HTML using Mkdocs
+image::images/mkdocs_html.PNG[mkdocs_html]
+
+=== Generated PDF using AsciidoctorJ
+image::images/asciidoc_pdf.PNG[asciidoc_pdf]
+
 == Document Builder
-The converter allows to build an AsciiDoc or Markdown document via the Builder pattern:
+The Swagger2Markup library allows to build an AsciiDoc or Markdown document via the Builder pattern:
 [source,java]
 ----
-        String asciiDoc = new AsciiDocBuilder().documentTitle("Title")
-                .sectionTitleLevel1("Section1").paragraph("Text text")
-                .sectionTitleLevel2("Code examples").listing("Code example").toString();
+        DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 
-        String markdown = new MarkdownBuilder().documentTitle("Title")
-                .sectionTitleLevel1("Section1").paragraph("Text text")
-                .sectionTitleLevel2("Code examples").listing("Code example").toString();
+        DocumentBuilder builder = DocumentBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test.adoc", StandardCharsets.UTF_8);
 ----

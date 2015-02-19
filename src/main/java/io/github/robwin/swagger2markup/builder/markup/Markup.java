@@ -1,4 +1,4 @@
-package io.swagger2markup.builder;
+package io.github.robwin.swagger2markup.builder.markup;
 
 /**
  * Project:   swagger2asciidoc

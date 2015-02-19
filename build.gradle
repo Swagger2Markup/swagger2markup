@@ -8,17 +8,13 @@ buildscript {
         classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
         classpath 'io.spring.gradle:dependency-management-plugin:0.3.1.RELEASE'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
-        classpath 'me.champeau.gradle:jbake-gradle-plugin:0.2'
-        classpath 'org.jbake:jbake-core:2.3.2'
         classpath 'org.asciidoctor:asciidoctorj:1.5.2'
-        classpath 'org.freemarker:freemarker:2.3.19'
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     }
 }
 description = 'swagger2markup Build'
-version = '0.1.0'
-group = 'io.swagger2markup'
+version = '0.2.0'
+group = 'io.github.robwin'
 
 apply plugin: 'java'
 apply plugin: 'maven-publish'
@@ -45,6 +41,8 @@ repositories {
 dependencies {
     compile 'io.swagger:swagger-compat-spec-parser'
     compile 'commons-collections:commons-collections'
+    compile 'commons-io:commons-io'
+    compile 'ch.qos.logback:logback-classic'
     testCompile 'junit:junit'
 }
 
@@ -52,17 +50,21 @@ dependencyManagement {
     dependencies {
         "io.swagger:swagger-compat-spec-parser" "1.0.0"
         "commons-collections:commons-collections" "3.2.1"
+        "commons-io:commons-io" "2.4"
         "com.mangofactory:swagger-springmvc" "0.9.5"
         "com.jayway.restassured:spring-mock-mvc" "2.4.0"
+        "ch.qos.logback:logback-classic" "1.1.2"
         "junit:junit" "4.11"
     }
 }
 
 asciidoctor {
+    backends = ['html5', 'pdf']
     attributes = [
             doctype: 'book',
             toc: 'left',
-            toclevels: '1'
+            toclevels: '2',
+            numbered: ''
     ]
 }
 
@@ -74,6 +76,10 @@ jacocoTestReport {
 }
 
 tasks.coveralls {
+    dependsOn 'check'
+}
+
+tasks.asciidoctor {
     dependsOn 'check'
 }
 

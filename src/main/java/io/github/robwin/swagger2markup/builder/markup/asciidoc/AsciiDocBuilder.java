@@ -1,8 +1,10 @@
-package io.swagger2markup.builder.asciidoc;
+package io.github.robwin.swagger2markup.builder.markup.asciidoc;
 
-import io.swagger2markup.builder.AbstractDocumentBuilder;
-import io.swagger2markup.builder.DocumentBuilder;
+import io.github.robwin.swagger2markup.builder.markup.AbstractDocumentBuilder;
+import io.github.robwin.swagger2markup.builder.markup.DocumentBuilder;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -65,6 +67,13 @@ public class AsciiDocBuilder extends AbstractDocumentBuilder{
     }
 
     @Override
+    public DocumentBuilder source(String text, String language){
+        documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
+        listing(AsciiDoc.LISTING, text);
+        return this;
+    }
+
+    @Override
     public DocumentBuilder tableWithHeaderRow(List<String> rowsInCSV){
         documentBuilder.append("[format=\"csv\", options=\"header\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
@@ -74,4 +83,11 @@ public class AsciiDocBuilder extends AbstractDocumentBuilder{
         documentBuilder.append(AsciiDoc.TABLE).append(newLine).append(newLine);
         return this;
     }
+
+    @Override
+    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
+        String fileNameWithExtension = fileName + ".adoc";
+        super.writeToFile(directory, fileNameWithExtension, charset);
+    }
+
 }
