@@ -21,9 +21,12 @@ The primary goal of this project is to simplify the documentation of RESTful API
 ----
 <repositories>
     <repository>
-      <id>jcenter-release</id>
-      <name>jcenter</name>
-      <url>http://oss.jfrog.org/artifactory/oss-release-local/</url>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>central</id>
+        <name>bintray</name>
+        <url>http://jcenter.bintray.com</url>
     </repository>
 </repositories>
 
