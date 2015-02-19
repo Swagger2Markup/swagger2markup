@@ -137,6 +137,67 @@ image::images/mkdocs_html.PNG[mkdocs_html]
 === Generated PDF using AsciidoctorJ
 image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
+
+== Integration with spring-restdocs.
+spring-restdocs can be used together with Swagger2Markup.
+Swagger2Markup can include the generated examples from spring-restdocs into the generated AsciiDoc document.
+Currently it does not work for Markdown, since spring-restdocs generates AsciiDoc files.
+
+Let's say I have a Swagger-annotated Controller method with a ApiOperation value _"Create a quota"_
+
+```java
+@ApiOperation(value = "Create a quota.", notes =  "Create a quota allows bla bla bla bla")
+public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota", value = "MailStorageQuota", required = true) @RequestBody MailStorageQuota mailStorageQuota) {
+}
+```
+
+I'm using spring-restdocs in combination with https://github.com/jayway/rest-assured to test the Controller.
+The target folder of the generated request and response example files must be _"create_a_quota"_.
+
+```java
+given().contentType(ContentType.XML).body(storageQuota).resultHandlers(document("create_a_quota")).
+when().put("/quotas").
+then().statusCode(204);
+```
+The output directory is configured as follows:
+```
+io.restdocumented.outputDir = docs/generated
+```
+
+The Swagger2MarkupConverter must know the output directory of spring-restdocs.
+
+```java
+Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
+                withExamples("docs/generated").build()
+                .intoFolder("src/docs/asciidoc");
+```
+
+The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  for example files and includes the request.asciidoc and response.asciidoc files, if they are available.
+
+Now my question: Could you please enhance spring-restdocs so that it can generate AsciiDoc and/or Markdown files? Maybe configurable via gradle? That would be great. In that way, I could generated AsciiDoc and Markdown documents with examples.
+
+== Integration of JSON and XML Schema files.
+Swagger2Markup can also include JSON and XML Schema files into the generated document.
+
+```java
+Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).
+                withExamples("docs/generated").withSchemas("docs/schemas").build()
+                .intoFolder("src/docs/markdown");
+```
+
+I create the Schemas files in Unit-Tests as follows:
+
+```java
+        RestDocumented restDocumented = RestDocumented.fromProperties();
+        restDocumented.documentJsonSchema(MailStorageQuota.class, "docs/schemas");
+        restDocumented.documentXmlSchema(MailStorageQuota.class, "docs/schemas");
+```
+
+I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder "docs/schemas".
+The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as Input or Output.
+
+
 == Document Builder
 The Swagger2Markup library allows to build an AsciiDoc or Markdown document via the Builder pattern:
 [source,java]
