@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
         classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
-        classpath 'io.spring.gradle:dependency-management-plugin:0.3.1.RELEASE'
+        classpath 'io.spring.gradle:dependency-management-plugin:0.4.0.RELEASE'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'org.asciidoctor:asciidoctorj:1.5.2'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
