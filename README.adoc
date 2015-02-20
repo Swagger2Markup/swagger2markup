@@ -23,9 +23,44 @@ compile "io.github.robwin:markup-document-builder:0.1.0"
 ----
 
 === Usage
+=== Adding MarkupDocBuilder to your project
+
+==== Maven
+
+[source,xml]
+----
+<repositories>
+    <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>central</id>
+        <name>bintray</name>
+        <url>http://jcenter.bintray.com</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.github.robwin.swagger2markup</groupId>
+    <artifactId>markup-document-builder</artifactId>
+    <version>0.1.0</version>
+</dependency>
+----
+
+==== Gradle
+
+[source,groovy]
+----
+repositories {
+    jcenter()
+}
+
+compile "io.github.robwin:markup-document-builder:0.1.0"
+----
+
+=== Using MarkupDocBuilder
+
 The MarkupDocBuilder allows to build an AsciiDoc or Markdown document via the Builder pattern.
-
-
 
 [source,java]
 ----
