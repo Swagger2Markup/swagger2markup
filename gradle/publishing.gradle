@@ -25,6 +25,9 @@ jar {
 
 if (!project.hasProperty('bintrayUsername')) ext.bintrayUsername = ''
 if (!project.hasProperty('bintrayApiKey')) ext.bintrayApiKey = ''
+if (!project.hasProperty('gpgPassphrase')) ext.gpgPassphrase = ''
+if (!project.hasProperty('ossUser')) ext.ossUser = ''
+if (!project.hasProperty('ossPassword')) ext.ossPassword = ''
 
 bintray {
     user = project.bintrayUsername
