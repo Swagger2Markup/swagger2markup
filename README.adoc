@@ -3,7 +3,7 @@
 :version: 0.1.1
 :hardbreaks:
 
-image:https://travis-ci.org/RobWin/markup-document-builder.svg["Build Status", link="https://travis-ci.org/RobWin/markup-document-builder"] image:https://coveralls.io/repos/RobWin/markup-document-builder/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/markup-document-builder"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="https://bintray.com/robwin/maven/markup-document-builder/0.1.1/view"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:https://travis-ci.org/RobWin/markup-document-builder.svg["Build Status", link="https://travis-ci.org/RobWin/markup-document-builder"] image:https://coveralls.io/repos/RobWin/markup-document-builder/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/markup-document-builder"] image::https://api.bintray.com/packages/robwin/maven/markup-document-builder/images/download.svg[link="https://bintray.com/robwin/maven/markup-document-builder/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
 
 == Overview
 
