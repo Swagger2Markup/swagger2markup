@@ -17,6 +17,7 @@ The project requires at least JDK 7.
 == Usage
 
 === Adding Swagger2Markup to your project
+The project is published in JCenter and Maven Central.
 
 ==== Maven
 
