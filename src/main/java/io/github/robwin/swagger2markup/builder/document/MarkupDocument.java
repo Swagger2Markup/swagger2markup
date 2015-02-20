@@ -1,9 +1,9 @@
 package io.github.robwin.swagger2markup.builder.document;
 
 import com.wordnik.swagger.models.Swagger;
-import io.github.robwin.swagger2markup.builder.markup.MarkupDocBuilder;
-import io.github.robwin.swagger2markup.builder.markup.MarkupDocBuilders;
-import io.github.robwin.swagger2markup.builder.markup.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupDocBuilders;
+import io.github.robwin.markup.builder.MarkupLanguage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

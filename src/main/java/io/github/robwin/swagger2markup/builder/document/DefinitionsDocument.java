@@ -3,7 +3,7 @@ package io.github.robwin.swagger2markup.builder.document;
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.Swagger;
 import com.wordnik.swagger.models.properties.Property;
-import io.github.robwin.swagger2markup.builder.markup.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
