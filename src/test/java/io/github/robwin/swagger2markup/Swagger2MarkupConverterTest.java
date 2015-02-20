@@ -1,6 +1,6 @@
 package io.github.robwin.swagger2markup;
 
-import io.github.robwin.swagger2markup.builder.markup.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupLanguage;
 import org.junit.Test;
 
 import java.io.File;

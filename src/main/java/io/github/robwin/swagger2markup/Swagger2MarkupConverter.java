@@ -1,9 +1,9 @@
 package io.github.robwin.swagger2markup;
 
 import com.wordnik.swagger.models.Swagger;
+import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
-import io.github.robwin.swagger2markup.builder.markup.MarkupLanguage;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.lang.Validate;
 import org.slf4j.Logger;

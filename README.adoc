@@ -1,21 +1,23 @@
 = Swagger2Markup
 :author: Robert Winkler
-:version: 0.2.0
+:version: 0.2.1
 :hardbreaks:
 
-image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:http://img.shields.io/:version-{version}-blue.svg["Semantic Versioning", link="https://bintray.com/robwin/maven/swagger2markup/0.2.0/view"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
+image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:https://api.bintray.com/packages/robwin/maven/swagger2markup/images/download.svg[link="https://bintray.com/robwin/maven/swagger2markup/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
 
 == Overview
 
-This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely accessible via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser].
+This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely accessible via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
 
 The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See <<integration-with-spring-restdocs, Integration with spring-restdocs>>.
 
 The project requires at least JDK 7.
 
 == Usage
 
 === Adding Swagger2Markup to your project
+The project is published in JCenter and Maven Central.
 
 ==== Maven
 
@@ -33,9 +35,9 @@ The project requires at least JDK 7.
 </repositories>
 
 <dependency>
-    <groupId>io.github.robwin.swagger2markup</groupId>
+    <groupId>io.github.robwin</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
 </dependency>
 ----
 
@@ -47,7 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "io.github.robwin:swagger2markup:0.2.0"
+compile "io.github.robwin:swagger2markup:0.2.1"
 ----
 
 === Using Swagger2Markup
@@ -65,17 +67,19 @@ public class Swagger2MarkupTest {
 
     @Test
     public void convertSwaggerToMarkup() {
-        //Remote
+        //Remote Swagger source
+        //Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).
-                withExamples("docs/generated").withSchemas("docs/schemas").build()
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
                 .intoFolder("src/docs/markdown");
 
-        Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-                withExamples("docs").withSchemas("docs/schemas").build()
+        //Remote Swagger source
+        //Default is AsciiDoc
+        Swagger2MarkupConverter.from("http://localhost:8080/api-docs").build()
                 .intoFolder("src/docs/asciidoc");
 
-        //Local
+        //Local Swagger source
+        //Default is AsciiDoc
         File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
         Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
                         .intoFolder("src/docs/asciidoc");
@@ -147,68 +151,63 @@ Currently it does not work for Markdown, since spring-restdocs generates only As
 
 Let's say I have a Swagger-annotated Spring RestController method with an ApiOperation value: _"Create a quota"_
 
-```java
+[source,java]
+----
 @ApiOperation(value = "Create a quota", notes =  "Create a quota allows bla bla bla bla")
 public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota",
     value = "MailStorageQuota", required = true) @RequestBody MailStorageQuota mailStorageQuota) {
 }
-```
+----
 
 I'm using spring-restdocs in combination with https://github.com/jayway/rest-assured to test the Controller.
 The target folder of the generated request and response example files must be _"create_a_quota"_ (similar to the value of the ApiOperation).
 
-```java
+[source,java]
+----
 given().contentType(ContentType.XML).body(storageQuota).resultHandlers(document("create_a_quota")).
 when().put("/quotas").
 then().statusCode(204);
-```
+----
 
 The spring-restdocs output directory is configured as follows:
 
-```
+[source]
+----
 io.restdocumented.outputDir = docs/generated
-```
+----
 
 The Swagger2MarkupConverter must know the output directory of spring-restdocs.
 
-```java
+[source,java]
+----
 Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
                 withExamples("docs/generated").build()
                 .intoFolder("src/docs/asciidoc");
-```
+----
 
 The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  and includes the _request.asciidoc_ and _response.asciidoc_ files, if they are available.
 
 == Integration of JSON and XML Schema files.
 Swagger2Markup can also include JSON and XML Schema files into the generated document.
 
-```java
+[source,java]
+----
 Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
                 withMarkupLanguage(MarkupLanguage.MARKDOWN).
                 withExamples("docs/generated").withSchemas("docs/schemas").build()
                 .intoFolder("src/docs/markdown");
-```
+----
 
 I create the Schemas files in Unit-Tests as follows:
 
-```java
+[source,java]
+----
         RestDocumented restDocumented = RestDocumented.fromProperties();
         restDocumented.documentJsonSchema(MailStorageQuota.class, "docs/schemas");
         restDocumented.documentXmlSchema(MailStorageQuota.class, "docs/schemas");
-```
+----
 
 I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder "docs/schemas".
 The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as Input or Output.
 
 See example: http://spring-swagger2markup-demo.readthedocs.org/en/latest/generated/definitions/[ReadTheDocs-demo]
-
-== Document Builder
-The Swagger2Markup library allows to build an AsciiDoc or Markdown document via the Builder pattern:
-[source,java]
-----
-MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
-builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test", StandardCharsets.UTF_8);
-
-MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.Markdown);
-builder.documentTitle("Test title").textLine("Text line").writeToFile("/tmp", "test", StandardCharsets.UTF_8);
-----

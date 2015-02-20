@@ -5,3 +5,6 @@
 
 == Version 0.2.0
 * This version is not downward compatible. This version supports includes of example files and JSON/XML Schema files. See documentation.
+
+=== Version 0.2.1
+* Signed jar files and published in Maven Central
