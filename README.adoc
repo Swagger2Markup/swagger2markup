@@ -30,7 +30,7 @@ The project requires at least JDK 7.
 </repositories>
 
 <dependency>
-    <groupId>io.github.robwin.swagger2markup</groupId>
+    <groupId>io.github.robwin</groupId>
     <artifactId>markup-document-builder</artifactId>
     <version>0.1.0</version>
 </dependency>
