@@ -39,6 +39,7 @@ repositories {
 }
 
 dependencies {
+    compile 'io.github.robwin:markup-document-builder'
     compile 'io.swagger:swagger-compat-spec-parser'
     compile 'commons-collections:commons-collections'
     compile 'commons-io:commons-io'
@@ -48,6 +49,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
+        "io.github.robwin:markup-document-builder" "0.1.0"
         "io.swagger:swagger-compat-spec-parser" "1.0.0"
         "commons-collections:commons-collections" "3.2.1"
         "commons-io:commons-io" "2.4"
