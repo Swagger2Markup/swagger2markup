@@ -65,6 +65,15 @@ publishing {
             pom.withXml {
                 def devs = ['RobWin': 'Robert Winkler']
                 def root = asNode()
+
+                root.dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+
                 root.appendNode('name', 'markup-document-builder')
                 root.appendNode('packaging', 'jar')
                 root.appendNode('url', 'https://github.com/RobWin/markup-document-builder')
