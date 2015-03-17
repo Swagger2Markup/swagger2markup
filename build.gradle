@@ -49,7 +49,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        "io.github.robwin:markup-document-builder" "0.1.0"
+        "io.github.robwin:markup-document-builder" "0.1.1"
         "io.swagger:swagger-compat-spec-parser" "1.0.0"
         "commons-collections:commons-collections" "3.2.1"
         "commons-io:commons-io" "2.4"
