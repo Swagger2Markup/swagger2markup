@@ -8,3 +8,6 @@
 
 === Version 0.2.1
 * Signed jar files and published in Maven Central
+
+=== Version 0.2.1
+* Fixed wrong dependency version to io.github.robwin:markup-document-builder
