@@ -82,36 +82,40 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInCSV){
-        String headersInCSV = rowsInCSV.get(0);
-        List<String> contentRowsInCSV = rowsInCSV.subList(1, rowsInCSV.size());
-        List<String> headers = Arrays.asList(headersInCSV.split(","));
+    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV){
+        String headersInPSV = rowsInPSV.get(0);
+        List<String> contentRowsInPSV = rowsInPSV.subList(1, rowsInPSV.size());
+        String[] headersAsArray = headersInPSV.split(String.format("\\%s", Markdown.TABLE_COLUMN_DELIMITER.toString()));
+        List<String> headers = Arrays.asList(headersAsArray);
         // Header
-        documentBuilder.append(Markdown.TABLE_COLUMN);
-        for(String header : headers){
-            documentBuilder.append(header).append(Markdown.TABLE_COLUMN);
-        }
+        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
+        documentBuilder.append(headersInPSV);
+        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
         newLine();
         // Header/Content separator
-        documentBuilder.append(Markdown.TABLE_COLUMN);
+        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
         for(String header : headers){
             for(int i = 1; i<5; i++) {
                 documentBuilder.append(Markdown.TABLE_ROW);
             }
-            documentBuilder.append(Markdown.TABLE_COLUMN);
+            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
         }
         newLine();
         // Content
-        for(String contentRow : contentRowsInCSV){
-            documentBuilder.append(Markdown.TABLE_COLUMN);
-            List<String> columns = Arrays.asList(contentRow.split(","));
-            for(String columnText : columns){
-                documentBuilder.append(columnText).append(Markdown.TABLE_COLUMN);
-            }
+        for(String contentRowInPSV : contentRowsInPSV){
+            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
+            documentBuilder.append(contentRowInPSV);
+            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
             newLine();
         }
         newLine().newLine();
         return this;
+    }
+
+    @Override
+    // TODO
+    public MarkupDocBuilder crossReference(String text) {
+        throw new UnsupportedOperationException("Not yet supported");
     }
 
     @Override

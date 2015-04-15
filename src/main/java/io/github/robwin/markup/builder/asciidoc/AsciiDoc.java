@@ -9,6 +9,7 @@ import io.github.robwin.markup.builder.Markup;
 public enum AsciiDoc implements Markup {
     LABELED(":: "),
     TABLE("|==="),
+    TABLE_COLUMN_DELIMITER("|"),
     LISTING("----"),
     HARDBREAKS(":hardbreaks:"),
     DOCUMENT_TITLE("= "),
@@ -17,7 +18,9 @@ public enum AsciiDoc implements Markup {
     SECTION_TITLE_LEVEL3("==== "),
     BOLD("*"),
     ITALIC("_"),
-    LIST_ENTRY("* ");
+    LIST_ENTRY("* "),
+    CROSS_REFERENCE_START("<<"),
+    CROSS_REFERENCE_END(">>");
 
     private final String markup;
 

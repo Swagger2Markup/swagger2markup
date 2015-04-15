@@ -7,7 +7,7 @@ import io.github.robwin.markup.builder.Markup;
  */
 public enum Markdown implements Markup {
     HARDBREAKS(""),
-    TABLE_COLUMN("|"),
+    TABLE_COLUMN_DELIMITER("|"),
     TABLE_ROW("-"),
     LISTING("```"),
     DOCUMENT_TITLE("# "),

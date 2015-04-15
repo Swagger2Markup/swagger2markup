@@ -32,7 +32,9 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder unorderedList(List<String> list);
 
-    MarkupDocBuilder tableWithHeaderRow(List<String> rowsInCSV);
+    MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV);
+
+    MarkupDocBuilder crossReference(String text);
 
     MarkupDocBuilder newLine();
 

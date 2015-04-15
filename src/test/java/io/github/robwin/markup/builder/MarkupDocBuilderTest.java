@@ -14,14 +14,14 @@ import java.util.List;
  */
 public class MarkupDocBuilderTest {
 
-    List<String> tableCsvRows;
+    List<String> tableRowsInPSV;
 
     @Before
     public void setUp(){
-        tableCsvRows = new ArrayList<>();
-        tableCsvRows.add("Header 1,Header 2,Header2");
-        tableCsvRows.add("Row 1 Column 1,Row 1 Column 2,Row 1 Column 3");
-        tableCsvRows.add("Row 2 Column 1,Row 2 Column 2,Row 2 Column 3");
+        tableRowsInPSV = new ArrayList<>();
+        tableRowsInPSV.add("Header 1 | Header 2 | Header2");
+        tableRowsInPSV.add("Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3");
+        tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
     }
 
 
@@ -35,7 +35,7 @@ public class MarkupDocBuilderTest {
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
                 .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", "java")
-                .tableWithHeaderRow(tableCsvRows)
+                .tableWithHeaderRow(tableRowsInPSV)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
                 .boldTextLine("Bold text line b")
@@ -53,8 +53,8 @@ public class MarkupDocBuilderTest {
                 .sectionTitleLevel3("Section Level 3a")
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
-                .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", "java")
-                .tableWithHeaderRow(tableCsvRows)
+                .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
+                .tableWithHeaderRow(tableRowsInPSV)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
                 .boldTextLine("Bold text line b")
