@@ -55,7 +55,7 @@ compile "io.github.robwin:swagger2markup:0.2.3"
 
 === Using Swagger2Markup
 
-Using the Swagger2MarkupConverter is simple. For instance, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/martypitt/swagger-springmvc[swagger-springmvc] as follows.
+Using the Swagger2MarkupConverter is simple. For instance, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] as follows.
 See demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo].
 
 [source,java]
