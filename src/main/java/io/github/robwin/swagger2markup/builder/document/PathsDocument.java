@@ -2,17 +2,22 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.wordnik.swagger.models.*;
 import com.wordnik.swagger.models.parameters.Parameter;
+import com.wordnik.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.utils.ParameterUtils;
+import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -21,20 +26,27 @@ import java.util.Map;
  */
 public class PathsDocument extends MarkupDocument {
 
+    private static final String PATHS = "Paths";
     private static final String VERSION = "Version: ";
-    private static final String DESCRIPTION_COLUMN = "Description";
-    private static final String DESCRIPTION = DESCRIPTION_COLUMN;
+    private static final String CONTACT_NAME = "Contact: ";
+    private static final String CONTACT_EMAIL = "Contact Email: ";
+    private static final String LICENSE = "License: ";
+    private static final String LICENSE_URL = "License URL: ";
+    private static final String TERMS_OF_SERVICE = "Terms of service: ";
+    private static final String HOST = "Host: ";
+    private static final String BASE_PATH = "BasePath: ";
+    private static final String SCHEMES = "Schemes: ";
     private static final String PARAMETERS = "Parameters";
     private static final String PRODUCES = "Produces";
     private static final String CONSUMES = "Consumes";
+    private static final String TAGS = "Tags";
     private static final String RESPONSES = "Responses";
     private static final String EXAMPLE_REQUEST = "Example request";
     private static final String EXAMPLE_RESPONSE = "Example response";
-    private static final String NAME_COLUMN = "Name";
-    private static final String LOCATED_IN_COLUMN = "Located in";
-    private static final String CODE_COLUMN = "Code";
-    public static final String REQUEST_EXAMPLE_FILE_NAME = "request";
-    public static final String RESPONSE_EXAMPLE_FILE_NAME = "response";
+    private static final String TYPE_COLUMN = "Type";
+    private static final String HTTP_CODE_COLUMN = "HTTP Code";
+    private static final String REQUEST_EXAMPLE_FILE_NAME = "request";
+    private static final String RESPONSE_EXAMPLE_FILE_NAME = "response";
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
@@ -58,32 +70,69 @@ public class PathsDocument extends MarkupDocument {
 
     @Override
     public MarkupDocument build() throws IOException {
-        documentHeader(swagger.getInfo());
-        paths(swagger.getPaths());
+        documentHeader();
+        paths();
         return this;
     }
 
     /**
-     * Builds the document header
-     *
-     * @param info the Swagger Info
+     * Builds the document header of the swagger model
      */
-    private void documentHeader(Info info) {
-        this.markupDocBuilder
-                .documentTitle(info.getTitle())
-                .textLine(info.getDescription())
-                .textLine(VERSION + info.getVersion())
-                .newLine();
+    private void documentHeader() {
+        Info info = swagger.getInfo();
+        this.markupDocBuilder.documentTitle(info.getTitle());
+        if(StringUtils.isNotBlank(info.getDescription())){
+            this.markupDocBuilder.textLine(info.getDescription());
+        }
+        if(StringUtils.isNotBlank(info.getVersion())){
+            this.markupDocBuilder.textLine(VERSION + info.getVersion());
+        }
+        Contact contact = info.getContact();
+        if(contact != null){
+            if(StringUtils.isNotBlank(contact.getName())){
+                this.markupDocBuilder.textLine(CONTACT_NAME + contact.getName());
+            }
+            if(StringUtils.isNotBlank(contact.getEmail())){
+                this.markupDocBuilder.textLine(CONTACT_EMAIL + contact.getEmail());
+            }
+        }
+        License license = info.getLicense();
+        if(license != null) {
+            if (StringUtils.isNotBlank(license.getName())) {
+                this.markupDocBuilder.textLine(LICENSE + license.getName());
+            }
+            if (StringUtils.isNotBlank(license.getUrl())) {
+                this.markupDocBuilder.textLine(LICENSE_URL + license.getUrl());
+            }
+        }
+        if(StringUtils.isNotBlank(info.getTermsOfService())){
+            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + info.getTermsOfService());
+        }
+        this.markupDocBuilder.newLine();
+
+        if(StringUtils.isNotBlank(swagger.getHost())){
+            this.markupDocBuilder.textLine(HOST + swagger.getHost());
+        }
+        if(StringUtils.isNotBlank(swagger.getBasePath())){
+            this.markupDocBuilder.textLine(BASE_PATH + swagger.getBasePath());
+        }
+        if(CollectionUtils.isNotEmpty(swagger.getSchemes())){
+            List<String> schemes = new ArrayList<>();
+            for(Scheme scheme : swagger.getSchemes()){
+                schemes.add(scheme.toString());
+            }
+            this.markupDocBuilder.textLine(SCHEMES + StringUtils.join(schemes, ", "));
+        }
+        this.markupDocBuilder.newLine();
     }
 
     /**
-     * Builds all paths of the Swagger file
-     *
-     * @param paths a Map of Swagger Paths
+     * Builds all paths of the Swagger model
      */
-    private void paths(Map<String, Path> paths) throws IOException {
+    private void paths() throws IOException {
+        Map<String, Path> paths = swagger.getPaths();
         if(MapUtils.isNotEmpty(paths)) {
-            //this.documentBuilder.sectionTitleLevel1(FEATURES);
+            this.markupDocBuilder.sectionTitleLevel1(PATHS);
             for (Map.Entry<String, Path> entry : paths.entrySet()) {
                 Path path = entry.getValue();
                 path("GET", entry.getKey(), path.getGet());
@@ -110,21 +159,21 @@ public class PathsDocument extends MarkupDocument {
             responsesSection(operation);
             consumesSection(operation);
             producesSection(operation);
+            tagsSection(operation);
             examplesSection(operation);
         }
     }
-
 
     private void pathTitle(String httpMethod, String resourcePath, Operation operation) {
         String summary = operation.getSummary();
         String title;
         if(StringUtils.isNotBlank(summary)) {
             title = summary;
-            this.markupDocBuilder.sectionTitleLevel1(title);
+            this.markupDocBuilder.sectionTitleLevel2(title);
             this.markupDocBuilder.listing(httpMethod + " " + resourcePath);
         }else{
             title = httpMethod + " " + resourcePath;
-            this.markupDocBuilder.sectionTitleLevel1(title);
+            this.markupDocBuilder.sectionTitleLevel2(title);
         }
         if (logger.isInfoEnabled()) {
             logger.info("Path processed: {}", title);
@@ -134,7 +183,7 @@ public class PathsDocument extends MarkupDocument {
     private void descriptionSection(Operation operation) {
         String description = operation.getDescription();
         if(StringUtils.isNotBlank(description)){
-            this.markupDocBuilder.sectionTitleLevel2(DESCRIPTION);
+            this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
             this.markupDocBuilder.paragraph(description);
         }
     }
@@ -142,20 +191,26 @@ public class PathsDocument extends MarkupDocument {
     private void parametersSection(Operation operation) {
         List<Parameter> parameters = operation.getParameters();
         if(CollectionUtils.isNotEmpty(parameters)){
-            List<String> csvContent = new ArrayList<>();
-            csvContent.add(NAME_COLUMN + DELIMITER + LOCATED_IN_COLUMN + DELIMITER + DESCRIPTION_COLUMN + DELIMITER + REQUIRED_COLUMN);
+            List<String> headerAndContent = new ArrayList<>();
+            // Table header row
+            List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN);
+            headerAndContent.add(StringUtils.join(header, DELIMITER));
             for(Parameter parameter : parameters){
-                csvContent.add(parameter.getName() + DELIMITER + parameter.getIn() + DELIMITER + parameter.getDescription() + DELIMITER + parameter.getRequired());
+                String type = ParameterUtils.getType(parameter, markupLanguage);
+                String parameterType = WordUtils.capitalize(parameter.getIn() + "Parameter");
+                // Table content row
+                List<String> content = Arrays.asList(parameterType, parameter.getName(),  parameter.getDescription(), Boolean.toString(parameter.getRequired()), type);
+                headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
-            this.markupDocBuilder.sectionTitleLevel2(PARAMETERS);
-            this.markupDocBuilder.tableWithHeaderRow(csvContent);
+            this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
+            this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
     }
 
     private void consumesSection(Operation operation) {
         List<String> consumes = operation.getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
-            this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
+            this.markupDocBuilder.sectionTitleLevel3(CONSUMES);
             this.markupDocBuilder.unorderedList(consumes);
         }
 
@@ -164,8 +219,16 @@ public class PathsDocument extends MarkupDocument {
     private void producesSection(Operation operation) {
         List<String> produces = operation.getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
-            this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
+            this.markupDocBuilder.sectionTitleLevel3(PRODUCES);
             this.markupDocBuilder.unorderedList(produces);
+        }
+    }
+
+    private void tagsSection(Operation operation) {
+        List<String> tags = operation.getTags();
+        if(CollectionUtils.isNotEmpty(tags)){
+            this.markupDocBuilder.sectionTitleLevel3(TAGS);
+            this.markupDocBuilder.unorderedList(tags);
         }
     }
 
@@ -198,7 +261,7 @@ public class PathsDocument extends MarkupDocument {
         for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
             java.nio.file.Path path = Paths.get(examplesFolderPath, exampleFolder, exampleFileName + fileNameExtension);
             if (Files.isReadable(path)) {
-                this.markupDocBuilder.sectionTitleLevel2(title);
+                this.markupDocBuilder.sectionTitleLevel3(title);
                 this.markupDocBuilder.paragraph(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 if (logger.isInfoEnabled()) {
                     logger.info("Example file processed: {}", path);
@@ -216,12 +279,18 @@ public class PathsDocument extends MarkupDocument {
         Map<String, Response> responses = operation.getResponses();
         if(MapUtils.isNotEmpty(responses)){
             List<String> csvContent = new ArrayList<>();
-            csvContent.add(CODE_COLUMN + DELIMITER + DESCRIPTION_COLUMN);
+            csvContent.add(HTTP_CODE_COLUMN + DELIMITER + DESCRIPTION_COLUMN + DELIMITER + SCHEMA_COLUMN);
             for(Map.Entry<String, Response> entry : responses.entrySet()){
                 Response response = entry.getValue();
-                csvContent.add(entry.getKey() + DELIMITER + response.getDescription());
+                if(response.getSchema() != null){
+                    Property property = response.getSchema();
+                    String type = PropertyUtils.getType(property, markupLanguage);
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  type);
+                }else{
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
+                }
             }
-            this.markupDocBuilder.sectionTitleLevel2(RESPONSES);
+            this.markupDocBuilder.sectionTitleLevel3(RESPONSES);
             this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
     }

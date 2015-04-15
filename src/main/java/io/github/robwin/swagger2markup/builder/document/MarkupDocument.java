@@ -15,8 +15,12 @@ import java.nio.charset.Charset;
  */
 public abstract class MarkupDocument {
 
-    protected static final String DELIMITER = ",";
+    protected static final String DELIMITER = "|";
     protected static final String REQUIRED_COLUMN = "Required";
+    protected static final String SCHEMA_COLUMN = "Schema";
+    protected static final String NAME_COLUMN = "Name";
+    protected static final String DESCRIPTION_COLUMN = "Description";
+    protected static final String DESCRIPTION = DESCRIPTION_COLUMN;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;

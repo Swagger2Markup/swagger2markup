@@ -45,8 +45,19 @@ public class Swagger2MarkupConverter {
      * @return a Swagger2MarkupConverter
      */
     public static Builder from(String swaggerSource){
-        Validate.notEmpty(swaggerSource, "swaggerSource must not be null!");
+        Validate.notEmpty(swaggerSource, "swaggerSource must not be empty!");
         return new Builder(swaggerSource);
+    }
+
+    /**
+     * Creates a Swagger2MarkupConverter.Builder from a given Swagger model.
+     *
+     * @param swagger the Swagger source.
+     * @return a Swagger2MarkupConverter
+     */
+    public static Builder from(Swagger swagger){
+        Validate.notNull(swagger, "swagger must not be null!");
+        return new Builder(swagger);
     }
 
     /**
@@ -62,6 +73,15 @@ public class Swagger2MarkupConverter {
     }
 
     /**
+     * Builds the document with the given markup language and returns it as a String
+     *
+     * @return a the document as a String
+     */
+    public String asString() throws IOException{
+        return buildDocuments();
+    }
+
+    /**
      * Writes a file for the Paths (API) and a file for the Definitions (Model)
 
      * @param directory the directory where the generated file should be stored
@@ -70,6 +90,16 @@ public class Swagger2MarkupConverter {
     private void buildDocuments(String directory) throws IOException {
         new PathsDocument(swagger, markupLanguage, examplesFolderPath).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
         new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Returns a file for the Paths (API) and a file for the Definitions (Model)
+
+     * @return a the document as a String
+     */
+    private String buildDocuments() throws IOException {
+        return new PathsDocument(swagger, markupLanguage, examplesFolderPath).build().toString()
+                .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath).build().toString());
     }
 
 
@@ -87,6 +117,17 @@ public class Swagger2MarkupConverter {
         Builder(String swaggerSource){
             swagger = new SwaggerParser().read(swaggerSource);
         }
+
+        /**
+         * Creates a Builder using a given Swagger model.
+         *
+         * @param swagger the Swagger source.
+         */
+        Builder(Swagger swagger){
+            this.swagger = swagger;
+        }
+
+
 
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath);

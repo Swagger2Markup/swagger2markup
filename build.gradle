@@ -13,7 +13,7 @@ buildscript {
     }
 }
 description = 'swagger2markup Build'
-version = '0.2.2'
+version = '0.2.3'
 group = 'io.github.robwin'
 
 apply plugin: 'java'
@@ -36,6 +36,7 @@ tasks.withType(JavaCompile) {
 repositories {
     jcenter()
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -45,11 +46,13 @@ dependencies {
     compile 'commons-io:commons-io'
     compile 'ch.qos.logback:logback-classic'
     testCompile 'junit:junit'
+    testCompile 'org.asciidoctor:asciidoctorj:1.5.2'
+    testCompile 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
 }
 
 dependencyManagement {
     dependencies {
-        "io.github.robwin:markup-document-builder" "0.1.1"
+        "io.github.robwin:markup-document-builder" "0.1.2"
         "io.swagger:swagger-compat-spec-parser" "1.0.0"
         "commons-collections:commons-collections" "3.2.1"
         "commons-io:commons-io" "2.4"

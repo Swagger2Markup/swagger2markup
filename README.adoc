@@ -1,6 +1,6 @@
 = Swagger2Markup
 :author: Robert Winkler
-:version: 0.2.2
+:version: 0.2.3
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:https://api.bintray.com/packages/robwin/maven/swagger2markup/images/download.svg[link="https://bintray.com/robwin/maven/swagger2markup/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
@@ -37,7 +37,7 @@ The project is published in JCenter and Maven Central.
 <dependency>
     <groupId>io.github.robwin</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
 </dependency>
 ----
 
@@ -49,7 +49,7 @@ repositories {
     jcenter()
 }
 
-compile "io.github.robwin:swagger2markup:0.2.2"
+compile "io.github.robwin:swagger2markup:0.2.3"
 ----
 
 === Using Swagger2Markup
@@ -83,6 +83,22 @@ public class Swagger2MarkupTest {
         File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
         Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
                         .intoFolder("src/docs/asciidoc");
+    }
+
+    @Test
+    public void testSwagger2HtmlConversion() throws IOException {
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        String asciiDoc =  Swagger2MarkupConverter.from(file.getAbsolutePath()).build().asString();
+        String path = "src/docs/asciidocAsString";
+        Files.createDirectories(Paths.get(path));
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "swagger.adoc"), StandardCharsets.UTF_8)){
+            writer.write(asciiDoc);        }
+        String asciiDocAsHtml = Asciidoctor.Factory.create().convert(asciiDoc,
+                OptionsBuilder.options().backend("html5").headerFooter(true).safe(SafeMode.UNSAFE).docType("book").attributes(AttributesBuilder.attributes()
+                        .tableOfContents(true).tableOfContents(Placement.LEFT).sectionNumbers(true).hardbreaks(true).setAnchors(true).attribute("sectlinks")));
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "swagger.html"), StandardCharsets.UTF_8)){
+            writer.write(asciiDocAsHtml);
+        }
     }
 }
 ----

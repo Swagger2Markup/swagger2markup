@@ -2,8 +2,10 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.Swagger;
+import com.wordnik.swagger.models.properties.AbstractProperty;
 import com.wordnik.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -26,8 +28,6 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final List<String> IGNORED_DEFINITIONS = Arrays.asList("Void");
     private static final String JSON_SCHEMA = "JSON Schema";
     private static final String XML_SCHEMA = "XML Schema";
-    private static final String NAME_COLUMN = "Name";
-    private static final String TYPE_COLUMN = "Type";
     public static final String JSON_SCHEMA_EXTENSION = ".json";
     public static final String XML_SCHEMA_EXTENSION = ".xsd";
     public static final String JSON = "json";
@@ -104,13 +104,22 @@ public class DefinitionsDocument extends MarkupDocument {
     private void definition(String definitionName, Model model) {
         this.markupDocBuilder.sectionTitleLevel2(definitionName);
         Map<String, Property> properties = model.getProperties();
-        List<String> csvContent = new ArrayList<>();
-        csvContent.add(NAME_COLUMN + DELIMITER + TYPE_COLUMN + DELIMITER + REQUIRED_COLUMN);
+        List<String> headerAndContent = new ArrayList<>();
+        List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN, REQUIRED_COLUMN);
+        headerAndContent.add(StringUtils.join(header, DELIMITER));
         for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
             Property property = propertyEntry.getValue();
-            csvContent.add(propertyEntry.getKey() + DELIMITER + property.getType() + DELIMITER + property.getRequired());
+            String description = "";
+            if(property instanceof AbstractProperty){
+                if(StringUtils.isNotBlank(property.getDescription())){
+                    description = property.getDescription();
+                }
+            }
+            String type = PropertyUtils.getType(property, markupLanguage);
+            List<String> content = Arrays.asList(propertyEntry.getKey(), description,  type, Boolean.toString(property.getRequired()));
+            headerAndContent.add(StringUtils.join(content, DELIMITER));
         }
-        this.markupDocBuilder.tableWithHeaderRow(csvContent);
+        this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
     }
 
     private void definitionSchema(String definitionName) throws IOException {
