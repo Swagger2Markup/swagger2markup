@@ -80,13 +80,19 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInCSV){
-        documentBuilder.append("[format=\"csv\", options=\"header\"]").append(newLine);
+    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV){
+        documentBuilder.append("[options=\"header\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
-        for(String row : rowsInCSV){
-            documentBuilder.append(row).append(newLine);
+        for(String row : rowsInPSV){
+            documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(row).append(newLine);
         }
         documentBuilder.append(AsciiDoc.TABLE).append(newLine).append(newLine);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder crossReference(String text) {
+        documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(text).append(AsciiDoc.CROSS_REFERENCE_END);
         return this;
     }
 
