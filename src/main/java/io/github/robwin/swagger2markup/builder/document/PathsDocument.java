@@ -135,11 +135,13 @@ public class PathsDocument extends MarkupDocument {
             this.markupDocBuilder.sectionTitleLevel1(PATHS);
             for (Map.Entry<String, Path> entry : paths.entrySet()) {
                 Path path = entry.getValue();
-                path("GET", entry.getKey(), path.getGet());
-                path("PUT", entry.getKey(), path.getPut());
-                path("DELETE", entry.getKey(), path.getDelete());
-                path("POST", entry.getKey(), path.getPost());
-                path("PATCH", entry.getKey(), path.getPatch());
+                if(path != null) {
+                    path("GET", entry.getKey(), path.getGet());
+                    path("PUT", entry.getKey(), path.getPut());
+                    path("DELETE", entry.getKey(), path.getDelete());
+                    path("POST", entry.getKey(), path.getPost());
+                    path("PATCH", entry.getKey(), path.getPatch());
+                }
             }
         }
     }

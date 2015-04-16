@@ -13,7 +13,7 @@ buildscript {
     }
 }
 description = 'swagger2markup Build'
-version = '0.2.3'
+version = '0.2.4'
 group = 'io.github.robwin'
 
 apply plugin: 'java'
@@ -79,12 +79,17 @@ artifacts {
 }
 
 asciidoctor {
+    sources {
+        include 'index.adoc'
+    }
     backends = ['html5', 'pdf']
     attributes = [
             doctype: 'book',
             toc: 'left',
             toclevels: '2',
-            numbered: ''
+            numbered: '',
+            sectlinks: '',
+            sectanchors: ''
     ]
 }
 

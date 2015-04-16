@@ -107,19 +107,21 @@ public class DefinitionsDocument extends MarkupDocument {
         List<String> headerAndContent = new ArrayList<>();
         List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN, REQUIRED_COLUMN);
         headerAndContent.add(StringUtils.join(header, DELIMITER));
-        for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
-            Property property = propertyEntry.getValue();
-            String description = "";
-            if(property instanceof AbstractProperty){
-                if(StringUtils.isNotBlank(property.getDescription())){
-                    description = property.getDescription();
+        if(MapUtils.isNotEmpty(properties)){
+            for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
+                Property property = propertyEntry.getValue();
+                String description = "";
+                if(property instanceof AbstractProperty){
+                    if(StringUtils.isNotBlank(property.getDescription())){
+                        description = property.getDescription();
+                    }
                 }
+                String type = PropertyUtils.getType(property, markupLanguage);
+                List<String> content = Arrays.asList(propertyEntry.getKey(), description,  type, Boolean.toString(property.getRequired()));
+                headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
-            String type = PropertyUtils.getType(property, markupLanguage);
-            List<String> content = Arrays.asList(propertyEntry.getKey(), description,  type, Boolean.toString(property.getRequired()));
-            headerAndContent.add(StringUtils.join(content, DELIMITER));
+            this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
-        this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
     }
 
     private void definitionSchema(String definitionName) throws IOException {

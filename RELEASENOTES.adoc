@@ -9,5 +9,12 @@
 === Version 0.2.1
 * Signed jar files and published in Maven Central
 
-=== Version 0.2.1
+=== Version 0.2.2
 * Fixed wrong dependency version to io.github.robwin:markup-document-builder
+
+=== Version 0.2.3
+* Fixed issue #7: @ApiModelProperty metadata are ignored for definitions file
+
+=== Version 0.2.4
+* Fixed issue #8: logback.xml on the classpath
+* Fixed issue #13: unknown format not supported for properties

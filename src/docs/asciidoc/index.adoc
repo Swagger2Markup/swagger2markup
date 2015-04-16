@@ -1,0 +1,9 @@
+:doctype: book
+:toc: left
+:toclevels: 2
+:numbered:
+:sectlinks:
+:sectanchors:
+
+include::paths.adoc[]
+include::definitions.adoc[]
