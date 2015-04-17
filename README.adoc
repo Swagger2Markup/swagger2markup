@@ -107,39 +107,35 @@ public class Swagger2MarkupTest {
 [source,java]
 ----
 @SpringBootApplication
-@EnableSwagger
-public class SpringBootSwaggerConfig {
+@EnableSwagger2
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(SpringBootTestConfig.class, args);
+        SpringApplication.run(Application.class, args);
     }
-
-    @Autowired
-    private SpringSwaggerConfig springSwaggerConfig;
 
     @Bean
-    public SwaggerSpringMvcPlugin customImplementation(){
-        return new SwaggerSpringMvcPlugin(this.springSwaggerConfig)
-                .apiInfo(apiInfo()).excludeAnnotations(Controller.class);
+    public Docket spicaRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(spicaApiInfo())
+                .select()
+                .paths(ant("/api/**"))
+                .build();
     }
 
-    private ApiInfo apiInfo() {
-        ApiInfo apiInfo = new ApiInfo(
-                "My Apps API Title",
-                "My Apps API Description",
-                "My Apps API terms of service",
-                "My Apps API Contact Email",
-                "My Apps API Licence Type",
-                "My Apps API License URL"
-        );
-        return apiInfo;
+    private ApiInfo spicaApiInfo() {
+        return new ApiInfoBuilder()
+                .title("Petstore API Title")
+                .description("Petstore API Description")
+                .contact("Petstore API Contact Email")
+                .version("1.0.0")
+                .build();
     }
 }
 ----
 
 You can generate your HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin].
 You can also use https://github.com/tomchristie/mkdocs[MkDocs] and https://github.com/rtfd/readthedocs.org[ReadTheDocs] to publish your Markdown documentation.
-See http://spring-swagger2markup-demo.readthedocs.org/[ReadTheDocs-demo]
 
 == Examples
 == Swagger source file
