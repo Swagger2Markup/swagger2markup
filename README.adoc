@@ -61,6 +61,7 @@ compile "io.github.robwin:swagger2markup:0.3.0"
 Using the Swagger2MarkupConverter is simple. For instance, you can generate your AsciiDoc/Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] as follows.
 See demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how you can generate static docs (HTML5 and PDF) with Swagger2Markup and serve them in a Spring Boot app under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
+==== Integration Test
 [source,java]
 ----
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -88,25 +89,42 @@ public class Swagger2MarkupTest {
         Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
                         .intoFolder("src/docs/asciidoc");
     }
+}
+----
+
+==== Unit Test together with spring-restdocs
+[source,java]
+----
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+public class CreateAsciiDoc {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CreateAsciiDoc.class);
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context)
+                .apply(new RestDocumentationConfigurer()).build();
+    }
 
     @Test
-    public void testSwagger2HtmlConversion() throws IOException {
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        String asciiDoc =  Swagger2MarkupConverter.from(file.getAbsolutePath()).build().asString();
-        String path = "src/docs/asciidocAsString";
-        Files.createDirectories(Paths.get(path));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "swagger.adoc"), StandardCharsets.UTF_8)){
-            writer.write(asciiDoc);        }
-        String asciiDocAsHtml = Asciidoctor.Factory.create().convert(asciiDoc,
-                OptionsBuilder.options().backend("html5").headerFooter(true).safe(SafeMode.UNSAFE).docType("book").attributes(AttributesBuilder.attributes()
-                        .tableOfContents(true).tableOfContents(Placement.LEFT).sectionNumbers(true).hardbreaks(true).setAnchors(true).attribute("sectlinks")));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "swagger.html"), StandardCharsets.UTF_8)){
-            writer.write(asciiDocAsHtml);
-        }
+    public void createAsciiDoc() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(document("get_swagger_doc"))
+                .andDo(Swagger2MarkupDocumentation.document("swagger_adoc"))
+                .andExpect(status().isOk());
     }
 }
 ----
 
+==== Springfox configuration
 [source,java]
 ----
 @SpringBootApplication
