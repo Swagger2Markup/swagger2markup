@@ -1,6 +1,10 @@
 package io.github.robwin.swagger2markup;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wordnik.swagger.models.Swagger;
+import com.wordnik.swagger.util.Json;
+import com.wordnik.swagger.util.Yaml;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
@@ -41,12 +45,12 @@ public class Swagger2MarkupConverter {
     /**
      * Creates a Swagger2MarkupConverter.Builder using a given Swagger source.
      *
-     * @param swaggerSource the Swagger source. Can be a HTTP url or a path to a local file.
+     * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
      * @return a Swagger2MarkupConverter
      */
-    public static Builder from(String swaggerSource){
-        Validate.notEmpty(swaggerSource, "swaggerSource must not be empty!");
-        return new Builder(swaggerSource);
+    public static Builder from(String swaggerLocation){
+        Validate.notEmpty(swaggerLocation, "swaggerLocation must not be empty!");
+        return new Builder(swaggerLocation);
     }
 
     /**
@@ -58,6 +62,30 @@ public class Swagger2MarkupConverter {
     public static Builder from(Swagger swagger){
         Validate.notNull(swagger, "swagger must not be null!");
         return new Builder(swagger);
+    }
+
+    /**
+     * Creates a Swagger2MarkupConverter.Builder from a given Swagger YAML or JSON String.
+     *
+     * @param swagger the Swagger YAML or JSON String.
+     * @return a Swagger2MarkupConverter
+     */
+    public static Builder fromString(String swagger) throws IOException {
+        Validate.notEmpty(swagger, "swagger must not be null!");
+        ObjectMapper mapper;
+        if(swagger.trim().startsWith("{")) {
+            mapper = Json.mapper();
+        }else {
+            mapper = Yaml.mapper();
+        }
+        JsonNode rootNode = mapper.readTree(swagger);
+
+        // must have swagger node set
+        JsonNode swaggerNode = rootNode.get("swagger");
+        if(swaggerNode == null)
+            throw new IllegalArgumentException("Swagger String is in the wrong format");
+
+        return new Builder(mapper.convertValue(rootNode, Swagger.class));
     }
 
     /**
@@ -112,10 +140,10 @@ public class Swagger2MarkupConverter {
         /**
          * Creates a Builder using a given Swagger source.
          *
-         * @param swaggerSource the Swagger source. Can be a HTTP url or a path to a local file.
+         * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
          */
-        Builder(String swaggerSource){
-            swagger = new SwaggerParser().read(swaggerSource);
+        Builder(String swaggerLocation){
+            swagger = new SwaggerParser().read(swaggerLocation);
         }
 
         /**
@@ -126,8 +154,6 @@ public class Swagger2MarkupConverter {
         Builder(Swagger swagger){
             this.swagger = swagger;
         }
-
-
 
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath);
