@@ -8,9 +8,9 @@ image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/sw
 
 == Overview
 
-This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely accessible via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
+The primary goal of this project is to make it easy to document RESTful services by combining documentation that's been hand-written with auto-generated API documentation produced by https://github.com/swagger-api[Swagger]. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
 
-The primary goal of this project is to simplify the documentation of RESTful APIs. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
+This project is a Swagger to Markup (AsciiDoc and Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely accessible via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
 
 You can use Swagger2Markup to convert your design-first Swagger YAML into a human-readable format and mix it with hand-written documentation.
 As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/springfox/springfox[springfox] and https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See usage guide below and <<integration-with-spring-restdocs, Integration with spring-restdocs>>.
