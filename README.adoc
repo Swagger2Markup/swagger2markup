@@ -67,7 +67,7 @@ The quickest way to get started is to look at the demo project https://github.co
 [source,java]
 ----
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = SpringBootSwaggerConfig.class)
+@SpringApplicationConfiguration(classes = Application.class)
 @IntegrationTest
 @WebAppConfiguration
 public class Swagger2MarkupTest {
@@ -76,13 +76,13 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToMarkup() {
         //Remote Swagger source
         //Markdown
-        Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
+        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").
                 withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
                 .intoFolder("src/docs/markdown");
 
         //Remote Swagger source
         //Default is AsciiDoc
-        Swagger2MarkupConverter.from("http://localhost:8080/api-docs").build()
+        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
                 .intoFolder("src/docs/asciidoc");
 
         //Local Swagger source
