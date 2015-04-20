@@ -63,7 +63,7 @@ compile "io.github.robwin:swagger2markup:0.4.0"
 Using the Swagger2MarkupConverter is simple. For example, you can generate your AsciiDoc or Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] during the unit or integration test phase, copy the documentation into the Jar file and serve it as static content.
 The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with Swagger2Markup and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
-==== Integration Test
+==== Generate Markup during an integration test
 
 Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the documents into the folder "src/docs/asciidoc".
 
@@ -103,7 +103,7 @@ public class Swagger2MarkupTest {
 }
 ----
 
-==== Unit Test
+==== Generate Markup during an unit test
 
 Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document.
 That way you verify that your Swagger endpoint is working, too. The test cycle is much faster then.
