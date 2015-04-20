@@ -5,3 +5,9 @@
 
 === Version 0.1.1
 * Signed jar files
+
+=== Version 0.1.2
+* Removed logback from compile dependency
+
+=== Version 0.1.3
+* Removed commons.io from compile dependency
