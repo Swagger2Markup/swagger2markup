@@ -226,7 +226,7 @@ Swagger2Markup can include the generated examples snippets from spring-restdocs 
 See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
 Currently spring-restdocs does not work support Markdown.
 
-Let's say I have a Swagger-annotated Spring RestController method with an ApiOperation value: _"Create a quota"_
+Let's say I have a Swagger-annotated Spring RestController method with an ApiOperation value: `Create a quota`
 
 [source,java]
 ----
@@ -239,7 +239,7 @@ public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota",
 ----
 
 I'm using spring-restdocs in combination with https://github.com/jayway/rest-assured to test the Controller.
-The target folder of the generated request and response example files must be _"create_a_quota"_ (similar to the value of the ApiOperation, but with underscores and lowercase).
+The target folder of the generated request and response example files must be `create_a_quota` (similar to the value of the ApiOperation, but with underscores and lowercase).
 
 [source,java]
 ----
@@ -264,7 +264,7 @@ Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
                 .intoFolder("src/docs/asciidoc");
 ----
 
-The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: _"Create a quota"_ in a folder called _"docs/generated/create_a_quota"_  and includes the _request.asciidoc_ and _response.asciidoc_ files, if they are available.
+The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: `Create a quota` in a folder called `docs/generated/create_a_quota`  and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
 
 == Integration of JSON and XML Schema files.
 Swagger2Markup can also include JSON and XML Schema files into the generated document.
@@ -286,7 +286,7 @@ I create the Schemas files in Unit-Tests as follows:
         restDocumented.documentXmlSchema(MailStorageQuota.class, "docs/schemas");
 ----
 
-I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder "docs/schemas".
+I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder `docs/schemas`.
 The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as Input or Output.
 
 See example: http://spring-swagger2markup-demo.readthedocs.org/en/latest/generated/definitions/[ReadTheDocs-demo]
