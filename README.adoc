@@ -188,7 +188,7 @@ asciidoctor {
 }
 ----
 
-You can copy the output into your Jar file and serve the documentation as static content.
+You can copy the output into your Jar file and serve the documentation as static content under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 [source]
 ----
