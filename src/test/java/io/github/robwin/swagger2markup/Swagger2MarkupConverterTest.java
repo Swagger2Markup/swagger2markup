@@ -50,20 +50,4 @@ public class Swagger2MarkupConverterTest {
             writer.write(asciiDocAsHtml);
         }
     }
-
-    @Test
-    public void testSpica2HtmlConversion() throws IOException {
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/spica.json").getFile());
-        String asciiDoc =  Swagger2MarkupConverter.from(file.getAbsolutePath()).build().asString();
-        String path = "src/docs/generated/asciidocAsString";
-        Files.createDirectories(Paths.get(path));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "spica.adoc"), StandardCharsets.UTF_8)){
-            writer.write(asciiDoc);        }
-        String asciiDocAsHtml = Asciidoctor.Factory.create().convert(asciiDoc,
-                OptionsBuilder.options().backend("html5").headerFooter(true).safe(SafeMode.UNSAFE).docType("book").attributes(AttributesBuilder.attributes()
-                        .tableOfContents(true).tableOfContents(Placement.LEFT).sectionNumbers(true).hardbreaks(true).setAnchors(true).attribute("sectlinks")));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "spica.html"), StandardCharsets.UTF_8)){
-            writer.write(asciiDocAsHtml);
-        }
-    }
 }
