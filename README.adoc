@@ -10,7 +10,7 @@ image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/sw
 
 The primary goal of this project is to simplify the documentation of a RESTful API by combining documentation that's been hand-written with auto-generated API documentation produced by https://github.com/swagger-api[Swagger]. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
 
-This project is a Swagger to Markup (AsciiDoc and GitHub Flavored Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into three documents (Overview, Paths and Definitions) which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
+This project is a Swagger to Markup (AsciiDoc and GitHub Flavored Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into three documents (Overview, Paths and Definitions) which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder]. Swagger2Markup can be used as a replacement for swagger-ui.
 
 http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to many formats including HTML, PDF and EPUB. You write an AsciiDoc document the same way you would write a normal text document.
 
@@ -270,7 +270,7 @@ Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
 
 The Swagger2MarkupConverter searches for a Swagger ApiOperation with value `Add a new pet to the store` in a folder called `src/docs/asciidoc/generated/add_a_new_pet_to_the_store` and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
 
-=== http-request.adoc
+=== Example http-request.adoc
 
 [source,http]
 ----
@@ -281,7 +281,7 @@ Content-Length: 111
 {"id":1,"category":{"id":1,"name":"Hund"},"name":"Wuffy","photoUrls":[],"tags":[],"status":null,"identifier":1}
 ----
 
-=== http-response.adoc
+=== Example http-response.adoc
 
 [source,http]
 ----
@@ -292,7 +292,7 @@ Content-Length: 7
 SUCCESS
 ----
 
-=== curl-request.adoc
+=== Example curl-request.adoc
 
 [source,bash]
 ----
