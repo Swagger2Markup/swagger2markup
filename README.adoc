@@ -226,33 +226,38 @@ Swagger2Markup can include the generated examples snippets from spring-restdocs 
 See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
 Currently spring-restdocs does not work support Markdown.
 
-Let's say I have a Swagger-annotated Spring RestController method with an ApiOperation value: `Create a quota`
+Let's say you have a Swagger-annotated Spring RestController method with an ApiOperation value: `Add a new pet to the store`
 
 [source,java]
 ----
-@ApiOperation(value = "Create a quota", notes =  "Create a quota allows bla bla bla bla")
-public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota",
-    value = "MailStorageQuota", required = true) @RequestBody MailStorageQuota mailStorageQuota) {
+@RequestMapping(method = POST)
+@ApiOperation(value = "Add a new pet to the store")
+@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+public ResponseEntity<String> addPet(
+      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
+    petData.add(pet);
+    return Responses.ok("SUCCESS");
 }
-
-
 ----
 
-I'm using spring-restdocs in combination with https://github.com/jayway/rest-assured to test the Controller.
-The target folder of the generated request and response example files must be `create_a_quota` (similar to the value of the ApiOperation, but with underscores and lowercase).
+The target folder of the generated request and response example files must be `add_a_new_pet_to_the_store` (similar to the value of the ApiOperation, but with underscores and lowercase).
 
 [source,java]
 ----
-given().contentType(ContentType.XML).body(storageQuota).resultHandlers(document("create_a_quota")).
-when().put("/quotas").
-then().statusCode(204);
+@Test
+public void add_a_new_pet_to_the_store() throws Exception {
+    this.mockMvc.perform(post("/api/pet/").content(createPet())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(document("add_a_new_pet_to_the_store"))
+            .andExpect(status().isOk());
+}
 ----
 
 The spring-restdocs output directory is configured as follows:
 
 [source]
 ----
-org.springframework.restdocs.outputDir = docs/generated
+org.springframework.restdocs.outputDir = src/docs/asciidoc/generated
 ----
 
 The Swagger2MarkupConverter must know the output directory of spring-restdocs.
@@ -260,11 +265,11 @@ The Swagger2MarkupConverter must know the output directory of spring-restdocs.
 [source,java]
 ----
 Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-                withExamples("docs/generated").build()
-                .intoFolder("src/docs/asciidoc");
+                withExamples("src/docs/asciidoc/generated").build()
+                .intoFolder("src/docs/asciidoc/generated");
 ----
 
-The Swagger2MarkupConverter searches for a Swagger ApiOperation with value: `Create a quota` in a folder called `docs/generated/create_a_quota`  and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
+The Swagger2MarkupConverter searches for a Swagger ApiOperation with value `Add a new pet to the store` in a folder called `src/docs/asciidoc/generated/add_a_new_pet_to_the_store` and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
 
 == Integration of JSON and XML Schema files.
 Swagger2Markup can also include JSON and XML Schema files into the generated document.
