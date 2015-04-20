@@ -1,6 +1,9 @@
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.wordnik.swagger.models.*;
+import com.wordnik.swagger.models.Operation;
+import com.wordnik.swagger.models.Path;
+import com.wordnik.swagger.models.Response;
+import com.wordnik.swagger.models.Swagger;
 import com.wordnik.swagger.models.parameters.Parameter;
 import com.wordnik.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -9,8 +12,8 @@ import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -27,26 +30,15 @@ import java.util.Map;
 public class PathsDocument extends MarkupDocument {
 
     private static final String PATHS = "Paths";
-    private static final String VERSION = "Version: ";
-    private static final String CONTACT_NAME = "Contact: ";
-    private static final String CONTACT_EMAIL = "Contact Email: ";
-    private static final String LICENSE = "License: ";
-    private static final String LICENSE_URL = "License URL: ";
-    private static final String TERMS_OF_SERVICE = "Terms of service: ";
-    private static final String HOST = "Host: ";
-    private static final String BASE_PATH = "BasePath: ";
-    private static final String SCHEMES = "Schemes: ";
     private static final String PARAMETERS = "Parameters";
-    private static final String PRODUCES = "Produces";
-    private static final String CONSUMES = "Consumes";
-    private static final String TAGS = "Tags";
+
     private static final String RESPONSES = "Responses";
     private static final String EXAMPLE_REQUEST = "Example request";
     private static final String EXAMPLE_RESPONSE = "Example response";
     private static final String TYPE_COLUMN = "Type";
     private static final String HTTP_CODE_COLUMN = "HTTP Code";
-    private static final String REQUEST_EXAMPLE_FILE_NAME = "request";
-    private static final String RESPONSE_EXAMPLE_FILE_NAME = "response";
+    private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
+    private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
@@ -70,60 +62,8 @@ public class PathsDocument extends MarkupDocument {
 
     @Override
     public MarkupDocument build() throws IOException {
-        documentHeader();
         paths();
         return this;
-    }
-
-    /**
-     * Builds the document header of the swagger model
-     */
-    private void documentHeader() {
-        Info info = swagger.getInfo();
-        this.markupDocBuilder.documentTitle(info.getTitle());
-        if(StringUtils.isNotBlank(info.getDescription())){
-            this.markupDocBuilder.textLine(info.getDescription());
-        }
-        if(StringUtils.isNotBlank(info.getVersion())){
-            this.markupDocBuilder.textLine(VERSION + info.getVersion());
-        }
-        Contact contact = info.getContact();
-        if(contact != null){
-            if(StringUtils.isNotBlank(contact.getName())){
-                this.markupDocBuilder.textLine(CONTACT_NAME + contact.getName());
-            }
-            if(StringUtils.isNotBlank(contact.getEmail())){
-                this.markupDocBuilder.textLine(CONTACT_EMAIL + contact.getEmail());
-            }
-        }
-        License license = info.getLicense();
-        if(license != null) {
-            if (StringUtils.isNotBlank(license.getName())) {
-                this.markupDocBuilder.textLine(LICENSE + license.getName());
-            }
-            if (StringUtils.isNotBlank(license.getUrl())) {
-                this.markupDocBuilder.textLine(LICENSE_URL + license.getUrl());
-            }
-        }
-        if(StringUtils.isNotBlank(info.getTermsOfService())){
-            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + info.getTermsOfService());
-        }
-        this.markupDocBuilder.newLine();
-
-        if(StringUtils.isNotBlank(swagger.getHost())){
-            this.markupDocBuilder.textLine(HOST + swagger.getHost());
-        }
-        if(StringUtils.isNotBlank(swagger.getBasePath())){
-            this.markupDocBuilder.textLine(BASE_PATH + swagger.getBasePath());
-        }
-        if(CollectionUtils.isNotEmpty(swagger.getSchemes())){
-            List<String> schemes = new ArrayList<>();
-            for(Scheme scheme : swagger.getSchemes()){
-                schemes.add(scheme.toString());
-            }
-            this.markupDocBuilder.textLine(SCHEMES + StringUtils.join(schemes, ", "));
-        }
-        this.markupDocBuilder.newLine();
     }
 
     /**

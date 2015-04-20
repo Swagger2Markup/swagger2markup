@@ -1,0 +1,1554 @@
+= SPICA Contacts API
+
+== Overview
+SPICA Contacts
+
+=== Version information
+Version: 2.0.0
+
+=== Contact information
+Contact: robert.winkler@telekom.de
+
+=== License information
+
+=== URI scheme
+Host: localhost:9080
+BasePath: /spica-contacts
+
+=== Tags
+
+* export-controller: Test description
+* export-controller
+* duplicates-controller
+* translation-controller
+* profile-controller
+* contact-group-controller
+* address-book-controller
+* address-book-backup-controller
+* references-controller
+* import-controller
+
+
+=== Consumes
+
+* application/xml
+* application/json
+
+
+=== Produces
+
+* application/xml
+* application/json
+
+
+== Paths
+=== deleteAddressBook
+----
+DELETE /rest/contacts/v1/addressbook
+----
+
+==== Description
+:hardbreaks:
+deleteAddressBook
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* address-book-controller
+
+=== getBackups
+----
+GET /rest/contacts/v1/backups
+----
+
+==== Description
+:hardbreaks:
+getBackups
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<AddressBookBackupsResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* address-book-backup-controller
+
+=== createBackup
+----
+PUT /rest/contacts/v1/backups
+----
+
+==== Description
+:hardbreaks:
+createBackup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|backup|false|<<AddressBookBackup>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<AddressBookBackupResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* address-book-backup-controller
+
+=== getBackup
+----
+GET /rest/contacts/v1/backups/{backupId}
+----
+
+==== Description
+:hardbreaks:
+getBackup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|backupId|backupId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<AddressBookBackupResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* address-book-backup-controller
+
+=== deleteBackup
+----
+DELETE /rest/contacts/v1/backups/{backupId}
+----
+
+==== Description
+:hardbreaks:
+deleteBackup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|backupId|backupId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* address-book-backup-controller
+
+=== restoreBackup
+----
+POST /rest/contacts/v1/backups/{backupId}
+----
+
+==== Description
+:hardbreaks:
+restoreBackup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|backupId|backupId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* address-book-backup-controller
+
+=== checkDuplicates
+----
+POST /rest/contacts/v1/duplicates
+----
+
+==== Description
+:hardbreaks:
+checkDuplicates
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|contacts|false|<<ContactList>>
+|HeaderParameter|filter|filter|true|string
+|HeaderParameter|full|fullResult|true|boolean
+|HeaderParameter|pictures|responseWithPictures|true|boolean
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<DuplicatesResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* duplicates-controller
+
+=== exportAllContactsAsCsv
+----
+GET /rest/contacts/v1/export/csv
+----
+
+==== Description
+:hardbreaks:
+exportAllContactsAsCsv
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|string
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/json
+
+==== Produces
+
+* text/csv
+
+==== Tags
+
+* export-controller
+
+=== exportAllContactsAsVCard
+----
+GET /rest/contacts/v1/export/vcard
+----
+
+==== Description
+:hardbreaks:
+exportAllContactsAsVCard
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|string
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/json
+
+==== Produces
+
+* text/vcard
+
+==== Tags
+
+* export-controller
+
+=== getContactGroups
+----
+GET /rest/contacts/v1/groups
+----
+
+==== Description
+:hardbreaks:
+getContactGroups
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|QueryParameter|filterBy|filterBys|false|csv string array
+|QueryParameter|filterOp|filterOps|true|csv string array
+|QueryParameter|filterValue|filterValues|false|csv string array
+|QueryParameter|sortBy|sortBys|false|csv string array
+|QueryParameter|sortOrder|sortOrders|true|csv string array
+|QueryParameter|startIndex|startIndex|true|integer (int32)
+|QueryParameter|count|count|true|integer (int32)
+|QueryParameter|field|fields|false|csv string array
+|QueryParameter|pictureSize|pictureSize|true|enum (LARGE, MEDIUM, SMALL)
+|QueryParameter|pictureScalingMode|pictureScalingMode|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactGroupsResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== createContactGroup
+----
+PUT /rest/contacts/v1/groups
+----
+
+==== Description
+:hardbreaks:
+createContactGroup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|contactGroup|false|<<ContactGroup>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactGroupResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== deleteAllContactGroups
+----
+DELETE /rest/contacts/v1/groups/all
+----
+
+==== Description
+:hardbreaks:
+deleteAllContactGroups
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== getContactGroup
+----
+GET /rest/contacts/v1/groups/{groupId}
+----
+
+==== Description
+:hardbreaks:
+getContactGroup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|QueryParameter|pictureSize|pictureSize|true|enum (LARGE, MEDIUM, SMALL)
+|QueryParameter|pictureScalingMode|pictureScalingMode|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactGroupResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== deleteContactGroup
+----
+DELETE /rest/contacts/v1/groups/{groupId}
+----
+
+==== Description
+:hardbreaks:
+deleteContactGroup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== updateContactGroup
+----
+POST /rest/contacts/v1/groups/{groupId}
+----
+
+==== Description
+:hardbreaks:
+updateContactGroup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|BodyParameter|body|contactGroup|false|<<ContactGroup>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactGroupResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== exportContactsOfGroupAsEmbeddedCsv
+----
+GET /rest/contacts/v1/groups/{groupId}/export/csv
+----
+
+==== Description
+:hardbreaks:
+exportContactsOfGroupAsEmbeddedCsv
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<CsvContactsResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* export-controller
+
+=== exportContactsOfGroupAsVCard
+----
+GET /rest/contacts/v1/groups/{groupId}/export/vcard
+----
+
+==== Description
+:hardbreaks:
+exportContactsOfGroupAsVCard
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|string
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/json
+
+==== Produces
+
+* text/vcard
+
+==== Tags
+
+* export-controller
+
+=== addContactsToGroup
+----
+PUT /rest/contacts/v1/groups/{groupId}/members
+----
+
+==== Description
+:hardbreaks:
+addContactsToGroup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|BodyParameter|body|contactIdsList|false|<<IdsList>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactGroupResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== removeContactsFromGroup
+----
+DELETE /rest/contacts/v1/groups/{groupId}/members
+----
+
+==== Description
+:hardbreaks:
+removeContactsFromGroup
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|groupId|groupId|true|string
+|BodyParameter|body|contactIdList|false|<<IdsList>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactGroupResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* contact-group-controller
+
+=== importContacts
+----
+PUT /rest/contacts/v1/import
+----
+
+==== Description
+:hardbreaks:
+importContacts
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|importContactData|false|<<ImportContactData>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactIdentifiersResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* import-controller
+
+=== importContactsWithMerge
+----
+POST /rest/contacts/v1/import
+----
+
+==== Description
+:hardbreaks:
+importContactsWithMerge
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|contacts|false|<<ContactList>>
+|HeaderParameter|group|createImportGroup|true|boolean
+|HeaderParameter|groupId|groupId|false|string
+|HeaderParameter|showImportResult|showImportResult|true|boolean
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactImportResult>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* import-controller
+
+=== getProfileContact
+----
+GET /rest/contacts/v1/profile
+----
+
+==== Description
+:hardbreaks:
+getProfileContact
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|QueryParameter|pictureSize|pictureSize|true|enum (LARGE, MEDIUM, SMALL)
+|QueryParameter|pictureScalingMode|pictureScalingMode|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* profile-controller
+
+=== addProfileFlag
+----
+PUT /rest/contacts/v1/profile/{contactId}
+----
+
+==== Description
+:hardbreaks:
+addProfileFlag
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|contactId|contactId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* profile-controller
+
+=== removeProfileFlag
+----
+DELETE /rest/contacts/v1/profile/{contactId}
+----
+
+==== Description
+:hardbreaks:
+removeProfileFlag
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|contactId|contactId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* profile-controller
+
+=== getTopReferences
+----
+GET /rest/contacts/v1/references
+----
+
+==== Description
+:hardbreaks:
+getTopReferences
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|QueryParameter|max|maxReferences|true|integer (int32)
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ReferencesResponse>>
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* references-controller
+
+=== deleteReference
+----
+DELETE /rest/contacts/v1/references/{referenceId}
+----
+
+==== Description
+:hardbreaks:
+deleteReference
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|referenceId|referenceId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|204|No Content|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* references-controller
+
+=== incrementReferenceCounter
+----
+POST /rest/contacts/v1/references/{referenceId}
+----
+
+==== Description
+:hardbreaks:
+incrementReferenceCounter
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|PathParameter|referenceId|referenceId|true|string
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<BooleanResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* references-controller
+
+=== translateCsvContacts
+----
+POST /rest/contacts/v1/translate/csv
+----
+
+==== Description
+:hardbreaks:
+translateCsvContacts
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|csvContacts|false|<<CsvContacts>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<TranslateCsvContactsResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* translation-controller
+
+=== translateVCardContacts
+----
+POST /rest/contacts/v1/translate/vcard
+----
+
+==== Description
+:hardbreaks:
+translateVCardContacts
+
+==== Parameters
+[options="header"]
+|===
+|Type|Name|Description|Required|Schema
+|BodyParameter|body|vCardContacts|false|<<VCardContacts>>
+|===
+
+==== Responses
+[options="header"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<ContactsResponse>>
+|201|Created|No Content
+|401|Unauthorized|No Content
+|403|Forbidden|No Content
+|404|Not Found|No Content
+|===
+
+==== Consumes
+
+* application/xml
+* application/json
+
+==== Produces
+
+* application/xml
+* application/json
+
+==== Tags
+
+* translation-controller
+
+== Definitions
+=== VCardContact
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contactId||string|false
+|vCard||string|false
+|===
+
+=== AddressBookBackupsResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|backups||<<AddressBookBackup>> array|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== Address
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|addressType||enum (PRIVATE, BUSINESS, UNKNOWN)|false
+|city||string|false
+|country||string|false
+|state||string|false
+|street||string|false
+|zipCode||string|false
+|===
+
+=== DeMail
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|address||string|false
+|pseudonyms||string|false
+|securityLevel||string|false
+|===
+
+=== CsvContactsResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|csvContent||string|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== ContactsResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contacts||<<Contact>> array|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== TelephoneNumber
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|number||string|false
+|telephoneType||enum (PRIVATE, BUSINESS, PRIVATE_MOBILE, BUSINESS_MOBILE, PRIVATE_FAX, BUSINESS_FAX, PRIVATE_VOIP, BUSINESS_VOIP, UNKNOWN)|false
+|===
+
+=== DateTime
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|afterNow||boolean|false
+|beforeNow||boolean|false
+|centuryOfEra||integer (int32)|false
+|chronology||<<Chronology>>|false
+|dayOfMonth||integer (int32)|false
+|dayOfWeek||integer (int32)|false
+|dayOfYear||integer (int32)|false
+|equalNow||boolean|false
+|era||integer (int32)|false
+|hourOfDay||integer (int32)|false
+|millis||integer (int64)|false
+|millisOfDay||integer (int32)|false
+|millisOfSecond||integer (int32)|false
+|minuteOfDay||integer (int32)|false
+|minuteOfHour||integer (int32)|false
+|monthOfYear||integer (int32)|false
+|secondOfDay||integer (int32)|false
+|secondOfMinute||integer (int32)|false
+|weekOfWeekyear||integer (int32)|false
+|weekyear||integer (int32)|false
+|year||integer (int32)|false
+|yearOfCentury||integer (int32)|false
+|yearOfEra||integer (int32)|false
+|zone||<<DateTimeZone>>|false
+|===
+
+=== AddressBookBackup
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|description||string|false
+|id||string|false
+|numberOfContacts||integer (int32)|false
+|timestamp||string (date-time)|false
+|===
+
+=== IdsList
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|ids||string array|false
+|===
+
+=== Duplicates
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|mergedContact||<<Contact>>|false
+|similarContacts||<<ContactWithSimilarity>> array|false
+|===
+
+=== ContactImportResult
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|addressListDetailUrl||string|false
+|addressListName||string|false
+|duplicatedContactIds||string array|false
+|error||<<ErrorDescription>>|false
+|importedContactIds||string array|false
+|updatedContactIds||string array|false
+|===
+
+=== VCardContacts
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|vCardContent||string|false
+|===
+
+=== ContactGroupsResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contactGroups||<<ContactGroup>> array|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== InstantMessaging
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|provider||string|false
+|userId||string|false
+|===
+
+=== Chronology
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|zone||<<DateTimeZone>>|false
+|===
+
+=== ErrorDescription
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|errorId||string|false
+|message||string|false
+|stackTrace||string|false
+|statusCode||integer (int32)|false
+|===
+
+=== Homepage
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|addressType||enum (PRIVATE, BUSINESS, UNKNOWN)|false
+|link||string|false
+|===
+
+=== Reminder
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|action||enum (EMAIL, SMS)|false
+|days||integer (int32)|false
+|hours||integer (int32)|false
+|minutes||integer (int32)|false
+|seconds||integer (int32)|false
+|weeks||integer (int32)|false
+|===
+
+=== ContactResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contact||<<Contact>>|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== DuplicatesResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|count||integer (int32)|false
+|duplicates||<<Duplicates>> array|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== AddressBookBackupResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|backup||<<AddressBookBackup>>|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== ContactWithSimilarity
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contact||<<Contact>>|false
+|requestIndex||integer (int32)|false
+|similarity||number (float)|false
+|===
+
+=== ContactList
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contacts||<<Contact>> array|false
+|===
+
+=== VCardContactsResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|error||<<ErrorDescription>>|false
+|vCardContacts||<<VCardContact>> array|false
+|===
+
+=== BooleanResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|error||<<ErrorDescription>>|false
+|===
+
+=== DateTimeZone
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|fixed||boolean|false
+|===
+
+=== EmailAddress
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|addressType||enum (PRIVATE, BUSINESS, UNKNOWN)|false
+|email||string|false
+|===
+
+=== Contact
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|addresses||<<Address>> array|false
+|anniversary||string|false
+|anniversaryReminders||<<Reminder>> array|false
+|birthday||string|false
+|birthdayReminders||<<Reminder>> array|false
+|communities||<<Community>> array|false
+|company||string|false
+|contactId||string|false
+|deMails||<<DeMail>> array|false
+|emails||<<EmailAddress>> array|false
+|first||string|false
+|flags||string array|false
+|homepages||<<Homepage>> array|false
+|instantMessagings||<<InstantMessaging>> array|false
+|jobTitle||string|false
+|last||string|false
+|modifiedDate||string (date-time)|false
+|notes||string|false
+|picture||string array|false
+|prefix||string|false
+|telephoneNumbers||<<TelephoneNumber>> array|false
+|title||string|false
+|version||string|false
+|===
+
+=== ContactGroupResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contactGroup||<<ContactGroup>>|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== TranslateCsvContactsResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contacts||<<Contact>> array|false
+|error||<<ErrorDescription>>|false
+|unknownColumns||string array|false
+|===
+
+=== CsvContacts
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|csvContent||string|false
+|===
+
+=== ImportContactData
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contactList||<<ContactList>>|false
+|groupId||string|false
+|===
+
+=== ReferencesResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|error||<<ErrorDescription>>|false
+|references||string array|false
+|===
+
+=== ContactGroup
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contactIds||string array|false
+|id||string|false
+|modifiedDate||string (date-time)|false
+|name||string|false
+|notes||string|false
+|picture||string array|false
+|===
+
+=== ContactIdentifiersResponse
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|contactIds||string array|false
+|error||<<ErrorDescription>>|false
+|===
+
+=== Community
+[options="header"]
+|===
+|Name|Description|Schema|Required
+|rssUrl||string|false
+|service||string|false
+|url||string|false
+|userId||string|false
+|===
+

@@ -7,9 +7,10 @@ import com.wordnik.swagger.util.Json;
 import com.wordnik.swagger.util.Yaml;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
+import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
 import io.swagger.parser.SwaggerParser;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +27,7 @@ public class Swagger2MarkupConverter {
     private final MarkupLanguage markupLanguage;
     private final String examplesFolderPath;
     private final String schemasFolderPath;
+    private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
 
@@ -116,6 +118,7 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(String directory) throws IOException {
+        new OverviewDocument(swagger, markupLanguage).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
         new PathsDocument(swagger, markupLanguage, examplesFolderPath).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
         new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
     }
@@ -126,8 +129,9 @@ public class Swagger2MarkupConverter {
      * @return a the document as a String
      */
     private String buildDocuments() throws IOException {
-        return new PathsDocument(swagger, markupLanguage, examplesFolderPath).build().toString()
-                .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath).build().toString());
+        return new OverviewDocument(swagger, markupLanguage).build().toString().concat(
+                new PathsDocument(swagger, markupLanguage, examplesFolderPath).build().toString()
+                .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath).build().toString()));
     }
 
 

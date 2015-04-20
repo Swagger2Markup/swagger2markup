@@ -1,6 +1,6 @@
 = Swagger2Markup
 :author: Robert Winkler
-:version: 0.3.0
+:version: 0.4.0
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:https://api.bintray.com/packages/robwin/maven/swagger2markup/images/download.svg[link="https://bintray.com/robwin/maven/swagger2markup/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
@@ -10,13 +10,13 @@ image:https://badges.gitter.im/Join%20Chat.svg[link="https://gitter.im/RobWin/sw
 
 The primary goal of this project is to simplify the documentation of a RESTful API by combining documentation that's been hand-written with auto-generated API documentation produced by https://github.com/swagger-api[Swagger]. The result is intended to be an easy-to-read, on- and offline user guide, comparable to https://developer.github.com/v3/[GitHub's API documentation]. 
 
-This project is a Swagger to Markup (AsciiDoc and GitHub Flavored Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into an AsciiDoc or Markdown document. The Swagger source file can be located locally or remotely via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
+This project is a Swagger to Markup (AsciiDoc and GitHub Flavored Markdown) converter. The *Swagger2MarkupConverter* takes a swagger.json or swagger.yaml file as source and converts it into three documents (Overview, Paths and Definitions) which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. The Swagger2MarkupConverter supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder].
 
 http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to many formats including HTML, PDF and EPUB. You write an AsciiDoc document the same way you would write a normal text document.
 
-You can use Swagger2Markup to convert your design-first Swagger YAML into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/springfox/springfox[springfox] and https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See usage guide below and <<integration-with-spring-restdocs, Integration with spring-restdocs>>.
+You can use Swagger2Markup to convert your design-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/tree/master/samples/java-jersey2[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See usage guide below and <<integration-with-spring-restdocs, Integration with spring-restdocs>>.
 
-You can generate your HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs] or https://github.com/rtfd/readthedocs.org[ReadTheDocs] to publish your AsciiDoc or Markdown documentation.
+You can generate your HTML5 and PDF documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
 
 The project requires at least JDK 7.
 
@@ -43,7 +43,7 @@ The project is published in JCenter and Maven Central.
 <dependency>
     <groupId>io.github.robwin</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>0.3.0</version>
+    <version>0.4.0</version>
 </dependency>
 ----
 
@@ -55,15 +55,18 @@ repositories {
     jcenter()
 }
 
-compile "io.github.robwin:swagger2markup:0.3.0"
+compile "io.github.robwin:swagger2markup:0.4.0"
 ----
 
 === Using Swagger2Markup
 
-Using the Swagger2MarkupConverter is simple. For example, you can generate your AsciiDoc / Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] during the unit or integration test phase, copy the result into the Jar file and serve it as static content.
+Using the Swagger2MarkupConverter is simple. For example, you can generate your AsciiDoc or Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] during the unit or integration test phase, copy the documentation into the Jar file and serve it as static content.
 The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with Swagger2Markup and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 ==== Integration Test
+
+Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the documents into the folder "src/docs/asciidoc".
+
 [source,java]
 ----
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -73,18 +76,24 @@ The quickest way to get started is to look at the demo project https://github.co
 public class Swagger2MarkupTest {
 
     @Test
-    public void convertSwaggerToMarkup() {
+    public void convertRemoteSwaggerToAsciiDoc() {
+        //Remote Swagger source
+        //Default is AsciiDoc
+        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
+                .intoFolder("src/docs/asciidoc");
+    }
+
+    @Test
+    public void convertRemoteSwaggerToMarkdown() {
         //Remote Swagger source
         //Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").
                 withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
                 .intoFolder("src/docs/markdown");
+    }
 
-        //Remote Swagger source
-        //Default is AsciiDoc
-        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
-                .intoFolder("src/docs/asciidoc");
-
+    @Test
+    public void convertLocalSwaggerToAsciiDoc() {
         //Local Swagger source
         //Default is AsciiDoc
         File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
@@ -96,17 +105,15 @@ public class Swagger2MarkupTest {
 
 ==== Unit Test
 
-Spring's MVC Test framework can also be used to make a request to the Springfox Swagger endpoint of the RESTful service that you are documenting. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document.
-That way you test that your Springfox Swagger endpoint is working, too.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document.
+That way you verify that your Swagger endpoint is working, too. The test cycle is much faster then.
 
 [source,java]
 ----
 @WebAppConfiguration
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
-public class CreateAsciiDoc {
-
-    private static final Logger LOG = LoggerFactory.getLogger(CreateAsciiDoc.class);
+public class Swagger2MarkupTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -119,7 +126,7 @@ public class CreateAsciiDoc {
     }
 
     @Test
-    public void createAsciiDoc() throws Exception {
+    public void convertSwaggerToAsciiDoc() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(Swagger2MarkupDocumentation.document("swagger_adoc"))
@@ -129,6 +136,9 @@ public class CreateAsciiDoc {
 ----
 
 ==== Springfox configuration
+
+The following is a complete https://github.com/springfox/springfox[springfox] configuration to use Swagger in a Spring Boot Application.
+
 [source,java]
 ----
 @SpringBootApplication
@@ -159,6 +169,47 @@ public class Application {
 }
 ----
 
+==== Combine generated documentation with your hand-written documentation
+
+The following shows how you can combine the generated documentation with your hand-written documentation with AsciiDoc.
+
+image::images/generated_docs.PNG[generated_docs]
+
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following shows how to configure the asciidoctor-gradle-plugin. By default it searches for AsciiDoc files in "src/docs/asciidoc" and puts the HTML and PDF output into "build/asciidoc/html5" and "build/asciidoc/pdf".
+
+[source]
+----
+asciidoctor {
+    sources {
+        include 'index.adoc'
+    }
+    backends = ['html5', 'pdf']
+    attributes = [
+            doctype: 'book',
+            toc: 'left',
+            toclevels: '2',
+            numbered: '',
+            sectlinks: '',
+            sectanchors: ''
+    ]
+}
+----
+
+You can copy the output into your Jar file and serve the documentation as static content.
+
+[source]
+----
+jar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
+    from ("${asciidoctor.outputDir}/pdf") {
+        into 'static/docs'
+    }
+}
+----
+
 == Examples
 == Swagger source file
 image::images/swagger_json.PNG[swagger_json]
@@ -171,9 +222,6 @@ image::images/markdown.PNG[markdown]
 
 === Generated HTML using AsciidoctorJ
 image::images/asciidoc_html.PNG[asciidoc_html]
-
-=== Generated HTML using Mkdocs
-image::images/mkdocs_html.PNG[mkdocs_html]
 
 === Generated PDF using AsciidoctorJ
 image::images/asciidoc_pdf.PNG[asciidoc_pdf]

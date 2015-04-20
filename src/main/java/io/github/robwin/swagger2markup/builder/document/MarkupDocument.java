@@ -21,6 +21,9 @@ public abstract class MarkupDocument {
     protected static final String NAME_COLUMN = "Name";
     protected static final String DESCRIPTION_COLUMN = "Description";
     protected static final String DESCRIPTION = DESCRIPTION_COLUMN;
+    protected static final String PRODUCES = "Produces";
+    protected static final String CONSUMES = "Consumes";
+    protected static final String TAGS = "Tags";
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;

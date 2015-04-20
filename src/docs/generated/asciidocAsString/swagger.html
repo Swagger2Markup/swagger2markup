@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>Swagger Petstore</title>
+<title>Swagger Petstore API</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -411,46 +411,55 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>Swagger Petstore</h1>
+<h1>Swagger Petstore API</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_paths">1. Paths</a>
+<li><a href="#_overview">1. Overview</a>
 <ul class="sectlevel2">
-<li><a href="#_update_an_existing_pet">1.1. Update an existing pet</a></li>
-<li><a href="#_add_a_new_pet_to_the_store">1.2. Add a new pet to the store</a></li>
-<li><a href="#_finds_pets_by_status">1.3. Finds Pets by status</a></li>
-<li><a href="#_finds_pets_by_tags">1.4. Finds Pets by tags</a></li>
-<li><a href="#_find_pet_by_id">1.5. Find pet by ID</a></li>
-<li><a href="#_deletes_a_pet">1.6. Deletes a pet</a></li>
-<li><a href="#_updates_a_pet_in_the_store_with_form_data">1.7. Updates a pet in the store with form data</a></li>
-<li><a href="#_place_an_order_for_a_pet">1.8. Place an order for a pet</a></li>
-<li><a href="#_find_purchase_order_by_id">1.9. Find purchase order by ID</a></li>
-<li><a href="#_delete_purchase_order_by_id">1.10. Delete purchase order by ID</a></li>
-<li><a href="#_create_user">1.11. Create user</a></li>
-<li><a href="#_creates_list_of_users_with_given_input_array">1.12. Creates list of users with given input array</a></li>
-<li><a href="#_creates_list_of_users_with_given_input_array_2">1.13. Creates list of users with given input array</a></li>
-<li><a href="#_logs_user_into_the_system">1.14. Logs user into the system</a></li>
-<li><a href="#_logs_out_current_logged_in_user_session">1.15. Logs out current logged in user session</a></li>
-<li><a href="#_get_user_by_user_name">1.16. Get user by user name</a></li>
-<li><a href="#_updated_user">1.17. Updated user</a></li>
-<li><a href="#_delete_user">1.18. Delete user</a></li>
+<li><a href="#_version_information">1.1. Version information</a></li>
+<li><a href="#_contact_information">1.2. Contact information</a></li>
+<li><a href="#_license_information">1.3. License information</a></li>
+<li><a href="#_uri_scheme">1.4. URI scheme</a></li>
 </ul>
 </li>
-<li><a href="#_definitions">2. Definitions</a>
+<li><a href="#_paths">2. Paths</a>
 <ul class="sectlevel2">
-<li><a href="#_user">2.1. User</a></li>
-<li><a href="#_category">2.2. Category</a></li>
-<li><a href="#_pet">2.3. Pet</a></li>
-<li><a href="#_tag">2.4. Tag</a></li>
-<li><a href="#_order">2.5. Order</a></li>
+<li><a href="#_update_an_existing_pet">2.1. Update an existing pet</a></li>
+<li><a href="#_add_a_new_pet_to_the_store">2.2. Add a new pet to the store</a></li>
+<li><a href="#_finds_pets_by_status">2.3. Finds Pets by status</a></li>
+<li><a href="#_finds_pets_by_tags">2.4. Finds Pets by tags</a></li>
+<li><a href="#_find_pet_by_id">2.5. Find pet by ID</a></li>
+<li><a href="#_deletes_a_pet">2.6. Deletes a pet</a></li>
+<li><a href="#_updates_a_pet_in_the_store_with_form_data">2.7. Updates a pet in the store with form data</a></li>
+<li><a href="#_place_an_order_for_a_pet">2.8. Place an order for a pet</a></li>
+<li><a href="#_find_purchase_order_by_id">2.9. Find purchase order by ID</a></li>
+<li><a href="#_delete_purchase_order_by_id">2.10. Delete purchase order by ID</a></li>
+<li><a href="#_create_user">2.11. Create user</a></li>
+<li><a href="#_creates_list_of_users_with_given_input_array">2.12. Creates list of users with given input array</a></li>
+<li><a href="#_creates_list_of_users_with_given_input_array_2">2.13. Creates list of users with given input array</a></li>
+<li><a href="#_logs_user_into_the_system">2.14. Logs user into the system</a></li>
+<li><a href="#_logs_out_current_logged_in_user_session">2.15. Logs out current logged in user session</a></li>
+<li><a href="#_get_user_by_user_name">2.16. Get user by user name</a></li>
+<li><a href="#_updated_user">2.17. Updated user</a></li>
+<li><a href="#_delete_user">2.18. Delete user</a></li>
+</ul>
+</li>
+<li><a href="#_definitions">3. Definitions</a>
+<ul class="sectlevel2">
+<li><a href="#_user">3.1. User</a></li>
+<li><a href="#_category">3.2. Category</a></li>
+<li><a href="#_pet">3.3. Pet</a></li>
+<li><a href="#_tag">3.4. Tag</a></li>
+<li><a href="#_order">3.5. Order</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>1. Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>This is a sample server Petstore server.</p>
@@ -461,13 +470,30 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>For this sample, you can use the api key <code>special-key</code> to test the authorization filters</p>
 </div>
+<div class="sect2">
+<h3 id="_version_information"><a class="anchor" href="#_version_information"></a>1.1. Version information</h3>
 <div class="paragraph">
-<p>Version: 1.0.0<br>
-Contact: <a href="mailto:apiteam@wordnik.com">apiteam@wordnik.com</a><br>
-License: Apache 2.0<br>
-License URL: <a href="http://www.apache.org/licenses/LICENSE-2.0.html" class="bare">http://www.apache.org/licenses/LICENSE-2.0.html</a><br>
-Terms of service: <a href="http://helloreverb.com/terms/" class="bare">http://helloreverb.com/terms/</a></p>
+<p>Version: 1.0.0</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_contact_information"><a class="anchor" href="#_contact_information"></a>1.2. Contact information</h3>
+<div class="paragraph">
+<p>Contact: <a href="mailto:apiteam@wordnik.com">apiteam@wordnik.com</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_license_information"><a class="anchor" href="#_license_information"></a>1.3. License information</h3>
+<div class="paragraph">
+<p>License: Apache 2.0<br>
+License URL: <a href="http://www.apache.org/licenses/LICENSE-2.0.html" class="bare">http://www.apache.org/licenses/LICENSE-2.0.html</a></p>
+</div>
+<div class="paragraph">
+<p>Terms of service: <a href="http://helloreverb.com/terms/" class="bare">http://helloreverb.com/terms/</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_uri_scheme"><a class="anchor" href="#_uri_scheme"></a>1.4. URI scheme</h3>
 <div class="paragraph">
 <p>Host: petstore.swagger.wordnik.com<br>
 BasePath: /v2<br>
@@ -475,18 +501,19 @@ Schemes: HTTP</p>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="_paths"><a class="anchor" href="#_paths"></a>1. Paths</h2>
+<h2 id="_paths"><a class="anchor" href="#_paths"></a>2. Paths</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_update_an_existing_pet"><a class="anchor" href="#_update_an_existing_pet"></a>1.1. Update an existing pet</h3>
+<h3 id="_update_an_existing_pet"><a class="anchor" href="#_update_an_existing_pet"></a>2.1. Update an existing pet</h3>
 <div class="listingblock">
 <div class="content">
 <pre>PUT /pets</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters"><a class="anchor" href="#_parameters"></a>1.1.1. Parameters</h4>
+<h4 id="_parameters"><a class="anchor" href="#_parameters"></a>2.1.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -516,7 +543,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses"><a class="anchor" href="#_responses"></a>1.1.2. Responses</h4>
+<h4 id="_responses"><a class="anchor" href="#_responses"></a>2.1.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -550,7 +577,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_consumes"><a class="anchor" href="#_consumes"></a>1.1.3. Consumes</h4>
+<h4 id="_consumes"><a class="anchor" href="#_consumes"></a>2.1.3. Consumes</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -563,7 +590,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_produces"><a class="anchor" href="#_produces"></a>1.1.4. Produces</h4>
+<h4 id="_produces"><a class="anchor" href="#_produces"></a>2.1.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -576,7 +603,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags"><a class="anchor" href="#_tags"></a>1.1.5. Tags</h4>
+<h4 id="_tags"><a class="anchor" href="#_tags"></a>2.1.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -587,14 +614,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_add_a_new_pet_to_the_store"><a class="anchor" href="#_add_a_new_pet_to_the_store"></a>1.2. Add a new pet to the store</h3>
+<h3 id="_add_a_new_pet_to_the_store"><a class="anchor" href="#_add_a_new_pet_to_the_store"></a>2.2. Add a new pet to the store</h3>
 <div class="listingblock">
 <div class="content">
 <pre>POST /pets</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a>1.2.1. Parameters</h4>
+<h4 id="_parameters_2"><a class="anchor" href="#_parameters_2"></a>2.2.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -624,7 +651,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_2"><a class="anchor" href="#_responses_2"></a>1.2.2. Responses</h4>
+<h4 id="_responses_2"><a class="anchor" href="#_responses_2"></a>2.2.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -648,7 +675,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_consumes_2"><a class="anchor" href="#_consumes_2"></a>1.2.3. Consumes</h4>
+<h4 id="_consumes_2"><a class="anchor" href="#_consumes_2"></a>2.2.3. Consumes</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -661,7 +688,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_produces_2"><a class="anchor" href="#_produces_2"></a>1.2.4. Produces</h4>
+<h4 id="_produces_2"><a class="anchor" href="#_produces_2"></a>2.2.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -674,7 +701,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_2"><a class="anchor" href="#_tags_2"></a>1.2.5. Tags</h4>
+<h4 id="_tags_2"><a class="anchor" href="#_tags_2"></a>2.2.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -685,20 +712,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_finds_pets_by_status"><a class="anchor" href="#_finds_pets_by_status"></a>1.3. Finds Pets by status</h3>
+<h3 id="_finds_pets_by_status"><a class="anchor" href="#_finds_pets_by_status"></a>2.3. Finds Pets by status</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /pets/findByStatus</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description"><a class="anchor" href="#_description"></a>1.3.1. Description</h4>
+<h4 id="_description"><a class="anchor" href="#_description"></a>2.3.1. Description</h4>
 <div class="paragraph">
 <p>Multiple status values can be provided with comma seperated strings</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_3"><a class="anchor" href="#_parameters_3"></a>1.3.2. Parameters</h4>
+<h4 id="_parameters_3"><a class="anchor" href="#_parameters_3"></a>2.3.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -728,7 +755,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_3"><a class="anchor" href="#_responses_3"></a>1.3.3. Responses</h4>
+<h4 id="_responses_3"><a class="anchor" href="#_responses_3"></a>2.3.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -757,7 +784,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_3"><a class="anchor" href="#_produces_3"></a>1.3.4. Produces</h4>
+<h4 id="_produces_3"><a class="anchor" href="#_produces_3"></a>2.3.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -770,7 +797,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_3"><a class="anchor" href="#_tags_3"></a>1.3.5. Tags</h4>
+<h4 id="_tags_3"><a class="anchor" href="#_tags_3"></a>2.3.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -781,20 +808,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_finds_pets_by_tags"><a class="anchor" href="#_finds_pets_by_tags"></a>1.4. Finds Pets by tags</h3>
+<h3 id="_finds_pets_by_tags"><a class="anchor" href="#_finds_pets_by_tags"></a>2.4. Finds Pets by tags</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /pets/findByTags</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_2"><a class="anchor" href="#_description_2"></a>1.4.1. Description</h4>
+<h4 id="_description_2"><a class="anchor" href="#_description_2"></a>2.4.1. Description</h4>
 <div class="paragraph">
 <p>Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_4"><a class="anchor" href="#_parameters_4"></a>1.4.2. Parameters</h4>
+<h4 id="_parameters_4"><a class="anchor" href="#_parameters_4"></a>2.4.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -824,7 +851,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_4"><a class="anchor" href="#_responses_4"></a>1.4.3. Responses</h4>
+<h4 id="_responses_4"><a class="anchor" href="#_responses_4"></a>2.4.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -853,7 +880,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_4"><a class="anchor" href="#_produces_4"></a>1.4.4. Produces</h4>
+<h4 id="_produces_4"><a class="anchor" href="#_produces_4"></a>2.4.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -866,7 +893,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_4"><a class="anchor" href="#_tags_4"></a>1.4.5. Tags</h4>
+<h4 id="_tags_4"><a class="anchor" href="#_tags_4"></a>2.4.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -877,20 +904,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_find_pet_by_id"><a class="anchor" href="#_find_pet_by_id"></a>1.5. Find pet by ID</h3>
+<h3 id="_find_pet_by_id"><a class="anchor" href="#_find_pet_by_id"></a>2.5. Find pet by ID</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /pets/{petId}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_3"><a class="anchor" href="#_description_3"></a>1.5.1. Description</h4>
+<h4 id="_description_3"><a class="anchor" href="#_description_3"></a>2.5.1. Description</h4>
 <div class="paragraph">
 <p>Returns a pet when ID &lt; 10.  ID &gt; 10 or nonintegers will simulate API error conditions</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_5"><a class="anchor" href="#_parameters_5"></a>1.5.2. Parameters</h4>
+<h4 id="_parameters_5"><a class="anchor" href="#_parameters_5"></a>2.5.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -920,7 +947,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_5"><a class="anchor" href="#_responses_5"></a>1.5.3. Responses</h4>
+<h4 id="_responses_5"><a class="anchor" href="#_responses_5"></a>2.5.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -954,7 +981,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_5"><a class="anchor" href="#_produces_5"></a>1.5.4. Produces</h4>
+<h4 id="_produces_5"><a class="anchor" href="#_produces_5"></a>2.5.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -967,7 +994,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_5"><a class="anchor" href="#_tags_5"></a>1.5.5. Tags</h4>
+<h4 id="_tags_5"><a class="anchor" href="#_tags_5"></a>2.5.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -978,14 +1005,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_deletes_a_pet"><a class="anchor" href="#_deletes_a_pet"></a>1.6. Deletes a pet</h3>
+<h3 id="_deletes_a_pet"><a class="anchor" href="#_deletes_a_pet"></a>2.6. Deletes a pet</h3>
 <div class="listingblock">
 <div class="content">
 <pre>DELETE /pets/{petId}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_6"><a class="anchor" href="#_parameters_6"></a>1.6.1. Parameters</h4>
+<h4 id="_parameters_6"><a class="anchor" href="#_parameters_6"></a>2.6.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1022,7 +1049,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_6"><a class="anchor" href="#_responses_6"></a>1.6.2. Responses</h4>
+<h4 id="_responses_6"><a class="anchor" href="#_responses_6"></a>2.6.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1046,7 +1073,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_6"><a class="anchor" href="#_produces_6"></a>1.6.3. Produces</h4>
+<h4 id="_produces_6"><a class="anchor" href="#_produces_6"></a>2.6.3. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1059,7 +1086,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_6"><a class="anchor" href="#_tags_6"></a>1.6.4. Tags</h4>
+<h4 id="_tags_6"><a class="anchor" href="#_tags_6"></a>2.6.4. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1070,14 +1097,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_updates_a_pet_in_the_store_with_form_data"><a class="anchor" href="#_updates_a_pet_in_the_store_with_form_data"></a>1.7. Updates a pet in the store with form data</h3>
+<h3 id="_updates_a_pet_in_the_store_with_form_data"><a class="anchor" href="#_updates_a_pet_in_the_store_with_form_data"></a>2.7. Updates a pet in the store with form data</h3>
 <div class="listingblock">
 <div class="content">
 <pre>POST /pets/{petId}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_7"><a class="anchor" href="#_parameters_7"></a>1.7.1. Parameters</h4>
+<h4 id="_parameters_7"><a class="anchor" href="#_parameters_7"></a>2.7.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1121,7 +1148,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_7"><a class="anchor" href="#_responses_7"></a>1.7.2. Responses</h4>
+<h4 id="_responses_7"><a class="anchor" href="#_responses_7"></a>2.7.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1145,7 +1172,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_consumes_3"><a class="anchor" href="#_consumes_3"></a>1.7.3. Consumes</h4>
+<h4 id="_consumes_3"><a class="anchor" href="#_consumes_3"></a>2.7.3. Consumes</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1155,7 +1182,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_produces_7"><a class="anchor" href="#_produces_7"></a>1.7.4. Produces</h4>
+<h4 id="_produces_7"><a class="anchor" href="#_produces_7"></a>2.7.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1168,7 +1195,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_7"><a class="anchor" href="#_tags_7"></a>1.7.5. Tags</h4>
+<h4 id="_tags_7"><a class="anchor" href="#_tags_7"></a>2.7.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1179,14 +1206,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_place_an_order_for_a_pet"><a class="anchor" href="#_place_an_order_for_a_pet"></a>1.8. Place an order for a pet</h3>
+<h3 id="_place_an_order_for_a_pet"><a class="anchor" href="#_place_an_order_for_a_pet"></a>2.8. Place an order for a pet</h3>
 <div class="listingblock">
 <div class="content">
 <pre>POST /stores/order</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_8"><a class="anchor" href="#_parameters_8"></a>1.8.1. Parameters</h4>
+<h4 id="_parameters_8"><a class="anchor" href="#_parameters_8"></a>2.8.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1216,7 +1243,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_8"><a class="anchor" href="#_responses_8"></a>1.8.2. Responses</h4>
+<h4 id="_responses_8"><a class="anchor" href="#_responses_8"></a>2.8.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1245,7 +1272,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_8"><a class="anchor" href="#_produces_8"></a>1.8.3. Produces</h4>
+<h4 id="_produces_8"><a class="anchor" href="#_produces_8"></a>2.8.3. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1258,7 +1285,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_8"><a class="anchor" href="#_tags_8"></a>1.8.4. Tags</h4>
+<h4 id="_tags_8"><a class="anchor" href="#_tags_8"></a>2.8.4. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1269,20 +1296,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_find_purchase_order_by_id"><a class="anchor" href="#_find_purchase_order_by_id"></a>1.9. Find purchase order by ID</h3>
+<h3 id="_find_purchase_order_by_id"><a class="anchor" href="#_find_purchase_order_by_id"></a>2.9. Find purchase order by ID</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /stores/order/{orderId}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_4"><a class="anchor" href="#_description_4"></a>1.9.1. Description</h4>
+<h4 id="_description_4"><a class="anchor" href="#_description_4"></a>2.9.1. Description</h4>
 <div class="paragraph">
 <p>For valid response try integer IDs with value &#8656; 5 or &gt; 10. Other values will generated exceptions</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_9"><a class="anchor" href="#_parameters_9"></a>1.9.2. Parameters</h4>
+<h4 id="_parameters_9"><a class="anchor" href="#_parameters_9"></a>2.9.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1312,7 +1339,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_9"><a class="anchor" href="#_responses_9"></a>1.9.3. Responses</h4>
+<h4 id="_responses_9"><a class="anchor" href="#_responses_9"></a>2.9.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1346,7 +1373,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_9"><a class="anchor" href="#_produces_9"></a>1.9.4. Produces</h4>
+<h4 id="_produces_9"><a class="anchor" href="#_produces_9"></a>2.9.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1359,7 +1386,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_9"><a class="anchor" href="#_tags_9"></a>1.9.5. Tags</h4>
+<h4 id="_tags_9"><a class="anchor" href="#_tags_9"></a>2.9.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1370,20 +1397,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_delete_purchase_order_by_id"><a class="anchor" href="#_delete_purchase_order_by_id"></a>1.10. Delete purchase order by ID</h3>
+<h3 id="_delete_purchase_order_by_id"><a class="anchor" href="#_delete_purchase_order_by_id"></a>2.10. Delete purchase order by ID</h3>
 <div class="listingblock">
 <div class="content">
 <pre>DELETE /stores/order/{orderId}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_5"><a class="anchor" href="#_description_5"></a>1.10.1. Description</h4>
+<h4 id="_description_5"><a class="anchor" href="#_description_5"></a>2.10.1. Description</h4>
 <div class="paragraph">
 <p>For valid response try integer IDs with value &lt; 1000. Anything above 1000 or nonintegers will generate API errors</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_10"><a class="anchor" href="#_parameters_10"></a>1.10.2. Parameters</h4>
+<h4 id="_parameters_10"><a class="anchor" href="#_parameters_10"></a>2.10.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1413,7 +1440,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_10"><a class="anchor" href="#_responses_10"></a>1.10.3. Responses</h4>
+<h4 id="_responses_10"><a class="anchor" href="#_responses_10"></a>2.10.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1442,7 +1469,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_10"><a class="anchor" href="#_produces_10"></a>1.10.4. Produces</h4>
+<h4 id="_produces_10"><a class="anchor" href="#_produces_10"></a>2.10.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1455,7 +1482,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_10"><a class="anchor" href="#_tags_10"></a>1.10.5. Tags</h4>
+<h4 id="_tags_10"><a class="anchor" href="#_tags_10"></a>2.10.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1466,20 +1493,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_create_user"><a class="anchor" href="#_create_user"></a>1.11. Create user</h3>
+<h3 id="_create_user"><a class="anchor" href="#_create_user"></a>2.11. Create user</h3>
 <div class="listingblock">
 <div class="content">
 <pre>POST /users</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_6"><a class="anchor" href="#_description_6"></a>1.11.1. Description</h4>
+<h4 id="_description_6"><a class="anchor" href="#_description_6"></a>2.11.1. Description</h4>
 <div class="paragraph">
 <p>This can only be done by the logged in user.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_11"><a class="anchor" href="#_parameters_11"></a>1.11.2. Parameters</h4>
+<h4 id="_parameters_11"><a class="anchor" href="#_parameters_11"></a>2.11.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1509,7 +1536,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_11"><a class="anchor" href="#_responses_11"></a>1.11.3. Responses</h4>
+<h4 id="_responses_11"><a class="anchor" href="#_responses_11"></a>2.11.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1533,7 +1560,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_11"><a class="anchor" href="#_produces_11"></a>1.11.4. Produces</h4>
+<h4 id="_produces_11"><a class="anchor" href="#_produces_11"></a>2.11.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1546,7 +1573,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_11"><a class="anchor" href="#_tags_11"></a>1.11.5. Tags</h4>
+<h4 id="_tags_11"><a class="anchor" href="#_tags_11"></a>2.11.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1557,14 +1584,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creates_list_of_users_with_given_input_array"><a class="anchor" href="#_creates_list_of_users_with_given_input_array"></a>1.12. Creates list of users with given input array</h3>
+<h3 id="_creates_list_of_users_with_given_input_array"><a class="anchor" href="#_creates_list_of_users_with_given_input_array"></a>2.12. Creates list of users with given input array</h3>
 <div class="listingblock">
 <div class="content">
 <pre>POST /users/createWithArray</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_12"><a class="anchor" href="#_parameters_12"></a>1.12.1. Parameters</h4>
+<h4 id="_parameters_12"><a class="anchor" href="#_parameters_12"></a>2.12.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1594,7 +1621,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_12"><a class="anchor" href="#_responses_12"></a>1.12.2. Responses</h4>
+<h4 id="_responses_12"><a class="anchor" href="#_responses_12"></a>2.12.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1618,7 +1645,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_12"><a class="anchor" href="#_produces_12"></a>1.12.3. Produces</h4>
+<h4 id="_produces_12"><a class="anchor" href="#_produces_12"></a>2.12.3. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1631,7 +1658,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_12"><a class="anchor" href="#_tags_12"></a>1.12.4. Tags</h4>
+<h4 id="_tags_12"><a class="anchor" href="#_tags_12"></a>2.12.4. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1642,14 +1669,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_creates_list_of_users_with_given_input_array_2"><a class="anchor" href="#_creates_list_of_users_with_given_input_array_2"></a>1.13. Creates list of users with given input array</h3>
+<h3 id="_creates_list_of_users_with_given_input_array_2"><a class="anchor" href="#_creates_list_of_users_with_given_input_array_2"></a>2.13. Creates list of users with given input array</h3>
 <div class="listingblock">
 <div class="content">
 <pre>POST /users/createWithList</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_13"><a class="anchor" href="#_parameters_13"></a>1.13.1. Parameters</h4>
+<h4 id="_parameters_13"><a class="anchor" href="#_parameters_13"></a>2.13.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1679,7 +1706,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_13"><a class="anchor" href="#_responses_13"></a>1.13.2. Responses</h4>
+<h4 id="_responses_13"><a class="anchor" href="#_responses_13"></a>2.13.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1703,7 +1730,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_13"><a class="anchor" href="#_produces_13"></a>1.13.3. Produces</h4>
+<h4 id="_produces_13"><a class="anchor" href="#_produces_13"></a>2.13.3. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1716,7 +1743,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_13"><a class="anchor" href="#_tags_13"></a>1.13.4. Tags</h4>
+<h4 id="_tags_13"><a class="anchor" href="#_tags_13"></a>2.13.4. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1727,14 +1754,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_logs_user_into_the_system"><a class="anchor" href="#_logs_user_into_the_system"></a>1.14. Logs user into the system</h3>
+<h3 id="_logs_user_into_the_system"><a class="anchor" href="#_logs_user_into_the_system"></a>2.14. Logs user into the system</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /users/login</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_14"><a class="anchor" href="#_parameters_14"></a>1.14.1. Parameters</h4>
+<h4 id="_parameters_14"><a class="anchor" href="#_parameters_14"></a>2.14.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1771,7 +1798,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_14"><a class="anchor" href="#_responses_14"></a>1.14.2. Responses</h4>
+<h4 id="_responses_14"><a class="anchor" href="#_responses_14"></a>2.14.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1800,7 +1827,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_14"><a class="anchor" href="#_produces_14"></a>1.14.3. Produces</h4>
+<h4 id="_produces_14"><a class="anchor" href="#_produces_14"></a>2.14.3. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1813,7 +1840,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_14"><a class="anchor" href="#_tags_14"></a>1.14.4. Tags</h4>
+<h4 id="_tags_14"><a class="anchor" href="#_tags_14"></a>2.14.4. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1824,14 +1851,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_logs_out_current_logged_in_user_session"><a class="anchor" href="#_logs_out_current_logged_in_user_session"></a>1.15. Logs out current logged in user session</h3>
+<h3 id="_logs_out_current_logged_in_user_session"><a class="anchor" href="#_logs_out_current_logged_in_user_session"></a>2.15. Logs out current logged in user session</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /users/logout</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_responses_15"><a class="anchor" href="#_responses_15"></a>1.15.1. Responses</h4>
+<h4 id="_responses_15"><a class="anchor" href="#_responses_15"></a>2.15.1. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1855,7 +1882,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_15"><a class="anchor" href="#_produces_15"></a>1.15.2. Produces</h4>
+<h4 id="_produces_15"><a class="anchor" href="#_produces_15"></a>2.15.2. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1868,7 +1895,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_15"><a class="anchor" href="#_tags_15"></a>1.15.3. Tags</h4>
+<h4 id="_tags_15"><a class="anchor" href="#_tags_15"></a>2.15.3. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1879,14 +1906,14 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_get_user_by_user_name"><a class="anchor" href="#_get_user_by_user_name"></a>1.16. Get user by user name</h3>
+<h3 id="_get_user_by_user_name"><a class="anchor" href="#_get_user_by_user_name"></a>2.16. Get user by user name</h3>
 <div class="listingblock">
 <div class="content">
 <pre>GET /users/{username}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_15"><a class="anchor" href="#_parameters_15"></a>1.16.1. Parameters</h4>
+<h4 id="_parameters_15"><a class="anchor" href="#_parameters_15"></a>2.16.1. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -1916,7 +1943,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_16"><a class="anchor" href="#_responses_16"></a>1.16.2. Responses</h4>
+<h4 id="_responses_16"><a class="anchor" href="#_responses_16"></a>2.16.2. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -1950,7 +1977,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_16"><a class="anchor" href="#_produces_16"></a>1.16.3. Produces</h4>
+<h4 id="_produces_16"><a class="anchor" href="#_produces_16"></a>2.16.3. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1963,7 +1990,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_16"><a class="anchor" href="#_tags_16"></a>1.16.4. Tags</h4>
+<h4 id="_tags_16"><a class="anchor" href="#_tags_16"></a>2.16.4. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -1974,20 +2001,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_updated_user"><a class="anchor" href="#_updated_user"></a>1.17. Updated user</h3>
+<h3 id="_updated_user"><a class="anchor" href="#_updated_user"></a>2.17. Updated user</h3>
 <div class="listingblock">
 <div class="content">
 <pre>PUT /users/{username}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_7"><a class="anchor" href="#_description_7"></a>1.17.1. Description</h4>
+<h4 id="_description_7"><a class="anchor" href="#_description_7"></a>2.17.1. Description</h4>
 <div class="paragraph">
 <p>This can only be done by the logged in user.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_16"><a class="anchor" href="#_parameters_16"></a>1.17.2. Parameters</h4>
+<h4 id="_parameters_16"><a class="anchor" href="#_parameters_16"></a>2.17.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -2024,7 +2051,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_17"><a class="anchor" href="#_responses_17"></a>1.17.3. Responses</h4>
+<h4 id="_responses_17"><a class="anchor" href="#_responses_17"></a>2.17.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -2053,7 +2080,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_17"><a class="anchor" href="#_produces_17"></a>1.17.4. Produces</h4>
+<h4 id="_produces_17"><a class="anchor" href="#_produces_17"></a>2.17.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2066,7 +2093,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_17"><a class="anchor" href="#_tags_17"></a>1.17.5. Tags</h4>
+<h4 id="_tags_17"><a class="anchor" href="#_tags_17"></a>2.17.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2077,20 +2104,20 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_delete_user"><a class="anchor" href="#_delete_user"></a>1.18. Delete user</h3>
+<h3 id="_delete_user"><a class="anchor" href="#_delete_user"></a>2.18. Delete user</h3>
 <div class="listingblock">
 <div class="content">
 <pre>DELETE /users/{username}</pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_description_8"><a class="anchor" href="#_description_8"></a>1.18.1. Description</h4>
+<h4 id="_description_8"><a class="anchor" href="#_description_8"></a>2.18.1. Description</h4>
 <div class="paragraph">
 <p>This can only be done by the logged in user.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_parameters_17"><a class="anchor" href="#_parameters_17"></a>1.18.2. Parameters</h4>
+<h4 id="_parameters_17"><a class="anchor" href="#_parameters_17"></a>2.18.2. Parameters</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 20%;">
@@ -2120,7 +2147,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_responses_18"><a class="anchor" href="#_responses_18"></a>1.18.3. Responses</h4>
+<h4 id="_responses_18"><a class="anchor" href="#_responses_18"></a>2.18.3. Responses</h4>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 33%;">
@@ -2149,7 +2176,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_produces_18"><a class="anchor" href="#_produces_18"></a>1.18.4. Produces</h4>
+<h4 id="_produces_18"><a class="anchor" href="#_produces_18"></a>2.18.4. Produces</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2162,7 +2189,7 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_tags_18"><a class="anchor" href="#_tags_18"></a>1.18.5. Tags</h4>
+<h4 id="_tags_18"><a class="anchor" href="#_tags_18"></a>2.18.5. Tags</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2175,10 +2202,10 @@ Schemes: HTTP</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_definitions"><a class="anchor" href="#_definitions"></a>2. Definitions</h2>
+<h2 id="_definitions"><a class="anchor" href="#_definitions"></a>3. Definitions</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_user"><a class="anchor" href="#_user"></a>2.1. User</h3>
+<h3 id="_user"><a class="anchor" href="#_user"></a>3.1. User</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -2247,7 +2274,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_category"><a class="anchor" href="#_category"></a>2.2. Category</h3>
+<h3 id="_category"><a class="anchor" href="#_category"></a>3.2. Category</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -2280,7 +2307,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_pet"><a class="anchor" href="#_pet"></a>2.3. Pet</h3>
+<h3 id="_pet"><a class="anchor" href="#_pet"></a>3.3. Pet</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -2337,7 +2364,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_tag"><a class="anchor" href="#_tag"></a>2.4. Tag</h3>
+<h3 id="_tag"><a class="anchor" href="#_tag"></a>3.4. Tag</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -2370,7 +2397,7 @@ Schemes: HTTP</p>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_order"><a class="anchor" href="#_order"></a>2.5. Order</h3>
+<h3 id="_order"><a class="anchor" href="#_order"></a>3.5. Order</h3>
 <table class="tableblock frame-all grid-all spread">
 <colgroup>
 <col style="width: 25%;">
@@ -2431,7 +2458,7 @@ Schemes: HTTP</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2015-04-16 12:10:07 MESZ
+Last updated 2015-04-20 13:43:56 MESZ
 </div>
 </div>
 </body>

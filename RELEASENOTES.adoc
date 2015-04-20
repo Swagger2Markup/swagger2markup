@@ -21,3 +21,10 @@
 
 == Version 0.3.0
 * Support of YAML or JSON String as input.
+
+== Version 0.4.0
+* Updated Swagger-Parser from 1.0.0 to 1.0.5
+* Updated commons-lang to commons-lang3
+* Swagger2MarkupConverter generates three documents now: overview, paths and definitions
+* Support for enums in HeaderParameter, QueryParameter, FormParameter and QueryParameter
+* Support for global consumes, produces and tags

@@ -4,6 +4,10 @@
 :numbered:
 :sectlinks:
 :sectanchors:
+:hardbreaks:
 
-include::paths.adoc[]
-include::definitions.adoc[]
+include::generated/overview.adoc[]
+include::manual_content1.adoc[]
+include::manual_content2.adoc[]
+include::generated/paths.adoc[]
+include::generated/definitions.adoc[]

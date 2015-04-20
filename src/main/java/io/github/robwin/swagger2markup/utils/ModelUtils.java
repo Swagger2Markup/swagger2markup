@@ -5,7 +5,7 @@ import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.ModelImpl;
 import com.wordnik.swagger.models.RefModel;
 import io.github.robwin.markup.builder.MarkupLanguage;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 
 public final class ModelUtils {
 
