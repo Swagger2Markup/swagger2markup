@@ -176,7 +176,7 @@ The following shows how you can combine the generated documentation with your ha
 
 image::images/generated_docs.PNG[generated_docs]
 
-You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following shows how to configure the asciidoctor-gradle-plugin. By default it searches for AsciiDoc files in "src/docs/asciidoc" and puts the HTML and PDF output into "build/asciidoc/html5" and "build/asciidoc/pdf".
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in "src/docs/asciidoc" and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`.
 
 [source]
 ----
@@ -188,7 +188,7 @@ asciidoctor {
 }
 ----
 
-You can copy the output into your Jar file and serve the documentation as static content under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
+You can copy the output into your Jar file and serve the documentation as static content under `http://localhost:9080/docs/index.html` and `http://localhost:9080/docs/index.pdf`.
 
 [source]
 ----
@@ -222,8 +222,9 @@ image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 == Integration with spring-restdocs
 https://github.com/spring-projects/spring-restdocs[spring-restdocs] can be used together with Swagger2Markup.
-Swagger2Markup can include the generated examples from spring-restdocs into the generated AsciiDoc document.
-Currently it does not work for Markdown, since spring-restdocs generates only AsciiDoc files.
+Swagger2Markup can include the generated examples snippets from spring-restdocs into the generated AsciiDoc document.
+See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
+Currently spring-restdocs does not work support Markdown.
 
 Let's say I have a Swagger-annotated Spring RestController method with an ApiOperation value: _"Create a quota"_
 
@@ -233,10 +234,12 @@ Let's say I have a Swagger-annotated Spring RestController method with an ApiOpe
 public void createMailStorageQuota(@ApiParam(name = "MailStorageQuota",
     value = "MailStorageQuota", required = true) @RequestBody MailStorageQuota mailStorageQuota) {
 }
+
+
 ----
 
 I'm using spring-restdocs in combination with https://github.com/jayway/rest-assured to test the Controller.
-The target folder of the generated request and response example files must be _"create_a_quota"_ (similar to the value of the ApiOperation).
+The target folder of the generated request and response example files must be _"create_a_quota"_ (similar to the value of the ApiOperation, but with underscores and lowercase).
 
 [source,java]
 ----
@@ -249,7 +252,7 @@ The spring-restdocs output directory is configured as follows:
 
 [source]
 ----
-io.restdocumented.outputDir = docs/generated
+org.springframework.restdocs.outputDir = docs/generated
 ----
 
 The Swagger2MarkupConverter must know the output directory of spring-restdocs.
