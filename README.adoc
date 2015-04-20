@@ -65,7 +65,7 @@ The quickest way to get started is to look at the demo project https://github.co
 
 ==== Generate Markup during an integration test
 
-Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the generated documents into the folder "src/docs/asciidoc" or "src/docs/markdown".
+Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the generated documents into the folder `src/docs/asciidoc` or `src/docs/markdown`.
 
 [source,java]
 ----
@@ -105,8 +105,7 @@ public class Swagger2MarkupTest {
 
 ==== Generate Markup during an unit test
 
-Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document.
-The custom ResultHandler is soon part of springfox.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is soon part of springfox.
 That way you verify that your Swagger endpoint is working, too.
 
 [source,java]
