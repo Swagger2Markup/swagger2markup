@@ -185,14 +185,6 @@ asciidoctor {
         include 'index.adoc'
     }
     backends = ['html5', 'pdf']
-    attributes = [
-            doctype: 'book',
-            toc: 'left',
-            toclevels: '2',
-            numbered: '',
-            sectlinks: '',
-            sectanchors: ''
-    ]
 }
 ----
 
