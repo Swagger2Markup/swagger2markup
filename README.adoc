@@ -216,13 +216,13 @@ jar {
 ----
 
 == Examples
-== Swagger source file
+== Swagger source
 image::images/swagger_json.PNG[swagger_json]
 
-=== Generated AsciiDoc file
+=== Generated AsciiDoc
 image::images/asciidoc.PNG[asciidoc]
 
-=== Generated Markdown file
+=== Generated Markdown
 image::images/markdown.PNG[markdown]
 
 === Generated HTML using AsciidoctorJ
@@ -256,10 +256,10 @@ The target folder of the generated request and response example files must be `a
 [source,java]
 ----
 @Test
-public void add_a_new_pet_to_the_store() throws Exception {
+public void findPetById() throws Exception {
     this.mockMvc.perform(post("/api/pet/").content(createPet())
             .contentType(MediaType.APPLICATION_JSON))
-            .andDo(document("add_a_new_pet_to_the_store"))
+            .andDo(RestDocumentation.document("add_a_new_pet_to_the_store"))
             .andExpect(status().isOk());
 }
 ----
@@ -271,45 +271,25 @@ The spring-restdocs output directory is configured as follows:
 org.springframework.restdocs.outputDir = src/docs/asciidoc/generated
 ----
 
-The Swagger2MarkupConverter must know the base output directory of spring-restdocs.
+You must specify the base output directory of spring-restdocs with the builder method `withExamples("src/docs/asciidoc/generated")`.
 
 [source,java]
 ----
-Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-                withExamples("src/docs/asciidoc/generated").build()
-                .intoFolder("src/docs/asciidoc/generated");
+@Test
+public void convertToAsciiDoc() throws Exception {
+    this.mockMvc.perform(get("/v2/api-docs")
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(document("get_swagger_doc"))
+            .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc")
+                    .withExamples("src/docs/asciidoc/generated").build())
+            .andExpect(status().isOk());
+}
 ----
 
 The Swagger2MarkupConverter searches for a Swagger ApiOperation with value `Add a new pet to the store` in a folder called `src/docs/asciidoc/generated/add_a_new_pet_to_the_store` and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
 
-=== Example http-request.adoc
-
-[source,http]
-----
-POST /api/pet/ HTTP/1.1
-Content-Type: application/json
-Content-Length: 111
-
-{"id":1,"category":{"id":1,"name":"Hund"},"name":"Wuffy","photoUrls":[],"tags":[],"status":null,"identifier":1}
-----
-
-=== Example http-response.adoc
-
-[source,http]
-----
-HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 7
-
-SUCCESS
-----
-
-=== Example curl-request.adoc
-
-[source,bash]
-----
-$ curl 'http://localhost:8080/api/pet/' -i -X POST -H 'Content-Type: application/json' -H 'Content-Length: 111' -d '{"id":1,"category":{"id":1,"name":"Hund"},"name":"Wuffy","photoUrls":[],"tags":[],"status":null,"identifier":1}'
-----
+=== Generated AsciiDoc
+image::images/springrestdocs_examples.PNG[springrestdocs]
 
 
 == Integration of JSON and XML Schema files.
