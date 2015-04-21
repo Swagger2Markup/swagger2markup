@@ -105,8 +105,7 @@ public class Swagger2MarkupTest {
 
 ==== Generate Markup during an unit test
 
-Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is soon part of springfox.
-That way you verify that your Swagger endpoint is working, too.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is soon part of springfox. That way you also verify that your Swagger endpoint is working.
 
 [source,java]
 ----
