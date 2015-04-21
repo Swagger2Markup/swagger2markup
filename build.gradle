@@ -78,7 +78,12 @@ artifacts {
     archives javadocJar
 }
 
+ext {
+    generatedDocumentation = file('src/docs/asciidoc/generated')
+}
+
 asciidoctor {
+    dependsOn test
     sources {
         include 'index.adoc'
     }
@@ -89,7 +94,8 @@ asciidoctor {
             toclevels: '2',
             numbered: '',
             sectlinks: '',
-            sectanchors: ''
+            sectanchors: '',
+            generated: generatedDocumentation
     ]
 }
 

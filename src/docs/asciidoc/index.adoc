@@ -1,13 +1,5 @@
-:doctype: book
-:toc: left
-:toclevels: 2
-:numbered:
-:sectlinks:
-:sectanchors:
-:hardbreaks:
-
-include::generated/overview.adoc[]
+include::{generated}/overview.adoc[]
 include::manual_content1.adoc[]
 include::manual_content2.adoc[]
 include::generated/paths.adoc[]
-include::generated/definitions.adoc[]
+include::{generated}/definitions.adoc[]
