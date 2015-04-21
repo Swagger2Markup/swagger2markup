@@ -80,16 +80,16 @@ public class Swagger2MarkupTest {
         //Remote Swagger source
         //Default is AsciiDoc
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
-                .intoFolder("src/docs/asciidoc");
+            .intoFolder("src/docs/asciidoc");
     }
 
     @Test
     public void convertRemoteSwaggerToMarkdown() {
         //Remote Swagger source
         //Markdown
-        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
-                .intoFolder("src/docs/markdown");
+        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
+            .withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+            .intoFolder("src/docs/markdown");
     }
 
     @Test
@@ -98,7 +98,7 @@ public class Swagger2MarkupTest {
         //Default is AsciiDoc
         File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
         Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
-                        .intoFolder("src/docs/asciidoc");
+            .intoFolder("src/docs/asciidoc");
     }
 }
 ----
@@ -128,7 +128,17 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToAsciiDoc() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupDocumentation.document("swagger_adoc"))
+                .andDo(document("get_swagger_doc"))
+                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").build())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void convertSwaggerToMarkdown() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(document("get_swagger_doc"))
+                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
                 .andExpect(status().isOk());
     }
 }
@@ -233,8 +243,7 @@ image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 
 == Integration with spring-restdocs
-Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs].
-Swagger2Markup can include the generated HTTP request and response snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated HTTP request and response snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
 Currently spring-restdocs does only support AsciiDoc.
 
 Let's say you have a Swagger-annotated Spring RestController method with an ApiOperation value: `Add a new pet to the store`
