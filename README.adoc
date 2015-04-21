@@ -170,19 +170,33 @@ public class Application {
 
 ==== Combine generated documentation with your hand-written documentation
 
-The following shows how you can combine the generated documentation with your hand-written documentation with AsciiDoc.
+The following shows how you can combine the generated documentation with your hand-written documentation with AsciiDoc. You have to create an `index.adoc` (it must not be necessarily called index). To include the programmatically generated snippets in your documentation, you use Asciidoc's `include` macro. The `generated` variable is configured below.
 
 image::images/generated_docs.PNG[generated_docs]
 
-You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`.
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to provide configurable access to the generated snippets:
 
 [source]
 ----
+ext {
+    generatedDocumentation = file('src/docs/asciidoc/generated')
+}
+
 asciidoctor {
+    dependsOn test
     sources {
         include 'index.adoc'
     }
     backends = ['html5', 'pdf']
+    attributes = [
+            doctype: 'book',
+            toc: 'left',
+            toclevels: '2',
+            numbered: '',
+            sectlinks: '',
+            sectanchors: '',
+            generated: generatedDocumentation
+    ]
 }
 ----
 
