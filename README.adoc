@@ -138,7 +138,8 @@ public class Swagger2MarkupTest {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(document("get_swagger_doc"))
-                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
+                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc")
+                    .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
                 .andExpect(status().isOk());
     }
 }
