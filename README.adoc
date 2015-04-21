@@ -175,7 +175,7 @@ The following shows how you can combine the generated documentation with your ha
 
 image::images/generated_docs.PNG[generated_docs]
 
-You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in "src/docs/asciidoc" and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`.
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`.
 
 [source]
 ----
@@ -220,10 +220,9 @@ image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 
 == Integration with spring-restdocs
-https://github.com/spring-projects/spring-restdocs[spring-restdocs] can be used together with Swagger2Markup.
-Swagger2Markup can include the generated examples snippets from spring-restdocs into the generated AsciiDoc document.
-See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
-Currently spring-restdocs does not work support Markdown.
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs].
+Swagger2Markup can include the generated HTTP request and response snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
+Currently spring-restdocs does only support AsciiDoc.
 
 Let's say you have a Swagger-annotated Spring RestController method with an ApiOperation value: `Add a new pet to the store`
 
@@ -259,7 +258,7 @@ The spring-restdocs output directory is configured as follows:
 org.springframework.restdocs.outputDir = src/docs/asciidoc/generated
 ----
 
-The Swagger2MarkupConverter must know the output directory of spring-restdocs.
+The Swagger2MarkupConverter must know the base output directory of spring-restdocs.
 
 [source,java]
 ----
@@ -306,21 +305,17 @@ Swagger2Markup can also include JSON and XML Schema files into the generated doc
 [source,java]
 ----
 Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).
-                withExamples("docs/generated").withSchemas("docs/schemas").build()
-                .intoFolder("src/docs/markdown");
+                withExamples("src/docs/asciidoc/generated").withSchemas("src/docs/schemas").build()
+                .intoFolder("src/docs/asciidoc");
 ----
 
-I create the Schemas files in Unit-Tests as follows:
+You can create the schema files during a unit test as follows:
 
 [source,java]
 ----
         RestDocumented restDocumented = RestDocumented.fromProperties();
-        restDocumented.documentJsonSchema(MailStorageQuota.class, "docs/schemas");
-        restDocumented.documentXmlSchema(MailStorageQuota.class, "docs/schemas");
+        restDocumented.documentJsonSchema(MailStorageQuota.class, "src/docs/schemas");
+        restDocumented.documentXmlSchema(MailStorageQuota.class, "src/docs/schemas");
 ----
 
-I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder `docs/schemas`.
-The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as Input or Output.
-
-See example: http://spring-swagger2markup-demo.readthedocs.org/en/latest/generated/definitions/[ReadTheDocs-demo]
+I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder `src/docs/schemas`. The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as input or output.
