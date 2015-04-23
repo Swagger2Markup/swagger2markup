@@ -105,7 +105,7 @@ public class Swagger2MarkupTest {
 
 ==== Generate Markup during an unit test
 
-Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is soon part of springfox. That way you also verify that your Swagger endpoint is working.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of springfox now. That way you also verify that your Swagger endpoint is working.
 
 [source,java]
 ----
@@ -128,7 +128,7 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToAsciiDoc() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").build())
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc").build())
                 .andExpect(status().isOk());
     }
 
@@ -136,7 +136,7 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToMarkdown() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc")
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc")
                     .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
                 .andExpect(status().isOk());
     }
