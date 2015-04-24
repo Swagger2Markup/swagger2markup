@@ -292,8 +292,7 @@ You must specify the base output directory of spring-restdocs with the builder m
 public void convertToAsciiDoc() throws Exception {
     this.mockMvc.perform(get("/v2/api-docs")
             .accept(MediaType.APPLICATION_JSON))
-            .andDo(document("get_swagger_doc"))
-            .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc")
+            .andDo(Swagger2MarkupResultHandler.outputDirectory("swagger_adoc")
                     .withExamples("src/docs/asciidoc/generated").build())
             .andExpect(status().isOk());
 }
@@ -310,8 +309,7 @@ Swagger2Markup can also include JSON and XML Schema files into the generated doc
 
 [source,java]
 ----
-Swagger2MarkupConverter.from("http://localhost:8080/api-docs").
-                withExamples("src/docs/asciidoc/generated").withSchemas("src/docs/schemas").build()
+Swagger2MarkupConverter.from("http://localhost:8080/api-docs").withSchemas("src/docs/schemas").build()
                 .intoFolder("src/docs/asciidoc");
 ----
 
