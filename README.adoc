@@ -105,7 +105,7 @@ public class Swagger2MarkupTest {
 
 ==== Generate Markup during an unit test
 
-Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is soon part of springfox. That way you also verify that your Swagger endpoint is working.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs` now. That way you also verify that your Swagger endpoint is working.
 
 [source,java]
 ----
@@ -128,8 +128,7 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToAsciiDoc() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(document("get_swagger_doc"))
-                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc").build())
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc").build())
                 .andExpect(status().isOk());
     }
 
@@ -137,8 +136,7 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToMarkdown() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(document("get_swagger_doc"))
-                .andDo(Swagger2MarkupResultHandler.convertIntoFolder("swagger_adoc")
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc")
                     .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
                 .andExpect(status().isOk());
     }
@@ -185,12 +183,17 @@ The following shows how you can combine the generated documentation with your ha
 
 image::images/generated_docs.PNG[generated_docs]
 
-You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to provide configurable access to the generated snippets:
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to provide configurable access to the generated snippets. The system property is used to control the base directory to which the documents are generated.
 
 [source]
 ----
 ext {
     generatedDocumentation = file('src/docs/asciidoc/generated')
+}
+
+test {
+    systemProperty 'io.springfox.staticdocs.outputDir', generatedDocumentation
+    outputs.dir generatedDocumentation
 }
 
 asciidoctor {
