@@ -143,6 +143,18 @@ public class Swagger2MarkupTest {
 }
 ----
 
+==== Gradle dependencies
+
+[source,groovy]
+----
+dependencies {
+    ...
+    compile 'io.springfox:springfox-swagger2:2.0.0'
+    testCompile 'io.springfox:springfox-staticdocs:2.0.0'
+    ...
+}
+----
+
 ==== Springfox configuration
 
 The following is a complete https://github.com/springfox/springfox[springfox] configuration to use Swagger in a Spring Boot Application.
