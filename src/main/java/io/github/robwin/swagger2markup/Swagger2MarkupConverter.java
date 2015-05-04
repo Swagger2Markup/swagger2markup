@@ -92,6 +92,7 @@ public class Swagger2MarkupConverter {
      *
      * @param swagger the Swagger YAML or JSON String.
      * @return a Swagger2MarkupConverter
+     * @throws java.io.IOException if String can not be parsed
      */
     public static Builder fromString(String swagger) throws IOException {
         Validate.notEmpty(swagger, "swagger must not be null!");
@@ -127,6 +128,7 @@ public class Swagger2MarkupConverter {
      * Builds the document with the given markup language and returns it as a String
      *
      * @return a the document as a String
+     * @throws java.io.IOException if files can not be read
      */
     public String asString() throws IOException{
         return buildDocuments();

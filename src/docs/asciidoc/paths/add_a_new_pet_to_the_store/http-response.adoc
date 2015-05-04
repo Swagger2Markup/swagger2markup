@@ -1,0 +1,10 @@
+
+[source,http]
+----
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 7
+
+SUCCESS
+----
+

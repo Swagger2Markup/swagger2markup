@@ -50,14 +50,15 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithDescriptions() throws IOException {
+    public void testSwagger2AsciiDocConversionWithDescriptionsAndExamples() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
         File outputDirectory = new File("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/asciidoc").build()
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/asciidoc")
+                .withExamples("src/docs/asciidoc/paths").build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
