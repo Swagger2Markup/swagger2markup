@@ -93,7 +93,7 @@ public class Swagger2MarkupTest {
         //Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
             .withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
-            .intoFolder(""build/docs/asciidoc/generated");
+            .intoFolder("build/docs/asciidoc/generated");
             
         //Then
         String[] files = new File("build/docs/asciidoc/generated").list();
