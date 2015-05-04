@@ -80,7 +80,10 @@ public class Swagger2MarkupTest {
         //Remote Swagger source
         //Default is AsciiDoc
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
-            .intoFolder("src/docs/asciidoc");
+            .intoFolder("build/docs/asciidoc/generated");
+        //Then
+        String[] files = new File("build/docs/asciidoc/generated").list();
+        assertThat(directories).hasSize(3).containsAll(Arrays.asList("definitions.adoc", "overview.adoc", "paths.adoc"));
     }
 
     @Test
@@ -89,7 +92,11 @@ public class Swagger2MarkupTest {
         //Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
             .withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
-            .intoFolder("src/docs/markdown");
+            .intoFolder(""build/docs/asciidoc/generated");
+            
+        //Then
+        String[] files = new File("build/docs/asciidoc/generated").list();
+        assertThat(directories).hasSize(3).containsAll(Arrays.asList("definitions.md", "overview.md", "paths.md"));
     }
 
     @Test
