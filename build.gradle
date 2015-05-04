@@ -47,8 +47,8 @@ dependencies {
     compile 'org.slf4j:slf4j-api'
     testCompile 'junit:junit'
     testCompile 'org.asciidoctor:asciidoctorj:1.5.2'
-    testCompile 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
     testCompile 'ch.qos.logback:logback-classic'
+    testCompile 'org.assertj:assertj-core'
 }
 
 dependencyManagement {
@@ -60,6 +60,7 @@ dependencyManagement {
         dependency "junit:junit:4.11"
         dependency "org.slf4j:slf4j-api:1.7.12"
         dependency "ch.qos.logback:logback-classic:1.1.2"
+        dependency "org.assertj:assertj-core:2.0.0"
     }
 }
 
@@ -79,7 +80,7 @@ artifacts {
 }
 
 ext {
-    generatedDocumentation = file('src/docs/asciidoc/generated')
+    generatedDocumentation = file('build/docs/asciidoc/generated')
 }
 
 asciidoctor {
@@ -95,6 +96,7 @@ asciidoctor {
             numbered: '',
             sectlinks: '',
             sectanchors: '',
+            hardbreaks: '',
             generated: generatedDocumentation
     ]
 }

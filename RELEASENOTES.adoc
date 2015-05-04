@@ -28,3 +28,6 @@
 * Swagger2MarkupConverter generates three documents now: overview, paths and definitions
 * Support for enums in HeaderParameter, QueryParameter, FormParameter and QueryParameter
 * Support for global consumes, produces and tags
+
+== Version 0.5.0
+* Support for including hand-written descriptions instead of using Swagger Annotations for descriptions

@@ -49,7 +49,6 @@ public class PathsDocument extends MarkupDocument {
 
     private static final String PATHS = "Paths";
     private static final String PARAMETERS = "Parameters";
-
     private static final String RESPONSES = "Responses";
     private static final String EXAMPLE_REQUEST = "Example request";
     private static final String EXAMPLE_RESPONSE = "Example response";
@@ -57,15 +56,23 @@ public class PathsDocument extends MarkupDocument {
     private static final String HTTP_CODE_COLUMN = "HTTP Code";
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
+    private static final String DESCRIPTION_FILE_NAME = "description";
+    private static final String PARAMETER = "Parameter";
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
+    private boolean handWrittenDescriptionsEnabled;
+    private String descriptionsFolderPath;
 
-    public PathsDocument(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath){
+    public PathsDocument(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath, String descriptionsFolderPath){
         super(swagger, markupLanguage);
         if(StringUtils.isNotBlank(examplesFolderPath)){
             this.examplesEnabled = true;
             this.examplesFolderPath = examplesFolderPath;
+        }
+        if(StringUtils.isNotBlank(descriptionsFolderPath)){
+            this.handWrittenDescriptionsEnabled = true;
+            this.descriptionsFolderPath = descriptionsFolderPath + "/" + PATHS.toLowerCase();
         }
         if(examplesEnabled){
             if (logger.isDebugEnabled()) {
@@ -74,6 +81,15 @@ public class PathsDocument extends MarkupDocument {
         }else{
             if (logger.isDebugEnabled()) {
                 logger.debug("Include examples is disabled.");
+            }
+        }
+        if(handWrittenDescriptionsEnabled){
+            if (logger.isDebugEnabled()) {
+                logger.debug("Include hand-written descriptions is enabled.");
+            }
+        }else{
+            if (logger.isDebugEnabled()) {
+                logger.debug("Include hand-written descriptions is disabled.");
             }
         }
     }
@@ -140,15 +156,41 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-    private void descriptionSection(Operation operation) {
+    private void descriptionSection(Operation operation) throws IOException {
+        if(handWrittenDescriptionsEnabled){
+            String summary = operation.getSummary();
+            if(StringUtils.isNotBlank(summary)) {
+                String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
+                String description = handWrittenPathDescription(operationFolder, DESCRIPTION_FILE_NAME);
+                if(StringUtils.isNotBlank(description)){
+                    this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
+                    this.markupDocBuilder.paragraph(description);
+                }else{
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
+                    }
+                    pathDescription(operation);
+                }
+            }else{
+                if (logger.isInfoEnabled()) {
+                    logger.info("Hand-written description cannot be read, because summary of operation is empty. Trying to use description from Swagger source.");
+                }
+                pathDescription(operation);
+            }
+        }else {
+            pathDescription(operation);
+        }
+    }
+
+    private void pathDescription(Operation operation) {
         String description = operation.getDescription();
-        if(StringUtils.isNotBlank(description)){
+        if (StringUtils.isNotBlank(description)) {
             this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
             this.markupDocBuilder.paragraph(description);
         }
     }
 
-    private void parametersSection(Operation operation) {
+    private void parametersSection(Operation operation) throws IOException {
         List<Parameter> parameters = operation.getParameters();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<String> headerAndContent = new ArrayList<>();
@@ -157,14 +199,40 @@ public class PathsDocument extends MarkupDocument {
             headerAndContent.add(StringUtils.join(header, DELIMITER));
             for(Parameter parameter : parameters){
                 String type = ParameterUtils.getType(parameter, markupLanguage);
-                String parameterType = WordUtils.capitalize(parameter.getIn() + "Parameter");
+                String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
-                List<String> content = Arrays.asList(parameterType, parameter.getName(),  parameter.getDescription(), Boolean.toString(parameter.getRequired()), type);
+                List<String> content = Arrays.asList(parameterType, parameter.getName(),  parameterDescription(operation, parameter), Boolean.toString(parameter.getRequired()), type);
                 headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
             this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
+    }
+
+    private String parameterDescription(Operation operation, Parameter parameter) throws IOException {
+        String description;
+        if(handWrittenDescriptionsEnabled){
+            String summary = operation.getSummary();
+            String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
+            String parameterName = parameter.getName();
+            if(StringUtils.isNotBlank(operationFolder) && StringUtils.isNotBlank(parameterName)) {
+                description = handWrittenPathDescription(operationFolder + "/" + parameterName, DESCRIPTION_FILE_NAME);
+                if(StringUtils.isBlank(description)) {
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
+                    }
+                    description = StringUtils.defaultString(parameter.getDescription());
+                }
+            }else{
+                if (logger.isInfoEnabled()) {
+                    logger.info("Hand-written description file cannot be read, because summary of operation or name of parameter is empty. Trying to use description from Swagger source.");
+                }
+                description = StringUtils.defaultString(parameter.getDescription());
+            }
+        }else {
+            description = StringUtils.defaultString(parameter.getDescription());
+        }
+        return description;
     }
 
     private void consumesSection(Operation operation) {
@@ -203,36 +271,78 @@ public class PathsDocument extends MarkupDocument {
             String summary = operation.getSummary();
             if(StringUtils.isNotBlank(summary)) {
                 String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
-                example(EXAMPLE_REQUEST, exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
-                example(EXAMPLE_RESPONSE, exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
+                String requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
+                if(StringUtils.isNotBlank(requestExample)){
+                    this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_REQUEST);
+                    this.markupDocBuilder.paragraph(requestExample);
+                }
+                String responseExample = example(exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
+                if(StringUtils.isNotBlank(responseExample)){
+                    this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_RESPONSE);
+                    this.markupDocBuilder.paragraph(responseExample);
+                }
+            }else{
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Example file cannot be read, because summary of operation is empty.");
+                }
             }
         }
     }
 
     /**
-     * Builds a concrete example
+     * Reads an example
      *
-     * @param title the title of the example
      * @param exampleFolder the name of the folder where the example file resides
      * @param exampleFileName the name of the example file
+     * @return the content of the file
      * @throws IOException
      */
-    private void example(String title, String exampleFolder, String exampleFileName) throws IOException {
+    private String example(String exampleFolder, String exampleFileName) throws IOException {
         for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
             java.nio.file.Path path = Paths.get(examplesFolderPath, exampleFolder, exampleFileName + fileNameExtension);
             if (Files.isReadable(path)) {
-                this.markupDocBuilder.sectionTitleLevel3(title);
-                this.markupDocBuilder.paragraph(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 if (logger.isInfoEnabled()) {
                     logger.info("Example file processed: {}", path);
                 }
-                break;
+                return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim();
             } else {
                 if (logger.isDebugEnabled()) {
                     logger.debug("Example file is not readable: {}", path);
                 }
             }
         }
+        if (logger.isWarnEnabled()) {
+            logger.info("No example file found with correct file name extension in folder: {}", Paths.get(examplesFolderPath, exampleFolder));
+        }
+        return null;
+    }
+
+    /**
+     * Reads a hand-written description
+     *
+     * @param descriptionFolder the name of the folder where the description file resides
+     * @param descriptionFileName the name of the description file
+     * @return the content of the file
+     * @throws IOException
+     */
+    private String handWrittenPathDescription(String descriptionFolder, String descriptionFileName) throws IOException {
+        for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
+            java.nio.file.Path path = Paths.get(descriptionsFolderPath, descriptionFolder, descriptionFileName + fileNameExtension);
+            if (Files.isReadable(path)) {
+                if (logger.isInfoEnabled()) {
+                    logger.info("Description file processed: {}", path);
+                }
+                return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim();
+            } else {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Description file is not readable: {}", path);
+                }
+            }
+        }
+        if (logger.isWarnEnabled()) {
+            logger.info("No description file found with correct file name extension in folder: {}", Paths.get(descriptionsFolderPath, descriptionFolder));
+        }
+        return null;
     }
 
     private void responsesSection(Operation operation) {

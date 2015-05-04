@@ -20,7 +20,6 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.wordnik.swagger.models.Model;
 import com.wordnik.swagger.models.Swagger;
-import com.wordnik.swagger.models.properties.AbstractProperty;
 import com.wordnik.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
@@ -50,14 +49,21 @@ public class DefinitionsDocument extends MarkupDocument {
     public static final String XML_SCHEMA_EXTENSION = ".xsd";
     public static final String JSON = "json";
     public static final String XML = "xml";
+    private static final String DESCRIPTION_FILE_NAME = "description";
     private boolean schemasEnabled;
-    private String schemasFolderPath;    
+    private String schemasFolderPath;
+    private boolean handWrittenDescriptionsEnabled;
+    private String descriptionsFolderPath;
 
-    public DefinitionsDocument(Swagger swagger, MarkupLanguage markupLanguage, String schemasFolderPath){
+    public DefinitionsDocument(Swagger swagger, MarkupLanguage markupLanguage, String schemasFolderPath, String descriptionsFolderPath){
         super(swagger, markupLanguage);
         if(StringUtils.isNotBlank(schemasFolderPath)){
             this.schemasEnabled = true;
             this.schemasFolderPath = schemasFolderPath;
+        }
+        if(StringUtils.isNotBlank(descriptionsFolderPath)){
+            this.handWrittenDescriptionsEnabled = true;
+            this.descriptionsFolderPath = descriptionsFolderPath + "/" + DEFINITIONS.toLowerCase();
         }
         if(schemasEnabled){
             if (logger.isDebugEnabled()) {
@@ -66,6 +72,15 @@ public class DefinitionsDocument extends MarkupDocument {
         }else{
             if (logger.isDebugEnabled()) {
                 logger.debug("Include schemas is disabled.");
+            }
+        }
+        if(handWrittenDescriptionsEnabled){
+            if (logger.isDebugEnabled()) {
+                logger.debug("Include hand-written descriptions is enabled.");
+            }
+        }else{
+            if (logger.isDebugEnabled()) {
+                logger.debug("Include hand-written descriptions is disabled.");
             }
         }
     }
@@ -119,8 +134,14 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param definitionName the name of the definition
      * @param model the Swagger Model of the definition
      */
-    private void definition(String definitionName, Model model) {
+    private void definition(String definitionName, Model model) throws IOException {
         this.markupDocBuilder.sectionTitleLevel2(definitionName);
+        descriptionSection(definitionName, model);
+        propertiesSection(definitionName, model);
+
+    }
+
+    private void propertiesSection(String definitionName, Model model) throws IOException {
         Map<String, Property> properties = model.getProperties();
         List<String> headerAndContent = new ArrayList<>();
         List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN, REQUIRED_COLUMN);
@@ -128,18 +149,83 @@ public class DefinitionsDocument extends MarkupDocument {
         if(MapUtils.isNotEmpty(properties)){
             for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
                 Property property = propertyEntry.getValue();
-                String description = "";
-                if(property instanceof AbstractProperty){
-                    if(StringUtils.isNotBlank(property.getDescription())){
-                        description = property.getDescription();
-                    }
-                }
                 String type = PropertyUtils.getType(property, markupLanguage);
-                List<String> content = Arrays.asList(propertyEntry.getKey(), description,  type, Boolean.toString(property.getRequired()));
+                String propertyName = propertyEntry.getKey();
+                List<String> content = Arrays.asList(propertyName, propertyDescription(definitionName, propertyName, property), type, Boolean.toString(property.getRequired()));
                 headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
+    }
+
+    private void descriptionSection(String definitionName, Model model) throws IOException {
+        if(handWrittenDescriptionsEnabled){
+            String description = handWrittenPathDescription(definitionName.toLowerCase(), DESCRIPTION_FILE_NAME);
+            if(StringUtils.isNotBlank(description)){
+                this.markupDocBuilder.paragraph(description);
+            }else{
+                if (logger.isInfoEnabled()) {
+                    logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
+                }
+                modelDescription(model);
+            }
+        }
+        else{
+            modelDescription(model);
+        }
+    }
+
+    private void modelDescription(Model model) {
+        String description = model.getDescription();
+        if (StringUtils.isNotBlank(description)) {
+            this.markupDocBuilder.paragraph(description);
+        }
+    }
+
+    private String propertyDescription(String definitionName, String propertyName, Property property) throws IOException {
+        String description;
+        if(handWrittenDescriptionsEnabled){
+            description = handWrittenPathDescription(definitionName + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
+            if(StringUtils.isBlank(description)) {
+                if (logger.isInfoEnabled()) {
+                    logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
+                }
+                description = StringUtils.defaultString(property.getDescription());
+            }
+        }
+        else{
+            description = StringUtils.defaultString(property.getDescription());
+        }
+        return description;
+    }
+
+
+    /**
+     * Reads a hand-written description
+     *
+     * @param descriptionFolder the name of the folder where the description file resides
+     * @param descriptionFileName the name of the description file
+     * @return the content of the file
+     * @throws IOException
+     */
+    private String handWrittenPathDescription(String descriptionFolder, String descriptionFileName) throws IOException {
+        for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
+            java.nio.file.Path path = Paths.get(descriptionsFolderPath, descriptionFolder, descriptionFileName + fileNameExtension);
+            if (Files.isReadable(path)) {
+                if (logger.isInfoEnabled()) {
+                    logger.info("Description file processed: {}", path);
+                }
+                return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim();
+            } else {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Description file is not readable: {}", path);
+                }
+            }
+        }
+        if (logger.isWarnEnabled()) {
+            logger.info("No description file found with correct file name extension in folder: {}", Paths.get(descriptionsFolderPath, descriptionFolder));
+        }
+        return null;
     }
 
     private void definitionSchema(String definitionName) throws IOException {
@@ -164,6 +250,5 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Schema file is not readable: {}", path);
             }
         }
-
     }
 }

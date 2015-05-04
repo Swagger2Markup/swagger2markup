@@ -1,9 +1,0 @@
-== Chapter of manual content 1
-
-This is some dummy text
-
-=== Sub chapter
-
-Dummy text of sub chapter
-
-

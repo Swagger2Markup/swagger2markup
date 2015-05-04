@@ -1,4 +1,0 @@
-== Chapter of manual content 2
-
-This is some dummy text
-

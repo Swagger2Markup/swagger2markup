@@ -19,15 +19,14 @@
 package io.github.robwin.swagger2markup;
 
 import io.github.robwin.markup.builder.MarkupLanguage;
-import org.asciidoctor.*;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.BDDAssertions.assertThat;
 
 /**
  * @author Robert Winkler
@@ -36,28 +35,76 @@ public class Swagger2MarkupConverterTest {
 
     @Test
     public void testSwagger2AsciiDocConversion() throws IOException {
+        //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
 
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).
-                withExamples("docs").withSchemas("docs/schemas").build()
-                .intoFolder("src/docs/asciidoc/generated");
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+    }
+
+    @Test
+    public void testSwagger2AsciiDocConversionWithDescriptions() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/asciidoc").build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
     }
 
     @Test
     public void testSwagger2MarkdownConversion() throws IOException {
+        //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory);
 
+        //When
         Swagger2MarkupConverter.from(file.getAbsolutePath()).
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).
-                withExamples("docs").withSchemas("docs/schemas").build()
-                .intoFolder("src/docs/markdown/generated");
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.md", "overview.md", "paths.md"));
     }
 
+    @Test
+    public void testSwagger2MarkdownConversionWithDescriptions() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/markdown").
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.md", "overview.md", "paths.md"));
+    }
+
+    /*
     @Test
     public void testSwagger2HtmlConversion() throws IOException {
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
         String asciiDoc =  Swagger2MarkupConverter.from(file.getAbsolutePath()).build().asString();
-        String path = "src/docs/generated/asciidocAsString";
+        String path = "build/docs/generated/asciidocAsString";
         Files.createDirectories(Paths.get(path));
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "swagger.adoc"), StandardCharsets.UTF_8)){
             writer.write(asciiDoc);        }
@@ -68,4 +115,5 @@ public class Swagger2MarkupConverterTest {
             writer.write(asciiDocAsHtml);
         }
     }
+    */
 }
