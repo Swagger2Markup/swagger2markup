@@ -83,7 +83,7 @@ public class Swagger2MarkupTest {
             .intoFolder("build/docs/asciidoc/generated");
         //Then
         String[] files = new File("build/docs/asciidoc/generated").list();
-        assertThat(directories).hasSize(3)
+        assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.adoc", "overview.adoc", "paths.adoc"));
     }
 
@@ -97,7 +97,7 @@ public class Swagger2MarkupTest {
             
         //Then
         String[] files = new File("build/docs/asciidoc/generated").list();
-        assertThat(directories).hasSize(3)
+        assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.md", "overview.md", "paths.md"));
     }
 
