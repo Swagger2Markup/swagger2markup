@@ -250,6 +250,46 @@ jar {
 }
 ----
 
+==== Include hand-written descriptions into the generated documentation
+
+If you don't want to pollute your source code with Swagger annotations just to add descriptions to Operations, Parameters and Model definitions. Like here:
+
+[source, java]
+----
+@RequestMapping(method = POST)
+@ApiOperation(value = "Add a new pet to the store")
+@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+public ResponseEntity<String> addPet(
+      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
+petData.add(pet);
+return Responses.ok("SUCCESS");
+}
+----
+
+You can create hand-written descriptions and include them with builder method `withDescriptions()` into your documentation.
+
+[source, java]
+----
+Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/asciidoc").build()
+            .intoFolder("src/docs/asciidoc");
+----
+
+By convention you need two folders `paths` and `definitions` inside your description base folder.
+The `paths` folder contains sub folders for all operations. The folder must be named similar to the value of the ApiOperation annotation, but with underscores and lowercase.
+For example a folder for `@ApiOperation(value = "Add a new pet to the store")` must be called `add_a_new_pet_to_the_store`.
+
+The `definitions` folder contains sub folders for all models. The folder must be named similar to the name of the Model, but lowercase.
+For example a folder for a model called `User` must be called `user`.
+
+You can have a global description file for each operation or model. And you can have one description file per operation parameter or model property.
+For example:
+
+image::images/handwritten_descriptions.PNG[handwritten_descriptions]
+
+The AsciiDoc HTML output would look as follows:
+
+image::images/handwritten_descr_asciidoc.PNG[handwritten_descr_asciidoc]
+
 == Examples
 == Swagger source
 image::images/swagger_json.PNG[swagger_json]
