@@ -256,13 +256,15 @@ If you don't want to pollute your source code with Swagger annotations just to a
 
 [source, java]
 ----
-@RequestMapping(method = POST)
-@ApiOperation(value = "Add a new pet to the store")
-@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
-public ResponseEntity<String> addPet(
-      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
-petData.add(pet);
-return Responses.ok("SUCCESS");
+@RequestMapping(value = "/login", method = GET)
+@ApiOperation(value = "Logs user into the system", response = String.class)
+@ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid username/password supplied")})
+public ResponseEntity<String> loginUser(
+      @ApiParam(value = "The user name for login", required = true)
+      @RequestParam("username") String username,
+      @ApiParam(value = "The password for login in clear text", required = true)
+      @RequestParam("password") String password) {
+    return new ResponseEntity<String>("logged in user session:" + System.currentTimeMillis(), HttpStatus.OK);
 }
 ----
 
