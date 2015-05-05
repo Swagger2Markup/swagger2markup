@@ -268,7 +268,7 @@ public ResponseEntity<String> updatePet(
 }
 ----
 
-You can create hand-written descriptions and include them with the builder method `withDescriptions()` into your documentation.
+You can create hand-written descriptions and include them with the builder method `withDescriptions()` into your documentation by specifying the base directory of your documentation.
 
 [source, java]
 ----
