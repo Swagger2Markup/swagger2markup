@@ -61,7 +61,7 @@ compile "io.github.robwin:swagger2markup:0.5.1"
 
 === Using Swagger2Markup
 
-Using the Swagger2MarkupConverter is simple. For example, you can generate your AsciiDoc or Markdown documentation using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox] during the unit or integration test phase, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
+Using the Swagger2MarkupConverter is simple.  For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
 The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin] and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 
