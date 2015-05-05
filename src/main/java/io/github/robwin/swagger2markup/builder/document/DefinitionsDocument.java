@@ -185,7 +185,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private String propertyDescription(String definitionName, String propertyName, Property property) throws IOException {
         String description;
         if(handWrittenDescriptionsEnabled){
-            description = handWrittenPathDescription(definitionName + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
+            description = handWrittenPathDescription(definitionName.toLowerCase() + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
             if(StringUtils.isBlank(description)) {
                 if (logger.isInfoEnabled()) {
                     logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
