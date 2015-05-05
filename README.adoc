@@ -256,19 +256,19 @@ If you don't want to pollute your source code with Swagger annotations just to a
 
 [source, java]
 ----
-@RequestMapping(value = "/login", method = GET)
-@ApiOperation(value = "Logs user into the system", response = String.class)
-@ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid username/password supplied")})
-public ResponseEntity<String> loginUser(
-      @ApiParam(value = "The user name for login", required = true)
-      @RequestParam("username") String username,
-      @ApiParam(value = "The password for login in clear text", required = true)
-      @RequestParam("password") String password) {
-    return new ResponseEntity<String>("logged in user session:" + System.currentTimeMillis(), HttpStatus.OK);
+@RequestMapping(method = PUT)
+@ApiOperation(value = "Update an existing pet")
+@ApiResponses(value = {@ApiResponse(code = 400, message = "Invalid ID supplied"),
+      @ApiResponse(code = 404, message = "Pet not found"),
+      @ApiResponse(code = 405, message = "Validation exception")})
+public ResponseEntity<String> updatePet(
+      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
+    petData.add(pet);
+    return Responses.ok("SUCCESS");
 }
 ----
 
-You can create hand-written descriptions and include them with the builder method `withDescriptions()` into your documentation.
+You can create hand-written descriptions and include them with the builder method `withDescriptions()` into your documentation by specifying the base folder of your documentation.
 
 [source, java]
 ----
@@ -278,7 +278,7 @@ Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/
 
 By convention you need two folders `paths` and `definitions` inside your description base folder.
 The `paths` folder contains sub folders for all operations. The folder must be named similar to the value of the ApiOperation annotation, but with underscores and lowercase.
-For example a folder for `@ApiOperation(value = "Add a new pet to the store")` must be called `add_a_new_pet_to_the_store`.
+For example a folder for `@ApiOperation(value = "Update an existing pet")` must be called `update_an_existing_pet`.
 
 The `definitions` folder contains sub folders for all models. The folder must be named similar to the name of the Model, but lowercase.
 For example a folder for a model called `User` must be called `user`.
