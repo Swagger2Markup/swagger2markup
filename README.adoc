@@ -60,7 +60,7 @@ compile "io.github.robwin:swagger2markup:0.5.1"
 
 === Using Swagger2Markup
 
-Using the Swagger2MarkupConverter is simple.  For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
+Using the Swagger2MarkupConverter is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger JSON file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime libraries required.
 The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin] and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 ==== Generate Markup during an integration test
@@ -77,11 +77,12 @@ public class Swagger2MarkupTest {
 
     @Test
     public void convertRemoteSwaggerToAsciiDoc() {
-        //Remote Swagger source
-        //Default is AsciiDoc
+        // Remote Swagger source
+        // Default is AsciiDoc
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
             .intoFolder("src/docs/asciidoc/generated");
-        //Then
+            
+        // Then validate that three AsciiDoc files have been created
         String[] files = new File("src/docs/asciidoc/generated").list();
         assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.adoc", "overview.adoc", "paths.adoc"));
@@ -89,13 +90,13 @@ public class Swagger2MarkupTest {
 
     @Test
     public void convertRemoteSwaggerToMarkdown() {
-        //Remote Swagger source
-        //Markdown
+        // Remote Swagger source
+        // Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
             .withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
             .intoFolder("src/docs/asciidoc/generated");
             
-        //Then
+        // Then validate that three Markdown files have been created
         String[] files = new File("src/docs/asciidoc/generated").list();
         assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.md", "overview.md", "paths.md"));
@@ -114,7 +115,7 @@ public class Swagger2MarkupTest {
 
 ==== Generate Markup during an unit test with springfox-staticdocs
 
-Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs` now. That way you also verify that your Swagger endpoint is working.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs`. That way you also verify that your Swagger endpoint is working.
 
 [source,java]
 ----
@@ -200,7 +201,7 @@ public class Application {
 
 ==== Combine generated documentation with your hand-written documentation
 
-The following shows how you can combine the generated documentation with your hand-written documentation with AsciiDoc. You have to create an `index.adoc` (it must not be necessarily called index). To include the programmatically generated snippets in your documentation, you use Asciidoc's `include` macro. The `generated` variable is configured below.
+The following shows how you can combine the generated documentation with your hand-written AsciiDoc documentation. You have to create an `index.adoc` (it must not be necessarily called index). To include the programmatically generated snippets in your documentation, you use Asciidoc's `include` macro. The `generated` variable is configured below.
 
 image::images/generated_docs.PNG[generated_docs]
 
