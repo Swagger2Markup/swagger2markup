@@ -205,7 +205,7 @@ The following shows how you can combine the generated documentation with your ha
 
 image::images/generated_docs.PNG[generated_docs]
 
-You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to provide configurable access to the generated snippets. The system property is used to control the base directory to which the documents are generated.
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to provide configurable access to the generated snippets. 
 
 [source,groovy]
 ----
@@ -281,7 +281,7 @@ public void findPetById() throws Exception {
 }
 ----
 
-The spring-restdocs output directory is configured as follows:
+The system property `org.springframework.restdocs.outputDir` is used to control the output base directory where the folder `add_a_new_pet_to_the_store` and the generated snippets are written to. The spring-restdocs output base directory is configured as follows:
 
 [source,groovy]
 ----
