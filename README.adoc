@@ -214,7 +214,6 @@ ext {
 }
 
 test {
-    systemProperty 'io.springfox.staticdocs.outputDir', generatedDocumentation
     outputs.dir generatedDocumentation
 }
 
@@ -291,7 +290,7 @@ ext {
 }
 
 test {
-    systemProperty 'io.springfox.staticdocs.outputDir', generatedDocumentation
+    systemProperty 'org.springframework.restdocs.outputDir', generatedDocumentation
     outputs.dir generatedDocumentation
 }
 ----
