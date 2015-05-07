@@ -106,8 +106,8 @@ public class Swagger2MarkupTest {
     public void convertLocalSwaggerToAsciiDoc() {
         //Local Swagger source
         //Default is AsciiDoc
-        File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+        String location = Swagger2MarkupTest.class.getResource("/json/swagger.json").getPath();
+        Swagger2MarkupConverter.from(location).build()
             .intoFolder("src/docs/asciidoc");
     }
 }
