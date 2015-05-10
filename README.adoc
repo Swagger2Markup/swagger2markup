@@ -65,7 +65,7 @@ The quickest way to get started is to look at the demo project https://github.co
 
 ==== Generate Markup during an integration test
 
-Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the generated documents into the folder `src/docs/asciidoc` or `src/docs/markdown`.
+Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the generated documents into the folder `src/docs/asciidoc/generated` or `src/docs/markdown/generated`.
 
 [source,java]
 ----
