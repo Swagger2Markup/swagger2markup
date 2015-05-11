@@ -94,10 +94,10 @@ public class Swagger2MarkupTest {
         // Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
             .withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
-            .intoFolder("src/docs/asciidoc/generated");
+            .intoFolder("src/docs/markdown/generated");
             
         // Then validate that three Markdown files have been created
-        String[] files = new File("src/docs/asciidoc/generated").list();
+        String[] files = new File("src/docs/markdown/generated").list();
         assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.md", "overview.md", "paths.md"));
     }
@@ -108,7 +108,7 @@ public class Swagger2MarkupTest {
         //Default is AsciiDoc
         String location = Swagger2MarkupTest.class.getResource("/json/swagger.json").getPath();
         Swagger2MarkupConverter.from(location).build()
-            .intoFolder("src/docs/asciidoc");
+            .intoFolder("src/docs/asciidoc/generated");
     }
 }
 ----
