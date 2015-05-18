@@ -12,16 +12,15 @@ The primary goal of this project is to *simplify the generation of an up-to-date
 
 Swagger2Markup converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. Swagger2Markup supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder]. 
 
-You can use Swagger2Markup to convert your design-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the implementation-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/tree/master/samples/java-jersey2[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See usage guide below and <<integration-with-spring-restdocs, Integration with spring-restdocs>>.
-If you are using Gradle, you can also use the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin].
+You can use Swagger2Markup to convert your contract-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the code-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/tree/master/samples/java-jersey2[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. See https://github.com/RobWin/swagger2markup#usage-guide[usage guide] below. If you are are Gradle user, you can also use the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin].
 
 http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to *HTML*, *PDF* and *EPUB*. AsciiDoc is much better suited for describing public APIs than *JavaDoc* or *Annotations*.
 
-You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/aalmiray/markdown-gradle-plugin[markdown-gradle-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
+You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. You can also use https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
 
 The project requires at least JDK 7.
 
-== Usage
+== Usage guide
 
 === Adding Swagger2Markup to your project
 The project is published in JCenter and Maven Central.
@@ -61,13 +60,12 @@ compile "io.github.robwin:swagger2markup:0.5.2"
 
 === Using Swagger2Markup
 
-Using the Swagger2MarkupConverter is simple.  For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime library dependencies required.
+Using the Swagger2MarkupConverter is simple. For example, if you are using https://github.com/spring-projects/spring-boot[Spring Boot] and https://github.com/springfox/springfox[springfox], you can generate your Swagger JSON file during the integration or unit test phase, convert the Swagger JSON file into AsciiDoc, convert AsciiDoc into HTML and PDF, copy the documentation into the Jar file and serve it as static content. That way there is no runtime overhead and there are no additional runtime libraries required.
 The quickest way to get started is to look at the demo project https://github.com/RobWin/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin] and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
-
 
 ==== Generate Markup during an integration test
 
-Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the generated documents into the folder `src/docs/asciidoc` or `src/docs/markdown`.
+Swagger2MarkupConverter can be used to make a request to a Swagger endpoint during an integration test. The Swagger2MarkupConverter writes the generated documents into the folder `src/docs/asciidoc/generated` or `src/docs/markdown/generated`.
 
 [source,java]
 ----
@@ -79,11 +77,12 @@ public class Swagger2MarkupTest {
 
     @Test
     public void convertRemoteSwaggerToAsciiDoc() {
-        //Remote Swagger source
-        //Default is AsciiDoc
+        // Remote Swagger source
+        // Default is AsciiDoc
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
             .intoFolder("src/docs/asciidoc/generated");
-        //Then
+            
+        // Then validate that three AsciiDoc files have been created
         String[] files = new File("src/docs/asciidoc/generated").list();
         assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.adoc", "overview.adoc", "paths.adoc"));
@@ -91,14 +90,14 @@ public class Swagger2MarkupTest {
 
     @Test
     public void convertRemoteSwaggerToMarkdown() {
-        //Remote Swagger source
-        //Markdown
+        // Remote Swagger source
+        // Markdown
         Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
             .withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
-            .intoFolder("src/docs/asciidoc/generated");
+            .intoFolder("src/docs/markdown/generated");
             
-        //Then
-        String[] files = new File("src/docs/asciidoc/generated").list();
+        // Then validate that three Markdown files have been created
+        String[] files = new File("src/docs/markdown/generated").list();
         assertThat(files).hasSize(3)
             .containsAll(Arrays.asList("definitions.md", "overview.md", "paths.md"));
     }
@@ -107,16 +106,16 @@ public class Swagger2MarkupTest {
     public void convertLocalSwaggerToAsciiDoc() {
         //Local Swagger source
         //Default is AsciiDoc
-        File file = new File(Swagger2MarkupTest.class.getResource("/json/swagger.json").getFile());
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
-            .intoFolder("src/docs/asciidoc");
+        String location = Swagger2MarkupTest.class.getResource("/json/swagger.json").getPath();
+        Swagger2MarkupConverter.from(location).build()
+            .intoFolder("src/docs/asciidoc/generated");
     }
 }
 ----
 
 ==== Generate Markup during an unit test with springfox-staticdocs
 
-Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs` now. That way you also verify that your Swagger endpoint is working.
+Spring's MVC Test framework can also be used to make a request to a https://github.com/springfox/springfox[springfox] Swagger endpoint during an unit test. A custom ResultHandler `Swagger2MarkupResultHandler` is used to automatically convert the Swagger JSON response into an AsciiDoc document. The custom ResultHandler is part of `springfox-staticdocs`. That way you also verify that your Swagger endpoint is working.
 
 [source,java]
 ----
@@ -139,7 +138,7 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToAsciiDoc() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc").build())
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc/generated").build())
                 .andExpect(status().isOk());
     }
 
@@ -147,7 +146,7 @@ public class Swagger2MarkupTest {
     public void convertSwaggerToMarkdown() throws Exception {
         this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
-                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc")
+                .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/markdown/generated")
                     .withMarkupLanguage(MarkupLanguage.MARKDOWN).build())
                 .andExpect(status().isOk());
     }
@@ -202,20 +201,19 @@ public class Application {
 
 ==== Combine generated documentation with your hand-written documentation
 
-The following shows how you can combine the generated documentation with your hand-written documentation with AsciiDoc. You have to create an `index.adoc` (it must not be necessarily called index). To include the programmatically generated snippets in your documentation, you use Asciidoc's `include` macro. The `generated` variable is configured below.
+The following shows how you can combine the generated documentation with your hand-written AsciiDoc documentation. You have to create an `index.adoc` (it must not be necessarily called index). To include the programmatically generated snippets in your documentation, you use Asciidoc's `include` macro. The `generated` variable is configured below.
 
 image::images/generated_docs.PNG[generated_docs]
 
-You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to provide configurable access to the generated snippets. The system property is used to control the base directory to which the documents are generated.
+You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to replace the variable in the `index.adoc` file and to provide configurable access to the generated snippets. 
 
-[source]
+[source,groovy]
 ----
 ext {
     generatedDocumentation = file('src/docs/asciidoc/generated')
 }
 
 test {
-    systemProperty 'io.springfox.staticdocs.outputDir', generatedDocumentation
     outputs.dir generatedDocumentation
 }
 
@@ -239,7 +237,7 @@ asciidoctor {
 
 You can copy the output into your Jar file and serve the documentation as static content under `http://localhost:9080/docs/index.html` and `http://localhost:9080/docs/index.pdf`.
 
-[source]
+[source,groovy]
 ----
 jar {
     dependsOn asciidoctor
@@ -251,6 +249,71 @@ jar {
     }
 }
 ----
+
+==== Include spring-restdocs example snippets
+
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated HTTP request and response example snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it. Currently spring-restdocs does only support AsciiDoc.
+
+Let's say you have a Swagger-annotated Spring RestController method with an ApiOperation value: `Add a new pet to the store`
+
+[source,java]
+----
+@RequestMapping(method = POST)
+@ApiOperation(value = "Add a new pet to the store")
+@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
+public ResponseEntity<String> addPet(
+      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
+    petData.add(pet);
+    return Responses.ok("SUCCESS");
+}
+----
+
+By convention the target folder of the generated request and response example files must be similar to the value of the ApiOperation, but with underscores and lowercase. For example a folder for `@ApiOperation(value = "Add a new pet to the store")` must be called `add_a_new_pet_to_the_store`.
+
+[source,java]
+----
+@Test
+public void findPetById() throws Exception {
+    this.mockMvc.perform(post("/api/pet/").content(createPet())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andDo(RestDocumentation.document("add_a_new_pet_to_the_store"))
+            .andExpect(status().isOk());
+}
+----
+
+The system property `org.springframework.restdocs.outputDir` is used to control the output base directory where the folder `add_a_new_pet_to_the_store` and the generated snippets are written to. The spring-restdocs output base directory is configured as follows:
+
+[source,groovy]
+----
+ext {
+    generatedDocumentation = file('src/docs/asciidoc/generated')
+}
+
+test {
+    systemProperty 'org.springframework.restdocs.outputDir', generatedDocumentation
+    outputs.dir generatedDocumentation
+}
+----
+
+You must specify the base output directory of spring-restdocs with the builder method `withExamples("src/docs/asciidoc/generated")`.
+
+[source,java]
+----
+@Test
+public void convertToAsciiDoc() throws Exception {
+    this.mockMvc.perform(get("/v2/api-docs")
+            .accept(MediaType.APPLICATION_JSON))
+            .andDo(Swagger2MarkupResultHandler.outputDirectory("src/docs/asciidoc")
+                    .withExamples("src/docs/asciidoc/generated").build())
+            .andExpect(status().isOk());
+}
+----
+
+By convention the Swagger2MarkupConverter searches for a method annotated with `@ApiOperation(value = "Add a new pet to the store")` in a folder called `src/docs/asciidoc/generated/add_a_new_pet_to_the_store` and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
+
+The AsciiDoc HTML output would look as follows:
+
+image::images/springrestdocs_examples.PNG[springrestdocs]
 
 ==== Include hand-written descriptions into the generated documentation
 
@@ -294,82 +357,7 @@ The AsciiDoc HTML output would look as follows:
 
 image::images/handwritten_descr_asciidoc.PNG[handwritten_descr_asciidoc]
 
-== Examples
-== Swagger source
-image::images/swagger_json.PNG[swagger_json]
-
-=== Generated AsciiDoc
-image::images/asciidoc.PNG[asciidoc]
-
-=== Generated Markdown
-image::images/markdown.PNG[markdown]
-
-=== Generated HTML using AsciidoctorJ
-image::images/asciidoc_html.PNG[asciidoc_html]
-
-=== Generated PDF using AsciidoctorJ
-image::images/asciidoc_pdf.PNG[asciidoc_pdf]
-
-
-== Integration with spring-restdocs
-Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated HTTP request and response snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it.
-Currently spring-restdocs does only support AsciiDoc.
-
-Let's say you have a Swagger-annotated Spring RestController method with an ApiOperation value: `Add a new pet to the store`
-
-[source,java]
-----
-@RequestMapping(method = POST)
-@ApiOperation(value = "Add a new pet to the store")
-@ApiResponses(value = {@ApiResponse(code = 405, message = "Invalid input")})
-public ResponseEntity<String> addPet(
-      @ApiParam(value = "Pet object that needs to be added to the store", required = true) @RequestBody Pet pet) {
-    petData.add(pet);
-    return Responses.ok("SUCCESS");
-}
-----
-
-The target folder of the generated request and response example files must be `add_a_new_pet_to_the_store` (similar to the value of the ApiOperation, but with underscores and lowercase).
-
-[source,java]
-----
-@Test
-public void findPetById() throws Exception {
-    this.mockMvc.perform(post("/api/pet/").content(createPet())
-            .contentType(MediaType.APPLICATION_JSON))
-            .andDo(RestDocumentation.document("add_a_new_pet_to_the_store"))
-            .andExpect(status().isOk());
-}
-----
-
-The spring-restdocs output directory is configured as follows:
-
-[source]
-----
-org.springframework.restdocs.outputDir = src/docs/asciidoc/generated
-----
-
-You must specify the base output directory of spring-restdocs with the builder method `withExamples("src/docs/asciidoc/generated")`.
-
-[source,java]
-----
-@Test
-public void convertToAsciiDoc() throws Exception {
-    this.mockMvc.perform(get("/v2/api-docs")
-            .accept(MediaType.APPLICATION_JSON))
-            .andDo(Swagger2MarkupResultHandler.outputDirectory("swagger_adoc")
-                    .withExamples("src/docs/asciidoc/generated").build())
-            .andExpect(status().isOk());
-}
-----
-
-The Swagger2MarkupConverter searches for a Swagger ApiOperation with value `Add a new pet to the store` in a folder called `src/docs/asciidoc/generated/add_a_new_pet_to_the_store` and includes the `http-request.adoc` and `http-response.adoc` files, if they are available.
-
-=== Generated AsciiDoc
-image::images/springrestdocs_examples.PNG[springrestdocs]
-
-
-== Integration of JSON and XML Schema files.
+==== Include JSON and XML Schema files.
 Swagger2Markup can also include JSON and XML Schema files into the generated document.
 
 [source,java]
@@ -388,6 +376,23 @@ restDocumented.documentXmlSchema(MailStorageQuota.class, "src/docs/schemas");
 ----
 
 I will make RestDocumented public soon. RestDocumented creates a MailStorageQuota.xsd and MailStorageQuota.json file in the folder `src/docs/schemas`. The Swagger2MarkupConverter will include the JSON and XML Schemas, if a Swagger Operation uses the MailStorageQuota class as input or output.
+
+== Screenshots
+
+=== Swagger source
+image::images/swagger_json.PNG[swagger_json]
+
+=== Generated AsciiDoc
+image::images/asciidoc.PNG[asciidoc]
+
+=== Generated Markdown
+image::images/markdown.PNG[markdown]
+
+=== Generated HTML using AsciidoctorJ
+image::images/asciidoc_html.PNG[asciidoc_html]
+
+=== Generated PDF using AsciidoctorJ
+image::images/asciidoc_pdf.PNG[asciidoc_pdf]
 
 == License
 
