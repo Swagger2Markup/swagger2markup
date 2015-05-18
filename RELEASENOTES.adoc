@@ -34,3 +34,7 @@
 
 == Version 0.5.1
 * Bugfix: Definition name must be lowercase so that descriptions file can be found
+
+== Version 0.5.2
+* Swagger License is not mandatory anymore
+* Updated markup-document-builder from v0.1.3 to v0.1.4

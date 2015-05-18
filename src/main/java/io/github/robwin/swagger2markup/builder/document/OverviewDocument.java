@@ -90,7 +90,7 @@ public class OverviewDocument extends MarkupDocument {
         }
 
         License license = info.getLicense();
-        if(license != null) {
+        if(license != null && (StringUtils.isNotBlank(license.getName()) || StringUtils.isNotBlank(license.getUrl()))) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
             if (StringUtils.isNotBlank(license.getName())) {
                 this.markupDocBuilder.textLine(LICENSE + license.getName());
