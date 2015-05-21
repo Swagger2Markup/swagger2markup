@@ -18,16 +18,14 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import com.wordnik.swagger.models.properties.ArrayProperty;
-import com.wordnik.swagger.models.properties.Property;
-import com.wordnik.swagger.models.properties.RefProperty;
-import com.wordnik.swagger.models.properties.StringProperty;
+import com.wordnik.swagger.models.properties.*;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
+import java.util.Objects;
 
 public final class PropertyUtils {
 
@@ -55,11 +53,41 @@ public final class PropertyUtils {
         }
         else{
             if(StringUtils.isNotBlank(property.getFormat())){
-                type = property.getType() + " (" + property.getFormat() + ")";
+                type = StringUtils.defaultString(property.getType()) + " (" + property.getFormat() + ")";
             }else{
                 type = property.getType();
             }
         }
-        return type;
+        return StringUtils.defaultString(type);
+    }
+
+    public static String getDefaultValue(Property property){
+        Validate.notNull(property, "property must not be null!");
+        String defaultValue = "";
+        if(property instanceof BooleanProperty){
+            BooleanProperty booleanProperty = (BooleanProperty)property;
+            defaultValue = Objects.toString(booleanProperty.getDefault(), "");
+        }else if(property instanceof StringProperty){
+            StringProperty stringProperty = (StringProperty)property;
+            defaultValue = Objects.toString(stringProperty.getDefault(), "");
+        }else if(property instanceof DoubleProperty){
+            DoubleProperty doubleProperty = (DoubleProperty)property;
+            defaultValue = Objects.toString(doubleProperty.getDefault(), "");
+        }else if(property instanceof FloatProperty){
+            FloatProperty floatProperty = (FloatProperty)property;
+            defaultValue = Objects.toString(floatProperty.getDefault(), "");
+        }else if(property instanceof IntegerProperty){
+            IntegerProperty integerProperty = (IntegerProperty)property;
+            defaultValue = Objects.toString(integerProperty.getDefault(), "");
+        }
+        else if(property instanceof LongProperty){
+            LongProperty longProperty = (LongProperty)property;
+            defaultValue = Objects.toString(longProperty.getDefault(), "");
+        }
+        else if(property instanceof UUIDProperty){
+            UUIDProperty uuidProperty = (UUIDProperty)property;
+            defaultValue = Objects.toString(uuidProperty.getDefault(), "");
+        }
+        return defaultValue;
     }
 }

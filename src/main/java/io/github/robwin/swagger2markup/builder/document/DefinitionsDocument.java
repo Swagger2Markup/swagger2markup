@@ -144,14 +144,18 @@ public class DefinitionsDocument extends MarkupDocument {
     private void propertiesSection(String definitionName, Model model) throws IOException {
         Map<String, Property> properties = model.getProperties();
         List<String> headerAndContent = new ArrayList<>();
-        List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN, REQUIRED_COLUMN);
+        List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
         headerAndContent.add(StringUtils.join(header, DELIMITER));
         if(MapUtils.isNotEmpty(properties)){
             for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
                 Property property = propertyEntry.getValue();
-                String type = PropertyUtils.getType(property, markupLanguage);
                 String propertyName = propertyEntry.getKey();
-                List<String> content = Arrays.asList(propertyName, propertyDescription(definitionName, propertyName, property), type, Boolean.toString(property.getRequired()));
+                List<String> content = Arrays.asList(
+                        propertyName,
+                        propertyDescription(definitionName, propertyName, property),
+                        Boolean.toString(property.getRequired()),
+                        PropertyUtils.getType(property, markupLanguage),
+                        PropertyUtils.getDefaultValue(property));
                 headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);

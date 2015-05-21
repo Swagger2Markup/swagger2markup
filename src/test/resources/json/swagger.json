@@ -563,14 +563,16 @@
                         "name": "username",
                         "description": "The user name for login",
                         "required": false,
-                        "type": "string"
+                        "type": "string",
+                        "default": "testUser"
                     },
                     {
                         "in": "query",
                         "name": "password",
                         "description": "The password for login in clear text",
                         "required": false,
-                        "type": "string"
+                        "type": "string",
+                        "default": "testPassword"
                     }
                 ],
                 "responses": {
@@ -623,7 +625,8 @@
                         "name": "username",
                         "description": "The name that needs to be fetched. Use user1 for testing.",
                         "required": true,
-                        "type": "string"
+                        "type": "string",
+                        "default": "testUser"
                     }
                 ],
                 "responses": {

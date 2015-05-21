@@ -19,7 +19,10 @@
 package io.github.robwin.swagger2markup.utils;
 
 import com.wordnik.swagger.models.Model;
-import com.wordnik.swagger.models.parameters.*;
+import com.wordnik.swagger.models.parameters.AbstractSerializableParameter;
+import com.wordnik.swagger.models.parameters.BodyParameter;
+import com.wordnik.swagger.models.parameters.Parameter;
+import com.wordnik.swagger.models.parameters.RefParameter;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,60 +41,17 @@ public final class ParameterUtils {
             Model model = bodyParameter.getSchema();
             type = ModelUtils.getType(model, markupLanguage);
         }
-        else if(parameter instanceof PathParameter){
-            PathParameter pathParameter = (PathParameter)parameter;
-            type = getTypeWithFormat(pathParameter.getType(), pathParameter.getFormat());
-        }
-        else if(parameter instanceof QueryParameter){
-            QueryParameter queryParameter = (QueryParameter)parameter;
-            List<String> enums = queryParameter.getEnum();
+        else if(parameter instanceof AbstractSerializableParameter){
+            AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
+            List enums = serializableParameter.getEnum();
             if(CollectionUtils.isNotEmpty(enums)){
                 type = "enum" + " (" + StringUtils.join(enums, ", ") + ")";
             }else{
-                type = getTypeWithFormat(queryParameter.getType(), queryParameter.getFormat());
+                type = getTypeWithFormat(serializableParameter.getType(), serializableParameter.getFormat());
             }
             if(type.equals("array")){
-                String collectionFormat = queryParameter.getCollectionFormat();
-                type = collectionFormat + " " + PropertyUtils.getType(queryParameter.getItems(), markupLanguage) + " " + type;
-            }
-        }
-        else if(parameter instanceof HeaderParameter){
-            HeaderParameter headerParameter = (HeaderParameter)parameter;
-            List<String> enums = headerParameter.getEnum();
-            if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + StringUtils.join(enums, ", ") + ")";
-            }else{
-                type = getTypeWithFormat(headerParameter.getType(), headerParameter.getFormat());
-            }
-            if(type.equals("array")){
-                String collectionFormat = headerParameter.getCollectionFormat();
-                type = collectionFormat + " " + PropertyUtils.getType(headerParameter.getItems(), markupLanguage) + " " + type;
-            }
-        }
-        else if(parameter instanceof FormParameter){
-            FormParameter formParameter = (FormParameter)parameter;
-            List<String> enums = formParameter.getEnum();
-            if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + StringUtils.join(enums, ", ") + ")";
-            }else{
-                type = getTypeWithFormat(formParameter.getType(), formParameter.getFormat());
-            }
-            if(type.equals("array")){
-                String collectionFormat = formParameter.getCollectionFormat();
-                type = collectionFormat + " " + PropertyUtils.getType(formParameter.getItems(), markupLanguage) + " " + type;
-            }
-        }
-        else if(parameter instanceof CookieParameter){
-            CookieParameter cookieParameter = (CookieParameter)parameter;
-            List<String> enums = cookieParameter.getEnum();
-            if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + StringUtils.join(enums, ", ") + ")";
-            }else{
-                type = getTypeWithFormat(cookieParameter.getType(), cookieParameter.getFormat());
-            }
-            if(type.equals("array")){
-                String collectionFormat = cookieParameter.getCollectionFormat();
-                type = collectionFormat + " " + PropertyUtils.getType(cookieParameter.getItems(), markupLanguage) + " " + type;
+                String collectionFormat = serializableParameter.getCollectionFormat();
+                type = collectionFormat + " " + PropertyUtils.getType(serializableParameter.getItems(), markupLanguage) + " " + type;
             }
         }
         else if(parameter instanceof RefParameter){
@@ -101,16 +61,27 @@ public final class ParameterUtils {
                 default: return refParameter.getSimpleRef();
             }
         }
-        return type;
+        return StringUtils.defaultString(type);
     }
 
     private static String getTypeWithFormat(String typeWithoutFormat, String format) {
         String type;
         if(StringUtils.isNotBlank(format)){
-            type = typeWithoutFormat + " (" + format + ")";
+            type = StringUtils.defaultString(typeWithoutFormat) + " (" + format + ")";
         }else{
-            type = typeWithoutFormat;
+            type = StringUtils.defaultString(typeWithoutFormat);
         }
         return type;
     }
+
+    public static String getDefaultValue(Parameter parameter){
+        Validate.notNull(parameter, "property must not be null!");
+        String defaultValue = "";
+        if(parameter instanceof AbstractSerializableParameter){
+            AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
+            defaultValue = serializableParameter.getDefaultValue();
+        }
+        return StringUtils.defaultString(defaultValue);
+    }
+
 }

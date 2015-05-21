@@ -172,6 +172,9 @@ public class Swagger2MarkupConverter {
          */
         Builder(String swaggerLocation){
             swagger = new SwaggerParser().read(swaggerLocation);
+            if(swagger == null){
+                throw new IllegalArgumentException("Failed to read the Swagger file. ");
+            }
         }
 
         /**

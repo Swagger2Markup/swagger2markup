@@ -1,6 +1,6 @@
 = Swagger2Markup
 :author: Robert Winkler
-:version: 0.5.3
+:version: 0.6.0
 :hardbreaks:
 
 image:https://travis-ci.org/RobWin/swagger2markup.svg["Build Status", link="https://travis-ci.org/RobWin/swagger2markup"] image:https://coveralls.io/repos/RobWin/swagger2markup/badge.svg["Coverage Status", link="https://coveralls.io/r/RobWin/swagger2markup"] image:https://api.bintray.com/packages/robwin/maven/swagger2markup/images/download.svg[link="https://bintray.com/robwin/maven/swagger2markup/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"]
@@ -43,7 +43,7 @@ The project is published in JCenter and Maven Central.
 <dependency>
     <groupId>io.github.robwin</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>0.5.3</version>
+    <version>0.6.0</version>
 </dependency>
 ----
 
@@ -55,7 +55,7 @@ repositories {
     jcenter()
 }
 
-compile "io.github.robwin:swagger2markup:0.5.3"
+compile "io.github.robwin:swagger2markup:0.6.0"
 ----
 
 === Using Swagger2Markup

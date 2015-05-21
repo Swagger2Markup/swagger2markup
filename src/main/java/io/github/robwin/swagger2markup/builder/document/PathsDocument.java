@@ -195,13 +195,18 @@ public class PathsDocument extends MarkupDocument {
         if(CollectionUtils.isNotEmpty(parameters)){
             List<String> headerAndContent = new ArrayList<>();
             // Table header row
-            List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN);
+            List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
             headerAndContent.add(StringUtils.join(header, DELIMITER));
             for(Parameter parameter : parameters){
                 String type = ParameterUtils.getType(parameter, markupLanguage);
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
-                List<String> content = Arrays.asList(parameterType, parameter.getName(),  parameterDescription(operation, parameter), Boolean.toString(parameter.getRequired()), type);
+                List<String> content = Arrays.asList(
+                        parameterType,
+                        parameter.getName(),
+                        parameterDescription(operation, parameter),
+                        Boolean.toString(parameter.getRequired()), type,
+                        ParameterUtils.getDefaultValue(parameter));
                 headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
             this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
