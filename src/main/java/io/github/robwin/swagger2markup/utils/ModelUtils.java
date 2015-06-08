@@ -18,10 +18,10 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import com.wordnik.swagger.models.ArrayModel;
-import com.wordnik.swagger.models.Model;
-import com.wordnik.swagger.models.ModelImpl;
-import com.wordnik.swagger.models.RefModel;
+import io.swagger.models.ArrayModel;
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.RefModel;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.lang3.Validate;
 

@@ -45,3 +45,6 @@
 == Version 0.6.0
 * Updated swagger-parser from v1.0.5 to v1.0.6
 * Support for default values in Parameters and Model properties
+
+== Version 0.6.1
+* Updated swagger-parser from v1.0.6 to v1.0.8

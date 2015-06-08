@@ -18,7 +18,7 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import com.wordnik.swagger.models.properties.*;
+import io.swagger.models.properties.*;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

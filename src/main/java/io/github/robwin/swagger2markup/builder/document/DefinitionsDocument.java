@@ -18,9 +18,9 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.wordnik.swagger.models.Model;
-import com.wordnik.swagger.models.Swagger;
-import com.wordnik.swagger.models.properties.Property;
+import io.swagger.models.Model;
+import io.swagger.models.Swagger;
+import io.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import org.apache.commons.collections.MapUtils;

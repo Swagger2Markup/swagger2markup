@@ -18,11 +18,11 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import com.wordnik.swagger.models.Model;
-import com.wordnik.swagger.models.parameters.AbstractSerializableParameter;
-import com.wordnik.swagger.models.parameters.BodyParameter;
-import com.wordnik.swagger.models.parameters.Parameter;
-import com.wordnik.swagger.models.parameters.RefParameter;
+import io.swagger.models.Model;
+import io.swagger.models.parameters.AbstractSerializableParameter;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.RefParameter;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;

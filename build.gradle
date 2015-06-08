@@ -5,15 +5,15 @@ buildscript {
     }
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
-        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.6'
-        classpath 'io.spring.gradle:dependency-management-plugin:0.5.0.RELEASE'
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.7'
+        classpath 'io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'org.asciidoctor:asciidoctorj:1.5.2'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
     }
 }
 description = 'swagger2markup Build'
-version = '0.6.0'
+version = '0.6.1'
 group = 'io.github.robwin'
 
 apply plugin: 'java'
@@ -54,7 +54,7 @@ dependencies {
 dependencyManagement {
     dependencies {
         dependency "io.github.robwin:markup-document-builder:0.1.4"
-        dependency "io.swagger:swagger-compat-spec-parser:1.0.6"
+        dependency "io.swagger:swagger-compat-spec-parser:1.0.8"
         dependency "commons-collections:commons-collections:3.2.1"
         dependency "commons-io:commons-io:2.4"
         dependency "junit:junit:4.11"
@@ -117,5 +117,5 @@ tasks.asciidoctor {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2.1'
+    gradleVersion = '2.4'
 }

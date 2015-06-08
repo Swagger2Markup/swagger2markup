@@ -20,14 +20,14 @@ package io.github.robwin.swagger2markup;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wordnik.swagger.models.Swagger;
-import com.wordnik.swagger.util.Json;
-import com.wordnik.swagger.util.Yaml;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
+import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
+import io.swagger.util.Json;
+import io.swagger.util.Yaml;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
