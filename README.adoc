@@ -252,7 +252,7 @@ jar {
 
 ==== Include spring-restdocs example snippets
 
-Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated HTTP request and response example snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it. Currently spring-restdocs does only support AsciiDoc.
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated AsciiDoc document. See https://github.com/spring-projects/spring-restdocs[spring-restdocs] how to configure it. Currently spring-restdocs does only support AsciiDoc.
 
 Let's say you have a Swagger-annotated Spring RestController method with an ApiOperation value: `Add a new pet to the store`
 
