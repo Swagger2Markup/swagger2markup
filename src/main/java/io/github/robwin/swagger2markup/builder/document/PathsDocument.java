@@ -50,12 +50,14 @@ public class PathsDocument extends MarkupDocument {
     private static final String PATHS = "Paths";
     private static final String PARAMETERS = "Parameters";
     private static final String RESPONSES = "Responses";
-    private static final String EXAMPLE_REQUEST = "Example request";
-    private static final String EXAMPLE_RESPONSE = "Example response";
+    private static final String EXAMPLE_CURL = "Example CURL request";
+    private static final String EXAMPLE_REQUEST = "Example HTTP request";
+    private static final String EXAMPLE_RESPONSE = "Example HTTP response";
     private static final String TYPE_COLUMN = "Type";
     private static final String HTTP_CODE_COLUMN = "HTTP Code";
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
+    private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
     private static final String DESCRIPTION_FILE_NAME = "description";
     private static final String PARAMETER = "Parameter";
 
@@ -276,6 +278,12 @@ public class PathsDocument extends MarkupDocument {
             String summary = operation.getSummary();
             if(StringUtils.isNotBlank(summary)) {
                 String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
+                String curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
+                if(StringUtils.isNotBlank(curlExample)){
+                    this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_CURL);
+                    this.markupDocBuilder.paragraph(curlExample);
+                }
+
                 String requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
                 if(StringUtils.isNotBlank(requestExample)){
                     this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_REQUEST);

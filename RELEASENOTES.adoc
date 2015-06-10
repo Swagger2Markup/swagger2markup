@@ -48,3 +48,6 @@
 
 == Version 0.6.1
 * Updated swagger-parser from v1.0.6 to v1.0.8
+
+== Version 0.6.2
+* curl-request.adoc from spring-restdocs is also added to the example chapters

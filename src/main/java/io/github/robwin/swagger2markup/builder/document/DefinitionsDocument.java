@@ -31,10 +31,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Robert Winkler
@@ -42,13 +39,13 @@ import java.util.Map;
 public class DefinitionsDocument extends MarkupDocument {
 
     private static final String DEFINITIONS = "Definitions";
-    private static final List<String> IGNORED_DEFINITIONS = Arrays.asList("Void");
+    private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private static final String JSON_SCHEMA = "JSON Schema";
     private static final String XML_SCHEMA = "XML Schema";
-    public static final String JSON_SCHEMA_EXTENSION = ".json";
-    public static final String XML_SCHEMA_EXTENSION = ".xsd";
-    public static final String JSON = "json";
-    public static final String XML = "xml";
+    private static final String JSON_SCHEMA_EXTENSION = ".json";
+    private static final String XML_SCHEMA_EXTENSION = ".xsd";
+    private static final String JSON = "json";
+    private static final String XML = "xml";
     private static final String DESCRIPTION_FILE_NAME = "description";
     private boolean schemasEnabled;
     private String schemasFolderPath;
