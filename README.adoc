@@ -315,6 +315,22 @@ The AsciiDoc HTML output would look as follows:
 
 image::images/springrestdocs_examples.PNG[springrestdocs]
 
+==== Create separated definition files
+
+If you want to create, in addition to the definitions.adoc, separate definition files for each model (ex: person.adoc, address.adoc, purchase.adoc ...), you can do the following:
+
+[source, java]
+----
+Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").withSeparatedDefinitions().build()
+            .intoFolder("src/docs/asciidoc/generated");
+
+// Then validate that separated definition files have been created
+assertThat(directories).hasSize(8).containsAll(
+            asList("definitions.adoc", "overview.adoc", "paths.adoc",
+                "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
+----
+
+
 ==== Include hand-written descriptions into the generated documentation
 
 If you don't want to pollute your source code with Swagger annotations just to add descriptions to Operations, Parameters and Model definitions. Like here:
@@ -337,7 +353,7 @@ You can create hand-written descriptions and include them with the builder metho
 
 [source, java]
 ----
-Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/asciidoc").build()
+Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").withDescriptions("src/docs/asciidoc").build()
             .intoFolder("src/docs/asciidoc");
 ----
 
@@ -362,7 +378,7 @@ Swagger2Markup can also include JSON and XML Schema files into the generated doc
 
 [source,java]
 ----
-Swagger2MarkupConverter.from("http://localhost:8080/api-docs").withSchemas("src/docs/schemas").build()
+Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").withSchemas("src/docs/schemas").build()
                 .intoFolder("src/docs/asciidoc");
 ----
 
