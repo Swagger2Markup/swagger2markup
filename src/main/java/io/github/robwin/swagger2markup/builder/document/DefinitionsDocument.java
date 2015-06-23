@@ -18,6 +18,8 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -26,6 +28,7 @@ import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -51,8 +54,10 @@ public class DefinitionsDocument extends MarkupDocument {
     private String schemasFolderPath;
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
+    private boolean isSplitDescriptions;
+    private String outputDirectory;
 
-    public DefinitionsDocument(Swagger swagger, MarkupLanguage markupLanguage, String schemasFolderPath, String descriptionsFolderPath){
+    public DefinitionsDocument(Swagger swagger, MarkupLanguage markupLanguage, String schemasFolderPath, String descriptionsFolderPath, boolean isSplitDescriptions, String outputDirectory){
         super(swagger, markupLanguage);
         if(StringUtils.isNotBlank(schemasFolderPath)){
             this.schemasEnabled = true;
@@ -80,11 +85,19 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Include hand-written descriptions is disabled.");
             }
         }
+        this.isSplitDescriptions = isSplitDescriptions;
+        this.outputDirectory = outputDirectory;
+        if (isSplitDescriptions) {
+            Validate.notEmpty(outputDirectory, "Output directory is required for descriptions!");
+            if (logger.isDebugEnabled()) {
+                logger.debug("Include split descriptions for each model object in path: " + outputDirectory);
+            }
+        }
     }
 
     @Override
     public MarkupDocument build() throws IOException {
-        definitions(swagger.getDefinitions());
+        definitions(swagger.getDefinitions(), this.markupDocBuilder);
         return this;
     }
 
@@ -92,16 +105,26 @@ public class DefinitionsDocument extends MarkupDocument {
      * Builds the Swagger definitions.
      *
      * @param definitions the Swagger definitions
+     * @param docBuilder the doc builder to use for output
      */
-    private void definitions(Map<String, Model> definitions) throws IOException {
+    private void definitions(Map<String, Model> definitions, MarkupDocBuilder docBuilder) throws IOException {
         if(MapUtils.isNotEmpty(definitions)){
-            this.markupDocBuilder.sectionTitleLevel1(DEFINITIONS);
+            docBuilder.sectionTitleLevel1(DEFINITIONS);
             for(Map.Entry<String, Model> definitionsEntry : definitions.entrySet()){
                 String definitionName = definitionsEntry.getKey();
                 if(StringUtils.isNotBlank(definitionName)) {
                     if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
-                        definition(definitionName, definitionsEntry.getValue());
-                        definitionSchema(definitionName);
+                        definition(definitionName, definitionsEntry.getValue(), docBuilder);
+                        definitionSchema(definitionName, docBuilder);
+                        if (isSplitDescriptions) {
+                            MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+                            definition(definitionName, definitionsEntry.getValue(), defDocBuilder);
+                            definitionSchema(definitionName, defDocBuilder);
+                            defDocBuilder.writeToFile(outputDirectory, definitionName.toLowerCase(), StandardCharsets.UTF_8);
+                            if (logger.isInfoEnabled()) {
+                                logger.info("Separate definition file produced: {}", definitionName);
+                            }
+                        }
                         if (logger.isInfoEnabled()) {
                             logger.info("Definition processed: {}", definitionName);
                         }
@@ -130,15 +153,16 @@ public class DefinitionsDocument extends MarkupDocument {
      *
      * @param definitionName the name of the definition
      * @param model the Swagger Model of the definition
+     * @param docBuilder the docbuilder do use for output
      */
-    private void definition(String definitionName, Model model) throws IOException {
-        this.markupDocBuilder.sectionTitleLevel2(definitionName);
-        descriptionSection(definitionName, model);
-        propertiesSection(definitionName, model);
+    private void definition(String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
+        docBuilder.sectionTitleLevel2(definitionName);
+        descriptionSection(definitionName, model, docBuilder);
+        propertiesSection(definitionName, model, docBuilder);
 
     }
 
-    private void propertiesSection(String definitionName, Model model) throws IOException {
+    private void propertiesSection(String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
         Map<String, Property> properties = model.getProperties();
         List<String> headerAndContent = new ArrayList<>();
         List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
@@ -155,31 +179,31 @@ public class DefinitionsDocument extends MarkupDocument {
                         PropertyUtils.getDefaultValue(property));
                 headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
-            this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
+            docBuilder.tableWithHeaderRow(headerAndContent);
         }
     }
 
-    private void descriptionSection(String definitionName, Model model) throws IOException {
+    private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
         if(handWrittenDescriptionsEnabled){
             String description = handWrittenPathDescription(definitionName.toLowerCase(), DESCRIPTION_FILE_NAME);
             if(StringUtils.isNotBlank(description)){
-                this.markupDocBuilder.paragraph(description);
+                docBuilder.paragraph(description);
             }else{
                 if (logger.isInfoEnabled()) {
                     logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
                 }
-                modelDescription(model);
+                modelDescription(model, docBuilder);
             }
         }
         else{
-            modelDescription(model);
+            modelDescription(model, docBuilder);
         }
     }
 
-    private void modelDescription(Model model) {
+    private void modelDescription(Model model, MarkupDocBuilder docBuilder) {
         String description = model.getDescription();
         if (StringUtils.isNotBlank(description)) {
-            this.markupDocBuilder.paragraph(description);
+            docBuilder.paragraph(description);
         }
     }
 
@@ -229,20 +253,20 @@ public class DefinitionsDocument extends MarkupDocument {
         return null;
     }
 
-    private void definitionSchema(String definitionName) throws IOException {
+    private void definitionSchema(String definitionName, MarkupDocBuilder docBuilder) throws IOException {
         if(schemasEnabled) {
             if (StringUtils.isNotBlank(definitionName)) {
-                schema(JSON_SCHEMA, schemasFolderPath, definitionName + JSON_SCHEMA_EXTENSION, JSON);
-                schema(XML_SCHEMA, schemasFolderPath, definitionName + XML_SCHEMA_EXTENSION, XML);
+                schema(JSON_SCHEMA, schemasFolderPath, definitionName + JSON_SCHEMA_EXTENSION, JSON, docBuilder);
+                schema(XML_SCHEMA, schemasFolderPath, definitionName + XML_SCHEMA_EXTENSION, XML, docBuilder);
             }
         }
     }
 
-    private void schema(String title, String schemasFolderPath, String schemaName, String language) throws IOException {
+    private void schema(String title, String schemasFolderPath, String schemaName, String language, MarkupDocBuilder docBuilder) throws IOException {
         java.nio.file.Path path = Paths.get(schemasFolderPath, schemaName);
         if (Files.isReadable(path)) {
-            this.markupDocBuilder.sectionTitleLevel3(title);
-            this.markupDocBuilder.source(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim(), language);
+            docBuilder.sectionTitleLevel3(title);
+            docBuilder.source(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim(), language);
             if (logger.isInfoEnabled()) {
                 logger.info("Schema file processed: {}", path);
             }

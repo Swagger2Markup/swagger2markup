@@ -24,6 +24,8 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.BDDAssertions.assertThat;
@@ -98,6 +100,26 @@ public class Swagger2MarkupConverterTest {
         //Then
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(3).containsAll(asList("definitions.md", "overview.md", "paths.md"));
+    }
+
+    @Test
+    public void testSwagger2AsciiDocConversionWithSplitDescriptions() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSplitDescriptions().build()
+            .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(8).containsAll(
+            asList("definitions.adoc", "overview.adoc", "paths.adoc",
+                "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
+        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.adoc"))))
+            .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.adoc"))));
     }
 
     /*

@@ -46,6 +46,7 @@ public class Swagger2MarkupConverter {
     private final String examplesFolderPath;
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
+    private final boolean isSplitDescriptions;
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
@@ -57,12 +58,13 @@ public class Swagger2MarkupConverter {
      * @param schemasFolderPath the folderPath where (XML, JSON)-Schema  files are stored
      * @param descriptionsFolderPath the folderPath where descriptions are stored
      */
-    Swagger2MarkupConverter(MarkupLanguage markupLanguage, Swagger swagger, String examplesFolderPath, String schemasFolderPath, String descriptionsFolderPath){
+    Swagger2MarkupConverter(MarkupLanguage markupLanguage, Swagger swagger, String examplesFolderPath, String schemasFolderPath, String descriptionsFolderPath, boolean isSplitDescriptions){
         this.markupLanguage = markupLanguage;
         this.swagger = swagger;
         this.examplesFolderPath = examplesFolderPath;
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
+        this.isSplitDescriptions = isSplitDescriptions;
     }
 
     /**
@@ -143,7 +145,7 @@ public class Swagger2MarkupConverter {
     private void buildDocuments(String directory) throws IOException {
         new OverviewDocument(swagger, markupLanguage).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
         new PathsDocument(swagger, markupLanguage, examplesFolderPath, descriptionsFolderPath).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
-        new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, descriptionsFolderPath).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
+        new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, descriptionsFolderPath, isSplitDescriptions, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
     }
 
     /**
@@ -154,7 +156,7 @@ public class Swagger2MarkupConverter {
     private String buildDocuments() throws IOException {
         return new OverviewDocument(swagger, markupLanguage).build().toString().concat(
                 new PathsDocument(swagger, markupLanguage, examplesFolderPath, schemasFolderPath).build().toString()
-                .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, schemasFolderPath).build().toString()));
+                .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, schemasFolderPath, false, null).build().toString()));
     }
 
 
@@ -163,6 +165,7 @@ public class Swagger2MarkupConverter {
         private String examplesFolderPath;
         private String schemasFolderPath;
         private String descriptionsFolderPath;
+        private boolean isSplitDescriptions;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
 
         /**
@@ -187,7 +190,7 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build(){
-            return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath, descriptionsFolderPath);
+            return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath, descriptionsFolderPath, isSplitDescriptions);
         }
 
         /**
@@ -209,6 +212,15 @@ public class Swagger2MarkupConverter {
          */
         public Builder withDescriptions(String descriptionsFolderPath){
             this.descriptionsFolderPath = descriptionsFolderPath;
+            return this;
+        }
+
+        /**
+         * In addition to definitions file, also create separate definition files for each entity. 
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withSplitDescriptions() {
+            this.isSplitDescriptions = true;
             return this;
         }
 
