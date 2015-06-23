@@ -54,10 +54,10 @@ public class DefinitionsDocument extends MarkupDocument {
     private String schemasFolderPath;
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
-    private boolean isSplitDescriptions;
+    private boolean separatedDefinitionsEnabled;
     private String outputDirectory;
 
-    public DefinitionsDocument(Swagger swagger, MarkupLanguage markupLanguage, String schemasFolderPath, String descriptionsFolderPath, boolean isSplitDescriptions, String outputDirectory){
+    public DefinitionsDocument(Swagger swagger, MarkupLanguage markupLanguage, String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitionsEnabled, String outputDirectory){
         super(swagger, markupLanguage);
         if(StringUtils.isNotBlank(schemasFolderPath)){
             this.schemasEnabled = true;
@@ -85,14 +85,18 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Include hand-written descriptions is disabled.");
             }
         }
-        this.isSplitDescriptions = isSplitDescriptions;
-        this.outputDirectory = outputDirectory;
-        if (isSplitDescriptions) {
-            Validate.notEmpty(outputDirectory, "Output directory is required for descriptions!");
+        this.separatedDefinitionsEnabled = separatedDefinitionsEnabled;
+        if(this.separatedDefinitionsEnabled){
             if (logger.isDebugEnabled()) {
-                logger.debug("Include split descriptions for each model object in path: " + outputDirectory);
+                logger.debug("Create separated definition files is enabled.");
+            }
+            Validate.notEmpty(outputDirectory, "Output directory is required for separated definition files!");
+        }else{
+            if (logger.isDebugEnabled()) {
+                logger.debug("Create separated definition files is disabled.");
             }
         }
+        this.outputDirectory = outputDirectory;
     }
 
     @Override
@@ -116,7 +120,7 @@ public class DefinitionsDocument extends MarkupDocument {
                     if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
                         definition(definitionName, definitionsEntry.getValue(), docBuilder);
                         definitionSchema(definitionName, docBuilder);
-                        if (isSplitDescriptions) {
+                        if (separatedDefinitionsEnabled) {
                             MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
                             definition(definitionName, definitionsEntry.getValue(), defDocBuilder);
                             definitionSchema(definitionName, defDocBuilder);

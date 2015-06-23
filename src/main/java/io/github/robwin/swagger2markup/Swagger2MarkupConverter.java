@@ -46,7 +46,7 @@ public class Swagger2MarkupConverter {
     private final String examplesFolderPath;
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
-    private final boolean isSplitDescriptions;
+    private final boolean separatedDefinitions;
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
@@ -57,14 +57,15 @@ public class Swagger2MarkupConverter {
      * @param examplesFolderPath the folderPath where examples are stored
      * @param schemasFolderPath the folderPath where (XML, JSON)-Schema  files are stored
      * @param descriptionsFolderPath the folderPath where descriptions are stored
+     * @param separatedDefinitions create separate definition files for each model definition.
      */
-    Swagger2MarkupConverter(MarkupLanguage markupLanguage, Swagger swagger, String examplesFolderPath, String schemasFolderPath, String descriptionsFolderPath, boolean isSplitDescriptions){
+    Swagger2MarkupConverter(MarkupLanguage markupLanguage, Swagger swagger, String examplesFolderPath, String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions){
         this.markupLanguage = markupLanguage;
         this.swagger = swagger;
         this.examplesFolderPath = examplesFolderPath;
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
-        this.isSplitDescriptions = isSplitDescriptions;
+        this.separatedDefinitions = separatedDefinitions;
     }
 
     /**
@@ -137,7 +138,7 @@ public class Swagger2MarkupConverter {
     }
 
     /**
-     * Writes a file for the Paths (API) and a file for the Definitions (Model)
+     * Builds all documents and writes them to a directory
 
      * @param directory the directory where the generated file should be stored
      * @throws IOException if a file cannot be written
@@ -145,11 +146,11 @@ public class Swagger2MarkupConverter {
     private void buildDocuments(String directory) throws IOException {
         new OverviewDocument(swagger, markupLanguage).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
         new PathsDocument(swagger, markupLanguage, examplesFolderPath, descriptionsFolderPath).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
-        new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, descriptionsFolderPath, isSplitDescriptions, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
+        new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, descriptionsFolderPath, separatedDefinitions, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
     }
 
     /**
-     * Returns a file for the Paths (API) and a file for the Definitions (Model)
+     * Returns all documents as a String
 
      * @return a the document as a String
      */
@@ -165,7 +166,7 @@ public class Swagger2MarkupConverter {
         private String examplesFolderPath;
         private String schemasFolderPath;
         private String descriptionsFolderPath;
-        private boolean isSplitDescriptions;
+        private boolean separatedDefinitions;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
 
         /**
@@ -190,7 +191,7 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build(){
-            return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath, descriptionsFolderPath, isSplitDescriptions);
+            return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath, descriptionsFolderPath, separatedDefinitions);
         }
 
         /**
@@ -216,11 +217,11 @@ public class Swagger2MarkupConverter {
         }
 
         /**
-         * In addition to definitions file, also create separate definition files for each entity. 
+         * In addition to the definitions file, also create separate definition files for each model definition.
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withSplitDescriptions() {
-            this.isSplitDescriptions = true;
+        public Builder withSeparatedDefinitions() {
+            this.separatedDefinitions = true;
             return this;
         }
 

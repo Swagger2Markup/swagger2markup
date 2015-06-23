@@ -51,3 +51,6 @@
 
 == Version 0.6.2
 * curl-request.adoc from spring-restdocs is also added to the example chapters
+
+== Version 0.6.3
+* Added possibility to write object definitions to separate files. Issue #19

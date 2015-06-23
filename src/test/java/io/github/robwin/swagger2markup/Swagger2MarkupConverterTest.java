@@ -103,14 +103,14 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithSplitDescriptions() throws IOException {
+    public void testSwagger2AsciiDocConversionWithSeparatedDefinitions() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
         File outputDirectory = new File("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSplitDescriptions().build()
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedDefinitions().build()
             .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -120,6 +120,27 @@ public class Swagger2MarkupConverterTest {
                 "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
         assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.adoc"))))
             .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.adoc"))));
+    }
+
+    @Test
+    public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedDefinitions().
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(8).containsAll(
+                asList("definitions.md", "overview.md", "paths.md",
+                        "user.md", "category.md", "pet.md", "tag.md", "order.md"));
+        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.md"))))
+                .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.md"))));
     }
 
     /*
