@@ -422,4 +422,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 == Community contributions
 
-* New feature RobWin/Swagger2Markup#19: In addition to the definitions.adoc you can also generate separate files for each definition model (ex: person.adoc, address.adoc, purchase.adoc)
+* New feature RobWin/Swagger2Markup#18 by @sg-ad: In addition to the definitions.adoc you can also generate separate files for each definition model (ex: person.adoc, address.adoc, purchase.adoc)
