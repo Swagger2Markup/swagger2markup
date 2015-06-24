@@ -207,6 +207,8 @@ image::images/generated_docs.PNG[generated_docs]
 
 You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to replace the variable in the `index.adoc` file and to provide configurable access to the generated snippets. 
 
+===== Gradle configuration
+
 [source,groovy]
 ----
 ext {
@@ -235,7 +237,36 @@ asciidoctor {
 }
 ----
 
+===== Maven configuration
+
+[source,xml]
+----
+<plugin>
+	<groupId>org.asciidoctor</groupId>
+	<artifactId>asciidoctor-maven-plugin</artifactId>
+	<version>1.5.2</version>
+	<executions>
+		<execution>
+			<id>generate-docs</id>
+			<phase>package</phase>
+			<goals>
+				<goal>process-asciidoc</goal>
+			</goals>
+			<configuration>
+				<backend>html</backend>
+				<doctype>pdf</doctype>
+				<attributes>
+					<generated>src/docs/asciidoc/generated</generated>
+				</attributes>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+----
+
 You can copy the output into your Jar file and serve the documentation as static content under `http://localhost:9080/docs/index.html` and `http://localhost:9080/docs/index.pdf`.
+
+===== Gradle configuration
 
 [source,groovy]
 ----
@@ -248,6 +279,33 @@ jar {
         into 'static/docs'
     }
 }
+----
+
+===== Maven configuration
+
+[source,xml]
+----
+<plugin>
+	<artifactId>maven-resources-plugin</artifactId>
+	<version>2.7</version>
+	<executions>
+		<execution>
+			<id>copy-resources</id>
+			<phase>prepare-package</phase>
+			<goals>
+				<goal>copy-resources</goal>
+			</goals>
+			<configuration>
+				<outputDirectory>${project.build.outputDirectory}/static/docs</outputDirectory>
+				<resources>
+					<resource>
+						<directory>${project.build.directory}/asciidoc/html5</directory>
+					</resource>
+				</resources>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
 ----
 
 ==== Include spring-restdocs example snippets
