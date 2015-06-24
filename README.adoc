@@ -153,7 +153,7 @@ public class Swagger2MarkupTest {
 }
 ----
 
-==== Gradle dependencies
+==== Springfox Gradle configration
 
 [source,groovy]
 ----
@@ -164,6 +164,22 @@ dependencies {
     ...
 }
 ----
+
+==== Springfox Maven configration
+
+```xml
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-swagger2</artifactId>
+	<version>2.0.1</version>
+</dependency>
+<dependency>
+	<groupIdio.springfox</groupId>
+	<artifactId>springfox-staticdocs</artifactId>
+	<version>2.0.1</version>
+	<scope>test</scope>
+</dependency>
+```
 
 ==== Springfox configuration
 
@@ -207,7 +223,7 @@ image::images/generated_docs.PNG[generated_docs]
 
 You can generate your HTML5 and PDF documentation via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. The following listing shows how to configure the Asciidoctor Gradle plugin. By default it searches for AsciiDoc files in `src/docs/asciidoc` and puts the HTML and PDF output into `build/asciidoc/html5` and `build/asciidoc/pdf`. The `generated` attribute is used to replace the variable in the `index.adoc` file and to provide configurable access to the generated snippets. 
 
-===== Gradle configuration
+===== Asciidoctor Gradle configuration
 
 [source,groovy]
 ----
@@ -237,7 +253,7 @@ asciidoctor {
 }
 ----
 
-===== Maven configuration
+===== Asciidoctor Maven configuration
 
 [source,xml]
 ----
@@ -254,8 +270,11 @@ asciidoctor {
 			</goals>
 			<configuration>
 				<backend>html</backend>
-				<doctype>pdf</doctype>
 				<attributes>
+					<doctype>pdf</doctype>
+					<toclevels>2</generated>
+					<toc>left</generated>
+					<doctype>book</generated>
 					<generated>src/docs/asciidoc/generated</generated>
 				</attributes>
 			</configuration>
