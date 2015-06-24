@@ -174,7 +174,7 @@ dependencies {
 	<version>2.0.1</version>
 </dependency>
 <dependency>
-	<groupIdio.springfox</groupId>
+	<groupId>io.springfox</groupId>
 	<artifactId>springfox-staticdocs</artifactId>
 	<version>2.0.1</version>
 	<scope>test</scope>
@@ -398,8 +398,9 @@ If you want to create, in addition to the definitions.adoc, separate definition 
 
 [source, java]
 ----
-Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").withSeparatedDefinitions().build()
-            .intoFolder("src/docs/asciidoc/generated");
+Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
+    .withSeparatedDefinitions().build()
+    .intoFolder("src/docs/asciidoc/generated");
 
 // Then validate that separated definition files have been created
 assertThat(directories).hasSize(8).containsAll(
@@ -430,8 +431,9 @@ You can create hand-written descriptions and include them with the builder metho
 
 [source, java]
 ----
-Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").withDescriptions("src/docs/asciidoc").build()
-            .intoFolder("src/docs/asciidoc");
+Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
+    .withDescriptions("src/docs/asciidoc").build()
+    .intoFolder("src/docs/asciidoc");
 ----
 
 By convention you need two folders `paths` and `definitions` inside your description base folder.
@@ -455,8 +457,9 @@ Swagger2Markup can also include JSON and XML Schema files into the generated doc
 
 [source,java]
 ----
-Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").withSchemas("src/docs/schemas").build()
-                .intoFolder("src/docs/asciidoc");
+Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs")
+    .withSchemas("src/docs/schemas").build()
+    .intoFolder("src/docs/asciidoc");
 ----
 
 You can create the schema files during a unit test as follows:
