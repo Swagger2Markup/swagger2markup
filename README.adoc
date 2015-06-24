@@ -165,7 +165,7 @@ dependencies {
 }
 ----
 
-==== Springfox Maven configration
+==== Springfox Maven configuration
 
 ```xml
 <dependency>
