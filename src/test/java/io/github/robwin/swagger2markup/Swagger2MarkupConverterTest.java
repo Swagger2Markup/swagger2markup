@@ -18,16 +18,25 @@
  */
 package io.github.robwin.swagger2markup;
 
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
 /**
@@ -115,8 +124,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(8).containsAll(
-            asList("definitions.adoc", "overview.adoc", "paths.adoc",
+        assertThat(directories).hasSize(9).containsAll(
+            asList("definitions.adoc", "overview.adoc", "paths.adoc", "identified.adoc",
                 "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
         assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.adoc"))))
             .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.adoc"))));
@@ -136,11 +145,103 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(8).containsAll(
-                asList("definitions.md", "overview.md", "paths.md",
+        assertThat(directories).hasSize(9).containsAll(
+                asList("definitions.md", "overview.md", "paths.md", "identified.md",
                         "user.md", "category.md", "pet.md", "tag.md", "order.md"));
         assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.md"))))
                 .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.md"))));
+    }
+
+    @Test
+    public void testSwagger2MarkdownConversionHandlesComposition() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedDefinitions().
+                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        // Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(9).containsAll(
+                asList("definitions.md", "overview.md", "paths.md", "identified.md",
+                        "user.md", "category.md", "pet.md", "tag.md", "order.md"));
+        verifyMarkdownContainsFieldsInTables(
+                outputDirectory + File.separator + "definitions.md",
+                ImmutableMap.<String, Set<String>>builder()
+                        .put("Identified", ImmutableSet.of("id"))
+                        .put("User", ImmutableSet.of("id", "username", "firstName",
+                                "lastName", "email", "password", "phone", "userStatus"))
+                        .build());
+        verifyMarkdownContainsFieldsInTables(
+                outputDirectory + File.separator + "user.md",
+                ImmutableMap.<String, Set<String>>builder()
+                        .put("User", ImmutableSet.of("id", "username", "firstName",
+                                "lastName", "email", "password", "phone", "userStatus"))
+                        .build()
+        );
+
+    }
+
+    /**
+     * Given a markdown document to search, this checks to see if the specified tables
+     * have all of the expected fields listed.
+     *
+     * @param doc path of markdown document to inspect
+     * @param fieldsByTable map of table name (header) to field names expected
+     *                      to be found in that table.
+     * @throws IOException if the markdown document could not be read
+     */
+    private static void verifyMarkdownContainsFieldsInTables(String doc, Map<String, Set<String>> fieldsByTable) throws IOException {
+        final List<String> lines = Files.readAllLines(Paths.get(doc), Charset.defaultCharset());
+        final Map<String, Set<String>> fieldsLeftByTable = Maps.newHashMap();
+        for(Map.Entry<String, Set<String>> entry : fieldsByTable.entrySet()) {
+            fieldsLeftByTable.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
+        }
+        String inTable = null;
+        for(String line : lines) {
+            // If we've found every field we care about, quit early
+            if(fieldsLeftByTable.isEmpty()) {
+                return;
+            }
+
+            // Transition to a new table if we encounter a header
+            final String currentHeader = getTableHeader(line);
+            if(inTable == null || currentHeader != null) {
+                inTable = currentHeader;
+            }
+
+            // If we're in a table that we care about, inspect this potential table row
+            if (inTable != null && fieldsLeftByTable.containsKey(inTable)){
+                // If we're still in a table, read the row and check for the field name
+                //  NOTE: If there was at least one pipe, then there's at least 2 fields
+                String[] parts = line.split("\\|");
+                if(parts.length > 1) {
+                    final String fieldName = parts[1];
+                    final Set<String> fieldsLeft = fieldsLeftByTable.get(inTable);
+                    // Mark the field as found and if this table has no more fields to find,
+                    //  remove it from the "fieldsLeftByTable" map to mark the table as done
+                    if(fieldsLeft.remove(fieldName) && fieldsLeft.isEmpty()) {
+                        fieldsLeftByTable.remove(inTable);
+                    }
+                }
+            }
+        }
+
+        // After reading the file, if there were still types, fail
+        if(!fieldsLeftByTable.isEmpty()) {
+            fail(String.format("Markdown file '%s' did not contain expected fields (by table): %s",
+                    doc, fieldsLeftByTable));
+        }
+    }
+
+    private static String getTableHeader(String line) {
+        return line.startsWith("###")
+                ? line.replace("###", "").trim()
+                : null;
     }
 
     /*
