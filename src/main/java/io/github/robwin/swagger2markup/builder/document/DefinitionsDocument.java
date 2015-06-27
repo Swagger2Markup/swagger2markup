@@ -18,9 +18,12 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
+import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
+import io.swagger.models.RefModel;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -118,11 +121,11 @@ public class DefinitionsDocument extends MarkupDocument {
                 String definitionName = definitionsEntry.getKey();
                 if(StringUtils.isNotBlank(definitionName)) {
                     if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
-                        definition(definitionName, definitionsEntry.getValue(), docBuilder);
+                        definition(definitions, definitionName, definitionsEntry.getValue(), docBuilder);
                         definitionSchema(definitionName, docBuilder);
                         if (separatedDefinitionsEnabled) {
                             MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
-                            definition(definitionName, definitionsEntry.getValue(), defDocBuilder);
+                            definition(definitions, definitionName, definitionsEntry.getValue(), defDocBuilder);
                             definitionSchema(definitionName, defDocBuilder);
                             defDocBuilder.writeToFile(outputDirectory, definitionName.toLowerCase(), StandardCharsets.UTF_8);
                             if (logger.isInfoEnabled()) {
@@ -159,15 +162,14 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param model the Swagger Model of the definition
      * @param docBuilder the docbuilder do use for output
      */
-    private void definition(String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
+    private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
         docBuilder.sectionTitleLevel2(definitionName);
         descriptionSection(definitionName, model, docBuilder);
-        propertiesSection(definitionName, model, docBuilder);
-
+        propertiesSection(definitions, definitionName, model, docBuilder);
     }
 
-    private void propertiesSection(String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
-        Map<String, Property> properties = model.getProperties();
+    private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) throws IOException {
+        Map<String, Property> properties = getAllProperties(definitions, model);
         List<String> headerAndContent = new ArrayList<>();
         List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
         headerAndContent.add(StringUtils.join(header, DELIMITER));
@@ -184,6 +186,31 @@ public class DefinitionsDocument extends MarkupDocument {
                 headerAndContent.add(StringUtils.join(content, DELIMITER));
             }
             docBuilder.tableWithHeaderRow(headerAndContent);
+        }
+    }
+
+    private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
+        if(model instanceof RefModel) {
+            final String ref = model.getReference();
+            return definitions.containsKey(ref)
+                    ? getAllProperties(definitions, definitions.get(model.getReference()))
+                    : null;
+        }
+        if(model instanceof ComposedModel) {
+            ComposedModel composedModel = (ComposedModel)model;
+            ImmutableMap.Builder<String, Property> allProperties = ImmutableMap.builder();
+            if(composedModel.getAllOf() != null) {
+                for(Model innerModel : composedModel.getAllOf()) {
+                    Map<String, Property> innerProperties = getAllProperties(definitions, innerModel);
+                    if(innerProperties != null) {
+                        allProperties.putAll(innerProperties);
+                    }
+                }
+            }
+            return allProperties.build();
+        }
+        else {
+            return model.getProperties();
         }
     }
 
