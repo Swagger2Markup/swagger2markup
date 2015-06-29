@@ -21,8 +21,9 @@ You can generate your HTML5, PDF and EPUB documentation via https://github.com/a
 The project requires at least JDK 7.
 
 == Reference documentation
+- http://swagger2markup.github.io/swagger2markup-docs/[Reference Documentation]
+- https://github.com/Swagger2Markup/swagger2markup/blob/master/RELEASENOTES.adoc[Release notes]
 
-The documentation can be found at http://swagger2markup.github.io/swagger2markup-docs/[Reference documentation]
 
 == License
 
