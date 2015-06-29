@@ -46,11 +46,14 @@
 * Updated swagger-parser from v1.0.5 to v1.0.6
 * Support for default values in Parameters and Model properties
 
-== Version 0.6.1
+=== Version 0.6.1
 * Updated swagger-parser from v1.0.6 to v1.0.8
 
-== Version 0.6.2
+=== Version 0.6.2
 * curl-request.adoc from spring-restdocs is also added to the example chapters
 
-== Version 0.6.3
+=== Version 0.6.3
 * Added possibility to write object definitions to separate files. Issue #19
+
+== Version 0.7.0
+* Added support for both reference models and composed models
