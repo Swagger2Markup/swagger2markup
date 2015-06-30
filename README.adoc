@@ -24,7 +24,9 @@ The project requires at least JDK 7.
 - http://swagger2markup.github.io/swagger2markup-docs/[Reference Documentation]
 - https://github.com/Swagger2Markup/swagger2markup/blob/master/RELEASENOTES.adoc[Release notes]
 
-== Community contributions
+== Contributing
+
+=== Community contributions
 
 Pull requests are welcome.
 
@@ -32,8 +34,14 @@ Pull requests are welcome.
 
 * New feature https://github.com/Swagger2Markup/swagger2markup/issues/21[RobWin/Swagger2Markup#21] by https://github.com/redowl[@redowl]: Support for both reference models and composed models.
 
-== Questions
-You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter]. 
+=== Questions
+You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter].
+
+=== Bugs
+If you believe you have found a bug, please take a moment to search the existing issues. If no one else has reported the problem, please open a new issue that describes the problem in detail and, ideally, includes a test that reproduces it.
+
+=== Enhancements
+If you’d like an enhancement to be made to Swagger2Markup Docs, pull requests are most welcome. The source code is on GitHub. You may want to search the existing issues and pull requests to see if the enhancement is already being worked on. You may also want to open a new issue to discuss a possible enhancement before work on it begins.
 
 == License
 
