@@ -24,6 +24,14 @@ The project requires at least JDK 7.
 - http://swagger2markup.github.io/swagger2markup-docs/[Reference Documentation]
 - https://github.com/Swagger2Markup/swagger2markup/blob/master/RELEASENOTES.adoc[Release notes]
 
+== Community contributions
+
+Pull requests are welcome.
+
+* New feature https://github.com/Swagger2Markup/swagger2markup/issues/18[RobWin/Swagger2Markup#18] by https://github.com/sg-ad[@sg-ad]: In addition to the definitions.adoc you can also generate separate files for each definition model (ex: person.adoc, address.adoc, purchase.adoc).
+
+* New feature https://github.com/Swagger2Markup/swagger2markup/issues/21[RobWin/Swagger2Markup#21] by https://github.com/redowl[@redowl]: Support for both reference models and composed models.
+
 
 == License
 
