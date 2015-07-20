@@ -39,7 +39,12 @@ public final class ParameterUtils {
         if(parameter instanceof BodyParameter){
             BodyParameter bodyParameter = (BodyParameter)parameter;
             Model model = bodyParameter.getSchema();
-            type = ModelUtils.getType(model, markupLanguage);
+            if(model != null){
+                type = ModelUtils.getType(model, markupLanguage);
+            }else{
+                type = "string";
+            }
+
         }
         else if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;

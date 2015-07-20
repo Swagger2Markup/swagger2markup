@@ -39,15 +39,29 @@ import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
-/**
- * @author Robert Winkler
- */
 public class Swagger2MarkupConverterTest {
 
     @Test
     public void testSwagger2AsciiDocConversion() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+    }
+
+
+    @Test
+    public void testOldSwaggerSpec2AsciiDocConversion() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger_12.json").getFile());
         File outputDirectory = new File("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory);
 

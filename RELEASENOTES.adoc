@@ -57,3 +57,6 @@
 
 == Version 0.7.0
 * Added support for both reference models and composed models
+
+== Version 0.7.1
+* Workaround: If the type of a BodyParameter is String and not a Model, the schema is null and lost. Therefore the fallback type of a BodyParameter is String now.
