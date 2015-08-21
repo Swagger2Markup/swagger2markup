@@ -24,6 +24,7 @@ import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
+import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import io.swagger.util.Json;
@@ -244,6 +245,16 @@ public class Swagger2MarkupConverter {
          */
         public Builder withSchemas(String schemasFolderPath){
             this.schemasFolderPath = schemasFolderPath;
+            return this;
+        }
+
+        /**
+         * Customize the Swagger data in any useful way
+         * @param preProcessor function object to mutate the swagger object
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder preProcessSwagger(Consumer<Swagger> preProcessor) {
+            preProcessor.accept(this.swagger);
             return this;
         }
     }
