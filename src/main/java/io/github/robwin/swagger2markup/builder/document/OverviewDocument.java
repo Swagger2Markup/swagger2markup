@@ -130,8 +130,9 @@ public class OverviewDocument extends MarkupDocument {
                 String description = tag.getDescription();
                 if(StringUtils.isNoneBlank(description)){
                     tags.add(name + ": " +   description);
+                }else{
+                    tags.add(name);
                 }
-                tags.add(name);
             }
             this.markupDocBuilder.unorderedList(tags);
             this.markupDocBuilder.newLine();
