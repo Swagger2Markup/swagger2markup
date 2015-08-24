@@ -33,7 +33,7 @@ Pull requests are welcome.
 
 * New feature https://github.com/Swagger2Markup/swagger2markup/issues/21[RobWin/Swagger2Markup#21] by https://github.com/redowl[@redowl]: Support for both reference models and composed models.
 
-* New feature https://github.com/Swagger2Markup/swagger2markup/issues/21[RobWin/Swagger2Markup#27] by https://github.com/zmitrok[@zmitrok]: Added a hook to preprocess a Swagger Model before it is converted.
+* New feature https://github.com/Swagger2Markup/swagger2markup/issues/27[RobWin/Swagger2Markup#27] by https://github.com/zmitrok[@zmitrok]: Added a hook to preprocess a Swagger Model before it is converted.
 
 === Questions
 You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter].
