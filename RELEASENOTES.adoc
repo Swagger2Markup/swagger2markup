@@ -58,5 +58,9 @@
 == Version 0.7.0
 * Added support for both reference models and composed models
 
-== Version 0.7.1
+=== Version 0.7.1
 * Workaround: If the type of a BodyParameter is String and not a Model, the schema is null and lost. Therefore the fallback type of a BodyParameter is String now.
+
+== Version 0.8.0
+* Enhancement #26 and #27: Added a pre-process hook to modify a Swagger Model before it is converted.
+* Bugfix #29: Tags are rendered twice
