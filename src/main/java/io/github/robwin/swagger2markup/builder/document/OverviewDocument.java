@@ -105,22 +105,23 @@ public class OverviewDocument extends MarkupDocument {
             this.markupDocBuilder.newLine();
         }
 
-        this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
-        if(StringUtils.isNotBlank(swagger.getHost())){
-            this.markupDocBuilder.textLine(HOST + swagger.getHost());
-        }
-        if(StringUtils.isNotBlank(swagger.getBasePath())){
-            this.markupDocBuilder.textLine(BASE_PATH + swagger.getBasePath());
-        }
-        if(CollectionUtils.isNotEmpty(swagger.getSchemes())){
-            List<String> schemes = new ArrayList<>();
-            for(Scheme scheme : swagger.getSchemes()){
-                schemes.add(scheme.toString());
+        if(StringUtils.isNotBlank(swagger.getHost()) || StringUtils.isNotBlank(swagger.getBasePath()) || CollectionUtils.isNotEmpty(swagger.getSchemes())) {
+            this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
+            if (StringUtils.isNotBlank(swagger.getHost())) {
+                this.markupDocBuilder.textLine(HOST + swagger.getHost());
             }
-            this.markupDocBuilder.textLine(SCHEMES + StringUtils.join(schemes, ", "));
-
+            if (StringUtils.isNotBlank(swagger.getBasePath())) {
+                this.markupDocBuilder.textLine(BASE_PATH + swagger.getBasePath());
+            }
+            if (CollectionUtils.isNotEmpty(swagger.getSchemes())) {
+                List<String> schemes = new ArrayList<>();
+                for (Scheme scheme : swagger.getSchemes()) {
+                    schemes.add(scheme.toString());
+                }
+                this.markupDocBuilder.textLine(SCHEMES + StringUtils.join(schemes, ", "));
+            }
+            this.markupDocBuilder.newLine();
         }
-        this.markupDocBuilder.newLine();
 
         if(CollectionUtils.isNotEmpty(swagger.getTags())){
             this.markupDocBuilder.sectionTitleLevel2(TAGS);

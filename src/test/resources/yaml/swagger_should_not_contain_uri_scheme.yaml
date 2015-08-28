@@ -1,0 +1,13 @@
+swagger: '2.0'
+info:
+  version: "0.0.0"
+  title: Test - Should not contain URI scheme
+ 
+paths:
+  /test:
+    get:
+      responses:
+        200:
+          description: OK
+          schema:
+            type: string
