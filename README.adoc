@@ -15,7 +15,7 @@ You can use Swagger2Markup to convert your contract-first Swagger YAML file into
 
 http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to *HTML*, *PDF* and *EPUB*. AsciiDoc is much better suited for describing public APIs than *JavaDoc* or *Annotations*.
 
-You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. You can also use https://readme.io/[ReadMe.io], https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
+You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. You could publish your AsciiDoc or Markdown documentation using https://github.com/jbake-org/jbake[JBake], Markdown documentation using https://readme.io/[ReadMe.io], https://github.com/tomchristie/mkdocs[MkDocs], and https://github.com/rtfd/readthedocs.org[ReadTheDocs], and slate flavoured Markdown documentation with https://github.com/tripit/slate[slate]
 
 The project requires at least JDK 7.
 
