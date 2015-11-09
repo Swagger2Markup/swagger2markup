@@ -28,6 +28,7 @@ import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
+import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -191,9 +192,15 @@ public class DefinitionsDocument extends MarkupDocument {
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
         if(model instanceof RefModel) {
-            final String ref = model.getReference();
+            RefModel refModel = (RefModel)model;
+            String ref;
+            if(refModel.getRefFormat().equals(RefFormat.INTERNAL)){
+                ref = refModel.getSimpleRef();
+            }else{
+                ref = model.getReference();
+            }
             return definitions.containsKey(ref)
-                    ? getAllProperties(definitions, definitions.get(model.getReference()))
+                    ? getAllProperties(definitions, definitions.get(ref))
                     : null;
         }
         if(model instanceof ComposedModel) {
