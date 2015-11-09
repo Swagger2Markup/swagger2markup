@@ -64,3 +64,7 @@
 == Version 0.8.0
 * Enhancement #26 and #27: Added a pre-process hook to modify a Swagger Model before it is converted.
 * Bugfix #29: Tags are rendered twice
+
+=== Version 0.9.0
+* Updated swagger-parser from v1.0.8 to v1.0.13
+* Support for global responses and parameters

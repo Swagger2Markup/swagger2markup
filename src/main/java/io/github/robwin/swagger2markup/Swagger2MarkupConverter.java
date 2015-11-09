@@ -21,9 +21,7 @@ package io.github.robwin.swagger2markup;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
-import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
-import io.github.robwin.swagger2markup.builder.document.PathsDocument;
+import io.github.robwin.swagger2markup.builder.document.*;
 import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -156,8 +154,8 @@ public class Swagger2MarkupConverter {
      * @return a the document as a String
      */
     private String buildDocuments() throws IOException {
-        return new OverviewDocument(swagger, markupLanguage).build().toString().concat(
-                new PathsDocument(swagger, markupLanguage, examplesFolderPath, schemasFolderPath).build().toString()
+        return new OverviewDocument(swagger, markupLanguage).build().toString()
+                .concat(new PathsDocument(swagger, markupLanguage, examplesFolderPath, schemasFolderPath).build().toString()
                 .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, schemasFolderPath, false, null).build().toString()));
     }
 

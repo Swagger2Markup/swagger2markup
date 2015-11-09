@@ -134,13 +134,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Pet"
-                            }
-                        }
+                        "$ref": "#/responses/FoundPets"
                     },
                     "400": {
                         "description": "Invalid status value"
@@ -183,13 +177,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/Pet"
-                            }
-                        }
+                        "$ref": "#/responses/FoundPets"
                     },
                     "400": {
                         "description": "Invalid tag value"
@@ -219,12 +207,7 @@
                 ],
                 "parameters": [
                     {
-                        "in": "path",
-                        "name": "petId",
-                        "description": "ID of pet that needs to be fetched",
-                        "required": true,
-                        "type": "integer",
-                        "format": "int64"
+                        "$ref": "#/parameters/petId"
                     }
                 ],
                 "responses": {
@@ -729,6 +712,27 @@
             }
         }
     },
+    "responses":{
+        "FoundPets": {
+            "description": "successful operation",
+            "schema": {
+                "type": "array",
+                "items": {
+                    "$ref": "#/definitions/Pet"
+                }
+            }
+        }
+    },
+    "parameters":{
+        "petId": {
+            "in": "path",
+            "name": "petId",
+            "description": "ID of the pet",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+        }
+    },
     "definitions": {
         "Identified": {
             "properties": {
@@ -767,6 +771,13 @@
                             "type": "integer",
                             "format": "int32",
                             "description": "User Status"
+                        },
+                        "pictures": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "format": "byte"
+                            }
                         }
                     }
                 }
