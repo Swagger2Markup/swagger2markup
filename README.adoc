@@ -11,11 +11,20 @@ The primary goal of this project is to *simplify the generation of an up-to-date
 
 Swagger2Markup converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. Swagger2Markup supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder]. 
 
-You can use Swagger2Markup to convert your contract-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the code-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-JAX-RS-Project-Setup-1.5.X[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. If you are are Gradle or Maven user, you can also use the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin] or https://github.com/redowl/swagger2markup-maven-plugin[Swagger2markup Maven Plugin].
+You can use Swagger2Markup to convert your contract-first Swagger YAML file into a human-readable format and combine it with hand-written documentation. As an alternative, you can choose the code-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-JAX-RS-Project-Setup-1.5.X[Swagger JAX-RS], https://github.com/springfox/springfox[springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. If you are Gradle or Maven user, you can also use the https://github.com/RobWin/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin] or https://github.com/redowl/swagger2markup-maven-plugin[Swagger2markup Maven Plugin].
 
 http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to *HTML*, *PDF* and *EPUB*. AsciiDoc is much better suited for describing public APIs than *JavaDoc* or *Annotations*.
 
-You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. You can also use https://readme.io/[ReadMe.io], https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs], https://github.com/rtfd/readthedocs.org[ReadTheDocs] or https://github.com/tripit/slate[slate] to publish your AsciiDoc or Markdown documentation.
+You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin]. You can publish your AsciiDoc documentation using https://github.com/RobWin/asciidocular[Asciidocular].  Asciidocular is a small AngularJS web app that loads your AsciiDoc files via Ajax and renders them as a full web site.
+
+Advantages:
+
+* No server-side components needed to convert your AsciiDoc files into HTML
+* No build process and tools needed
+* Deployable via GitHub Pages
+* Responsive Bootswatch (Bootstrap) theme
+
+You can publish your Markdown documentation using https://github.com/jbake-org/jbake[JBake], https://github.com/tomchristie/mkdocs[MkDocs] or https://github.com/rtfd/readthedocs.org[ReadTheDocs].
 
 The project requires at least JDK 7.
 
@@ -32,6 +41,8 @@ Pull requests are welcome.
 * New feature https://github.com/Swagger2Markup/swagger2markup/issues/18[RobWin/Swagger2Markup#18] by https://github.com/sg-ad[@sg-ad]: In addition to the definitions.adoc you can also generate separate files for each definition model (ex: person.adoc, address.adoc, purchase.adoc).
 
 * New feature https://github.com/Swagger2Markup/swagger2markup/issues/21[RobWin/Swagger2Markup#21] by https://github.com/redowl[@redowl]: Support for both reference models and composed models.
+
+* New feature https://github.com/Swagger2Markup/swagger2markup/issues/27[RobWin/Swagger2Markup#27] by https://github.com/zmitrok[@zmitrok]: Added a hook to preprocess a Swagger Model before it is converted.
 
 === Questions
 You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter].

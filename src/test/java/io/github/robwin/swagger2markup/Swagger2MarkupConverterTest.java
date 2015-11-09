@@ -92,6 +92,44 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionDoesNotContainUriScheme() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_should_not_contain_uri_scheme.yaml").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+
+        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "overview.adoc"))))
+                .doesNotContain("=== URI scheme");
+    }
+
+    @Test
+    public void testSwagger2AsciiDocConversionContainsUriScheme() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_should_contain_uri_scheme.yaml").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+
+        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "overview.adoc"))))
+                .contains("=== URI scheme");
+    }
+
+    @Test
     public void testSwagger2MarkdownConversion() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
