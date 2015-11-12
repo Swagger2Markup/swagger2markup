@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.swagger.models.Swagger;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
@@ -48,9 +49,9 @@ public abstract class MarkupDocument {
     protected MarkupLanguage markupLanguage;
     protected MarkupDocBuilder markupDocBuilder;
 
-    MarkupDocument(Swagger swagger, MarkupLanguage markupLanguage){
-        this.swagger = swagger;
-        this.markupLanguage = markupLanguage;
+    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig){
+        this.swagger = swagger2MarkupConfig.getSwagger();
+        this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
     }
 

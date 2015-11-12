@@ -18,14 +18,14 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.swagger.models.*;
-import io.github.robwin.markup.builder.MarkupLanguage;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public class OverviewDocument extends MarkupDocument {
 
@@ -44,18 +44,17 @@ public class OverviewDocument extends MarkupDocument {
     private static final String BASE_PATH = "BasePath: ";
     private static final String SCHEMES = "Schemes: ";
 
-    public OverviewDocument(Swagger swagger, MarkupLanguage markupLanguage){
-        super(swagger, markupLanguage);
+    public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig){
+        super(swagger2MarkupConfig);
     }
 
     /**
      * Builds the MarkupDocument.
      *
      * @return the built MarkupDocument
-     * @throws java.io.IOException if the files to include are not readable
      */
     @Override
-    public MarkupDocument build() throws IOException {
+    public MarkupDocument build(){
         overview();
         return this;
     }
@@ -68,11 +67,11 @@ public class OverviewDocument extends MarkupDocument {
         Info info = swagger.getInfo();
         this.markupDocBuilder.documentTitle(info.getTitle());
         this.markupDocBuilder.sectionTitleLevel1(OVERVIEW);
-        if(StringUtils.isNotBlank(info.getDescription())){
+        if(isNotBlank(info.getDescription())){
             this.markupDocBuilder.textLine(info.getDescription());
             this.markupDocBuilder.newLine();
         }
-        if(StringUtils.isNotBlank(info.getVersion())){
+        if(isNotBlank(info.getVersion())){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
             this.markupDocBuilder.textLine(VERSION + info.getVersion());
             this.markupDocBuilder.newLine();
@@ -80,56 +79,56 @@ public class OverviewDocument extends MarkupDocument {
         Contact contact = info.getContact();
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
-            if(StringUtils.isNotBlank(contact.getName())){
+            if(isNotBlank(contact.getName())){
                 this.markupDocBuilder.textLine(CONTACT_NAME + contact.getName());
             }
-            if(StringUtils.isNotBlank(contact.getEmail())){
+            if(isNotBlank(contact.getEmail())){
                 this.markupDocBuilder.textLine(CONTACT_EMAIL + contact.getEmail());
             }
             this.markupDocBuilder.newLine();
         }
 
         License license = info.getLicense();
-        if(license != null && (StringUtils.isNotBlank(license.getName()) || StringUtils.isNotBlank(license.getUrl()))) {
+        if(license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
-            if (StringUtils.isNotBlank(license.getName())) {
+            if (isNotBlank(license.getName())) {
                 this.markupDocBuilder.textLine(LICENSE + license.getName());
             }
-            if (StringUtils.isNotBlank(license.getUrl())) {
+            if (isNotBlank(license.getUrl())) {
                 this.markupDocBuilder.textLine(LICENSE_URL + license.getUrl());
             }
             this.markupDocBuilder.newLine();
         }
-        if(StringUtils.isNotBlank(info.getTermsOfService())){
+        if(isNotBlank(info.getTermsOfService())){
             this.markupDocBuilder.textLine(TERMS_OF_SERVICE + info.getTermsOfService());
             this.markupDocBuilder.newLine();
         }
 
-        if(StringUtils.isNotBlank(swagger.getHost()) || StringUtils.isNotBlank(swagger.getBasePath()) || CollectionUtils.isNotEmpty(swagger.getSchemes())) {
+        if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
-            if (StringUtils.isNotBlank(swagger.getHost())) {
+            if (isNotBlank(swagger.getHost())) {
                 this.markupDocBuilder.textLine(HOST + swagger.getHost());
             }
-            if (StringUtils.isNotBlank(swagger.getBasePath())) {
+            if (isNotBlank(swagger.getBasePath())) {
                 this.markupDocBuilder.textLine(BASE_PATH + swagger.getBasePath());
             }
-            if (CollectionUtils.isNotEmpty(swagger.getSchemes())) {
+            if (isNotEmpty(swagger.getSchemes())) {
                 List<String> schemes = new ArrayList<>();
                 for (Scheme scheme : swagger.getSchemes()) {
                     schemes.add(scheme.toString());
                 }
-                this.markupDocBuilder.textLine(SCHEMES + StringUtils.join(schemes, ", "));
+                this.markupDocBuilder.textLine(SCHEMES + join(schemes, ", "));
             }
             this.markupDocBuilder.newLine();
         }
 
-        if(CollectionUtils.isNotEmpty(swagger.getTags())){
+        if(isNotEmpty(swagger.getTags())){
             this.markupDocBuilder.sectionTitleLevel2(TAGS);
             List<String> tags = new ArrayList<>();
             for(Tag tag : swagger.getTags()){
                 String name = tag.getName();
                 String description = tag.getDescription();
-                if(StringUtils.isNoneBlank(description)){
+                if(isNoneBlank(description)){
                     tags.add(name + ": " +   description);
                 }else{
                     tags.add(name);
@@ -139,13 +138,13 @@ public class OverviewDocument extends MarkupDocument {
             this.markupDocBuilder.newLine();
         }
 
-        if(CollectionUtils.isNotEmpty(swagger.getConsumes())){
+        if(isNotEmpty(swagger.getConsumes())){
             this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
             this.markupDocBuilder.unorderedList(swagger.getConsumes());
             this.markupDocBuilder.newLine();
         }
 
-        if(CollectionUtils.isNotEmpty(swagger.getProduces())){
+        if(isNotEmpty(swagger.getProduces())){
             this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
             this.markupDocBuilder.unorderedList(swagger.getProduces());
             this.markupDocBuilder.newLine();

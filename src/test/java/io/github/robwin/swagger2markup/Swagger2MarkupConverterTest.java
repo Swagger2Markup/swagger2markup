@@ -37,6 +37,7 @@ import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
 public class Swagger2MarkupConverterTest {
@@ -57,11 +58,46 @@ public class Swagger2MarkupConverterTest {
         assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
     }
 
+    @Test
+    public void testSwagger2AsciiDocGroupedByTags() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withPathsGroupedBy(GroupBy.TAGS)
+                .build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+    }
+
+    @Test
+    public void testSwagger2AsciiDocGroupedByTagsWithMissingTag() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger_missing_tag.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+        //When
+        try {
+            Swagger2MarkupConverter.from(file.getAbsolutePath())
+                    .withPathsGroupedBy(GroupBy.TAGS)
+                    .build()
+                    .intoFolder(outputDirectory.getAbsolutePath());
+            // If NullPointerException was not thrown, test would fail the specified message
+            failBecauseExceptionWasNotThrown(NullPointerException.class);
+        } catch (Exception e) {
+            assertThat(e).hasMessage("Path operations must have tags, if you want to group by tags! The operation 'PUT /pets' has not tags.");
+        }
+    }
 
     @Test
     public void testOldSwaggerSpec2AsciiDocConversion() throws IOException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger_12.json").getFile());
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/error_swagger_12.json").getFile());
         File outputDirectory = new File("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory);
 
@@ -187,7 +223,7 @@ public class Swagger2MarkupConverterTest {
     public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
+        File outputDirectory = new File("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
@@ -208,7 +244,7 @@ public class Swagger2MarkupConverterTest {
     public void testSwagger2MarkdownConversionHandlesComposition() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
+        File outputDirectory = new File("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory);
 
         //When

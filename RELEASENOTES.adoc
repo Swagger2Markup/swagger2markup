@@ -68,3 +68,7 @@
 === Version 0.9.0
 * Updated swagger-parser from v1.0.8 to v1.0.13
 * Support for global responses and parameters
+
+=== Version 0.9.1
+* Added support to group the paths by tags or as-is
+* Added support to order the definitions by natural ordering or as-is

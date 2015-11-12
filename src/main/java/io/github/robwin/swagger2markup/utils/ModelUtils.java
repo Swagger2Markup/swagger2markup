@@ -27,6 +27,13 @@ import org.apache.commons.lang3.Validate;
 
 public final class ModelUtils {
 
+    /**
+     * Retrieves the type of a model, or otherwise "NOT FOUND"
+     *
+     * @param model the model
+     * @param markupLanguage the markup language which is used to generate the files
+     * @return the type of the model, or otherwise "NOT FOUND"
+     */
     public static String getType(Model model, MarkupLanguage markupLanguage) {
         Validate.notNull(model, "model must not be null!");
         if (model instanceof ModelImpl) {

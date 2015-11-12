@@ -75,9 +75,6 @@
                 ]
             },
             "put": {
-                "tags": [
-                    "pet"
-                ],
                 "summary": "Update an existing pet",
                 "description": "",
                 "operationId": "updatePet",

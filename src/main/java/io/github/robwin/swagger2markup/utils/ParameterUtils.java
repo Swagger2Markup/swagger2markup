@@ -18,21 +18,29 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
+import io.github.robwin.markup.builder.MarkupLanguage;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.RefParameter;
-import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 
 public final class ParameterUtils {
 
+    /**
+     * Retrieves the type of a parameter, or otherwise an empty String
+     *
+     * @param parameter the parameter
+     * @param markupLanguage the markup language which is used to generate the files
+     * @return the type of the parameter, or otherwise an empty String
+     */
     public static String getType(Parameter parameter, MarkupLanguage markupLanguage){
         Validate.notNull(parameter, "property must not be null!");
         String type = "NOT FOUND";
@@ -50,7 +58,7 @@ public final class ParameterUtils {
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             List enums = serializableParameter.getEnum();
             if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + StringUtils.join(enums, ", ") + ")";
+                type = "enum" + " (" + join(enums, ", ") + ")";
             }else{
                 type = getTypeWithFormat(serializableParameter.getType(), serializableParameter.getFormat());
             }
@@ -66,19 +74,32 @@ public final class ParameterUtils {
                 default: return refParameter.getSimpleRef();
             }
         }
-        return StringUtils.defaultString(type);
+        return defaultString(type);
     }
 
+    /**
+     * Adds the format to the type, if a format is available
+     *
+     * @param typeWithoutFormat the type
+     * @param format the format
+     * @return returns the type and format, if a format is available
+     */
     private static String getTypeWithFormat(String typeWithoutFormat, String format) {
         String type;
-        if(StringUtils.isNotBlank(format)){
-            type = StringUtils.defaultString(typeWithoutFormat) + " (" + format + ")";
+        if(isNotBlank(format)){
+            type = defaultString(typeWithoutFormat) + " (" + format + ")";
         }else{
-            type = StringUtils.defaultString(typeWithoutFormat);
+            type = defaultString(typeWithoutFormat);
         }
         return type;
     }
 
+    /**
+     * Retrieves the default value of a parameter, or otherwise an empty String
+     *
+     * @param parameter the parameter
+     * @return the default value of the parameter, or otherwise an empty String
+     */
     public static String getDefaultValue(Parameter parameter){
         Validate.notNull(parameter, "property must not be null!");
         String defaultValue = "";
@@ -86,7 +107,7 @@ public final class ParameterUtils {
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             defaultValue = serializableParameter.getDefaultValue();
         }
-        return StringUtils.defaultString(defaultValue);
+        return defaultString(defaultValue);
     }
 
 }

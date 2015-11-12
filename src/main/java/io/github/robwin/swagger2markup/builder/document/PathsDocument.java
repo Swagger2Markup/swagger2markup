@@ -18,29 +18,29 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import io.swagger.models.Operation;
-import io.swagger.models.Path;
-import io.swagger.models.Response;
-import io.swagger.models.Swagger;
-import io.swagger.models.parameters.Parameter;
-import io.swagger.models.properties.Property;
-import io.github.robwin.markup.builder.MarkupLanguage;
+import com.google.common.base.Optional;
+import com.google.common.collect.Multimap;
+import io.github.robwin.swagger2markup.GroupBy;
+import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
+import io.swagger.models.*;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.properties.Property;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.text.WordUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static io.github.robwin.swagger2markup.utils.TagUtils.*;
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * @author Robert Winkler
@@ -48,6 +48,7 @@ import java.util.Map;
 public class PathsDocument extends MarkupDocument {
 
     private static final String PATHS = "Paths";
+    private static final String RESOURCES = "Resources";
     private static final String PARAMETERS = "Parameters";
     private static final String RESPONSES = "Responses";
     private static final String EXAMPLE_CURL = "Example CURL request";
@@ -65,16 +66,18 @@ public class PathsDocument extends MarkupDocument {
     private String examplesFolderPath;
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
+    private final GroupBy pathsGroupedBy;
 
-    public PathsDocument(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath, String descriptionsFolderPath){
-        super(swagger, markupLanguage);
-        if(StringUtils.isNotBlank(examplesFolderPath)){
+    public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig){
+        super(swagger2MarkupConfig);
+        this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
+        if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
             this.examplesEnabled = true;
-            this.examplesFolderPath = examplesFolderPath;
+            this.examplesFolderPath = swagger2MarkupConfig.getExamplesFolderPath();
         }
-        if(StringUtils.isNotBlank(descriptionsFolderPath)){
+        if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
             this.handWrittenDescriptionsEnabled = true;
-            this.descriptionsFolderPath = descriptionsFolderPath + "/" + PATHS.toLowerCase();
+            this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + PATHS.toLowerCase();
         }
         if(examplesEnabled){
             if (logger.isDebugEnabled()) {
@@ -96,42 +99,70 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
+    /**
+     * Builds the paths markup document.
+     *
+     * @return the the paths markup document
+     * @throws IOException
+     */
     @Override
-    public MarkupDocument build() throws IOException {
+    public MarkupDocument build(){
         paths();
         return this;
     }
 
     /**
-     * Builds all paths of the Swagger model
+     * Builds all paths of the Swagger model. Either grouped as-is or by tags.
      */
-    private void paths() throws IOException {
+    private void paths(){
         Map<String, Path> paths = swagger.getPaths();
         if(MapUtils.isNotEmpty(paths)) {
-            this.markupDocBuilder.sectionTitleLevel1(PATHS);
-            for (Map.Entry<String, Path> entry : paths.entrySet()) {
-                Path path = entry.getValue();
-                if(path != null) {
-                    path("GET", entry.getKey(), path.getGet());
-                    path("PUT", entry.getKey(), path.getPut());
-                    path("DELETE", entry.getKey(), path.getDelete());
-                    path("POST", entry.getKey(), path.getPost());
-                    path("PATCH", entry.getKey(), path.getPatch());
+            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                this.markupDocBuilder.sectionTitleLevel1(PATHS);
+                for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
+                    Path path = pathEntry.getValue();
+                    if(path != null) {
+                        createPathSections(pathEntry.getKey(), path);
+                    }
+                }
+            }else{
+                this.markupDocBuilder.sectionTitleLevel1(RESOURCES);
+                Multimap<String, Pair<String, Path>> pathsGroupedByTag = groupPathsByTag(paths);
+                Map<String, Tag> tagsMap = convertTagsListToMap(swagger.getTags());
+                for(String tagName : pathsGroupedByTag.keySet()){
+                    this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
+                    Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
+                    if(tagDescription.isPresent()) {
+                        this.markupDocBuilder.paragraph(tagDescription.get());
+                    }
+                    Collection<Pair<String, Path>> pathsOfTag = pathsGroupedByTag.get(tagName);
+                    for(Pair<String, Path> pathPair : pathsOfTag){
+                        Path path = pathPair.getValue();
+                        if(path != null) {
+                            createPathSections(pathPair.getKey(), path);
+                        }
+                    }
                 }
             }
         }
     }
 
+    private void createPathSections(String pathUrl, Path path){
+        for(Map.Entry<HttpMethod, Operation> operationEntry : path.getOperationMap().entrySet()){
+            String methodAndPath = operationEntry.getKey() + " " + pathUrl;
+            path(methodAndPath, operationEntry.getValue());
+        }
+    }
+
     /**
-     * Builds a path
+     * Builds a path.
      *
-     * @param httpMethod the HTTP method of the path
-     * @param resourcePath the URL of the path
+     * @param methodAndPath the Method of the operation and the URL of the path
      * @param operation the Swagger Operation
      */
-    private void path(String httpMethod, String resourcePath, Operation operation) throws IOException {
+    private void path(String methodAndPath, Operation operation) {
         if(operation != null){
-            pathTitle(httpMethod, resourcePath, operation);
+            pathTitle(methodAndPath, operation);
             descriptionSection(operation);
             parametersSection(operation);
             responsesSection(operation);
@@ -142,63 +173,89 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-    private void pathTitle(String httpMethod, String resourcePath, Operation operation) {
+    /**
+     * Adds the path title to the document. If the operation has a summary, the title is the summary.
+     * Otherwise the title is the method of the operation and the URL of the path.
+     *
+     * @param methodAndPath the Method of the operation and the URL of the path
+     * @param operation the Swagger Operation
+     */
+    private void pathTitle(String methodAndPath, Operation operation) {
         String summary = operation.getSummary();
         String title;
-        if(StringUtils.isNotBlank(summary)) {
+        if(isNotBlank(summary)) {
             title = summary;
-            this.markupDocBuilder.sectionTitleLevel2(title);
-            this.markupDocBuilder.listing(httpMethod + " " + resourcePath);
+            addPathTitle(title);
+            this.markupDocBuilder.listing(methodAndPath);
         }else{
-            title = httpMethod + " " + resourcePath;
-            this.markupDocBuilder.sectionTitleLevel2(title);
+            addPathTitle(methodAndPath);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("Path processed: {}", title);
+            logger.info("Path processed: {}", methodAndPath);
         }
     }
 
-    private void descriptionSection(Operation operation) throws IOException {
+    /**
+     * Adds a path title to the document.
+     *
+     * @param title the path title
+     */
+    private void addPathTitle(String title) {
+        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+            this.markupDocBuilder.sectionTitleLevel2(title);
+        }else{
+            this.markupDocBuilder.sectionTitleLevel3(title);
+        }
+    }
+
+    /**
+     * Adds a path description to the document.
+     *
+     * @param operation the Swagger Operation
+     */
+    private void descriptionSection(Operation operation) {
         if(handWrittenDescriptionsEnabled){
             String summary = operation.getSummary();
-            if(StringUtils.isNotBlank(summary)) {
+            if(isNotBlank(summary)) {
                 String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
-                String description = handWrittenPathDescription(operationFolder, DESCRIPTION_FILE_NAME);
-                if(StringUtils.isNotBlank(description)){
-                    this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
-                    this.markupDocBuilder.paragraph(description);
+                Optional<String> description = handWrittenPathDescription(operationFolder, DESCRIPTION_FILE_NAME);
+                if(description.isPresent()){
+                    pathDescription(description.get());
                 }else{
                     if (logger.isInfoEnabled()) {
                         logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
                     }
-                    pathDescription(operation);
+                    pathDescription(operation.getDescription());
                 }
             }else{
                 if (logger.isInfoEnabled()) {
                     logger.info("Hand-written description cannot be read, because summary of operation is empty. Trying to use description from Swagger source.");
                 }
-                pathDescription(operation);
+                pathDescription(operation.getDescription());
             }
         }else {
-            pathDescription(operation);
+            pathDescription(operation.getDescription());
         }
     }
 
-    private void pathDescription(Operation operation) {
-        String description = operation.getDescription();
-        if (StringUtils.isNotBlank(description)) {
-            this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
+    private void pathDescription(String description) {
+        if (isNotBlank(description)) {
+            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
+            }else{
+                this.markupDocBuilder.sectionTitleLevel4(DESCRIPTION);
+            }
             this.markupDocBuilder.paragraph(description);
         }
     }
 
-    private void parametersSection(Operation operation) throws IOException {
+    private void parametersSection(Operation operation) {
         List<Parameter> parameters = operation.getParameters();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<String> headerAndContent = new ArrayList<>();
             // Table header row
             List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            headerAndContent.add(StringUtils.join(header, DELIMITER));
+            headerAndContent.add(join(header, DELIMITER));
             for(Parameter parameter : parameters){
                 String type = ParameterUtils.getType(parameter, markupLanguage);
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
@@ -209,43 +266,61 @@ public class PathsDocument extends MarkupDocument {
                         parameterDescription(operation, parameter),
                         Boolean.toString(parameter.getRequired()), type,
                         ParameterUtils.getDefaultValue(parameter));
-                headerAndContent.add(StringUtils.join(content, DELIMITER));
+                headerAndContent.add(join(content, DELIMITER));
             }
-            this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
+            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
+            }else{
+                this.markupDocBuilder.sectionTitleLevel4(PARAMETERS);
+            }
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
     }
 
-    private String parameterDescription(Operation operation, Parameter parameter) throws IOException {
-        String description;
+    /**
+     * Retrieves the description of a parameter, or otherwise an empty String.
+     * If hand-written descriptions are enabled, it tries to load the description from a file.
+     * If the file cannot be read, the description the parameter is returned.
+     *
+     * @param operation the Swagger Operation
+     * @param parameter the Swagger Parameter
+     * @return the description of a parameter.
+     */
+    private String parameterDescription(Operation operation, Parameter parameter){
         if(handWrittenDescriptionsEnabled){
             String summary = operation.getSummary();
             String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
             String parameterName = parameter.getName();
-            if(StringUtils.isNotBlank(operationFolder) && StringUtils.isNotBlank(parameterName)) {
-                description = handWrittenPathDescription(operationFolder + "/" + parameterName, DESCRIPTION_FILE_NAME);
-                if(StringUtils.isBlank(description)) {
-                    if (logger.isInfoEnabled()) {
-                        logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
+            if(isNotBlank(operationFolder) && isNotBlank(parameterName)) {
+                Optional<String> description = handWrittenPathDescription(operationFolder + "/" + parameterName, DESCRIPTION_FILE_NAME);
+                if(description.isPresent()){
+                    return description.get();
+                }
+                else{
+                    if (logger.isWarnEnabled()) {
+                        logger.warn("Hand-written description file cannot be read. Trying to use description from Swagger source.");
                     }
-                    description = StringUtils.defaultString(parameter.getDescription());
+                    return defaultString(parameter.getDescription());
                 }
             }else{
-                if (logger.isInfoEnabled()) {
-                    logger.info("Hand-written description file cannot be read, because summary of operation or name of parameter is empty. Trying to use description from Swagger source.");
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Hand-written description file cannot be read, because summary of operation or name of parameter is empty. Trying to use description from Swagger source.");
                 }
-                description = StringUtils.defaultString(parameter.getDescription());
+                return defaultString(parameter.getDescription());
             }
         }else {
-            description = StringUtils.defaultString(parameter.getDescription());
+            return defaultString(parameter.getDescription());
         }
-        return description;
     }
 
     private void consumesSection(Operation operation) {
         List<String> consumes = operation.getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
-            this.markupDocBuilder.sectionTitleLevel3(CONSUMES);
+            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                this.markupDocBuilder.sectionTitleLevel3(CONSUMES);
+            }else{
+                this.markupDocBuilder.sectionTitleLevel4(CONSUMES);
+            }
             this.markupDocBuilder.unorderedList(consumes);
         }
 
@@ -254,45 +329,64 @@ public class PathsDocument extends MarkupDocument {
     private void producesSection(Operation operation) {
         List<String> produces = operation.getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
-            this.markupDocBuilder.sectionTitleLevel3(PRODUCES);
+            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                this.markupDocBuilder.sectionTitleLevel3(PRODUCES);
+            }else{
+                this.markupDocBuilder.sectionTitleLevel4(PRODUCES);
+            }
             this.markupDocBuilder.unorderedList(produces);
         }
     }
 
     private void tagsSection(Operation operation) {
-        List<String> tags = operation.getTags();
-        if(CollectionUtils.isNotEmpty(tags)){
-            this.markupDocBuilder.sectionTitleLevel3(TAGS);
-            this.markupDocBuilder.unorderedList(tags);
+        if(pathsGroupedBy.equals(GroupBy.AS_IS)) {
+            List<String> tags = operation.getTags();
+            if (CollectionUtils.isNotEmpty(tags)) {
+                this.markupDocBuilder.sectionTitleLevel3(TAGS);
+                this.markupDocBuilder.unorderedList(tags);
+            }
         }
     }
 
     /**
-     * Builds the example section of a Swagger Operation
+     * Builds the example section of a Swagger Operation. Tries to load the examples from
+     * curl-request.adoc, http-request.adoc and http-response.adoc or
+     * curl-request.md, http-request.md and http-response.md.
      *
      * @param operation the Swagger Operation
-     * @throws IOException if the example file is not readable
      */
-    private void examplesSection(Operation operation) throws IOException {
+    private void examplesSection(Operation operation) {
         if(examplesEnabled){
             String summary = operation.getSummary();
-            if(StringUtils.isNotBlank(summary)) {
+            if(isNotBlank(summary)) {
                 String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
-                String curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
-                if(StringUtils.isNotBlank(curlExample)){
-                    this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_CURL);
-                    this.markupDocBuilder.paragraph(curlExample);
+                Optional<String> curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
+                if(curlExample.isPresent()){
+                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_CURL);
+                    }else{
+                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_CURL);
+                    }
+                    this.markupDocBuilder.paragraph(curlExample.get());
                 }
 
-                String requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
-                if(StringUtils.isNotBlank(requestExample)){
-                    this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_REQUEST);
-                    this.markupDocBuilder.paragraph(requestExample);
+                Optional<String> requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
+                if(requestExample.isPresent()){
+                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_REQUEST);
+                    }else{
+                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_REQUEST);
+                    }
+                    this.markupDocBuilder.paragraph(requestExample.get());
                 }
-                String responseExample = example(exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
-                if(StringUtils.isNotBlank(responseExample)){
-                    this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_RESPONSE);
-                    this.markupDocBuilder.paragraph(responseExample);
+                Optional<String> responseExample = example(exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
+                if(responseExample.isPresent()){
+                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_RESPONSE);
+                    }else{
+                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_RESPONSE);
+                    }
+                    this.markupDocBuilder.paragraph(responseExample.get());
                 }
             }else{
                 if (logger.isWarnEnabled()) {
@@ -308,26 +402,31 @@ public class PathsDocument extends MarkupDocument {
      * @param exampleFolder the name of the folder where the example file resides
      * @param exampleFileName the name of the example file
      * @return the content of the file
-     * @throws IOException
      */
-    private String example(String exampleFolder, String exampleFileName) throws IOException {
+    private Optional<String> example(String exampleFolder, String exampleFileName) {
         for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
             java.nio.file.Path path = Paths.get(examplesFolderPath, exampleFolder, exampleFileName + fileNameExtension);
             if (Files.isReadable(path)) {
                 if (logger.isInfoEnabled()) {
                     logger.info("Example file processed: {}", path);
                 }
-                return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim();
+                try {
+                    return Optional.fromNullable(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                } catch (IOException e) {
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(String.format("Failed to read example file: %s", path),  e);
+                    }
+                }
             } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Example file is not readable: {}", path);
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Example file is not readable: {}", path);
                 }
             }
         }
         if (logger.isWarnEnabled()) {
-            logger.info("No example file found with correct file name extension in folder: {}", Paths.get(examplesFolderPath, exampleFolder));
+            logger.warn("No example file found with correct file name extension in folder: {}", Paths.get(examplesFolderPath, exampleFolder));
         }
-        return null;
+        return Optional.absent();
     }
 
     /**
@@ -336,26 +435,31 @@ public class PathsDocument extends MarkupDocument {
      * @param descriptionFolder the name of the folder where the description file resides
      * @param descriptionFileName the name of the description file
      * @return the content of the file
-     * @throws IOException
      */
-    private String handWrittenPathDescription(String descriptionFolder, String descriptionFileName) throws IOException {
+    private Optional<String> handWrittenPathDescription(String descriptionFolder, String descriptionFileName){
         for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
             java.nio.file.Path path = Paths.get(descriptionsFolderPath, descriptionFolder, descriptionFileName + fileNameExtension);
             if (Files.isReadable(path)) {
                 if (logger.isInfoEnabled()) {
                     logger.info("Description file processed: {}", path);
                 }
-                return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim();
+                try {
+                    return Optional.fromNullable(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                } catch (IOException e) {
+                    if (logger.isWarnEnabled()) {
+                        logger.warn(String.format("Failed to read description file: %s", path),  e);
+                    }
+                }
             } else {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Description file is not readable: {}", path);
+                if (logger.isWarnEnabled()) {
+                    logger.warn("Description file is not readable: {}", path);
                 }
             }
         }
         if (logger.isWarnEnabled()) {
-            logger.info("No description file found with correct file name extension in folder: {}", Paths.get(descriptionsFolderPath, descriptionFolder));
+            logger.warn("No description file found with correct file name extension in folder: {}", Paths.get(descriptionsFolderPath, descriptionFolder));
         }
-        return null;
+        return Optional.absent();
     }
 
     private void responsesSection(Operation operation) {
@@ -373,7 +477,11 @@ public class PathsDocument extends MarkupDocument {
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
                 }
             }
-            this.markupDocBuilder.sectionTitleLevel3(RESPONSES);
+            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                this.markupDocBuilder.sectionTitleLevel3(RESPONSES);
+            }else{
+                this.markupDocBuilder.sectionTitleLevel4(RESPONSES);
+            }
             this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
     }

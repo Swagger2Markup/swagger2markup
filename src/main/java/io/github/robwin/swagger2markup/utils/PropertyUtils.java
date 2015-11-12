@@ -18,17 +18,25 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import io.swagger.models.properties.*;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.swagger.models.properties.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.Objects;
 
+import static org.apache.commons.lang3.StringUtils.*;
+
 public final class PropertyUtils {
 
+    /**
+     * Retrieves the type and format of a property.
+     *
+     * @param property the property
+     * @param markupLanguage the markup language which is used to generate the files
+     * @return the type of the property
+     */
     public static String getType(Property property, MarkupLanguage markupLanguage){
         Validate.notNull(property, "property must not be null!");
         String type;
@@ -46,21 +54,27 @@ public final class PropertyUtils {
             StringProperty stringProperty = (StringProperty)property;
             List<String> enums = stringProperty.getEnum();
             if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + StringUtils.join(enums, ", ") + ")";
+                type = "enum" + " (" + join(enums, ", ") + ")";
             }else{
                 type = property.getType();
             }
         }
         else{
-            if(StringUtils.isNotBlank(property.getFormat())){
-                type = StringUtils.defaultString(property.getType()) + " (" + property.getFormat() + ")";
+            if(isNotBlank(property.getFormat())){
+                type = defaultString(property.getType()) + " (" + property.getFormat() + ")";
             }else{
                 type = property.getType();
             }
         }
-        return StringUtils.defaultString(type);
+        return defaultString(type);
     }
 
+    /**
+     * Retrieves the default value of a property, or otherwise returns an empty String.
+     *
+     * @param property the property
+     * @return the default value of the property, or otherwise an empty String
+     */
     public static String getDefaultValue(Property property){
         Validate.notNull(property, "property must not be null!");
         String defaultValue = "";

@@ -1,0 +1,48 @@
+swagger: '2.0'
+info:
+  description: TODO
+  version: 0.0.1
+  title: API Spec
+  termsOfService: TODO
+basePath: /v1
+schemes:
+  - http
+paths:
+  /aaa:
+    post:
+      tags:
+        - AAA
+      summary: TODO
+      description: TODO
+      operationId: aaa
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: TODO
+          required: true
+          schema:
+            $ref: '#/definitions/AAA'
+      responses:
+        '200':
+          description: Success
+        '405':
+          description: Invalid data
+definitions:
+  AAA:
+    allOf:
+      - $ref: '#/definitions/BBB'
+      - type: object
+        properties:
+          propA:
+            type: string
+          propB:
+            type: string
+  BBB:
+    type: object
+    properties:
+      propA:
+        type: string

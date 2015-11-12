@@ -17,16 +17,12 @@
  *
  */
 package io.github.robwin.swagger2markup;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.builder.document.*;
 import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
-import io.swagger.util.Json;
-import io.swagger.util.Yaml;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,31 +36,16 @@ import java.nio.charset.StandardCharsets;
 public class Swagger2MarkupConverter {
     private static final Logger LOG = LoggerFactory.getLogger(Swagger2MarkupConverter.class);
 
-    private final Swagger swagger;
-    private final MarkupLanguage markupLanguage;
-    private final String examplesFolderPath;
-    private final String schemasFolderPath;
-    private final String descriptionsFolderPath;
-    private final boolean separatedDefinitions;
+    private final Swagger2MarkupConfig swagger2MarkupConfig;
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
 
     /**
-     * @param markupLanguage the markup language which is used to generate the files
-     * @param swagger the Swagger object
-     * @param examplesFolderPath the folderPath where examples are stored
-     * @param schemasFolderPath the folderPath where (XML, JSON)-Schema  files are stored
-     * @param descriptionsFolderPath the folderPath where descriptions are stored
-     * @param separatedDefinitions create separate definition files for each model definition.
+     * @param swagger2MarkupConfig the configuration
      */
-    Swagger2MarkupConverter(MarkupLanguage markupLanguage, Swagger swagger, String examplesFolderPath, String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions){
-        this.markupLanguage = markupLanguage;
-        this.swagger = swagger;
-        this.examplesFolderPath = examplesFolderPath;
-        this.schemasFolderPath = schemasFolderPath;
-        this.descriptionsFolderPath = descriptionsFolderPath;
-        this.separatedDefinitions = separatedDefinitions;
+    Swagger2MarkupConverter(Swagger2MarkupConfig swagger2MarkupConfig){
+        this.swagger2MarkupConfig = swagger2MarkupConfig;
     }
 
     /**
@@ -85,33 +66,24 @@ public class Swagger2MarkupConverter {
      * @return a Swagger2MarkupConverter
      */
     public static Builder from(Swagger swagger){
-        Validate.notNull(swagger, "swagger must not be null!");
+        Validate.notNull(swagger, "Swagger must not be null!");
         return new Builder(swagger);
     }
 
     /**
      * Creates a Swagger2MarkupConverter.Builder from a given Swagger YAML or JSON String.
      *
-     * @param swagger the Swagger YAML or JSON String.
+     * @param swaggerAsString the Swagger YAML or JSON String.
      * @return a Swagger2MarkupConverter
      * @throws java.io.IOException if String can not be parsed
      */
-    public static Builder fromString(String swagger) throws IOException {
-        Validate.notEmpty(swagger, "swagger must not be null!");
-        ObjectMapper mapper;
-        if(swagger.trim().startsWith("{")) {
-            mapper = Json.mapper();
-        }else {
-            mapper = Yaml.mapper();
-        }
-        JsonNode rootNode = mapper.readTree(swagger);
-
-        // must have swagger node set
-        JsonNode swaggerNode = rootNode.get("swagger");
-        if(swaggerNode == null)
+    public static Builder fromString(String swaggerAsString) throws IOException {
+        Validate.notEmpty(swaggerAsString, "Swagger String must not be null!");
+        Swagger swagger = new SwaggerParser().parse(swaggerAsString);
+        if(swagger == null)
             throw new IllegalArgumentException("Swagger String is in the wrong format");
 
-        return new Builder(mapper.convertValue(rootNode, Swagger.class));
+        return new Builder(swagger);
     }
 
     /**
@@ -143,9 +115,9 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(String directory) throws IOException {
-        new OverviewDocument(swagger, markupLanguage).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
-        new PathsDocument(swagger, markupLanguage, examplesFolderPath, descriptionsFolderPath).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
-        new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, descriptionsFolderPath, separatedDefinitions, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
+        new OverviewDocument(swagger2MarkupConfig).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
+        new PathsDocument(swagger2MarkupConfig).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
+        new DefinitionsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
     }
 
     /**
@@ -153,10 +125,10 @@ public class Swagger2MarkupConverter {
 
      * @return a the document as a String
      */
-    private String buildDocuments() throws IOException {
-        return new OverviewDocument(swagger, markupLanguage).build().toString()
-                .concat(new PathsDocument(swagger, markupLanguage, examplesFolderPath, schemasFolderPath).build().toString()
-                .concat(new DefinitionsDocument(swagger, markupLanguage, schemasFolderPath, schemasFolderPath, false, null).build().toString()));
+    private String buildDocuments() {
+        return new OverviewDocument(swagger2MarkupConfig).build().toString()
+                .concat(new PathsDocument(swagger2MarkupConfig).build().toString()
+                .concat(new DefinitionsDocument(swagger2MarkupConfig, null).build().toString()));
     }
 
 
@@ -166,6 +138,8 @@ public class Swagger2MarkupConverter {
         private String schemasFolderPath;
         private String descriptionsFolderPath;
         private boolean separatedDefinitions;
+        private GroupBy pathsGroupedBy = GroupBy.AS_IS;
+        private OrderBy definitionsOrderedBy = OrderBy.NATURAL;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
 
         /**
@@ -190,7 +164,7 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build(){
-            return new Swagger2MarkupConverter(markupLanguage, swagger, examplesFolderPath, schemasFolderPath, descriptionsFolderPath, separatedDefinitions);
+            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath, schemasFolderPath, descriptionsFolderPath, separatedDefinitions, pathsGroupedBy, definitionsOrderedBy));
         }
 
         /**
@@ -248,11 +222,34 @@ public class Swagger2MarkupConverter {
 
         /**
          * Customize the Swagger data in any useful way
+         *
          * @param preProcessor function object to mutate the swagger object
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder preProcessSwagger(Consumer<Swagger> preProcessor) {
             preProcessor.accept(this.swagger);
+            return this;
+        }
+
+        /**
+         * Specifies if the paths should be grouped by tags or stay as-is.
+         *
+         * @param pathsGroupedBy the GroupBy enum
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPathsGroupedBy(GroupBy pathsGroupedBy) {
+            this.pathsGroupedBy = pathsGroupedBy;
+            return this;
+        }
+
+        /**
+         * Specifies if the definitions should be ordered by natural ordering or stay as-is.
+         *
+         * @param definitionsOrderedBy the OrderBy enum
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withDefinitionsOrderedBy(OrderBy definitionsOrderedBy) {
+            this.definitionsOrderedBy = definitionsOrderedBy;
             return this;
         }
     }
