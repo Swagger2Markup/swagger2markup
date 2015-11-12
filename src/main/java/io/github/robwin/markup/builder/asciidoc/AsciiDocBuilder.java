@@ -61,6 +61,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder sectionTitleLevel4(String title){
+        sectionTitleLevel3(AsciiDoc.SECTION_TITLE_LEVEL4, title);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder paragraph(String text){
         paragraph(AsciiDoc.HARDBREAKS, text);
         return this;
