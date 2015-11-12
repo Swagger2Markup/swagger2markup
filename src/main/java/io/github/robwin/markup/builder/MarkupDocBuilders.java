@@ -27,7 +27,7 @@ import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
  */
 public final class MarkupDocBuilders {
 
-    private MarkupDocBuilders(){};
+    private MarkupDocBuilders(){}
 
     public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage){
         switch(markupLanguage){

@@ -62,6 +62,12 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
+    public MarkupDocBuilder sectionTitleLevel4(String title){
+        sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL4, title);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder paragraph(String text){
         paragraph(Markdown.HARDBREAKS, text);
         return this;

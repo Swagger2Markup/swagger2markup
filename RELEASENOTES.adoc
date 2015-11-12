@@ -14,3 +14,6 @@
 
 === Version 0.1.4
 * Fixed SECTION_TITLE_LEVEL3 in Markdown enum
+
+=== Version 0.1.5
+* Added SECTION_TITLE_LEVEL4

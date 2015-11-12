@@ -36,6 +36,8 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder sectionTitleLevel3(String title);
 
+    MarkupDocBuilder sectionTitleLevel4(String title);
+
     MarkupDocBuilder textLine(String text);
 
     MarkupDocBuilder paragraph(String text);

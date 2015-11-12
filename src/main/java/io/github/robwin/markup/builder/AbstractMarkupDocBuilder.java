@@ -57,6 +57,10 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
+    protected void sectionTitleLevel4(Markup markup, String title){
+        documentBuilder.append(markup).append(title).append(newLine);
+    }
+
     @Override
     public MarkupDocBuilder textLine(String text){
         documentBuilder.append(text).append(newLine);
