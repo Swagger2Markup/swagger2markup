@@ -38,9 +38,9 @@ bintray {
     pkg {
         repo = 'maven'
         name = 'swagger2markup'
-        websiteUrl = 'https://github.com/RobWin/swagger2markup'
-        issueTrackerUrl = 'https://github.com/RobWin/swagger2markup/issues'
-        vcsUrl = 'https://github.com/RobWin/swagger2markup.git'
+        websiteUrl = 'https://github.com/Swagger2Markup/swagger2markup'
+        issueTrackerUrl = 'https://github.com/Swagger2Markup/swagger2markup/issues'
+        vcsUrl = 'https://github.com/Swagger2Markup/swagger2markup.git'
         desc = 'A Swagger to Markup (AsciiDoc and Markdown) converter.'
         licenses = ['Apache-2.0']
         version {
@@ -76,15 +76,15 @@ publishing {
 
                 root.appendNode('name', 'swagger2markup')
                 root.appendNode('packaging', 'jar')
-                root.appendNode('url', 'https://github.com/RobWin/swagger2markup')
+                root.appendNode('url', 'https://github.com/Swagger2Markup/swagger2markup')
                 root.appendNode('description', 'A Swagger to Markup (AsciiDoc and Markdown) converter.')
 
                 def license = root.appendNode('licenses').appendNode('license')
                 license.appendNode('name', 'Apache-2.0')
-                license.appendNode('url', 'https://github.com/RobWin/swagger2markup/blob/master/LICENSE.txt')
+                license.appendNode('url', 'https://github.com/Swagger2Markup/swagger2markup/blob/master/LICENSE.txt')
                 license.appendNode('distribution', 'repo')
 
-                root.appendNode('scm').appendNode('url', 'https://github.com/RobWin/swagger2markup.git')
+                root.appendNode('scm').appendNode('url', 'https://github.com/Swagger2Markup/swagger2markup.git')
 
                 def developers = root.appendNode('developers')
                 devs.each {
