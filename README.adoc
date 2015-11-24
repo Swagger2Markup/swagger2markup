@@ -11,9 +11,9 @@ The primary goal of this project is to *simplify the generation of an up-to-date
 
 For example:
 
-image::images/Swagger2Markup.png[]
+image::images/Swagger2Markup.PNG[]
 
-image::images/Swagger2Markup_definitions.png[]
+image::images/Swagger2Markup_definitions.PNG[]
 
 
 Swagger2Markup converts a Swagger JSON or YAML file into several *AsciiDoc* or *GitHub Flavored Markdown* documents which can be combined with hand-written documentation. The Swagger source file can be located locally or remotely via HTTP. Swagger2Markup supports the Swagger 1.2 and 2.0 specification. Internally it uses the _official_ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/RobWin/markup-document-builder[markup-document-builder]. 
