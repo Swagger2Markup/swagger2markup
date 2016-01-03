@@ -21,31 +21,58 @@ package io.github.robwin.swagger2markup.builder.document;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.swagger.models.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
 
 public class OverviewDocument extends MarkupDocument {
 
-    private static final String OVERVIEW = "Overview";
-    private static final String CURRENT_VERSION = "Version information";
-    private static final String VERSION = "Version: ";
-    private static final String CONTACT_INFORMATION = "Contact information";
-    private static final String CONTACT_NAME = "Contact: ";
-    private static final String CONTACT_EMAIL = "Contact Email: ";
-    private static final String LICENSE_INFORMATION = "License information";
-    private static final String LICENSE = "License: ";
-    private static final String LICENSE_URL = "License URL: ";
-    private static final String TERMS_OF_SERVICE = "Terms of service: ";
-    private static final String URI_SCHEME = "URI scheme";
-    private static final String HOST = "Host: ";
-    private static final String BASE_PATH = "BasePath: ";
-    private static final String SCHEMES = "Schemes: ";
+    private final String OVERVIEW;
+    private final String CURRENT_VERSION;
+    private final String VERSION;
+    private final String CONTACT_INFORMATION;
+    private final String CONTACT_NAME;
+    private final String CONTACT_EMAIL;
+    private final String LICENSE_INFORMATION;
+    private final String LICENSE;
+    private final String LICENSE_URL;
+    private final String TERMS_OF_SERVICE;
+    private final String URI_SCHEME;
+    private final String HOST;
+    private final String BASE_PATH;
+    private final String SCHEMES;
 
     public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
+
+        Properties properties = new Properties();
+        try {
+            properties.load(OverviewDocument.class.getResourceAsStream(String.format("/lang/overview_%s.properties",
+                    swagger2MarkupConfig.getOutputLanguage().toString())));
+        } catch (IOException e)
+        {
+            if (logger.isErrorEnabled()) {
+                logger.error(e.getMessage());
+            }
+        }
+        OVERVIEW = properties.getProperty("overview");
+        CURRENT_VERSION = properties.getProperty("current_version");
+        VERSION = properties.getProperty("version");
+        CONTACT_INFORMATION = properties.getProperty("contact_information");
+        CONTACT_NAME = properties.getProperty("contact_name");
+        CONTACT_EMAIL = properties.getProperty("contact_email");
+        LICENSE_INFORMATION = properties.getProperty("license_information");
+        LICENSE = properties.getProperty("license");
+        LICENSE_URL = properties.getProperty("license_url");
+        TERMS_OF_SERVICE = properties.getProperty("terms_of_service");
+        URI_SCHEME = properties.getProperty("uri_scheme");
+        HOST = properties.getProperty("host");
+        BASE_PATH = properties.getProperty("base_path");
+        SCHEMES = properties.getProperty("schemes");
     }
 
     /**
