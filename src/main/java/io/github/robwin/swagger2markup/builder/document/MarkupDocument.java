@@ -18,16 +18,17 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
-import io.swagger.models.Swagger;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.swagger.models.Swagger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ResourceBundle;
 
 /**
  * @author Robert Winkler
@@ -35,15 +36,15 @@ import java.nio.charset.Charset;
 public abstract class MarkupDocument {
 
     protected static final String DELIMITER = "|";
-    protected static final String DEFAULT_COLUMN = "Default";
-    protected static final String REQUIRED_COLUMN = "Required";
-    protected static final String SCHEMA_COLUMN = "Schema";
-    protected static final String NAME_COLUMN = "Name";
-    protected static final String DESCRIPTION_COLUMN = "Description";
-    protected static final String DESCRIPTION = DESCRIPTION_COLUMN;
-    protected static final String PRODUCES = "Produces";
-    protected static final String CONSUMES = "Consumes";
-    protected static final String TAGS = "Tags";
+    protected final String DEFAULT_COLUMN;
+    protected final String REQUIRED_COLUMN;
+    protected final String SCHEMA_COLUMN;
+    protected final String NAME_COLUMN;
+    protected final String DESCRIPTION_COLUMN;
+    protected final String DESCRIPTION;
+    protected final String PRODUCES;
+    protected final String CONSUMES;
+    protected final String TAGS;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;
@@ -53,6 +54,18 @@ public abstract class MarkupDocument {
         this.swagger = swagger2MarkupConfig.getSwagger();
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        DEFAULT_COLUMN = labels.getString("default_column");
+        REQUIRED_COLUMN = labels.getString("required_column");
+        SCHEMA_COLUMN = labels.getString("schema_column");
+        NAME_COLUMN = labels.getString("name_column");
+        DESCRIPTION_COLUMN = labels.getString("description_column");
+        DESCRIPTION = DESCRIPTION_COLUMN;
+        PRODUCES = labels.getString("produces");
+        CONSUMES = labels.getString("consumes");
+        TAGS = labels.getString("tags");
     }
 
     /**

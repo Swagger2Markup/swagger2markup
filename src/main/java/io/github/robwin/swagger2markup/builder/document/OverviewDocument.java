@@ -23,29 +23,47 @@ import io.swagger.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
 
 public class OverviewDocument extends MarkupDocument {
 
-    private static final String OVERVIEW = "Overview";
-    private static final String CURRENT_VERSION = "Version information";
-    private static final String VERSION = "Version: ";
-    private static final String CONTACT_INFORMATION = "Contact information";
-    private static final String CONTACT_NAME = "Contact: ";
-    private static final String CONTACT_EMAIL = "Contact Email: ";
-    private static final String LICENSE_INFORMATION = "License information";
-    private static final String LICENSE = "License: ";
-    private static final String LICENSE_URL = "License URL: ";
-    private static final String TERMS_OF_SERVICE = "Terms of service: ";
-    private static final String URI_SCHEME = "URI scheme";
-    private static final String HOST = "Host: ";
-    private static final String BASE_PATH = "BasePath: ";
-    private static final String SCHEMES = "Schemes: ";
+    private final String OVERVIEW;
+    private final String CURRENT_VERSION;
+    private final String VERSION;
+    private final String CONTACT_INFORMATION;
+    private final String CONTACT_NAME;
+    private final String CONTACT_EMAIL;
+    private final String LICENSE_INFORMATION;
+    private final String LICENSE;
+    private final String LICENSE_URL;
+    private final String TERMS_OF_SERVICE;
+    private final String URI_SCHEME;
+    private final String HOST;
+    private final String BASE_PATH;
+    private final String SCHEMES;
 
     public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
+
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        OVERVIEW = labels.getString("overview");
+        CURRENT_VERSION = labels.getString("current_version");
+        VERSION = labels.getString("version");
+        CONTACT_INFORMATION = labels.getString("contact_information");
+        CONTACT_NAME = labels.getString("contact_name");
+        CONTACT_EMAIL = labels.getString("contact_email");
+        LICENSE_INFORMATION = labels.getString("license_information");
+        LICENSE = labels.getString("license");
+        LICENSE_URL = labels.getString("license_url");
+        TERMS_OF_SERVICE = labels.getString("terms_of_service");
+        URI_SCHEME = labels.getString("uri_scheme");
+        HOST = labels.getString("host");
+        BASE_PATH = labels.getString("base_path");
+        SCHEMES = labels.getString("schemes");
     }
 
     /**

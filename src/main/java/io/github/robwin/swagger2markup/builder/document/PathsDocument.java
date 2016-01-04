@@ -47,20 +47,20 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class PathsDocument extends MarkupDocument {
 
-    private static final String PATHS = "Paths";
-    private static final String RESOURCES = "Resources";
-    private static final String PARAMETERS = "Parameters";
-    private static final String RESPONSES = "Responses";
-    private static final String EXAMPLE_CURL = "Example CURL request";
-    private static final String EXAMPLE_REQUEST = "Example HTTP request";
-    private static final String EXAMPLE_RESPONSE = "Example HTTP response";
-    private static final String TYPE_COLUMN = "Type";
-    private static final String HTTP_CODE_COLUMN = "HTTP Code";
-    private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
-    private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
-    private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
-    private static final String DESCRIPTION_FILE_NAME = "description";
-    private static final String PARAMETER = "Parameter";
+    private final String PATHS;
+    private final String RESOURCES;
+    private final String PARAMETERS;
+    private final String RESPONSES;
+    private final String EXAMPLE_CURL;
+    private final String EXAMPLE_REQUEST;
+    private final String EXAMPLE_RESPONSE;
+    private final String TYPE_COLUMN;
+    private final String HTTP_CODE_COLUMN;
+    private final String REQUEST_EXAMPLE_FILE_NAME;
+    private final String RESPONSE_EXAMPLE_FILE_NAME;
+    private final String CURL_EXAMPLE_FILE_NAME;
+    private final String DESCRIPTION_FILE_NAME;
+    private final String PARAMETER;
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
@@ -70,6 +70,24 @@ public class PathsDocument extends MarkupDocument {
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
+
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        PATHS = labels.getString("paths");
+        RESOURCES = labels.getString("resources");
+        PARAMETERS = labels.getString("parameters");
+        RESPONSES = labels.getString("responses");
+        EXAMPLE_CURL = labels.getString("example_curl");
+        EXAMPLE_REQUEST = labels.getString("example_request");
+        EXAMPLE_RESPONSE = labels.getString("example_response");
+        TYPE_COLUMN = labels.getString("type_column");
+        HTTP_CODE_COLUMN = labels.getString("http_code_column");
+        REQUEST_EXAMPLE_FILE_NAME = labels.getString("request_example_file_name");
+        RESPONSE_EXAMPLE_FILE_NAME = labels.getString("response_example_file_name");
+        CURL_EXAMPLE_FILE_NAME = labels.getString("curl_example_file_name");
+        DESCRIPTION_FILE_NAME = labels.getString("description_file_name");
+        PARAMETER = labels.getString("parameter");
+
         this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
             this.examplesEnabled = true;
@@ -103,7 +121,6 @@ public class PathsDocument extends MarkupDocument {
      * Builds the paths markup document.
      *
      * @return the the paths markup document
-     * @throws IOException
      */
     @Override
     public MarkupDocument build(){

@@ -141,6 +141,7 @@ public class Swagger2MarkupConverter {
         private GroupBy pathsGroupedBy = GroupBy.AS_IS;
         private OrderBy definitionsOrderedBy = OrderBy.NATURAL;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
+        private Language outputLanguage = Language.EN;
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -164,7 +165,9 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build(){
-            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath, schemasFolderPath, descriptionsFolderPath, separatedDefinitions, pathsGroupedBy, definitionsOrderedBy));
+            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
+                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, pathsGroupedBy, definitionsOrderedBy,
+                    outputLanguage));
         }
 
         /**
@@ -250,6 +253,17 @@ public class Swagger2MarkupConverter {
          */
         public Builder withDefinitionsOrderedBy(OrderBy definitionsOrderedBy) {
             this.definitionsOrderedBy = definitionsOrderedBy;
+            return this;
+        }
+
+        /**
+         * Specifies labels language of output files
+         *
+         * @param language the enum
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withOutputLanguage(Language language) {
+            this.outputLanguage = language;
             return this;
         }
     }

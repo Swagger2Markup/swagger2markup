@@ -20,6 +20,7 @@ package io.github.robwin.swagger2markup.config;
 
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.GroupBy;
+import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.swagger.models.Swagger;
 
@@ -33,6 +34,7 @@ public class Swagger2MarkupConfig {
     private final boolean separatedDefinitions;
     private final GroupBy pathsGroupedBy;
     private final OrderBy definitionsOrderedBy;
+    private final Language outputLanguage;
 
     /**
      * @param swagger the Swagger source
@@ -43,8 +45,11 @@ public class Swagger2MarkupConfig {
      * @param separatedDefinitions specified if in addition to the definitions file, also separate definition files for each model definition should be created
      * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
+     * @param outputLanguage specifies language of labels in output files
      */
-    public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath, String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy) {
+    public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
+                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions,
+                                GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -53,6 +58,7 @@ public class Swagger2MarkupConfig {
         this.separatedDefinitions = separatedDefinitions;
         this.pathsGroupedBy = pathsGroupedBy;
         this.definitionsOrderedBy = definitionsOrderedBy;
+        this.outputLanguage = outputLanguage;
     }
 
     public Swagger getSwagger() {
@@ -83,8 +89,11 @@ public class Swagger2MarkupConfig {
         return pathsGroupedBy;
     }
 
-
     public OrderBy getDefinitionsOrderedBy() {
         return definitionsOrderedBy;
+    }
+
+    public Language getOutputLanguage() {
+        return outputLanguage;
     }
 }

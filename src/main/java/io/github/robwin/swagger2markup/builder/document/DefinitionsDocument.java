@@ -46,10 +46,10 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class DefinitionsDocument extends MarkupDocument {
 
-    private static final String DEFINITIONS = "Definitions";
+    private final String DEFINITIONS;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
-    private static final String JSON_SCHEMA = "JSON Schema";
-    private static final String XML_SCHEMA = "XML Schema";
+    private final String JSON_SCHEMA;
+    private final String XML_SCHEMA;
     private static final String JSON_SCHEMA_EXTENSION = ".json";
     private static final String XML_SCHEMA_EXTENSION = ".xsd";
     private static final String JSON = "json";
@@ -65,6 +65,13 @@ public class DefinitionsDocument extends MarkupDocument {
 
     public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
         super(swagger2MarkupConfig);
+
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        DEFINITIONS = labels.getString("definitions");
+        JSON_SCHEMA = labels.getString("json_schema");
+        XML_SCHEMA = labels.getString("xml_schema");
+
         this.definitionsOrderedBy = swagger2MarkupConfig.getDefinitionsOrderedBy();
         if(isNotBlank(swagger2MarkupConfig.getSchemasFolderPath())){
             this.schemasEnabled = true;
