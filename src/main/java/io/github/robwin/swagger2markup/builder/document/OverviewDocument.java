@@ -21,10 +21,9 @@ package io.github.robwin.swagger2markup.builder.document;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.swagger.models.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
@@ -49,30 +48,22 @@ public class OverviewDocument extends MarkupDocument {
     public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
 
-        Properties properties = new Properties();
-        try {
-            properties.load(OverviewDocument.class.getResourceAsStream(String.format("/lang/overview_%s.properties",
-                    swagger2MarkupConfig.getOutputLanguage().toString())));
-        } catch (IOException e)
-        {
-            if (logger.isErrorEnabled()) {
-                logger.error(e.getMessage());
-            }
-        }
-        OVERVIEW = properties.getProperty("overview");
-        CURRENT_VERSION = properties.getProperty("current_version");
-        VERSION = properties.getProperty("version");
-        CONTACT_INFORMATION = properties.getProperty("contact_information");
-        CONTACT_NAME = properties.getProperty("contact_name");
-        CONTACT_EMAIL = properties.getProperty("contact_email");
-        LICENSE_INFORMATION = properties.getProperty("license_information");
-        LICENSE = properties.getProperty("license");
-        LICENSE_URL = properties.getProperty("license_url");
-        TERMS_OF_SERVICE = properties.getProperty("terms_of_service");
-        URI_SCHEME = properties.getProperty("uri_scheme");
-        HOST = properties.getProperty("host");
-        BASE_PATH = properties.getProperty("base_path");
-        SCHEMES = properties.getProperty("schemes");
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        OVERVIEW = labels.getString("overview");
+        CURRENT_VERSION = labels.getString("current_version");
+        VERSION = labels.getString("version");
+        CONTACT_INFORMATION = labels.getString("contact_information");
+        CONTACT_NAME = labels.getString("contact_name");
+        CONTACT_EMAIL = labels.getString("contact_email");
+        LICENSE_INFORMATION = labels.getString("license_information");
+        LICENSE = labels.getString("license");
+        LICENSE_URL = labels.getString("license_url");
+        TERMS_OF_SERVICE = labels.getString("terms_of_service");
+        URI_SCHEME = labels.getString("uri_scheme");
+        HOST = labels.getString("host");
+        BASE_PATH = labels.getString("base_path");
+        SCHEMES = labels.getString("schemes");
     }
 
     /**

@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 /**
  * @author Robert Winkler
@@ -55,24 +55,17 @@ public abstract class MarkupDocument {
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
 
-        Properties properties = new Properties();
-        try {
-            properties.load(MarkupDocument.class.getResourceAsStream(String.format("/lang/markup_%s.properties",
-                    swagger2MarkupConfig.getOutputLanguage().toString())));
-        } catch (IOException e) {
-            if (logger.isErrorEnabled()) {
-                logger.error(e.getMessage());
-            }
-        }
-        DEFAULT_COLUMN = properties.getProperty("default_column");
-        REQUIRED_COLUMN = properties.getProperty("required_column");
-        SCHEMA_COLUMN = properties.getProperty("schema_column");
-        NAME_COLUMN = properties.getProperty("name_column");
-        DESCRIPTION_COLUMN = properties.getProperty("description_column");
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        DEFAULT_COLUMN = labels.getString("default_column");
+        REQUIRED_COLUMN = labels.getString("required_column");
+        SCHEMA_COLUMN = labels.getString("schema_column");
+        NAME_COLUMN = labels.getString("name_column");
+        DESCRIPTION_COLUMN = labels.getString("description_column");
         DESCRIPTION = DESCRIPTION_COLUMN;
-        PRODUCES = properties.getProperty("produces");
-        CONSUMES = properties.getProperty("consumes");
-        TAGS = properties.getProperty("tags");
+        PRODUCES = labels.getString("produces");
+        CONSUMES = labels.getString("consumes");
+        TAGS = labels.getString("tags");
     }
 
     /**

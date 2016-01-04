@@ -71,29 +71,22 @@ public class PathsDocument extends MarkupDocument {
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
 
-        Properties properties = new Properties();
-        try {
-            properties.load(MarkupDocument.class.getResourceAsStream(String.format("/lang/paths_%s.properties",
-                    swagger2MarkupConfig.getOutputLanguage().toString())));
-        } catch (IOException e) {
-            if (logger.isErrorEnabled()) {
-                logger.error(e.getMessage());
-            }
-        }
-        PATHS = properties.getProperty("paths");
-        RESOURCES = properties.getProperty("resources");
-        PARAMETERS = properties.getProperty("parameters");
-        RESPONSES = properties.getProperty("responses");
-        EXAMPLE_CURL = properties.getProperty("example_curl");
-        EXAMPLE_REQUEST = properties.getProperty("example_request");
-        EXAMPLE_RESPONSE = properties.getProperty("example_response");
-        TYPE_COLUMN = properties.getProperty("type_column");
-        HTTP_CODE_COLUMN = properties.getProperty("http_code_column");
-        REQUEST_EXAMPLE_FILE_NAME = properties.getProperty("request_example_file_name");
-        RESPONSE_EXAMPLE_FILE_NAME = properties.getProperty("response_example_file_name");
-        CURL_EXAMPLE_FILE_NAME = properties.getProperty("curl_example_file_name");
-        DESCRIPTION_FILE_NAME = properties.getProperty("description_file_name");
-        PARAMETER = properties.getProperty("parameter");
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        PATHS = labels.getString("paths");
+        RESOURCES = labels.getString("resources");
+        PARAMETERS = labels.getString("parameters");
+        RESPONSES = labels.getString("responses");
+        EXAMPLE_CURL = labels.getString("example_curl");
+        EXAMPLE_REQUEST = labels.getString("example_request");
+        EXAMPLE_RESPONSE = labels.getString("example_response");
+        TYPE_COLUMN = labels.getString("type_column");
+        HTTP_CODE_COLUMN = labels.getString("http_code_column");
+        REQUEST_EXAMPLE_FILE_NAME = labels.getString("request_example_file_name");
+        RESPONSE_EXAMPLE_FILE_NAME = labels.getString("response_example_file_name");
+        CURL_EXAMPLE_FILE_NAME = labels.getString("curl_example_file_name");
+        DESCRIPTION_FILE_NAME = labels.getString("description_file_name");
+        PARAMETER = labels.getString("parameter");
 
         this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){

@@ -1,20 +1,21 @@
 package io.github.robwin.swagger2markup;
 
+import java.util.Locale;
+
 /**
  * @author Maksim Myshkin
  */
 public enum Language {
-    EN("en"),
-    RU("ru");
+    EN(new Locale("en")),
+    RU(new Locale("ru"));
 
-    private final String lang;
+    private final Locale lang;
 
-    Language(final String lang) {
+    Language(final Locale lang) {
         this.lang = lang;
     }
 
-    @Override
-    public String toString() {
+    public Locale toLocale() {
         return lang;
     }
 }

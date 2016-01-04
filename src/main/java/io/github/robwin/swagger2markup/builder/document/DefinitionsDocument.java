@@ -66,18 +66,11 @@ public class DefinitionsDocument extends MarkupDocument {
     public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
         super(swagger2MarkupConfig);
 
-        Properties properties = new Properties();
-        try {
-            properties.load(MarkupDocument.class.getResourceAsStream(String.format("/lang/definitions_%s.properties",
-                    swagger2MarkupConfig.getOutputLanguage().toString())));
-        } catch (IOException e) {
-            if (logger.isErrorEnabled()) {
-                logger.error(e.getMessage());
-            }
-        }
-        DEFINITIONS = properties.getProperty("definitions");
-        JSON_SCHEMA = properties.getProperty("json_schema");
-        XML_SCHEMA = properties.getProperty("xml_schema");
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
+                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        DEFINITIONS = labels.getString("definitions");
+        JSON_SCHEMA = labels.getString("json_schema");
+        XML_SCHEMA = labels.getString("xml_schema");
 
         this.definitionsOrderedBy = swagger2MarkupConfig.getDefinitionsOrderedBy();
         if(isNotBlank(swagger2MarkupConfig.getSchemasFolderPath())){
