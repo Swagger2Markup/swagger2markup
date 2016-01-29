@@ -54,6 +54,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String XML_SCHEMA_EXTENSION = ".xsd";
     private static final String JSON = "json";
     private static final String XML = "xml";
+    private static final String DESCRIPTION_FOLDER_NAME = "definitions";
     private static final String DESCRIPTION_FILE_NAME = "description";
     private boolean schemasEnabled;
     private String schemasFolderPath;
@@ -79,7 +80,7 @@ public class DefinitionsDocument extends MarkupDocument {
         }
         if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
             this.handWrittenDescriptionsEnabled = true;
-            this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + DEFINITIONS.toLowerCase();
+            this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + DESCRIPTION_FOLDER_NAME;
         }
         if(schemasEnabled){
             if (logger.isDebugEnabled()) {
