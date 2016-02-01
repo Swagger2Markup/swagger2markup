@@ -24,6 +24,7 @@ import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -34,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -58,7 +60,9 @@ public abstract class MarkupDocument {
     protected MarkupLanguage markupLanguage;
     protected MarkupDocBuilder markupDocBuilder;
 
-    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig){
+    protected static AtomicInteger idCount = new AtomicInteger(0);
+
+    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig) {
         this.swagger = swagger2MarkupConfig.getSwagger();
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
@@ -76,18 +80,22 @@ public abstract class MarkupDocument {
         TAGS = labels.getString("tags");
     }
 
+    public Integer getNextId() {
+        return idCount.getAndIncrement();
+    }
+
     /**
      * Builds the MarkupDocument.
      *
      * @return the built MarkupDocument
      * @throws IOException if the files to include are not readable
      */
-    public abstract MarkupDocument build() throws IOException ;
+    public abstract MarkupDocument build() throws IOException;
 
     /**
      * Returns a string representation of the document.
      */
-    public String toString(){
+    public String toString() {
         return markupDocBuilder.toString();
     }
 
@@ -95,12 +103,16 @@ public abstract class MarkupDocument {
      * Writes the content of the builder to a file and clears the builder.
      *
      * @param directory the directory where the generated file should be stored
-     * @param fileName the name of the file
-     * @param charset the the charset to use for encoding
+     * @param fileName  the name of the file
+     * @param charset   the the charset to use for encoding
      * @throws IOException if the file cannot be written
      */
-    public void writeToFile(String directory, String fileName, Charset charset) throws IOException{
+    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
         markupDocBuilder.writeToFile(directory, fileName, charset);
+    }
+
+    public String uniqueTypeName(String name) {
+        return name + "-" + getNextId();
     }
 
     public String typeSchema(Type type) {
@@ -110,9 +122,9 @@ public abstract class MarkupDocument {
             return type.displaySchema(markupLanguage);
     }
 
-    public void typeProperties(Type type, MarkupDocBuilder docBuilder, PropertyDescriptor propertyDescriptor) {
+    public void typeProperties(Type type, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
         if (type instanceof ObjectType) {
-            ObjectType objectType = (ObjectType)type;
+            ObjectType objectType = (ObjectType) type;
             List<String> headerAndContent = new ArrayList<>();
             List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
             headerAndContent.add(join(header, DELIMITER));
@@ -123,7 +135,7 @@ public abstract class MarkupDocument {
                     Type propertyType = PropertyUtils.getType(property);
                     List<String> content = Arrays.asList(
                             propertyName,
-                            propertyDescriptor.getDescription(property),
+                            propertyDescriptor.getDescription(property, propertyName),
                             Boolean.toString(property.getRequired()),
                             typeSchema(propertyType),
                             PropertyUtils.getDefaultValue(property));
@@ -141,10 +153,36 @@ public abstract class MarkupDocument {
             this.type = type;
         }
 
-        public String getDescription(Property property) {
+        public String getDescription(Property property, String propertyName) {
             return defaultString(property.getDescription());
         }
     }
 
+    public void sectionTitleLevel(int level, String title, String anchor, MarkupDocBuilder docBuilder) {
+        if (anchor != null)
+            docBuilder.textLine(MarkupDocBuilderUtils.anchor(anchor, this.markupLanguage));
 
+        switch (level) {
+            case 1:
+                docBuilder.sectionTitleLevel1(title);
+                break;
+            case 2:
+                docBuilder.sectionTitleLevel2(title);
+                break;
+            case 3:
+                docBuilder.sectionTitleLevel3(title);
+                break;
+            case 4:
+                docBuilder.sectionTitleLevel4(title);
+                break;
+            case 5:
+                if (anchor == null)
+                    docBuilder.textLine(MarkupDocBuilderUtils.anchor(title, this.markupLanguage));
+                docBuilder.boldTextLine(title);
+                break;
+            default:
+                throw new RuntimeException("Illegal section level : " + level);
+        }
+
+    }
 }

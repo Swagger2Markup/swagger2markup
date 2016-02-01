@@ -199,10 +199,10 @@ public class DefinitionsDocument extends MarkupDocument {
         }
 
         @Override
-        public String getDescription(Property property) {
+        public String getDescription(Property property, String propertyName) {
             String description;
             if(handWrittenDescriptionsEnabled){
-                description = handWrittenPathDescription(type.getName().toLowerCase() + "/" + property.getName().toLowerCase(), DESCRIPTION_FILE_NAME);
+                description = handWrittenPathDescription(type.getName().toLowerCase() + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
                 if(isBlank(description)) {
                     if (logger.isInfoEnabled()) {
                         logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
@@ -220,7 +220,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
         Type type = new ObjectType(definitionName, properties);
-        typeProperties(type, docBuilder, new DefinitionPropertyDescriptor(type));
+        typeProperties(type, new DefinitionPropertyDescriptor(type), docBuilder);
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {

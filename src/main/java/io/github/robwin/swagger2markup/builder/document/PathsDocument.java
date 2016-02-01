@@ -22,6 +22,8 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
@@ -62,6 +64,8 @@ public class PathsDocument extends MarkupDocument {
     private final String CURL_EXAMPLE_FILE_NAME;
     private final String DESCRIPTION_FILE_NAME;
     private final String PARAMETER;
+    private final String DEFINITIONS;
+
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
@@ -88,6 +92,7 @@ public class PathsDocument extends MarkupDocument {
         CURL_EXAMPLE_FILE_NAME = labels.getString("curl_example_file_name");
         DESCRIPTION_FILE_NAME = labels.getString("description_file_name");
         PARAMETER = labels.getString("parameter");
+        DEFINITIONS = labels.getString("definitions");
 
         this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
@@ -180,14 +185,17 @@ public class PathsDocument extends MarkupDocument {
      */
     private void path(String methodAndPath, Operation operation) {
         if(operation != null){
+            List<Type> localDefinitions = new ArrayList<>();
+
             pathTitle(methodAndPath, operation);
             descriptionSection(operation);
-            parametersSection(operation);
-            responsesSection(operation);
+            localDefinitions.addAll(parametersSection(operation));
+            localDefinitions.addAll(responsesSection(operation));
             consumesSection(operation);
             producesSection(operation);
             tagsSection(operation);
             examplesSection(operation);
+            localDefinitionsSection(localDefinitions);
         }
     }
 
@@ -276,8 +284,9 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-    private void parametersSection(Operation operation) {
+    private List<Type> parametersSection(Operation operation) {
         List<Parameter> parameters = operation.getParameters();
+        List<Type> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<String> headerAndContent = new ArrayList<>();
             // Table header row
@@ -285,6 +294,14 @@ public class PathsDocument extends MarkupDocument {
             headerAndContent.add(join(header, DELIMITER));
             for(Parameter parameter : parameters){
                 Type type = ParameterUtils.getType(parameter);
+                if (type instanceof ObjectType) {
+                    String localTypeName = parameter.getName();
+                    type.setName(localTypeName);
+                    type.setUniqueName(uniqueTypeName(localTypeName));
+                    localDefinitions.add(type);
+
+                    type = new RefType(type);
+                }
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
                 List<String> content = Arrays.asList(
@@ -299,6 +316,8 @@ public class PathsDocument extends MarkupDocument {
             addPathSectionTitle(PARAMETERS);
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
+
+        return localDefinitions;
     }
 
     /**
@@ -466,8 +485,9 @@ public class PathsDocument extends MarkupDocument {
         return Optional.absent();
     }
 
-    private void responsesSection(Operation operation) {
+    private List<Type> responsesSection(Operation operation) {
         Map<String, Response> responses = operation.getResponses();
+        List<Type> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
             List<String> csvContent = new ArrayList<>();
             csvContent.add(HTTP_CODE_COLUMN + DELIMITER + DESCRIPTION_COLUMN + DELIMITER + SCHEMA_COLUMN);
@@ -476,6 +496,14 @@ public class PathsDocument extends MarkupDocument {
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
+                    if (type instanceof ObjectType) {
+                        String localTypeName = "Response " + entry.getKey();
+                        type.setName(localTypeName);
+                        type.setUniqueName(uniqueTypeName(localTypeName));
+                        localDefinitions.add(type);
+
+                        type = new RefType(type);
+                    }
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + typeSchema(type));
                 }else{
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
@@ -484,6 +512,22 @@ public class PathsDocument extends MarkupDocument {
             addPathSectionTitle(RESPONSES);
             this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
+        return localDefinitions;
     }
 
+    private void localDefinitionsSection(List<Type> definitions) {
+        if(CollectionUtils.isNotEmpty(definitions)){
+            addPathSectionTitle(DEFINITIONS);
+
+            for (Type definition: definitions) {
+                if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                    sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
+                }else{
+                    sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
+                }
+                typeProperties(definition, new PropertyDescriptor(definition), this.markupDocBuilder);
+            }
+        }
+
+    }
 }

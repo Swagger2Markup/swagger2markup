@@ -1,6 +1,7 @@
 package io.github.robwin.swagger2markup.type;
 
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 
 public class RefType extends Type {
 
@@ -8,13 +9,12 @@ public class RefType extends Type {
         super(name);
     }
 
+    public RefType(Type type) {
+        super(type.name, type.uniqueName);
+    }
+
     @Override
     public String displaySchema(MarkupLanguage language) {
-        switch (language) {
-            case ASCIIDOC:
-                return "<<" + getName() + ">>";
-            default:
-                return getName();
-        }
+        return MarkupDocBuilderUtils.crossReference(getName(), getUniqueName(), language);
     }
 }

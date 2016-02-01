@@ -3,7 +3,6 @@ package io.github.robwin.swagger2markup.type;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.swagger.models.properties.Property;
 
-import java.util.List;
 import java.util.Map;
 
 public class ObjectType extends Type {
