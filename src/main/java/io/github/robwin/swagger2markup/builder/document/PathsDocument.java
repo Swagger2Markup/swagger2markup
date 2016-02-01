@@ -413,7 +413,7 @@ public class PathsDocument extends MarkupDocument {
                     logger.info("Example file processed: {}", path);
                 }
                 try {
-                    return Optional.fromNullable(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                    return Optional.of(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 } catch (IOException e) {
                     if (logger.isWarnEnabled()) {
                         logger.warn(String.format("Failed to read example file: %s", path),  e);
@@ -446,7 +446,7 @@ public class PathsDocument extends MarkupDocument {
                     logger.info("Description file processed: {}", path);
                 }
                 try {
-                    return Optional.fromNullable(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                    return Optional.of(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 } catch (IOException e) {
                     if (logger.isWarnEnabled()) {
                         logger.warn(String.format("Failed to read description file: %s", path),  e);
