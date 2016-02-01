@@ -226,6 +226,19 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
+     * Adds a path section title to the document.
+     *
+     * @param title the path title
+     */
+    private void addPathSectionTitle(String title) {
+        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+            this.markupDocBuilder.sectionTitleLevel3(title);
+        }else{
+            this.markupDocBuilder.sectionTitleLevel4(title);
+        }
+    }
+
+    /**
      * Adds a path description to the document.
      *
      * @param operation the Swagger Operation
@@ -257,11 +270,7 @@ public class PathsDocument extends MarkupDocument {
 
     private void pathDescription(String description) {
         if (isNotBlank(description)) {
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(DESCRIPTION);
-            }
+            addPathSectionTitle(DESCRIPTION);
             this.markupDocBuilder.paragraph(description);
         }
     }
@@ -285,11 +294,7 @@ public class PathsDocument extends MarkupDocument {
                         ParameterUtils.getDefaultValue(parameter));
                 headerAndContent.add(join(content, DELIMITER));
             }
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(PARAMETERS);
-            }
+            addPathSectionTitle(PARAMETERS);
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
     }
@@ -333,11 +338,7 @@ public class PathsDocument extends MarkupDocument {
     private void consumesSection(Operation operation) {
         List<String> consumes = operation.getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(CONSUMES);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(CONSUMES);
-            }
+            addPathSectionTitle(CONSUMES);
             this.markupDocBuilder.unorderedList(consumes);
         }
 
@@ -346,11 +347,7 @@ public class PathsDocument extends MarkupDocument {
     private void producesSection(Operation operation) {
         List<String> produces = operation.getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(PRODUCES);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(PRODUCES);
-            }
+            addPathSectionTitle(PRODUCES);
             this.markupDocBuilder.unorderedList(produces);
         }
     }
@@ -359,7 +356,7 @@ public class PathsDocument extends MarkupDocument {
         if(pathsGroupedBy.equals(GroupBy.AS_IS)) {
             List<String> tags = operation.getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
-                this.markupDocBuilder.sectionTitleLevel3(TAGS);
+                addPathSectionTitle(TAGS);
                 this.markupDocBuilder.unorderedList(tags);
             }
         }
@@ -379,30 +376,18 @@ public class PathsDocument extends MarkupDocument {
                 String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
                 Optional<String> curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
                 if(curlExample.isPresent()){
-                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_CURL);
-                    }else{
-                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_CURL);
-                    }
+                    addPathSectionTitle(EXAMPLE_CURL);
                     this.markupDocBuilder.paragraph(curlExample.get());
                 }
 
                 Optional<String> requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
                 if(requestExample.isPresent()){
-                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_REQUEST);
-                    }else{
-                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_REQUEST);
-                    }
+                    addPathSectionTitle(EXAMPLE_REQUEST);
                     this.markupDocBuilder.paragraph(requestExample.get());
                 }
                 Optional<String> responseExample = example(exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
                 if(responseExample.isPresent()){
-                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_RESPONSE);
-                    }else{
-                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_RESPONSE);
-                    }
+                    addPathSectionTitle(EXAMPLE_RESPONSE);
                     this.markupDocBuilder.paragraph(responseExample.get());
                 }
             }else{
@@ -494,11 +479,7 @@ public class PathsDocument extends MarkupDocument {
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
                 }
             }
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(RESPONSES);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(RESPONSES);
-            }
+            addPathSectionTitle(RESPONSES);
             this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
     }
