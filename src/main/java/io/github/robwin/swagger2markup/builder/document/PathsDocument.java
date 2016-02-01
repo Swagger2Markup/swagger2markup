@@ -60,10 +60,11 @@ public class PathsDocument extends MarkupDocument {
     private final String EXAMPLE_RESPONSE;
     private final String TYPE_COLUMN;
     private final String HTTP_CODE_COLUMN;
-    private final String REQUEST_EXAMPLE_FILE_NAME;
-    private final String RESPONSE_EXAMPLE_FILE_NAME;
-    private final String CURL_EXAMPLE_FILE_NAME;
-    private final String DESCRIPTION_FILE_NAME;
+    private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
+    private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
+    private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
+    private static final String DESCRIPTION_FOLDER_NAME = "paths";
+    private static final String DESCRIPTION_FILE_NAME = "description";
     private final String PARAMETER;
     private final String DEFINITIONS;
 
@@ -88,10 +89,6 @@ public class PathsDocument extends MarkupDocument {
         EXAMPLE_RESPONSE = labels.getString("example_response");
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
-        REQUEST_EXAMPLE_FILE_NAME = labels.getString("request_example_file_name");
-        RESPONSE_EXAMPLE_FILE_NAME = labels.getString("response_example_file_name");
-        CURL_EXAMPLE_FILE_NAME = labels.getString("curl_example_file_name");
-        DESCRIPTION_FILE_NAME = labels.getString("description_file_name");
         PARAMETER = labels.getString("parameter");
         DEFINITIONS = labels.getString("definitions");
 
@@ -102,7 +99,7 @@ public class PathsDocument extends MarkupDocument {
         }
         if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
             this.handWrittenDescriptionsEnabled = true;
-            this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + PATHS.toLowerCase();
+            this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + DESCRIPTION_FOLDER_NAME;
         }
         if(examplesEnabled){
             if (logger.isDebugEnabled()) {
