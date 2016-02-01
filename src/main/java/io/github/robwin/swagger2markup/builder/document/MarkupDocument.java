@@ -22,13 +22,21 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
+import io.swagger.models.properties.Property;
+import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ResourceBundle;
+import java.util.*;
+
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * @author Robert Winkler
@@ -94,4 +102,49 @@ public abstract class MarkupDocument {
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException{
         markupDocBuilder.writeToFile(directory, fileName, charset);
     }
+
+    public String typeSchema(Type type) {
+        if (type == null)
+            return "Unknown";
+        else
+            return type.displaySchema(markupLanguage);
+    }
+
+    public void typeProperties(Type type, MarkupDocBuilder docBuilder, PropertyDescriptor propertyDescriptor) {
+        if (type instanceof ObjectType) {
+            ObjectType objectType = (ObjectType)type;
+            List<String> headerAndContent = new ArrayList<>();
+            List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
+            headerAndContent.add(join(header, DELIMITER));
+            if (MapUtils.isNotEmpty(objectType.getProperties())) {
+                for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
+                    Property property = propertyEntry.getValue();
+                    String propertyName = propertyEntry.getKey();
+                    Type propertyType = PropertyUtils.getType(property);
+                    List<String> content = Arrays.asList(
+                            propertyName,
+                            propertyDescriptor.getDescription(property),
+                            Boolean.toString(property.getRequired()),
+                            typeSchema(propertyType),
+                            PropertyUtils.getDefaultValue(property));
+                    headerAndContent.add(join(content, DELIMITER));
+                }
+                docBuilder.tableWithHeaderRow(headerAndContent);
+            }
+        }
+    }
+
+    public class PropertyDescriptor {
+        protected Type type;
+
+        public PropertyDescriptor(Type type) {
+            this.type = type;
+        }
+
+        public String getDescription(Property property) {
+            return defaultString(property.getDescription());
+        }
+    }
+
+
 }

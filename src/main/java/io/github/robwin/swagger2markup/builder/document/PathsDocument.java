@@ -129,13 +129,6 @@ public class PathsDocument extends MarkupDocument {
         return this;
     }
 
-    private String displayType(Type type) {
-        if (type == null)
-            return "Unknown";
-        else
-            return type.displaySchema(markupLanguage);
-    }
-
     /**
      * Builds all paths of the Swagger model. Either grouped as-is or by tags.
      */
@@ -299,7 +292,7 @@ public class PathsDocument extends MarkupDocument {
                         parameter.getName(),
                         parameterDescription(operation, parameter),
                         Boolean.toString(parameter.getRequired()),
-                        displayType(type),
+                        typeSchema(type),
                         ParameterUtils.getDefaultValue(parameter));
                 headerAndContent.add(join(content, DELIMITER));
             }
@@ -483,7 +476,7 @@ public class PathsDocument extends MarkupDocument {
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + displayType(type));
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + typeSchema(type));
                 }else{
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
                 }
