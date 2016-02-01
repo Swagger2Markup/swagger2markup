@@ -25,6 +25,7 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
@@ -521,9 +522,9 @@ public class PathsDocument extends MarkupDocument {
 
             for (Type definition: definitions) {
                 if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                    sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
+                    MarkupDocBuilderUtils.sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupLanguage, this.markupDocBuilder);
                 }else{
-                    sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
+                    MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupLanguage, this.markupDocBuilder);
                 }
                 typeProperties(definition, new PropertyDescriptor(definition), this.markupDocBuilder);
             }

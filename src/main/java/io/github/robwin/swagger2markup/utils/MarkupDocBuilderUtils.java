@@ -12,13 +12,17 @@ public class MarkupDocBuilderUtils {
         return anchor.replaceAll("[^0-9a-zA-Z]", "_");
     }
 
-    public static String anchor(String text, MarkupLanguage language) {
+    public static void anchor(String text, MarkupLanguage language, MarkupDocBuilder docBuilder) {
         switch (language) {
             case ASCIIDOC:
-                return "[[" + normalizeAnchor(text) + "]]";
+                docBuilder.textLine("[[" + normalizeAnchor(text) + "]]");
+                break;
             default:
-                return "";
         }
+    }
+
+    public static void crossReference(String text, String anchor, MarkupLanguage language, MarkupDocBuilder docBuilder) {
+        docBuilder.textLine(crossReference(text, anchor, language));
     }
 
     public static String crossReference(String text, String anchor, MarkupLanguage language) {
@@ -37,5 +41,33 @@ public class MarkupDocBuilderUtils {
                 else
                     return text;
         }
+    }
+
+    public static void sectionTitleLevel(int level, String title, String anchor, MarkupLanguage language, MarkupDocBuilder docBuilder) {
+        if (anchor != null)
+            MarkupDocBuilderUtils.anchor(anchor, language, docBuilder);
+
+        switch (level) {
+            case 1:
+                docBuilder.sectionTitleLevel1(title);
+                break;
+            case 2:
+                docBuilder.sectionTitleLevel2(title);
+                break;
+            case 3:
+                docBuilder.sectionTitleLevel3(title);
+                break;
+            case 4:
+                docBuilder.sectionTitleLevel4(title);
+                break;
+            case 5:
+                if (anchor == null)
+                    MarkupDocBuilderUtils.anchor(title, language, docBuilder);
+                docBuilder.boldTextLine(title);
+                break;
+            default:
+                throw new RuntimeException("Illegal section level : " + level);
+        }
+
     }
 }

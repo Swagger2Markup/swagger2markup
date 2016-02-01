@@ -24,7 +24,6 @@ import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -60,7 +59,7 @@ public abstract class MarkupDocument {
     protected MarkupLanguage markupLanguage;
     protected MarkupDocBuilder markupDocBuilder;
 
-    protected static AtomicInteger idCount = new AtomicInteger(0);
+    protected static AtomicInteger typeIdCount = new AtomicInteger(0);
 
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig) {
         this.swagger = swagger2MarkupConfig.getSwagger();
@@ -78,10 +77,6 @@ public abstract class MarkupDocument {
         PRODUCES = labels.getString("produces");
         CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
-    }
-
-    public Integer getNextId() {
-        return idCount.getAndIncrement();
     }
 
     /**
@@ -112,7 +107,7 @@ public abstract class MarkupDocument {
     }
 
     public String uniqueTypeName(String name) {
-        return name + "-" + getNextId();
+        return name + "-" + typeIdCount.getAndIncrement();
     }
 
     public String typeSchema(Type type) {
@@ -158,31 +153,4 @@ public abstract class MarkupDocument {
         }
     }
 
-    public void sectionTitleLevel(int level, String title, String anchor, MarkupDocBuilder docBuilder) {
-        if (anchor != null)
-            docBuilder.textLine(MarkupDocBuilderUtils.anchor(anchor, this.markupLanguage));
-
-        switch (level) {
-            case 1:
-                docBuilder.sectionTitleLevel1(title);
-                break;
-            case 2:
-                docBuilder.sectionTitleLevel2(title);
-                break;
-            case 3:
-                docBuilder.sectionTitleLevel3(title);
-                break;
-            case 4:
-                docBuilder.sectionTitleLevel4(title);
-                break;
-            case 5:
-                if (anchor == null)
-                    docBuilder.textLine(MarkupDocBuilderUtils.anchor(title, this.markupLanguage));
-                docBuilder.boldTextLine(title);
-                break;
-            default:
-                throw new RuntimeException("Illegal section level : " + level);
-        }
-
-    }
 }
