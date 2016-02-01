@@ -22,6 +22,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
@@ -126,6 +127,13 @@ public class PathsDocument extends MarkupDocument {
     public MarkupDocument build(){
         paths();
         return this;
+    }
+
+    private String displayType(Type type) {
+        if (type == null)
+            return "Unknown";
+        else
+            return type.displaySchema(markupLanguage);
     }
 
     /**
@@ -283,14 +291,15 @@ public class PathsDocument extends MarkupDocument {
             List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
             headerAndContent.add(join(header, DELIMITER));
             for(Parameter parameter : parameters){
-                String type = ParameterUtils.getType(parameter, markupLanguage);
+                Type type = ParameterUtils.getType(parameter);
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
                 List<String> content = Arrays.asList(
                         parameterType,
                         parameter.getName(),
                         parameterDescription(operation, parameter),
-                        Boolean.toString(parameter.getRequired()), type,
+                        Boolean.toString(parameter.getRequired()),
+                        displayType(type),
                         ParameterUtils.getDefaultValue(parameter));
                 headerAndContent.add(join(content, DELIMITER));
             }
@@ -473,8 +482,8 @@ public class PathsDocument extends MarkupDocument {
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
-                    String type = PropertyUtils.getType(property, markupLanguage);
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  type);
+                    Type type = PropertyUtils.getType(property);
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + displayType(type));
                 }else{
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
                 }

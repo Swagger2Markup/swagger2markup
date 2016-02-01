@@ -18,35 +18,34 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
+import io.github.robwin.swagger2markup.type.ArrayType;
+import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.RefType;
+import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
 import io.swagger.models.RefModel;
-import io.github.robwin.markup.builder.MarkupLanguage;
 import org.apache.commons.lang3.Validate;
 
 public final class ModelUtils {
 
     /**
-     * Retrieves the type of a model, or otherwise "NOT FOUND"
+     * Retrieves the type of a model, or otherwise null
      *
      * @param model the model
-     * @param markupLanguage the markup language which is used to generate the files
-     * @return the type of the model, or otherwise "NOT FOUND"
+     * @return the type of the model, or otherwise null
      */
-    public static String getType(Model model, MarkupLanguage markupLanguage) {
+    public static Type getType(Model model) {
         Validate.notNull(model, "model must not be null!");
         if (model instanceof ModelImpl) {
-            return ((ModelImpl) model).getType();
+            return new ObjectType(null, model.getProperties());
         } else if (model instanceof RefModel) {
-            switch (markupLanguage){
-                case ASCIIDOC: return "<<" + ((RefModel) model).getSimpleRef() + ">>";
-                default: return ((RefModel) model).getSimpleRef();
-            }
+            return new RefType(((RefModel) model).getSimpleRef());
         } else if (model instanceof ArrayModel) {
             ArrayModel arrayModel = ((ArrayModel) model);
-            return PropertyUtils.getType(arrayModel.getItems(), markupLanguage) + " " + arrayModel.getType();
+            return new ArrayType(null, PropertyUtils.getType(arrayModel.getItems()));
         }
-        return "NOT FOUND";
+        return null;
     }
 }

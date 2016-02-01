@@ -23,6 +23,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
@@ -191,6 +192,13 @@ public class DefinitionsDocument extends MarkupDocument {
         propertiesSection(definitions, definitionName, model, docBuilder);
     }
 
+    private String displayType(Type type) {
+        if (type == null)
+            return "Unknown";
+        else
+            return type.displaySchema(markupLanguage);
+    }
+
     private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
         List<String> headerAndContent = new ArrayList<>();
@@ -200,11 +208,12 @@ public class DefinitionsDocument extends MarkupDocument {
             for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
                 Property property = propertyEntry.getValue();
                 String propertyName = propertyEntry.getKey();
+                Type type = PropertyUtils.getType(property);
                 List<String> content = Arrays.asList(
                         propertyName,
                         propertyDescription(definitionName, propertyName, property),
                         Boolean.toString(property.getRequired()),
-                        PropertyUtils.getType(property, markupLanguage),
+                        displayType(type),
                         PropertyUtils.getDefaultValue(property));
                 headerAndContent.add(join(content, DELIMITER));
             }
