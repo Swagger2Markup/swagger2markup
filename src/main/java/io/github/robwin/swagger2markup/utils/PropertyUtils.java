@@ -55,6 +55,8 @@ public final class PropertyUtils {
             }else{
                 type = new BasicType(property.getType());
             }
+        }else if(property instanceof ObjectProperty) {
+          type = new ObjectType(null, ((ObjectProperty) property).getProperties());
         }
         else{
             if(isNotBlank(property.getFormat())){
