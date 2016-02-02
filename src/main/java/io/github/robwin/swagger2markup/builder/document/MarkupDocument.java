@@ -56,6 +56,7 @@ public abstract class MarkupDocument {
     protected final String PRODUCES;
     protected final String CONSUMES;
     protected final String TAGS;
+    protected final String NO_CONTENT;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;
@@ -79,6 +80,7 @@ public abstract class MarkupDocument {
         PRODUCES = labels.getString("produces");
         CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
+        NO_CONTENT = labels.getString("no_content");
     }
 
     /**
@@ -112,13 +114,6 @@ public abstract class MarkupDocument {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
-    public String typeSchema(Type type) {
-        if (type == null)
-            return "Unknown";
-        else
-            return type.displaySchema(markupLanguage);
-    }
-
     public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
@@ -132,9 +127,8 @@ public abstract class MarkupDocument {
                     String propertyName = propertyEntry.getKey();
                     Type propertyType = PropertyUtils.getType(property);
                     if (depth > 0 && propertyType instanceof ObjectType) {
-                        String localTypeName = propertyName;
-                        propertyType.setName(localTypeName);
-                        propertyType.setUniqueName(uniqueTypeName(localTypeName));
+                        propertyType.setName(propertyName);
+                        propertyType.setUniqueName(uniqueTypeName(propertyName));
                         localDefinitions.add(propertyType);
 
                         propertyType = new RefType(propertyType);
@@ -144,12 +138,20 @@ public abstract class MarkupDocument {
                             propertyName,
                             propertyDescriptor.getDescription(property, propertyName),
                             Boolean.toString(property.getRequired()),
-                            typeSchema(propertyType),
+                            propertyType.displaySchema(markupLanguage),
                             PropertyUtils.getDefaultValue(property));
                     headerAndContent.add(join(content, DELIMITER));
                 }
                 docBuilder.tableWithHeaderRow(headerAndContent);
             }
+            else {
+                docBuilder.textLine(NO_CONTENT);
+                docBuilder.newLine();
+            }
+        }
+        else {
+            docBuilder.textLine(NO_CONTENT);
+            docBuilder.newLine();
         }
 
         return localDefinitions;

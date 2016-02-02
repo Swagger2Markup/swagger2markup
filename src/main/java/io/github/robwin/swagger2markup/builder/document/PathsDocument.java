@@ -51,6 +51,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class PathsDocument extends MarkupDocument {
 
+    private static final String RESPONSE_INLINE_PREFIX = "Response";
     private final String PATHS;
     private final String RESOURCES;
     private final String PARAMETERS;
@@ -304,7 +305,7 @@ public class PathsDocument extends MarkupDocument {
                         parameter.getName(),
                         parameterDescription(operation, parameter),
                         Boolean.toString(parameter.getRequired()),
-                        typeSchema(type),
+                        type.displaySchema(markupLanguage),
                         ParameterUtils.getDefaultValue(parameter));
                 headerAndContent.add(join(content, DELIMITER));
             }
@@ -492,16 +493,16 @@ public class PathsDocument extends MarkupDocument {
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                        String localTypeName = "Response " + entry.getKey();
+                        String localTypeName = RESPONSE_INLINE_PREFIX + " " + entry.getKey();
 
                         type.setName(localTypeName);
                         type.setUniqueName(uniqueTypeName(localTypeName));
                         localDefinitions.add(type);
                         type = new RefType(type);
                     }
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + typeSchema(type));
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + type.displaySchema(markupLanguage));
                 }else{
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  NO_CONTENT);
                 }
             }
             addPathSectionTitle(RESPONSES);
