@@ -1,0 +1,135 @@
+swagger: "2.0"
+info:
+  title: FCU API
+  description: Outscale FCU service
+  version: "2.18"
+host: fcu.eu-west-2.outscale.com
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /LaunchCommand:
+    post:
+      summary: LaunchCommand
+      description: <description>
+      tags:
+        - All
+      parameters:
+        - $ref: "#/parameters/Version"
+        - name: array
+          in: query
+          type: array
+          items:
+            type: string
+        - name: ref array
+          in: query
+          type: array
+          items:
+            $ref: '#/definitions/Simple'
+        - name: csv
+          in: query
+          type: array
+          collectionFormat: pipes
+          items:
+            type: boolean
+        - name: FirstParameter
+          description: <description>
+          in: body
+          schema:
+            $ref: '#/definitions/Simple'
+        - name: LaunchCommandRequest
+          description: <description>
+          in: body
+          schema:
+            description: Inline schema
+            type: object
+            required:
+              - Command
+              - MinCount
+              - MaxCount
+            properties:
+              DryRun:
+                description: <description>
+                type: boolean
+              SecurityGroup.N:
+                description: <description>
+                type: array
+                items:
+                  type: string
+                type: string
+              Location:
+                description: <description>
+                $ref: '#/definitions/Location'
+              KernelId:
+                description: <description>
+                type: string
+      responses:
+        200:
+          description: Reservation
+          schema:
+            type: object
+            properties:
+              ReservationId:
+                description: <description>
+                type: string
+              Location:
+                description: <description>
+                $ref: '#/definitions/Location'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+
+
+
+parameters:
+  Version:
+    name: Version
+    description: <description>
+    in: query
+    type: boolean
+
+definitions:
+  ExternalLocation:
+    $ref: ./swagger_inlineSchema.yaml#/definitions/Location
+
+  Simple:
+    description: simple def
+    type: string
+
+  Error:
+    type: integer
+
+  Location:
+    type: object
+    properties:
+      Loop:
+        description: <description>
+        type:
+          $ref: '#/definitions/Location'
+      Affinity:
+        description: <description>
+        type: string
+
+  InlineDepthSchema:
+    type: object
+    properties:
+      Loop:
+        type: object
+        properties:
+          P1:
+            description: description P1
+            type: string
+          p2:
+            description: description P2
+            type: object
+            properties:
+              pv1:
+                description: pv1
+                type: string
+              pv2:
+                description: pv2
+                type: boolean
