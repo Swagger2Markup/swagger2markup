@@ -66,7 +66,6 @@ public class PathsDocument extends MarkupDocument {
     private static final String DESCRIPTION_FOLDER_NAME = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
     private final String PARAMETER;
-    private final String DEFINITIONS;
 
 
     private boolean examplesEnabled;
@@ -74,6 +73,7 @@ public class PathsDocument extends MarkupDocument {
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
     private final GroupBy pathsGroupedBy;
+    private final Integer inlineSchemaDepthLevel;
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
@@ -90,8 +90,8 @@ public class PathsDocument extends MarkupDocument {
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
         PARAMETER = labels.getString("parameter");
-        DEFINITIONS = labels.getString("definitions");
 
+        this.inlineSchemaDepthLevel = swagger2MarkupConfig.getInlineSchemaDepthLevel();
         this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
             this.examplesEnabled = true;
@@ -183,17 +183,14 @@ public class PathsDocument extends MarkupDocument {
      */
     private void path(String methodAndPath, Operation operation) {
         if(operation != null){
-            List<Type> localDefinitions = new ArrayList<>();
-
             pathTitle(methodAndPath, operation);
             descriptionSection(operation);
-            localDefinitions.addAll(parametersSection(operation));
-            localDefinitions.addAll(responsesSection(operation));
+            inlineDefinitions(parametersSection(operation), inlineSchemaDepthLevel);
+            inlineDefinitions(responsesSection(operation), inlineSchemaDepthLevel);
             consumesSection(operation);
             producesSection(operation);
             tagsSection(operation);
             examplesSection(operation);
-            localDefinitionsSection(localDefinitions);
         }
     }
 
@@ -292,12 +289,12 @@ public class PathsDocument extends MarkupDocument {
             headerAndContent.add(join(header, DELIMITER));
             for(Parameter parameter : parameters){
                 Type type = ParameterUtils.getType(parameter);
-                if (type instanceof ObjectType) {
+                if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                     String localTypeName = parameter.getName();
+
                     type.setName(localTypeName);
                     type.setUniqueName(uniqueTypeName(localTypeName));
                     localDefinitions.add(type);
-
                     type = new RefType(type);
                 }
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
@@ -494,12 +491,12 @@ public class PathsDocument extends MarkupDocument {
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
-                    if (type instanceof ObjectType) {
+                    if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                         String localTypeName = "Response " + entry.getKey();
+
                         type.setName(localTypeName);
                         type.setUniqueName(uniqueTypeName(localTypeName));
                         localDefinitions.add(type);
-
                         type = new RefType(type);
                     }
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + typeSchema(type));
@@ -513,17 +510,17 @@ public class PathsDocument extends MarkupDocument {
         return localDefinitions;
     }
 
-    private void localDefinitionsSection(List<Type> definitions) {
+    private void inlineDefinitions(List<Type> definitions, int depth) {
         if(CollectionUtils.isNotEmpty(definitions)){
-            addPathSectionTitle(DEFINITIONS);
-
             for (Type definition: definitions) {
                 if(pathsGroupedBy.equals(GroupBy.AS_IS)){
                     MarkupDocBuilderUtils.sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupLanguage, this.markupDocBuilder);
                 }else{
                     MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupLanguage, this.markupDocBuilder);
                 }
-                typeProperties(definition, new PropertyDescriptor(definition), this.markupDocBuilder);
+                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), this.markupDocBuilder);
+                for (Type localDefinition : localDefinitions)
+                    inlineDefinitions(Arrays.asList(localDefinition), depth - 1);
             }
         }
 

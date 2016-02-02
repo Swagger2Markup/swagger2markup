@@ -65,6 +65,11 @@ public class MarkupDocBuilderUtils {
                     MarkupDocBuilderUtils.anchor(title, language, docBuilder);
                 docBuilder.boldTextLine(title);
                 break;
+            case 6:
+                if (anchor == null)
+                    MarkupDocBuilderUtils.anchor(title, language, docBuilder);
+                docBuilder.textLine(title);
+                break;
             default:
                 throw new RuntimeException("Illegal section level : " + level);
         }

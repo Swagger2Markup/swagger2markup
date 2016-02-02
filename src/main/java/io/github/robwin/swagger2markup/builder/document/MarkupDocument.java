@@ -23,7 +23,9 @@ import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -117,7 +119,8 @@ public abstract class MarkupDocument {
             return type.displaySchema(markupLanguage);
     }
 
-    public void typeProperties(Type type, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
+    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
+        List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
             List<String> headerAndContent = new ArrayList<>();
@@ -128,6 +131,15 @@ public abstract class MarkupDocument {
                     Property property = propertyEntry.getValue();
                     String propertyName = propertyEntry.getKey();
                     Type propertyType = PropertyUtils.getType(property);
+                    if (depth > 0 && propertyType instanceof ObjectType) {
+                        String localTypeName = propertyName;
+                        propertyType.setName(localTypeName);
+                        propertyType.setUniqueName(uniqueTypeName(localTypeName));
+                        localDefinitions.add(propertyType);
+
+                        propertyType = new RefType(propertyType);
+                    }
+
                     List<String> content = Arrays.asList(
                             propertyName,
                             propertyDescriptor.getDescription(property, propertyName),
@@ -139,6 +151,8 @@ public abstract class MarkupDocument {
                 docBuilder.tableWithHeaderRow(headerAndContent);
             }
         }
+
+        return localDefinitions;
     }
 
     public class PropertyDescriptor {
