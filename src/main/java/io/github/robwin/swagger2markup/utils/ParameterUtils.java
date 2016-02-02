@@ -18,7 +18,7 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.BodyParameter;
@@ -29,28 +29,27 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
 
 
 public final class ParameterUtils {
 
     /**
-     * Retrieves the type of a parameter, or otherwise an empty String
+     * Retrieves the type of a parameter, or otherwise null
      *
      * @param parameter the parameter
-     * @param markupLanguage the markup language which is used to generate the files
-     * @return the type of the parameter, or otherwise an empty String
+     * @return the type of the parameter, or otherwise null
      */
-    public static String getType(Parameter parameter, MarkupLanguage markupLanguage){
-        Validate.notNull(parameter, "property must not be null!");
-        String type = "NOT FOUND";
+    public static Type getType(Parameter parameter){
+        Validate.notNull(parameter, "parameter must not be null!");
+        Type type = null;
         if(parameter instanceof BodyParameter){
             BodyParameter bodyParameter = (BodyParameter)parameter;
             Model model = bodyParameter.getSchema();
             if(model != null){
-                type = ModelUtils.getType(model, markupLanguage);
+                type = ModelUtils.getType(model);
             }else{
-                type = "string";
+                type = new BasicType("string");
             }
 
         }
@@ -58,38 +57,18 @@ public final class ParameterUtils {
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             List enums = serializableParameter.getEnum();
             if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + join(enums, ", ") + ")";
+                type = new EnumType(null, enums);
             }else{
-                type = getTypeWithFormat(serializableParameter.getType(), serializableParameter.getFormat());
+                type = new BasicType(serializableParameter.getType(), serializableParameter.getFormat());
             }
-            if(type.equals("array")){
+            if(type.getName().equals("array")){
                 String collectionFormat = serializableParameter.getCollectionFormat();
-                type = collectionFormat + " " + PropertyUtils.getType(serializableParameter.getItems(), markupLanguage) + " " + type;
+                type = new ArrayType(null, PropertyUtils.getType(serializableParameter.getItems()), collectionFormat);
             }
         }
         else if(parameter instanceof RefParameter){
             RefParameter refParameter = (RefParameter)parameter;
-            switch (markupLanguage){
-                case ASCIIDOC: return "<<" + refParameter.getSimpleRef() + ">>";
-                default: return refParameter.getSimpleRef();
-            }
-        }
-        return defaultString(type);
-    }
-
-    /**
-     * Adds the format to the type, if a format is available
-     *
-     * @param typeWithoutFormat the type
-     * @param format the format
-     * @return returns the type and format, if a format is available
-     */
-    private static String getTypeWithFormat(String typeWithoutFormat, String format) {
-        String type;
-        if(isNotBlank(format)){
-            type = defaultString(typeWithoutFormat) + " (" + format + ")";
-        }else{
-            type = defaultString(typeWithoutFormat);
+            type = new RefType(refParameter.getSimpleRef());
         }
         return type;
     }
@@ -101,7 +80,7 @@ public final class ParameterUtils {
      * @return the default value of the parameter, or otherwise an empty String
      */
     public static String getDefaultValue(Parameter parameter){
-        Validate.notNull(parameter, "property must not be null!");
+        Validate.notNull(parameter, "parameter must not be null!");
         String defaultValue = "";
         if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;

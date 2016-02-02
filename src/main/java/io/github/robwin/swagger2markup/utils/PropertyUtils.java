@@ -19,6 +19,7 @@
 package io.github.robwin.swagger2markup.utils;
 
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.properties.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
@@ -34,39 +35,37 @@ public final class PropertyUtils {
      * Retrieves the type and format of a property.
      *
      * @param property the property
-     * @param markupLanguage the markup language which is used to generate the files
      * @return the type of the property
      */
-    public static String getType(Property property, MarkupLanguage markupLanguage){
+    public static Type getType(Property property){
         Validate.notNull(property, "property must not be null!");
-        String type;
+        Type type = null;
         if(property instanceof RefProperty){
             RefProperty refProperty = (RefProperty)property;
-            switch (markupLanguage){
-                case ASCIIDOC: return "<<" + refProperty.getSimpleRef() + ">>";
-                default: return refProperty.getSimpleRef();
-            }
+            type = new RefType(refProperty.getSimpleRef());
         }else if(property instanceof ArrayProperty){
             ArrayProperty arrayProperty = (ArrayProperty)property;
             Property items = arrayProperty.getItems();
-            type = getType(items, markupLanguage) + " " + arrayProperty.getType();
+            type = new ArrayType(null, getType(items));
         }else if(property instanceof StringProperty){
             StringProperty stringProperty = (StringProperty)property;
             List<String> enums = stringProperty.getEnum();
             if(CollectionUtils.isNotEmpty(enums)){
-                type = "enum" + " (" + join(enums, ", ") + ")";
+                type = new EnumType(null, enums);
             }else{
-                type = property.getType();
+                type = new BasicType(property.getType());
             }
+        }else if(property instanceof ObjectProperty) {
+          type = new ObjectType(null, ((ObjectProperty) property).getProperties());
         }
         else{
             if(isNotBlank(property.getFormat())){
-                type = defaultString(property.getType()) + " (" + property.getFormat() + ")";
+                type = new BasicType(property.getType(), property.getFormat());
             }else{
-                type = property.getType();
+                type = new BasicType(property.getType());
             }
         }
-        return defaultString(type);
+        return type;
     }
 
     /**

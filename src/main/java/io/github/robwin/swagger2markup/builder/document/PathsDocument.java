@@ -22,6 +22,9 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.RefType;
+import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
@@ -62,6 +65,8 @@ public class PathsDocument extends MarkupDocument {
     private static final String DESCRIPTION_FOLDER_NAME = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
     private final String PARAMETER;
+    private final String DEFINITIONS;
+
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
@@ -84,6 +89,7 @@ public class PathsDocument extends MarkupDocument {
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
         PARAMETER = labels.getString("parameter");
+        DEFINITIONS = labels.getString("definitions");
 
         this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
@@ -176,14 +182,17 @@ public class PathsDocument extends MarkupDocument {
      */
     private void path(String methodAndPath, Operation operation) {
         if(operation != null){
+            List<Type> localDefinitions = new ArrayList<>();
+
             pathTitle(methodAndPath, operation);
             descriptionSection(operation);
-            parametersSection(operation);
-            responsesSection(operation);
+            localDefinitions.addAll(parametersSection(operation));
+            localDefinitions.addAll(responsesSection(operation));
             consumesSection(operation);
             producesSection(operation);
             tagsSection(operation);
             examplesSection(operation);
+            localDefinitionsSection(localDefinitions);
         }
     }
 
@@ -223,6 +232,19 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
+     * Adds a path section title to the document.
+     *
+     * @param title the path title
+     */
+    private void addPathSectionTitle(String title) {
+        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+            this.markupDocBuilder.sectionTitleLevel3(title);
+        }else{
+            this.markupDocBuilder.sectionTitleLevel4(title);
+        }
+    }
+
+    /**
      * Adds a path description to the document.
      *
      * @param operation the Swagger Operation
@@ -254,41 +276,45 @@ public class PathsDocument extends MarkupDocument {
 
     private void pathDescription(String description) {
         if (isNotBlank(description)) {
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(DESCRIPTION);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(DESCRIPTION);
-            }
+            addPathSectionTitle(DESCRIPTION);
             this.markupDocBuilder.paragraph(description);
         }
     }
 
-    private void parametersSection(Operation operation) {
+    private List<Type> parametersSection(Operation operation) {
         List<Parameter> parameters = operation.getParameters();
+        List<Type> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<String> headerAndContent = new ArrayList<>();
             // Table header row
             List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
             headerAndContent.add(join(header, DELIMITER));
             for(Parameter parameter : parameters){
-                String type = ParameterUtils.getType(parameter, markupLanguage);
+                Type type = ParameterUtils.getType(parameter);
+                if (type instanceof ObjectType) {
+                    String localTypeName = parameter.getName();
+                    type.setName(localTypeName);
+                    type.setUniqueName(uniqueTypeName(localTypeName));
+                    localDefinitions.add(type);
+
+                    type = new RefType(type);
+                }
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
                 List<String> content = Arrays.asList(
                         parameterType,
                         parameter.getName(),
                         parameterDescription(operation, parameter),
-                        Boolean.toString(parameter.getRequired()), type,
+                        Boolean.toString(parameter.getRequired()),
+                        typeSchema(type),
                         ParameterUtils.getDefaultValue(parameter));
                 headerAndContent.add(join(content, DELIMITER));
             }
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(PARAMETERS);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(PARAMETERS);
-            }
+            addPathSectionTitle(PARAMETERS);
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
         }
+
+        return localDefinitions;
     }
 
     /**
@@ -330,11 +356,7 @@ public class PathsDocument extends MarkupDocument {
     private void consumesSection(Operation operation) {
         List<String> consumes = operation.getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(CONSUMES);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(CONSUMES);
-            }
+            addPathSectionTitle(CONSUMES);
             this.markupDocBuilder.unorderedList(consumes);
         }
 
@@ -343,11 +365,7 @@ public class PathsDocument extends MarkupDocument {
     private void producesSection(Operation operation) {
         List<String> produces = operation.getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(PRODUCES);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(PRODUCES);
-            }
+            addPathSectionTitle(PRODUCES);
             this.markupDocBuilder.unorderedList(produces);
         }
     }
@@ -356,7 +374,7 @@ public class PathsDocument extends MarkupDocument {
         if(pathsGroupedBy.equals(GroupBy.AS_IS)) {
             List<String> tags = operation.getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
-                this.markupDocBuilder.sectionTitleLevel3(TAGS);
+                addPathSectionTitle(TAGS);
                 this.markupDocBuilder.unorderedList(tags);
             }
         }
@@ -376,30 +394,18 @@ public class PathsDocument extends MarkupDocument {
                 String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
                 Optional<String> curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
                 if(curlExample.isPresent()){
-                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_CURL);
-                    }else{
-                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_CURL);
-                    }
+                    addPathSectionTitle(EXAMPLE_CURL);
                     this.markupDocBuilder.paragraph(curlExample.get());
                 }
 
                 Optional<String> requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
                 if(requestExample.isPresent()){
-                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_REQUEST);
-                    }else{
-                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_REQUEST);
-                    }
+                    addPathSectionTitle(EXAMPLE_REQUEST);
                     this.markupDocBuilder.paragraph(requestExample.get());
                 }
                 Optional<String> responseExample = example(exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
                 if(responseExample.isPresent()){
-                    if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                        this.markupDocBuilder.sectionTitleLevel3(EXAMPLE_RESPONSE);
-                    }else{
-                        this.markupDocBuilder.sectionTitleLevel4(EXAMPLE_RESPONSE);
-                    }
+                    addPathSectionTitle(EXAMPLE_RESPONSE);
                     this.markupDocBuilder.paragraph(responseExample.get());
                 }
             }else{
@@ -425,7 +431,7 @@ public class PathsDocument extends MarkupDocument {
                     logger.info("Example file processed: {}", path);
                 }
                 try {
-                    return Optional.fromNullable(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                    return Optional.of(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 } catch (IOException e) {
                     if (logger.isWarnEnabled()) {
                         logger.warn(String.format("Failed to read example file: %s", path),  e);
@@ -458,7 +464,7 @@ public class PathsDocument extends MarkupDocument {
                     logger.info("Description file processed: {}", path);
                 }
                 try {
-                    return Optional.fromNullable(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
+                    return Optional.of(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim());
                 } catch (IOException e) {
                     if (logger.isWarnEnabled()) {
                         logger.warn(String.format("Failed to read description file: %s", path),  e);
@@ -476,8 +482,9 @@ public class PathsDocument extends MarkupDocument {
         return Optional.absent();
     }
 
-    private void responsesSection(Operation operation) {
+    private List<Type> responsesSection(Operation operation) {
         Map<String, Response> responses = operation.getResponses();
+        List<Type> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
             List<String> csvContent = new ArrayList<>();
             csvContent.add(HTTP_CODE_COLUMN + DELIMITER + DESCRIPTION_COLUMN + DELIMITER + SCHEMA_COLUMN);
@@ -485,19 +492,39 @@ public class PathsDocument extends MarkupDocument {
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
-                    String type = PropertyUtils.getType(property, markupLanguage);
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  type);
+                    Type type = PropertyUtils.getType(property);
+                    if (type instanceof ObjectType) {
+                        String localTypeName = "Response " + entry.getKey();
+                        type.setName(localTypeName);
+                        type.setUniqueName(uniqueTypeName(localTypeName));
+                        localDefinitions.add(type);
+
+                        type = new RefType(type);
+                    }
+                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + typeSchema(type));
                 }else{
                     csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  "No Content");
                 }
             }
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                this.markupDocBuilder.sectionTitleLevel3(RESPONSES);
-            }else{
-                this.markupDocBuilder.sectionTitleLevel4(RESPONSES);
-            }
+            addPathSectionTitle(RESPONSES);
             this.markupDocBuilder.tableWithHeaderRow(csvContent);
         }
+        return localDefinitions;
     }
 
+    private void localDefinitionsSection(List<Type> definitions) {
+        if(CollectionUtils.isNotEmpty(definitions)){
+            addPathSectionTitle(DEFINITIONS);
+
+            for (Type definition: definitions) {
+                if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+                    sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
+                }else{
+                    sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
+                }
+                typeProperties(definition, new PropertyDescriptor(definition), this.markupDocBuilder);
+            }
+        }
+
+    }
 }

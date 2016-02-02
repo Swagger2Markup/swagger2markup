@@ -23,7 +23,8 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
-import io.github.robwin.swagger2markup.utils.PropertyUtils;
+import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.RefModel;
@@ -192,25 +193,35 @@ public class DefinitionsDocument extends MarkupDocument {
         propertiesSection(definitions, definitionName, model, docBuilder);
     }
 
+    private class DefinitionPropertyDescriptor extends PropertyDescriptor {
+
+        public DefinitionPropertyDescriptor(Type type) {
+            super(type);
+        }
+
+        @Override
+        public String getDescription(Property property, String propertyName) {
+            String description;
+            if(handWrittenDescriptionsEnabled){
+                description = handWrittenPathDescription(type.getName().toLowerCase() + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
+                if(isBlank(description)) {
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
+                    }
+                    description = defaultString(property.getDescription());
+                }
+            }
+            else{
+                description = defaultString(property.getDescription());
+            }
+            return description;
+        }
+    }
+
     private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
-        List<String> headerAndContent = new ArrayList<>();
-        List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-        headerAndContent.add(join(header, DELIMITER));
-        if(MapUtils.isNotEmpty(properties)){
-            for (Map.Entry<String, Property> propertyEntry : properties.entrySet()) {
-                Property property = propertyEntry.getValue();
-                String propertyName = propertyEntry.getKey();
-                List<String> content = Arrays.asList(
-                        propertyName,
-                        propertyDescription(definitionName, propertyName, property),
-                        Boolean.toString(property.getRequired()),
-                        PropertyUtils.getType(property, markupLanguage),
-                        PropertyUtils.getDefaultValue(property));
-                headerAndContent.add(join(content, DELIMITER));
-            }
-            docBuilder.tableWithHeaderRow(headerAndContent);
-        }
+        Type type = new ObjectType(definitionName, properties);
+        typeProperties(type, new DefinitionPropertyDescriptor(type), docBuilder);
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
@@ -267,24 +278,6 @@ public class DefinitionsDocument extends MarkupDocument {
             docBuilder.paragraph(description);
         }
     }
-
-    private String propertyDescription(String definitionName, String propertyName, Property property) {
-        String description;
-        if(handWrittenDescriptionsEnabled){
-            description = handWrittenPathDescription(definitionName.toLowerCase() + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
-            if(isBlank(description)) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
-                }
-                description = defaultString(property.getDescription());
-            }
-        }
-        else{
-            description = defaultString(property.getDescription());
-        }
-        return description;
-    }
-
 
     /**
      * Reads a hand-written description
