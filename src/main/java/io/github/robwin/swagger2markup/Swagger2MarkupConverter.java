@@ -17,9 +17,12 @@
  *
  */
 package io.github.robwin.swagger2markup;
+
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
+import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
+import io.github.robwin.swagger2markup.builder.document.PathsDocument;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
-import io.github.robwin.swagger2markup.builder.document.*;
 import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -142,6 +145,7 @@ public class Swagger2MarkupConverter {
         private OrderBy definitionsOrderedBy = OrderBy.NATURAL;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
         private Language outputLanguage = Language.EN;
+        private Integer inlineSchemaDepthLevel = 0;
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -167,7 +171,7 @@ public class Swagger2MarkupConverter {
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, pathsGroupedBy, definitionsOrderedBy,
-                    outputLanguage));
+                    outputLanguage, inlineSchemaDepthLevel));
         }
 
         /**
@@ -264,6 +268,17 @@ public class Swagger2MarkupConverter {
          */
         public Builder withOutputLanguage(Language language) {
             this.outputLanguage = language;
+            return this;
+        }
+
+        /**
+         * Specifies maximum depth level for inline object schema displaying (0 = no inline schemas)
+         *
+         * @param inlineSchemaDepthLevel
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withInlineSchemaDepthLevel(Integer inlineSchemaDepthLevel) {
+            this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
             return this;
         }
     }

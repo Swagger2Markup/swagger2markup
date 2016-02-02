@@ -25,11 +25,13 @@ import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.RefModel;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.Validate;
@@ -64,6 +66,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private boolean separatedDefinitionsEnabled;
     private String outputDirectory;
     private final OrderBy definitionsOrderedBy;
+    private final Integer inlineSchemaDepthLevel;
 
     public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
         super(swagger2MarkupConfig);
@@ -74,6 +77,7 @@ public class DefinitionsDocument extends MarkupDocument {
         JSON_SCHEMA = labels.getString("json_schema");
         XML_SCHEMA = labels.getString("xml_schema");
 
+        this.inlineSchemaDepthLevel = swagger2MarkupConfig.getInlineSchemaDepthLevel();
         this.definitionsOrderedBy = swagger2MarkupConfig.getDefinitionsOrderedBy();
         if(isNotBlank(swagger2MarkupConfig.getSchemasFolderPath())){
             this.schemasEnabled = true;
@@ -221,7 +225,9 @@ public class DefinitionsDocument extends MarkupDocument {
     private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
         Type type = new ObjectType(definitionName, properties);
-        typeProperties(type, new DefinitionPropertyDescriptor(type), docBuilder);
+
+        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), docBuilder);
+        inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
@@ -340,5 +346,17 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Schema file is not readable: {}", path);
             }
         }
+    }
+
+    private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
+        if(CollectionUtils.isNotEmpty(definitions)){
+            for (Type definition: definitions) {
+                MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), docBuilder);
+                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), docBuilder);
+                for (Type localDefinition : localDefinitions)
+                    inlineDefinitions(Arrays.asList(localDefinition), depth - 1, docBuilder);
+            }
+        }
+
     }
 }

@@ -39,7 +39,7 @@ public final class PropertyUtils {
      */
     public static Type getType(Property property){
         Validate.notNull(property, "property must not be null!");
-        Type type = null;
+        Type type;
         if(property instanceof RefProperty){
             RefProperty refProperty = (RefProperty)property;
             type = new RefType(refProperty.getSimpleRef());

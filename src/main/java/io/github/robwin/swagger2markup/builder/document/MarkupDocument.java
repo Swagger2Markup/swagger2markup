@@ -23,6 +23,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
@@ -38,14 +39,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * @author Robert Winkler
  */
 public abstract class MarkupDocument {
 
-    protected static final String DELIMITER = "|";
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
     protected final String SCHEMA_COLUMN;
@@ -55,12 +54,13 @@ public abstract class MarkupDocument {
     protected final String PRODUCES;
     protected final String CONSUMES;
     protected final String TAGS;
+    protected final String NO_CONTENT;
     protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;
     protected MarkupDocBuilder markupDocBuilder;
 
-    protected static AtomicInteger idCount = new AtomicInteger(0);
+    protected static AtomicInteger typeIdCount = new AtomicInteger(0);
 
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig) {
         this.swagger = swagger2MarkupConfig.getSwagger();
@@ -78,10 +78,7 @@ public abstract class MarkupDocument {
         PRODUCES = labels.getString("produces");
         CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
-    }
-
-    public Integer getNextId() {
-        return idCount.getAndIncrement();
+        NO_CONTENT = labels.getString("no_content");
     }
 
     /**
@@ -112,38 +109,50 @@ public abstract class MarkupDocument {
     }
 
     public String uniqueTypeName(String name) {
-        return name + "-" + getNextId();
+        return name + "-" + typeIdCount.getAndIncrement();
     }
 
-    public String typeSchema(Type type) {
-        if (type == null)
-            return "Unknown";
-        else
-            return type.displaySchema(markupLanguage);
-    }
-
-    public void typeProperties(Type type, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
+    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
+        List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
-            List<String> headerAndContent = new ArrayList<>();
+            List<List<String>> cells = new ArrayList<>();
             List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            headerAndContent.add(join(header, DELIMITER));
+            cells.add(header);
             if (MapUtils.isNotEmpty(objectType.getProperties())) {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
                     String propertyName = propertyEntry.getKey();
                     Type propertyType = PropertyUtils.getType(property);
+                    if (depth > 0 && propertyType instanceof ObjectType) {
+                        propertyType.setName(propertyName);
+                        propertyType.setUniqueName(uniqueTypeName(propertyName));
+                        localDefinitions.add(propertyType);
+
+                        propertyType = new RefType(propertyType);
+                    }
+
                     List<String> content = Arrays.asList(
                             propertyName,
                             propertyDescriptor.getDescription(property, propertyName),
                             Boolean.toString(property.getRequired()),
-                            typeSchema(propertyType),
+                            propertyType.displaySchema(markupLanguage),
                             PropertyUtils.getDefaultValue(property));
-                    headerAndContent.add(join(content, DELIMITER));
+                    cells.add(content);
                 }
-                docBuilder.tableWithHeaderRow(headerAndContent);
+                MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 6, 1, 1, 1), cells, docBuilder);
+            }
+            else {
+                docBuilder.textLine(NO_CONTENT);
+                docBuilder.newLine();
             }
         }
+        else {
+            docBuilder.textLine(NO_CONTENT);
+            docBuilder.newLine();
+        }
+
+        return localDefinitions;
     }
 
     public class PropertyDescriptor {
@@ -158,31 +167,4 @@ public abstract class MarkupDocument {
         }
     }
 
-    public void sectionTitleLevel(int level, String title, String anchor, MarkupDocBuilder docBuilder) {
-        if (anchor != null)
-            docBuilder.textLine(MarkupDocBuilderUtils.anchor(anchor, this.markupLanguage));
-
-        switch (level) {
-            case 1:
-                docBuilder.sectionTitleLevel1(title);
-                break;
-            case 2:
-                docBuilder.sectionTitleLevel2(title);
-                break;
-            case 3:
-                docBuilder.sectionTitleLevel3(title);
-                break;
-            case 4:
-                docBuilder.sectionTitleLevel4(title);
-                break;
-            case 5:
-                if (anchor == null)
-                    docBuilder.textLine(MarkupDocBuilderUtils.anchor(title, this.markupLanguage));
-                docBuilder.boldTextLine(title);
-                break;
-            default:
-                throw new RuntimeException("Illegal section level : " + level);
-        }
-
-    }
 }

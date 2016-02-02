@@ -35,6 +35,7 @@ public class Swagger2MarkupConfig {
     private final GroupBy pathsGroupedBy;
     private final OrderBy definitionsOrderedBy;
     private final Language outputLanguage;
+    private final Integer inlineSchemaDepthLevel;
 
     /**
      * @param swagger the Swagger source
@@ -46,10 +47,12 @@ public class Swagger2MarkupConfig {
      * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
      * @param outputLanguage specifies language of labels in output files
+     * @param inlineSchemaDepthLevel specifies the max depth for inline object schema display (0 = no inline schemas)
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions,
-                                GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage) {
+                                GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
+                                Integer inlineSchemaDepthLevel) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -59,6 +62,7 @@ public class Swagger2MarkupConfig {
         this.pathsGroupedBy = pathsGroupedBy;
         this.definitionsOrderedBy = definitionsOrderedBy;
         this.outputLanguage = outputLanguage;
+        this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
     }
 
     public Swagger getSwagger() {
@@ -95,5 +99,9 @@ public class Swagger2MarkupConfig {
 
     public Language getOutputLanguage() {
         return outputLanguage;
+    }
+
+    public Integer getInlineSchemaDepthLevel() {
+        return inlineSchemaDepthLevel;
     }
 }
