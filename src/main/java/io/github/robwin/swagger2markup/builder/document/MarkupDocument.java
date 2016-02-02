@@ -18,6 +18,8 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -25,7 +27,6 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -114,6 +115,15 @@ public abstract class MarkupDocument {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
+    public static String tableRow(List<String> cells) {
+        return join(Collections2.transform(cells, new Function<String, String>() {
+            @Override
+            public String apply(final String cell) {
+                return cell.replace(DELIMITER, "{vbar}");
+            }
+        }), DELIMITER);
+    }
+
     public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
@@ -140,7 +150,7 @@ public abstract class MarkupDocument {
                             Boolean.toString(property.getRequired()),
                             propertyType.displaySchema(markupLanguage),
                             PropertyUtils.getDefaultValue(property));
-                    headerAndContent.add(join(content, DELIMITER));
+                    headerAndContent.add(tableRow(content));
                 }
                 docBuilder.tableWithHeaderRow(headerAndContent);
             }

@@ -307,7 +307,7 @@ public class PathsDocument extends MarkupDocument {
                         Boolean.toString(parameter.getRequired()),
                         type.displaySchema(markupLanguage),
                         ParameterUtils.getDefaultValue(parameter));
-                headerAndContent.add(join(content, DELIMITER));
+                headerAndContent.add(tableRow(content));
             }
             addPathSectionTitle(PARAMETERS);
             this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
@@ -500,9 +500,9 @@ public class PathsDocument extends MarkupDocument {
                         localDefinitions.add(type);
                         type = new RefType(type);
                     }
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER + type.displaySchema(markupLanguage));
+                    csvContent.add(tableRow(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupLanguage))));
                 }else{
-                    csvContent.add(entry.getKey() + DELIMITER + response.getDescription() + DELIMITER +  NO_CONTENT);
+                    csvContent.add(tableRow(Arrays.asList(entry.getKey(), response.getDescription(), NO_CONTENT)));
                 }
             }
             addPathSectionTitle(RESPONSES);
@@ -521,7 +521,7 @@ public class PathsDocument extends MarkupDocument {
                 }
                 List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), this.markupDocBuilder);
                 for (Type localDefinition : localDefinitions)
-                    inlineDefinitions(Arrays.asList(localDefinition), depth - 1);
+                    inlineDefinitions(Collections.singletonList(localDefinition), depth - 1);
             }
         }
 
