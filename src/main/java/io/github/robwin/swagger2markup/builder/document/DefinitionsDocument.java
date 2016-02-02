@@ -351,7 +351,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
-                MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupLanguage, docBuilder);
+                MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), docBuilder);
                 List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), docBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Arrays.asList(localDefinition), depth - 1, docBuilder);

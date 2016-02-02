@@ -18,8 +18,6 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -27,6 +25,7 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -40,14 +39,12 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * @author Robert Winkler
  */
 public abstract class MarkupDocument {
 
-    protected static final String DELIMITER = "|";
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
     protected final String SCHEMA_COLUMN;
@@ -115,22 +112,13 @@ public abstract class MarkupDocument {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
-    public static String tableRow(List<String> cells) {
-        return join(Collections2.transform(cells, new Function<String, String>() {
-            @Override
-            public String apply(final String cell) {
-                return cell.replace(DELIMITER, "{vbar}");
-            }
-        }), DELIMITER);
-    }
-
     public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
-            List<String> headerAndContent = new ArrayList<>();
+            List<List<String>> cells = new ArrayList<>();
             List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            headerAndContent.add(join(header, DELIMITER));
+            cells.add(header);
             if (MapUtils.isNotEmpty(objectType.getProperties())) {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
@@ -150,9 +138,9 @@ public abstract class MarkupDocument {
                             Boolean.toString(property.getRequired()),
                             propertyType.displaySchema(markupLanguage),
                             PropertyUtils.getDefaultValue(property));
-                    headerAndContent.add(tableRow(content));
+                    cells.add(content);
                 }
-                docBuilder.tableWithHeaderRow(headerAndContent);
+                MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 6, 1, 1, 1), cells, docBuilder);
             }
             else {
                 docBuilder.textLine(NO_CONTENT);

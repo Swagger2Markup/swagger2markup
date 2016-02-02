@@ -44,7 +44,8 @@ import java.nio.file.Paths;
 import java.util.*;
 
 import static io.github.robwin.swagger2markup.utils.TagUtils.*;
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -284,10 +285,10 @@ public class PathsDocument extends MarkupDocument {
         List<Parameter> parameters = operation.getParameters();
         List<Type> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
-            List<String> headerAndContent = new ArrayList<>();
+            List<List<String>> cells = new ArrayList<>();
             // Table header row
             List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            headerAndContent.add(join(header, DELIMITER));
+            cells.add(header);
             for(Parameter parameter : parameters){
                 Type type = ParameterUtils.getType(parameter);
                 if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
@@ -307,10 +308,10 @@ public class PathsDocument extends MarkupDocument {
                         Boolean.toString(parameter.getRequired()),
                         type.displaySchema(markupLanguage),
                         ParameterUtils.getDefaultValue(parameter));
-                headerAndContent.add(tableRow(content));
+               cells.add(content);
             }
             addPathSectionTitle(PARAMETERS);
-            this.markupDocBuilder.tableWithHeaderRow(headerAndContent);
+            MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 1, 6, 1, 1, 1), cells, this.markupDocBuilder);
         }
 
         return localDefinitions;
@@ -485,8 +486,8 @@ public class PathsDocument extends MarkupDocument {
         Map<String, Response> responses = operation.getResponses();
         List<Type> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
-            List<String> csvContent = new ArrayList<>();
-            csvContent.add(HTTP_CODE_COLUMN + DELIMITER + DESCRIPTION_COLUMN + DELIMITER + SCHEMA_COLUMN);
+            List<List<String>> cells = new ArrayList<>();
+            cells.add(Arrays.asList(HTTP_CODE_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN));
             for(Map.Entry<String, Response> entry : responses.entrySet()){
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
@@ -500,13 +501,13 @@ public class PathsDocument extends MarkupDocument {
                         localDefinitions.add(type);
                         type = new RefType(type);
                     }
-                    csvContent.add(tableRow(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupLanguage))));
+                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupLanguage)));
                 }else{
-                    csvContent.add(tableRow(Arrays.asList(entry.getKey(), response.getDescription(), NO_CONTENT)));
+                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), NO_CONTENT));
                 }
             }
             addPathSectionTitle(RESPONSES);
-            this.markupDocBuilder.tableWithHeaderRow(csvContent);
+            MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 6, 1), cells, this.markupDocBuilder);
         }
         return localDefinitions;
     }
@@ -515,9 +516,9 @@ public class PathsDocument extends MarkupDocument {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
                 if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                    MarkupDocBuilderUtils.sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupLanguage, this.markupDocBuilder);
+                    MarkupDocBuilderUtils.sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
                 }else{
-                    MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupLanguage, this.markupDocBuilder);
+                    MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
                 }
                 List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), this.markupDocBuilder);
                 for (Type localDefinition : localDefinitions)
