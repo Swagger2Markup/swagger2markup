@@ -84,7 +84,6 @@ ext {
 }
 
 asciidoctor {
-    dependsOn test
     sources {
         include 'index.adoc'
     }
@@ -109,10 +108,6 @@ jacocoTestReport {
 }
 
 tasks.coveralls {
-    dependsOn 'check'
-}
-
-tasks.asciidoctor {
     dependsOn 'check'
 }
 
