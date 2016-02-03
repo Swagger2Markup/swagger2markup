@@ -522,6 +522,7 @@ public class PathsDocument extends MarkupDocument {
     private void addInlineDefinitionTitle(String title, String anchor) {
         MarkupDocBuilderUtils.anchor(anchor, this.markupDocBuilder);
         this.markupDocBuilder.boldTextLine(title);
+        this.markupDocBuilder.newLine();
     }
 
     private void inlineDefinitions(List<Type> definitions, int depth) {

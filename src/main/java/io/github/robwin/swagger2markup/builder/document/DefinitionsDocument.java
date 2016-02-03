@@ -355,6 +355,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         MarkupDocBuilderUtils.anchor(anchor, docBuilder);
         docBuilder.boldTextLine(title);
+        docBuilder.newLine();
     }
 
 
