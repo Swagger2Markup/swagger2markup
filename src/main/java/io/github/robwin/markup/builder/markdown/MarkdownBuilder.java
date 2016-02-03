@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -40,6 +41,7 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
     private static final String MARKDOWN_FILE_EXTENSION = "md";
+    private static final Pattern ANCHOR_ESCAPE_PATTERN = Pattern.compile("[^0-9a-zA-Z]+");
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
@@ -148,6 +150,10 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         return this;
     }
 
+    private static String normalizeReferenceAnchor(String anchor) {
+        return ANCHOR_ESCAPE_PATTERN.matcher(anchor).replaceAll("-");
+    }
+
     @Override
     public MarkupDocBuilder anchor(String anchor) {
         documentBuilder.append(anchorAsString(anchor));
@@ -156,7 +162,9 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public String anchorAsString(String anchor) {
-        return "";
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<a name=\"").append(normalizeReferenceAnchor(anchor)).append("\"></a>");
+        return stringBuilder.toString();
     }
 
     @Override
@@ -169,9 +177,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     public String crossReferenceAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
-            stringBuilder.append(anchor);
-        else
-            stringBuilder.append(text);
+            text = anchor;
+        stringBuilder.append("[").append(text).append("](#").append(normalizeReferenceAnchor(anchor)).append(")");
         return stringBuilder.toString();
     }
 

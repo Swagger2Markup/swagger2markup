@@ -39,7 +39,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     private static final String ASCIIDOC_FILE_EXTENSION = "adoc";
-    private static final Pattern ANCHOR_ESCAPE_PATTERN = Pattern.compile("[^0-9a-zA-Z]");
+    private static final Pattern ANCHOR_ESCAPE_PATTERN = Pattern.compile("[^0-9a-zA-Z]+");
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
