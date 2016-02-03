@@ -33,7 +33,7 @@ import java.util.List;
 public class MarkupDocBuilderTest {
 
     List<String> tableRowsInPSV;
-    List<MarkupDocBuilder.TableColumnSpec> tableColumns;
+    List<MarkupTableColumn> tableColumns;
     List<List<String>> tableCells;
 
 
@@ -45,9 +45,9 @@ public class MarkupDocBuilderTest {
         tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
 
         tableColumns = Arrays.asList(
-                new MarkupDocBuilder.TableColumnSpec().withHeader("Header1"),
-                new MarkupDocBuilder.TableColumnSpec().withWidthRatio(2),
-                new MarkupDocBuilder.TableColumnSpec().withHeader("Header3").withWidthRatio(1));
+                new MarkupTableColumn().withHeader("Header1"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1));
         tableCells = new ArrayList<>();
         tableCells.add(Arrays.asList("Row 1 | Column 1", "Row 1 | Column 2", "Row 1 | Column 3"));
         tableCells.add(Arrays.asList("Row 2 | Column 1", "Row 2 | Column 2", "Row 2 | Column 3"));
@@ -75,10 +75,10 @@ public class MarkupDocBuilderTest {
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
                 .anchor("anchor").newLine()
-                .anchor("\u0240 & this | there").newLine()
+                .anchor("  \u0240 & This | There  ").newLine()
                 .crossReference("anchor").newLine()
                 .crossReference("anchor", "text").newLine()
-                .crossReference("\u0240 & this | there").newLine()
+                .crossReference("  \u0240 & This | There  ").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
@@ -103,10 +103,10 @@ public class MarkupDocBuilderTest {
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
                 .anchor("anchor").newLine()
-                .anchor("\u0240 & this | there").newLine()
+                .anchor("  \u0240 & This | There  ").newLine()
                 .crossReference("anchor").newLine()
                 .crossReference("anchor", "text").newLine()
-                .crossReference("\u0240 & this | there").newLine()
+                .crossReference("  \u0240 & This | There  ").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 

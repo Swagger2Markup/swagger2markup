@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,7 +42,8 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
     private static final String MARKDOWN_FILE_EXTENSION = "md";
-    private static final Pattern ANCHOR_ESCAPE_PATTERN = Pattern.compile("[^0-9a-zA-Z]+");
+    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_\\s]+");
+    private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
@@ -151,7 +153,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     private static String normalizeReferenceAnchor(String anchor) {
-        return ANCHOR_ESCAPE_PATTERN.matcher(anchor).replaceAll("-");
+        return ANCHOR_SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim().toLowerCase()).replaceAll("")).replaceAll("-");
     }
 
     @Override
@@ -177,7 +179,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     public String crossReferenceAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
-            text = anchor;
+            text = anchor.trim();
         stringBuilder.append("[").append(text).append("](#").append(normalizeReferenceAnchor(anchor)).append(")");
         return stringBuilder.toString();
     }
@@ -187,20 +189,20 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> columns, List<List<String>> cells) {
-        if (CollectionUtils.isEmpty(columns))
+    public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
+        if (CollectionUtils.isEmpty(columnSpecs))
             throw new RuntimeException("Header is mandatory in Markdown");
 
         newLine();
-        Collection<String> headerList = Collections2.transform(columns, new Function<TableColumnSpec, String>() {
-            public String apply(final TableColumnSpec header) {
+        Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
+            public String apply(final MarkupTableColumn header) {
                 return escapeTableCell(defaultString(header.header));
             }
         });
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
 
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
-        for (TableColumnSpec col : columns) {
+        for (MarkupTableColumn col : columnSpecs) {
             documentBuilder.append(StringUtils.repeat(Markdown.TABLE_ROW.toString(), 3));
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
         }
@@ -221,6 +223,6 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
+        writeToFileWithoutExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
     }
 }
