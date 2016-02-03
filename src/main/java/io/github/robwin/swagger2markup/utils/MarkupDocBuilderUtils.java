@@ -53,38 +53,6 @@ public class MarkupDocBuilderUtils {
         }
     }
 
-    public static void sectionTitleLevel(int level, String title, String anchor, MarkupDocBuilder docBuilder) {
-        if (anchor != null)
-            MarkupDocBuilderUtils.anchor(anchor, docBuilder);
-
-        switch (level) {
-            case 1:
-                docBuilder.sectionTitleLevel1(title);
-                break;
-            case 2:
-                docBuilder.sectionTitleLevel2(title);
-                break;
-            case 3:
-                docBuilder.sectionTitleLevel3(title);
-                break;
-            case 4:
-                docBuilder.sectionTitleLevel4(title);
-                break;
-            case 5:
-                if (anchor == null)
-                    MarkupDocBuilderUtils.anchor(title, docBuilder);
-                docBuilder.boldTextLine(title);
-                break;
-            case 6:
-                if (anchor == null)
-                    MarkupDocBuilderUtils.anchor(title, docBuilder);
-                docBuilder.textLine(title);
-                break;
-            default:
-                throw new RuntimeException("Illegal section level : " + level);
-        }
-    }
-
     public static void tableWithHeaderRow(List<Integer> columnWidthRatios, List<List<String>> cells, MarkupDocBuilder docBuilder) {
         if (docBuilder instanceof AsciiDocBuilder) {
             docBuilder.textLine("[options=\"header\",cols=\"" + join(columnWidthRatios, ",") + "\"]");

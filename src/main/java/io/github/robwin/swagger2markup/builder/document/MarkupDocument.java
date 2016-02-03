@@ -125,11 +125,13 @@ public abstract class MarkupDocument {
                     String propertyName = propertyEntry.getKey();
                     Type propertyType = PropertyUtils.getType(property);
                     if (depth > 0 && propertyType instanceof ObjectType) {
-                        propertyType.setName(propertyName);
-                        propertyType.setUniqueName(uniqueTypeName(propertyName));
-                        localDefinitions.add(propertyType);
+                        if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
+                            propertyType.setName(propertyName);
+                            propertyType.setUniqueName(uniqueTypeName(propertyName));
+                            localDefinitions.add(propertyType);
 
-                        propertyType = new RefType(propertyType);
+                            propertyType = new RefType(propertyType);
+                        }
                     }
 
                     List<String> content = Arrays.asList(

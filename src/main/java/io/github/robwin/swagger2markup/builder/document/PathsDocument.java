@@ -292,12 +292,14 @@ public class PathsDocument extends MarkupDocument {
             for(Parameter parameter : parameters){
                 Type type = ParameterUtils.getType(parameter);
                 if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                    String localTypeName = parameter.getName();
+                    if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
+                        String localTypeName = parameter.getName();
 
-                    type.setName(localTypeName);
-                    type.setUniqueName(uniqueTypeName(localTypeName));
-                    localDefinitions.add(type);
-                    type = new RefType(type);
+                        type.setName(localTypeName);
+                        type.setUniqueName(uniqueTypeName(localTypeName));
+                        localDefinitions.add(type);
+                        type = new RefType(type);
+                    }
                 }
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
@@ -494,12 +496,14 @@ public class PathsDocument extends MarkupDocument {
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                        String localTypeName = RESPONSE_INLINE_PREFIX + " " + entry.getKey();
+                        if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
+                            String localTypeName = RESPONSE_INLINE_PREFIX + " " + entry.getKey();
 
-                        type.setName(localTypeName);
-                        type.setUniqueName(uniqueTypeName(localTypeName));
-                        localDefinitions.add(type);
-                        type = new RefType(type);
+                            type.setName(localTypeName);
+                            type.setUniqueName(uniqueTypeName(localTypeName));
+                            localDefinitions.add(type);
+                            type = new RefType(type);
+                        }
                     }
                     cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupLanguage)));
                 }else{
@@ -512,14 +516,18 @@ public class PathsDocument extends MarkupDocument {
         return localDefinitions;
     }
 
+    /**
+     * Inline definitions should never been referenced in TOC, so they are just text.
+     */
+    private void addInlineDefinitionTitle(String title, String anchor) {
+        MarkupDocBuilderUtils.anchor(anchor, this.markupDocBuilder);
+        this.markupDocBuilder.boldTextLine(title);
+    }
+
     private void inlineDefinitions(List<Type> definitions, int depth) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
-                if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                    MarkupDocBuilderUtils.sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
-                }else{
-                    MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), this.markupDocBuilder);
-                }
+                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName());
                 List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), this.markupDocBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1);

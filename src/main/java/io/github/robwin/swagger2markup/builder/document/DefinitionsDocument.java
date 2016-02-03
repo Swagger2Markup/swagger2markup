@@ -348,13 +348,23 @@ public class DefinitionsDocument extends MarkupDocument {
         }
     }
 
+
+    /**
+     * Inline definitions should never been referenced in TOC, so they are just text.
+     */
+    private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
+        MarkupDocBuilderUtils.anchor(anchor, docBuilder);
+        docBuilder.boldTextLine(title);
+    }
+
+
     private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
-                MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), docBuilder);
+                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
                 List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), docBuilder);
                 for (Type localDefinition : localDefinitions)
-                    inlineDefinitions(Arrays.asList(localDefinition), depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
         }
 
