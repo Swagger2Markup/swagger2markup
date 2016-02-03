@@ -145,7 +145,7 @@ public class Swagger2MarkupConverter {
         private OrderBy definitionsOrderedBy = OrderBy.NATURAL;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
         private Language outputLanguage = Language.EN;
-        private Integer inlineSchemaDepthLevel = 0;
+        private int inlineSchemaDepthLevel = 0;
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -277,7 +277,7 @@ public class Swagger2MarkupConverter {
          * @param inlineSchemaDepthLevel
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withInlineSchemaDepthLevel(Integer inlineSchemaDepthLevel) {
+        public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
             this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
             return this;
         }

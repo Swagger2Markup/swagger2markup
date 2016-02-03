@@ -78,6 +78,23 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocWithInlineSchema() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withInlineSchemaDepthLevel(1).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+    }
+
+    @Test
     public void testSwagger2AsciiDocGroupedByTags() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());

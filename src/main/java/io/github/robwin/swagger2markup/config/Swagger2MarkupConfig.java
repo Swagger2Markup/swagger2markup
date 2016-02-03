@@ -35,7 +35,7 @@ public class Swagger2MarkupConfig {
     private final GroupBy pathsGroupedBy;
     private final OrderBy definitionsOrderedBy;
     private final Language outputLanguage;
-    private final Integer inlineSchemaDepthLevel;
+    private final int inlineSchemaDepthLevel;
 
     /**
      * @param swagger the Swagger source
@@ -52,7 +52,7 @@ public class Swagger2MarkupConfig {
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
-                                Integer inlineSchemaDepthLevel) {
+                                int inlineSchemaDepthLevel) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -101,7 +101,7 @@ public class Swagger2MarkupConfig {
         return outputLanguage;
     }
 
-    public Integer getInlineSchemaDepthLevel() {
+    public int getInlineSchemaDepthLevel() {
         return inlineSchemaDepthLevel;
     }
 }

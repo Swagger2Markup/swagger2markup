@@ -66,7 +66,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private boolean separatedDefinitionsEnabled;
     private String outputDirectory;
     private final OrderBy definitionsOrderedBy;
-    private final Integer inlineSchemaDepthLevel;
+    private final int inlineSchemaDepthLevel;
 
     public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
         super(swagger2MarkupConfig);

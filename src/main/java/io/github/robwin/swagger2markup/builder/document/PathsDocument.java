@@ -75,7 +75,7 @@ public class PathsDocument extends MarkupDocument {
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
     private final GroupBy pathsGroupedBy;
-    private final Integer inlineSchemaDepthLevel;
+    private final int inlineSchemaDepthLevel;
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);

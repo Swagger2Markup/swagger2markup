@@ -14,7 +14,7 @@ paths:
   /LaunchCommand:
     post:
       summary: LaunchCommand
-      description: <description>
+      description: Dummy description
       tags:
         - All
       parameters:
@@ -41,7 +41,7 @@ paths:
           schema:
             $ref: '#/definitions/Simple'
         - name: LaunchCommandRequest
-          description: <description>
+          description: Launch something
           in: body
           schema:
             description: Inline schema
@@ -52,19 +52,19 @@ paths:
               - MaxCount
             properties:
               DryRun:
-                description: <description>
+                description: Dummy description
                 type: boolean
               SecurityGroup.N:
-                description: <description>
+                description: Dummy description
                 type: array
                 items:
                   type: string
                 type: string
               Location:
-                description: <description>
+                description: Dummy description
                 $ref: '#/definitions/Location'
               KernelId:
-                description: <description>
+                description: Dummy description
                 type: string
       responses:
         200:
