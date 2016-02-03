@@ -114,8 +114,8 @@ artifactory {
             repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
             //when using oss.jfrog.org the credentials are from Bintray. For local build we expect them to be found in
             //~/.gradle/gradle.properties, otherwise to be set in the build server
-            username = project.hasProperty('bintrayUsername') ? project.bintrayUsername : getenv()['BINTRAY_USER']
-            password = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : getenv()['BINTRAY_KEY']
+            username = project.hasProperty('bintrayUsername') ? project.bintrayUsername : System.getenv('BINTRAY_USER')
+            password = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
         }
         defaults {
             publications('mavenJava')
@@ -136,6 +136,10 @@ jacocoTestReport {
 }
 
 tasks.coveralls {
+    dependsOn 'check'
+}
+
+tasks.artifactoryPublish {
     dependsOn 'check'
 }
 
