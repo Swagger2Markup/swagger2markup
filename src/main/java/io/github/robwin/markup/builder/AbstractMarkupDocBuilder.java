@@ -42,23 +42,23 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void documentTitleWithAttributes(Markup markup, String title){
-        documentBuilder.append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel1(Markup markup, String title){
-        documentBuilder.append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel2(Markup markup, String title){
-        documentBuilder.append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel3(Markup markup, String title){
-        documentBuilder.append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel4(Markup markup, String title){
-        documentBuilder.append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
     }
 
     @Override
@@ -104,9 +104,25 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder crossReference(String anchor) {
+        crossReference(anchor, null);
+        return this;
+    }
+
+    @Override
+    public String crossReferenceAsString(String anchor) {
+        return crossReferenceAsString(anchor, null);
+    }
+
+    @Override
     public MarkupDocBuilder newLine(){
         documentBuilder.append(newLine);
         return this;
+    }
+
+    @Override
+    public MarkupDocBuilder table(List<List<String>> cells) {
+        return tableWithColumnSpecs(null, cells);
     }
 
     @Override
@@ -114,8 +130,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return documentBuilder.toString();
     }
 
-    @Override
-    public void writeToFile(String directory, String fileNameWithExtension, Charset charset) throws IOException {
+    protected void writeToFileWithExtension(String directory, String fileNameWithExtension, Charset charset) throws IOException {
         Files.createDirectories(Paths.get(directory));
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileNameWithExtension), charset)){
             writer.write(documentBuilder.toString());
