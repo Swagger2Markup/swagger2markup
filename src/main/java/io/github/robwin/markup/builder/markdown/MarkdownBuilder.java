@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.TableColumnSpec;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -222,6 +223,6 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
+        writeToFileWithoutExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
     }
 }

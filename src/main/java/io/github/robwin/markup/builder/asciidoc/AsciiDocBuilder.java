@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.TableColumnSpec;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
@@ -204,6 +205,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithExtension(directory, fileName + "." + ASCIIDOC_FILE_EXTENSION, charset);
+        writeToFileWithoutExtension(directory, fileName + "." + ASCIIDOC_FILE_EXTENSION, charset);
     }
 }
