@@ -62,7 +62,7 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder anchor(String anchor);
 
-    String inlineAnchor(String anchor);
+    String anchorAsString(String anchor);
 
     /**
      * @param anchor Target anchor
@@ -70,11 +70,11 @@ public interface MarkupDocBuilder {
      */
     MarkupDocBuilder crossReference(String anchor, String text);
 
-    String inlineCrossReference(String anchor, String text);
+    String crossReferenceAsString(String anchor, String text);
 
     MarkupDocBuilder crossReference(String anchor);
 
-    String inlineCrossReference(String anchor);
+    String crossReferenceAsString(String anchor);
 
     MarkupDocBuilder newLine();
 

@@ -110,8 +110,8 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public String inlineCrossReference(String anchor) {
-        return inlineCrossReference(anchor, null);
+    public String crossReferenceAsString(String anchor) {
+        return crossReferenceAsString(anchor, null);
     }
 
     @Override
