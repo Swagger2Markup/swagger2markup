@@ -94,21 +94,14 @@ public interface MarkupDocBuilder {
      */
     void writeToFile(String directory, String fileName, Charset charset) throws IOException;
 
-    class TableColumnSpec {
-        public String header;
-        public Integer widthRatio = 0;
-        public TableColumnSpec() {}
-        public TableColumnSpec(String header, Integer widthRatio) {
-            this.header = header;
-            this.widthRatio = widthRatio;
-        }
-        public TableColumnSpec withHeader(String header) {
-            this.header = header;
-            return this;
-        }
-        public TableColumnSpec withWidthRatio(Integer widthRatio) {
-            this.widthRatio = widthRatio;
-            return this;
-        }
-    }
+    /**
+     * Writes the content of the builder to a file and clears the builder.
+     *
+     * @param directory the directory where the generated file should be stored
+     * @param fileName the name of the file
+     * @param charset the the charset to use for encoding
+     * @throws java.io.IOException if the file cannot be written
+     */
+     void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException;
+
 }

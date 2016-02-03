@@ -130,13 +130,14 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return documentBuilder.toString();
     }
 
-    protected void writeToFileWithExtension(String directory, String fileNameWithExtension, Charset charset) throws IOException {
+    @Override
+    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
         Files.createDirectories(Paths.get(directory));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileNameWithExtension), charset)){
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileName), charset)){
             writer.write(documentBuilder.toString());
         }
         if (logger.isInfoEnabled()) {
-            logger.info("{} was written to: {}", fileNameWithExtension, directory);
+            logger.info("{} was written to: {}", fileName, directory);
         }
         documentBuilder = new StringBuilder();
     }
