@@ -18,13 +18,21 @@
  */
 package io.github.robwin.markup.builder.markdown;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.join;
 
 /**
  * @author Robert Winkler
@@ -153,6 +161,43 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
             documentBuilder.append(anchor);
         else
             documentBuilder.append(text);
+        return this;
+    }
+
+    private String escapeTableCell(String cell) {
+        return cell.replace(Markdown.TABLE_COLUMN_DELIMITER.toString(), Markdown.TABLE_COLUMN_DELIMITER_ESCAPE.toString());
+    }
+
+    @Override
+    public MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> columns, List<List<String>> cells) {
+        if (CollectionUtils.isEmpty(columns))
+            throw new RuntimeException("Header is mandatory in Markdown");
+
+        newLine();
+        Collection<String> headerList = Collections2.transform(columns, new Function<TableColumnSpec, String>() {
+            public String apply(final TableColumnSpec header) {
+                return escapeTableCell(defaultString(header.header));
+            }
+        });
+        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
+
+        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
+        for (TableColumnSpec col : columns) {
+            documentBuilder.append(StringUtils.repeat(Markdown.TABLE_ROW.toString(), 3));
+            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
+        }
+        documentBuilder.append(newLine);
+
+        for (List<String> row : cells) {
+            Collection<String> cellList = Collections2.transform(row, new Function<String, String>() {
+                public String apply(final String cell) {
+                    return escapeTableCell(cell);
+                }
+            });
+            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(cellList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
+        }
+        newLine();
+
         return this;
     }
 

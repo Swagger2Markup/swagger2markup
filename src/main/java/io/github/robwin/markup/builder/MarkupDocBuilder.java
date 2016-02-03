@@ -56,6 +56,10 @@ public interface MarkupDocBuilder {
     @Deprecated
     MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV);
 
+    MarkupDocBuilder table(List<List<String>> cells);
+
+    MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> headers, List<List<String>> cells);
+
     MarkupDocBuilder anchor(String anchor);
 
     /**
@@ -84,4 +88,21 @@ public interface MarkupDocBuilder {
      */
     void writeToFile(String directory, String fileName, Charset charset) throws IOException;
 
+    class TableColumnSpec {
+        public String header;
+        public Integer widthRatio = 0;
+        public TableColumnSpec() {}
+        public TableColumnSpec(String header, Integer widthRatio) {
+            this.header = header;
+            this.widthRatio = widthRatio;
+        }
+        public TableColumnSpec withHeader(String header) {
+            this.header = header;
+            return this;
+        }
+        public TableColumnSpec withWidthRatio(Integer widthRatio) {
+            this.widthRatio = widthRatio;
+            return this;
+        }
+    }
 }
