@@ -18,16 +18,16 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.properties.*;
+import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.Objects;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class PropertyUtils {
 
@@ -42,7 +42,10 @@ public final class PropertyUtils {
         Type type;
         if(property instanceof RefProperty){
             RefProperty refProperty = (RefProperty)property;
-            type = new RefType(refProperty.getSimpleRef());
+            if (refProperty.getRefFormat() == RefFormat.RELATIVE)
+                type = new ObjectType(null, null); // FIXME : Workaround for https://github.com/swagger-api/swagger-parser/issues/177
+            else
+                type = new RefType(refProperty.getSimpleRef());
         }else if(property instanceof ArrayProperty){
             ArrayProperty arrayProperty = (ArrayProperty)property;
             Property items = arrayProperty.getItems();
