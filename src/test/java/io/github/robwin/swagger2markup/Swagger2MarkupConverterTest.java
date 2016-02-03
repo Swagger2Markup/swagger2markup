@@ -31,7 +31,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -178,7 +177,7 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
 
-        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "overview.adoc"))))
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "overview.adoc").toPath())))
                 .doesNotContain("=== URI scheme");
     }
 
@@ -197,7 +196,7 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
 
-        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "overview.adoc"))))
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "overview.adoc").toPath())))
                 .contains("=== URI scheme");
     }
 
@@ -251,8 +250,8 @@ public class Swagger2MarkupConverterTest {
         assertThat(directories).hasSize(9).containsAll(
             asList("definitions.adoc", "overview.adoc", "paths.adoc", "identified.adoc",
                 "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
-        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.adoc"))))
-            .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.adoc"))));
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath())))
+            .contains(new String(Files.readAllBytes(new File(outputDirectory, "user.adoc").toPath())));
     }
 
     @Test
@@ -272,8 +271,8 @@ public class Swagger2MarkupConverterTest {
         assertThat(directories).hasSize(9).containsAll(
                 asList("definitions.md", "overview.md", "paths.md", "identified.md",
                         "user.md", "category.md", "pet.md", "tag.md", "order.md"));
-        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.md"))))
-                .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.md"))));
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.md").toPath())))
+                .contains(new String(Files.readAllBytes(new File(outputDirectory, "user.md").toPath())));
     }
 
     @Test
@@ -294,14 +293,14 @@ public class Swagger2MarkupConverterTest {
                 asList("definitions.md", "overview.md", "paths.md", "identified.md",
                         "user.md", "category.md", "pet.md", "tag.md", "order.md"));
         verifyMarkdownContainsFieldsInTables(
-                outputDirectory + File.separator + "definitions.md",
+                new File(outputDirectory, "definitions.md"),
                 ImmutableMap.<String, Set<String>>builder()
                         .put("Identified", ImmutableSet.of("id"))
                         .put("User", ImmutableSet.of("id", "username", "firstName",
                                 "lastName", "email", "password", "phone", "userStatus"))
                         .build());
         verifyMarkdownContainsFieldsInTables(
-                outputDirectory + File.separator + "user.md",
+                new File(outputDirectory, "user.md"),
                 ImmutableMap.<String, Set<String>>builder()
                         .put("User", ImmutableSet.of("id", "username", "firstName",
                                 "lastName", "email", "password", "phone", "userStatus"))
@@ -324,7 +323,7 @@ public class Swagger2MarkupConverterTest {
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
-        assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.adoc"))))
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath())))
                 .contains("== Определения");
     }
 
@@ -332,13 +331,13 @@ public class Swagger2MarkupConverterTest {
      * Given a markdown document to search, this checks to see if the specified tables
      * have all of the expected fields listed.
      *
-     * @param doc path of markdown document to inspect
+     * @param doc markdown document file to inspect
      * @param fieldsByTable map of table name (header) to field names expected
      *                      to be found in that table.
      * @throws IOException if the markdown document could not be read
      */
-    private static void verifyMarkdownContainsFieldsInTables(String doc, Map<String, Set<String>> fieldsByTable) throws IOException {
-        final List<String> lines = Files.readAllLines(Paths.get(doc), Charset.defaultCharset());
+    private static void verifyMarkdownContainsFieldsInTables(File doc, Map<String, Set<String>> fieldsByTable) throws IOException {
+        final List<String> lines = Files.readAllLines(doc.toPath(), Charset.defaultCharset());
         final Map<String, Set<String>> fieldsLeftByTable = Maps.newHashMap();
         for(Map.Entry<String, Set<String>> entry : fieldsByTable.entrySet()) {
             fieldsLeftByTable.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
