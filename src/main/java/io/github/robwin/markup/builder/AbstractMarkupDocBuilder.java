@@ -38,7 +38,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected void documentTitle(Markup markup, String title){
-        documentBuilder.append(newLine).append(markup).append(title).append(newLine).append(newLine);
+        documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
     protected void documentTitleWithAttributes(Markup markup, String title){
@@ -113,6 +113,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     public MarkupDocBuilder newLine(){
         documentBuilder.append(newLine);
         return this;
+    }
+
+    @Override
+    public MarkupDocBuilder table(List<List<String>> cells) {
+        return tableWithColumnSpecs(null, cells);
     }
 
     @Override

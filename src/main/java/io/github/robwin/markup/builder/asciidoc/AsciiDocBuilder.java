@@ -18,13 +18,20 @@
  */
 package io.github.robwin.markup.builder.asciidoc;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * @author Robert Winkler
@@ -135,6 +142,51 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
             documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.CROSS_REFERENCE_END);
         else
             documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
+        return this;
+    }
+
+    private String escapeTableCell(String cell) {
+        return cell.replace(AsciiDoc.TABLE_COLUMN_DELIMITER.toString(), AsciiDoc.TABLE_COLUMN_DELIMITER_ESCAPE.toString());
+    }
+
+    @Override
+    public MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> columns, List<List<String>> cells) {
+
+        Boolean hasHeader = false;
+        List<String> options = new ArrayList<>();
+        List<String> cols = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(columns)) {
+            for (TableColumnSpec col : columns) {
+                if (!hasHeader && isNotBlank(col.header)) {
+                    options.add("header");
+                    hasHeader = true;
+                }
+                cols.add(String.valueOf(col.widthRatio));
+            }
+        }
+
+        newLine();
+        documentBuilder.append("[options=\"" + join(options, ",") + "\", cols=\"" + join(cols, ",") + "\"]").append(newLine);
+        documentBuilder.append(AsciiDoc.TABLE).append(newLine);
+        if (hasHeader) {
+            Collection<String> headerList = Collections2.transform(columns, new Function<TableColumnSpec, String>() {
+                public String apply(final TableColumnSpec header) {
+                    return escapeTableCell(defaultString(header.header));
+                }
+            });
+            documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(headerList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
+
+        }
+        for (List<String> row : cells) {
+            Collection<String> cellList = Collections2.transform(row, new Function<String, String>() {
+                public String apply(final String cell) {
+                    return escapeTableCell(cell);
+                }
+            });
+            documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(cellList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
+        }
+        documentBuilder.append(AsciiDoc.TABLE).append(newLine);
+        newLine();
         return this;
     }
 

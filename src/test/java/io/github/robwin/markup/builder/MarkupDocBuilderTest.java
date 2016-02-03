@@ -33,6 +33,9 @@ import java.util.List;
 public class MarkupDocBuilderTest {
 
     List<String> tableRowsInPSV;
+    List<MarkupDocBuilder.TableColumnSpec> tableColumns;
+    List<List<String>> tableCells;
+
 
     @Before
     public void setUp(){
@@ -40,6 +43,14 @@ public class MarkupDocBuilderTest {
         tableRowsInPSV.add("Header 1 | Header 2 | Header2");
         tableRowsInPSV.add("Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3");
         tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
+
+        tableColumns = Arrays.asList(
+                new MarkupDocBuilder.TableColumnSpec().withHeader("Header1"),
+                new MarkupDocBuilder.TableColumnSpec().withWidthRatio(2),
+                new MarkupDocBuilder.TableColumnSpec().withHeader("Header3").withWidthRatio(1));
+        tableCells = new ArrayList<>();
+        tableCells.add(Arrays.asList("Row 1 | Column 1", "Row 1 | Column 2", "Row 1 | Column 3"));
+        tableCells.add(Arrays.asList("Row 2 | Column 1", "Row 2 | Column 2", "Row 2 | Column 3"));
     }
 
 
@@ -55,15 +66,17 @@ public class MarkupDocBuilderTest {
                 .listing("Source code listing")
                 .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", "java")
                 .tableWithHeaderRow(tableRowsInPSV)
+                .table(tableCells)
+                .tableWithColumnSpecs(tableColumns, tableCells)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
                 .textLine("text line b")
                 .boldTextLine("Bold text line b")
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
-                .anchor("anchor")
-                .crossReference("anchor")
-                .crossReference("anchor", "text")
+                .anchor("anchor").newLine()
+                .crossReference("anchor").newLine()
+                .crossReference("anchor", "text").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
@@ -79,15 +92,17 @@ public class MarkupDocBuilderTest {
                 .listing("Source code listing")
                 .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
                 .tableWithHeaderRow(tableRowsInPSV)
+                //.table(tableCells)
+                .tableWithColumnSpecs(tableColumns, tableCells)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
                 .textLine("text line b")
                 .boldTextLine("Bold text line b")
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
-                .anchor("anchor")
-                .crossReference("anchor")
-                .crossReference("anchor", "text")
+                .anchor("anchor").newLine()
+                .crossReference("anchor").newLine()
+                .crossReference("anchor", "text").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 

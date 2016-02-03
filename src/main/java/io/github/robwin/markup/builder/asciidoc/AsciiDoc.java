@@ -28,6 +28,7 @@ public enum AsciiDoc implements Markup {
     LABELED(":: "),
     TABLE("|==="),
     TABLE_COLUMN_DELIMITER("|"),
+    TABLE_COLUMN_DELIMITER_ESCAPE("\\|"), // AsciiDoctor supports both \| and {vbar}
     LISTING("----"),
     HARDBREAKS(":hardbreaks:"),
     DOCUMENT_TITLE("= "),
