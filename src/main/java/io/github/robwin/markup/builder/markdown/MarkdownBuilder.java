@@ -41,7 +41,8 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
     private static final String MARKDOWN_FILE_EXTENSION = "md";
-    private static final Pattern ANCHOR_ESCAPE_PATTERN = Pattern.compile("[^0-9a-zA-Z]+");
+    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_\\s]+");
+    private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
@@ -151,7 +152,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     private static String normalizeReferenceAnchor(String anchor) {
-        return ANCHOR_ESCAPE_PATTERN.matcher(anchor).replaceAll("-");
+        return ANCHOR_SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim().toLowerCase()).replaceAll("")).replaceAll("-");
     }
 
     @Override
@@ -177,7 +178,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     public String crossReferenceAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
-            text = anchor;
+            text = anchor.trim();
         stringBuilder.append("[").append(text).append("](#").append(normalizeReferenceAnchor(anchor)).append(")");
         return stringBuilder.toString();
     }
