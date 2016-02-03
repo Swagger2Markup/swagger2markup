@@ -222,6 +222,6 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
+        writeToFileWithoutExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
     }
 }

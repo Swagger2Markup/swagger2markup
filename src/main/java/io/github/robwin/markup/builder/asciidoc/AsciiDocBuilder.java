@@ -204,6 +204,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithExtension(directory, fileName + "." + ASCIIDOC_FILE_EXTENSION, charset);
+        writeToFileWithoutExtension(directory, fileName + "." + ASCIIDOC_FILE_EXTENSION, charset);
     }
 }
