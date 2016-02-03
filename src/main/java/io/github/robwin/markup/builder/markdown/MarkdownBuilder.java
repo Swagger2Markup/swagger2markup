@@ -150,23 +150,23 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder anchor(String anchor) {
-        documentBuilder.append(inlineAnchor(anchor));
+        documentBuilder.append(anchorAsString(anchor));
         return this;
     }
 
     @Override
-    public String inlineAnchor(String anchor) {
+    public String anchorAsString(String anchor) {
         return "";
     }
 
     @Override
     public MarkupDocBuilder crossReference(String anchor, String text) {
-        documentBuilder.append(inlineCrossReference(anchor, text));
+        documentBuilder.append(crossReferenceAsString(anchor, text));
         return this;
     }
 
     @Override
-    public String inlineCrossReference(String anchor, String text) {
+    public String crossReferenceAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
             stringBuilder.append(anchor);

@@ -132,12 +132,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder anchor(String anchor) {
-        documentBuilder.append(inlineAnchor(anchor));
+        documentBuilder.append(anchorAsString(anchor));
         return this;
     }
 
     @Override
-    public String inlineAnchor(String anchor) {
+    public String anchorAsString(String anchor) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
         return stringBuilder.toString();
@@ -145,12 +145,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder crossReference(String anchor, String text) {
-        documentBuilder.append(inlineCrossReference(anchor, text));
+        documentBuilder.append(crossReferenceAsString(anchor, text));
         return this;
     }
 
     @Override
-    public String inlineCrossReference(String anchor, String text) {
+    public String crossReferenceAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
             stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.CROSS_REFERENCE_END);
