@@ -31,6 +31,8 @@ import java.util.List;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
+    private static final String MARKDOWN_FILE_EXTENSION = "md";
+
     @Override
     public MarkupDocBuilder documentTitle(String title){
         documentTitle(Markdown.DOCUMENT_TITLE, title);
@@ -63,7 +65,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder sectionTitleLevel4(String title){
-        sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL4, title);
+        sectionTitleLevel4(Markdown.SECTION_TITLE_LEVEL4, title);
         return this;
     }
 
@@ -111,6 +113,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         List<String> contentRowsInPSV = rowsInPSV.subList(1, rowsInPSV.size());
         String[] headersAsArray = headersInPSV.split(String.format("\\%s", Markdown.TABLE_COLUMN_DELIMITER.toString()));
         List<String> headers = Arrays.asList(headersAsArray);
+
+        newLine();
         // Header
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
         documentBuilder.append(headersInPSV);
@@ -136,15 +140,24 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         return this;
     }
 
-    @Override
     // TODO
-    public MarkupDocBuilder crossReference(String text) {
-        throw new UnsupportedOperationException("Not yet supported");
+    @Override
+    public MarkupDocBuilder anchor(String anchor) {
+        return this;
+    }
+
+    // TODO
+    @Override
+    public MarkupDocBuilder crossReference(String anchor, String text) {
+        if (text == null)
+            documentBuilder.append(anchor);
+        else
+            documentBuilder.append(text);
+        return this;
     }
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        String fileNameWithExtension = fileName + ".md";
-        super.writeToFile(directory, fileNameWithExtension, charset);
+        writeToFileWithExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
     }
 }
