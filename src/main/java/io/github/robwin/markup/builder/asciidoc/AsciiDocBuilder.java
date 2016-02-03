@@ -22,7 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.TableColumnSpec;
+import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
@@ -163,13 +163,13 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> columns, List<List<String>> cells) {
+    public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
 
         Boolean hasHeader = false;
         List<String> options = new ArrayList<>();
         List<String> cols = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(columns)) {
-            for (TableColumnSpec col : columns) {
+        if (CollectionUtils.isNotEmpty(columnSpecs)) {
+            for (MarkupTableColumn col : columnSpecs) {
                 if (!hasHeader && isNotBlank(col.header)) {
                     options.add("header");
                     hasHeader = true;
@@ -182,8 +182,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append("[options=\"" + join(options, ",") + "\", cols=\"" + join(cols, ",") + "\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         if (hasHeader) {
-            Collection<String> headerList = Collections2.transform(columns, new Function<TableColumnSpec, String>() {
-                public String apply(final TableColumnSpec header) {
+            Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
+                public String apply(final MarkupTableColumn header) {
                     return escapeTableCell(defaultString(header.header));
                 }
             });

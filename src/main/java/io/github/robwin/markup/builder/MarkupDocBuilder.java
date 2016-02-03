@@ -58,7 +58,7 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder table(List<List<String>> cells);
 
-    MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> headers, List<List<String>> cells);
+    MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells);
 
     MarkupDocBuilder anchor(String anchor);
 

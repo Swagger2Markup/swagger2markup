@@ -22,7 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.TableColumnSpec;
+import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -189,20 +189,20 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder tableWithColumnSpecs(List<TableColumnSpec> columns, List<List<String>> cells) {
-        if (CollectionUtils.isEmpty(columns))
+    public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
+        if (CollectionUtils.isEmpty(columnSpecs))
             throw new RuntimeException("Header is mandatory in Markdown");
 
         newLine();
-        Collection<String> headerList = Collections2.transform(columns, new Function<TableColumnSpec, String>() {
-            public String apply(final TableColumnSpec header) {
+        Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
+            public String apply(final MarkupTableColumn header) {
                 return escapeTableCell(defaultString(header.header));
             }
         });
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
 
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
-        for (TableColumnSpec col : columns) {
+        for (MarkupTableColumn col : columnSpecs) {
             documentBuilder.append(StringUtils.repeat(Markdown.TABLE_ROW.toString(), 3));
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
         }
