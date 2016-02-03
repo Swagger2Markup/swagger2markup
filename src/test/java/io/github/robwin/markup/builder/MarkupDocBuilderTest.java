@@ -75,9 +75,10 @@ public class MarkupDocBuilderTest {
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
                 .anchor("anchor").newLine()
-                .anchor("\u0240  & this | there").newLine()
+                .anchor("\u0240 & this | there").newLine()
                 .crossReference("anchor").newLine()
                 .crossReference("anchor", "text").newLine()
+                .crossReference("\u0240 & this | there").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
@@ -102,9 +103,10 @@ public class MarkupDocBuilderTest {
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
                 .anchor("anchor").newLine()
-                .anchor("\u0240  & this | there").newLine()
+                .anchor("\u0240 & this | there").newLine()
                 .crossReference("anchor").newLine()
                 .crossReference("anchor", "text").newLine()
+                .crossReference("\u0240 & this | there").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
