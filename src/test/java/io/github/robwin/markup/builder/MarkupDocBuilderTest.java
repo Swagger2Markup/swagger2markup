@@ -33,7 +33,7 @@ import java.util.List;
 public class MarkupDocBuilderTest {
 
     List<String> tableRowsInPSV;
-    List<TableColumnSpec> tableColumns;
+    List<MarkupTableColumn> tableColumns;
     List<List<String>> tableCells;
 
 
@@ -45,9 +45,9 @@ public class MarkupDocBuilderTest {
         tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
 
         tableColumns = Arrays.asList(
-                new TableColumnSpec().withHeader("Header1"),
-                new TableColumnSpec().withWidthRatio(2),
-                new TableColumnSpec().withHeader("Header3").withWidthRatio(1));
+                new MarkupTableColumn().withHeader("Header1"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1));
         tableCells = new ArrayList<>();
         tableCells.add(Arrays.asList("Row 1 | Column 1", "Row 1 | Column 2", "Row 1 | Column 3"));
         tableCells.add(Arrays.asList("Row 2 | Column 1", "Row 2 | Column 2", "Row 2 | Column 3"));
