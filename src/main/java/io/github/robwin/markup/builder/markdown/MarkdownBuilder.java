@@ -148,20 +148,31 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         return this;
     }
 
-    // TODO
     @Override
     public MarkupDocBuilder anchor(String anchor) {
+        documentBuilder.append(inlineAnchor(anchor));
         return this;
     }
 
-    // TODO
+    @Override
+    public String inlineAnchor(String anchor) {
+        return "";
+    }
+
     @Override
     public MarkupDocBuilder crossReference(String anchor, String text) {
-        if (text == null)
-            documentBuilder.append(anchor);
-        else
-            documentBuilder.append(text);
+        documentBuilder.append(inlineCrossReference(anchor, text));
         return this;
+    }
+
+    @Override
+    public String inlineCrossReference(String anchor, String text) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (text == null)
+            stringBuilder.append(anchor);
+        else
+            stringBuilder.append(text);
+        return stringBuilder.toString();
     }
 
     private String escapeTableCell(String cell) {

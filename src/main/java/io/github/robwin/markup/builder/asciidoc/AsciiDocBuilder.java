@@ -132,17 +132,31 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder anchor(String anchor) {
-        documentBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
+        documentBuilder.append(inlineAnchor(anchor));
         return this;
     }
 
     @Override
+    public String inlineAnchor(String anchor) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
+        return stringBuilder.toString();
+    }
+
+    @Override
     public MarkupDocBuilder crossReference(String anchor, String text) {
-        if (text == null)
-            documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.CROSS_REFERENCE_END);
-        else
-            documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
+        documentBuilder.append(inlineCrossReference(anchor, text));
         return this;
+    }
+
+    @Override
+    public String inlineCrossReference(String anchor, String text) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (text == null)
+            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.CROSS_REFERENCE_END);
+        else
+            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
+        return stringBuilder.toString();
     }
 
     private String escapeTableCell(String cell) {

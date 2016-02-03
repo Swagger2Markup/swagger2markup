@@ -62,13 +62,19 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder anchor(String anchor);
 
+    String inlineAnchor(String anchor);
+
     /**
      * @param anchor Target anchor
      * @param text If not null, display this text instead of anchor
      */
     MarkupDocBuilder crossReference(String anchor, String text);
 
+    String inlineCrossReference(String anchor, String text);
+
     MarkupDocBuilder crossReference(String anchor);
+
+    String inlineCrossReference(String anchor);
 
     MarkupDocBuilder newLine();
 
