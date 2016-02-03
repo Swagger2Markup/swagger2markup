@@ -50,15 +50,20 @@ public class MarkupDocBuilderTest {
                 .sectionTitleLevel1("Section Level 1a")
                 .sectionTitleLevel2("Section Level 2a")
                 .sectionTitleLevel3("Section Level 3a")
+                .sectionTitleLevel4("Section Level 4a")
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
                 .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC)", "java")
                 .tableWithHeaderRow(tableRowsInPSV)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
+                .textLine("text line b")
                 .boldTextLine("Bold text line b")
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
+                .anchor("anchor")
+                .crossReference("anchor")
+                .crossReference("anchor", "text")
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
@@ -69,15 +74,20 @@ public class MarkupDocBuilderTest {
                 .sectionTitleLevel1("Section Level 1a")
                 .sectionTitleLevel2("Section Level 2a")
                 .sectionTitleLevel3("Section Level 3a")
+                .sectionTitleLevel4("Section Level 4a")
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
                 .source("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
                 .tableWithHeaderRow(tableRowsInPSV)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
+                .textLine("text line b")
                 .boldTextLine("Bold text line b")
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
+                .anchor("anchor")
+                .crossReference("anchor")
+                .crossReference("anchor", "text")
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 

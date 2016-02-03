@@ -24,11 +24,15 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author Robert Winkler
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
+
+    private static final String ASCIIDOC_FILE_EXTENSION = "adoc";
+    private static final Pattern ANCHOR_ESCAPE_PATTERN = Pattern.compile("[^0-9a-zA-Z]");
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
@@ -62,7 +66,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder sectionTitleLevel4(String title){
-        sectionTitleLevel3(AsciiDoc.SECTION_TITLE_LEVEL4, title);
+        sectionTitleLevel4(AsciiDoc.SECTION_TITLE_LEVEL4, title);
         return this;
     }
 
@@ -105,6 +109,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV){
+        newLine();
         documentBuilder.append("[options=\"header\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         for(String row : rowsInPSV){
@@ -114,16 +119,27 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         return this;
     }
 
+    private static String normalizeReferenceAnchor(String anchor) {
+        return ANCHOR_ESCAPE_PATTERN.matcher(anchor).replaceAll("_");
+    }
+
     @Override
-    public MarkupDocBuilder crossReference(String text) {
-        documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(text).append(AsciiDoc.CROSS_REFERENCE_END);
+    public MarkupDocBuilder anchor(String anchor) {
+        documentBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder crossReference(String anchor, String text) {
+        if (text == null)
+            documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.CROSS_REFERENCE_END);
+        else
+            documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
         return this;
     }
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        String fileNameWithExtension = fileName + ".adoc";
-        super.writeToFile(directory, fileNameWithExtension, charset);
+        writeToFileWithExtension(directory, fileName + "." + ASCIIDOC_FILE_EXTENSION, charset);
     }
-
 }

@@ -39,7 +39,9 @@ public enum AsciiDoc implements Markup {
     ITALIC("_"),
     LIST_ENTRY("* "),
     CROSS_REFERENCE_START("<<"),
-    CROSS_REFERENCE_END(">>");
+    CROSS_REFERENCE_END(">>"),
+    ANCHOR_START("[["),
+    ANCHOR_END("]]");
 
     private final String markup;
 

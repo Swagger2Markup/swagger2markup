@@ -26,6 +26,7 @@ import java.util.List;
  * @author Robert Winkler
  */
 public interface MarkupDocBuilder {
+
     MarkupDocBuilder documentTitle(String title);
 
     MarkupDocBuilder documentTitleWithAttributes(String title);
@@ -52,9 +53,18 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder unorderedList(List<String> list);
 
+    @Deprecated
     MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV);
 
-    MarkupDocBuilder crossReference(String text);
+    MarkupDocBuilder anchor(String anchor);
+
+    /**
+     * @param anchor Target anchor
+     * @param text If not null, display this text instead of anchor
+     */
+    MarkupDocBuilder crossReference(String anchor, String text);
+
+    MarkupDocBuilder crossReference(String anchor);
 
     MarkupDocBuilder newLine();
 
@@ -65,11 +75,13 @@ public interface MarkupDocBuilder {
 
     /**
      * Writes the content of the builder to a file and clears the builder.
+     * An extension will be dynamically added to fileName depending on the markup language.
      *
      * @param directory the directory where the generated file should be stored
-     * @param fileName the name of the file
+     * @param fileName the base name of the file without extension
      * @param charset the the charset to use for encoding
      * @throws java.io.IOException if the file cannot be written
      */
     void writeToFile(String directory, String fileName, Charset charset) throws IOException;
+
 }
