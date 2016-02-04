@@ -5,15 +5,8 @@ before_install:
 - chmod +x gradlew
 after_success:
 - ./gradlew jacocoTestReport coveralls
-- ./gradlew artifactoryPublish
-notifications:
-  webhooks:
-    urls:
-    - https://webhooks.gitter.im/e/9c620e84679284b7d621
-    on_success: change
-    on_failure: always
-    on_start: false
+- ./gradlew artifactoryPublish -PbintrayUsername="${BINTRAY_USER}" -PbintrayApiKey="${BINTRAY_KEY}"
 env:
   global:
-  - secure: "SPKolgUdjIa/uJ+7/B/GPFlsa8IZg7NuZdFA8zROTaqew/xu+oX7qVGImseeBpPIEPJb02ac6hr7Y3/zvv0GJxIPtIbyDzVh73ImQUhT1ttLYGJfITAWqAPFF7RNNMtuOl3S2DLZ5OMJddkcFp00pa9nyI82Gk47B8GsaGIntAI="
-  - secure: "nXXuHfvFACZwdiFM3Ta0x/f49N7cAgi0AMkgEnQrh/2xWlvQk2z2ySGJQLkhJ7Wy8LDY7Yt1b1GUt6DlP3PuFFMW/cT4iARewqiJRXZXxUQz8fpTDeTo1nmVmW/zzII6Qj3QHM3NRbR/xDOVSJiT30Hnq2hcCBQJWYsTICmzjRk="
+  - secure: Gw8S2a4VumGXAWAmGAh0jOU3WxiG54mKPEI/XZVc+CjcYyb5MtcgzDi0snmfXOAcjME2vJDqi+6tYF8jjQFkb2Tm5qCSVZxbRPeyPv8d9lJL2ZIDpz7TAgBiWJiJmVMFjo0FGzWp7csJwl1KMJUlH18Sz4tgmLA4YgxoLf70Gtk=
+  - secure: CIcQiSraUwXtbE3dAZ61xITqYL4kORjN37NfDz747ceaFn4u4Mui7dJ7k8GhujW3Cm/N8NalJ/MwlbK0sHIv0bGmi/CNwn15xE2ymJXoSHEihAUiKm2ql6k/hHp7T5LkUafLWbrIGQc4ch4jJRqsNaK1ouLpZLTzHromiiQZXZw=
