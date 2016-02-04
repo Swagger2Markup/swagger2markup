@@ -248,11 +248,11 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(9).containsAll(
-            asList("definitions.adoc", "overview.adoc", "paths.adoc", "identified.adoc",
-                "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+            asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc"));
+        File definitionsDirectory = new File(outputDirectory, "definitions");
         assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.adoc"))))
-            .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.adoc"))));
+            .contains(new String(Files.readAllBytes(Paths.get(definitionsDirectory + File.separator + "user.adoc"))));
     }
 
     @Test
@@ -269,11 +269,16 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(9).containsAll(
-                asList("definitions.md", "overview.md", "paths.md", "identified.md",
-                        "user.md", "category.md", "pet.md", "tag.md", "order.md"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions", "definitions.md", "overview.md", "paths.md"));
+
+        File definitionsDirectory = new File(outputDirectory, "definitions");
+        String[] definitions = definitionsDirectory.list();
+        assertThat(definitions).hasSize(6).containsAll(
+                asList("identified.md", "user.md", "category.md", "pet.md", "tag.md", "order.md"));
+
         assertThat(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "definitions.md"))))
-                .contains(new String(Files.readAllBytes(Paths.get(outputDirectory + File.separator + "user.md"))));
+                .contains(new String(Files.readAllBytes(Paths.get(definitionsDirectory + File.separator + "user.md"))));
     }
 
     @Test
@@ -290,9 +295,8 @@ public class Swagger2MarkupConverterTest {
 
         // Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(9).containsAll(
-                asList("definitions.md", "overview.md", "paths.md", "identified.md",
-                        "user.md", "category.md", "pet.md", "tag.md", "order.md"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions", "definitions.md", "overview.md", "paths.md"));
         verifyMarkdownContainsFieldsInTables(
                 outputDirectory + File.separator + "definitions.md",
                 ImmutableMap.<String, Set<String>>builder()
@@ -300,8 +304,9 @@ public class Swagger2MarkupConverterTest {
                         .put("User", ImmutableSet.of("id", "username", "firstName",
                                 "lastName", "email", "password", "phone", "userStatus"))
                         .build());
+        File definitionsDirectory = new File(outputDirectory, "definitions");
         verifyMarkdownContainsFieldsInTables(
-                outputDirectory + File.separator + "user.md",
+                definitionsDirectory + File.separator + "user.md",
                 ImmutableMap.<String, Set<String>>builder()
                         .put("User", ImmutableSet.of("id", "username", "firstName",
                                 "lastName", "email", "password", "phone", "userStatus"))
