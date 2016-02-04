@@ -30,6 +30,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -39,6 +40,10 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     private static final String ASCIIDOC_FILE_EXTENSION = "adoc";
+    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_:.\\s]+");
+    private static final Pattern XREF_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_:./#\\s]+");
+    private static final Pattern SPACE_PATTERN = Pattern.compile("[\\s]+");
+
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
@@ -125,37 +130,46 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         return this;
     }
 
-    private static String normalizeReferenceAnchor(String anchor) {
-        return anchor.trim();
+    private static String normalizeAnchor(String anchor) {
+        return "_" + SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim()).replaceAll("")).replaceAll("_");
     }
 
     @Override
-    public MarkupDocBuilder anchor(String anchor) {
-        documentBuilder.append(anchorAsString(anchor));
-        return this;
-    }
-
-    @Override
-    public String anchorAsString(String anchor) {
+    public String anchorAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
+        if (text == null)
+            stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
+        else
+            stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor)).append(",").append(text).append(AsciiDoc.ANCHOR_END);
         return stringBuilder.toString();
     }
 
-    @Override
-    public MarkupDocBuilder crossReference(String anchor, String text) {
-        documentBuilder.append(crossReferenceAsString(anchor, text));
-        return this;
+
+    protected String normalizedCrossReferenceAsString(String anchor, String text) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (text == null)
+            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(anchor).append(AsciiDoc.CROSS_REFERENCE_END);
+        else
+            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(anchor).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
+        return stringBuilder.toString();
+    }
+
+    private static String normalizeXRef(String anchor) {
+        return "_" + SPACE_PATTERN.matcher(XREF_FORBIDDEN_PATTERN.matcher(anchor.trim()).replaceAll("")).replaceAll("_");
     }
 
     @Override
     public String crossReferenceAsString(String anchor, String text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (text == null)
-            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(AsciiDoc.CROSS_REFERENCE_END);
-        else
-            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(normalizeReferenceAnchor(anchor)).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
-        return stringBuilder.toString();
+        return normalizedCrossReferenceAsString(normalizeXRef(anchor), text);
+    }
+
+    private static String normalizeTitleXRef(String anchor) {
+        return anchor.trim();
+    }
+
+    @Override
+    public String crossReferenceTitleAsString(String anchor, String text) {
+        return normalizedCrossReferenceAsString(normalizeTitleXRef(anchor), text);
     }
 
     private String escapeTableCell(String cell) {
