@@ -87,12 +87,10 @@ public class OverviewDocument extends MarkupDocument {
         this.markupDocBuilder.sectionTitleLevel1(OVERVIEW);
         if(isNotBlank(info.getDescription())){
             this.markupDocBuilder.textLine(info.getDescription());
-            this.markupDocBuilder.newLine();
         }
         if(isNotBlank(info.getVersion())){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
             this.markupDocBuilder.textLine(VERSION + info.getVersion());
-            this.markupDocBuilder.newLine();
         }
         Contact contact = info.getContact();
         if(contact != null){
@@ -103,7 +101,6 @@ public class OverviewDocument extends MarkupDocument {
             if(isNotBlank(contact.getEmail())){
                 this.markupDocBuilder.textLine(CONTACT_EMAIL + contact.getEmail());
             }
-            this.markupDocBuilder.newLine();
         }
 
         License license = info.getLicense();
@@ -115,11 +112,9 @@ public class OverviewDocument extends MarkupDocument {
             if (isNotBlank(license.getUrl())) {
                 this.markupDocBuilder.textLine(LICENSE_URL + license.getUrl());
             }
-            this.markupDocBuilder.newLine();
         }
         if(isNotBlank(info.getTermsOfService())){
             this.markupDocBuilder.textLine(TERMS_OF_SERVICE + info.getTermsOfService());
-            this.markupDocBuilder.newLine();
         }
 
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
@@ -137,7 +132,6 @@ public class OverviewDocument extends MarkupDocument {
                 }
                 this.markupDocBuilder.textLine(SCHEMES + join(schemes, ", "));
             }
-            this.markupDocBuilder.newLine();
         }
 
         if(isNotEmpty(swagger.getTags())){
@@ -153,19 +147,16 @@ public class OverviewDocument extends MarkupDocument {
                 }
             }
             this.markupDocBuilder.unorderedList(tags);
-            this.markupDocBuilder.newLine();
         }
 
         if(isNotEmpty(swagger.getConsumes())){
             this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
             this.markupDocBuilder.unorderedList(swagger.getConsumes());
-            this.markupDocBuilder.newLine();
         }
 
         if(isNotEmpty(swagger.getProduces())){
             this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
             this.markupDocBuilder.unorderedList(swagger.getProduces());
-            this.markupDocBuilder.newLine();
         }
 
     }

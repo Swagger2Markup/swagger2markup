@@ -20,12 +20,12 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
@@ -286,9 +286,13 @@ public class PathsDocument extends MarkupDocument {
         List<Type> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<List<String>> cells = new ArrayList<>();
-            // Table header row
-            List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            cells.add(header);
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(TYPE_COLUMN, 1),
+                    new MarkupTableColumn(NAME_COLUMN, 1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
+                    new MarkupTableColumn(REQUIRED_COLUMN, 1),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1),
+                    new MarkupTableColumn(DEFAULT_COLUMN, 1));
             for(Parameter parameter : parameters){
                 Type type = ParameterUtils.getType(parameter);
                 if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
@@ -308,12 +312,12 @@ public class PathsDocument extends MarkupDocument {
                         parameter.getName(),
                         parameterDescription(operation, parameter),
                         Boolean.toString(parameter.getRequired()),
-                        type.displaySchema(markupLanguage),
+                        type.displaySchema(markupDocBuilder),
                         ParameterUtils.getDefaultValue(parameter));
                cells.add(content);
             }
             addPathSectionTitle(PARAMETERS);
-            MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 1, 6, 1, 1, 1), cells, this.markupDocBuilder);
+            markupDocBuilder.tableWithColumnSpecs(cols, cells);
         }
 
         return localDefinitions;
@@ -489,7 +493,10 @@ public class PathsDocument extends MarkupDocument {
         List<Type> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
             List<List<String>> cells = new ArrayList<>();
-            cells.add(Arrays.asList(HTTP_CODE_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN));
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(HTTP_CODE_COLUMN, 1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1));
             for(Map.Entry<String, Response> entry : responses.entrySet()){
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
@@ -505,13 +512,13 @@ public class PathsDocument extends MarkupDocument {
                             type = new RefType(type);
                         }
                     }
-                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupLanguage)));
+                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupDocBuilder)));
                 }else{
                     cells.add(Arrays.asList(entry.getKey(), response.getDescription(), NO_CONTENT));
                 }
             }
             addPathSectionTitle(RESPONSES);
-            MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 6, 1), cells, this.markupDocBuilder);
+            markupDocBuilder.tableWithColumnSpecs(cols, cells);
         }
         return localDefinitions;
     }
@@ -520,9 +527,9 @@ public class PathsDocument extends MarkupDocument {
      * Inline definitions should never been referenced in TOC, so they are just text.
      */
     private void addInlineDefinitionTitle(String title, String anchor) {
-        MarkupDocBuilderUtils.anchor(anchor, this.markupDocBuilder);
+        markupDocBuilder.anchor(anchor);
+        markupDocBuilder.newLine();
         this.markupDocBuilder.boldTextLine(title);
-        this.markupDocBuilder.newLine();
     }
 
     private void inlineDefinitions(List<Type> definitions, int depth) {

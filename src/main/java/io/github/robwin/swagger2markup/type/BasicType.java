@@ -1,6 +1,6 @@
 package io.github.robwin.swagger2markup.type;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -18,7 +18,7 @@ public class BasicType extends Type {
     }
 
     @Override
-    public String displaySchema(MarkupLanguage language) {
+    public String displaySchema(MarkupDocBuilder docBuilder) {
         if (isNotBlank(this.format))
             return this.name + "(" + this.format + ")";
         else

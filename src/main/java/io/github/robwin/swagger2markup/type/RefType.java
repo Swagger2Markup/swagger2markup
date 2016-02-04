@@ -1,7 +1,6 @@
 package io.github.robwin.swagger2markup.type;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 public class RefType extends Type {
 
@@ -14,7 +13,7 @@ public class RefType extends Type {
     }
 
     @Override
-    public String displaySchema(MarkupLanguage language) {
-        return MarkupDocBuilderUtils.crossReference(getName(), getUniqueName(), language);
+    public String displaySchema(MarkupDocBuilder docBuilder) {
+        return docBuilder.crossReferenceAsString(getUniqueName(), getName());
     }
 }

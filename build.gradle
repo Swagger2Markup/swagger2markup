@@ -36,6 +36,9 @@ tasks.withType(JavaCompile) {
 }
 
 repositories {
+    maven {
+        url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
+    }
     jcenter()
     mavenCentral()
     mavenLocal()
@@ -55,7 +58,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependency "io.github.robwin:markup-document-builder:0.1.5"
+        dependency "io.github.robwin:markup-document-builder:0.1.6-SNAPSHOT"
         dependency "io.swagger:swagger-compat-spec-parser:1.0.16"
         dependency "commons-collections:commons-collections:3.2.1"
         dependency "commons-io:commons-io:2.4"

@@ -25,7 +25,6 @@ import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.RefModel;
@@ -353,9 +352,9 @@ public class DefinitionsDocument extends MarkupDocument {
      * Inline definitions should never been referenced in TOC, so they are just text.
      */
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        MarkupDocBuilderUtils.anchor(anchor, docBuilder);
-        docBuilder.boldTextLine(title);
+        docBuilder.anchor(anchor);
         docBuilder.newLine();
+        docBuilder.boldTextLine(title);
     }
 
 
