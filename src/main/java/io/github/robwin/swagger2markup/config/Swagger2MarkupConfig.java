@@ -32,7 +32,7 @@ public class Swagger2MarkupConfig {
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
     private final boolean separatedDefinitions;
-    private final boolean separatedOperations;
+    private final boolean separatedPaths;
     private final GroupBy pathsGroupedBy;
     private final OrderBy definitionsOrderedBy;
     private final Language outputLanguage;
@@ -45,14 +45,14 @@ public class Swagger2MarkupConfig {
      * @param schemasFolderPath the path to the folder where the schema documents reside
      * @param descriptionsFolderPath the path to the folder where the description documents reside
      * @param separatedDefinitions specified if in addition to the definitions file, also separate definition files for each model definition should be created
-     * @param separatedOperations specified if in addition to the operations file, also separate path files for each operation should be created
+     * @param separatedPaths specified if in addition to the paths file, also separate path files for each path should be created
      * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
      * @param outputLanguage specifies language of labels in output files
      * @param inlineSchemaDepthLevel specifies the max depth for inline object schema display (0 = no inline schemas)
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
-                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
+                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedPaths,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel) {
         this.swagger = swagger;
@@ -61,7 +61,7 @@ public class Swagger2MarkupConfig {
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
         this.separatedDefinitions = separatedDefinitions;
-        this.separatedOperations = separatedOperations;
+        this.separatedPaths = separatedPaths;
         this.pathsGroupedBy = pathsGroupedBy;
         this.definitionsOrderedBy = definitionsOrderedBy;
         this.outputLanguage = outputLanguage;
@@ -92,8 +92,8 @@ public class Swagger2MarkupConfig {
         return separatedDefinitions;
     }
 
-    public boolean isSeparatedOperations() {
-        return separatedOperations;
+    public boolean isSeparatedPaths() {
+        return separatedPaths;
     }
 
     public GroupBy getPathsGroupedBy() {

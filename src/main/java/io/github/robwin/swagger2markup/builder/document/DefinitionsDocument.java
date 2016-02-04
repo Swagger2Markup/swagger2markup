@@ -58,8 +58,8 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String JSON = "json";
     private static final String XML = "xml";
     private static final String DESCRIPTION_FOLDER_NAME = "definitions";
-    private static final String SEPARATED_DEFINITIONS_FOLDER_NAME = "definitions";
     private static final String DESCRIPTION_FILE_NAME = "description";
+    private static final String SEPARATED_DEFINITIONS_FOLDER_NAME = "definitions";
     private boolean schemasEnabled;
     private String schemasFolderPath;
     private boolean handWrittenDescriptionsEnabled;

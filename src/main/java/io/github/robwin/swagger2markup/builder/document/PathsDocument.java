@@ -70,8 +70,8 @@ public class PathsDocument extends MarkupDocument {
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
     private static final String DESCRIPTION_FOLDER_NAME = "paths";
-    private static final String SEPARATED_OPERATIONS_FOLDER_NAME = "operations";
     private static final String DESCRIPTION_FILE_NAME = "description";
+    private static final String SEPARATED_PATHS_FOLDER_NAME = "paths";
     private final String PARAMETER;
     private static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
@@ -81,7 +81,7 @@ public class PathsDocument extends MarkupDocument {
     private String descriptionsFolderPath;
     private final GroupBy pathsGroupedBy;
     private final int inlineSchemaDepthLevel;
-    private boolean separatedOperationsEnabled;
+    private boolean separatedPathsEnabled;
     private String outputDirectory;
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
@@ -130,15 +130,15 @@ public class PathsDocument extends MarkupDocument {
             }
         }
 
-        this.separatedOperationsEnabled = swagger2MarkupConfig.isSeparatedOperations();
-        if(this.separatedOperationsEnabled){
+        this.separatedPathsEnabled = swagger2MarkupConfig.isSeparatedPaths();
+        if(this.separatedPathsEnabled){
             if (logger.isDebugEnabled()) {
-                logger.debug("Create separated operation files is enabled.");
+                logger.debug("Create separated path files is enabled.");
             }
-            Validate.notEmpty(outputDirectory, "Output directory is required for separated operation files!");
+            Validate.notEmpty(outputDirectory, "Output directory is required for separated path files!");
         }else{
             if (logger.isDebugEnabled()) {
-                logger.debug("Create separated operation files is disabled.");
+                logger.debug("Create separated path files is disabled.");
             }
         }
         this.outputDirectory = outputDirectory;
@@ -202,22 +202,22 @@ public class PathsDocument extends MarkupDocument {
 
          path(methodAndPath, operation, this.markupDocBuilder);
 
-        if (separatedOperationsEnabled) {
+        if (separatedPathsEnabled) {
             MarkupDocBuilder pathDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
             path(methodAndPath, operation, pathDocBuilder);
-            String operationFileName = operation.getOperationId();
-            if (operationFileName == null)
-                operationFileName = methodAndPath;
-            operationFileName = FILENAME_FORBIDDEN_PATTERN.matcher(operationFileName).replaceAll("_").toLowerCase();
+            String pathFileName = operation.getOperationId();
+            if (pathFileName == null)
+                pathFileName = methodAndPath;
+            pathFileName = FILENAME_FORBIDDEN_PATTERN.matcher(pathFileName).replaceAll("_").toLowerCase();
             try {
-                pathDocBuilder.writeToFile(Paths.get(outputDirectory, SEPARATED_OPERATIONS_FOLDER_NAME).toString(), operationFileName, StandardCharsets.UTF_8);
+                pathDocBuilder.writeToFile(Paths.get(outputDirectory, SEPARATED_PATHS_FOLDER_NAME).toString(), pathFileName, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to write operation file: %s", operationFileName), e);
+                    logger.warn(String.format("Failed to write path file: %s", pathFileName), e);
                 }
             }
             if (logger.isInfoEnabled()) {
-                logger.info("Separate operation file produced: {}", operationFileName);
+                logger.info("Separate path file produced: {}", pathFileName);
             }
         }
     }
