@@ -56,7 +56,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class PathsDocument extends MarkupDocument {
 
-    private static final String RESPONSE_INLINE_PREFIX = "Response";
+    private final String RESPONSE;
     private final String PATHS;
     private final String RESOURCES;
     private final String PARAMETERS;
@@ -89,6 +89,7 @@ public class PathsDocument extends MarkupDocument {
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
+        RESPONSE = labels.getString("response");
         PATHS = labels.getString("paths");
         RESOURCES = labels.getString("resources");
         PARAMETERS = labels.getString("parameters");
@@ -539,7 +540,7 @@ public class PathsDocument extends MarkupDocument {
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                        String localTypeName = RESPONSE_INLINE_PREFIX + " " + entry.getKey();
+                        String localTypeName = RESPONSE + " " + entry.getKey();
 
                         type.setName(localTypeName);
                         type.setUniqueName(uniqueTypeName(localTypeName));
