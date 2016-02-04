@@ -119,7 +119,7 @@ public class Swagger2MarkupConverter {
      */
     private void buildDocuments(String directory) throws IOException {
         new OverviewDocument(swagger2MarkupConfig).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
-        new PathsDocument(swagger2MarkupConfig).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
+        new PathsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
         new DefinitionsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
     }
 
@@ -130,7 +130,7 @@ public class Swagger2MarkupConverter {
      */
     private String buildDocuments() {
         return new OverviewDocument(swagger2MarkupConfig).build().toString()
-                .concat(new PathsDocument(swagger2MarkupConfig).build().toString()
+                .concat(new PathsDocument(swagger2MarkupConfig, null).build().toString()
                 .concat(new DefinitionsDocument(swagger2MarkupConfig, null).build().toString()));
     }
 
@@ -141,6 +141,7 @@ public class Swagger2MarkupConverter {
         private String schemasFolderPath;
         private String descriptionsFolderPath;
         private boolean separatedDefinitions;
+        private boolean separatedOperations;
         private GroupBy pathsGroupedBy = GroupBy.AS_IS;
         private OrderBy definitionsOrderedBy = OrderBy.NATURAL;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
@@ -170,7 +171,7 @@ public class Swagger2MarkupConverter {
 
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
-                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, pathsGroupedBy, definitionsOrderedBy,
+                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
                     outputLanguage, inlineSchemaDepthLevel));
         }
 
@@ -202,6 +203,15 @@ public class Swagger2MarkupConverter {
          */
         public Builder withSeparatedDefinitions() {
             this.separatedDefinitions = true;
+            return this;
+        }
+
+        /**
+         * In addition to the paths file, also create separate path files for each path.
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withSeparatedOperations() {
+            this.separatedOperations = true;
             return this;
         }
 
