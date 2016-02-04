@@ -74,11 +74,11 @@ public class MarkupDocBuilderTest {
                 .boldTextLine("Bold text line b")
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
-                .anchor("anchor").newLine()
-                .anchor("  \u0240 & This | There  ").newLine()
-                .crossReference("anchor").newLine()
+                .anchor("anchor", null).newLine()
+                .anchor("  \u0240 & This | There .:/-_# ", null).newLine()
+                .crossReference("anchor", null).newLine()
                 .crossReference("anchor", "text").newLine()
-                .crossReference("  \u0240 & This | There  ").newLine()
+                .crossReference("  \u0240 & This | There .:/-_ ", null).newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
@@ -102,11 +102,11 @@ public class MarkupDocBuilderTest {
                 .boldTextLine("Bold text line b")
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
-                .anchor("anchor").newLine()
-                .anchor("  \u0240 & This | There  ").newLine()
-                .crossReference("anchor").newLine()
+                .anchor("anchor", null).newLine()
+                .anchor("  \u0240 & This | There .:/-_# ", null).newLine()
+                .crossReference("anchor", null).newLine()
                 .crossReference("anchor", "text").newLine()
-                .crossReference("  \u0240 & This | There  ").newLine()
+                .crossReference("  \u0240 & This | There .:/-_ ", null).newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 

@@ -23,8 +23,8 @@ import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupTableColumn;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -157,22 +157,10 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder anchor(String anchor) {
-        documentBuilder.append(anchorAsString(anchor));
-        return this;
-    }
-
-    @Override
-    public String anchorAsString(String anchor) {
+    public String anchorAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<a name=\"").append(normalizeReferenceAnchor(anchor)).append("\"></a>");
         return stringBuilder.toString();
-    }
-
-    @Override
-    public MarkupDocBuilder crossReference(String anchor, String text) {
-        documentBuilder.append(crossReferenceAsString(anchor, text));
-        return this;
     }
 
     @Override
@@ -190,8 +178,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
-        if (CollectionUtils.isEmpty(columnSpecs))
-            throw new RuntimeException("Header is mandatory in Markdown");
+        Validate.notEmpty(columnSpecs);
 
         newLine();
         Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
