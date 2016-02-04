@@ -60,21 +60,17 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells);
 
-    MarkupDocBuilder anchor(String anchor);
+    MarkupDocBuilder anchor(String anchor, String text);
 
-    String anchorAsString(String anchor);
+    String anchorAsString(String anchor, String text);
 
-    /**
-     * @param anchor Target anchor
-     * @param text If not null, display this text instead of anchor
-     */
     MarkupDocBuilder crossReference(String anchor, String text);
 
     String crossReferenceAsString(String anchor, String text);
 
-    MarkupDocBuilder crossReference(String anchor);
+    MarkupDocBuilder crossReferenceTitle(String anchor, String text);
 
-    String crossReferenceAsString(String anchor);
+    String crossReferenceTitleAsString(String anchor, String text);
 
     MarkupDocBuilder newLine();
 
