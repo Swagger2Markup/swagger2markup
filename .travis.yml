@@ -5,7 +5,7 @@ before_install:
 - chmod +x gradlew
 after_success:
 - ./gradlew jacocoTestReport coveralls
-- ./gradlew artifactoryPublish
+- ./gradlew artifactoryPublish -PbintrayUsername="${BINTRAY_USER}" -PbintrayApiKey="${BINTRAY_KEY}"
 notifications:
   webhooks:
     urls:
