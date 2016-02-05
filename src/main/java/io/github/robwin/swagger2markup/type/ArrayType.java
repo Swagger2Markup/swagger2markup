@@ -1,6 +1,6 @@
 package io.github.robwin.swagger2markup.type;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 public class ArrayType extends Type {
 
@@ -18,10 +18,10 @@ public class ArrayType extends Type {
     }
 
     @Override
-    public String displaySchema(MarkupLanguage language) {
+    public String displaySchema(MarkupDocBuilder docBuilder) {
         String collectionFormat = "";
         if (this.collectionFormat != null)
             collectionFormat = this.collectionFormat + " ";
-        return collectionFormat + ofType.displaySchema(language) + " array";
+        return collectionFormat + ofType.displaySchema(docBuilder) + " array";
     }
 }

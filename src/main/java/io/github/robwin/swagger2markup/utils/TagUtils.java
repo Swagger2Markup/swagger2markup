@@ -21,6 +21,7 @@ package io.github.robwin.swagger2markup.utils;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.Ordering;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
@@ -30,10 +31,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TagUtils {
 
@@ -77,8 +75,19 @@ public class TagUtils {
      * @param paths the Paths
      * @return Paths grouped by Tag
      */
-    public static Multimap<String, Pair<String, Path>> groupPathsByTag(Map<String, Path> paths) {
-        Multimap<String, Pair<String, Path>> pathsGroupedByTag = MultimapBuilder.SortedSetMultimapBuilder.treeKeys().hashSetValues().build();
+    public static Multimap<String, Pair<String, Path>> groupPathsByTag(Map<String, Path> paths, Comparator<String> tagComparator, Comparator<String> pathComparator) {
+        MultimapBuilder.MultimapBuilderWithKeys<String> multimapBuilderWithKeys;
+        if (tagComparator == null)
+            multimapBuilderWithKeys = MultimapBuilder.SortedSetMultimapBuilder.treeKeys(Ordering.<String>natural()); // FIXME as-is when tagComparator not supported because of limitations in MultiMap::hashkeys()
+        else
+            multimapBuilderWithKeys = MultimapBuilder.SortedSetMultimapBuilder.treeKeys(tagComparator);
+
+        Multimap<String, Pair<String, Path>> pathsGroupedByTag;
+        if (pathComparator == null)
+            pathsGroupedByTag = multimapBuilderWithKeys.hashSetValues().build();
+        else
+            pathsGroupedByTag = multimapBuilderWithKeys.treeSetValues(new PathUtils.PathPairComparator(pathComparator)).build();
+
         for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
             String resourcePath = pathEntry.getKey();
             Path path = pathEntry.getValue();
@@ -92,7 +101,7 @@ public class TagUtils {
                         if (LOG.isInfoEnabled()) {
                             LOG.info("Added path operation '{} {}' to tag '{}'", httpMethod, resourcePath, tag);
                         }
-                        pathsGroupedByTag.put(tag, Pair.of(resourcePath, pathEntry.getValue()));
+                        pathsGroupedByTag.put(tag, Pair.of(resourcePath, path));
                     }
                 }
             }

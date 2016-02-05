@@ -1,9 +1,9 @@
 swagger: "2.0"
 info:
-  title: FCU API
-  description: Outscale FCU service
+  title: API
+  description: Service API
   version: "2.18"
-host: fcu.eu-west-2.outscale.com
+host: service.host.com
 schemes:
   - https
 consumes:
@@ -18,28 +18,6 @@ paths:
       tags:
         - All
       parameters:
-        - $ref: "#/parameters/Version"
-        - name: array
-          in: query
-          type: array
-          items:
-            type: string
-        - name: ref array
-          in: query
-          type: array
-          items:
-            $ref: '#/definitions/Simple'
-        - name: csv
-          in: query
-          type: array
-          collectionFormat: pipes
-          items:
-            type: boolean
-        - name: FirstParameter
-          description: <description>
-          in: body
-          schema:
-            $ref: '#/definitions/Simple'
         - name: LaunchCommandRequest
           description: Launch something
           in: body
@@ -51,10 +29,17 @@ paths:
               - MinCount
               - MaxCount
             properties:
-              DryRun:
+              Command:
                 description: Dummy description
-                type: boolean
-              SecurityGroup.N:
+                type: object
+                properties:
+                  path:
+                    description: Command path
+                    type: string
+                  args:
+                    description: Command arguments
+                    type: string
+              Options:
                 description: Dummy description
                 type: array
                 items:
@@ -63,12 +48,9 @@ paths:
               Location:
                 description: Dummy description
                 $ref: '#/definitions/Location'
-              KernelId:
-                description: Dummy description
-                type: string
       responses:
         200:
-          description: Reservation
+          description: Result
           schema:
             type: object
             properties:
@@ -84,34 +66,29 @@ paths:
             $ref: '#/definitions/Error'
 
 
-
-parameters:
-  Version:
-    name: Version
-    description: <description>
-    in: query
-    type: boolean
-
 definitions:
   ExternalLocation:
     $ref: ./swagger_inlineSchema.yaml#/definitions/Location
 
-  Simple:
-    description: simple def
-    type: string
-
   Error:
-    type: integer
+    type: object
+    properties:
+      error-code:
+        description: Error code
+        type: integer
+      message:
+        description: Error message
+        type: string
 
   Location:
     type: object
     properties:
       Loop:
-        description: <description>
+        description: Loop
         type:
           $ref: '#/definitions/Location'
-      Affinity:
-        description: <description>
+      Place:
+        description: Place
         type: string
 
   InlineDepthSchema:
@@ -120,16 +97,24 @@ definitions:
       Loop:
         type: object
         properties:
-          P1:
-            description: description P1
+          p1:
+            description: Description p1
             type: string
           p2:
-            description: description P2
+            description: Description p2
             type: object
             properties:
-              pv1:
-                description: pv1
+              p2-1:
+                description: Description p2-1
                 type: string
-              pv2:
-                description: pv2
-                type: boolean
+              p2-2:
+                description: Description p2-2
+                type: object
+                properties:
+                  p2-2-1:
+                    description: Description p2-2-1
+                    type: string
+                  p2-2-2:
+                    description: Description p2-2-2
+                    type: boolean
+

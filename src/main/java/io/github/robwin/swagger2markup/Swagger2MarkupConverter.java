@@ -18,12 +18,14 @@
  */
 package io.github.robwin.swagger2markup;
 
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.utils.Consumer;
+import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.lang3.Validate;
@@ -32,6 +34,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 
 /**
  * @author Robert Winkler
@@ -43,6 +46,11 @@ public class Swagger2MarkupConverter {
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
+
+    private static final Comparator<String> DEFAULT_TAG_ORDERING = Ordering.natural();
+    private static final Comparator<String> DEFAULT_PATH_ORDERING = Ordering.natural();
+    private static final Comparator<HttpMethod> DEFAULT_PATH_METHOD_ORDERING = Ordering.explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS);
+    private static final Comparator<String> DEFAULT_DEFINITION_ORDERING = Ordering.natural();
 
     /**
      * @param swagger2MarkupConfig the configuration
@@ -147,6 +155,10 @@ public class Swagger2MarkupConverter {
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
         private Language outputLanguage = Language.EN;
         private int inlineSchemaDepthLevel = 0;
+        private Comparator<String> tagOrdering = DEFAULT_TAG_ORDERING;
+        private Comparator<String> pathOrdering = DEFAULT_PATH_ORDERING;
+        private Comparator<HttpMethod> pathMethodOrdering = DEFAULT_PATH_METHOD_ORDERING;
+        private Comparator<String> definitionOrdering = DEFAULT_DEFINITION_ORDERING;
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -172,7 +184,7 @@ public class Swagger2MarkupConverter {
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedPaths, pathsGroupedBy, definitionsOrderedBy,
-                    outputLanguage, inlineSchemaDepthLevel));
+                    outputLanguage, inlineSchemaDepthLevel, tagOrdering, pathOrdering, pathMethodOrdering, definitionOrdering));
         }
 
         /**
@@ -265,8 +277,10 @@ public class Swagger2MarkupConverter {
          * @param definitionsOrderedBy the OrderBy enum
          * @return the Swagger2MarkupConverter.Builder
          */
+        @Deprecated
         public Builder withDefinitionsOrderedBy(OrderBy definitionsOrderedBy) {
             this.definitionsOrderedBy = definitionsOrderedBy;
+            this.definitionOrdering = Ordering.natural();
             return this;
         }
 
@@ -291,6 +305,59 @@ public class Swagger2MarkupConverter {
             this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
             return this;
         }
+
+        /**
+         * Specifies a custom comparator function to order tags.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param tagOrdering
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withTagOrdering(Comparator<String> tagOrdering) {
+            this.tagOrdering = tagOrdering;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order paths.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param pathOrdering
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPathOrdering(Comparator<String> pathOrdering) {
+            this.pathOrdering = pathOrdering;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order paths methods.
+         * By default, explicit ordering is applied : GET, PUT, POST, DELETE, PATCH, HEAD, OPTIONS
+         * Set ordering to null to keep swagger original order
+         *
+         * @param pathMethodOrdering
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPathMethodOrdering(Comparator<HttpMethod> pathMethodOrdering) {
+            this.pathMethodOrdering = pathMethodOrdering;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order definitions.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param definitionOrdering
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withDefinitionOrdering(Comparator<String> definitionOrdering) {
+            this.definitionOrdering = definitionOrdering;
+            return this;
+        }
+
     }
 
 }

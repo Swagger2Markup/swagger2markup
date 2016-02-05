@@ -1,6 +1,6 @@
 package io.github.robwin.swagger2markup.type;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class EnumType extends Type {
     }
 
     @Override
-    public String displaySchema(MarkupLanguage language) {
+    public String displaySchema(MarkupDocBuilder docBuilder) {
         return "enum" + " (" + join(values, ", ") + ")";
     }
 }

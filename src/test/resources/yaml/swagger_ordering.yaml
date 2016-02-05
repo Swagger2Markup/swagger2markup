@@ -1,0 +1,38 @@
+swagger: "2.0"
+info:
+  title: API
+
+paths:
+  /C:
+    post:
+      tags:
+        - C
+        - B
+    get:
+      tags:
+        - C
+        - A
+  /B:
+    get:
+      tags:
+        - B
+  /A:
+    get:
+      tags:
+        - B
+        - C
+    delete:
+      tags:
+        - C
+        - A
+
+definitions:
+
+  C:
+    type: string
+
+  B:
+    type: string
+
+  A:
+    type: string

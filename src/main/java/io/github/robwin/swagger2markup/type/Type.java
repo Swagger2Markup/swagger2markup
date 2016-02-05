@@ -1,6 +1,6 @@
 package io.github.robwin.swagger2markup.type;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 import org.apache.commons.lang3.Validate;
 
 public abstract class Type {
@@ -35,5 +35,5 @@ public abstract class Type {
         this.uniqueName = uniqueName;
     }
 
-    public abstract String displaySchema(MarkupLanguage language);
+    public abstract String displaySchema(MarkupDocBuilder docBuilder);
 }

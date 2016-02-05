@@ -22,13 +22,14 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
+import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
+import io.github.robwin.swagger2markup.utils.PathUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
 import io.swagger.models.parameters.Parameter;
@@ -81,6 +82,9 @@ public class PathsDocument extends MarkupDocument {
     private String descriptionsFolderPath;
     private final GroupBy pathsGroupedBy;
     private final int inlineSchemaDepthLevel;
+    private final Comparator<String> tagOrdering;
+    private final Comparator<String> pathOrdering;
+    private final Comparator<HttpMethod> pathMethodOrdering;
     private boolean separatedPathsEnabled;
     private String outputDirectory;
 
@@ -143,6 +147,9 @@ public class PathsDocument extends MarkupDocument {
             }
         }
         this.outputDirectory = outputDirectory;
+        tagOrdering = swagger2MarkupConfig.getTagOrdering();
+        pathOrdering = swagger2MarkupConfig.getPathOrdering();
+        pathMethodOrdering = swagger2MarkupConfig.getPathMethodOrdering();
     }
 
     /**
@@ -162,17 +169,24 @@ public class PathsDocument extends MarkupDocument {
     private void paths(){
         Map<String, Path> paths = swagger.getPaths();
         if(MapUtils.isNotEmpty(paths)) {
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+            if(pathsGroupedBy == GroupBy.AS_IS){
                 this.markupDocBuilder.sectionTitleLevel1(PATHS);
-                for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
-                    Path path = pathEntry.getValue();
-                    if(path != null) {
-                        createPathSections(pathEntry.getKey(), path);
-                    }
+
+                Set<Pair<String, Path>> sortedPaths;
+                if (this.pathOrdering == null)
+                    sortedPaths = new LinkedHashSet<>();
+                else
+                    sortedPaths = new TreeSet<>(new PathUtils.PathPairComparator(this.pathOrdering));
+                for (Map.Entry<String, Path> e : paths.entrySet()) {
+                    sortedPaths.add(Pair.of(e.getKey(), e.getValue()));
                 }
-            }else{
+
+                for (Pair<String, Path> pathEntry : sortedPaths) {
+                    createPathSections(pathEntry.getKey(), pathEntry.getValue());
+                }
+            } else {
                 this.markupDocBuilder.sectionTitleLevel1(RESOURCES);
-                Multimap<String, Pair<String, Path>> pathsGroupedByTag = groupPathsByTag(paths);
+                Multimap<String, Pair<String, Path>> pathsGroupedByTag = groupPathsByTag(paths, tagOrdering, pathOrdering);
                 Map<String, Tag> tagsMap = convertTagsListToMap(swagger.getTags());
                 for(String tagName : pathsGroupedByTag.keySet()){
                     this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
@@ -193,7 +207,15 @@ public class PathsDocument extends MarkupDocument {
     }
 
     private void createPathSections(String pathUrl, Path path){
-        for(Map.Entry<HttpMethod, Operation> operationEntry : path.getOperationMap().entrySet()){
+
+        Map<HttpMethod, Operation> operationsMap;
+        if (pathMethodOrdering == null)
+            operationsMap = new LinkedHashMap<>();
+        else
+            operationsMap = new TreeMap<>(pathMethodOrdering);
+        operationsMap.putAll(path.getOperationMap());
+
+        for(Map.Entry<HttpMethod, Operation> operationEntry : operationsMap.entrySet()){
             String methodAndPath = operationEntry.getKey() + " " + pathUrl;
             processPath(methodAndPath, operationEntry.getValue());
         }
@@ -270,7 +292,7 @@ public class PathsDocument extends MarkupDocument {
      * @param title the path title
      */
     private void addPathTitle(String title, MarkupDocBuilder docBuilder) {
-        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+        if(pathsGroupedBy == GroupBy.AS_IS){
             docBuilder.sectionTitleLevel2(title);
         }else{
             docBuilder.sectionTitleLevel3(title);
@@ -283,7 +305,7 @@ public class PathsDocument extends MarkupDocument {
      * @param title the path title
      */
     private void addPathSectionTitle(String title, MarkupDocBuilder docBuilder) {
-        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+        if(pathsGroupedBy == GroupBy.AS_IS){
             docBuilder.sectionTitleLevel3(title);
         }else{
             docBuilder.sectionTitleLevel4(title);
@@ -332,18 +354,24 @@ public class PathsDocument extends MarkupDocument {
         List<Type> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<List<String>> cells = new ArrayList<>();
-            // Table header row
-            List<String> header = Arrays.asList(TYPE_COLUMN, NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            cells.add(header);
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(TYPE_COLUMN, 1),
+                    new MarkupTableColumn(NAME_COLUMN, 1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
+                    new MarkupTableColumn(REQUIRED_COLUMN, 1),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1),
+                    new MarkupTableColumn(DEFAULT_COLUMN, 1));
             for(Parameter parameter : parameters){
                 Type type = ParameterUtils.getType(parameter);
                 if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                    String localTypeName = parameter.getName();
+                    if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
+                        String localTypeName = parameter.getName();
 
-                    type.setName(localTypeName);
-                    type.setUniqueName(uniqueTypeName(localTypeName));
-                    localDefinitions.add(type);
-                    type = new RefType(type);
+                        type.setName(localTypeName);
+                        type.setUniqueName(uniqueTypeName(localTypeName));
+                        localDefinitions.add(type);
+                        type = new RefType(type);
+                    }
                 }
                 String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
                 // Table content row
@@ -352,12 +380,12 @@ public class PathsDocument extends MarkupDocument {
                         parameter.getName(),
                         parameterDescription(operation, parameter, docBuilder),
                         Boolean.toString(parameter.getRequired()),
-                        type.displaySchema(markupLanguage),
+                        type.displaySchema(markupDocBuilder),
                         ParameterUtils.getDefaultValue(parameter));
                cells.add(content);
             }
             addPathSectionTitle(PARAMETERS, docBuilder);
-            MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 1, 6, 1, 1, 1), cells, docBuilder);
+            docBuilder.tableWithColumnSpecs(cols, cells);
         }
 
         return localDefinitions;
@@ -417,11 +445,17 @@ public class PathsDocument extends MarkupDocument {
     }
 
     private void tagsSection(Operation operation, MarkupDocBuilder docBuilder) {
-        if(pathsGroupedBy.equals(GroupBy.AS_IS)) {
+        if(pathsGroupedBy == GroupBy.AS_IS) {
             List<String> tags = operation.getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 addPathSectionTitle(TAGS, docBuilder);
-                docBuilder.unorderedList(tags);
+                Set<String> sortedTags;
+                if (tagOrdering == null)
+                    sortedTags = new LinkedHashSet<>();
+                else
+                    sortedTags = new TreeSet<>(this.tagOrdering);
+                sortedTags.addAll(tags);
+                this.markupDocBuilder.unorderedList(new ArrayList<>(sortedTags));
             }
         }
     }
@@ -533,40 +567,50 @@ public class PathsDocument extends MarkupDocument {
         List<Type> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
             List<List<String>> cells = new ArrayList<>();
-            cells.add(Arrays.asList(HTTP_CODE_COLUMN, DESCRIPTION_COLUMN, SCHEMA_COLUMN));
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(HTTP_CODE_COLUMN, 1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1));
             for(Map.Entry<String, Response> entry : responses.entrySet()){
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property);
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                        String localTypeName = RESPONSE + " " + entry.getKey();
+                        if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
+                            String localTypeName = RESPONSE + " " + entry.getKey();
 
-                        type.setName(localTypeName);
-                        type.setUniqueName(uniqueTypeName(localTypeName));
-                        localDefinitions.add(type);
-                        type = new RefType(type);
+                            type.setName(localTypeName);
+                            type.setUniqueName(uniqueTypeName(localTypeName));
+                            localDefinitions.add(type);
+                            type = new RefType(type);
+                        }
                     }
-                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupLanguage)));
+                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupDocBuilder)));
                 }else{
                     cells.add(Arrays.asList(entry.getKey(), response.getDescription(), NO_CONTENT));
                 }
             }
             addPathSectionTitle(RESPONSES, docBuilder);
-            MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 6, 1), cells, docBuilder);
+            docBuilder.tableWithColumnSpecs(cols, cells);
         }
         return localDefinitions;
+    }
+
+    /**
+     * Inline definitions should never been referenced in TOC, so they are just text.
+     */
+    private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
+        docBuilder.anchor(anchor, null);
+        docBuilder.newLine();
+        docBuilder.boldTextLine(title);
     }
 
     private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
-                if(pathsGroupedBy.equals(GroupBy.AS_IS)){
-                    MarkupDocBuilderUtils.sectionTitleLevel(4, definition.getName(), definition.getUniqueName(), docBuilder);
-                }else{
-                    MarkupDocBuilderUtils.sectionTitleLevel(5, definition.getName(), definition.getUniqueName(), docBuilder);
-                }
-                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), docBuilder);
+                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
+                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), this.markupDocBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }

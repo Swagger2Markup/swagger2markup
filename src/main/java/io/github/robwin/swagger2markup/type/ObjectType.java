@@ -1,7 +1,8 @@
 package io.github.robwin.swagger2markup.type;
 
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.Property;
+import org.apache.commons.collections.MapUtils;
 
 import java.util.Map;
 
@@ -15,8 +16,11 @@ public class ObjectType extends Type {
     }
 
     @Override
-    public String displaySchema(MarkupLanguage language) {
-        return "object";
+    public String displaySchema(MarkupDocBuilder docBuilder) {
+        if (MapUtils.isEmpty(properties))
+            return "empty object";
+        else
+            return "object";
     }
 
     public Map<String, Property> getProperties() {

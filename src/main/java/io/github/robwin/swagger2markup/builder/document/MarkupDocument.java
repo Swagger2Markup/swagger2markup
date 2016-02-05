@@ -21,11 +21,11 @@ package io.github.robwin.swagger2markup.builder.document;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
-import io.github.robwin.swagger2markup.utils.MarkupDocBuilderUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
@@ -117,39 +117,43 @@ public abstract class MarkupDocument {
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
             List<List<String>> cells = new ArrayList<>();
-            List<String> header = Arrays.asList(NAME_COLUMN, DESCRIPTION_COLUMN, REQUIRED_COLUMN, SCHEMA_COLUMN, DEFAULT_COLUMN);
-            cells.add(header);
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(NAME_COLUMN, 1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
+                    new MarkupTableColumn(REQUIRED_COLUMN, 1),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1),
+                    new MarkupTableColumn(DEFAULT_COLUMN, 1));
             if (MapUtils.isNotEmpty(objectType.getProperties())) {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
                     String propertyName = propertyEntry.getKey();
                     Type propertyType = PropertyUtils.getType(property);
                     if (depth > 0 && propertyType instanceof ObjectType) {
-                        propertyType.setName(propertyName);
-                        propertyType.setUniqueName(uniqueTypeName(propertyName));
-                        localDefinitions.add(propertyType);
+                        if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
+                            propertyType.setName(propertyName);
+                            propertyType.setUniqueName(uniqueTypeName(propertyName));
+                            localDefinitions.add(propertyType);
 
-                        propertyType = new RefType(propertyType);
+                            propertyType = new RefType(propertyType);
+                        }
                     }
 
                     List<String> content = Arrays.asList(
                             propertyName,
                             propertyDescriptor.getDescription(property, propertyName),
                             Boolean.toString(property.getRequired()),
-                            propertyType.displaySchema(markupLanguage),
+                            propertyType.displaySchema(docBuilder),
                             PropertyUtils.getDefaultValue(property));
                     cells.add(content);
                 }
-                MarkupDocBuilderUtils.tableWithHeaderRow(Arrays.asList(1, 6, 1, 1, 1), cells, docBuilder);
+                docBuilder.tableWithColumnSpecs(cols, cells);
             }
             else {
                 docBuilder.textLine(NO_CONTENT);
-                docBuilder.newLine();
             }
         }
         else {
             docBuilder.textLine(NO_CONTENT);
-            docBuilder.newLine();
         }
 
         return localDefinitions;
