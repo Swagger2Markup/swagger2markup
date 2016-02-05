@@ -58,6 +58,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String XML = "xml";
     private static final String DESCRIPTION_FOLDER_NAME = "definitions";
     private static final String DESCRIPTION_FILE_NAME = "description";
+    private static final String SEPARATED_DEFINITIONS_FOLDER_NAME = "definitions";
     private boolean schemasEnabled;
     private String schemasFolderPath;
     private boolean handWrittenDescriptionsEnabled;
@@ -120,7 +121,7 @@ public class DefinitionsDocument extends MarkupDocument {
 
     @Override
     public MarkupDocument build(){
-        definitions(swagger.getDefinitions(), this.markupDocBuilder);
+        definitions(swagger.getDefinitions());
         return this;
     }
 
@@ -128,11 +129,10 @@ public class DefinitionsDocument extends MarkupDocument {
      * Builds the Swagger definitions.
      *
      * @param definitions the Swagger definitions
-     * @param docBuilder the doc builder to use for output
      */
-    private void definitions(Map<String, Model> definitions, MarkupDocBuilder docBuilder){
+    private void definitions(Map<String, Model> definitions){
         if(MapUtils.isNotEmpty(definitions)){
-            docBuilder.sectionTitleLevel1(DEFINITIONS);
+            this.markupDocBuilder.sectionTitleLevel1(DEFINITIONS);
             Set<String> definitionNames;
             if(definitionsOrderedBy.equals(OrderBy.AS_IS)){
                 definitionNames = definitions.keySet();
@@ -143,23 +143,7 @@ public class DefinitionsDocument extends MarkupDocument {
                 Model model = definitions.get(definitionName);
                 if(isNotBlank(definitionName)) {
                     if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
-                        definition(definitions, definitionName, model, docBuilder);
-                        definitionSchema(definitionName, docBuilder);
-                        if (separatedDefinitionsEnabled) {
-                            MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
-                            definition(definitions, definitionName, model, defDocBuilder);
-                            definitionSchema(definitionName, defDocBuilder);
-                            try {
-                                defDocBuilder.writeToFile(outputDirectory, definitionName.toLowerCase(), StandardCharsets.UTF_8);
-                            } catch (IOException e) {
-                                if (logger.isWarnEnabled()) {
-                                    logger.warn(String.format("Failed to write definition file: %s", definitionName), e);
-                                }
-                            }
-                            if (logger.isInfoEnabled()) {
-                                logger.info("Separate definition file produced: {}", definitionName);
-                            }
-                        }
+                        processDefinition(definitions, definitionName, model);
                         if (logger.isInfoEnabled()) {
                             logger.info("Definition processed: {}", definitionName);
                         }
@@ -169,6 +153,27 @@ public class DefinitionsDocument extends MarkupDocument {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
+
+        definition(definitions, definitionName, model, this.markupDocBuilder);
+
+        if (separatedDefinitionsEnabled) {
+            MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+            definition(definitions, definitionName, model, defDocBuilder);
+            String definitionFileName = definitionName.toLowerCase();
+            try {
+                defDocBuilder.writeToFile(Paths.get(outputDirectory, SEPARATED_DEFINITIONS_FOLDER_NAME).toString(), definitionFileName, StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(String.format("Failed to write definition file: %s", definitionFileName), e);
+                }
+            }
+            if (logger.isInfoEnabled()) {
+                logger.info("Separate definition file produced: {}", definitionFileName);
             }
         }
     }
@@ -194,6 +199,7 @@ public class DefinitionsDocument extends MarkupDocument {
         docBuilder.sectionTitleLevel2(definitionName);
         descriptionSection(definitionName, model, docBuilder);
         propertiesSection(definitions, definitionName, model, docBuilder);
+        definitionSchema(definitionName, docBuilder);
     }
 
     private class DefinitionPropertyDescriptor extends PropertyDescriptor {
@@ -352,7 +358,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * Inline definitions should never been referenced in TOC, so they are just text.
      */
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        docBuilder.anchor(anchor);
+        docBuilder.anchor(anchor, null);
         docBuilder.newLine();
         docBuilder.boldTextLine(title);
     }
