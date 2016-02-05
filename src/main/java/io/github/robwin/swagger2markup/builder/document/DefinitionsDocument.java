@@ -21,7 +21,6 @@ package io.github.robwin.swagger2markup.builder.document;
 import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
-import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -65,8 +64,8 @@ public class DefinitionsDocument extends MarkupDocument {
     private String descriptionsFolderPath;
     private boolean separatedDefinitionsEnabled;
     private String outputDirectory;
-    private final OrderBy definitionsOrderedBy;
     private final int inlineSchemaDepthLevel;
+    private final Comparator<String> definitionOrdering;
 
     public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
         super(swagger2MarkupConfig);
@@ -78,7 +77,6 @@ public class DefinitionsDocument extends MarkupDocument {
         XML_SCHEMA = labels.getString("xml_schema");
 
         this.inlineSchemaDepthLevel = swagger2MarkupConfig.getInlineSchemaDepthLevel();
-        this.definitionsOrderedBy = swagger2MarkupConfig.getDefinitionsOrderedBy();
         if(isNotBlank(swagger2MarkupConfig.getSchemasFolderPath())){
             this.schemasEnabled = true;
             this.schemasFolderPath = swagger2MarkupConfig.getSchemasFolderPath();
@@ -117,6 +115,7 @@ public class DefinitionsDocument extends MarkupDocument {
             }
         }
         this.outputDirectory = outputDirectory;
+        this.definitionOrdering = swagger2MarkupConfig.getDefinitionOrdering();
     }
 
     @Override
@@ -134,11 +133,11 @@ public class DefinitionsDocument extends MarkupDocument {
         if(MapUtils.isNotEmpty(definitions)){
             this.markupDocBuilder.sectionTitleLevel1(DEFINITIONS);
             Set<String> definitionNames;
-            if(definitionsOrderedBy.equals(OrderBy.AS_IS)){
-                definitionNames = definitions.keySet();
-            }else{
-                definitionNames = new TreeSet<>(definitions.keySet());
-            }
+            if (definitionOrdering == null)
+              definitionNames = new LinkedHashSet<>();
+            else
+              definitionNames = new TreeSet<>(definitionOrdering);
+            definitionNames.addAll(definitions.keySet());
             for(String definitionName : definitionNames){
                 Model model = definitions.get(definitionName);
                 if(isNotBlank(definitionName)) {

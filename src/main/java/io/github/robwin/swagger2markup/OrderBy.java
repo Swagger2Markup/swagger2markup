@@ -17,6 +17,8 @@
  *
  */
 package io.github.robwin.swagger2markup;
+
+@Deprecated
 public enum OrderBy {
     AS_IS,
     NATURAL

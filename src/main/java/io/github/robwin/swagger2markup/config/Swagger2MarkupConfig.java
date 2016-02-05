@@ -37,12 +37,14 @@ public class Swagger2MarkupConfig {
     private final boolean separatedDefinitions;
     private final boolean separatedPaths;
     private final GroupBy pathsGroupedBy;
+    @Deprecated
     private final OrderBy definitionsOrderedBy;
     private final Language outputLanguage;
     private final int inlineSchemaDepthLevel;
-    private final Comparator<String> tagComparator;
-    private final Comparator<String> pathComparator;
-    private final Comparator<HttpMethod> pathMethodComparator;
+    private final Comparator<String> tagOrdering;
+    private final Comparator<String> pathOrdering;
+    private final Comparator<HttpMethod> pathMethodOrdering;
+    private final Comparator<String> definitionOrdering;
 
     /**
      * @param swagger the Swagger source
@@ -56,15 +58,16 @@ public class Swagger2MarkupConfig {
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
      * @param outputLanguage specifies language of labels in output files
      * @param inlineSchemaDepthLevel specifies the max depth for inline object schema display (0 = no inline schemas)
-     * @param tagComparator specifies a custom comparator function to order tags
-     * @param pathComparator specifies a custom comparator function to order paths
-     * @param pathMethodComparator specifies a custom comparator function to order paths methods
+     * @param tagOrdering specifies a custom comparator function to order tags (null = as-is ordering)
+     * @param pathOrdering specifies a custom comparator function to order paths (null = as-is ordering)
+     * @param pathMethodOrdering specifies a custom comparator function to order paths methods (null = as-is ordering)
+     * @param definitionOrdering specifies a custom comparator function to order definitions (null = as-is ordering)
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedPaths,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
-                                int inlineSchemaDepthLevel, Comparator<String> tagComparator, Comparator<String> pathComparator,
-                                Comparator<HttpMethod> pathMethodComparator) {
+                                int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<String> pathOrdering,
+                                Comparator<HttpMethod> pathMethodOrdering, Comparator<String> definitionOrdering) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -76,9 +79,10 @@ public class Swagger2MarkupConfig {
         this.definitionsOrderedBy = definitionsOrderedBy;
         this.outputLanguage = outputLanguage;
         this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
-        this.tagComparator = tagComparator;
-        this.pathComparator = pathComparator;
-        this.pathMethodComparator = pathMethodComparator;
+        this.tagOrdering = tagOrdering;
+        this.pathOrdering = pathOrdering;
+        this.pathMethodOrdering = pathMethodOrdering;
+        this.definitionOrdering = definitionOrdering;
     }
 
     public Swagger getSwagger() {
@@ -125,15 +129,19 @@ public class Swagger2MarkupConfig {
         return inlineSchemaDepthLevel;
     }
 
-    public Comparator<String> getTagComparator() {
-        return tagComparator;
+    public Comparator<String> getTagOrdering() {
+        return tagOrdering;
     }
 
-    public Comparator<String> getPathComparator() {
-        return pathComparator;
+    public Comparator<String> getPathOrdering() {
+        return pathOrdering;
     }
 
-    public Comparator<HttpMethod> getPathMethodComparator() {
-        return pathMethodComparator;
+    public Comparator<HttpMethod> getPathMethodOrdering() {
+        return pathMethodOrdering;
+    }
+
+    public Comparator<String> getDefinitionOrdering() {
+        return definitionOrdering;
     }
 }

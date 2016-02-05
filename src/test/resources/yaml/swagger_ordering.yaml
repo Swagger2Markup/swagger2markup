@@ -1,6 +1,7 @@
 swagger: "2.0"
 info:
   title: API
+
 paths:
   /C:
     post:
@@ -24,3 +25,14 @@ paths:
       tags:
         - C
         - A
+
+definitions:
+
+  C:
+    type: string
+
+  B:
+    type: string
+
+  A:
+    type: string
