@@ -27,6 +27,7 @@ import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
+import io.github.robwin.swagger2markup.utils.PathUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
 import io.swagger.models.parameters.Parameter;
@@ -76,6 +77,9 @@ public class PathsDocument extends MarkupDocument {
     private String descriptionsFolderPath;
     private final GroupBy pathsGroupedBy;
     private final int inlineSchemaDepthLevel;
+    private final Comparator<String> tagComparator;
+    private final Comparator<String> pathComparator;
+    private final Comparator<HttpMethod> pathMethodComparator;
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig){
         super(swagger2MarkupConfig);
@@ -121,6 +125,9 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Include hand-written descriptions is disabled.");
             }
         }
+        tagComparator = swagger2MarkupConfig.getTagComparator();
+        pathComparator = swagger2MarkupConfig.getPathComparator();
+        pathMethodComparator = swagger2MarkupConfig.getPathMethodComparator();
     }
 
     /**
@@ -140,17 +147,25 @@ public class PathsDocument extends MarkupDocument {
     private void paths(){
         Map<String, Path> paths = swagger.getPaths();
         if(MapUtils.isNotEmpty(paths)) {
-            if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+            if(pathsGroupedBy == GroupBy.AS_IS || pathsGroupedBy == GroupBy.SORTED){
                 this.markupDocBuilder.sectionTitleLevel1(PATHS);
-                for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
-                    Path path = pathEntry.getValue();
-                    if(path != null) {
-                        createPathSections(pathEntry.getKey(), path);
-                    }
+
+                Set<Pair<String, Path>> sortedPaths;
+                if (pathsGroupedBy == GroupBy.SORTED) {
+                    sortedPaths = new TreeSet<>(new PathUtils.PathPairComparator(this.pathComparator));
+                } else {
+                    sortedPaths = new LinkedHashSet<>();
                 }
-            }else{
+                for (Map.Entry<String, Path> e : paths.entrySet()) {
+                    sortedPaths.add(Pair.of(e.getKey(), e.getValue()));
+                }
+
+                for (Pair<String, Path> pathEntry : sortedPaths) {
+                    createPathSections(pathEntry.getKey(), pathEntry.getValue());
+                }
+            } else {
                 this.markupDocBuilder.sectionTitleLevel1(RESOURCES);
-                Multimap<String, Pair<String, Path>> pathsGroupedByTag = groupPathsByTag(paths);
+                Multimap<String, Pair<String, Path>> pathsGroupedByTag = groupPathsByTag(paths, tagComparator, pathComparator);
                 Map<String, Tag> tagsMap = convertTagsListToMap(swagger.getTags());
                 for(String tagName : pathsGroupedByTag.keySet()){
                     this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
@@ -171,7 +186,11 @@ public class PathsDocument extends MarkupDocument {
     }
 
     private void createPathSections(String pathUrl, Path path){
-        for(Map.Entry<HttpMethod, Operation> operationEntry : path.getOperationMap().entrySet()){
+
+        Map<HttpMethod, Operation> operationsMap = new TreeMap<>(pathMethodComparator);
+        operationsMap.putAll(path.getOperationMap());
+
+        for(Map.Entry<HttpMethod, Operation> operationEntry : operationsMap.entrySet()){
             String methodAndPath = operationEntry.getKey() + " " + pathUrl;
             path(methodAndPath, operationEntry.getValue());
         }
@@ -224,7 +243,7 @@ public class PathsDocument extends MarkupDocument {
      * @param title the path title
      */
     private void addPathTitle(String title) {
-        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+        if(pathsGroupedBy == GroupBy.AS_IS || pathsGroupedBy == GroupBy.SORTED){
             this.markupDocBuilder.sectionTitleLevel2(title);
         }else{
             this.markupDocBuilder.sectionTitleLevel3(title);
@@ -237,7 +256,7 @@ public class PathsDocument extends MarkupDocument {
      * @param title the path title
      */
     private void addPathSectionTitle(String title) {
-        if(pathsGroupedBy.equals(GroupBy.AS_IS)){
+        if(pathsGroupedBy == GroupBy.AS_IS || pathsGroupedBy == GroupBy.SORTED){
             this.markupDocBuilder.sectionTitleLevel3(title);
         }else{
             this.markupDocBuilder.sectionTitleLevel4(title);
@@ -377,11 +396,13 @@ public class PathsDocument extends MarkupDocument {
     }
 
     private void tagsSection(Operation operation) {
-        if(pathsGroupedBy.equals(GroupBy.AS_IS)) {
+        if(pathsGroupedBy == GroupBy.AS_IS || pathsGroupedBy == GroupBy.SORTED) {
             List<String> tags = operation.getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 addPathSectionTitle(TAGS);
-                this.markupDocBuilder.unorderedList(tags);
+                Set<String> orderedTags = new TreeSet<>(this.tagComparator);
+                orderedTags.addAll(tags);
+                this.markupDocBuilder.unorderedList(new ArrayList<>(orderedTags));
             }
         }
     }

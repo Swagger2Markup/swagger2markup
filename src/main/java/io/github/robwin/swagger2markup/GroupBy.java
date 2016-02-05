@@ -20,5 +20,6 @@ package io.github.robwin.swagger2markup;
 
 public enum GroupBy {
     AS_IS,
+    SORTED,
     TAGS
 }

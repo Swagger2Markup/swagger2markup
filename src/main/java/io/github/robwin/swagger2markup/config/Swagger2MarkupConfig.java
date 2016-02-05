@@ -22,7 +22,10 @@ import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
+import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
+
+import java.util.Comparator;
 
 public class Swagger2MarkupConfig {
 
@@ -36,6 +39,9 @@ public class Swagger2MarkupConfig {
     private final OrderBy definitionsOrderedBy;
     private final Language outputLanguage;
     private final int inlineSchemaDepthLevel;
+    private final Comparator<String> tagComparator;
+    private final Comparator<String> pathComparator;
+    private final Comparator<HttpMethod> pathMethodComparator;
 
     /**
      * @param swagger the Swagger source
@@ -48,11 +54,15 @@ public class Swagger2MarkupConfig {
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
      * @param outputLanguage specifies language of labels in output files
      * @param inlineSchemaDepthLevel specifies the max depth for inline object schema display (0 = no inline schemas)
+     * @param tagComparator specifies a custom comparator function to order tags
+     * @param pathComparator specifies a custom comparator function to order paths
+     * @param pathMethodComparator specifies a custom comparator function to order paths methods
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
-                                int inlineSchemaDepthLevel) {
+                                int inlineSchemaDepthLevel, Comparator<String> tagComparator, Comparator<String> pathComparator,
+                                Comparator<HttpMethod> pathMethodComparator) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -63,6 +73,9 @@ public class Swagger2MarkupConfig {
         this.definitionsOrderedBy = definitionsOrderedBy;
         this.outputLanguage = outputLanguage;
         this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
+        this.tagComparator = tagComparator;
+        this.pathComparator = pathComparator;
+        this.pathMethodComparator = pathMethodComparator;
     }
 
     public Swagger getSwagger() {
@@ -103,5 +116,17 @@ public class Swagger2MarkupConfig {
 
     public int getInlineSchemaDepthLevel() {
         return inlineSchemaDepthLevel;
+    }
+
+    public Comparator<String> getTagComparator() {
+        return tagComparator;
+    }
+
+    public Comparator<String> getPathComparator() {
+        return pathComparator;
+    }
+
+    public Comparator<HttpMethod> getPathMethodComparator() {
+        return pathMethodComparator;
     }
 }

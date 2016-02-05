@@ -30,10 +30,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TagUtils {
 
@@ -77,8 +74,8 @@ public class TagUtils {
      * @param paths the Paths
      * @return Paths grouped by Tag
      */
-    public static Multimap<String, Pair<String, Path>> groupPathsByTag(Map<String, Path> paths) {
-        Multimap<String, Pair<String, Path>> pathsGroupedByTag = MultimapBuilder.SortedSetMultimapBuilder.treeKeys().hashSetValues().build();
+    public static Multimap<String, Pair<String, Path>> groupPathsByTag(Map<String, Path> paths, Comparator<String> tagComparator, Comparator<String> pathComparator) {
+        Multimap<String, Pair<String, Path>> pathsGroupedByTag = MultimapBuilder.SortedSetMultimapBuilder.treeKeys(tagComparator).treeSetValues(new PathUtils.PathPairComparator(pathComparator)).build();
         for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
             String resourcePath = pathEntry.getKey();
             Path path = pathEntry.getValue();
@@ -92,7 +89,7 @@ public class TagUtils {
                         if (LOG.isInfoEnabled()) {
                             LOG.info("Added path operation '{} {}' to tag '{}'", httpMethod, resourcePath, tag);
                         }
-                        pathsGroupedByTag.put(tag, Pair.of(resourcePath, pathEntry.getValue()));
+                        pathsGroupedByTag.put(tag, Pair.of(resourcePath, path));
                     }
                 }
             }

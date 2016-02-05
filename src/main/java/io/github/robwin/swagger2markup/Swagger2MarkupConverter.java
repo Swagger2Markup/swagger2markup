@@ -24,6 +24,7 @@ import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.utils.Consumer;
+import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.lang3.Validate;
@@ -32,6 +33,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author Robert Winkler
@@ -43,6 +47,42 @@ public class Swagger2MarkupConverter {
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
+
+    private static final Comparator<String> DEFAULT_TAG_COMPARATOR = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            return o1.compareTo(o2);
+        }
+    };
+
+    private static final Comparator<String> DEFAULT_PATH_COMPARATOR = new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            return o1.compareTo(o2);
+        }
+    };
+
+    private static final Comparator<HttpMethod> DEFAULT_PATH_METHOD_COMPARATOR = new HttpMethodComparator<>(Arrays.asList(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS));
+
+    public static class HttpMethodComparator<HttpMethod> implements Comparator<HttpMethod> {
+        private List<HttpMethod> methodsOrdering;
+
+        public HttpMethodComparator(List<HttpMethod> methodsOrdering) {
+            this.methodsOrdering = methodsOrdering;
+        }
+
+        @Override
+        public int compare(HttpMethod o1, HttpMethod o2) {
+            int o1Index = methodsOrdering.indexOf(o1);
+            if (o1Index == -1)
+                o1Index = methodsOrdering.size();
+            int o2Index = methodsOrdering.indexOf(o2);
+            if (o2Index == -1)
+                o2Index = methodsOrdering.size() + 1;
+            return o1Index - o2Index;
+        }
+    };
+
 
     /**
      * @param swagger2MarkupConfig the configuration
@@ -146,6 +186,9 @@ public class Swagger2MarkupConverter {
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
         private Language outputLanguage = Language.EN;
         private int inlineSchemaDepthLevel = 0;
+        private Comparator<String> tagComparator = DEFAULT_TAG_COMPARATOR;
+        private Comparator<String> pathComparator = DEFAULT_PATH_COMPARATOR;
+        private Comparator<HttpMethod> pathMethodComparator = DEFAULT_PATH_METHOD_COMPARATOR;
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -171,7 +214,7 @@ public class Swagger2MarkupConverter {
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, pathsGroupedBy, definitionsOrderedBy,
-                    outputLanguage, inlineSchemaDepthLevel));
+                    outputLanguage, inlineSchemaDepthLevel, tagComparator, pathComparator, pathMethodComparator));
         }
 
         /**
@@ -279,6 +322,42 @@ public class Swagger2MarkupConverter {
          */
         public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
             this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order tags.
+         * By default, alphabetical ordering is applied.
+         *
+         * @param tagComparator
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withTagComparator(Comparator<String> tagComparator) {
+            this.tagComparator = tagComparator;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order paths.
+         * By default, alphabetical ordering is applied.
+         *
+         * @param pathComparator
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPathComparator(Comparator<String> pathComparator) {
+            this.pathComparator = pathComparator;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order paths methods.
+         * By default, the order is GET, PUT, POST, DELETE, PATCH, HEAD, OPTIONS
+         *
+         * @param pathMethodComparator
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPathMethodComparator(Comparator<HttpMethod> pathMethodComparator) {
+            this.pathMethodComparator = pathMethodComparator;
             return this;
         }
     }
