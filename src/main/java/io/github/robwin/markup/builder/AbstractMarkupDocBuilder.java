@@ -110,20 +110,45 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder anchor(String anchor) {
+        return anchor(anchor, null);
+    }
+
+    @Override
+    public MarkupDocBuilder crossReference(String document, String anchor, String text) {
+        documentBuilder.append(crossReferenceAsString(document, anchor, text));
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder crossReference(String anchor, String text) {
-        documentBuilder.append(crossReferenceAsString(anchor, text));
+        return crossReference(null, anchor, text);
+    }
+
+    @Override
+    public MarkupDocBuilder crossReference(String anchor) {
+        return crossReference(null, anchor, null);
+    }
+
+    @Override
+    public MarkupDocBuilder crossReferenceTitle(String document, String anchor, String text) {
+        documentBuilder.append(crossReferenceTitleAsString(document, anchor, text));
         return this;
     }
 
     @Override
     public MarkupDocBuilder crossReferenceTitle(String anchor, String text) {
-        documentBuilder.append(crossReferenceTitleAsString(anchor, text));
-        return this;
+        return crossReferenceTitle(null, anchor, text);
     }
 
     @Override
-    public String crossReferenceTitleAsString(String anchor, String text) {
-        return crossReferenceAsString(anchor, text);
+    public MarkupDocBuilder crossReferenceTitle(String anchor) {
+        return crossReferenceTitle(null, anchor, null);
+    }
+
+    @Override
+    public String crossReferenceTitleAsString(String document, String anchor, String text) {
+        return crossReferenceAsString(document, anchor, text);
     }
 
     @Override

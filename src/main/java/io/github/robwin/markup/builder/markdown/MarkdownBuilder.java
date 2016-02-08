@@ -164,7 +164,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public String crossReferenceAsString(String anchor, String text) {
+    public String crossReferenceAsString(String document, String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
             text = anchor.trim();
