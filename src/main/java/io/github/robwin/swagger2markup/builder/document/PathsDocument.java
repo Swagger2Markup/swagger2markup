@@ -41,10 +41,12 @@ import io.swagger.models.properties.Property;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -53,8 +55,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 import static io.github.robwin.swagger2markup.utils.TagUtils.*;
-import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.*;
 
 /**
  * @author Robert Winkler
@@ -78,7 +79,6 @@ public class PathsDocument extends MarkupDocument {
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
     private static final String DESCRIPTION_FOLDER_NAME = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
-    private static final String SEPARATED_PATHS_FOLDER_NAME = "paths";
     private final String PARAMETER;
     private static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
@@ -92,10 +92,12 @@ public class PathsDocument extends MarkupDocument {
     private final Comparator<String> pathOrdering;
     private final Comparator<HttpMethod> pathMethodOrdering;
     private boolean separatedPathsEnabled;
-    private String outputDirectory;
+    private String separatedPathsFolder;
+    private String pathsDocument;
+
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger2MarkupConfig);
+        super(swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -112,6 +114,7 @@ public class PathsDocument extends MarkupDocument {
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
         PARAMETER = labels.getString("parameter");
 
+        this.pathsDocument = swagger2MarkupConfig.getPathsDocument();
         this.inlineSchemaDepthLevel = swagger2MarkupConfig.getInlineSchemaDepthLevel();
         this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
@@ -143,6 +146,7 @@ public class PathsDocument extends MarkupDocument {
         }
 
         this.separatedPathsEnabled = swagger2MarkupConfig.isSeparatedPaths();
+        this.separatedPathsFolder = swagger2MarkupConfig.getSeparatedPathsFolder();
         if(this.separatedPathsEnabled){
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated path files is enabled.");
@@ -153,7 +157,6 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Create separated path files is disabled.");
             }
         }
-        this.outputDirectory = outputDirectory;
         tagOrdering = swagger2MarkupConfig.getTagOrdering();
         pathOrdering = swagger2MarkupConfig.getPathOrdering();
         pathMethodOrdering = swagger2MarkupConfig.getPathMethodOrdering();
@@ -228,28 +231,59 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-     private void processPath(String methodAndPath, Operation operation) {
+    private String normalizePathFileName(String methodAndPath, Operation operation) {
+        String pathFileName = operation.getOperationId();
 
-         path(methodAndPath, operation, this.markupDocBuilder);
+        if (pathFileName == null)
+            pathFileName = methodAndPath;
+        pathFileName = FILENAME_FORBIDDEN_PATTERN.matcher(pathFileName).replaceAll("_").toLowerCase();
 
+        return pathFileName;
+    }
+
+    private String resolvePathDocument(String methodAndPath, Operation operation) {
+        if (this.outputDirectory == null)
+            return null;
+        else if (this.separatedPathsEnabled)
+            return "./" + this.separatedPathsFolder + "/" + this.markupDocBuilder.addfileExtension(normalizePathFileName(methodAndPath, operation));
+        else
+            return "./" + this.markupDocBuilder.addfileExtension(this.pathsDocument);
+    }
+
+    private void processPath(String methodAndPath, Operation operation) {
         if (separatedPathsEnabled) {
             MarkupDocBuilder pathDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
             path(methodAndPath, operation, pathDocBuilder);
-            String pathFileName = operation.getOperationId();
-            if (pathFileName == null)
-                pathFileName = methodAndPath;
-            pathFileName = FILENAME_FORBIDDEN_PATTERN.matcher(pathFileName).replaceAll("_").toLowerCase();
+            File pathFile = new File(outputDirectory, resolvePathDocument(methodAndPath, operation));
+
             try {
-                pathDocBuilder.writeToFile(Paths.get(outputDirectory, SEPARATED_PATHS_FOLDER_NAME).toString(), pathFileName, StandardCharsets.UTF_8);
+                String pathDirectory = FilenameUtils.getFullPath(pathFile.getPath());
+                String pathFileName = FilenameUtils.getName(pathFile.getPath());
+
+                pathDocBuilder.writeToFileWithoutExtension(pathDirectory, pathFileName, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to write path file: %s", pathFileName), e);
+                    logger.warn(String.format("Failed to write path file: %s", pathFile), e);
                 }
             }
             if (logger.isInfoEnabled()) {
-                logger.info("Separate path file produced: {}", pathFileName);
+                logger.info("Separate path file produced: {}", pathFile);
             }
+
+            pathRef(methodAndPath, operation, this.markupDocBuilder);
+
+        } else {
+            path(methodAndPath, operation, this.markupDocBuilder);
         }
+    }
+
+
+    private String operationName(String methodAndPath, Operation operation) {
+        String operationName = operation.getSummary();
+        if(isBlank(operationName)) {
+            operationName = methodAndPath;
+        }
+        return operationName;
     }
 
     /**
@@ -273,6 +307,18 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
+     * Builds a cross-reference to separated path file
+     * @param methodAndPath the Method of the operation and the URL of the path
+     * @param operation the Swagger Operation
+     */
+    private void pathRef(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
+        String document = resolvePathDocument(methodAndPath, operation);
+        String operationName = operationName(methodAndPath, operation);
+
+        addPathTitle(docBuilder.crossReferenceAsString(document, operationName, operationName), docBuilder);
+    }
+
+    /**
      * Adds the path title to the document. If the operation has a summary, the title is the summary.
      * Otherwise the title is the method of the operation and the URL of the path.
      *
@@ -280,15 +326,13 @@ public class PathsDocument extends MarkupDocument {
      * @param operation the Swagger Operation
      */
     private void pathTitle(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
-        String summary = operation.getSummary();
-        String title;
-        if(isNotBlank(summary)) {
-            title = summary;
-            addPathTitle(title, docBuilder);
+        String operationName = operationName(methodAndPath, operation);
+
+        addPathTitle(operationName, docBuilder);
+        if(operationName.equals(operation.getSummary())) {
             docBuilder.listing(methodAndPath);
-        }else{
-            addPathTitle(methodAndPath, docBuilder);
         }
+
         if (logger.isInfoEnabled()) {
             logger.info("Path processed: {}", methodAndPath);
         }
@@ -370,7 +414,7 @@ public class PathsDocument extends MarkupDocument {
                     new MarkupTableColumn(SCHEMA_COLUMN, 1),
                     new MarkupTableColumn(DEFAULT_COLUMN, 1));
             for(Parameter parameter : parameters){
-                Type type = ParameterUtils.getType(parameter);
+                Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolver());
                 if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                     if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
                         String localTypeName = parameter.getName();
@@ -463,7 +507,7 @@ public class PathsDocument extends MarkupDocument {
                 else
                     sortedTags = new TreeSet<>(this.tagOrdering);
                 sortedTags.addAll(tags);
-                this.markupDocBuilder.unorderedList(new ArrayList<>(sortedTags));
+                docBuilder.unorderedList(new ArrayList<>(sortedTags));
             }
         }
     }
@@ -560,7 +604,8 @@ public class PathsDocument extends MarkupDocument {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    List<String> content = Arrays.asList(type, docBuilder.crossReferenceAsString(securityKey, securityKey),
+                    List<String> content = Arrays.asList(type, docBuilder.crossReferenceAsString(securityKey,
+                            securityKey, securityKey),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }
@@ -615,7 +660,7 @@ public class PathsDocument extends MarkupDocument {
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
-                    Type type = PropertyUtils.getType(property);
+                    Type type = PropertyUtils.getType(property, new DefinitionDocumentResolver());
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
                             String localTypeName = RESPONSE + " " + entry.getKey();
@@ -650,7 +695,10 @@ public class PathsDocument extends MarkupDocument {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), this.markupDocBuilder);
+                String definitionsRelativePath = null;
+                if (this.separatedPathsEnabled)
+                    definitionsRelativePath = "..";
+                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), definitionsRelativePath, docBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }

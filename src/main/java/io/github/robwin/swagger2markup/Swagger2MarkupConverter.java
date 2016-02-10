@@ -46,15 +46,6 @@ public class Swagger2MarkupConverter {
     private static final Logger LOG = LoggerFactory.getLogger(Swagger2MarkupConverter.class);
 
     private final Swagger2MarkupConfig swagger2MarkupConfig;
-    private static final String OVERVIEW_DOCUMENT = "overview";
-    private static final String PATHS_DOCUMENT = "paths";
-    private static final String DEFINITIONS_DOCUMENT = "definitions";
-    private static final String SECURITY_DOCUMENT = "security";
-
-    private static final Comparator<String> DEFAULT_TAG_ORDERING = Ordering.natural();
-    private static final Comparator<String> DEFAULT_PATH_ORDERING = Ordering.natural();
-    private static final Comparator<HttpMethod> DEFAULT_PATH_METHOD_ORDERING = Ordering.explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS);
-    private static final Comparator<String> DEFAULT_DEFINITION_ORDERING = Ordering.natural();
 
     /**
      * @param swagger2MarkupConfig the configuration
@@ -130,10 +121,10 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(String directory) throws IOException {
-        new OverviewDocument(swagger2MarkupConfig).build().writeToFile(directory, OVERVIEW_DOCUMENT, StandardCharsets.UTF_8);
-        new PathsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, PATHS_DOCUMENT, StandardCharsets.UTF_8);
-        new DefinitionsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, DEFINITIONS_DOCUMENT, StandardCharsets.UTF_8);
-        new SecurityDocument(swagger2MarkupConfig).build().writeToFile(directory, SECURITY_DOCUMENT, StandardCharsets.UTF_8);
+        new OverviewDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getOverviewDocument(), StandardCharsets.UTF_8);
+        new PathsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getPathsDocument(), StandardCharsets.UTF_8);
+        new DefinitionsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getDefinitionsDocument(), StandardCharsets.UTF_8);
+        new SecurityDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getSecurityDocument(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -143,10 +134,10 @@ public class Swagger2MarkupConverter {
      */
     private String buildDocuments() {
         StringBuilder sb = new StringBuilder();
-        sb.append(new OverviewDocument(swagger2MarkupConfig).build().toString());
+        sb.append(new OverviewDocument(swagger2MarkupConfig, null).build().toString());
         sb.append(new PathsDocument(swagger2MarkupConfig, null).build().toString());
         sb.append(new DefinitionsDocument(swagger2MarkupConfig, null).build().toString());
-        sb.append(new SecurityDocument(swagger2MarkupConfig).build().toString());
+        sb.append(new SecurityDocument(swagger2MarkupConfig, null).build().toString());
         return sb.toString();
     }
 
@@ -163,10 +154,10 @@ public class Swagger2MarkupConverter {
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
         private Language outputLanguage = Language.EN;
         private int inlineSchemaDepthLevel = 0;
-        private Comparator<String> tagOrdering = DEFAULT_TAG_ORDERING;
-        private Comparator<String> pathOrdering = DEFAULT_PATH_ORDERING;
-        private Comparator<HttpMethod> pathMethodOrdering = DEFAULT_PATH_METHOD_ORDERING;
-        private Comparator<String> definitionOrdering = DEFAULT_DEFINITION_ORDERING;
+        private Comparator<String> tagOrdering = Ordering.natural();
+        private Comparator<String> pathOrdering = Ordering.natural();
+        private Comparator<HttpMethod> pathMethodOrdering = Ordering.explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS);
+        private Comparator<String> definitionOrdering = Ordering.natural();
 
         /**
          * Creates a Builder using a given Swagger source.

@@ -78,3 +78,9 @@
 
 === Version 0.9.3
 * Updated swagger-parser from v1.0.13 to v1.0.16
+* Enhancement #61 Refactor separated documents logic to support inter-document cross-references
+* Enhancement #53 : support for tags, paths and methods ordering
+* Enhancement #51 : Support for separated operations files
+* Enhancement #52: Markdown generation for inline schemas
+
+

@@ -49,8 +49,8 @@ public class SecurityDocument extends MarkupDocument {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocument(Swagger2MarkupConfig swagger2MarkupConfig) {
-        super(swagger2MarkupConfig);
+    public SecurityDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
+        super(swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());

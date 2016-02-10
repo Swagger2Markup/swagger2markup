@@ -45,8 +45,8 @@ public class OverviewDocument extends MarkupDocument {
     private final String BASE_PATH;
     private final String SCHEMES;
 
-    public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig){
-        super(swagger2MarkupConfig);
+    public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
+        super(swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());

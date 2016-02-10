@@ -18,10 +18,8 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
-import io.github.robwin.swagger2markup.type.ArrayType;
-import io.github.robwin.swagger2markup.type.ObjectType;
-import io.github.robwin.swagger2markup.type.RefType;
-import io.github.robwin.swagger2markup.type.Type;
+import com.google.common.base.Function;
+import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -36,15 +34,16 @@ public final class ModelUtils {
      * @param model the model
      * @return the type of the model, or otherwise null
      */
-    public static Type getType(Model model) {
+    public static Type getType(Model model, Function<String, String> definitionDocumentResolver) {
         Validate.notNull(model, "model must not be null!");
         if (model instanceof ModelImpl) {
             return new ObjectType(null, model.getProperties());
         } else if (model instanceof RefModel) {
-            return new RefType(((RefModel) model).getSimpleRef());
+            String simpleRef = ((RefModel) model).getSimpleRef();
+            return new RefType(definitionDocumentResolver.apply(simpleRef), simpleRef);
         } else if (model instanceof ArrayModel) {
             ArrayModel arrayModel = ((ArrayModel) model);
-            return new ArrayType(null, PropertyUtils.getType(arrayModel.getItems()));
+            return new ArrayType(null, PropertyUtils.getType(arrayModel.getItems(), definitionDocumentResolver));
         }
         return null;
     }

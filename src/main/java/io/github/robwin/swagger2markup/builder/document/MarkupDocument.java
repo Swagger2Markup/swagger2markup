@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Function;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -33,6 +34,8 @@ import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -61,13 +64,22 @@ public abstract class MarkupDocument {
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;
     protected MarkupDocBuilder markupDocBuilder;
+    protected boolean separatedDefinitionsEnabled;
+    protected String separatedDefinitionsFolder;
+    protected String definitionsDocument;
+    protected String outputDirectory;
+
 
     protected static AtomicInteger typeIdCount = new AtomicInteger(0);
 
-    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig) {
+    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
         this.swagger = swagger2MarkupConfig.getSwagger();
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+        this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();
+        this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
+        this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();
+        this.outputDirectory = outputDirectory;
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -82,6 +94,39 @@ public abstract class MarkupDocument {
         CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
         NO_CONTENT = labels.getString("no_content");
+    }
+
+    protected String normalizeDefinitionFileName(String definitionName) {
+        return definitionName.toLowerCase();
+    }
+
+    protected String resolveDefinitionDocument(String definitionName, String relativePath) {
+        if (this.outputDirectory == null)
+            return null;
+        else if (this.separatedDefinitionsEnabled)
+            return new File(new File(relativePath, this.separatedDefinitionsFolder), this.markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+        else
+            return new File(relativePath, this.markupDocBuilder.addfileExtension(this.definitionsDocument)).getPath();
+    }
+
+    protected String resolveDefinitionDocument(String definitionName) {
+        return resolveDefinitionDocument(definitionName, null);
+    }
+
+    class DefinitionDocumentResolver implements Function<String, String> {
+        private String relativePath;
+
+        public DefinitionDocumentResolver(String relativePath) {
+            this.relativePath = relativePath;
+        }
+
+        public DefinitionDocumentResolver() {}
+
+        @Nullable
+        @Override
+        public String apply(@Nullable String definitionName) {
+            return resolveDefinitionDocument(definitionName, relativePath);
+        }
     }
 
     /**
@@ -115,7 +160,7 @@ public abstract class MarkupDocument {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
-    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, MarkupDocBuilder docBuilder) {
+    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, String definitionsRelativePath, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
@@ -130,7 +175,7 @@ public abstract class MarkupDocument {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
                     String propertyName = propertyEntry.getKey();
-                    Type propertyType = PropertyUtils.getType(property);
+                    Type propertyType = PropertyUtils.getType(property, new DefinitionDocumentResolver(definitionsRelativePath));
                     if (depth > 0 && propertyType instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
                             propertyType.setName(propertyName);
