@@ -19,15 +19,18 @@
 package io.github.robwin.swagger2markup;
 
 import com.google.common.collect.Ordering;
+
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
+import io.github.robwin.swagger2markup.builder.document.SecurityDocument;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
+
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -121,6 +124,7 @@ public class Swagger2MarkupConverter {
         new OverviewDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getOverviewDocument(), StandardCharsets.UTF_8);
         new PathsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getPathsDocument(), StandardCharsets.UTF_8);
         new DefinitionsDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getDefinitionsDocument(), StandardCharsets.UTF_8);
+        new SecurityDocument(swagger2MarkupConfig, directory).build().writeToFile(directory, swagger2MarkupConfig.getSecurityDocument(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -129,9 +133,12 @@ public class Swagger2MarkupConverter {
      * @return a the document as a String
      */
     private String buildDocuments() {
-        return new OverviewDocument(swagger2MarkupConfig, null).build().toString()
-                .concat(new PathsDocument(swagger2MarkupConfig, null).build().toString()
-                .concat(new DefinitionsDocument(swagger2MarkupConfig, null).build().toString()));
+        StringBuilder sb = new StringBuilder();
+        sb.append(new OverviewDocument(swagger2MarkupConfig, null).build().toString());
+        sb.append(new PathsDocument(swagger2MarkupConfig, null).build().toString());
+        sb.append(new DefinitionsDocument(swagger2MarkupConfig, null).build().toString());
+        sb.append(new SecurityDocument(swagger2MarkupConfig, null).build().toString());
+        return sb.toString();
     }
 
 

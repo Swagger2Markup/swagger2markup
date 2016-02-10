@@ -49,6 +49,7 @@ public class Swagger2MarkupConfig {
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
     private static final String DEFINITIONS_DOCUMENT = "definitions";
+    private static final String SECURITY_DOCUMENT = "security";
 
     private static final String SEPARATED_DEFINITIONS_FOLDER = "definitions";
     private static final String SEPARATED_PATHS_FOLDER = "paths";
@@ -162,6 +163,10 @@ public class Swagger2MarkupConfig {
 
     public String getDefinitionsDocument() {
         return DEFINITIONS_DOCUMENT;
+    }
+
+    public String getSecurityDocument() {
+        return SECURITY_DOCUMENT;
     }
 
     public String getSeparatedDefinitionsFolder() {
