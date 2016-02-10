@@ -41,10 +41,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
-    protected void documentTitleWithAttributes(Markup markup, String title){
-        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
-    }
-
     protected void sectionTitleLevel1(Markup markup, String title){
         documentBuilder.append(newLine).append(markup).append(title).append(newLine);
     }
@@ -98,9 +94,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected void unorderedList(Markup markup, List<String> list){
         documentBuilder.append(newLine);
         for(String listEntry : list){
-            documentBuilder.append(markup).append(listEntry).append(newLine);
+            unorderedListItem(markup, listEntry);
         }
         documentBuilder.append(newLine);
+    }
+
+    protected void unorderedListItem(Markup markup, String item) {
+        documentBuilder.append(markup).append(item).append(newLine);
     }
 
     @Override
@@ -115,40 +115,35 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String document, String anchor, String text) {
-        documentBuilder.append(crossReferenceAsString(document, anchor, text));
+    public MarkupDocBuilder crossReferenceAnchor(String document, String anchor, String text) {
+        documentBuilder.append(crossReferenceAnchorAsString(document, anchor, text));
         return this;
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String anchor, String text) {
-        return crossReference(null, anchor, text);
+    public MarkupDocBuilder crossReferenceAnchor(String anchor, String text) {
+        return crossReferenceAnchor(null, anchor, text);
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String anchor) {
-        return crossReference(null, anchor, null);
+    public MarkupDocBuilder crossReferenceAnchor(String anchor) {
+        return crossReferenceAnchor(null, anchor, null);
     }
 
     @Override
-    public MarkupDocBuilder crossReferenceTitle(String document, String anchor, String text) {
-        documentBuilder.append(crossReferenceTitleAsString(document, anchor, text));
+    public MarkupDocBuilder crossReference(String document, String title, String text) {
+        documentBuilder.append(crossReferenceAsString(document, title, text));
         return this;
     }
 
     @Override
-    public MarkupDocBuilder crossReferenceTitle(String anchor, String text) {
-        return crossReferenceTitle(null, anchor, text);
+    public MarkupDocBuilder crossReference(String title, String text) {
+        return crossReference(null, title, text);
     }
 
     @Override
-    public MarkupDocBuilder crossReferenceTitle(String anchor) {
-        return crossReferenceTitle(null, anchor, null);
-    }
-
-    @Override
-    public String crossReferenceTitleAsString(String document, String anchor, String text) {
-        return crossReferenceAsString(document, anchor, text);
+    public MarkupDocBuilder crossReference(String title) {
+        return crossReference(null, title, null);
     }
 
     @Override
@@ -167,6 +162,10 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return documentBuilder.toString();
     }
 
+    protected String addfileExtension(Markup markup, String fileName) {
+        return fileName + "." + markup;
+    }
+
     @Override
     public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
         Files.createDirectories(Paths.get(directory));
@@ -177,5 +176,10 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             logger.info("{} was written to: {}", fileName, directory);
         }
         documentBuilder = new StringBuilder();
+    }
+
+    @Override
+    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
+        writeToFileWithoutExtension(directory, addfileExtension(fileName), charset);
     }
 }
