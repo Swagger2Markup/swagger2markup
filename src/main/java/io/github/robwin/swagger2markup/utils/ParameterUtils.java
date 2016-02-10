@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
+import com.google.common.base.Function;
 import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -40,14 +41,14 @@ public final class ParameterUtils {
      * @param parameter the parameter
      * @return the type of the parameter, or otherwise null
      */
-    public static Type getType(Parameter parameter){
+    public static Type getType(Parameter parameter, Function<String, String> definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
         if(parameter instanceof BodyParameter){
             BodyParameter bodyParameter = (BodyParameter)parameter;
             Model model = bodyParameter.getSchema();
             if(model != null){
-                type = ModelUtils.getType(model);
+                type = ModelUtils.getType(model, definitionDocumentResolver);
             }else{
                 type = new BasicType("string");
             }
@@ -63,12 +64,12 @@ public final class ParameterUtils {
             }
             if(type.getName().equals("array")){
                 String collectionFormat = serializableParameter.getCollectionFormat();
-                type = new ArrayType(null, PropertyUtils.getType(serializableParameter.getItems()), collectionFormat);
+                type = new ArrayType(null, PropertyUtils.getType(serializableParameter.getItems(), definitionDocumentResolver), collectionFormat);
             }
         }
         else if(parameter instanceof RefParameter){
-            RefParameter refParameter = (RefParameter)parameter;
-            type = new RefType(refParameter.getSimpleRef());
+            String simpleRef = ((RefParameter)parameter).getSimpleRef();
+            type = new RefType(definitionDocumentResolver.apply(simpleRef), simpleRef);
         }
         return type;
     }

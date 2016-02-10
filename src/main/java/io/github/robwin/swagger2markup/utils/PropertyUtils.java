@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.utils;
 
+import com.google.common.base.Function;
 import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
@@ -37,7 +38,7 @@ public final class PropertyUtils {
      * @param property the property
      * @return the type of the property
      */
-    public static Type getType(Property property){
+    public static Type getType(Property property, Function<String, String> definitionDocumentResolver){
         Validate.notNull(property, "property must not be null!");
         Type type;
         if(property instanceof RefProperty){
@@ -45,11 +46,11 @@ public final class PropertyUtils {
             if (refProperty.getRefFormat() == RefFormat.RELATIVE)
                 type = new ObjectType(null, null); // FIXME : Workaround for https://github.com/swagger-api/swagger-parser/issues/177
             else
-                type = new RefType(refProperty.getSimpleRef());
+                type = new RefType(definitionDocumentResolver.apply(refProperty.getSimpleRef()), refProperty.getSimpleRef());
         }else if(property instanceof ArrayProperty){
             ArrayProperty arrayProperty = (ArrayProperty)property;
             Property items = arrayProperty.getItems();
-            type = new ArrayType(null, getType(items));
+            type = new ArrayType(null, getType(items, definitionDocumentResolver));
         }else if(property instanceof StringProperty){
             StringProperty stringProperty = (StringProperty)property;
             List<String> enums = stringProperty.getEnum();
