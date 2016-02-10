@@ -56,7 +56,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
 
@@ -73,7 +74,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
@@ -90,7 +92,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
@@ -107,7 +110,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
@@ -142,7 +146,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
@@ -159,7 +164,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
@@ -175,7 +181,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
         assertThat(new String(Files.readAllBytes(new File(outputDirectory, "overview.adoc").toPath())))
                 .doesNotContain("=== URI scheme");
@@ -194,7 +201,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
         assertThat(new String(Files.readAllBytes(new File(outputDirectory, "overview.adoc").toPath())))
                 .contains("=== URI scheme");
@@ -214,7 +222,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.md", "overview.md", "paths.md"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.md", "overview.md", "paths.md", "security.md"));
     }
 
     @Test
@@ -231,7 +240,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(3).containsAll(asList("definitions.md", "overview.md", "paths.md"));
+        assertThat(directories).hasSize(4).containsAll(
+                asList("definitions.md", "overview.md", "paths.md", "security.md"));
     }
 
     @Test
@@ -247,8 +257,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(4).containsAll(
-            asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc"));
+        assertThat(directories).hasSize(5).containsAll(
+                asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
         File definitionsDirectory = new File(outputDirectory, "definitions");
         assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath())))
             .contains(new String(Files.readAllBytes(new File(definitionsDirectory, "user.adoc").toPath())));
@@ -268,8 +278,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(4).containsAll(
-                asList("definitions", "definitions.md", "overview.md", "paths.md"));
+        assertThat(directories).hasSize(5).containsAll(
+                asList("definitions", "definitions.md", "overview.md", "paths.md", "security.md"));
 
         File definitionsDirectory = new File(outputDirectory, "definitions");
         String[] definitions = definitionsDirectory.list();
@@ -294,8 +304,8 @@ public class Swagger2MarkupConverterTest {
 
         // Then
         String[] directories = outputDirectory.list();
-        assertThat(directories).hasSize(4).containsAll(
-                asList("definitions", "definitions.md", "overview.md", "paths.md"));
+        assertThat(directories).hasSize(5).containsAll(
+                asList("definitions", "definitions.md", "overview.md", "paths.md", "security.md"));
         verifyMarkdownContainsFieldsInTables(
                 new File(outputDirectory, "definitions.md"),
                 ImmutableMap.<String, Set<String>>builder()
@@ -329,7 +339,8 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath())))
-                .contains("== Определения");
+.contains(
+                "== ÐžÐ¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ñ�");
     }
 
     /**
