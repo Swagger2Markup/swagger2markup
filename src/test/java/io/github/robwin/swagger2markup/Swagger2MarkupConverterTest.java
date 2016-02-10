@@ -249,9 +249,6 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(4).containsAll(
             asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc"));
-        File definitionsDirectory = new File(outputDirectory, "definitions");
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath())))
-            .contains(new String(Files.readAllBytes(new File(definitionsDirectory, "user.adoc").toPath())));
     }
 
     @Test
@@ -275,9 +272,6 @@ public class Swagger2MarkupConverterTest {
         String[] definitions = definitionsDirectory.list();
         assertThat(definitions).hasSize(6).containsAll(
                 asList("identified.md", "user.md", "category.md", "pet.md", "tag.md", "order.md"));
-
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.md").toPath())))
-                .contains(new String(Files.readAllBytes(new File(definitionsDirectory, "user.md").toPath())));
     }
 
     @Test
@@ -296,13 +290,7 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions", "definitions.md", "overview.md", "paths.md"));
-        verifyMarkdownContainsFieldsInTables(
-                new File(outputDirectory, "definitions.md"),
-                ImmutableMap.<String, Set<String>>builder()
-                        .put("Identified", ImmutableSet.of("id"))
-                        .put("User", ImmutableSet.of("id", "username", "firstName",
-                                "lastName", "email", "password", "phone", "userStatus"))
-                        .build());
+
         File definitionsDirectory = new File(outputDirectory, "definitions");
         verifyMarkdownContainsFieldsInTables(
                 new File(definitionsDirectory, "user.md"),
