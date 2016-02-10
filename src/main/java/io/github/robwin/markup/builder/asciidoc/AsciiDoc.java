@@ -42,7 +42,8 @@ public enum AsciiDoc implements Markup {
     CROSS_REFERENCE_START("<<"),
     CROSS_REFERENCE_END(">>"),
     ANCHOR_START("[["),
-    ANCHOR_END("]]");
+    ANCHOR_END("]]"),
+    FILE_EXTENSION("adoc");
 
     private final String markup;
 

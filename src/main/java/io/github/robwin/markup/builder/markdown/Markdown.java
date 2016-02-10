@@ -36,7 +36,8 @@ public enum Markdown implements Markup {
     SECTION_TITLE_LEVEL4("##### "),
     BOLD("**"),
     ITALIC("*"),
-    LIST_ENTRY("* ");
+    LIST_ENTRY("* "),
+    FILE_EXTENSION("md");
 
     private final String markup;
 
