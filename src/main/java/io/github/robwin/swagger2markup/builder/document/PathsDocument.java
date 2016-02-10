@@ -18,8 +18,10 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupTableColumn;
@@ -32,8 +34,10 @@ import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PathUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.*;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
@@ -65,6 +69,8 @@ public class PathsDocument extends MarkupDocument {
     private final String EXAMPLE_CURL;
     private final String EXAMPLE_REQUEST;
     private final String EXAMPLE_RESPONSE;
+
+    private final String SECURITY;
     private final String TYPE_COLUMN;
     private final String HTTP_CODE_COLUMN;
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
@@ -101,6 +107,7 @@ public class PathsDocument extends MarkupDocument {
         EXAMPLE_CURL = labels.getString("example_curl");
         EXAMPLE_REQUEST = labels.getString("example_request");
         EXAMPLE_RESPONSE = labels.getString("example_response");
+        SECURITY = labels.getString("security");
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
         PARAMETER = labels.getString("parameter");
@@ -261,6 +268,7 @@ public class PathsDocument extends MarkupDocument {
             producesSection(operation, docBuilder);
             tagsSection(operation, docBuilder);
             examplesSection(operation, docBuilder);
+            securitySchemeSection(operation, docBuilder);
         }
     }
 
@@ -527,6 +535,38 @@ public class PathsDocument extends MarkupDocument {
             logger.warn("No example file found with correct file name extension in folder: {}", Paths.get(examplesFolderPath, exampleFolder));
         }
         return Optional.absent();
+    }
+
+    /**
+     * Builds the security section of a Swagger Operation.
+     *
+     * @param operation the Swagger Operation
+     * @param docBuilder the MarkupDocBuilder document builder
+     */
+    private void securitySchemeSection(Operation operation, MarkupDocBuilder docBuilder) {
+        List<Map<String, List<String>>> securitySchemes = operation.getSecurity();
+        if (CollectionUtils.isNotEmpty(securitySchemes)) {
+            addPathSectionTitle(SECURITY, docBuilder);
+            Map<String, SecuritySchemeDefinition> securityDefinitions = swagger.getSecurityDefinitions();
+            List<List<String>> cells = new ArrayList<>();
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(TYPE_COLUMN, 1),
+                    new MarkupTableColumn(NAME_COLUMN, 1),
+                    new MarkupTableColumn(SCOPES_COLUMN, 6));
+            for (Map<String, List<String>> securityScheme : securitySchemes) {
+                for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
+                    String securityKey = securityEntry.getKey();
+                    String type = "UNKNOWN";
+                    if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
+                        type = securityDefinitions.get(securityKey).getType();
+                    }
+                    List<String> content = Arrays.asList(type, docBuilder.crossReferenceAsString(securityKey, securityKey),
+                            Joiner.on(",").join(securityEntry.getValue()));
+                    cells.add(content);
+                }
+            }
+            docBuilder.tableWithColumnSpecs(cols, cells);
+        }
     }
 
     /**

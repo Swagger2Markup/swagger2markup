@@ -50,6 +50,8 @@ public abstract class MarkupDocument {
     protected final String SCHEMA_COLUMN;
     protected final String NAME_COLUMN;
     protected final String DESCRIPTION_COLUMN;
+
+    protected final String SCOPES_COLUMN;
     protected final String DESCRIPTION;
     protected final String PRODUCES;
     protected final String CONSUMES;
@@ -74,6 +76,7 @@ public abstract class MarkupDocument {
         SCHEMA_COLUMN = labels.getString("schema_column");
         NAME_COLUMN = labels.getString("name_column");
         DESCRIPTION_COLUMN = labels.getString("description_column");
+        SCOPES_COLUMN = labels.getString("scopes_column");
         DESCRIPTION = DESCRIPTION_COLUMN;
         PRODUCES = labels.getString("produces");
         CONSUMES = labels.getString("consumes");
