@@ -242,12 +242,10 @@ public class PathsDocument extends MarkupDocument {
     }
 
     private String resolvePathDocument(String methodAndPath, Operation operation) {
-        if (this.outputDirectory == null)
-            return null;
-        else if (this.separatedPathsEnabled)
-            return "./" + this.separatedPathsFolder + "/" + this.markupDocBuilder.addfileExtension(normalizePathFileName(methodAndPath, operation));
+        if (this.separatedPathsEnabled)
+            return new File(this.separatedPathsFolder, this.markupDocBuilder.addfileExtension(normalizePathFileName(methodAndPath, operation))).getPath();
         else
-            return "./" + this.markupDocBuilder.addfileExtension(this.pathsDocument);
+            return this.markupDocBuilder.addfileExtension(this.pathsDocument);
     }
 
     private void processPath(String methodAndPath, Operation operation) {
@@ -414,7 +412,7 @@ public class PathsDocument extends MarkupDocument {
                     new MarkupTableColumn(SCHEMA_COLUMN, 1),
                     new MarkupTableColumn(DEFAULT_COLUMN, 1));
             for(Parameter parameter : parameters){
-                Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolver());
+                Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromPath());
                 if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                     if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
                         String localTypeName = parameter.getName();
@@ -660,7 +658,7 @@ public class PathsDocument extends MarkupDocument {
                 Response response = entry.getValue();
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
-                    Type type = PropertyUtils.getType(property, new DefinitionDocumentResolver());
+                    Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromPath());
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
                             String localTypeName = RESPONSE + " " + entry.getKey();
@@ -695,14 +693,26 @@ public class PathsDocument extends MarkupDocument {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                String definitionsRelativePath = null;
-                if (this.separatedPathsEnabled)
-                    definitionsRelativePath = "..";
-                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), definitionsRelativePath, docBuilder);
+
+                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromPath(), docBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
         }
 
+    }
+
+    class DefinitionDocumentResolverFromPath extends DefinitionDocumentResolverDefault {
+
+        public DefinitionDocumentResolverFromPath() {}
+
+        public String apply(String definitionName) {
+            String defaultResolver = super.apply(definitionName);
+
+            if (defaultResolver != null && separatedPathsEnabled)
+                return new File("..", defaultResolver).getPath();
+            else
+                return defaultResolver;
+        }
     }
 }

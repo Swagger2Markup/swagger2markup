@@ -158,7 +158,7 @@ public class DefinitionsDocument extends MarkupDocument {
         if (separatedDefinitionsEnabled) {
             MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
             definition(definitions, definitionName, model, defDocBuilder);
-            File definitionFile = new File(outputDirectory, resolveDefinitionDocument(definitionName));
+            File definitionFile = new File(outputDirectory, new DefinitionDocumentResolverDefault().apply(definitionName));
             try {
                 String definitionDirectory = FilenameUtils.getFullPath(definitionFile.getPath());
                 String definitionFileName = FilenameUtils.getName(definitionFile.getPath());
@@ -209,7 +209,7 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
-        addDefinitionTitle(docBuilder.crossReferenceAsString(resolveDefinitionDocument(definitionName), definitionName, definitionName), docBuilder);
+        addDefinitionTitle(docBuilder.crossReferenceAsString(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName), docBuilder);
     }
 
     private class DefinitionPropertyDescriptor extends PropertyDescriptor {
@@ -241,10 +241,7 @@ public class DefinitionsDocument extends MarkupDocument {
         Map<String, Property> properties = getAllProperties(definitions, model);
         Type type = new ObjectType(definitionName, properties);
 
-        String definitionsRelativePath = null;
-        if (this.separatedDefinitionsEnabled)
-            definitionsRelativePath = "..";
-        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), definitionsRelativePath, docBuilder);
+        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
         inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
     }
 
@@ -376,19 +373,27 @@ public class DefinitionsDocument extends MarkupDocument {
         docBuilder.boldTextLine(title);
     }
 
-
     private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                String definitionsRelativePath = null;
-                if (this.separatedDefinitionsEnabled)
-                    definitionsRelativePath = "..";
-                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), definitionsRelativePath, docBuilder);
+                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
         }
 
+    }
+
+    class DefinitionDocumentResolverFromDefinition extends DefinitionDocumentResolverDefault {
+
+        public DefinitionDocumentResolverFromDefinition() {}
+
+        public String apply(String definitionName) {
+            if (separatedDefinitionsEnabled)
+                return markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName));
+            else
+                return super.apply(definitionName);
+        }
     }
 }

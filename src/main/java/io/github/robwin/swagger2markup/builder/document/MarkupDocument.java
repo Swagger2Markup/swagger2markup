@@ -24,6 +24,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -161,7 +162,7 @@ public abstract class MarkupDocument {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
-    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, String definitionsRelativePath, MarkupDocBuilder docBuilder) {
+    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
@@ -176,7 +177,7 @@ public abstract class MarkupDocument {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
                     String propertyName = propertyEntry.getKey();
-                    Type propertyType = PropertyUtils.getType(property, new DefinitionDocumentResolver(definitionsRelativePath));
+                    Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
                     if (depth > 0 && propertyType instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
                             propertyType.setName(propertyName);
@@ -220,4 +221,21 @@ public abstract class MarkupDocument {
         }
     }
 
+    class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
+
+        public DefinitionDocumentResolverDefault() {}
+
+        protected String normalizeDefinitionFileName(String definitionName) {
+            return definitionName.toLowerCase();
+        }
+
+        public String apply(String definitionName) {
+            if (outputDirectory == null)
+                return null;
+            else if (separatedDefinitionsEnabled)
+                return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+            else
+                return markupDocBuilder.addfileExtension(definitionsDocument);
+        }
+    }
 }
