@@ -26,8 +26,6 @@ import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -41,18 +39,11 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
-    private static final String MARKDOWN_FILE_EXTENSION = "md";
     private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_\\s]+");
     private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
-        documentTitle(Markdown.DOCUMENT_TITLE, title);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder documentTitleWithAttributes(String title) {
         documentTitle(Markdown.DOCUMENT_TITLE, title);
         return this;
     }
@@ -120,6 +111,12 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
+    public MarkupDocBuilder unorderedListItem(String item) {
+        unorderedListItem(Markdown.LIST_ENTRY, item);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV){
         String headersInPSV = rowsInPSV.get(0);
         List<String> contentRowsInPSV = rowsInPSV.subList(1, rowsInPSV.size());
@@ -164,12 +161,17 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public String crossReferenceAsString(String anchor, String text) {
+    public String crossReferenceAnchorAsString(String document, String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
             text = anchor.trim();
         stringBuilder.append("[").append(text).append("](#").append(normalizeReferenceAnchor(anchor)).append(")");
         return stringBuilder.toString();
+    }
+
+    @Override
+    public String crossReferenceAsString(String document, String title, String text) {
+        return crossReferenceAnchorAsString(document, title, text);
     }
 
     private String escapeTableCell(String cell) {
@@ -209,7 +211,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(directory, fileName + "." + MARKDOWN_FILE_EXTENSION, charset);
+    public String addfileExtension(String fileName) {
+        return addfileExtension(Markdown.FILE_EXTENSION, fileName);
     }
 }

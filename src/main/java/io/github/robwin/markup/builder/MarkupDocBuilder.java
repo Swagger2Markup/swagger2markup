@@ -29,8 +29,6 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder documentTitle(String title);
 
-    MarkupDocBuilder documentTitleWithAttributes(String title);
-
     MarkupDocBuilder sectionTitleLevel1(String title);
 
     MarkupDocBuilder sectionTitleLevel2(String title);
@@ -53,6 +51,8 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder unorderedList(List<String> list);
 
+    MarkupDocBuilder unorderedListItem(String item);
+
     @Deprecated
     MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV);
 
@@ -62,15 +62,25 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder anchor(String anchor, String text);
 
+    MarkupDocBuilder anchor(String anchor);
+
     String anchorAsString(String anchor, String text);
 
-    MarkupDocBuilder crossReference(String anchor, String text);
+    MarkupDocBuilder crossReferenceAnchor(String document, String anchor, String text);
 
-    String crossReferenceAsString(String anchor, String text);
+    MarkupDocBuilder crossReferenceAnchor(String anchor, String text);
 
-    MarkupDocBuilder crossReferenceTitle(String anchor, String text);
+    MarkupDocBuilder crossReferenceAnchor(String anchor);
 
-    String crossReferenceTitleAsString(String anchor, String text);
+    String crossReferenceAnchorAsString(String document, String anchor, String text);
+
+    MarkupDocBuilder crossReference(String document, String title, String text);
+
+    MarkupDocBuilder crossReference(String title, String text);
+
+    MarkupDocBuilder crossReference(String title);
+
+    String crossReferenceAsString(String document, String title, String text);
 
     MarkupDocBuilder newLine();
 
@@ -78,6 +88,13 @@ public interface MarkupDocBuilder {
      * Returns a string representation of the document.
      */
     String toString();
+
+    /**
+     * Add an extension to fileName depending on markup language
+     * @param fileName without extension
+     * @return fileName with an extension
+     */
+    String addfileExtension(String fileName);
 
     /**
      * Writes the content of the builder to a file and clears the builder.

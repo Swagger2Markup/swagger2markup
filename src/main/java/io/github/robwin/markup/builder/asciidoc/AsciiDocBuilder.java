@@ -25,8 +25,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.collections.CollectionUtils;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,20 +38,12 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
-    private static final String ASCIIDOC_FILE_EXTENSION = "adoc";
-    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_:.\\s]+");
-    private static final Pattern XREF_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_:./#\\s]+");
+    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^\\p{ASCII}]+");
     private static final Pattern SPACE_PATTERN = Pattern.compile("[\\s]+");
 
 
     @Override
     public MarkupDocBuilder documentTitle(String title){
-        documentTitle(AsciiDoc.DOCUMENT_TITLE, title);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder documentTitleWithAttributes(String title) {
         documentTitle(AsciiDoc.DOCUMENT_TITLE, title);
         return this;
     }
@@ -112,6 +103,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder unorderedListItem(String item) {
+        unorderedListItem(AsciiDoc.LIST_ENTRY, item);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder source(String text, String language){
         documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
         listing(AsciiDoc.LISTING, text);
@@ -130,46 +127,61 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         return this;
     }
 
-    private static String normalizeAnchor(String anchor) {
-        return "_" + SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim()).replaceAll("")).replaceAll("_");
+    private String normalizeAnchor(String anchor) {
+        return "_" + SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim().toLowerCase()).replaceAll("")).replaceAll("_");
+    }
+
+    private String normalizeTitle(String document, String title) {
+        if (document == null)
+            return title.trim();
+        else {
+            // Reference to a title in another document is not yet supported in AsciiDoctor.
+            // The following workaround works with AsciiDoctor HTML output.
+            return "_" + title.trim().toLowerCase();
+        }
+    }
+
+    /**
+     * Partial workaround for https://github.com/asciidoctor/asciidoctor/issues/844
+     */
+    private String normalizeDocument(String document) {
+        if (document == null)
+            return null;
+
+        return new File(document).toPath().normalize().toString();
     }
 
     @Override
     public String anchorAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (text == null)
-            stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor)).append(AsciiDoc.ANCHOR_END);
-        else
-            stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor)).append(",").append(text).append(AsciiDoc.ANCHOR_END);
+        stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor));
+        if (text != null)
+            stringBuilder.append(",").append(text);
+        stringBuilder.append(AsciiDoc.ANCHOR_END);
         return stringBuilder.toString();
     }
 
 
-    protected String normalizedCrossReferenceAsString(String anchor, String text) {
+    protected String normalizedCrossReferenceAsString(String document, String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (text == null)
-            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(anchor).append(AsciiDoc.CROSS_REFERENCE_END);
-        else
-            stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START).append(anchor).append(",").append(text).append(AsciiDoc.CROSS_REFERENCE_END);
+        stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START);
+        if (document != null)
+            stringBuilder.append(document).append("#");
+        stringBuilder.append(anchor);
+        if (text != null)
+            stringBuilder.append(",").append(text);
+        stringBuilder.append(AsciiDoc.CROSS_REFERENCE_END);
         return stringBuilder.toString();
     }
 
-    private static String normalizeXRef(String anchor) {
-        return "_" + SPACE_PATTERN.matcher(XREF_FORBIDDEN_PATTERN.matcher(anchor.trim()).replaceAll("")).replaceAll("_");
+    @Override
+    public String crossReferenceAnchorAsString(String document, String anchor, String text) {
+        return normalizedCrossReferenceAsString(normalizeDocument(document), normalizeAnchor(anchor), text);
     }
 
     @Override
-    public String crossReferenceAsString(String anchor, String text) {
-        return normalizedCrossReferenceAsString(normalizeXRef(anchor), text);
-    }
-
-    private static String normalizeTitleXRef(String anchor) {
-        return anchor.trim();
-    }
-
-    @Override
-    public String crossReferenceTitleAsString(String anchor, String text) {
-        return normalizedCrossReferenceAsString(normalizeTitleXRef(anchor), text);
+    public String crossReferenceAsString(String document, String title, String text) {
+        return normalizedCrossReferenceAsString(normalizeDocument(document), normalizeTitle(document, title), text);
     }
 
     private String escapeTableCell(String cell) {
@@ -193,7 +205,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         }
 
         newLine();
-        documentBuilder.append("[options=\"" + join(options, ",") + "\", cols=\"" + join(cols, ",") + "\"]").append(newLine);
+        documentBuilder.append("[options=\"").append(join(options, ",")).append("\", cols=\"").append(join(cols, ",")).append("\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         if (hasHeader) {
             Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
@@ -218,7 +230,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(directory, fileName + "." + ASCIIDOC_FILE_EXTENSION, charset);
+    public String addfileExtension(String fileName) {
+        return addfileExtension(AsciiDoc.FILE_EXTENSION, fileName);
     }
+
 }

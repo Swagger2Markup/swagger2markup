@@ -44,6 +44,7 @@ dependencies {
     compile 'org.slf4j:slf4j-api'
     compile 'commons-collections:commons-collections'
     compile 'org.apache.commons:commons-lang3'
+    compile "commons-io:commons-io"
     compile 'com.google.guava:guava'
     testCompile 'junit:junit'
     testCompile 'ch.qos.logback:logback-classic'
@@ -56,6 +57,7 @@ dependencyManagement {
         dependency "ch.qos.logback:logback-classic:1.1.2"
         dependency "commons-collections:commons-collections:3.2.1"
         dependency "org.apache.commons:commons-lang3:3.2.1"
+        dependency "commons-io:commons-io:2.4"
         dependency "com.google.guava:guava:18.0"
     }
 }
