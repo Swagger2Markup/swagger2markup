@@ -4,8 +4,11 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 public class RefType extends Type {
 
-    public RefType(String name) {
+    private String document;
+
+    public RefType(String document, String name) {
         super(name);
+        this.document = document;
     }
 
     public RefType(Type type) {
@@ -14,6 +17,14 @@ public class RefType extends Type {
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        return docBuilder.crossReferenceAsString(getUniqueName(), getName());
+        return docBuilder.crossReferenceAsString(getDocument(), getUniqueName(), getName());
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public void setDocument(String document) {
+        this.document = document;
     }
 }

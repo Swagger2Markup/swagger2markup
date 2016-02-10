@@ -46,6 +46,13 @@ public class Swagger2MarkupConfig {
     private final Comparator<HttpMethod> pathMethodOrdering;
     private final Comparator<String> definitionOrdering;
 
+    private static final String OVERVIEW_DOCUMENT = "overview";
+    private static final String PATHS_DOCUMENT = "paths";
+    private static final String DEFINITIONS_DOCUMENT = "definitions";
+
+    private static final String SEPARATED_DEFINITIONS_FOLDER = "definitions";
+    private static final String SEPARATED_PATHS_FOLDER = "paths";
+
     /**
      * @param swagger the Swagger source
      * @param markupLanguage the markup language which is used to generate the files
@@ -143,5 +150,25 @@ public class Swagger2MarkupConfig {
 
     public Comparator<String> getDefinitionOrdering() {
         return definitionOrdering;
+    }
+
+    public String getOverviewDocument() {
+        return OVERVIEW_DOCUMENT;
+    }
+
+    public String getPathsDocument() {
+        return PATHS_DOCUMENT;
+    }
+
+    public String getDefinitionsDocument() {
+        return DEFINITIONS_DOCUMENT;
+    }
+
+    public String getSeparatedDefinitionsFolder() {
+        return SEPARATED_DEFINITIONS_FOLDER;
+    }
+
+    public String getSeparatedPathsFolder() {
+        return SEPARATED_PATHS_FOLDER;
     }
 }

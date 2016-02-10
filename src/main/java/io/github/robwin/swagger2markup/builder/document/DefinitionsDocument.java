@@ -32,8 +32,10 @@ import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -57,18 +59,15 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String XML = "xml";
     private static final String DESCRIPTION_FOLDER_NAME = "definitions";
     private static final String DESCRIPTION_FILE_NAME = "description";
-    private static final String SEPARATED_DEFINITIONS_FOLDER_NAME = "definitions";
     private boolean schemasEnabled;
     private String schemasFolderPath;
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
-    private boolean separatedDefinitionsEnabled;
-    private String outputDirectory;
     private final int inlineSchemaDepthLevel;
     private final Comparator<String> definitionOrdering;
 
     public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger2MarkupConfig);
+        super(swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -103,7 +102,6 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Include hand-written descriptions is disabled.");
             }
         }
-        this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();
         if(this.separatedDefinitionsEnabled){
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
@@ -114,7 +112,6 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Create separated definition files is disabled.");
             }
         }
-        this.outputDirectory = outputDirectory;
         this.definitionOrdering = swagger2MarkupConfig.getDefinitionOrdering();
     }
 
@@ -158,22 +155,28 @@ public class DefinitionsDocument extends MarkupDocument {
 
     private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
-        definition(definitions, definitionName, model, this.markupDocBuilder);
-
         if (separatedDefinitionsEnabled) {
             MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
             definition(definitions, definitionName, model, defDocBuilder);
-            String definitionFileName = definitionName.toLowerCase();
+            File definitionFile = new File(outputDirectory, resolveDefinitionDocument(definitionName));
             try {
-                defDocBuilder.writeToFile(Paths.get(outputDirectory, SEPARATED_DEFINITIONS_FOLDER_NAME).toString(), definitionFileName, StandardCharsets.UTF_8);
+                String definitionDirectory = FilenameUtils.getFullPath(definitionFile.getPath());
+                String definitionFileName = FilenameUtils.getName(definitionFile.getPath());
+
+                defDocBuilder.writeToFileWithoutExtension(definitionDirectory, definitionFileName, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to write definition file: %s", definitionFileName), e);
+                    logger.warn(String.format("Failed to write definition file: %s", definitionFile), e);
                 }
             }
             if (logger.isInfoEnabled()) {
-                logger.info("Separate definition file produced: {}", definitionFileName);
+                logger.info("Separate definition file produced: {}", definitionFile);
             }
+
+            definitionRef(definitionName, this.markupDocBuilder);
+
+        } else {
+            definition(definitions, definitionName, model, this.markupDocBuilder);
         }
     }
 
@@ -195,10 +198,18 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
-        docBuilder.sectionTitleLevel2(definitionName);
+        addDefinitionTitle(definitionName, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         propertiesSection(definitions, definitionName, model, docBuilder);
         definitionSchema(definitionName, docBuilder);
+    }
+
+    private void addDefinitionTitle(String title, MarkupDocBuilder docBuilder) {
+        docBuilder.sectionTitleLevel2(title);
+    }
+
+    private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
+        addDefinitionTitle(docBuilder.crossReferenceAsString(resolveDefinitionDocument(definitionName), definitionName, definitionName), docBuilder);
     }
 
     private class DefinitionPropertyDescriptor extends PropertyDescriptor {
@@ -230,7 +241,10 @@ public class DefinitionsDocument extends MarkupDocument {
         Map<String, Property> properties = getAllProperties(definitions, model);
         Type type = new ObjectType(definitionName, properties);
 
-        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), docBuilder);
+        String definitionsRelativePath = null;
+        if (this.separatedDefinitionsEnabled)
+            definitionsRelativePath = "..";
+        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), definitionsRelativePath, docBuilder);
         inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
     }
 
@@ -367,7 +381,10 @@ public class DefinitionsDocument extends MarkupDocument {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), docBuilder);
+                String definitionsRelativePath = null;
+                if (this.separatedDefinitionsEnabled)
+                    definitionsRelativePath = "..";
+                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), definitionsRelativePath, docBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
