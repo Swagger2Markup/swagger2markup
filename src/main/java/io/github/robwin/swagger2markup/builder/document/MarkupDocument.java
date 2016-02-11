@@ -18,12 +18,12 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.base.Function;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -34,7 +34,6 @@ import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -68,6 +67,8 @@ public abstract class MarkupDocument {
     protected String separatedDefinitionsFolder;
     protected String definitionsDocument;
     protected String outputDirectory;
+    protected boolean useInterDocumentCrossReferences;
+    protected String interDocumentCrossReferencesPrefix;
 
 
     protected static AtomicInteger typeIdCount = new AtomicInteger(0);
@@ -80,6 +81,8 @@ public abstract class MarkupDocument {
         this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
         this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();
         this.outputDirectory = outputDirectory;
+        this.useInterDocumentCrossReferences = swagger2MarkupConfig.isInterDocumentCrossReferences();
+        this.interDocumentCrossReferencesPrefix = swagger2MarkupConfig.getInterDocumentCrossReferencesPrefix();
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -94,40 +97,6 @@ public abstract class MarkupDocument {
         CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
         NO_CONTENT = labels.getString("no_content");
-    }
-
-    protected String normalizeDefinitionFileName(String definitionName) {
-        return definitionName.toLowerCase();
-    }
-
-    protected String resolveDefinitionDocument(String definitionName, String relativePath) {
-        if (this.outputDirectory == null)
-            return null;
-        else if (this.separatedDefinitionsEnabled)
-            return new File(new File(relativePath, this.separatedDefinitionsFolder), this.markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
-        else
-            //return new File(relativePath, this.markupDocBuilder.addfileExtension(this.definitionsDocument)).getPath();
-            return null;
-    }
-
-    protected String resolveDefinitionDocument(String definitionName) {
-        return resolveDefinitionDocument(definitionName, null);
-    }
-
-    class DefinitionDocumentResolver implements Function<String, String> {
-        private String relativePath;
-
-        public DefinitionDocumentResolver(String relativePath) {
-            this.relativePath = relativePath;
-        }
-
-        public DefinitionDocumentResolver() {}
-
-        @Nullable
-        @Override
-        public String apply(@Nullable String definitionName) {
-            return resolveDefinitionDocument(definitionName, relativePath);
-        }
     }
 
     /**
@@ -157,11 +126,34 @@ public abstract class MarkupDocument {
         markupDocBuilder.writeToFile(directory, fileName, charset);
     }
 
+    /**
+     * Create a normalized filename for a separated definition file
+     * @param definitionName name of the definition
+     * @return a normalized filename for the separated definition file
+     */
+    protected String normalizeDefinitionFileName(String definitionName) {
+        return definitionName.toLowerCase();
+    }
+
+    /**
+     * Make the type {@code name} unique in the scope of the program execution by appending an increment.
+     * @param name type name
+     * @return unique type name
+     */
     public String uniqueTypeName(String name) {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
-    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, String definitionsRelativePath, MarkupDocBuilder docBuilder) {
+    /**
+     * Build the property table for an object type
+     * @param type to display
+     * @param depth current inline schema object depth
+     * @param propertyDescriptor property descriptor to apply to properties
+     * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
+     * @param docBuilder the docbuilder do use for output
+     * @return a list of inline schemas referenced by some properties, for later display
+     */
+    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType) type;
@@ -176,7 +168,7 @@ public abstract class MarkupDocument {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
                     String propertyName = propertyEntry.getKey();
-                    Type propertyType = PropertyUtils.getType(property, new DefinitionDocumentResolver(definitionsRelativePath));
+                    Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
                     if (depth > 0 && propertyType instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
                             propertyType.setName(propertyName);
@@ -208,6 +200,9 @@ public abstract class MarkupDocument {
         return localDefinitions;
     }
 
+    /**
+     * A functor to return descriptions for a given property
+     */
     public class PropertyDescriptor {
         protected Type type;
 
@@ -220,4 +215,20 @@ public abstract class MarkupDocument {
         }
     }
 
+    /**
+     * Default {@code DefinitionDocumentResolver} functor
+     */
+    class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
+
+        public DefinitionDocumentResolverDefault() {}
+
+        public String apply(String definitionName) {
+            if (!useInterDocumentCrossReferences || outputDirectory == null)
+                return null;
+            else if (separatedDefinitionsEnabled)
+                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+            else
+                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(definitionsDocument);
+        }
+    }
 }

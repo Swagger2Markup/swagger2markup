@@ -26,6 +26,7 @@ import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
+import io.swagger.models.Operation;
 import io.swagger.models.RefModel;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
@@ -153,6 +154,24 @@ public class DefinitionsDocument extends MarkupDocument {
         }
     }
 
+    /**
+     * Create the definition filename depending on the generation mode
+     * @param definitionName definition name
+     * @return definition filename
+     */
+    private String resolveDefinitionDocument(String definitionName) {
+        if (separatedDefinitionsEnabled)
+            return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+        else
+            return markupDocBuilder.addfileExtension(definitionsDocument);
+    }
+
+    /**
+     * Generate definition files depending on the generation mode
+     * @param definitions all available definitions to be able to verify references
+     * @param definitionName definition name to process
+     * @param model definition model to process
+     */
     private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
         if (separatedDefinitionsEnabled) {
@@ -204,14 +223,28 @@ public class DefinitionsDocument extends MarkupDocument {
         definitionSchema(definitionName, docBuilder);
     }
 
+    /**
+     * Builds a cross-reference to a separated definition file.
+     * @param definitionName definition name to target
+     * @param docBuilder the docbuilder do use for output
+     */
+    private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
+        addDefinitionTitle(docBuilder.crossReferenceAsString(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName), docBuilder);
+    }
+
+    /**
+     * Builds definition title
+     * @param title definition title
+     * @param docBuilder the docbuilder do use for output
+     */
     private void addDefinitionTitle(String title, MarkupDocBuilder docBuilder) {
         docBuilder.sectionTitleLevel2(title);
     }
 
-    private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
-        addDefinitionTitle(docBuilder.crossReferenceAsString(resolveDefinitionDocument(definitionName), definitionName, definitionName), docBuilder);
-    }
-
+    /**
+     * Override Property description functor for definitions.
+     * This implementation handles optional handwritten descriptions.
+     */
     private class DefinitionPropertyDescriptor extends PropertyDescriptor {
 
         public DefinitionPropertyDescriptor(Type type) {
@@ -237,14 +270,18 @@ public class DefinitionsDocument extends MarkupDocument {
         }
     }
 
+    /**
+     * Builds the properties of a definition and inline schemas.
+     * @param definitions all available definitions
+     * @param definitionName name of the definition to display
+     * @param model model of the definition to display
+     * @param docBuilder the docbuilder do use for output
+     */
     private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
         Type type = new ObjectType(definitionName, properties);
 
-        String definitionsRelativePath = null;
-        if (this.separatedDefinitionsEnabled)
-            definitionsRelativePath = "..";
-        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), definitionsRelativePath, docBuilder);
+        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
         inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
     }
 
@@ -368,7 +405,11 @@ public class DefinitionsDocument extends MarkupDocument {
 
 
     /**
-     * Inline definitions should never been referenced in TOC, so they are just text.
+     * Builds the title of an inline schema.
+     * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.
+     * @param title inline schema title
+     * @param anchor inline schema anchor
+     * @param docBuilder the docbuilder do use for output
      */
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         docBuilder.anchor(anchor, null);
@@ -376,19 +417,39 @@ public class DefinitionsDocument extends MarkupDocument {
         docBuilder.boldTextLine(title);
     }
 
-
+    /**
+     * Builds inline schema definitions
+     * @param definitions all inline definitions to display
+     * @param depth current inline schema depth
+     * @param docBuilder the docbuilder do use for output
+     */
     private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                String definitionsRelativePath = null;
-                if (this.separatedDefinitionsEnabled)
-                    definitionsRelativePath = "..";
-                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), definitionsRelativePath, docBuilder);
+                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (Type localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
         }
 
+    }
+
+    /**
+     * Overrides definition document resolver functor for inter-document cross-references from definitions files.
+     * This implementation simplify the path between two definitions because all definitions are in the same path.
+     */
+    class DefinitionDocumentResolverFromDefinition extends DefinitionDocumentResolverDefault {
+
+        public DefinitionDocumentResolverFromDefinition() {}
+
+        public String apply(String definitionName) {
+            String defaultResolver = super.apply(definitionName);
+
+            if (defaultResolver != null && separatedDefinitionsEnabled)
+                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName));
+            else
+                return defaultResolver;
+        }
     }
 }

@@ -2,6 +2,9 @@ package io.github.robwin.swagger2markup.type;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 
+/**
+ * Reference to a type defined elsewhere
+ */
 public class RefType extends Type {
 
     private String document;

@@ -45,6 +45,8 @@ public class Swagger2MarkupConfig {
     private final Comparator<String> pathOrdering;
     private final Comparator<HttpMethod> pathMethodOrdering;
     private final Comparator<String> definitionOrdering;
+    private final boolean interDocumentCrossReferences;
+    private final String interDocumentCrossReferencesPrefix;
 
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
@@ -70,12 +72,15 @@ public class Swagger2MarkupConfig {
      * @param pathOrdering specifies a custom comparator function to order paths (null = as-is ordering)
      * @param pathMethodOrdering specifies a custom comparator function to order paths methods (null = as-is ordering)
      * @param definitionOrdering specifies a custom comparator function to order definitions (null = as-is ordering)
+     * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
+     * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedPaths,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<String> pathOrdering,
-                                Comparator<HttpMethod> pathMethodOrdering, Comparator<String> definitionOrdering) {
+                                Comparator<HttpMethod> pathMethodOrdering, Comparator<String> definitionOrdering,
+                                boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -91,6 +96,8 @@ public class Swagger2MarkupConfig {
         this.pathOrdering = pathOrdering;
         this.pathMethodOrdering = pathMethodOrdering;
         this.definitionOrdering = definitionOrdering;
+        this.interDocumentCrossReferences = interDocumentCrossReferences;
+        this.interDocumentCrossReferencesPrefix = interDocumentCrossReferencesPrefix;
     }
 
     public Swagger getSwagger() {
@@ -175,5 +182,13 @@ public class Swagger2MarkupConfig {
 
     public String getSeparatedPathsFolder() {
         return SEPARATED_PATHS_FOLDER;
+    }
+
+    public boolean isInterDocumentCrossReferences() {
+        return interDocumentCrossReferences;
+    }
+
+    public String getInterDocumentCrossReferencesPrefix() {
+        return interDocumentCrossReferencesPrefix;
     }
 }

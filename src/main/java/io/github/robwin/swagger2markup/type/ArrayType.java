@@ -2,6 +2,9 @@ package io.github.robwin.swagger2markup.type;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 
+/**
+ * Array type abstraction
+ */
 public class ArrayType extends Type {
 
     protected String collectionFormat;

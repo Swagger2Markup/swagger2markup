@@ -6,6 +6,9 @@ import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.join;
 
+/**
+ * Enum type abstraction
+ */
 public class EnumType extends Type {
 
     protected List<String> values;

@@ -6,6 +6,9 @@ import org.apache.commons.collections.MapUtils;
 
 import java.util.Map;
 
+/**
+ * Complex object abstraction
+ */
 public class ObjectType extends Type {
 
     protected Map<String, Property> properties;
