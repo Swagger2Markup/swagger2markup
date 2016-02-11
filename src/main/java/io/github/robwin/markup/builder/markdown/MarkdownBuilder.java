@@ -29,7 +29,6 @@ import org.apache.commons.lang3.Validate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -39,9 +38,6 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
-    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_\\s]+");
-    private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
-
     @Override
     public MarkupDocBuilder documentTitle(String title){
         documentTitle(Markdown.DOCUMENT_TITLE, title);
@@ -149,32 +145,32 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         return this;
     }
 
-    private static String normalizeReferenceAnchor(String anchor) {
-        return ANCHOR_SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim().toLowerCase()).replaceAll("")).replaceAll("-");
+    private String normalizeAnchor(String anchor) {
+        return normalizeAnchor(Markdown.SPACE_ESCAPE, anchor);
     }
 
     @Override
     public String anchorAsString(String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<a name=\"").append(normalizeReferenceAnchor(anchor)).append("\"></a>");
+        stringBuilder.append("<a name=\"").append(normalizeAnchor(anchor)).append("\"></a>");
         return stringBuilder.toString();
     }
 
     @Override
-    public String crossReferenceAnchorAsString(String document, String anchor, String text) {
+    public String crossReferenceRawAsString(String document, String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
             text = anchor.trim();
         stringBuilder.append("[").append(text).append("]").append("(");
         if (document != null)
             stringBuilder.append(document);
-        stringBuilder.append("#").append(normalizeReferenceAnchor(anchor)).append(")");
+        stringBuilder.append("#").append(anchor).append(")");
         return stringBuilder.toString();
     }
 
     @Override
     public String crossReferenceAsString(String document, String title, String text) {
-        return crossReferenceAnchorAsString(document, title, text);
+        return crossReferenceRawAsString(document, normalizeAnchor(title), text);
     }
 
     private String escapeTableCell(String cell) {
