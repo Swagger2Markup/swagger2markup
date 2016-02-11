@@ -46,6 +46,7 @@ dependencies {
     compile 'org.apache.commons:commons-lang3'
     compile "commons-io:commons-io"
     compile 'com.google.guava:guava'
+    compile "commons-codec:commons-codec"
     testCompile 'junit:junit'
     testCompile 'ch.qos.logback:logback-classic'
 }
@@ -59,6 +60,7 @@ dependencyManagement {
         dependency "org.apache.commons:commons-lang3:3.2.1"
         dependency "commons-io:commons-io:2.4"
         dependency "com.google.guava:guava:18.0"
+        dependency "commons-codec:commons-codec:1.6"
     }
 }
 
