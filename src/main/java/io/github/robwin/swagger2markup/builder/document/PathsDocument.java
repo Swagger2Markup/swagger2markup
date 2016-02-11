@@ -301,8 +301,8 @@ public class PathsDocument extends MarkupDocument {
             consumesSection(operation, docBuilder);
             producesSection(operation, docBuilder);
             tagsSection(operation, docBuilder);
-            examplesSection(operation, docBuilder);
             securitySchemeSection(operation, docBuilder);
+            examplesSection(operation, docBuilder);
         }
     }
 
