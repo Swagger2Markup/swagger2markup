@@ -18,7 +18,6 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.base.Function;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -35,7 +34,6 @@ import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -69,6 +67,8 @@ public abstract class MarkupDocument {
     protected String separatedDefinitionsFolder;
     protected String definitionsDocument;
     protected String outputDirectory;
+    protected boolean useInterDocumentCrossReferences;
+    protected String interDocumentCrossReferencesPrefix;
 
 
     protected static AtomicInteger typeIdCount = new AtomicInteger(0);
@@ -81,6 +81,8 @@ public abstract class MarkupDocument {
         this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
         this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();
         this.outputDirectory = outputDirectory;
+        this.useInterDocumentCrossReferences = swagger2MarkupConfig.isInterDocumentCrossReferences();
+        this.interDocumentCrossReferencesPrefix = swagger2MarkupConfig.getInterDocumentCrossReferencesPrefix();
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -95,40 +97,6 @@ public abstract class MarkupDocument {
         CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
         NO_CONTENT = labels.getString("no_content");
-    }
-
-    protected String normalizeDefinitionFileName(String definitionName) {
-        return definitionName.toLowerCase();
-    }
-
-    protected String resolveDefinitionDocument(String definitionName, String relativePath) {
-        if (this.outputDirectory == null)
-            return null;
-        else if (this.separatedDefinitionsEnabled)
-            return new File(new File(relativePath, this.separatedDefinitionsFolder), this.markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
-        else
-            //return new File(relativePath, this.markupDocBuilder.addfileExtension(this.definitionsDocument)).getPath();
-            return null;
-    }
-
-    protected String resolveDefinitionDocument(String definitionName) {
-        return resolveDefinitionDocument(definitionName, null);
-    }
-
-    class DefinitionDocumentResolver implements Function<String, String> {
-        private String relativePath;
-
-        public DefinitionDocumentResolver(String relativePath) {
-            this.relativePath = relativePath;
-        }
-
-        public DefinitionDocumentResolver() {}
-
-        @Nullable
-        @Override
-        public String apply(@Nullable String definitionName) {
-            return resolveDefinitionDocument(definitionName, relativePath);
-        }
     }
 
     /**
@@ -156,6 +124,10 @@ public abstract class MarkupDocument {
      */
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
         markupDocBuilder.writeToFile(directory, fileName, charset);
+    }
+
+    protected String normalizeDefinitionFileName(String definitionName) {
+        return definitionName.toLowerCase();
     }
 
     public String uniqueTypeName(String name) {
@@ -225,17 +197,13 @@ public abstract class MarkupDocument {
 
         public DefinitionDocumentResolverDefault() {}
 
-        protected String normalizeDefinitionFileName(String definitionName) {
-            return definitionName.toLowerCase();
-        }
-
         public String apply(String definitionName) {
-            if (outputDirectory == null)
+            if (!useInterDocumentCrossReferences || outputDirectory == null)
                 return null;
             else if (separatedDefinitionsEnabled)
-                return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
             else
-                return markupDocBuilder.addfileExtension(definitionsDocument);
+                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(definitionsDocument);
         }
     }
 }

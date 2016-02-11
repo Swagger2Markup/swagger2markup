@@ -158,6 +158,8 @@ public class Swagger2MarkupConverter {
         private Comparator<String> pathOrdering = Ordering.natural();
         private Comparator<HttpMethod> pathMethodOrdering = Ordering.explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS);
         private Comparator<String> definitionOrdering = Ordering.natural();
+        private boolean interDocumentCrossReferences = false;
+        private String interDocumentCrossReferencesPrefix = "";
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -183,7 +185,8 @@ public class Swagger2MarkupConverter {
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedPaths, pathsGroupedBy, definitionsOrderedBy,
-                    outputLanguage, inlineSchemaDepthLevel, tagOrdering, pathOrdering, pathMethodOrdering, definitionOrdering));
+                    outputLanguage, inlineSchemaDepthLevel, tagOrdering, pathOrdering, pathMethodOrdering, definitionOrdering,
+                    interDocumentCrossReferences, interDocumentCrossReferencesPrefix));
         }
 
         /**
@@ -357,6 +360,27 @@ public class Swagger2MarkupConverter {
             return this;
         }
 
+        /**
+         * Enable use of inter-document cross-references when needed
+         *
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withInterDocumentCrossReferences() {
+            this.interDocumentCrossReferences = true;
+            return this;
+        }
+
+        /**
+         * Enable use of inter-document cross-references when needed
+         *
+         * @param prefix Prefix to document in all inter-document cross-references
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withInterDocumentCrossReferences(String prefix) {
+            this.interDocumentCrossReferences = true;
+            this.interDocumentCrossReferencesPrefix = prefix;
+            return this;
+        }
     }
 
 }

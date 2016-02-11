@@ -26,6 +26,7 @@ import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
+import io.swagger.models.Operation;
 import io.swagger.models.RefModel;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
@@ -153,12 +154,19 @@ public class DefinitionsDocument extends MarkupDocument {
         }
     }
 
+    private String resolveDefinitionDocument(String definitionName) {
+        if (separatedDefinitionsEnabled)
+            return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+        else
+            return markupDocBuilder.addfileExtension(definitionsDocument);
+    }
+
     private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
         if (separatedDefinitionsEnabled) {
             MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
             definition(definitions, definitionName, model, defDocBuilder);
-            File definitionFile = new File(outputDirectory, new DefinitionDocumentResolverDefault().apply(definitionName));
+            File definitionFile = new File(outputDirectory, resolveDefinitionDocument(definitionName));
             try {
                 String definitionDirectory = FilenameUtils.getFullPath(definitionFile.getPath());
                 String definitionFileName = FilenameUtils.getName(definitionFile.getPath());
@@ -390,10 +398,12 @@ public class DefinitionsDocument extends MarkupDocument {
         public DefinitionDocumentResolverFromDefinition() {}
 
         public String apply(String definitionName) {
-            if (separatedDefinitionsEnabled)
-                return markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName));
+            String defaultResolver = super.apply(definitionName);
+
+            if (defaultResolver != null && separatedDefinitionsEnabled)
+                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName));
             else
-                return super.apply(definitionName);
+                return defaultResolver;
         }
     }
 }

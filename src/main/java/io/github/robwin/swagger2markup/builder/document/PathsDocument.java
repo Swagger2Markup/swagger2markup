@@ -710,7 +710,7 @@ public class PathsDocument extends MarkupDocument {
             String defaultResolver = super.apply(definitionName);
 
             if (defaultResolver != null && separatedPathsEnabled)
-                return new File("..", defaultResolver).getPath();
+                return interDocumentCrossReferencesPrefix + new File("..", defaultResolver).getPath();
             else
                 return defaultResolver;
         }
