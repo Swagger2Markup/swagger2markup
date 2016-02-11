@@ -377,6 +377,9 @@ public class Swagger2MarkupConverter {
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
+            if (prefix == null)
+                return withInterDocumentCrossReferences();
+
             this.interDocumentCrossReferences = true;
             this.interDocumentCrossReferencesPrefix = prefix;
             return this;
