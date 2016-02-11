@@ -259,6 +259,32 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(5).containsAll(
                 asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+
+        File definitionsDirectory = new File(outputDirectory, "definitions");
+        String[] definitions = definitionsDirectory.list();
+        assertThat(definitions).hasSize(6).containsAll(
+                asList("identified.adoc", "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
+    }
+
+    @Test
+    public void testSwagger2AsciiDocConversionWithSeparatedPaths() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedPaths().build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(directories).hasSize(5).containsAll(
+                asList("paths", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+
+        File pathsDirectory = new File(outputDirectory, "paths");
+        String[] paths = pathsDirectory.list();
+        assertThat(paths).hasSize(18);
     }
 
     @Test
