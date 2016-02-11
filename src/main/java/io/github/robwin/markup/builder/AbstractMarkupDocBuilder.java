@@ -18,6 +18,7 @@
  */
 package io.github.robwin.markup.builder;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,35 +27,49 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * @author Robert Winkler
  */
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
-    
+
+    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
+    private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
+
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected void documentTitle(Markup markup, String title){
+        anchor(title).newLine();
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
     protected void sectionTitleLevel1(Markup markup, String title){
-        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine);
+        anchor(title).newLine();
+        documentBuilder.append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel2(Markup markup, String title){
-        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine);
+        anchor(title).newLine();
+        documentBuilder.append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel3(Markup markup, String title){
-        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine);
+        anchor(title).newLine();
+        documentBuilder.append(markup).append(title).append(newLine);
     }
 
     protected void sectionTitleLevel4(Markup markup, String title){
-        documentBuilder.append(newLine).append(markup).append(title).append(newLine);
+        documentBuilder.append(newLine);
+        anchor(title).newLine();
+        documentBuilder.append(markup).append(title).append(newLine);
     }
 
     @Override
@@ -114,20 +129,38 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return anchor(anchor, null);
     }
 
+    /**
+     * Generic normalization algorithm for all markups
+     */
+    protected String normalizeAnchor(Markup spaceEscape, String anchor) {
+        String normalizedAnchor = anchor.trim();
+        normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD);
+        normalizedAnchor = normalizedAnchor.toLowerCase();
+        normalizedAnchor = ANCHOR_SPACE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
+
+        String validAnchor = ANCHOR_FORBIDDEN_PATTERN.matcher(normalizedAnchor).replaceAll("");
+        if (validAnchor.length() != normalizedAnchor.length())
+            normalizedAnchor = DigestUtils.md5Hex(anchor);
+        else
+            normalizedAnchor = validAnchor;
+
+        return normalizedAnchor;
+    }
+
     @Override
-    public MarkupDocBuilder crossReferenceAnchor(String document, String anchor, String text) {
-        documentBuilder.append(crossReferenceAnchorAsString(document, anchor, text));
+    public MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text) {
+        documentBuilder.append(crossReferenceRawAsString(document, anchor, text));
         return this;
     }
 
     @Override
-    public MarkupDocBuilder crossReferenceAnchor(String anchor, String text) {
-        return crossReferenceAnchor(null, anchor, text);
+    public MarkupDocBuilder crossReferenceRaw(String anchor, String text) {
+        return crossReferenceRaw(null, anchor, text);
     }
 
     @Override
-    public MarkupDocBuilder crossReferenceAnchor(String anchor) {
-        return crossReferenceAnchor(null, anchor, null);
+    public MarkupDocBuilder crossReferenceRaw(String anchor) {
+        return crossReferenceRaw(null, anchor, null);
     }
 
     @Override

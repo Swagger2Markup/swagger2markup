@@ -38,10 +38,6 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
-    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^\\p{ASCII}]+");
-    private static final Pattern SPACE_PATTERN = Pattern.compile("[\\s]+");
-
-
     @Override
     public MarkupDocBuilder documentTitle(String title){
         documentTitle(AsciiDoc.DOCUMENT_TITLE, title);
@@ -128,17 +124,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     private String normalizeAnchor(String anchor) {
-        return "_" + SPACE_PATTERN.matcher(ANCHOR_FORBIDDEN_PATTERN.matcher(anchor.trim().toLowerCase()).replaceAll("")).replaceAll("_");
-    }
+        String normalizedAnchor = "_" + normalizeAnchor(AsciiDoc.SPACE_ESCAPE, anchor);
 
-    private String normalizeTitle(String document, String title) {
-        if (document == null)
-            return title.trim();
-        else {
-            // Reference to a title in another document is not yet supported in AsciiDoctor.
-            // The following workaround works with AsciiDoctor HTML output.
-            return "_" + title.trim().toLowerCase();
-        }
+        if (normalizedAnchor.endsWith("-"))
+            normalizedAnchor += "_";
+
+        return normalizedAnchor;
     }
 
     /**
@@ -161,8 +152,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         return stringBuilder.toString();
     }
 
-
-    protected String normalizedCrossReferenceAsString(String document, String anchor, String text) {
+    @Override
+    public String crossReferenceRawAsString(String document, String anchor, String text) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START);
         if (document != null)
@@ -171,17 +162,11 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (text != null)
             stringBuilder.append(",").append(text);
         stringBuilder.append(AsciiDoc.CROSS_REFERENCE_END);
-        return stringBuilder.toString();
-    }
-
-    @Override
-    public String crossReferenceAnchorAsString(String document, String anchor, String text) {
-        return normalizedCrossReferenceAsString(normalizeDocument(document), normalizeAnchor(anchor), text);
-    }
+        return stringBuilder.toString();    }
 
     @Override
     public String crossReferenceAsString(String document, String title, String text) {
-        return normalizedCrossReferenceAsString(normalizeDocument(document), normalizeTitle(document, title), text);
+        return crossReferenceRawAsString(normalizeDocument(document), normalizeAnchor(title), text);
     }
 
     private String escapeTableCell(String cell) {

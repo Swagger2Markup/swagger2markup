@@ -75,9 +75,10 @@ public class MarkupDocBuilderTest {
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
                 .anchor("anchor", "text").newLine()
+                .anchor(" Simple    anchor").newLine()
                 .anchor("  \u0240 µ&|ù This .:/-_#  ").newLine()
-                .crossReferenceAnchor("./document.adoc", "anchor", "text").newLine()
-                .crossReferenceAnchor("  \u0240 µ&|ù This .:/-_  ").newLine()
+                .crossReferenceRaw("./document.adoc", "anchor", "text").newLine()
+                .crossReferenceRaw("  \u0240 µ&|ù This .:/-_  ").newLine()
                 .crossReference("./document.adoc", "anchor", "text").newLine()
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
@@ -104,10 +105,11 @@ public class MarkupDocBuilderTest {
                 .italicTextLine("Italic text line b")
                 .unorderedList(Arrays.asList("Entry1", "Entry2", "Entry 2"))
                 .anchor("anchor", "text").newLine()
+                .anchor(" Simple    anchor").newLine()
                 .anchor("  \u0240 µ&|ù This .:/-_#  ").newLine()
-                .crossReferenceAnchor("./document.adoc", "anchor", "text").newLine()
-                .crossReferenceAnchor("  \u0240 µ&|ù This .:/-_  ").newLine()
-                .crossReference("./document.adoc", "anchor", "text").newLine()
+                .crossReferenceRaw("./document.md", "anchor", "text").newLine()
+                .crossReferenceRaw("  \u0240 µ&|ù This .:/-_  ").newLine()
+                .crossReference("./document.md", "anchor", "text").newLine()
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine()
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }

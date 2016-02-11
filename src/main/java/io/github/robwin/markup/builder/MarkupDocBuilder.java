@@ -66,13 +66,13 @@ public interface MarkupDocBuilder {
 
     String anchorAsString(String anchor, String text);
 
-    MarkupDocBuilder crossReferenceAnchor(String document, String anchor, String text);
+    MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text);
 
-    MarkupDocBuilder crossReferenceAnchor(String anchor, String text);
+    MarkupDocBuilder crossReferenceRaw(String anchor, String text);
 
-    MarkupDocBuilder crossReferenceAnchor(String anchor);
+    MarkupDocBuilder crossReferenceRaw(String anchor);
 
-    String crossReferenceAnchorAsString(String document, String anchor, String text);
+    String crossReferenceRawAsString(String document, String anchor, String text);
 
     MarkupDocBuilder crossReference(String document, String title, String text);
 
