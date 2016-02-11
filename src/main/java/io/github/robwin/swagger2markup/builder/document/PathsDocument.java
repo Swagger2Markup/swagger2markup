@@ -430,7 +430,7 @@ public class PathsDocument extends MarkupDocument {
                 List<String> content = Arrays.asList(
                         parameterType,
                         parameter.getName(),
-                        parameterDescription(operation, parameter, docBuilder),
+                        parameterDescription(operation, parameter),
                         Boolean.toString(parameter.getRequired()),
                         type.displaySchema(markupDocBuilder),
                         ParameterUtils.getDefaultValue(parameter));
@@ -452,7 +452,7 @@ public class PathsDocument extends MarkupDocument {
      * @param parameter the Swagger Parameter
      * @return the description of a parameter.
      */
-    private String parameterDescription(Operation operation, Parameter parameter, MarkupDocBuilder docBuilder){
+    private String parameterDescription(Operation operation, Parameter parameter){
         if(handWrittenDescriptionsEnabled){
             String summary = operation.getSummary();
             String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
@@ -604,7 +604,7 @@ public class PathsDocument extends MarkupDocument {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    List<String> content = Arrays.asList(type, docBuilder.crossReferenceAsString(securityKey,
+                    List<String> content = Arrays.asList(type, docBuilder.crossReferenceAnchorAsString(null,
                             securityKey, securityKey),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);

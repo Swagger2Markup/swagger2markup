@@ -106,7 +106,8 @@ public abstract class MarkupDocument {
         else if (this.separatedDefinitionsEnabled)
             return new File(new File(relativePath, this.separatedDefinitionsFolder), this.markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
         else
-            return new File(relativePath, this.markupDocBuilder.addfileExtension(this.definitionsDocument)).getPath();
+            //return new File(relativePath, this.markupDocBuilder.addfileExtension(this.definitionsDocument)).getPath();
+            return null;
     }
 
     protected String resolveDefinitionDocument(String definitionName) {
