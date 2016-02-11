@@ -165,7 +165,10 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         StringBuilder stringBuilder = new StringBuilder();
         if (text == null)
             text = anchor.trim();
-        stringBuilder.append("[").append(text).append("](#").append(normalizeReferenceAnchor(anchor)).append(")");
+        stringBuilder.append("[").append(text).append("]").append("(");
+        if (document != null)
+            stringBuilder.append(document);
+        stringBuilder.append("#").append(normalizeReferenceAnchor(anchor)).append(")");
         return stringBuilder.toString();
     }
 
