@@ -60,6 +60,20 @@ public class Swagger2MarkupConverterTest {
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
+    @Test
+    public void testSwagger2AsciiDocConversionAsString() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        String asciiDocAsString = Swagger2MarkupConverter.from(file.getAbsolutePath()).build()
+                .asString();
+        //Then
+        assertThat(asciiDocAsString).isNotEmpty();
+    }
+
 
     @Test
     public void testSwagger2AsciiDocConversion() throws IOException {
