@@ -3,6 +3,9 @@ package io.github.robwin.swagger2markup.type;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * Type abstraction for display purpose
+ */
 public abstract class Type {
 
     protected String name;

@@ -231,6 +231,12 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
+    /**
+     * Create a normalized filename for a separated path file
+     * @param methodAndPath method and path of the operation
+     * @param operation operation
+     * @return a normalized filename for the separated path file
+     */
     private String normalizePathFileName(String methodAndPath, Operation operation) {
         String pathFileName = operation.getOperationId();
 
@@ -241,6 +247,12 @@ public class PathsDocument extends MarkupDocument {
         return pathFileName;
     }
 
+    /**
+     * Create the path filename depending on the generation mode
+     * @param methodAndPath method and path of the operation
+     * @param operation operation
+     * @return path filename
+     */
     private String resolvePathDocument(String methodAndPath, Operation operation) {
         if (this.separatedPathsEnabled)
             return new File(this.separatedPathsFolder, this.markupDocBuilder.addfileExtension(normalizePathFileName(methodAndPath, operation))).getPath();
@@ -248,6 +260,11 @@ public class PathsDocument extends MarkupDocument {
             return this.markupDocBuilder.addfileExtension(this.pathsDocument);
     }
 
+    /**
+     * Generate path files depending on the generation mode.
+     * @param methodAndPath method and path of the operation
+     * @param operation operation
+     */
     private void processPath(String methodAndPath, Operation operation) {
         if (separatedPathsEnabled) {
             MarkupDocBuilder pathDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
@@ -276,6 +293,13 @@ public class PathsDocument extends MarkupDocument {
     }
 
 
+    /**
+     * Returns the operation name depending on available informations.
+     * The summary is used to name the operation, or else the operation summary is used.
+     * @param methodAndPath method and path of the operation
+     * @param operation operation
+     * @return operation name
+     */
     private String operationName(String methodAndPath, Operation operation) {
         String operationName = operation.getSummary();
         if(isBlank(operationName)) {
@@ -289,6 +313,7 @@ public class PathsDocument extends MarkupDocument {
      *
      * @param methodAndPath the Method of the operation and the URL of the path
      * @param operation the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
      */
     private void path(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
         if(operation != null){
@@ -305,9 +330,10 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
-     * Builds a cross-reference to separated path file
+     * Builds a cross-reference to a separated path file
      * @param methodAndPath the Method of the operation and the URL of the path
      * @param operation the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
      */
     private void pathRef(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
         String document = resolvePathDocument(methodAndPath, operation);
@@ -322,6 +348,7 @@ public class PathsDocument extends MarkupDocument {
      *
      * @param methodAndPath the Method of the operation and the URL of the path
      * @param operation the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
      */
     private void pathTitle(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
         String operationName = operationName(methodAndPath, operation);
@@ -340,6 +367,7 @@ public class PathsDocument extends MarkupDocument {
      * Adds a path title to the document.
      *
      * @param title the path title
+     * @param docBuilder the docbuilder do use for output
      */
     private void addPathTitle(String title, MarkupDocBuilder docBuilder) {
         if(pathsGroupedBy == GroupBy.AS_IS){
@@ -353,6 +381,7 @@ public class PathsDocument extends MarkupDocument {
      * Adds a path section title to the document.
      *
      * @param title the path title
+     * @param docBuilder the docbuilder do use for output
      */
     private void addPathSectionTitle(String title, MarkupDocBuilder docBuilder) {
         if(pathsGroupedBy == GroupBy.AS_IS){
@@ -366,6 +395,7 @@ public class PathsDocument extends MarkupDocument {
      * Adds a path description to the document.
      *
      * @param operation the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
      */
     private void descriptionSection(Operation operation, MarkupDocBuilder docBuilder) {
         if(handWrittenDescriptionsEnabled){
@@ -516,6 +546,7 @@ public class PathsDocument extends MarkupDocument {
      * curl-request.md, http-request.md and http-response.md.
      *
      * @param operation the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
      */
     private void examplesSection(Operation operation, MarkupDocBuilder docBuilder) {
         if(examplesEnabled){
@@ -681,7 +712,11 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
-     * Inline definitions should never been referenced in TOC, so they are just text.
+     * Builds the title of an inline schema.
+     * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.
+     * @param title inline schema title
+     * @param anchor inline schema anchor
+     * @param docBuilder the docbuilder do use for output
      */
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         docBuilder.anchor(anchor, null);
@@ -689,6 +724,12 @@ public class PathsDocument extends MarkupDocument {
         docBuilder.boldTextLine(title);
     }
 
+    /**
+     * Builds inline schema definitions
+     * @param definitions all inline definitions to display
+     * @param depth current inline schema depth
+     * @param docBuilder the docbuilder do use for output
+     */
     private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (Type definition: definitions) {
@@ -702,6 +743,10 @@ public class PathsDocument extends MarkupDocument {
 
     }
 
+    /**
+     * Overrides definition document resolver functor for inter-document cross-references from paths files.
+     * This implementation adapt the relative paths to definitions files
+     */
     class DefinitionDocumentResolverFromPath extends DefinitionDocumentResolverDefault {
 
         public DefinitionDocumentResolverFromPath() {}

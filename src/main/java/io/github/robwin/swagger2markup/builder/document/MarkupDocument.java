@@ -126,14 +126,33 @@ public abstract class MarkupDocument {
         markupDocBuilder.writeToFile(directory, fileName, charset);
     }
 
+    /**
+     * Create a normalized filename for a separated definition file
+     * @param definitionName name of the definition
+     * @return a normalized filename for the separated definition file
+     */
     protected String normalizeDefinitionFileName(String definitionName) {
         return definitionName.toLowerCase();
     }
 
+    /**
+     * Make the type {@code name} unique in the scope of the program execution by appending an increment.
+     * @param name type name
+     * @return unique type name
+     */
     public String uniqueTypeName(String name) {
         return name + "-" + typeIdCount.getAndIncrement();
     }
 
+    /**
+     * Build the property table for an object type
+     * @param type to display
+     * @param depth current inline schema object depth
+     * @param propertyDescriptor property descriptor to apply to properties
+     * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
+     * @param docBuilder the docbuilder do use for output
+     * @return a list of inline schemas referenced by some properties, for later display
+     */
     public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<Type> localDefinitions = new ArrayList<>();
         if (type instanceof ObjectType) {
@@ -181,6 +200,9 @@ public abstract class MarkupDocument {
         return localDefinitions;
     }
 
+    /**
+     * A functor to return descriptions for a given property
+     */
     public class PropertyDescriptor {
         protected Type type;
 
@@ -193,6 +215,9 @@ public abstract class MarkupDocument {
         }
     }
 
+    /**
+     * Default {@code DefinitionDocumentResolver} functor
+     */
     class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
 
         public DefinitionDocumentResolverDefault() {}

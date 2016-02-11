@@ -4,6 +4,9 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
+/**
+ * Base type abstraction (string, integer, ...)
+ */
 public class BasicType extends Type {
 
     protected String format;
