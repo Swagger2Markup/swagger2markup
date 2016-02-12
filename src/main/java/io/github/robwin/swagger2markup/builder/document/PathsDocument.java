@@ -20,6 +20,7 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Multimap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
@@ -386,12 +387,9 @@ public class PathsDocument extends MarkupDocument {
      */
     private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(handWrittenDescriptionsEnabled){
-            String operationFolder = normalizeOperationFileName(operation.getId());
-
-            if (!new File(operationFolder, DESCRIPTION_FILE_NAME).exists())
-                operationFolder = normalizeOperationFileName(operation.getTitle());
-
-            Optional<String> description = handWrittenOperationDescription(operationFolder, DESCRIPTION_FILE_NAME);
+            Optional<String> description = handWrittenOperationDescription(normalizeOperationFileName(operation.getId()), DESCRIPTION_FILE_NAME);
+            if (!description.isPresent())
+                description = handWrittenOperationDescription(normalizeOperationFileName(operation.getTitle()), DESCRIPTION_FILE_NAME);
             if (description.isPresent()) {
                 operationDescription(description.get(), docBuilder);
             } else {
@@ -467,16 +465,13 @@ public class PathsDocument extends MarkupDocument {
      * @param parameter the Swagger Parameter
      * @return the description of a parameter.
      */
-    private String parameterDescription(PathOperation operation, Parameter parameter){
+    private String parameterDescription(final PathOperation operation, Parameter parameter){
         if (handWrittenDescriptionsEnabled) {
-            String parameterName = parameter.getName();
+            final String parameterName = parameter.getName();
             if (isNotBlank(parameterName)) {
-                String operationFolder = normalizeOperationFileName(operation.getId());
-
-                if (!new File(new File(operationFolder, parameterName), DESCRIPTION_FILE_NAME).exists())
-                    operationFolder = normalizeOperationFileName(operation.getTitle());
-
-                Optional<String> description = handWrittenOperationDescription(new File(operationFolder, parameterName).getPath(), DESCRIPTION_FILE_NAME);
+                Optional<String> description = handWrittenOperationDescription(new File(normalizeOperationFileName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
+                if (!description.isPresent())
+                    description = handWrittenOperationDescription(new File(normalizeOperationFileName(operation.getTitle()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
                 if (description.isPresent()) {
                     return description.get();
                 } else {
@@ -543,23 +538,24 @@ public class PathsDocument extends MarkupDocument {
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(examplesEnabled){
-            String operationFolder = normalizeOperationFileName(operation.getId());
-
-            if (!new File(operationFolder, DESCRIPTION_FILE_NAME).exists())
-                operationFolder = normalizeOperationFileName(operation.getTitle());
-
-            Optional<String> curlExample = example(operationFolder, CURL_EXAMPLE_FILE_NAME);
+            Optional<String> curlExample = example(normalizeOperationFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
+            if (!curlExample.isPresent())
+                curlExample = example(normalizeOperationFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
             if(curlExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
                 docBuilder.paragraph(curlExample.get());
             }
 
-            Optional<String> requestExample = example(operationFolder, REQUEST_EXAMPLE_FILE_NAME);
+            Optional<String> requestExample = example(normalizeOperationFileName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
+            if (!requestExample.isPresent())
+                requestExample = example(normalizeOperationFileName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
             if(requestExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
                 docBuilder.paragraph(requestExample.get());
             }
-            Optional<String> responseExample = example(operationFolder, RESPONSE_EXAMPLE_FILE_NAME);
+            Optional<String> responseExample = example(normalizeOperationFileName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
+            if (!responseExample.isPresent())
+                responseExample = example(normalizeOperationFileName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
             if(responseExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
                 docBuilder.paragraph(responseExample.get());
