@@ -26,6 +26,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.GroupBy;
+import io.github.robwin.swagger2markup.OperationPath;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
@@ -226,50 +227,40 @@ public class PathsDocument extends MarkupDocument {
         operationsMap.putAll(path.getOperationMap());
 
         for(Map.Entry<HttpMethod, Operation> operationEntry : operationsMap.entrySet()){
-            String methodAndPath = operationEntry.getKey() + " " + pathUrl;
-            processOperation(methodAndPath, operationEntry.getValue());
+            processOperation(new OperationPath(operationEntry.getKey(), pathUrl, operationEntry.getValue()));
         }
     }
 
     /**
      * Create a normalized filename for a separated operation file
-     * @param methodAndPath method and path of the operation
      * @param operation operation
      * @return a normalized filename for the separated operation file
      */
-    private String normalizeOperationFileName(String methodAndPath, Operation operation) {
-        String operationFileName = operation.getOperationId();
-
-        if (operationFileName == null)
-            operationFileName = methodAndPath;
-        operationFileName = FILENAME_FORBIDDEN_PATTERN.matcher(operationFileName).replaceAll("_").toLowerCase();
-
-        return operationFileName;
+    private String normalizeOperationFileName(OperationPath operation) {
+        return FILENAME_FORBIDDEN_PATTERN.matcher(operation.getId()).replaceAll("_").toLowerCase();
     }
 
     /**
      * Create the operation filename depending on the generation mode
-     * @param methodAndPath method and path of the operation
      * @param operation operation
      * @return operation filename
      */
-    private String resolveOperationDocument(String methodAndPath, Operation operation) {
+    private String resolveOperationDocument(OperationPath operation) {
         if (this.separatedOperationsEnabled)
-            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeOperationFileName(methodAndPath, operation))).getPath();
+            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeOperationFileName(operation))).getPath();
         else
             return this.markupDocBuilder.addfileExtension(this.pathsDocument);
     }
 
     /**
      * Generate operations depending on the generation mode.
-     * @param methodAndPath method and path of the operation
      * @param operation operation
      */
-    private void processOperation(String methodAndPath, Operation operation) {
+    private void processOperation(OperationPath operation) {
         if (separatedOperationsEnabled) {
             MarkupDocBuilder pathDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
-            operation(methodAndPath, operation, pathDocBuilder);
-            File operationFile = new File(outputDirectory, resolveOperationDocument(methodAndPath, operation));
+            operation(operation, pathDocBuilder);
+            File operationFile = new File(outputDirectory, resolveOperationDocument(operation));
 
             try {
                 String operationDirectory = FilenameUtils.getFullPath(operationFile.getPath());
@@ -285,10 +276,14 @@ public class PathsDocument extends MarkupDocument {
                 logger.info("Separate operation file produced: {}", operationFile);
             }
 
-            operationRef(methodAndPath, operation, this.markupDocBuilder);
+            operationRef(operation, this.markupDocBuilder);
 
         } else {
-            operation(methodAndPath, operation, this.markupDocBuilder);
+            operation(operation, this.markupDocBuilder);
+        }
+
+        if (logger.isInfoEnabled()) {
+            logger.info("Operation processed: {}", operation);
         }
     }
 
@@ -296,14 +291,13 @@ public class PathsDocument extends MarkupDocument {
     /**
      * Returns the operation name depending on available informations.
      * The summary is used to name the operation, or else the operation summary is used.
-     * @param methodAndPath method and path of the operation
      * @param operation operation
      * @return operation name
      */
-    private String operationName(String methodAndPath, Operation operation) {
-        String operationName = operation.getSummary();
+    private String operationName(OperationPath operation) {
+        String operationName = operation.getOperation().getSummary();
         if(isBlank(operationName)) {
-            operationName = methodAndPath;
+            operationName = operation.getMethod() + " " + operation.getPath();
         }
         return operationName;
     }
@@ -311,13 +305,12 @@ public class PathsDocument extends MarkupDocument {
     /**
      * Builds an operation.
      *
-     * @param methodAndPath the Method of the operation and the URL of the operation
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void operation(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
+    private void operation(OperationPath operation, MarkupDocBuilder docBuilder) {
         if(operation != null){
-            operationTitle(methodAndPath, operation, docBuilder);
+            operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
             inlineDefinitions(parametersSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
             inlineDefinitions(responsesSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
@@ -331,13 +324,12 @@ public class PathsDocument extends MarkupDocument {
 
     /**
      * Builds a cross-reference to a separated operation file
-     * @param methodAndPath the Method of the operation and the URL of the operation
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void operationRef(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
-        String document = resolveOperationDocument(methodAndPath, operation);
-        String operationName = operationName(methodAndPath, operation);
+    private void operationRef(OperationPath operation, MarkupDocBuilder docBuilder) {
+        String document = resolveOperationDocument(operation);
+        String operationName = operationName(operation);
 
         addOperationTitle(docBuilder.crossReferenceAsString(document, operationName, operationName), docBuilder);
     }
@@ -346,20 +338,15 @@ public class PathsDocument extends MarkupDocument {
      * Adds the operation title to the document. If the operation has a summary, the title is the summary.
      * Otherwise the title is the method of the operation and the URL of the operation.
      *
-     * @param methodAndPath the Method of the operation and the URL of the operation
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void operationTitle(String methodAndPath, Operation operation, MarkupDocBuilder docBuilder) {
-        String operationName = operationName(methodAndPath, operation);
+    private void operationTitle(OperationPath operation, MarkupDocBuilder docBuilder) {
+        String operationName = operationName(operation);
 
         addOperationTitle(operationName, docBuilder);
-        if(operationName.equals(operation.getSummary())) {
-            docBuilder.listing(methodAndPath);
-        }
-
-        if (logger.isInfoEnabled()) {
-            logger.info("Path processed: {}", methodAndPath);
+        if(operationName.equals(operation.getOperation().getSummary())) {
+            docBuilder.listing(operation.getMethod() + " " + operation.getPath());
         }
     }
 
@@ -397,9 +384,9 @@ public class PathsDocument extends MarkupDocument {
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void descriptionSection(Operation operation, MarkupDocBuilder docBuilder) {
+    private void descriptionSection(OperationPath operation, MarkupDocBuilder docBuilder) {
         if(handWrittenDescriptionsEnabled){
-            String summary = operation.getSummary();
+            String summary = operation.getOperation().getSummary();
             if(isNotBlank(summary)) {
                 String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
                 Optional<String> description = handWrittenOperationDescription(operationFolder, DESCRIPTION_FILE_NAME);
@@ -409,16 +396,16 @@ public class PathsDocument extends MarkupDocument {
                     if (logger.isInfoEnabled()) {
                         logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
                     }
-                    operationDescription(operation.getDescription(), docBuilder);
+                    operationDescription(operation.getOperation().getDescription(), docBuilder);
                 }
             }else{
                 if (logger.isInfoEnabled()) {
                     logger.info("Hand-written description cannot be read, because summary of operation is empty. Trying to use description from Swagger source.");
                 }
-                operationDescription(operation.getDescription(), docBuilder);
+                operationDescription(operation.getOperation().getDescription(), docBuilder);
             }
         }else {
-            operationDescription(operation.getDescription(), docBuilder);
+            operationDescription(operation.getOperation().getDescription(), docBuilder);
         }
     }
 
@@ -429,8 +416,8 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-    private List<Type> parametersSection(Operation operation, MarkupDocBuilder docBuilder) {
-        List<Parameter> parameters = operation.getParameters();
+    private List<Type> parametersSection(OperationPath operation, MarkupDocBuilder docBuilder) {
+        List<Parameter> parameters = operation.getOperation().getParameters();
         List<Type> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<List<String>> cells = new ArrayList<>();
@@ -480,9 +467,9 @@ public class PathsDocument extends MarkupDocument {
      * @param parameter the Swagger Parameter
      * @return the description of a parameter.
      */
-    private String parameterDescription(Operation operation, Parameter parameter){
+    private String parameterDescription(OperationPath operation, Parameter parameter){
         if(handWrittenDescriptionsEnabled){
-            String summary = operation.getSummary();
+            String summary = operation.getOperation().getSummary();
             String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
             String parameterName = parameter.getName();
             if(isNotBlank(operationFolder) && isNotBlank(parameterName)) {
@@ -507,8 +494,8 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-    private void consumesSection(Operation operation, MarkupDocBuilder docBuilder) {
-        List<String> consumes = operation.getConsumes();
+    private void consumesSection(OperationPath operation, MarkupDocBuilder docBuilder) {
+        List<String> consumes = operation.getOperation().getConsumes();
         if(CollectionUtils.isNotEmpty(consumes)){
             addOperationSectionTitle(CONSUMES, docBuilder);
             docBuilder.unorderedList(consumes);
@@ -516,17 +503,17 @@ public class PathsDocument extends MarkupDocument {
 
     }
 
-    private void producesSection(Operation operation, MarkupDocBuilder docBuilder) {
-        List<String> produces = operation.getProduces();
+    private void producesSection(OperationPath operation, MarkupDocBuilder docBuilder) {
+        List<String> produces = operation.getOperation().getProduces();
         if(CollectionUtils.isNotEmpty(produces)){
             addOperationSectionTitle(PRODUCES, docBuilder);
             docBuilder.unorderedList(produces);
         }
     }
 
-    private void tagsSection(Operation operation, MarkupDocBuilder docBuilder) {
+    private void tagsSection(OperationPath operation, MarkupDocBuilder docBuilder) {
         if(pathsGroupedBy == GroupBy.AS_IS) {
-            List<String> tags = operation.getTags();
+            List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 addOperationSectionTitle(TAGS, docBuilder);
                 Set<String> sortedTags;
@@ -548,9 +535,9 @@ public class PathsDocument extends MarkupDocument {
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void examplesSection(Operation operation, MarkupDocBuilder docBuilder) {
+    private void examplesSection(OperationPath operation, MarkupDocBuilder docBuilder) {
         if(examplesEnabled){
-            String summary = operation.getSummary();
+            String summary = operation.getOperation().getSummary();
             if(isNotBlank(summary)) {
                 String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
                 Optional<String> curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
@@ -616,8 +603,8 @@ public class PathsDocument extends MarkupDocument {
      * @param operation the Swagger Operation
      * @param docBuilder the MarkupDocBuilder document builder
      */
-    private void securitySchemeSection(Operation operation, MarkupDocBuilder docBuilder) {
-        List<Map<String, List<String>>> securitySchemes = operation.getSecurity();
+    private void securitySchemeSection(OperationPath operation, MarkupDocBuilder docBuilder) {
+        List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
         if (CollectionUtils.isNotEmpty(securitySchemes)) {
             addOperationSectionTitle(SECURITY, docBuilder);
             Map<String, SecuritySchemeDefinition> securityDefinitions = swagger.getSecurityDefinitions();
@@ -676,8 +663,8 @@ public class PathsDocument extends MarkupDocument {
         return Optional.absent();
     }
 
-    private List<Type> responsesSection(Operation operation, MarkupDocBuilder docBuilder) {
-        Map<String, Response> responses = operation.getResponses();
+    private List<Type> responsesSection(OperationPath operation, MarkupDocBuilder docBuilder) {
+        Map<String, Response> responses = operation.getOperation().getResponses();
         List<Type> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
             List<List<String>> cells = new ArrayList<>();
@@ -719,7 +706,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        docBuilder.anchor(anchor, null);
+        docBuilder.anchor(anchor);
         docBuilder.newLine();
         docBuilder.boldTextLine(title);
     }
