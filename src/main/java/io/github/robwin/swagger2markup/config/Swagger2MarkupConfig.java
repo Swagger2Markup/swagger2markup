@@ -35,7 +35,7 @@ public class Swagger2MarkupConfig {
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
     private final boolean separatedDefinitions;
-    private final boolean separatedPaths;
+    private final boolean separatedOperations;
     private final GroupBy pathsGroupedBy;
     @Deprecated
     private final OrderBy definitionsOrderedBy;
@@ -54,7 +54,7 @@ public class Swagger2MarkupConfig {
     private static final String SECURITY_DOCUMENT = "security";
 
     private static final String SEPARATED_DEFINITIONS_FOLDER = "definitions";
-    private static final String SEPARATED_PATHS_FOLDER = "paths";
+    private static final String SEPARATED_OPERATIONS_FOLDER = "operations";
 
     /**
      * @param swagger the Swagger source
@@ -63,7 +63,7 @@ public class Swagger2MarkupConfig {
      * @param schemasFolderPath the path to the folder where the schema documents reside
      * @param descriptionsFolderPath the path to the folder where the description documents reside
      * @param separatedDefinitions specified if in addition to the definitions file, also separate definition files for each model definition should be created
-     * @param separatedPaths specified if in addition to the paths file, also separate path files for each path should be created
+     * @param separatedOperations specified if in addition to the paths file, also separate operation files for each operation should be created
      * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
      * @param outputLanguage specifies language of labels in output files
@@ -76,7 +76,7 @@ public class Swagger2MarkupConfig {
      * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
-                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedPaths,
+                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<String> pathOrdering,
                                 Comparator<HttpMethod> pathMethodOrdering, Comparator<String> definitionOrdering,
@@ -87,7 +87,7 @@ public class Swagger2MarkupConfig {
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
         this.separatedDefinitions = separatedDefinitions;
-        this.separatedPaths = separatedPaths;
+        this.separatedOperations = separatedOperations;
         this.pathsGroupedBy = pathsGroupedBy;
         this.definitionsOrderedBy = definitionsOrderedBy;
         this.outputLanguage = outputLanguage;
@@ -124,8 +124,8 @@ public class Swagger2MarkupConfig {
         return separatedDefinitions;
     }
 
-    public boolean isSeparatedPaths() {
-        return separatedPaths;
+    public boolean isSeparatedOperations() {
+        return separatedOperations;
     }
 
     public GroupBy getPathsGroupedBy() {
@@ -180,8 +180,8 @@ public class Swagger2MarkupConfig {
         return SEPARATED_DEFINITIONS_FOLDER;
     }
 
-    public String getSeparatedPathsFolder() {
-        return SEPARATED_PATHS_FOLDER;
+    public String getSeparatedOperationsFolder() {
+        return SEPARATED_OPERATIONS_FOLDER;
     }
 
     public boolean isInterDocumentCrossReferences() {

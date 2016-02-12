@@ -288,13 +288,13 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedPaths().build()
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedOperations().build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
         String[] directories = outputDirectory.list();
         assertThat(directories).hasSize(5).containsAll(
-                asList("paths", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+                asList("operations", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
         File pathsDirectory = new File(outputDirectory, "paths");
         String[] paths = pathsDirectory.list();

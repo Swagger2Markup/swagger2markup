@@ -148,7 +148,7 @@ public class Swagger2MarkupConverter {
         private String schemasFolderPath;
         private String descriptionsFolderPath;
         private boolean separatedDefinitions;
-        private boolean separatedPaths;
+        private boolean separatedOperations;
         private GroupBy pathsGroupedBy = GroupBy.AS_IS;
         private OrderBy definitionsOrderedBy = OrderBy.NATURAL;
         private MarkupLanguage markupLanguage = MarkupLanguage.ASCIIDOC;
@@ -184,7 +184,7 @@ public class Swagger2MarkupConverter {
 
         public Swagger2MarkupConverter build(){
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
-                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedPaths, pathsGroupedBy, definitionsOrderedBy,
+                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
                     outputLanguage, inlineSchemaDepthLevel, tagOrdering, pathOrdering, pathMethodOrdering, definitionOrdering,
                     interDocumentCrossReferences, interDocumentCrossReferencesPrefix));
         }
@@ -224,8 +224,8 @@ public class Swagger2MarkupConverter {
          * In addition to the paths file, also create separate path files for each path.
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withSeparatedPaths() {
-            this.separatedPaths = true;
+        public Builder withSeparatedOperations() {
+            this.separatedOperations = true;
             return this;
         }
 
