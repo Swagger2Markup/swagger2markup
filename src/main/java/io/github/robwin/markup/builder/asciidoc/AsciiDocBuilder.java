@@ -45,26 +45,26 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel1(String title){
-        sectionTitleLevel1(AsciiDoc.SECTION_TITLE_LEVEL1, title);
+    public MarkupDocBuilder sectionTitleLevel1(String title, String anchor){
+        sectionTitleLevel1(AsciiDoc.SECTION_TITLE_LEVEL1, title, anchor);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel2(String title){
-        sectionTitleLevel2(AsciiDoc.SECTION_TITLE_LEVEL2, title);
+    public MarkupDocBuilder sectionTitleLevel2(String title, String anchor){
+        sectionTitleLevel2(AsciiDoc.SECTION_TITLE_LEVEL2, title, anchor);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel3(String title){
-        sectionTitleLevel3(AsciiDoc.SECTION_TITLE_LEVEL3, title);
+    public MarkupDocBuilder sectionTitleLevel3(String title, String anchor){
+        sectionTitleLevel3(AsciiDoc.SECTION_TITLE_LEVEL3, title, anchor);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel4(String title){
-        sectionTitleLevel4(AsciiDoc.SECTION_TITLE_LEVEL4, title);
+    public MarkupDocBuilder sectionTitleLevel4(String title, String anchor){
+        sectionTitleLevel4(AsciiDoc.SECTION_TITLE_LEVEL4, title, anchor);
         return this;
     }
 
