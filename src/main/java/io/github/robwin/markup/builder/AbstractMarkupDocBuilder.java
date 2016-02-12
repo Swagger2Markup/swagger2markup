@@ -44,7 +44,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected void documentTitle(Markup markup, String title){
-        anchor(title).newLine();
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
