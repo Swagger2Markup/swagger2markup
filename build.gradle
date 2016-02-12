@@ -51,7 +51,7 @@ dependencies {
     compile 'commons-io:commons-io'
     compile 'org.slf4j:slf4j-api'
     testCompile 'junit:junit'
-    testCompile 'org.asciidoctor:asciidoctorj:1.5.2'
+    testCompile 'org.asciidoctor:asciidoctorj:1.5.4'
     testCompile 'ch.qos.logback:logback-classic'
     testCompile 'org.assertj:assertj-core'
 }

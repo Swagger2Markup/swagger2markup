@@ -22,6 +22,7 @@ import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
+import io.github.robwin.swagger2markup.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
 
@@ -35,15 +36,14 @@ public class Swagger2MarkupConfig {
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
     private final boolean separatedDefinitions;
-    private final boolean separatedPaths;
+    private final boolean separatedOperations;
     private final GroupBy pathsGroupedBy;
     @Deprecated
     private final OrderBy definitionsOrderedBy;
     private final Language outputLanguage;
     private final int inlineSchemaDepthLevel;
     private final Comparator<String> tagOrdering;
-    private final Comparator<String> pathOrdering;
-    private final Comparator<HttpMethod> pathMethodOrdering;
+    private final Comparator<PathOperation> operationOrdering;
     private final Comparator<String> definitionOrdering;
     private final boolean interDocumentCrossReferences;
     private final String interDocumentCrossReferencesPrefix;
@@ -54,7 +54,7 @@ public class Swagger2MarkupConfig {
     private static final String SECURITY_DOCUMENT = "security";
 
     private static final String SEPARATED_DEFINITIONS_FOLDER = "definitions";
-    private static final String SEPARATED_PATHS_FOLDER = "paths";
+    private static final String SEPARATED_OPERATIONS_FOLDER = "operations";
 
     /**
      * @param swagger the Swagger source
@@ -63,23 +63,22 @@ public class Swagger2MarkupConfig {
      * @param schemasFolderPath the path to the folder where the schema documents reside
      * @param descriptionsFolderPath the path to the folder where the description documents reside
      * @param separatedDefinitions specified if in addition to the definitions file, also separate definition files for each model definition should be created
-     * @param separatedPaths specified if in addition to the paths file, also separate path files for each path should be created
+     * @param separatedOperations specified if in addition to the paths file, also separate operation files for each operation should be created
      * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
      * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
      * @param outputLanguage specifies language of labels in output files
      * @param inlineSchemaDepthLevel specifies the max depth for inline object schema display (0 = no inline schemas)
      * @param tagOrdering specifies a custom comparator function to order tags (null = as-is ordering)
-     * @param pathOrdering specifies a custom comparator function to order paths (null = as-is ordering)
-     * @param pathMethodOrdering specifies a custom comparator function to order paths methods (null = as-is ordering)
+     * @param operationOrdering specifies a custom comparator function to order operations (null = as-is ordering)
      * @param definitionOrdering specifies a custom comparator function to order definitions (null = as-is ordering)
      * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
      * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
-                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedPaths,
+                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
-                                int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<String> pathOrdering,
-                                Comparator<HttpMethod> pathMethodOrdering, Comparator<String> definitionOrdering,
+                                int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering,
+                                Comparator<String> definitionOrdering,
                                 boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
@@ -87,14 +86,13 @@ public class Swagger2MarkupConfig {
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
         this.separatedDefinitions = separatedDefinitions;
-        this.separatedPaths = separatedPaths;
+        this.separatedOperations = separatedOperations;
         this.pathsGroupedBy = pathsGroupedBy;
         this.definitionsOrderedBy = definitionsOrderedBy;
         this.outputLanguage = outputLanguage;
         this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
         this.tagOrdering = tagOrdering;
-        this.pathOrdering = pathOrdering;
-        this.pathMethodOrdering = pathMethodOrdering;
+        this.operationOrdering = operationOrdering;
         this.definitionOrdering = definitionOrdering;
         this.interDocumentCrossReferences = interDocumentCrossReferences;
         this.interDocumentCrossReferencesPrefix = interDocumentCrossReferencesPrefix;
@@ -124,8 +122,8 @@ public class Swagger2MarkupConfig {
         return separatedDefinitions;
     }
 
-    public boolean isSeparatedPaths() {
-        return separatedPaths;
+    public boolean isSeparatedOperations() {
+        return separatedOperations;
     }
 
     public GroupBy getPathsGroupedBy() {
@@ -148,12 +146,8 @@ public class Swagger2MarkupConfig {
         return tagOrdering;
     }
 
-    public Comparator<String> getPathOrdering() {
-        return pathOrdering;
-    }
-
-    public Comparator<HttpMethod> getPathMethodOrdering() {
-        return pathMethodOrdering;
+    public Comparator<PathOperation> getOperationOrdering() {
+        return operationOrdering;
     }
 
     public Comparator<String> getDefinitionOrdering() {
@@ -180,8 +174,8 @@ public class Swagger2MarkupConfig {
         return SEPARATED_DEFINITIONS_FOLDER;
     }
 
-    public String getSeparatedPathsFolder() {
-        return SEPARATED_PATHS_FOLDER;
+    public String getSeparatedOperationsFolder() {
+        return SEPARATED_OPERATIONS_FOLDER;
     }
 
     public boolean isInterDocumentCrossReferences() {
