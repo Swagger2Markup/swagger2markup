@@ -143,7 +143,7 @@ public class Swagger2MarkupConverterTest {
             // If NullPointerException was not thrown, test would fail the specified message
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (Exception e) {
-            assertThat(e).hasMessage("Path operations must have tags, if you want to group by tags! The operation 'PUT /pets' has not tags.");
+            assertThat(e).hasMessage("Can't GroupBy.TAGS > Operation 'updatePet' has not tags");
         }
     }
 
@@ -281,7 +281,7 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithSeparatedPaths() throws IOException {
+    public void testSwagger2AsciiDocConversionWithSeparatedOperations() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
         File outputDirectory = new File("build/docs/asciidoc/generated");
@@ -296,7 +296,7 @@ public class Swagger2MarkupConverterTest {
         assertThat(directories).hasSize(5).containsAll(
                 asList("operations", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
-        File pathsDirectory = new File(outputDirectory, "paths");
+        File pathsDirectory = new File(outputDirectory, "operations");
         String[] paths = pathsDirectory.list();
         assertThat(paths).hasSize(18);
     }

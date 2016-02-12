@@ -3,13 +3,15 @@ package io.github.robwin.swagger2markup;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 
-public class OperationPath {
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+public class PathOperation {
 
     protected HttpMethod method;
     protected String path;
     protected Operation operation;
 
-    public OperationPath(HttpMethod method, String path, Operation operation) {
+    public PathOperation(HttpMethod method, String path, Operation operation) {
         this.method = method;
         this.path = path;
         this.operation = operation;
@@ -21,6 +23,14 @@ public class OperationPath {
 
     public String getPath() {
         return path;
+    }
+
+    public String getTitle() {
+        String operationName = operation.getSummary();
+        if (true || isBlank(operationName)) {
+            operationName = getMethod() + " " + getPath();
+        }
+        return operationName;
     }
 
     public String getId() {

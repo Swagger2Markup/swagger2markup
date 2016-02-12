@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -35,6 +36,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Comparator;
@@ -50,7 +52,7 @@ public class Swagger2MarkupConverter {
     /**
      * @param swagger2MarkupConfig the configuration
      */
-    Swagger2MarkupConverter(Swagger2MarkupConfig swagger2MarkupConfig){
+    Swagger2MarkupConverter(Swagger2MarkupConfig swagger2MarkupConfig) {
         this.swagger2MarkupConfig = swagger2MarkupConfig;
     }
 
@@ -60,7 +62,7 @@ public class Swagger2MarkupConverter {
      * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
      * @return a Swagger2MarkupConverter
      */
-    public static Builder from(String swaggerLocation){
+    public static Builder from(String swaggerLocation) {
         Validate.notEmpty(swaggerLocation, "swaggerLocation must not be empty!");
         return new Builder(swaggerLocation);
     }
@@ -71,7 +73,7 @@ public class Swagger2MarkupConverter {
      * @param swagger the Swagger source.
      * @return a Swagger2MarkupConverter
      */
-    public static Builder from(Swagger swagger){
+    public static Builder from(Swagger swagger) {
         Validate.notNull(swagger, "Swagger must not be null!");
         return new Builder(swagger);
     }
@@ -86,7 +88,7 @@ public class Swagger2MarkupConverter {
     public static Builder fromString(String swaggerAsString) throws IOException {
         Validate.notEmpty(swaggerAsString, "Swagger String must not be null!");
         Swagger swagger = new SwaggerParser().parse(swaggerAsString);
-        if(swagger == null)
+        if (swagger == null)
             throw new IllegalArgumentException("Swagger String is in the wrong format");
 
         return new Builder(swagger);
@@ -110,13 +112,13 @@ public class Swagger2MarkupConverter {
      * @return a the document as a String
      * @throws java.io.IOException if files can not be read
      */
-    public String asString() throws IOException{
+    public String asString() throws IOException {
         return buildDocuments();
     }
 
     /**
      * Builds all documents and writes them to a directory
-
+     *
      * @param directory the directory where the generated file should be stored
      * @throws IOException if a file cannot be written
      */
@@ -129,7 +131,7 @@ public class Swagger2MarkupConverter {
 
     /**
      * Returns all documents as a String
-
+     *
      * @return a the document as a String
      */
     private String buildDocuments() {
@@ -142,7 +144,7 @@ public class Swagger2MarkupConverter {
     }
 
 
-    public static class Builder{
+    public static class Builder {
         private final Swagger swagger;
         private String examplesFolderPath;
         private String schemasFolderPath;
@@ -155,8 +157,29 @@ public class Swagger2MarkupConverter {
         private Language outputLanguage = Language.EN;
         private int inlineSchemaDepthLevel = 0;
         private Comparator<String> tagOrdering = Ordering.natural();
-        private Comparator<String> pathOrdering = Ordering.natural();
-        private Comparator<HttpMethod> pathMethodOrdering = Ordering.explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS);
+
+        private static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
+                .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
+                .onResultOf(new Function<PathOperation, HttpMethod>() {
+                    @Nullable
+                    @Override
+                    public HttpMethod apply(@Nullable PathOperation input) {
+                        return input.getMethod();
+                    }
+                });
+
+        private static final Ordering<PathOperation> OPERATION_PATH_COMPARATOR = Ordering
+                .natural()
+                .onResultOf(new Function<PathOperation, String>() {
+                    @Nullable
+                    @Override
+                    public String apply(@Nullable PathOperation input) {
+                        return input.getPath();
+                    }
+                });
+
+        private Comparator<PathOperation> operationOrdering = OPERATION_PATH_COMPARATOR.compound(OPERATION_METHOD_COMPARATOR);
+
         private Comparator<String> definitionOrdering = Ordering.natural();
         private boolean interDocumentCrossReferences = false;
         private String interDocumentCrossReferencesPrefix = "";
@@ -166,9 +189,9 @@ public class Swagger2MarkupConverter {
          *
          * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
          */
-        Builder(String swaggerLocation){
+        Builder(String swaggerLocation) {
             swagger = new SwaggerParser().read(swaggerLocation);
-            if(swagger == null){
+            if (swagger == null) {
                 throw new IllegalArgumentException("Failed to read the Swagger file. ");
             }
         }
@@ -178,14 +201,14 @@ public class Swagger2MarkupConverter {
          *
          * @param swagger the Swagger source.
          */
-        Builder(Swagger swagger){
+        Builder(Swagger swagger) {
             this.swagger = swagger;
         }
 
-        public Swagger2MarkupConverter build(){
+        public Swagger2MarkupConverter build() {
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
-                    outputLanguage, inlineSchemaDepthLevel, tagOrdering, pathOrdering, pathMethodOrdering, definitionOrdering,
+                    outputLanguage, inlineSchemaDepthLevel, tagOrdering, operationOrdering, definitionOrdering,
                     interDocumentCrossReferences, interDocumentCrossReferencesPrefix));
         }
 
@@ -195,7 +218,7 @@ public class Swagger2MarkupConverter {
          * @param markupLanguage the markup language which is used to generate the files
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withMarkupLanguage(MarkupLanguage markupLanguage){
+        public Builder withMarkupLanguage(MarkupLanguage markupLanguage) {
             this.markupLanguage = markupLanguage;
             return this;
         }
@@ -206,13 +229,14 @@ public class Swagger2MarkupConverter {
          * @param descriptionsFolderPath the path to the folder where the description documents reside
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withDescriptions(String descriptionsFolderPath){
+        public Builder withDescriptions(String descriptionsFolderPath) {
             this.descriptionsFolderPath = descriptionsFolderPath;
             return this;
         }
 
         /**
          * In addition to the definitions file, also create separate definition files for each model definition.
+         *
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withSeparatedDefinitions() {
@@ -222,6 +246,7 @@ public class Swagger2MarkupConverter {
 
         /**
          * In addition to the paths file, also create separate path files for each path.
+         *
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withSeparatedOperations() {
@@ -235,7 +260,7 @@ public class Swagger2MarkupConverter {
          * @param examplesFolderPath the path to the folder where the example documents reside
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withExamples(String examplesFolderPath){
+        public Builder withExamples(String examplesFolderPath) {
             this.examplesFolderPath = examplesFolderPath;
             return this;
         }
@@ -246,7 +271,7 @@ public class Swagger2MarkupConverter {
          * @param schemasFolderPath the path to the folder where the schema documents reside
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withSchemas(String schemasFolderPath){
+        public Builder withSchemas(String schemasFolderPath) {
             this.schemasFolderPath = schemasFolderPath;
             return this;
         }
@@ -322,28 +347,15 @@ public class Swagger2MarkupConverter {
         }
 
         /**
-         * Specifies a custom comparator function to order paths.
-         * By default, natural ordering is applied.
+         * Specifies a custom comparator function to order operations.
+         * By default, natural ordering is applied on operation 'path', then explicit ordering is applied on operation 'method'
          * Set ordering to null to keep swagger original order
          *
-         * @param pathOrdering
+         * @param operationOrdering
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder withPathOrdering(Comparator<String> pathOrdering) {
-            this.pathOrdering = pathOrdering;
-            return this;
-        }
-
-        /**
-         * Specifies a custom comparator function to order paths methods.
-         * By default, explicit ordering is applied : GET, PUT, POST, DELETE, PATCH, HEAD, OPTIONS
-         * Set ordering to null to keep swagger original order
-         *
-         * @param pathMethodOrdering
-         * @return the Swagger2MarkupConverter.Builder
-         */
-        public Builder withPathMethodOrdering(Comparator<HttpMethod> pathMethodOrdering) {
-            this.pathMethodOrdering = pathMethodOrdering;
+        public Builder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
+            this.operationOrdering = operationOrdering;
             return this;
         }
 
