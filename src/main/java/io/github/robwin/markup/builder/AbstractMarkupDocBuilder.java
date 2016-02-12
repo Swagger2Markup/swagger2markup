@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
+    private static final Pattern ANCHOR_PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}+");
     private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
 
     protected StringBuilder documentBuilder = new StringBuilder();
@@ -47,28 +48,48 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
-    protected void sectionTitleLevel1(Markup markup, String title){
+    protected void sectionTitleLevel1(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(title).newLine();
+        anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
-    protected void sectionTitleLevel2(Markup markup, String title){
+    @Override
+    public MarkupDocBuilder sectionTitleLevel1(String title) {
+        return sectionTitleLevel1(title, title);
+    }
+
+    protected void sectionTitleLevel2(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(title).newLine();
+        anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
-    protected void sectionTitleLevel3(Markup markup, String title){
+    @Override
+    public MarkupDocBuilder sectionTitleLevel2(String title) {
+        return sectionTitleLevel2(title, title);
+    }
+
+    protected void sectionTitleLevel3(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(title).newLine();
+        anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
-    protected void sectionTitleLevel4(Markup markup, String title){
+    @Override
+    public MarkupDocBuilder sectionTitleLevel3(String title) {
+        return sectionTitleLevel3(title, title);
+    }
+
+    protected void sectionTitleLevel4(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(title).newLine();
+        anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleLevel4(String title) {
+        return sectionTitleLevel4(title, title);
     }
 
     @Override
@@ -129,17 +150,24 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     /**
-     * Generic normalization algorithm for all markups
+     * Generic normalization algorithm for all markups (less common denominator character set).
+     * Key points :
+     * - Anchor is trimmed and lower cased
+     * - Punctuation is ignored
+     * - Spaces are replaced
+     * - If the anchor still contains forbidden characters (non-ASCII, ...) which are not normalizable (Normalizer.Form.NFD), replace the whole anchor with an hash (MD5).
      */
     protected String normalizeAnchor(Markup spaceEscape, String anchor) {
         String normalizedAnchor = anchor.trim();
+        String trimAnchor = normalizedAnchor;
         normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD);
+        normalizedAnchor = ANCHOR_PUNCTUATION_PATTERN.matcher(normalizedAnchor).replaceAll("");
         normalizedAnchor = normalizedAnchor.toLowerCase();
         normalizedAnchor = ANCHOR_SPACE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
 
         String validAnchor = ANCHOR_FORBIDDEN_PATTERN.matcher(normalizedAnchor).replaceAll("");
         if (validAnchor.length() != normalizedAnchor.length())
-            normalizedAnchor = DigestUtils.md5Hex(anchor);
+            normalizedAnchor = DigestUtils.md5Hex(trimAnchor);
         else
             normalizedAnchor = validAnchor;
 
