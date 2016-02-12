@@ -234,8 +234,8 @@ public class PathsDocument extends MarkupDocument {
      * @param operation operation
      * @return a normalized filename for the separated operation file
      */
-    private String normalizeOperationFileName(PathOperation operation) {
-        return FILENAME_FORBIDDEN_PATTERN.matcher(operation.getId()).replaceAll("_").toLowerCase();
+    private String normalizeOperationFileName(String operation) {
+        return FILENAME_FORBIDDEN_PATTERN.matcher(operation).replaceAll("_").toLowerCase();
     }
 
     /**
@@ -245,7 +245,7 @@ public class PathsDocument extends MarkupDocument {
      */
     private String resolveOperationDocument(PathOperation operation) {
         if (this.separatedOperationsEnabled)
-            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeOperationFileName(operation))).getPath();
+            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeOperationFileName(operation.getId()))).getPath();
         else
             return this.markupDocBuilder.addfileExtension(this.pathsDocument);
     }
@@ -374,27 +374,29 @@ public class PathsDocument extends MarkupDocument {
 
     /**
      * Adds a operation description to the document.
+     * If hand-written descriptions exist, it tries to load the description from a file.
+     * If the file cannot be read, the description of the operation is returned.
+     * Operation folder search order :
+     * - normalizeOperationFileName(operation.operationId)
+     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
+     * - then, normalizeOperationFileName(operation.summary)
      *
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
     private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(handWrittenDescriptionsEnabled){
-            String summary = operation.getOperation().getSummary();
-            if(isNotBlank(summary)) {
-                String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
-                Optional<String> description = handWrittenOperationDescription(operationFolder, DESCRIPTION_FILE_NAME);
-                if(description.isPresent()){
-                    operationDescription(description.get(), docBuilder);
-                }else{
-                    if (logger.isInfoEnabled()) {
-                        logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
-                    }
-                    operationDescription(operation.getOperation().getDescription(), docBuilder);
-                }
-            }else{
+            String operationFolder = normalizeOperationFileName(operation.getId());
+
+            if (!new File(operationFolder, DESCRIPTION_FILE_NAME).exists())
+                operationFolder = normalizeOperationFileName(operation.getTitle());
+
+            Optional<String> description = handWrittenOperationDescription(operationFolder, DESCRIPTION_FILE_NAME);
+            if (description.isPresent()) {
+                operationDescription(description.get(), docBuilder);
+            } else {
                 if (logger.isInfoEnabled()) {
-                    logger.info("Hand-written description cannot be read, because summary of operation is empty. Trying to use description from Swagger source.");
+                    logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
                 }
                 operationDescription(operation.getOperation().getDescription(), docBuilder);
             }
@@ -454,36 +456,42 @@ public class PathsDocument extends MarkupDocument {
 
     /**
      * Retrieves the description of a parameter, or otherwise an empty String.
-     * If hand-written descriptions are enabled, it tries to load the description from a file.
-     * If the file cannot be read, the description the parameter is returned.
+     * If hand-written descriptions exist, it tries to load the description from a file.
+     * If the file cannot be read, the description of the parameter is returned.
+     * Operation folder search order :
+     * - normalizeOperationFileName(operation.operationId)
+     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
+     * - then, normalizeOperationFileName(operation.summary)
      *
      * @param operation the Swagger Operation
      * @param parameter the Swagger Parameter
      * @return the description of a parameter.
      */
     private String parameterDescription(PathOperation operation, Parameter parameter){
-        if(handWrittenDescriptionsEnabled){
-            String summary = operation.getOperation().getSummary();
-            String operationFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
+        if (handWrittenDescriptionsEnabled) {
             String parameterName = parameter.getName();
-            if(isNotBlank(operationFolder) && isNotBlank(parameterName)) {
-                Optional<String> description = handWrittenOperationDescription(operationFolder + "/" + parameterName, DESCRIPTION_FILE_NAME);
-                if(description.isPresent()){
+            if (isNotBlank(parameterName)) {
+                String operationFolder = normalizeOperationFileName(operation.getId());
+
+                if (!new File(new File(operationFolder, parameterName), DESCRIPTION_FILE_NAME).exists())
+                    operationFolder = normalizeOperationFileName(operation.getTitle());
+
+                Optional<String> description = handWrittenOperationDescription(new File(operationFolder, parameterName).getPath(), DESCRIPTION_FILE_NAME);
+                if (description.isPresent()) {
                     return description.get();
-                }
-                else{
+                } else {
                     if (logger.isWarnEnabled()) {
                         logger.warn("Hand-written description file cannot be read. Trying to use description from Swagger source.");
                     }
                     return defaultString(parameter.getDescription());
                 }
-            }else{
+            } else {
                 if (logger.isWarnEnabled()) {
-                    logger.warn("Hand-written description file cannot be read, because summary of operation or name of parameter is empty. Trying to use description from Swagger source.");
+                    logger.warn("Hand-written description file cannot be read, because name of parameter is empty. Trying to use description from Swagger source.");
                 }
                 return defaultString(parameter.getDescription());
             }
-        }else {
+        } else {
             return defaultString(parameter.getDescription());
         }
     }
@@ -525,35 +533,36 @@ public class PathsDocument extends MarkupDocument {
      * Builds the example section of a Swagger Operation. Tries to load the examples from
      * curl-request.adoc, http-request.adoc and http-response.adoc or
      * curl-request.md, http-request.md and http-response.md.
+     * Operation folder search order :
+     * - normalizeOperationFileName(operation.operationId)
+     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
+     * - then, normalizeOperationFileName(operation.summary)
      *
      * @param operation the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(examplesEnabled){
-            String summary = operation.getOperation().getSummary();
-            if(isNotBlank(summary)) {
-                String exampleFolder = summary.replace(".", "").replace(" ", "_").toLowerCase();
-                Optional<String> curlExample = example(exampleFolder, CURL_EXAMPLE_FILE_NAME);
-                if(curlExample.isPresent()){
-                    addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
-                    docBuilder.paragraph(curlExample.get());
-                }
+            String operationFolder = normalizeOperationFileName(operation.getId());
 
-                Optional<String> requestExample = example(exampleFolder, REQUEST_EXAMPLE_FILE_NAME);
-                if(requestExample.isPresent()){
-                    addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
-                    docBuilder.paragraph(requestExample.get());
-                }
-                Optional<String> responseExample = example(exampleFolder, RESPONSE_EXAMPLE_FILE_NAME);
-                if(responseExample.isPresent()){
-                    addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
-                    docBuilder.paragraph(responseExample.get());
-                }
-            }else{
-                if (logger.isWarnEnabled()) {
-                    logger.warn("Example file cannot be read, because summary of operation is empty.");
-                }
+            if (!new File(operationFolder, DESCRIPTION_FILE_NAME).exists())
+                operationFolder = normalizeOperationFileName(operation.getTitle());
+
+            Optional<String> curlExample = example(operationFolder, CURL_EXAMPLE_FILE_NAME);
+            if(curlExample.isPresent()){
+                addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
+                docBuilder.paragraph(curlExample.get());
+            }
+
+            Optional<String> requestExample = example(operationFolder, REQUEST_EXAMPLE_FILE_NAME);
+            if(requestExample.isPresent()){
+                addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
+                docBuilder.paragraph(requestExample.get());
+            }
+            Optional<String> responseExample = example(operationFolder, RESPONSE_EXAMPLE_FILE_NAME);
+            if(responseExample.isPresent()){
+                addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
+                docBuilder.paragraph(responseExample.get());
             }
         }
     }

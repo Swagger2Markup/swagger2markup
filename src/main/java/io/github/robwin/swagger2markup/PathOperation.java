@@ -25,9 +25,13 @@ public class PathOperation {
         return path;
     }
 
+    /**
+     * Returns the display title for an operation
+     * @return the operation title
+     */
     public String getTitle() {
         String operationName = operation.getSummary();
-        if (true || isBlank(operationName)) {
+        if (isBlank(operationName)) {
             operationName = getMethod() + " " + getPath();
         }
         return operationName;
