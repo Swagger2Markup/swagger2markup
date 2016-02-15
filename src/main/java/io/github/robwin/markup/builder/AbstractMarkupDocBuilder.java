@@ -36,8 +36,8 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
-    private static final Pattern ANCHOR_FORBIDDEN_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
-    private static final Pattern ANCHOR_PUNCTUATION_PATTERN = Pattern.compile("\\p{Punct}+");
+    private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
+    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\p{InCombiningDiacriticalMarks}@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
 
     protected StringBuilder documentBuilder = new StringBuilder();
@@ -159,15 +159,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
      */
     protected String normalizeAnchor(Markup spaceEscape, String anchor) {
         String normalizedAnchor = anchor.trim();
-        String trimAnchor = normalizedAnchor;
         normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD);
-        normalizedAnchor = ANCHOR_PUNCTUATION_PATTERN.matcher(normalizedAnchor).replaceAll("");
+        normalizedAnchor = ANCHOR_IGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll("");
+        normalizedAnchor = normalizedAnchor.trim();
         normalizedAnchor = normalizedAnchor.toLowerCase();
         normalizedAnchor = ANCHOR_SPACE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
 
-        String validAnchor = ANCHOR_FORBIDDEN_PATTERN.matcher(normalizedAnchor).replaceAll("");
+        String validAnchor = ANCHOR_UNIGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll("");
         if (validAnchor.length() != normalizedAnchor.length())
-            normalizedAnchor = DigestUtils.md5Hex(trimAnchor);
+            normalizedAnchor = DigestUtils.md5Hex(normalizedAnchor);
         else
             normalizedAnchor = validAnchor;
 
