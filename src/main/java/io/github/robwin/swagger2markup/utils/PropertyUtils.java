@@ -19,8 +19,23 @@
 package io.github.robwin.swagger2markup.utils;
 
 import com.google.common.base.Function;
-import io.github.robwin.swagger2markup.type.*;
-import io.swagger.models.properties.*;
+import io.github.robwin.swagger2markup.type.ArrayType;
+import io.github.robwin.swagger2markup.type.BasicType;
+import io.github.robwin.swagger2markup.type.EnumType;
+import io.github.robwin.swagger2markup.type.ObjectType;
+import io.github.robwin.swagger2markup.type.RefType;
+import io.github.robwin.swagger2markup.type.Type;
+import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.DoubleProperty;
+import io.swagger.models.properties.FloatProperty;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.ObjectProperty;
+import io.swagger.models.properties.Property;
+import io.swagger.models.properties.RefProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UUIDProperty;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
@@ -106,5 +121,14 @@ public final class PropertyUtils {
             defaultValue = Objects.toString(uuidProperty.getDefault(), "");
         }
         return defaultValue;
+    }
+
+    public static String getExample(Property property) {
+        Validate.notNull(property, "parameter must not be null!");
+        String examplesValue = "";
+        if (property.getExample() != null) {
+            examplesValue = property.getExample();
+        }
+        return examplesValue;
     }
 }

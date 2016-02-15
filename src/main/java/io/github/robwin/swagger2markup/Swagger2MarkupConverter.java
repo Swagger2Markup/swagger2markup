@@ -147,6 +147,7 @@ public class Swagger2MarkupConverter {
     public static class Builder {
         private final Swagger swagger;
         private String examplesFolderPath;
+        private boolean generateExamples = false;
         private String schemasFolderPath;
         private String descriptionsFolderPath;
         private boolean separatedDefinitions;
@@ -206,7 +207,7 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build() {
-            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
+            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath, generateExamples,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
                     outputLanguage, inlineSchemaDepthLevel, tagOrdering, operationOrdering, definitionOrdering,
                     interDocumentCrossReferences, interDocumentCrossReferencesPrefix));
@@ -262,6 +263,16 @@ public class Swagger2MarkupConverter {
          */
         public Builder withExamples(String examplesFolderPath) {
             this.examplesFolderPath = examplesFolderPath;
+            return this;
+        }
+
+        /**
+         * Generates examples from model definitions
+         *
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withGeneratedExamples() {
+            this.generateExamples = true;
             return this;
         }
 

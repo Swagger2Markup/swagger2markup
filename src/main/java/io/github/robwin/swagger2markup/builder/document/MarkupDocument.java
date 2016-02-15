@@ -48,6 +48,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 public abstract class MarkupDocument {
 
     protected final String DEFAULT_COLUMN;
+    protected final String EXAMPLE_COLUMN;
     protected final String REQUIRED_COLUMN;
     protected final String SCHEMA_COLUMN;
     protected final String NAME_COLUMN;
@@ -87,6 +88,7 @@ public abstract class MarkupDocument {
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
+        EXAMPLE_COLUMN = labels.getString("example_column");
         REQUIRED_COLUMN = labels.getString("required_column");
         SCHEMA_COLUMN = labels.getString("schema_column");
         NAME_COLUMN = labels.getString("name_column");
@@ -163,7 +165,9 @@ public abstract class MarkupDocument {
                     new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
                     new MarkupTableColumn(REQUIRED_COLUMN, 1),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1),
-                    new MarkupTableColumn(DEFAULT_COLUMN, 1));
+                    new MarkupTableColumn(DEFAULT_COLUMN, 1),
+                    new MarkupTableColumn(EXAMPLE_COLUMN, 1)
+                );
             if (MapUtils.isNotEmpty(objectType.getProperties())) {
                 for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
                     Property property = propertyEntry.getValue();
@@ -184,7 +188,9 @@ public abstract class MarkupDocument {
                             propertyDescriptor.getDescription(property, propertyName),
                             Boolean.toString(property.getRequired()),
                             propertyType.displaySchema(docBuilder),
-                            PropertyUtils.getDefaultValue(property));
+                            PropertyUtils.getDefaultValue(property),
+                            PropertyUtils.getExample(property)
+                    );
                     cells.add(content);
                 }
                 docBuilder.tableWithColumnSpecs(cols, cells);

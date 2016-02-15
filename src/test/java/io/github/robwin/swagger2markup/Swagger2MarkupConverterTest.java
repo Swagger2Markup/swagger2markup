@@ -365,8 +365,8 @@ public class Swagger2MarkupConverterTest {
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath()))).contains(
-                "== Определения");
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath()),  Charset.forName("UTF-8")))
+                .contains("== Определения");
     }
 
     /**
