@@ -20,7 +20,6 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Multimap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
@@ -34,10 +33,21 @@ import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.github.robwin.swagger2markup.utils.TagUtils;
-import io.swagger.models.*;
+import io.swagger.models.HttpMethod;
+import io.swagger.models.Model;
+import io.swagger.models.Operation;
+import io.swagger.models.Path;
+import io.swagger.models.RefModel;
+import io.swagger.models.Response;
+import io.swagger.models.Tag;
 import io.swagger.models.auth.SecuritySchemeDefinition;
+import io.swagger.models.parameters.AbstractSerializableParameter;
+import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.RefParameter;
 import io.swagger.models.properties.Property;
+import io.swagger.models.properties.RefProperty;
+import io.swagger.util.Json;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
@@ -50,7 +60,17 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import static io.github.robwin.swagger2markup.utils.TagUtils.convertTagsListToMap;
@@ -85,6 +105,7 @@ public class PathsDocument extends MarkupDocument {
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
+    private boolean generateExamples;
     private boolean handWrittenDescriptionsEnabled;
     private String descriptionsFolderPath;
     private final GroupBy pathsGroupedBy;
@@ -120,6 +141,10 @@ public class PathsDocument extends MarkupDocument {
         if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
             this.examplesEnabled = true;
             this.examplesFolderPath = swagger2MarkupConfig.getExamplesFolderPath();
+        }
+        if (swagger2MarkupConfig.shouldGenerateExamples()) {
+            this.examplesEnabled = true;
+            this.generateExamples = true;
         }
         if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
             this.handWrittenDescriptionsEnabled = true;
@@ -538,27 +563,48 @@ public class PathsDocument extends MarkupDocument {
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(examplesEnabled){
-            Optional<String> curlExample = example(normalizeOperationFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
-            if (!curlExample.isPresent())
-                curlExample = example(normalizeOperationFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
+            Optional<String> curlExample = Optional.absent();
+            Optional<String> requestExample = Optional.absent();
+            Optional<String> responseExample = Optional.absent();
+            Map<String, Object> responseExampleMap = MapUtils.EMPTY_MAP;
+
+            if (generateExamples) {
+                requestExample = generateRequestExample(operation.getOperation());
+                responseExampleMap = generateResponseExampleMap(operation.getOperation());
+            } else {
+                curlExample = example(normalizeOperationFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
+                if (!curlExample.isPresent())
+                    curlExample = example(normalizeOperationFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
+                requestExample = example(normalizeOperationFileName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
+                if (!requestExample.isPresent())
+                    requestExample = example(normalizeOperationFileName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
+                responseExample = example(normalizeOperationFileName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
+                if (!responseExample.isPresent())
+                    responseExample = example(normalizeOperationFileName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
+            }
+
             if(curlExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
                 docBuilder.paragraph(curlExample.get());
             }
 
-            Optional<String> requestExample = example(normalizeOperationFileName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
-            if (!requestExample.isPresent())
-                requestExample = example(normalizeOperationFileName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
             if(requestExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
-                docBuilder.paragraph(requestExample.get());
+                if (generateExamples) {
+                    docBuilder.listing(requestExample.get());
+                } else {
+                    docBuilder.paragraph(requestExample.get());
+                }
             }
-            Optional<String> responseExample = example(normalizeOperationFileName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
-            if (!responseExample.isPresent())
-                responseExample = example(normalizeOperationFileName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
-            if(responseExample.isPresent()){
+            if (responseExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
                 docBuilder.paragraph(responseExample.get());
+            } else if (generateExamples && responseExampleMap.size() > 0) {
+                addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
+                for (Map.Entry<String, Object> response : responseExampleMap.entrySet()) {
+                    docBuilder.sectionTitleLevel4(RESPONSE + ' ' + response.getKey() + ':');
+                    docBuilder.listing(Json.pretty(response.getValue()));
+                }
             }
         }
     }
@@ -594,6 +640,86 @@ public class PathsDocument extends MarkupDocument {
             logger.warn("No example file found with correct file name extension in folder: {}", Paths.get(examplesFolderPath, exampleFolder));
         }
         return Optional.absent();
+    }
+
+    /**
+     * Generates a Map of response examples
+     *
+     * @param operation the Swagger Operation
+     * @return map containing response examples.
+     */
+    private Map<String, Object> generateResponseExampleMap(Operation operation) {
+        Map<String, Object> examples = new HashMap<>();
+        Map<String, Response> responses = operation.getResponses();
+        for (Map.Entry<String, Response> responseEntry : responses.entrySet()) {
+            Response response = responseEntry.getValue();
+            Object example = response.getExamples();
+            if (example != null) {
+                examples.put(responseEntry.getKey(), example);
+            } else {
+                Property schema = response.getSchema();
+                example = schema != null ? schema.getExample() : null;
+                if (example == null && schema instanceof RefProperty) {
+                    String simpleRef = ((RefProperty) schema).getSimpleRef();
+                    example = generateExampleForRefModel(simpleRef);
+                }
+                if (example != null) {
+                    examples.put(responseEntry.getKey(), example);
+                }
+            }
+        }
+        return examples;
+    }
+
+    /**
+     * Generates examples for request
+     *
+     * @param operation the Swagger Operation
+     * @return an Optional with the example content
+     */
+    private Optional<String> generateRequestExample(Operation operation) {
+        List<Parameter> parameters = operation.getParameters();
+        Object example = null;
+        for (Parameter parameter : parameters) {
+            if (parameter instanceof BodyParameter) {
+                if (((BodyParameter) parameter).getSchema() instanceof RefModel) {
+                    String simpleRef = ((RefModel) ((BodyParameter) parameter).getSchema()).getSimpleRef();
+                    example = generateExampleForRefModel(simpleRef);
+                } else {
+                    example = ((BodyParameter) parameter).getExamples();
+                }
+            } else if (parameter instanceof AbstractSerializableParameter) {
+                example = ((AbstractSerializableParameter) parameter).getExample();
+            } else if (parameter instanceof RefParameter) {
+                String simpleRef = ((RefParameter) parameter).getSimpleRef();
+                example = generateExampleForRefModel(simpleRef);
+            }
+        }
+        String result = example != null ? Json.pretty(example) : null;
+        return Optional.fromNullable(result);
+    }
+
+    /**
+     * Generates an example object from a simple reference
+     *
+     * @param simpleRef the simple reference string
+     * @return returns an Object or Map of examples
+     */
+    private Object generateExampleForRefModel(String simpleRef) {
+        Model model = swagger.getDefinitions().get(simpleRef);
+        Object example = null;
+        if (model != null) {
+            example = model.getExample();
+            if (example == null) {
+                Map<String, String> exampleMap = new HashMap<>();
+                for (Map.Entry<String,Property> property : model.getProperties().entrySet()) {
+                    String exampleString = property.getValue().getExample();
+                    exampleMap.put(property.getKey(), exampleString != null ? exampleString : "");
+                }
+                example = exampleMap;
+            }
+        }
+        return example;
     }
 
     /**
