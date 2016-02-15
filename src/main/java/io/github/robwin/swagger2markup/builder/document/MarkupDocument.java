@@ -31,6 +31,7 @@ import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -45,6 +47,8 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  * @author Robert Winkler
  */
 public abstract class MarkupDocument {
+
+    protected static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
@@ -124,12 +128,15 @@ public abstract class MarkupDocument {
     }
 
     /**
-     * Create a normalized filename for a separated definition file
-     * @param definitionName name of the definition
-     * @return a normalized filename for the separated definition file
+     * Create a normalized filename
+     * @param name current name of the file
+     * @return a normalized filename
      */
-    protected String normalizeDefinitionFileName(String definitionName) {
-        return definitionName.toLowerCase();
+    protected String normalizeFileName(String name) {
+        String fileName = FILENAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_").toLowerCase();
+        fileName = StringUtils.removeEnd(fileName, "_");
+        fileName = StringUtils.removeStart(fileName, "_");
+        return fileName;
     }
 
     /**
@@ -208,7 +215,7 @@ public abstract class MarkupDocument {
             if (!useInterDocumentCrossReferences || outputDirectory == null)
                 return null;
             else if (separatedDefinitionsEnabled)
-                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
             else
                 return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(definitionsDocument);
         }

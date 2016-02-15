@@ -50,7 +50,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static io.github.robwin.swagger2markup.utils.TagUtils.convertTagsListToMap;
 import static io.github.robwin.swagger2markup.utils.TagUtils.getTagDescription;
@@ -82,8 +81,6 @@ public class PathsDocument extends MarkupDocument {
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
     private static final String DESCRIPTION_FOLDER_NAME = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
-
-    private static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
@@ -236,22 +233,13 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
-     * Create a normalized filename for a separated operation file
-     * @param operation operation
-     * @return a normalized filename for the separated operation file
-     */
-    private String normalizeOperationFileName(String operation) {
-        return FILENAME_FORBIDDEN_PATTERN.matcher(operation).replaceAll("_").toLowerCase();
-    }
-
-    /**
      * Create the operation filename depending on the generation mode
      * @param operation operation
      * @return operation filename
      */
     private String resolveOperationDocument(PathOperation operation) {
         if (this.separatedOperationsEnabled)
-            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeOperationFileName(operation.getId()))).getPath();
+            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeFileName(operation.getId()))).getPath();
         else
             return this.markupDocBuilder.addfileExtension(this.pathsDocument);
     }
@@ -393,9 +381,9 @@ public class PathsDocument extends MarkupDocument {
      */
     private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(handWrittenDescriptionsEnabled){
-            Optional<String> description = handWrittenOperationDescription(normalizeOperationFileName(operation.getId()), DESCRIPTION_FILE_NAME);
+            Optional<String> description = handWrittenOperationDescription(normalizeFileName(operation.getId()), DESCRIPTION_FILE_NAME);
             if (!description.isPresent())
-                description = handWrittenOperationDescription(normalizeOperationFileName(operation.getTitle()), DESCRIPTION_FILE_NAME);
+                description = handWrittenOperationDescription(normalizeFileName(operation.getTitle()), DESCRIPTION_FILE_NAME);
 
             if (description.isPresent()) {
                 operationDescription(description.get(), docBuilder);
@@ -520,9 +508,9 @@ public class PathsDocument extends MarkupDocument {
         if (handWrittenDescriptionsEnabled) {
             final String parameterName = parameter.getName();
             if (isNotBlank(parameterName)) {
-                Optional<String> description = handWrittenOperationDescription(new File(normalizeOperationFileName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
+                Optional<String> description = handWrittenOperationDescription(new File(normalizeFileName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
                 if (!description.isPresent())
-                    description = handWrittenOperationDescription(new File(normalizeOperationFileName(operation.getTitle()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
+                    description = handWrittenOperationDescription(new File(normalizeFileName(operation.getTitle()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
 
                 if (description.isPresent()) {
                     return description.get();
@@ -590,27 +578,27 @@ public class PathsDocument extends MarkupDocument {
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(examplesEnabled){
-            Optional<String> curlExample = example(normalizeOperationFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
+            Optional<String> curlExample = example(normalizeFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
             if (!curlExample.isPresent())
-                curlExample = example(normalizeOperationFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
+                curlExample = example(normalizeFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
 
             if(curlExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
                 docBuilder.paragraph(curlExample.get());
             }
 
-            Optional<String> requestExample = example(normalizeOperationFileName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
+            Optional<String> requestExample = example(normalizeFileName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
             if (!requestExample.isPresent())
-                requestExample = example(normalizeOperationFileName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
+                requestExample = example(normalizeFileName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
 
             if(requestExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
                 docBuilder.paragraph(requestExample.get());
             }
 
-            Optional<String> responseExample = example(normalizeOperationFileName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
+            Optional<String> responseExample = example(normalizeFileName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
             if (!responseExample.isPresent())
-                responseExample = example(normalizeOperationFileName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
+                responseExample = example(normalizeFileName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
 
             if(responseExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);

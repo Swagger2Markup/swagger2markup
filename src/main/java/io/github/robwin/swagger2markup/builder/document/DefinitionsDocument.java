@@ -26,7 +26,6 @@ import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
-import io.swagger.models.Operation;
 import io.swagger.models.RefModel;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
@@ -161,7 +160,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private String resolveDefinitionDocument(String definitionName) {
         if (separatedDefinitionsEnabled)
-            return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+            return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
         else
             return markupDocBuilder.addfileExtension(definitionsDocument);
     }
@@ -448,7 +447,7 @@ public class DefinitionsDocument extends MarkupDocument {
             String defaultResolver = super.apply(definitionName);
 
             if (defaultResolver != null && separatedDefinitionsEnabled)
-                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName));
+                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(normalizeFileName(definitionName));
             else
                 return defaultResolver;
         }
