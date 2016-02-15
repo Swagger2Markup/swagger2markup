@@ -312,9 +312,9 @@ public class PathsDocument extends MarkupDocument {
         if(operation != null){
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
-            inlineDefinitions(parametersSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
-            inlineDefinitions(bodyParameterSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
-            inlineDefinitions(responsesSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
+            inlineDefinitions(parametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), inlineSchemaDepthLevel, docBuilder);
+            inlineDefinitions(bodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), inlineSchemaDepthLevel, docBuilder);
+            inlineDefinitions(responsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), inlineSchemaDepthLevel, docBuilder);
             consumesSection(operation, docBuilder);
             producesSection(operation, docBuilder);
             tagsSection(operation, docBuilder);
@@ -438,7 +438,7 @@ public class PathsDocument extends MarkupDocument {
                             String localTypeName = parameter.getName();
 
                             type.setName(localTypeName);
-                            type.setUniqueName(uniqueTypeName(localTypeName));
+                            type.setUniqueName(operation.getId() + " " + localTypeName);
                             localDefinitions.add((ObjectType)type);
                             type = new RefType(type);
                         }
@@ -493,7 +493,7 @@ public class PathsDocument extends MarkupDocument {
                         } else {
                             docBuilder.paragraph(typeInfos.toString());
 
-                            localDefinitions.addAll(typeProperties((ObjectType)type, this.inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            localDefinitions.addAll(typeProperties((ObjectType)type, operation.getId(), this.inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
@@ -737,7 +737,7 @@ public class PathsDocument extends MarkupDocument {
                             String localTypeName = RESPONSE + " " + entry.getKey();
 
                             type.setName(localTypeName);
-                            type.setUniqueName(uniqueTypeName(localTypeName));
+                            type.setUniqueName(operation.getId() + " " + localTypeName);
                             localDefinitions.add((ObjectType)type);
                             type = new RefType(type);
                         }
@@ -769,17 +769,18 @@ public class PathsDocument extends MarkupDocument {
     /**
      * Builds inline schema definitions
      * @param definitions all inline definitions to display
+     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
      * @param depth current inline schema depth
      * @param docBuilder the docbuilder do use for output
      */
-    private void inlineDefinitions(List<ObjectType> definitions, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (ObjectType definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<ObjectType> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
+                List<ObjectType> localDefinitions = typeProperties(definition, uniquePrefix, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }
         }
 

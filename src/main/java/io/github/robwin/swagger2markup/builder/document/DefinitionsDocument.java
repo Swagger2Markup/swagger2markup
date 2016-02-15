@@ -219,7 +219,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         addDefinitionTitle(definitionName, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
-        propertiesSection(definitions, definitionName, model, docBuilder);
+        inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, inlineSchemaDepthLevel, docBuilder);
         definitionSchema(definitionName, docBuilder);
     }
 
@@ -276,13 +276,13 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param definitionName name of the definition to display
      * @param model model of the definition to display
      * @param docBuilder the docbuilder do use for output
+     * @return a list of inlined types.
      */
-    private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
+    private List<ObjectType> propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
         ObjectType type = new ObjectType(definitionName, properties);
 
-        List<ObjectType> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
-        inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
+        return typeProperties(type, definitionName, 1, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
@@ -420,16 +420,17 @@ public class DefinitionsDocument extends MarkupDocument {
     /**
      * Builds inline schema definitions
      * @param definitions all inline definitions to display
+     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
      * @param depth current inline schema depth
      * @param docBuilder the docbuilder do use for output
      */
-    private void inlineDefinitions(List<ObjectType> definitions, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
             for (ObjectType definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<ObjectType> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                List<ObjectType> localDefinitions = typeProperties(definition, uniquePrefix, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }
         }
 

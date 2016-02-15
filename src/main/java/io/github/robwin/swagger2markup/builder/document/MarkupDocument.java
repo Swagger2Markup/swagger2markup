@@ -38,7 +38,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -70,8 +69,6 @@ public abstract class MarkupDocument {
     protected boolean useInterDocumentCrossReferences;
     protected String interDocumentCrossReferencesPrefix;
 
-
-    protected static AtomicInteger typeIdCount = new AtomicInteger(0);
 
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
         this.swagger = swagger2MarkupConfig.getSwagger();
@@ -136,24 +133,16 @@ public abstract class MarkupDocument {
     }
 
     /**
-     * Make the type {@code name} unique in the scope of the program execution by appending an increment.
-     * @param name type name
-     * @return unique type name
-     */
-    public String uniqueTypeName(String name) {
-        return name + "-" + typeIdCount.getAndIncrement();
-    }
-
-    /**
-     * Build the property table for an object type
+     * Build a generic property table for any ObjectType
      * @param type to display
+     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
      * @param depth current inline schema object depth
      * @param propertyDescriptor property descriptor to apply to properties
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      * @param docBuilder the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    public List<ObjectType> typeProperties(ObjectType type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    public List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
@@ -170,7 +159,7 @@ public abstract class MarkupDocument {
                 if (depth > 0 && propertyType instanceof ObjectType) {
                     if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
                         propertyType.setName(propertyName);
-                        propertyType.setUniqueName(uniqueTypeName(propertyName));
+                        propertyType.setUniqueName(uniquePrefix + " " + propertyName);
                         localDefinitions.add((ObjectType)propertyType);
 
                         propertyType = new RefType(propertyType);

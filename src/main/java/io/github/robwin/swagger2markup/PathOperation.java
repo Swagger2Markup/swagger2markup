@@ -41,7 +41,7 @@ public class PathOperation {
         String id = operation.getOperationId();
 
         if (id == null)
-            id = getMethod() + " " + getPath();
+            id = getPath() + " " + getMethod();
 
         return id;
     }
