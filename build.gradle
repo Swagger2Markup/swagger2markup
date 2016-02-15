@@ -14,7 +14,7 @@ buildscript {
     }
 }
 description = 'swagger2markup Build'
-version = '0.9.3-SNAPSHOT'
+version = '0.9.3-VOC-1'
 group = 'io.github.robwin'
 
 apply plugin: 'java'
@@ -58,7 +58,7 @@ dependencies {
 
 dependencyManagement {
     dependencies {
-        dependency "io.github.robwin:markup-document-builder:0.1.6-SNAPSHOT"
+        dependency "io.github.robwin:markup-document-builder:0.1.6-VOC"
         dependency "io.swagger:swagger-compat-spec-parser:1.0.17"
         dependency "commons-collections:commons-collections:3.2.1"
         dependency "commons-io:commons-io:2.4"
