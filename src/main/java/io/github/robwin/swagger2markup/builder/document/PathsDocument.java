@@ -20,7 +20,6 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Multimap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
@@ -67,6 +66,7 @@ public class PathsDocument extends MarkupDocument {
     private final String PATHS;
     private final String RESOURCES;
     private final String PARAMETERS;
+    private final String BODY_PARAMETER;
     private final String RESPONSES;
     private final String EXAMPLE_CURL;
     private final String EXAMPLE_REQUEST;
@@ -75,12 +75,14 @@ public class PathsDocument extends MarkupDocument {
     private final String SECURITY;
     private final String TYPE_COLUMN;
     private final String HTTP_CODE_COLUMN;
+    private final String PARAMETER;
+
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
     private static final String DESCRIPTION_FOLDER_NAME = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
-    private final String PARAMETER;
+
     private static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     private boolean examplesEnabled;
@@ -94,6 +96,7 @@ public class PathsDocument extends MarkupDocument {
     private boolean separatedOperationsEnabled;
     private String separatedOperationsFolder;
     private String pathsDocument;
+    private final boolean flatBody;
 
 
     public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
@@ -105,6 +108,7 @@ public class PathsDocument extends MarkupDocument {
         PATHS = labels.getString("paths");
         RESOURCES = labels.getString("resources");
         PARAMETERS = labels.getString("parameters");
+        BODY_PARAMETER = labels.getString("body_parameter");
         RESPONSES = labels.getString("responses");
         EXAMPLE_CURL = labels.getString("example_curl");
         EXAMPLE_REQUEST = labels.getString("example_request");
@@ -159,6 +163,7 @@ public class PathsDocument extends MarkupDocument {
         }
         tagOrdering = swagger2MarkupConfig.getTagOrdering();
         operationOrdering = swagger2MarkupConfig.getOperationOrdering();
+        this.flatBody = swagger2MarkupConfig.isFlatBody();
     }
 
     /**
@@ -308,6 +313,7 @@ public class PathsDocument extends MarkupDocument {
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
             inlineDefinitions(parametersSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
+            inlineDefinitions(bodyParameterSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
             inlineDefinitions(responsesSection(operation, docBuilder), inlineSchemaDepthLevel, docBuilder);
             consumesSection(operation, docBuilder);
             producesSection(operation, docBuilder);
@@ -390,6 +396,7 @@ public class PathsDocument extends MarkupDocument {
             Optional<String> description = handWrittenOperationDescription(normalizeOperationFileName(operation.getId()), DESCRIPTION_FILE_NAME);
             if (!description.isPresent())
                 description = handWrittenOperationDescription(normalizeOperationFileName(operation.getTitle()), DESCRIPTION_FILE_NAME);
+
             if (description.isPresent()) {
                 operationDescription(description.get(), docBuilder);
             } else {
@@ -410,9 +417,9 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-    private List<Type> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private List<ObjectType> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
-        List<Type> localDefinitions = new ArrayList<>();
+        List<ObjectType> localDefinitions = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(parameters)){
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
@@ -422,31 +429,75 @@ public class PathsDocument extends MarkupDocument {
                     new MarkupTableColumn(REQUIRED_COLUMN, 1),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1),
                     new MarkupTableColumn(DEFAULT_COLUMN, 1));
-            for(Parameter parameter : parameters){
-                Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
-                if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
-                    if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
-                        String localTypeName = parameter.getName();
+            for(Parameter parameter : parameters) {
+                if (!parameter.getIn().equals("body") || !this.flatBody) {
+                    Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
 
-                        type.setName(localTypeName);
-                        type.setUniqueName(uniqueTypeName(localTypeName));
-                        localDefinitions.add(type);
-                        type = new RefType(type);
+                    if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
+                        if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
+                            String localTypeName = parameter.getName();
+
+                            type.setName(localTypeName);
+                            type.setUniqueName(uniqueTypeName(localTypeName));
+                            localDefinitions.add((ObjectType)type);
+                            type = new RefType(type);
+                        }
                     }
+                    String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
+                    // Table content row
+                    List<String> content = Arrays.asList(
+                            parameterType,
+                            parameter.getName(),
+                            parameterDescription(operation, parameter),
+                            Boolean.toString(parameter.getRequired()),
+                            type.displaySchema(markupDocBuilder),
+                            ParameterUtils.getDefaultValue(parameter));
+                    cells.add(content);
                 }
-                String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
-                // Table content row
-                List<String> content = Arrays.asList(
-                        parameterType,
-                        parameter.getName(),
-                        parameterDescription(operation, parameter),
-                        Boolean.toString(parameter.getRequired()),
-                        type.displaySchema(markupDocBuilder),
-                        ParameterUtils.getDefaultValue(parameter));
-               cells.add(content);
             }
             addOperationSectionTitle(PARAMETERS, docBuilder);
             docBuilder.tableWithColumnSpecs(cols, cells);
+        }
+
+        return localDefinitions;
+    }
+
+    /**
+     * Builds the body parameter section, if {@code Swagger2MarkupConfig.isIsolatedBody()} is true
+     * @param operation the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
+     * @return a list of inlined types.
+     */
+    private List<ObjectType> bodyParameterSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+        List<ObjectType> localDefinitions = new ArrayList<>();
+
+        if (this.flatBody) {
+            List<Parameter> parameters = operation.getOperation().getParameters();
+            if (CollectionUtils.isNotEmpty(parameters)) {
+                for (Parameter parameter : parameters) {
+                    if (parameter.getIn().equals("body")) {
+                        Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
+
+                        addOperationSectionTitle(BODY_PARAMETER, docBuilder);
+                        if (isNotBlank(parameter.getDescription())) {
+                            docBuilder.paragraph(parameter.getDescription());
+                        }
+
+                        StringBuilder typeInfos = new StringBuilder();
+                        typeInfos.append(REQUIRED_COLUMN + ": " + parameter.getRequired()).append(System.lineSeparator());
+                        typeInfos.append(NAME_COLUMN + ": " + parameter.getName()).append(System.lineSeparator());
+                        if (!(type instanceof ObjectType)) {
+                            typeInfos.append(TYPE_COLUMN + ": " + type.displaySchema(docBuilder)).append(System.lineSeparator());
+
+                            docBuilder.paragraph(typeInfos.toString());
+                        } else {
+                            docBuilder.paragraph(typeInfos.toString());
+
+                            localDefinitions.addAll(typeProperties((ObjectType)type, this.inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                        }
+                    }
+                }
+            }
         }
 
         return localDefinitions;
@@ -472,6 +523,7 @@ public class PathsDocument extends MarkupDocument {
                 Optional<String> description = handWrittenOperationDescription(new File(normalizeOperationFileName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
                 if (!description.isPresent())
                     description = handWrittenOperationDescription(new File(normalizeOperationFileName(operation.getTitle()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
+
                 if (description.isPresent()) {
                     return description.get();
                 } else {
@@ -541,6 +593,7 @@ public class PathsDocument extends MarkupDocument {
             Optional<String> curlExample = example(normalizeOperationFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
             if (!curlExample.isPresent())
                 curlExample = example(normalizeOperationFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
+
             if(curlExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
                 docBuilder.paragraph(curlExample.get());
@@ -549,13 +602,16 @@ public class PathsDocument extends MarkupDocument {
             Optional<String> requestExample = example(normalizeOperationFileName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
             if (!requestExample.isPresent())
                 requestExample = example(normalizeOperationFileName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
+
             if(requestExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
                 docBuilder.paragraph(requestExample.get());
             }
+
             Optional<String> responseExample = example(normalizeOperationFileName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
             if (!responseExample.isPresent())
                 responseExample = example(normalizeOperationFileName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
+
             if(responseExample.isPresent()){
                 addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
                 docBuilder.paragraph(responseExample.get());
@@ -662,9 +718,9 @@ public class PathsDocument extends MarkupDocument {
         return Optional.absent();
     }
 
-    private List<Type> responsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private List<ObjectType> responsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
-        List<Type> localDefinitions = new ArrayList<>();
+        List<ObjectType> localDefinitions = new ArrayList<>();
         if(MapUtils.isNotEmpty(responses)){
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
@@ -682,7 +738,7 @@ public class PathsDocument extends MarkupDocument {
 
                             type.setName(localTypeName);
                             type.setUniqueName(uniqueTypeName(localTypeName));
-                            localDefinitions.add(type);
+                            localDefinitions.add((ObjectType)type);
                             type = new RefType(type);
                         }
                     }
@@ -716,13 +772,13 @@ public class PathsDocument extends MarkupDocument {
      * @param depth current inline schema depth
      * @param docBuilder the docbuilder do use for output
      */
-    private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
-            for (Type definition: definitions) {
+            for (ObjectType definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<Type> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
-                for (Type localDefinition : localDefinitions)
+                List<ObjectType> localDefinitions = typeProperties(definition, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
+                for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
         }

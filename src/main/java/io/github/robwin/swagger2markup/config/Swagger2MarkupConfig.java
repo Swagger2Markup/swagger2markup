@@ -23,7 +23,6 @@ import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.PathOperation;
-import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
 
 import java.util.Comparator;
@@ -47,6 +46,7 @@ public class Swagger2MarkupConfig {
     private final Comparator<String> definitionOrdering;
     private final boolean interDocumentCrossReferences;
     private final String interDocumentCrossReferencesPrefix;
+    private final boolean flatBody;
 
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
@@ -73,13 +73,15 @@ public class Swagger2MarkupConfig {
      * @param definitionOrdering specifies a custom comparator function to order definitions (null = as-is ordering)
      * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
      * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
+     * @param flatBody optionally isolate the body parameter, if any, from other parameters
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering,
                                 Comparator<String> definitionOrdering,
-                                boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix) {
+                                boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix,
+                                boolean flatBody) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -96,6 +98,7 @@ public class Swagger2MarkupConfig {
         this.definitionOrdering = definitionOrdering;
         this.interDocumentCrossReferences = interDocumentCrossReferences;
         this.interDocumentCrossReferencesPrefix = interDocumentCrossReferencesPrefix;
+        this.flatBody = flatBody;
     }
 
     public Swagger getSwagger() {
@@ -184,5 +187,9 @@ public class Swagger2MarkupConfig {
 
     public String getInterDocumentCrossReferencesPrefix() {
         return interDocumentCrossReferencesPrefix;
+    }
+
+    public boolean isFlatBody() {
+        return flatBody;
     }
 }

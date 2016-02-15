@@ -153,47 +153,40 @@ public abstract class MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
-        List<Type> localDefinitions = new ArrayList<>();
-        if (type instanceof ObjectType) {
-            ObjectType objectType = (ObjectType) type;
-            List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(NAME_COLUMN, 1),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
-                    new MarkupTableColumn(REQUIRED_COLUMN, 1),
-                    new MarkupTableColumn(SCHEMA_COLUMN, 1),
-                    new MarkupTableColumn(DEFAULT_COLUMN, 1));
-            if (MapUtils.isNotEmpty(objectType.getProperties())) {
-                for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
-                    Property property = propertyEntry.getValue();
-                    String propertyName = propertyEntry.getKey();
-                    Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
-                    if (depth > 0 && propertyType instanceof ObjectType) {
-                        if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
-                            propertyType.setName(propertyName);
-                            propertyType.setUniqueName(uniqueTypeName(propertyName));
-                            localDefinitions.add(propertyType);
+    public List<ObjectType> typeProperties(ObjectType type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<List<String>> cells = new ArrayList<>();
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn(NAME_COLUMN, 1),
+                new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
+                new MarkupTableColumn(REQUIRED_COLUMN, 1),
+                new MarkupTableColumn(SCHEMA_COLUMN, 1),
+                new MarkupTableColumn(DEFAULT_COLUMN, 1));
+        if (MapUtils.isNotEmpty(type.getProperties())) {
+            for (Map.Entry<String, Property> propertyEntry : type.getProperties().entrySet()) {
+                Property property = propertyEntry.getValue();
+                String propertyName = propertyEntry.getKey();
+                Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
+                if (depth > 0 && propertyType instanceof ObjectType) {
+                    if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
+                        propertyType.setName(propertyName);
+                        propertyType.setUniqueName(uniqueTypeName(propertyName));
+                        localDefinitions.add((ObjectType)propertyType);
 
-                            propertyType = new RefType(propertyType);
-                        }
+                        propertyType = new RefType(propertyType);
                     }
-
-                    List<String> content = Arrays.asList(
-                            propertyName,
-                            propertyDescriptor.getDescription(property, propertyName),
-                            Boolean.toString(property.getRequired()),
-                            propertyType.displaySchema(docBuilder),
-                            PropertyUtils.getDefaultValue(property));
-                    cells.add(content);
                 }
-                docBuilder.tableWithColumnSpecs(cols, cells);
+
+                List<String> content = Arrays.asList(
+                        propertyName,
+                        propertyDescriptor.getDescription(property, propertyName),
+                        Boolean.toString(property.getRequired()),
+                        propertyType.displaySchema(docBuilder),
+                        PropertyUtils.getDefaultValue(property));
+                cells.add(content);
             }
-            else {
-                docBuilder.textLine(NO_CONTENT);
-            }
-        }
-        else {
+            docBuilder.tableWithColumnSpecs(cols, cells);
+        } else {
             docBuilder.textLine(NO_CONTENT);
         }
 

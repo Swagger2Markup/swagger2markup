@@ -279,9 +279,9 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
-        Type type = new ObjectType(definitionName, properties);
+        ObjectType type = new ObjectType(definitionName, properties);
 
-        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+        List<ObjectType> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
         inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
     }
 
@@ -423,12 +423,12 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param depth current inline schema depth
      * @param docBuilder the docbuilder do use for output
      */
-    private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
-            for (Type definition: definitions) {
+            for (ObjectType definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
-                for (Type localDefinition : localDefinitions)
+                List<ObjectType> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
             }
         }

@@ -157,6 +157,7 @@ public class Swagger2MarkupConverter {
         private Language outputLanguage = Language.EN;
         private int inlineSchemaDepthLevel = 0;
         private Comparator<String> tagOrdering = Ordering.natural();
+        private boolean flatBody = false;
 
         private static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
                 .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
@@ -209,7 +210,7 @@ public class Swagger2MarkupConverter {
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
                     outputLanguage, inlineSchemaDepthLevel, tagOrdering, operationOrdering, definitionOrdering,
-                    interDocumentCrossReferences, interDocumentCrossReferencesPrefix));
+                    interDocumentCrossReferences, interDocumentCrossReferencesPrefix, flatBody));
         }
 
         /**
@@ -394,6 +395,16 @@ public class Swagger2MarkupConverter {
 
             this.interDocumentCrossReferences = true;
             this.interDocumentCrossReferencesPrefix = prefix;
+            return this;
+        }
+
+        /**
+         * Optionally isolate the body parameter, if any, from other parameters
+         *
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withFlatBody() {
+            this.flatBody = true;
             return this;
         }
     }

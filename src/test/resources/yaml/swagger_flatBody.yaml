@@ -1,0 +1,264 @@
+swagger: "2.0"
+info:
+  title: API
+  description: Service API
+  version: "2.18"
+host: service.host.com
+schemes:
+  - https
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /LaunchCommand:
+    post:
+      summary: LaunchCommand
+      description: Example of a RPC call using both a body and some parameters
+      tags:
+        - All
+      parameters:
+        - name: Version
+          description: The API version
+          type: string
+          in: query
+        - name: Option
+          description: An optional option
+          type: string
+          in: query
+        - name: LaunchCommandRequest
+          description: |
+            Launch something new
+          in: body
+          schema:
+            description: Inline schema
+            type: object
+            required:
+              - Command
+              - MinCount
+              - MaxCount
+            properties:
+              Command:
+                description: Dummy description
+                type: object
+                properties:
+                  path:
+                    description: Command path
+                    type: string
+                  args:
+                    description: Command arguments
+                    type: string
+              Options:
+                description: Dummy description
+                type: array
+                items:
+                  type: string
+                type: string
+              Location:
+                description: Dummy description
+                $ref: '#/definitions/Location'
+      responses:
+        200:
+          description: Result
+          schema:
+            type: object
+            properties:
+              ReservationId:
+                description: <description>
+                type: string
+              Location:
+                description: <description>
+                $ref: '#/definitions/Location'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /LaunchCommandRef:
+    post:
+      summary: LaunchCommand with body ref
+      description: Example of a RPC call using both a ref body and some parameters
+      tags:
+        - All
+      parameters:
+        - name: Version
+          description: The API version
+          type: string
+          in: query
+        - name: Option
+          description: An optional option
+          type: string
+          in: query
+        - name: LaunchCommandRequest
+          description: |
+            Launch something new
+          in: body
+          schema:
+            $ref: "#/definitions/LaunchCommandRequest"
+
+      responses:
+        200:
+          description: Result
+          schema:
+            type: object
+            properties:
+              ReservationId:
+                description: <description>
+                type: string
+              Location:
+                description: <description>
+                $ref: '#/definitions/Location'
+        400:
+          description: Error
+          schema:
+            $ref: '#/definitions/Error'
+
+  /LaunchCommand2:
+    post:
+      summary: LaunchCommand
+      description: Test for a non object body
+      tags:
+        - All
+      parameters:
+        - name: Version
+          description: The API version
+          type: string
+          in: query
+        - name: Option
+          description: An optional option
+          type: string
+          in: query
+        - name: LaunchCommandRequest
+          description: |
+            Launch something new
+          in: body
+          type: string
+#           schema:
+#             description: String schema
+#             type: string
+
+  /users/{userId}:
+    post:
+      summary: Update user infos
+      description: Example of a Rest call using both a body and some path parameters
+      tags:
+        - All
+      parameters:
+        - name: userId
+          description: The user ID
+          type: string
+          in: path
+        - name: LaunchCommandRequest
+          description: |
+            Launch something new
+          in: body
+          schema:
+            description: Inline schema
+            type: body
+            required:
+              - Command
+              - MinCount
+              - MaxCount
+            properties:
+              Command:
+                description: Dummy description
+                type: object
+                properties:
+                  path:
+                    description: Command path
+                    type: string
+                  args:
+                    description: Command arguments
+                    type: string
+              Options:
+                description: Dummy description
+                type: array
+                items:
+                  type: string
+                type: string
+              Location:
+                description: Dummy description
+                $ref: '#/definitions/Location'
+
+
+definitions:
+
+  LaunchCommandRequest:
+    description: Inline schema
+    type: object
+    required:
+      - Command
+      - MinCount
+      - MaxCount
+    properties:
+      Command:
+        description: Dummy description
+        type: object
+        properties:
+          path:
+            description: Command path
+            type: string
+          args:
+            description: Command arguments
+            type: string
+      Options:
+        description: Dummy description
+        type: array
+        items:
+          type: string
+        type: string
+      Location:
+        description: Dummy description
+        $ref: '#/definitions/Location'
+
+  ExternalLocation:
+    $ref: ./swagger_inlineSchema.yaml#/definitions/Location
+
+  Error:
+    type: object
+    properties:
+      error-code:
+        description: Error code
+        type: integer
+      message:
+        description: Error message
+        type: string
+
+  Location:
+    type: object
+    properties:
+      Loop:
+        description: Loop
+        type:
+          $ref: '#/definitions/Location'
+      Place:
+        description: Place
+        type: string
+
+  InlineDepthSchema:
+    type: object
+    properties:
+      Loop:
+        type: object
+        properties:
+          p1:
+            description: Description p1
+            type: string
+          p2:
+            description: Description p2
+            type: object
+            properties:
+              p2-1:
+                description: Description p2-1
+                type: string
+              p2-2:
+                description: Description p2-2
+                type: object
+                properties:
+                  p2-2-1:
+                    description: Description p2-2-1
+                    type: string
+                  p2-2-2:
+                    description: Description p2-2-2
+                    type: boolean
+
