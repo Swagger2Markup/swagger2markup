@@ -40,6 +40,6 @@ public class AbstractMarkupDocBuilderTest {
         assertNormalization(normalize("\u0240"), " \u0240 ");
         assertNormalization(DigestUtils.md5Hex("µu_\u0240this_-_"), "  µ&|ù \u0240This .:/-_#  ");
         assertNormalization("this_is_a_funky_string", "Tĥïŝ ĩš â fůňķŷ Šťŕĭńġ");
-        assertNormalization("", "  @#&(){}[]§!¡$*£%+=/:.;,?¿\\<>| ");
+        assertNormalization("", "  @#&(){}[]!$*%+=/:.;,?\\<>| ");
     }
 }

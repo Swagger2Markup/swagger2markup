@@ -48,6 +48,8 @@ dependencies {
     compile 'com.google.guava:guava'
     compile "commons-codec:commons-codec"
     testCompile 'junit:junit'
+    testCompile "org.mockito:mockito-core"
+
     testCompile 'ch.qos.logback:logback-classic'
 }
 
@@ -55,6 +57,7 @@ dependencyManagement {
     dependencies {
         dependency "org.slf4j:slf4j-api:1.7.12"
         dependency "junit:junit:4.11"
+        dependency "org.mockito:mockito-core:1.9.5"
         dependency "ch.qos.logback:logback-classic:1.1.2"
         dependency "commons-collections:commons-collections:3.2.1"
         dependency "org.apache.commons:commons-lang3:3.2.1"
