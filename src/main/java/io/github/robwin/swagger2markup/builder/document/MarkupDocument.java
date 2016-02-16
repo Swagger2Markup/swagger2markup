@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -71,6 +72,7 @@ public abstract class MarkupDocument {
     protected String outputDirectory;
     protected boolean useInterDocumentCrossReferences;
     protected String interDocumentCrossReferencesPrefix;
+    protected Comparator<String> propertyOrdering;
 
 
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
@@ -83,6 +85,7 @@ public abstract class MarkupDocument {
         this.outputDirectory = outputDirectory;
         this.useInterDocumentCrossReferences = swagger2MarkupConfig.isInterDocumentCrossReferences();
         this.interDocumentCrossReferencesPrefix = swagger2MarkupConfig.getInterDocumentCrossReferencesPrefix();
+        this.propertyOrdering = swagger2MarkupConfig.getPropertyOrdering();
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -158,9 +161,15 @@ public abstract class MarkupDocument {
                 new MarkupTableColumn(SCHEMA_COLUMN, 1),
                 new MarkupTableColumn(DEFAULT_COLUMN, 1));
         if (MapUtils.isNotEmpty(type.getProperties())) {
-            for (Map.Entry<String, Property> propertyEntry : type.getProperties().entrySet()) {
-                Property property = propertyEntry.getValue();
-                String propertyName = propertyEntry.getKey();
+            Set<String> propertyNames;
+            if (this.propertyOrdering == null)
+                propertyNames = new LinkedHashSet<>();
+            else
+                propertyNames = new TreeSet<>(this.propertyOrdering);
+            propertyNames.addAll(type.getProperties().keySet());
+
+            for (String propertyName: propertyNames) {
+                Property property = type.getProperties().get(propertyName);
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
                 if (depth > 0 && propertyType instanceof ObjectType) {
                     if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {

@@ -24,6 +24,7 @@ import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.PathOperation;
 import io.swagger.models.Swagger;
+import io.swagger.models.parameters.Parameter;
 
 import java.util.Comparator;
 
@@ -44,6 +45,9 @@ public class Swagger2MarkupConfig {
     private final Comparator<String> tagOrdering;
     private final Comparator<PathOperation> operationOrdering;
     private final Comparator<String> definitionOrdering;
+    private final Comparator<Parameter> parameterOrdering;
+    private final Comparator<String> propertyOrdering;
+    private final Comparator<String> responseOrdering;
     private final boolean interDocumentCrossReferences;
     private final String interDocumentCrossReferencesPrefix;
     private final boolean flatBody;
@@ -71,6 +75,9 @@ public class Swagger2MarkupConfig {
      * @param tagOrdering specifies a custom comparator function to order tags (null = as-is ordering)
      * @param operationOrdering specifies a custom comparator function to order operations (null = as-is ordering)
      * @param definitionOrdering specifies a custom comparator function to order definitions (null = as-is ordering)
+     * @param parameterOrdering specifies a custom comparator function to order parameters (null = as-is ordering)
+     * @param propertyOrdering specifies a custom comparator function to order properties (null = as-is ordering)
+     * @param responseOrdering specifies a custom comparator function to order responses (null = as-is ordering)
      * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
      * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
      * @param flatBody optionally isolate the body parameter, if any, from other parameters
@@ -79,7 +86,8 @@ public class Swagger2MarkupConfig {
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering,
-                                Comparator<String> definitionOrdering,
+                                Comparator<String> definitionOrdering, Comparator<Parameter> parameterOrdering, Comparator<String> propertyOrdering,
+                                Comparator<String> responseOrdering,
                                 boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix,
                                 boolean flatBody) {
         this.swagger = swagger;
@@ -96,6 +104,9 @@ public class Swagger2MarkupConfig {
         this.tagOrdering = tagOrdering;
         this.operationOrdering = operationOrdering;
         this.definitionOrdering = definitionOrdering;
+        this.parameterOrdering = parameterOrdering;
+        this.propertyOrdering = propertyOrdering;
+        this.responseOrdering = responseOrdering;
         this.interDocumentCrossReferences = interDocumentCrossReferences;
         this.interDocumentCrossReferencesPrefix = interDocumentCrossReferencesPrefix;
         this.flatBody = flatBody;
@@ -155,6 +166,18 @@ public class Swagger2MarkupConfig {
 
     public Comparator<String> getDefinitionOrdering() {
         return definitionOrdering;
+    }
+
+    public Comparator<Parameter> getParameterOrdering() {
+        return parameterOrdering;
+    }
+
+    public Comparator<String> getPropertyOrdering() {
+        return propertyOrdering;
+    }
+
+    public Comparator<String> getResponseOrdering() {
+        return responseOrdering;
     }
 
     public String getOverviewDocument() {

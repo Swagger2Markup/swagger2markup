@@ -92,6 +92,8 @@ public class PathsDocument extends MarkupDocument {
     private final int inlineSchemaDepthLevel;
     private final Comparator<String> tagOrdering;
     private final Comparator<PathOperation> operationOrdering;
+    private final Comparator<Parameter> parameterOrdering;
+    private final Comparator<String> responseOrdering;
     private boolean separatedOperationsEnabled;
     private String separatedOperationsFolder;
     private String pathsDocument;
@@ -160,8 +162,11 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Create separated operation files is disabled.");
             }
         }
-        tagOrdering = swagger2MarkupConfig.getTagOrdering();
-        operationOrdering = swagger2MarkupConfig.getOperationOrdering();
+        this.tagOrdering = swagger2MarkupConfig.getTagOrdering();
+        this.operationOrdering = swagger2MarkupConfig.getOperationOrdering();
+        this.parameterOrdering = swagger2MarkupConfig.getParameterOrdering();
+        this.responseOrdering = swagger2MarkupConfig.getResponseOrdering();
+
         this.flatBody = swagger2MarkupConfig.isFlatBody();
     }
 
@@ -409,7 +414,10 @@ public class PathsDocument extends MarkupDocument {
 
     private List<ObjectType> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
+        if (this.parameterOrdering != null)
+            Collections.sort(parameters, this.parameterOrdering);
         List<ObjectType> localDefinitions = new ArrayList<>();
+
         if(CollectionUtils.isNotEmpty(parameters)){
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
@@ -434,7 +442,7 @@ public class PathsDocument extends MarkupDocument {
                         }
                     }
                     String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
-                    // Table content row
+
                     List<String> content = Arrays.asList(
                             parameterType,
                             parameter.getName(),
@@ -711,20 +719,29 @@ public class PathsDocument extends MarkupDocument {
     private List<ObjectType> responsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
         List<ObjectType> localDefinitions = new ArrayList<>();
+
         if(MapUtils.isNotEmpty(responses)){
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN, 1),
                     new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1));
-            for(Map.Entry<String, Response> entry : responses.entrySet()){
-                Response response = entry.getValue();
+            Set<String> responseNames;
+            if (this.responseOrdering == null)
+                responseNames = new LinkedHashSet<>();
+            else
+                responseNames = new TreeSet<>(this.responseOrdering);
+            responseNames.addAll(responses.keySet());
+
+            for(String responseName : responseNames){
+                Response response = responses.get(responseName);
+
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
                     if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
-                            String localTypeName = RESPONSE + " " + entry.getKey();
+                            String localTypeName = RESPONSE + " " + responseName;
 
                             type.setName(localTypeName);
                             type.setUniqueName(operation.getId() + " " + localTypeName);
@@ -732,9 +749,9 @@ public class PathsDocument extends MarkupDocument {
                             type = new RefType(type);
                         }
                     }
-                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), type.displaySchema(markupDocBuilder)));
+                    cells.add(Arrays.asList(responseName, response.getDescription(), type.displaySchema(markupDocBuilder)));
                 }else{
-                    cells.add(Arrays.asList(entry.getKey(), response.getDescription(), NO_CONTENT));
+                    cells.add(Arrays.asList(responseName, response.getDescription(), NO_CONTENT));
                 }
             }
             addOperationSectionTitle(RESPONSES, docBuilder);
