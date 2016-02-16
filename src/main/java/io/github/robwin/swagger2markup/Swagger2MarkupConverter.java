@@ -192,7 +192,7 @@ public class Swagger2MarkupConverter {
                     }
                 });
 
-        public Ordering<Parameter> PARAMETER_NAME_COMPARATOR = Ordering
+        public static final Ordering<Parameter> PARAMETER_NAME_COMPARATOR = Ordering
                 .natural()
                 .onResultOf(new Function<Parameter, String>() {
                     @Nullable
@@ -352,7 +352,7 @@ public class Swagger2MarkupConverter {
         /**
          * Specifies maximum depth level for inline object schema displaying (0 = no inline schemas)
          *
-         * @param inlineSchemaDepthLevel
+         * @param inlineSchemaDepthLevel number of recursion levels for inline schemas display
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
@@ -365,7 +365,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param tagOrdering
+         * @param tagOrdering tag comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withTagOrdering(Comparator<String> tagOrdering) {
@@ -378,7 +378,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied on operation 'path', then explicit ordering is applied on operation 'method'
          * Set ordering to null to keep swagger original order
          *
-         * @param operationOrdering
+         * @param operationOrdering operation comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
@@ -391,7 +391,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param definitionOrdering
+         * @param definitionOrdering definition comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withDefinitionOrdering(Comparator<String> definitionOrdering) {
@@ -404,7 +404,7 @@ public class Swagger2MarkupConverter {
          * By default, explicit ordering is applied on parameter 'in', then natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param parameterOrdering
+         * @param parameterOrdering parameter comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withParameterOrdering(Comparator<Parameter> parameterOrdering) {
@@ -417,7 +417,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param propertyOrdering
+         * @param propertyOrdering property comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withPropertyOrdering(Comparator<String> propertyOrdering) {
@@ -430,7 +430,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param responseOrdering
+         * @param responseOrdering response comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withResponseOrdering(Comparator<String> responseOrdering) {
