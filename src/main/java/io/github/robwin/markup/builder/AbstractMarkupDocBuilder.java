@@ -19,6 +19,7 @@
 package io.github.robwin.markup.builder;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,8 +38,8 @@ import java.util.regex.Pattern;
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
-    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\p{InCombiningDiacriticalMarks}@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
-    private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
+    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
+    private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -152,18 +153,19 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     /**
      * Generic normalization algorithm for all markups (less common denominator character set).
      * Key points :
+     * - Anchor is normalized (Normalized.Form.NFD)
+     * - Punctuations (excluding [-_]) and spaces are replaced with escape character (depends on markup : Markup.E)
+     * - Beginning, ending separation characters [-_] are ignored, repeating separation characters are simplified (keep first one)
      * - Anchor is trimmed and lower cased
-     * - Punctuation is ignored
-     * - Spaces are replaced
-     * - If the anchor still contains forbidden characters (non-ASCII, ...) which are not normalizable (Normalizer.Form.NFD), replace the whole anchor with an hash (MD5).
+     * - If the anchor still contains forbidden characters (non-ASCII, ...), replace the whole anchor with an hash (MD5).
      */
     protected String normalizeAnchor(Markup spaceEscape, String anchor) {
         String normalizedAnchor = anchor.trim();
-        normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD);
-        normalizedAnchor = ANCHOR_IGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll("");
-        normalizedAnchor = normalizedAnchor.trim();
-        normalizedAnchor = normalizedAnchor.toLowerCase();
-        normalizedAnchor = ANCHOR_SPACE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
+        normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        normalizedAnchor = ANCHOR_IGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
+        normalizedAnchor = normalizedAnchor.replaceAll(String.format("([%1$s])([%1$s]+)", ANCHOR_SEPARATION_CHARACTERS), "$1");
+        normalizedAnchor = StringUtils.strip(normalizedAnchor, ANCHOR_SEPARATION_CHARACTERS);
+        normalizedAnchor = normalizedAnchor.trim().toLowerCase();
 
         String validAnchor = ANCHOR_UNIGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll("");
         if (validAnchor.length() != normalizedAnchor.length())
