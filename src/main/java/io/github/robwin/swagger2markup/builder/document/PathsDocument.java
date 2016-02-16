@@ -41,6 +41,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.output.StringBuilderWriter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -418,7 +420,7 @@ public class PathsDocument extends MarkupDocument {
                     new MarkupTableColumn(SCHEMA_COLUMN, 1),
                     new MarkupTableColumn(DEFAULT_COLUMN, 1));
             for(Parameter parameter : parameters) {
-                if (!parameter.getIn().equals("body") || !this.flatBody) {
+                if (!StringUtils.equals(parameter.getIn(), "body") || !this.flatBody) {
                     Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
 
                     if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
@@ -463,7 +465,7 @@ public class PathsDocument extends MarkupDocument {
             List<Parameter> parameters = operation.getOperation().getParameters();
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
-                    if (parameter.getIn().equals("body")) {
+                    if (StringUtils.equals(parameter.getIn(), "body")) {
                         Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
 
                         addOperationSectionTitle(BODY_PARAMETER, docBuilder);

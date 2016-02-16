@@ -31,7 +31,6 @@ import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -133,9 +132,9 @@ public abstract class MarkupDocument {
      * @return a normalized filename
      */
     protected String normalizeFileName(String name) {
-        String fileName = FILENAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_").toLowerCase();
-        fileName = StringUtils.removeEnd(fileName, "_");
-        fileName = StringUtils.removeStart(fileName, "_");
+        String fileName = FILENAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
+        fileName = fileName.replaceAll("(^[_]+)|([_]+$)", "");
+        fileName = fileName.trim().toLowerCase();
         return fileName;
     }
 
