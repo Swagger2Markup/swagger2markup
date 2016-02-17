@@ -26,7 +26,6 @@ import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
-import io.swagger.models.Operation;
 import io.swagger.models.RefModel;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
@@ -161,7 +160,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private String resolveDefinitionDocument(String definitionName) {
         if (separatedDefinitionsEnabled)
-            return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+            return new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
         else
             return markupDocBuilder.addfileExtension(definitionsDocument);
     }
@@ -219,7 +218,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         addDefinitionTitle(definitionName, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
-        propertiesSection(definitions, definitionName, model, docBuilder);
+        inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, inlineSchemaDepthLevel, docBuilder);
         definitionSchema(definitionName, docBuilder);
     }
 
@@ -276,13 +275,13 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param definitionName name of the definition to display
      * @param model model of the definition to display
      * @param docBuilder the docbuilder do use for output
+     * @return a list of inlined types.
      */
-    private void propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
+    private List<ObjectType> propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
         Map<String, Property> properties = getAllProperties(definitions, model);
-        Type type = new ObjectType(definitionName, properties);
+        ObjectType type = new ObjectType(definitionName, properties);
 
-        List<Type> localDefinitions = typeProperties(type, inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
-        inlineDefinitions(localDefinitions, inlineSchemaDepthLevel - 1, docBuilder);
+        return typeProperties(type, definitionName, 1, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
@@ -420,16 +419,17 @@ public class DefinitionsDocument extends MarkupDocument {
     /**
      * Builds inline schema definitions
      * @param definitions all inline definitions to display
+     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
      * @param depth current inline schema depth
      * @param docBuilder the docbuilder do use for output
      */
-    private void inlineDefinitions(List<Type> definitions, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
         if(CollectionUtils.isNotEmpty(definitions)){
-            for (Type definition: definitions) {
+            for (ObjectType definition: definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<Type> localDefinitions = typeProperties(definition, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
-                for (Type localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), depth - 1, docBuilder);
+                List<ObjectType> localDefinitions = typeProperties(definition, uniquePrefix, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                for (ObjectType localDefinition : localDefinitions)
+                    inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }
         }
 
@@ -447,7 +447,7 @@ public class DefinitionsDocument extends MarkupDocument {
             String defaultResolver = super.apply(definitionName);
 
             if (defaultResolver != null && separatedDefinitionsEnabled)
-                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName));
+                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(normalizeFileName(definitionName));
             else
                 return defaultResolver;
         }
