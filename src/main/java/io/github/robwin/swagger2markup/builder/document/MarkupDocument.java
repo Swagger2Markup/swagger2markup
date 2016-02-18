@@ -79,7 +79,7 @@ public abstract class MarkupDocument {
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
         this.swagger = swagger2MarkupConfig.getSwagger();
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
-        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage).withAnchorPrefix(swagger2MarkupConfig.getAnchorPrefix());
         this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();
         this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
         this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();

@@ -262,7 +262,7 @@ public class PathsDocument extends MarkupDocument {
      */
     private void processOperation(PathOperation operation) {
         if (separatedOperationsEnabled) {
-            MarkupDocBuilder pathDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+            MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
             operation(operation, pathDocBuilder);
             File operationFile = new File(outputDirectory, resolveOperationDocument(operation));
 
@@ -332,8 +332,7 @@ public class PathsDocument extends MarkupDocument {
         String document = resolveOperationDocument(operation);
         String operationName = operationName(operation);
 
-        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-        addOperationTitle(ref.crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
+        addOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
     }
 
     /**
@@ -697,8 +696,7 @@ public class PathsDocument extends MarkupDocument {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-                    List<String> content = Arrays.asList(type, ref.crossReference(securityKey, securityKey).toString(),
+                    List<String> content = Arrays.asList(type, docBuilder.copy().crossReference(securityKey, securityKey).toString(),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }

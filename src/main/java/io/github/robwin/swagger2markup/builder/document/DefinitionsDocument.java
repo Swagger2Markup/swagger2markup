@@ -180,7 +180,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
         if (separatedDefinitionsEnabled) {
-            MarkupDocBuilder defDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+            MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy();
             definition(definitions, definitionName, model, defDocBuilder);
             File definitionFile = new File(outputDirectory, resolveDefinitionDocument(definitionName));
             try {
@@ -234,8 +234,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
-        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-        addDefinitionTitle(ref.crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+        addDefinitionTitle(docBuilder.copy().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**

@@ -157,6 +157,7 @@ public class Swagger2MarkupConverter {
         private int inlineSchemaDepthLevel = 0;
         private Comparator<String> tagOrdering = Ordering.natural();
         private boolean flatBody = false;
+        private String anchorPrefix;
 
         public static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
                 .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
@@ -236,7 +237,7 @@ public class Swagger2MarkupConverter {
                     schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
                     outputLanguage, inlineSchemaDepthLevel,
                     tagOrdering, operationOrdering, definitionOrdering, parameterOrdering, propertyOrdering, responseOrdering,
-                    interDocumentCrossReferences, interDocumentCrossReferencesPrefix, flatBody));
+                    interDocumentCrossReferences, interDocumentCrossReferencesPrefix, flatBody, anchorPrefix));
         }
 
         /**
@@ -451,7 +452,7 @@ public class Swagger2MarkupConverter {
         /**
          * Enable use of inter-document cross-references when needed
          *
-         * @param prefix Prefix to document in all inter-document cross-references
+         * @param prefix Prefix to document in all inter-document cross-references (null = no prefix)
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
@@ -470,6 +471,16 @@ public class Swagger2MarkupConverter {
          */
         public Builder withFlatBody() {
             this.flatBody = true;
+            return this;
+        }
+
+        /**
+         * Pptionally prefix all anchors for unicity
+         * @param anchorPrefix anchor prefix (null = no prefix)
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withAnchorPrefix(String anchorPrefix) {
+            this.anchorPrefix = anchorPrefix;
             return this;
         }
     }
