@@ -81,14 +81,14 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text){
-        boldTextLine(AsciiDoc.BOLD, text);
+    public MarkupDocBuilder boldText(String text){
+        boldText(AsciiDoc.BOLD, text);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder italicTextLine(String text) {
-        italicTextLine(AsciiDoc.ITALIC, text);
+    public MarkupDocBuilder italicText(String text) {
+        italicText(AsciiDoc.ITALIC, text);
         return this;
     }
 
@@ -143,30 +143,29 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public String anchorAsString(String anchor, String text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor));
+    public MarkupDocBuilder anchor(String anchor, String text) {
+        documentBuilder.append(AsciiDoc.ANCHOR_START).append(normalizeAnchor(anchor));
         if (text != null)
-            stringBuilder.append(",").append(text);
-        stringBuilder.append(AsciiDoc.ANCHOR_END);
-        return stringBuilder.toString();
+            documentBuilder.append(",").append(text);
+        documentBuilder.append(AsciiDoc.ANCHOR_END);
+        return this;
     }
 
     @Override
-    public String crossReferenceRawAsString(String document, String anchor, String text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(AsciiDoc.CROSS_REFERENCE_START);
+    public MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text) {
+        documentBuilder.append(AsciiDoc.CROSS_REFERENCE_START);
         if (document != null)
-            stringBuilder.append(document).append("#");
-        stringBuilder.append(anchor);
+            documentBuilder.append(document).append("#");
+        documentBuilder.append(anchor);
         if (text != null)
-            stringBuilder.append(",").append(text);
-        stringBuilder.append(AsciiDoc.CROSS_REFERENCE_END);
-        return stringBuilder.toString();    }
+            documentBuilder.append(",").append(text);
+        documentBuilder.append(AsciiDoc.CROSS_REFERENCE_END);
+        return this;
+    }
 
     @Override
-    public String crossReferenceAsString(String document, String title, String text) {
-        return crossReferenceRawAsString(normalizeDocument(document), normalizeAnchor(title), text);
+    public MarkupDocBuilder crossReference(String document, String title, String text) {
+        return crossReferenceRaw(normalizeDocument(document), normalizeAnchor(title), text);
     }
 
     private String escapeTableCell(String cell) {
@@ -211,6 +210,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         }
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         newLine();
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder newLine(boolean forceLineBreak) {
+        newLine(AsciiDoc.LINE_BREAK, forceLineBreak);
         return this;
     }
 

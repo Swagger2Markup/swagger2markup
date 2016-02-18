@@ -18,7 +18,9 @@
  */
 package io.github.robwin.markup.builder;
 
+import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,9 +38,11 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
+    private static final boolean LINE_BREAK_DEFAULT = false;
+
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
-    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\p{InCombiningDiacriticalMarks}@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
-    private static final Pattern ANCHOR_SPACE_PATTERN = Pattern.compile("[\\s]+");
+    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
+    private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -93,8 +97,21 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder textLine(String text, boolean forceLineBreak){
+        text(text);
+        newLine(forceLineBreak);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder textLine(String text){
-        documentBuilder.append(text).append(newLine);
+        textLine(text, LINE_BREAK_DEFAULT);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder text(String text){
+        documentBuilder.append(text);
         return this;
     }
 
@@ -103,27 +120,51 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void listing(Markup markup, String text){
-        delimitedTextLine(markup, text);
+        delimitedBlockText(markup, text);
     }
 
-    protected void delimitedTextLine(Markup markup, String text){
+    protected void delimitedBlockText(Markup markup, String text){
         documentBuilder.append(markup).append(newLine).append(text).append(newLine).append(markup).append(newLine).append(newLine);
     }
 
-    protected void delimitedTextLineWithoutLineBreaks(Markup markup, String text){
-        documentBuilder.append(markup).append(text).append(markup).append(newLine);
+    protected void delimitedTextWithoutLineBreaks(Markup markup, String text){
+        documentBuilder.append(markup).append(text).append(markup);
     }
 
     protected void preserveLineBreaks(Markup markup){
         documentBuilder.append(markup).append(newLine);
     }
 
-    protected void boldTextLine(Markup markup, String text){
-        delimitedTextLineWithoutLineBreaks(markup, text);
+    protected void boldText(Markup markup, String text){
+        delimitedTextWithoutLineBreaks(markup, text);
     }
 
-    protected void italicTextLine(Markup markup, String text){
-        delimitedTextLineWithoutLineBreaks(markup, text);
+    @Override
+    public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak){
+        boldText(text);
+        newLine(forceLineBreak);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder boldTextLine(String text){
+        return boldTextLine(text, LINE_BREAK_DEFAULT);
+    }
+
+    protected void italicText(Markup markup, String text){
+        delimitedTextWithoutLineBreaks(markup, text);
+    }
+
+    @Override
+    public MarkupDocBuilder italicTextLine(String text, boolean forceLineBreak) {
+        italicText(text);
+        newLine(forceLineBreak);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder italicTextLine(String text) {
+        return italicTextLine(text, LINE_BREAK_DEFAULT);
     }
 
     protected void unorderedList(Markup markup, List<String> list){
@@ -139,12 +180,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder anchor(String anchor, String text) {
-        documentBuilder.append(anchorAsString(anchor, text));
-        return this;
-    }
-
-    @Override
     public MarkupDocBuilder anchor(String anchor) {
         return anchor(anchor, null);
     }
@@ -152,18 +187,19 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     /**
      * Generic normalization algorithm for all markups (less common denominator character set).
      * Key points :
+     * - Anchor is normalized (Normalized.Form.NFD)
+     * - Punctuations (excluding [-_]) and spaces are replaced with escape character (depends on markup : Markup.E)
+     * - Beginning, ending separation characters [-_] are ignored, repeating separation characters are simplified (keep first one)
      * - Anchor is trimmed and lower cased
-     * - Punctuation is ignored
-     * - Spaces are replaced
-     * - If the anchor still contains forbidden characters (non-ASCII, ...) which are not normalizable (Normalizer.Form.NFD), replace the whole anchor with an hash (MD5).
+     * - If the anchor still contains forbidden characters (non-ASCII, ...), replace the whole anchor with an hash (MD5).
      */
     protected String normalizeAnchor(Markup spaceEscape, String anchor) {
         String normalizedAnchor = anchor.trim();
-        normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD);
-        normalizedAnchor = ANCHOR_IGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll("");
-        normalizedAnchor = normalizedAnchor.trim();
-        normalizedAnchor = normalizedAnchor.toLowerCase();
-        normalizedAnchor = ANCHOR_SPACE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
+        normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+        normalizedAnchor = ANCHOR_IGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
+        normalizedAnchor = normalizedAnchor.replaceAll(String.format("([%1$s])([%1$s]+)", ANCHOR_SEPARATION_CHARACTERS), "$1");
+        normalizedAnchor = StringUtils.strip(normalizedAnchor, ANCHOR_SEPARATION_CHARACTERS);
+        normalizedAnchor = normalizedAnchor.trim().toLowerCase();
 
         String validAnchor = ANCHOR_UNIGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll("");
         if (validAnchor.length() != normalizedAnchor.length())
@@ -174,11 +210,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return normalizedAnchor;
     }
 
-    @Override
-    public MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text) {
-        documentBuilder.append(crossReferenceRawAsString(document, anchor, text));
-        return this;
-    }
 
     @Override
     public MarkupDocBuilder crossReferenceRaw(String anchor, String text) {
@@ -191,12 +222,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String document, String title, String text) {
-        documentBuilder.append(crossReferenceAsString(document, title, text));
-        return this;
-    }
-
-    @Override
     public MarkupDocBuilder crossReference(String title, String text) {
         return crossReference(null, title, text);
     }
@@ -206,9 +231,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return crossReference(null, title, null);
     }
 
+    protected void newLine(Markup markup, boolean forceLineBreak){
+        if (forceLineBreak)
+            documentBuilder.append(markup);
+        documentBuilder.append(newLine);
+    }
+
     @Override
     public MarkupDocBuilder newLine(){
-        documentBuilder.append(newLine);
+        newLine(LINE_BREAK_DEFAULT);
         return this;
     }
 

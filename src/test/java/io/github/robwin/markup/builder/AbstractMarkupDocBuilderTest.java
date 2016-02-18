@@ -1,12 +1,13 @@
 package io.github.robwin.markup.builder;
 
 import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
+import io.github.robwin.markup.builder.markdown.Markdown;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 public class AbstractMarkupDocBuilderTest {
@@ -18,28 +19,49 @@ public class AbstractMarkupDocBuilderTest {
         builder = mock(AbstractMarkupDocBuilder.class, Mockito.CALLS_REAL_METHODS);
     }
 
-    private String normalize(String anchor) {
-        return builder.normalizeAnchor(AsciiDoc.SPACE_ESCAPE, anchor);
+    private String normalize(Markup markup, String anchor) {
+        return builder.normalizeAnchor(markup, anchor);
     }
 
-    private void assertNormalization(String result, String anchor) {
-        assertEquals(result, normalize(anchor));
+    private void assertNormalization(Markup markup, String result, String anchor) {
+        assertEquals(result, normalize(markup, anchor));
     }
 
     @Test
-    public void testNormalizeAnchor() throws Exception {
-        assertNormalization("", "");
-        assertNormalization("anchor", "anchor");
-        assertNormalization("anchor", "aNcHoR");
-        assertNormalization("__anchor__", "_ anchor _");
-        assertNormalization("-_anchor_-", "- anchor -");
-        assertNormalization("classic-simple_anchor", "classic-simple_anchor");
-        assertNormalization("an_chor", "     an    chor  ");
-        assertNormalization("anchor", "#  anchor  &");
-        assertNormalization(DigestUtils.md5Hex("\u0240"), "\u0240");
-        assertNormalization(normalize("\u0240"), " \u0240 ");
-        assertNormalization(DigestUtils.md5Hex("µu_\u0240this_-_"), "  µ&|ù \u0240This .:/-_#  ");
-        assertNormalization("this_is_a_funky_string", "Tĥïŝ ĩš â fůňķŷ Šťŕĭńġ");
-        assertNormalization("", "  @#&(){}[]!$*%+=/:.;,?\\<>| ");
+    public void testNormalizeAnchorAsciiDoc() throws Exception {
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "", "");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "anchor", "anchor");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "anchor", "aNcHoR");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "anchor", "_ anchor _");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "anchor", "- anchor -");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "a_n-c_h_o-r", "_-a _ - n-_-_-c_-_-_h___o---r_-");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "classic-simple_anchor", "classic-simple_anchor");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "an_chor", "     an    chor  ");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "anchor", "#  anchor  &");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, DigestUtils.md5Hex("\u0240"), "\u0240");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, normalize(AsciiDoc.SPACE_ESCAPE, "\u0240"), " \u0240 ");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, DigestUtils.md5Hex("µ_u_\u0240this"), "  µ&|ù \u0240This .:/-_#  ");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "this_is_a_really_funky_string", "Tĥïŝ ĩš â really fůňķŷ Šťŕĭńġ");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "", "  @#&(){}[]!$*%+=/:.;,?\\<>| ");
+        assertNormalization(AsciiDoc.SPACE_ESCAPE, "sub_action_html_query_value", " /sub/action.html/?query=value ");
+    }
+
+    @Test
+    public void testNormalizeAnchorMarkdown() throws Exception {
+        assertNormalization(Markdown.SPACE_ESCAPE, "", "");
+        assertNormalization(Markdown.SPACE_ESCAPE, "anchor", "anchor");
+        assertNormalization(Markdown.SPACE_ESCAPE, "anchor", "aNcHoR");
+        assertNormalization(Markdown.SPACE_ESCAPE, "anchor", "_ anchor _");
+        assertNormalization(Markdown.SPACE_ESCAPE, "anchor", "- anchor -");
+        assertNormalization(Markdown.SPACE_ESCAPE, "a-n-c_h_o-r", "_-a _ - n-_-_-c_-_-_h___o---r_-");
+        assertNormalization(Markdown.SPACE_ESCAPE, "classic-simple_anchor", "classic-simple_anchor");
+        assertNormalization(Markdown.SPACE_ESCAPE, "an-chor", "     an    chor  ");
+        assertNormalization(Markdown.SPACE_ESCAPE, "anchor", "#  anchor  &");
+        assertNormalization(Markdown.SPACE_ESCAPE, DigestUtils.md5Hex("\u0240"), "\u0240");
+        assertNormalization(Markdown.SPACE_ESCAPE, normalize(Markdown.SPACE_ESCAPE, "\u0240"), " \u0240 ");
+        assertNormalization(Markdown.SPACE_ESCAPE, DigestUtils.md5Hex("µ-u-\u0240this"), "  µ&|ù \u0240This .:/-_#  ");
+        assertNormalization(Markdown.SPACE_ESCAPE, "this-is-a-really-funky-string", "Tĥïŝ ĩš â really fůňķŷ Šťŕĭńġ");
+        assertNormalization(Markdown.SPACE_ESCAPE, "", "  @#&(){}[]!$*%+=/:.;,?\\<>| ");
+        assertNormalization(Markdown.SPACE_ESCAPE, "sub-action-html-query-value", " /sub/action.html/?query=value ");
     }
 }
