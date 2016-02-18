@@ -54,46 +54,50 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     protected void sectionTitleLevel1(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(anchor).newLine();
+        if (anchor != null)
+            anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel1(String title) {
-        return sectionTitleLevel1(title, title);
+    public MarkupDocBuilder sectionTitleWithAnchorLevel1(String title) {
+        return sectionTitleWithAnchorLevel1(title, title);
     }
 
     protected void sectionTitleLevel2(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(anchor).newLine();
+        if (anchor != null)
+            anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel2(String title) {
-        return sectionTitleLevel2(title, title);
+    public MarkupDocBuilder sectionTitleWithAnchorLevel2(String title) {
+        return sectionTitleWithAnchorLevel2(title, title);
     }
 
     protected void sectionTitleLevel3(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(anchor).newLine();
+        if (anchor != null)
+            anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel3(String title) {
-        return sectionTitleLevel3(title, title);
+    public MarkupDocBuilder sectionTitleWithAnchorLevel3(String title) {
+        return sectionTitleWithAnchorLevel3(title, title);
     }
 
     protected void sectionTitleLevel4(Markup markup, String title, String anchor){
         documentBuilder.append(newLine);
-        anchor(anchor).newLine();
+        if (anchor != null)
+            anchor(anchor).newLine();
         documentBuilder.append(markup).append(title).append(newLine);
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel4(String title) {
-        return sectionTitleLevel4(title, title);
+    public MarkupDocBuilder sectionTitleWithAnchorLevel4(String title) {
+        return sectionTitleWithAnchorLevel4(title, title);
     }
 
     @Override

@@ -31,19 +31,27 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder sectionTitleLevel1(String title);
 
-    MarkupDocBuilder sectionTitleLevel1(String title, String anchor);
+    MarkupDocBuilder sectionTitleWithAnchorLevel1(String title, String anchor);
+
+    MarkupDocBuilder sectionTitleWithAnchorLevel1(String title);
 
     MarkupDocBuilder sectionTitleLevel2(String title);
 
-    MarkupDocBuilder sectionTitleLevel2(String title, String anchor);
+    MarkupDocBuilder sectionTitleWithAnchorLevel2(String title, String anchor);
+
+    MarkupDocBuilder sectionTitleWithAnchorLevel2(String title);
 
     MarkupDocBuilder sectionTitleLevel3(String title);
 
-    MarkupDocBuilder sectionTitleLevel3(String title, String anchor);
+    MarkupDocBuilder sectionTitleWithAnchorLevel3(String title, String anchor);
+
+    MarkupDocBuilder sectionTitleWithAnchorLevel3(String title);
 
     MarkupDocBuilder sectionTitleLevel4(String title);
 
-    MarkupDocBuilder sectionTitleLevel4(String title, String anchor);
+    MarkupDocBuilder sectionTitleWithAnchorLevel4(String title, String anchor);
+
+    MarkupDocBuilder sectionTitleWithAnchorLevel4(String title);
 
     MarkupDocBuilder textLine(String text);
 
