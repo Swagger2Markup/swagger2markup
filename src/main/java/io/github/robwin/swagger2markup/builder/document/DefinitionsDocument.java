@@ -49,6 +49,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class DefinitionsDocument extends MarkupDocument {
 
+    private static final String DEFINITIONS_ANCHOR = "definitions";
     private final String DEFINITIONS;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private final String JSON_SCHEMA;
@@ -121,6 +122,11 @@ public class DefinitionsDocument extends MarkupDocument {
         return this;
     }
 
+    private void addDefinitionsTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, DEFINITIONS_ANCHOR);
+
+    }
+
     /**
      * Builds the Swagger definitions.
      *
@@ -128,7 +134,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void definitions(Map<String, Model> definitions){
         if(MapUtils.isNotEmpty(definitions)){
-            this.markupDocBuilder.sectionTitleLevel1(DEFINITIONS);
+            addDefinitionsTitle(DEFINITIONS);
             Set<String> definitionNames;
             if (definitionOrdering == null)
               definitionNames = new LinkedHashSet<>();
@@ -216,7 +222,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
-        addDefinitionTitle(definitionName, docBuilder);
+        addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, inlineSchemaDepthLevel, docBuilder);
         definitionSchema(definitionName, docBuilder);
@@ -229,16 +235,17 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
         MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-        addDefinitionTitle(ref.crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), docBuilder);
+        addDefinitionTitle(ref.crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**
      * Builds definition title
      * @param title definition title
+     * @param anchor optional anchor (null => auto-generate from title)
      * @param docBuilder the docbuilder do use for output
      */
-    private void addDefinitionTitle(String title, MarkupDocBuilder docBuilder) {
-        docBuilder.sectionTitleLevel2(title);
+    private void addDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
+        docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
     }
 
     /**

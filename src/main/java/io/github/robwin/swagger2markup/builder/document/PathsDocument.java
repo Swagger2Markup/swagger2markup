@@ -78,6 +78,7 @@ public class PathsDocument extends MarkupDocument {
     private final String HTTP_CODE_COLUMN;
     private final String PARAMETER;
 
+    private static final String PATHS_ANCHOR = "paths";
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
@@ -181,6 +182,10 @@ public class PathsDocument extends MarkupDocument {
         return this;
     }
 
+    private void addPathsTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, PATHS_ANCHOR);
+    }
+
     /**
      * Builds all operations of the Swagger model. Either grouped as-is or by tags.
      */
@@ -203,7 +208,7 @@ public class PathsDocument extends MarkupDocument {
         if (allOperations.size() > 0) {
 
             if (pathsGroupedBy == GroupBy.AS_IS) {
-                this.markupDocBuilder.sectionTitleLevel1(PATHS);
+                addPathsTitle(PATHS);
 
                 if (this.operationOrdering != null) {
                     Set<PathOperation> sortedOperations = new TreeSet<>(this.operationOrdering);
@@ -217,7 +222,7 @@ public class PathsDocument extends MarkupDocument {
 
 
             } else {
-                this.markupDocBuilder.sectionTitleLevel1(RESOURCES);
+                addPathsTitle(RESOURCES);
 
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(allOperations, tagOrdering, operationOrdering);
 
@@ -328,7 +333,7 @@ public class PathsDocument extends MarkupDocument {
         String operationName = operationName(operation);
 
         MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-        addOperationTitle(ref.crossReference(document, operationName, operationName).toString(), docBuilder);
+        addOperationTitle(ref.crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
     }
 
     /**
@@ -341,7 +346,7 @@ public class PathsDocument extends MarkupDocument {
     private void operationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
         String operationName = operationName(operation);
 
-        addOperationTitle(operationName, docBuilder);
+        addOperationTitle(operationName, null, docBuilder);
         if(operationName.equals(operation.getOperation().getSummary())) {
             docBuilder.listing(operation.getMethod() + " " + operation.getPath());
         }
@@ -351,13 +356,14 @@ public class PathsDocument extends MarkupDocument {
      * Adds a operation title to the document.
      *
      * @param title the operation title
+     * @param anchor optional anchor (null => auto-generate from title)
      * @param docBuilder the docbuilder do use for output
      */
-    private void addOperationTitle(String title, MarkupDocBuilder docBuilder) {
+    private void addOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         if(pathsGroupedBy == GroupBy.AS_IS){
-            docBuilder.sectionTitleLevel2(title);
+            docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         }else{
-            docBuilder.sectionTitleLevel3(title);
+            docBuilder.sectionTitleWithAnchorLevel3(title, anchor);
         }
     }
 
