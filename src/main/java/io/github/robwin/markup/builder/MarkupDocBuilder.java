@@ -47,6 +47,8 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder textLine(String text);
 
+    MarkupDocBuilder text(String text);
+
     MarkupDocBuilder paragraph(String text);
 
     MarkupDocBuilder listing(String text);
@@ -55,7 +57,11 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder boldTextLine(String text);
 
+    MarkupDocBuilder boldText(String text);
+
     MarkupDocBuilder italicTextLine(String text);
+
+    MarkupDocBuilder italicText(String text);
 
     MarkupDocBuilder unorderedList(List<String> list);
 
@@ -72,23 +78,17 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder anchor(String anchor);
 
-    String anchorAsString(String anchor, String text);
-
     MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text);
 
     MarkupDocBuilder crossReferenceRaw(String anchor, String text);
 
     MarkupDocBuilder crossReferenceRaw(String anchor);
 
-    String crossReferenceRawAsString(String document, String anchor, String text);
-
     MarkupDocBuilder crossReference(String document, String title, String text);
 
     MarkupDocBuilder crossReference(String title, String text);
 
     MarkupDocBuilder crossReference(String title);
-
-    String crossReferenceAsString(String document, String title, String text);
 
     MarkupDocBuilder newLine();
 

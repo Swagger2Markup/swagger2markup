@@ -89,14 +89,14 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text){
-        boldTextLine(Markdown.BOLD, text);
+    public MarkupDocBuilder boldText(String text){
+        boldText(Markdown.BOLD, text);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder italicTextLine(String text) {
-        italicTextLine(Markdown.ITALIC, text);
+    public MarkupDocBuilder italicText(String text) {
+        italicText(Markdown.ITALIC, text);
         return this;
     }
 
@@ -150,27 +150,25 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public String anchorAsString(String anchor, String text) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<a name=\"").append(normalizeAnchor(anchor)).append("\"></a>");
-        return stringBuilder.toString();
+    public MarkupDocBuilder anchor(String anchor, String text) {
+        documentBuilder.append("<a name=\"").append(normalizeAnchor(anchor)).append("\"></a>");
+        return this;
     }
 
     @Override
-    public String crossReferenceRawAsString(String document, String anchor, String text) {
-        StringBuilder stringBuilder = new StringBuilder();
+    public MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text) {
         if (text == null)
             text = anchor.trim();
-        stringBuilder.append("[").append(text).append("]").append("(");
+        documentBuilder.append("[").append(text).append("]").append("(");
         if (document != null)
-            stringBuilder.append(document);
-        stringBuilder.append("#").append(anchor).append(")");
-        return stringBuilder.toString();
+            documentBuilder.append(document);
+        documentBuilder.append("#").append(anchor).append(")");
+        return this;
     }
 
     @Override
-    public String crossReferenceAsString(String document, String title, String text) {
-        return crossReferenceRawAsString(document, normalizeAnchor(title), text);
+    public MarkupDocBuilder crossReference(String document, String title, String text) {
+        return crossReferenceRaw(document, normalizeAnchor(title), text);
     }
 
     private String escapeTableCell(String cell) {

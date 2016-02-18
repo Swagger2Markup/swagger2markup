@@ -18,6 +18,7 @@
  */
 package io.github.robwin.markup.builder;
 
+import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -95,7 +96,14 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder textLine(String text){
-        documentBuilder.append(text).append(newLine);
+        text(text);
+        newLine();
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder text(String text){
+        documentBuilder.append(text);
         return this;
     }
 
@@ -104,27 +112,41 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void listing(Markup markup, String text){
-        delimitedTextLine(markup, text);
+        delimitedBlockText(markup, text);
     }
 
-    protected void delimitedTextLine(Markup markup, String text){
+    protected void delimitedBlockText(Markup markup, String text){
         documentBuilder.append(markup).append(newLine).append(text).append(newLine).append(markup).append(newLine).append(newLine);
     }
 
-    protected void delimitedTextLineWithoutLineBreaks(Markup markup, String text){
-        documentBuilder.append(markup).append(text).append(markup).append(newLine);
+    protected void delimitedTextWithoutLineBreaks(Markup markup, String text){
+        documentBuilder.append(markup).append(text).append(markup);
     }
 
     protected void preserveLineBreaks(Markup markup){
         documentBuilder.append(markup).append(newLine);
     }
 
-    protected void boldTextLine(Markup markup, String text){
-        delimitedTextLineWithoutLineBreaks(markup, text);
+    protected void boldText(Markup markup, String text){
+        delimitedTextWithoutLineBreaks(markup, text);
     }
 
-    protected void italicTextLine(Markup markup, String text){
-        delimitedTextLineWithoutLineBreaks(markup, text);
+    @Override
+    public MarkupDocBuilder boldTextLine(String text){
+        boldText(text);
+        newLine();
+        return this;
+    }
+
+    protected void italicText(Markup markup, String text){
+        delimitedTextWithoutLineBreaks(markup, text);
+    }
+
+    @Override
+    public MarkupDocBuilder italicTextLine(String text) {
+        italicText(text);
+        newLine();
+        return this;
     }
 
     protected void unorderedList(Markup markup, List<String> list){
@@ -137,12 +159,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     protected void unorderedListItem(Markup markup, String item) {
         documentBuilder.append(markup).append(item).append(newLine);
-    }
-
-    @Override
-    public MarkupDocBuilder anchor(String anchor, String text) {
-        documentBuilder.append(anchorAsString(anchor, text));
-        return this;
     }
 
     @Override
@@ -176,11 +192,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return normalizedAnchor;
     }
 
-    @Override
-    public MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text) {
-        documentBuilder.append(crossReferenceRawAsString(document, anchor, text));
-        return this;
-    }
 
     @Override
     public MarkupDocBuilder crossReferenceRaw(String anchor, String text) {
@@ -190,12 +201,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     @Override
     public MarkupDocBuilder crossReferenceRaw(String anchor) {
         return crossReferenceRaw(null, anchor, null);
-    }
-
-    @Override
-    public MarkupDocBuilder crossReference(String document, String title, String text) {
-        documentBuilder.append(crossReferenceAsString(document, title, text));
-        return this;
     }
 
     @Override
