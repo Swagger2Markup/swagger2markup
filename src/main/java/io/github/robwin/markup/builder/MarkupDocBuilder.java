@@ -47,6 +47,8 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder textLine(String text);
 
+    MarkupDocBuilder textLine(String text, boolean forceLineBreak);
+
     MarkupDocBuilder text(String text);
 
     MarkupDocBuilder paragraph(String text);
@@ -57,9 +59,13 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder boldTextLine(String text);
 
+    MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak);
+
     MarkupDocBuilder boldText(String text);
 
     MarkupDocBuilder italicTextLine(String text);
+
+    MarkupDocBuilder italicTextLine(String text, boolean forceLineBreak);
 
     MarkupDocBuilder italicText(String text);
 
@@ -91,6 +97,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReference(String title);
 
     MarkupDocBuilder newLine();
+
+    MarkupDocBuilder newLine(boolean forceLineBreak);
 
     /**
      * Returns a string representation of the document.

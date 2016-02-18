@@ -214,6 +214,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder newLine(boolean forceLineBreak) {
+        newLine(AsciiDoc.LINE_BREAK, forceLineBreak);
+        return this;
+    }
+
+    @Override
     public String addfileExtension(String fileName) {
         return addfileExtension(AsciiDoc.FILE_EXTENSION, fileName);
     }
