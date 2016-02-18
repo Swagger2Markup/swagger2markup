@@ -38,7 +38,8 @@ public enum Markdown implements Markup {
     ITALIC("*"),
     LIST_ENTRY("* "),
     FILE_EXTENSION("md"),
-    SPACE_ESCAPE("-");
+    SPACE_ESCAPE("-"),
+    LINE_BREAK("  ");
 
     private final String markup;
 

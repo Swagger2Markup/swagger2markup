@@ -44,7 +44,8 @@ public enum AsciiDoc implements Markup {
     ANCHOR_START("[["),
     ANCHOR_END("]]"),
     FILE_EXTENSION("adoc"),
-    SPACE_ESCAPE("_");
+    SPACE_ESCAPE("_"),
+    LINE_BREAK(" +");
 
     private final String markup;
 

@@ -38,6 +38,8 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
+    private static final boolean LINE_BREAK_DEFAULT = false;
+
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
     private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
@@ -95,9 +97,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder textLine(String text){
+    public MarkupDocBuilder textLine(String text, boolean forceLineBreak){
         text(text);
-        newLine();
+        newLine(forceLineBreak);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder textLine(String text){
+        textLine(text, LINE_BREAK_DEFAULT);
         return this;
     }
 
@@ -132,10 +140,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text){
+    public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak){
         boldText(text);
-        newLine();
+        newLine(forceLineBreak);
         return this;
+    }
+
+    @Override
+    public MarkupDocBuilder boldTextLine(String text){
+        return boldTextLine(text, LINE_BREAK_DEFAULT);
     }
 
     protected void italicText(Markup markup, String text){
@@ -143,10 +156,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder italicTextLine(String text) {
+    public MarkupDocBuilder italicTextLine(String text, boolean forceLineBreak) {
         italicText(text);
-        newLine();
+        newLine(forceLineBreak);
         return this;
+    }
+
+    @Override
+    public MarkupDocBuilder italicTextLine(String text) {
+        return italicTextLine(text, LINE_BREAK_DEFAULT);
     }
 
     protected void unorderedList(Markup markup, List<String> list){
@@ -213,9 +231,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return crossReference(null, title, null);
     }
 
+    protected void newLine(Markup markup, boolean forceLineBreak){
+        if (forceLineBreak)
+            documentBuilder.append(markup);
+        documentBuilder.append(newLine);
+    }
+
     @Override
     public MarkupDocBuilder newLine(){
-        documentBuilder.append(newLine);
+        newLine(LINE_BREAK_DEFAULT);
         return this;
     }
 

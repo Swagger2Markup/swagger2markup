@@ -208,6 +208,12 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
+    public MarkupDocBuilder newLine(boolean forceLineBreak) {
+        newLine(Markdown.LINE_BREAK, forceLineBreak);
+        return this;
+    }
+
+    @Override
     public String addfileExtension(String fileName) {
         return addfileExtension(Markdown.FILE_EXTENSION, fileName);
     }
