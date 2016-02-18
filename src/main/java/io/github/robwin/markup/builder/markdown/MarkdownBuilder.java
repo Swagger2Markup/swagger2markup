@@ -38,6 +38,12 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
+
+    @Override
+    public MarkupDocBuilder copy() {
+        return new MarkdownBuilder().withAnchorPrefix(anchorPrefix);
+    }
+
     @Override
     public MarkupDocBuilder documentTitle(String title){
         documentTitle(Markdown.DOCUMENT_TITLE, title);
@@ -191,8 +197,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String document, String title, String text) {
-        return crossReferenceRaw(document, normalizeAnchor(title), text);
+    public MarkupDocBuilder crossReference(String document, String anchor, String text) {
+        return crossReferenceRaw(document, normalizeAnchor(anchor), text);
     }
 
     private String escapeTableCell(String cell) {

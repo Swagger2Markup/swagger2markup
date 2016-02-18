@@ -27,6 +27,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static junit.framework.TestCase.assertEquals;
+
+
 /**
  * @author Robert Winkler
  */
@@ -91,6 +94,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.adoc", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true)
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
+
+        MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC).withAnchorPrefix(" mdb test- ");
+        String prefixMarkup = builderWithConfig.anchor("anchor", "text")
+                .crossReference("anchor", "text")
+                .toString();
+
+        assertEquals("[[_mdb_test-anchor,text]]<<_mdb_test-anchor,text>>", prefixMarkup);
     }
 
     @Test
@@ -130,6 +140,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.md", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true)
                 .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
+
+        MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN).withAnchorPrefix(" mdb test- ");
+        String prefixMarkup = builderWithConfig.anchor("anchor", "text")
+                .crossReference("anchor", "text")
+                .toString();
+
+        assertEquals("<a name=\"mdb-test-anchor\"></a>[text](#mdb-test-anchor)", prefixMarkup);
     }
 
 }
