@@ -39,6 +39,11 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
+    public MarkupDocBuilder copy() {
+        return new AsciiDocBuilder().withAnchorPrefix(anchorPrefix);
+    }
+
+    @Override
     public MarkupDocBuilder documentTitle(String title){
         documentTitle(AsciiDoc.DOCUMENT_TITLE, title);
         return this;
@@ -188,8 +193,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String document, String title, String text) {
-        return crossReferenceRaw(normalizeDocument(document), normalizeAnchor(title), text);
+    public MarkupDocBuilder crossReference(String document, String anchor, String text) {
+        return crossReferenceRaw(normalizeDocument(document), normalizeAnchor(anchor), text);
     }
 
     private String escapeTableCell(String cell) {

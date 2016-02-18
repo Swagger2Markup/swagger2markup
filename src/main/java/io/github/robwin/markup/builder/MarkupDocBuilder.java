@@ -98,11 +98,11 @@ public interface MarkupDocBuilder {
 
     MarkupDocBuilder crossReferenceRaw(String anchor);
 
-    MarkupDocBuilder crossReference(String document, String title, String text);
+    MarkupDocBuilder crossReference(String document, String anchor, String text);
 
-    MarkupDocBuilder crossReference(String title, String text);
+    MarkupDocBuilder crossReference(String anchor, String text);
 
-    MarkupDocBuilder crossReference(String title);
+    MarkupDocBuilder crossReference(String anchor);
 
     MarkupDocBuilder newLine();
 
@@ -112,6 +112,23 @@ public interface MarkupDocBuilder {
      * Returns a string representation of the document.
      */
     String toString();
+
+    /**
+     * Configure this builder to prefix all generated anchors with {@code prefix}
+     * @param prefix anchor prefix
+     */
+    MarkupDocBuilder withAnchorPrefix(String prefix);
+
+    /**
+     * @return anchor prefix configuration
+     */
+    String getAnchorPrefix();
+
+    /**
+     * Return a new instance of this builder with the state
+     * @return new builder instance with a state copy
+     */
+    MarkupDocBuilder copy();
 
     /**
      * Add an extension to fileName depending on markup language
