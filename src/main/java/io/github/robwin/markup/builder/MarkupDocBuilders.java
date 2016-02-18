@@ -38,16 +38,11 @@ public final class MarkupDocBuilders {
     }
 
     /**
-     * Instantiate a new builder copying {@code docBuilder} characteristics.
+     * Instantiate a new builder from {@code docBuilder} with the same configuration.
      * You can use it to build intermediate MarkupDocBuilder for composition purpose.
      */
     public static MarkupDocBuilder documentBuilder(MarkupDocBuilder docBuilder){
-        if (docBuilder instanceof MarkdownBuilder)
-            return new MarkdownBuilder();
-        else if (docBuilder instanceof AsciiDocBuilder)
-            return new AsciiDocBuilder();
-        else
-            return new AsciiDocBuilder();
+       return docBuilder.copy();
     }
 
 

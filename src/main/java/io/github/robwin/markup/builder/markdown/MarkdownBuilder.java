@@ -38,6 +38,12 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
+
+    @Override
+    public MarkupDocBuilder copy() {
+        return new MarkdownBuilder().withAnchorPrefix(anchorPrefix);
+    }
+
     @Override
     public MarkupDocBuilder documentTitle(String title){
         documentTitle(Markdown.DOCUMENT_TITLE, title);
@@ -52,7 +58,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel1(String title, String anchor) {
-        sectionTitleLevel1(Markdown.SECTION_TITLE_LEVEL1, title, anchor);
+        sectionTitleLevel1(Markdown.SECTION_TITLE_LEVEL1, title, (anchor == null ? title : anchor));
         return this;
     }
 
@@ -64,7 +70,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel2(String title, String anchor) {
-        sectionTitleLevel2(Markdown.SECTION_TITLE_LEVEL2, title, anchor);
+        sectionTitleLevel2(Markdown.SECTION_TITLE_LEVEL2, title, (anchor == null ? title : anchor));
         return this;
     }
 
@@ -76,7 +82,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel3(String title, String anchor) {
-        sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL3, title, anchor);
+        sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL3, title, (anchor == null ? title : anchor));
         return this;
     }
 
@@ -88,7 +94,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel4(String title, String anchor) {
-        sectionTitleLevel4(Markdown.SECTION_TITLE_LEVEL4, title, anchor);
+        sectionTitleLevel4(Markdown.SECTION_TITLE_LEVEL4, title, (anchor == null ? title : anchor));
         return this;
     }
 
@@ -191,8 +197,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String document, String title, String text) {
-        return crossReferenceRaw(document, normalizeAnchor(title), text);
+    public MarkupDocBuilder crossReference(String document, String anchor, String text) {
+        return crossReferenceRaw(document, normalizeAnchor(anchor), text);
     }
 
     private String escapeTableCell(String cell) {

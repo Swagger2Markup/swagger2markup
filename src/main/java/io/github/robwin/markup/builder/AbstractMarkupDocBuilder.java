@@ -33,6 +33,8 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
+
 /**
  * @author Robert Winkler
  */
@@ -47,6 +49,19 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
     protected Logger logger = LoggerFactory.getLogger(getClass());
+
+    protected String anchorPrefix = null;
+
+    @Override
+    public MarkupDocBuilder withAnchorPrefix(String prefix) {
+        this.anchorPrefix = prefix;
+        return this;
+    }
+
+    @Override
+    public String getAnchorPrefix() {
+        return this.anchorPrefix;
+    }
 
     protected void documentTitle(Markup markup, String title){
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
@@ -196,9 +211,10 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
      * - Beginning, ending separation characters [-_] are ignored, repeating separation characters are simplified (keep first one)
      * - Anchor is trimmed and lower cased
      * - If the anchor still contains forbidden characters (non-ASCII, ...), replace the whole anchor with an hash (MD5).
+     * - Add the anchor prefix if configured
      */
     protected String normalizeAnchor(Markup spaceEscape, String anchor) {
-        String normalizedAnchor = anchor.trim();
+        String normalizedAnchor = defaultString(anchorPrefix) + anchor.trim();
         normalizedAnchor = Normalizer.normalize(normalizedAnchor, Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
         normalizedAnchor = ANCHOR_IGNORABLE_PATTERN.matcher(normalizedAnchor).replaceAll(spaceEscape.toString());
         normalizedAnchor = normalizedAnchor.replaceAll(String.format("([%1$s])([%1$s]+)", ANCHOR_SEPARATION_CHARACTERS), "$1");
@@ -226,13 +242,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String title, String text) {
-        return crossReference(null, title, text);
+    public MarkupDocBuilder crossReference(String anchor, String text) {
+        return crossReference(null, anchor, text);
     }
 
     @Override
-    public MarkupDocBuilder crossReference(String title) {
-        return crossReference(null, title, null);
+    public MarkupDocBuilder crossReference(String anchor) {
+        return crossReference(null, anchor, null);
     }
 
     protected void newLine(Markup markup, boolean forceLineBreak){
