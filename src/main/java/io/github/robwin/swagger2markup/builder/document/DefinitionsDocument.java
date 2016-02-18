@@ -228,7 +228,8 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
-        addDefinitionTitle(docBuilder.crossReferenceAsString(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName), docBuilder);
+        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
+        addDefinitionTitle(ref.crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), docBuilder);
     }
 
     /**

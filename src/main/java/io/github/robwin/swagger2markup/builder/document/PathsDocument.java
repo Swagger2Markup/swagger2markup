@@ -327,7 +327,8 @@ public class PathsDocument extends MarkupDocument {
         String document = resolveOperationDocument(operation);
         String operationName = operationName(operation);
 
-        addOperationTitle(docBuilder.crossReferenceAsString(document, operationName, operationName), docBuilder);
+        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
+        addOperationTitle(ref.crossReference(document, operationName, operationName).toString(), docBuilder);
     }
 
     /**
@@ -412,13 +413,30 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
+    /**
+     * Filter parameters to display in parameters section
+     * @param parameter parameter to filter
+     * @return true if parameter can be displayed
+     */
+    private boolean filterParameter(Parameter parameter) {
+        return (!this.flatBody || !StringUtils.equals(parameter.getIn(), "body"));
+    }
+
     private List<ObjectType> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (this.parameterOrdering != null)
             Collections.sort(parameters, this.parameterOrdering);
         List<ObjectType> localDefinitions = new ArrayList<>();
 
-        if(CollectionUtils.isNotEmpty(parameters)){
+        boolean displayParameters = false;
+        if (CollectionUtils.isNotEmpty(parameters))
+            for (Parameter p : parameters)
+              if (filterParameter(p)) {
+                  displayParameters = true;
+                  break;
+              }
+
+        if (displayParameters) {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN, 1),
@@ -428,7 +446,7 @@ public class PathsDocument extends MarkupDocument {
                     new MarkupTableColumn(SCHEMA_COLUMN, 1),
                     new MarkupTableColumn(DEFAULT_COLUMN, 1));
             for(Parameter parameter : parameters) {
-                if (!StringUtils.equals(parameter.getIn(), "body") || !this.flatBody) {
+                if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
 
                     if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
@@ -481,11 +499,11 @@ public class PathsDocument extends MarkupDocument {
                             docBuilder.paragraph(parameter.getDescription());
                         }
 
-                        StringBuilder typeInfos = new StringBuilder();
-                        typeInfos.append(REQUIRED_COLUMN + ": " + parameter.getRequired()).append(System.lineSeparator());
-                        typeInfos.append(NAME_COLUMN + ": " + parameter.getName()).append(System.lineSeparator());
+                        MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(this.markupLanguage);
+                        typeInfos.italicText(REQUIRED_COLUMN).textLine(": " + parameter.getRequired());
+                        typeInfos.italicText(NAME_COLUMN).textLine(": " + parameter.getName());
                         if (!(type instanceof ObjectType)) {
-                            typeInfos.append(TYPE_COLUMN + ": " + type.displaySchema(docBuilder)).append(System.lineSeparator());
+                            typeInfos.italicText(TYPE_COLUMN).textLine(": " + type.displaySchema(docBuilder));
 
                             docBuilder.paragraph(typeInfos.toString());
                         } else {
@@ -673,8 +691,8 @@ public class PathsDocument extends MarkupDocument {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    List<String> content = Arrays.asList(type, docBuilder.crossReferenceAsString(null,
-                            securityKey, securityKey),
+                    MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
+                    List<String> content = Arrays.asList(type, ref.crossReference(securityKey, securityKey).toString(),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }

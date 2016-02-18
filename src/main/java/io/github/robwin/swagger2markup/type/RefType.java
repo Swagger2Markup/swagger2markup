@@ -1,6 +1,7 @@
 package io.github.robwin.swagger2markup.type;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupDocBuilders;
 
 /**
  * Reference to a type defined elsewhere
@@ -20,7 +21,8 @@ public class RefType extends Type {
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        return docBuilder.crossReferenceAsString(getDocument(), getUniqueName(), getName());
+        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
+        return ref.crossReference(getDocument(), getUniqueName(), getName()).toString();
     }
 
     public String getDocument() {
