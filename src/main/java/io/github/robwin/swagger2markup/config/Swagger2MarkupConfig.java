@@ -51,6 +51,7 @@ public class Swagger2MarkupConfig {
     private final boolean interDocumentCrossReferences;
     private final String interDocumentCrossReferencesPrefix;
     private final boolean flatBody;
+    private final String anchorPrefix;
 
     private static final String OVERVIEW_DOCUMENT = "overview";
     private static final String PATHS_DOCUMENT = "paths";
@@ -81,6 +82,7 @@ public class Swagger2MarkupConfig {
      * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
      * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
      * @param flatBody optionally isolate the body parameter, if any, from other parameters
+     * @param anchorPrefix optionally prefix all anchors for unicity
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
@@ -89,7 +91,7 @@ public class Swagger2MarkupConfig {
                                 Comparator<String> definitionOrdering, Comparator<Parameter> parameterOrdering, Comparator<String> propertyOrdering,
                                 Comparator<String> responseOrdering,
                                 boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix,
-                                boolean flatBody) {
+                                boolean flatBody, String anchorPrefix) {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
@@ -110,6 +112,7 @@ public class Swagger2MarkupConfig {
         this.interDocumentCrossReferences = interDocumentCrossReferences;
         this.interDocumentCrossReferencesPrefix = interDocumentCrossReferencesPrefix;
         this.flatBody = flatBody;
+        this.anchorPrefix = anchorPrefix;
     }
 
     public Swagger getSwagger() {
@@ -214,5 +217,9 @@ public class Swagger2MarkupConfig {
 
     public boolean isFlatBody() {
         return flatBody;
+    }
+
+    public String getAnchorPrefix() {
+        return anchorPrefix;
     }
 }

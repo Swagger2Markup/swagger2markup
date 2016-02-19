@@ -21,8 +21,7 @@ public class RefType extends Type {
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-        return ref.crossReference(getDocument(), getUniqueName(), getName()).toString();
+        return docBuilder.copy().crossReference(getDocument(), getUniqueName(), getName()).toString();
     }
 
     public String getDocument() {

@@ -23,6 +23,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
+import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.PathOperation;
@@ -78,6 +79,7 @@ public class PathsDocument extends MarkupDocument {
     private final String HTTP_CODE_COLUMN;
     private final String PARAMETER;
 
+    private static final String PATHS_ANCHOR = "paths";
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
@@ -181,6 +183,10 @@ public class PathsDocument extends MarkupDocument {
         return this;
     }
 
+    private void addPathsTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, PATHS_ANCHOR);
+    }
+
     /**
      * Builds all operations of the Swagger model. Either grouped as-is or by tags.
      */
@@ -203,7 +209,7 @@ public class PathsDocument extends MarkupDocument {
         if (allOperations.size() > 0) {
 
             if (pathsGroupedBy == GroupBy.AS_IS) {
-                this.markupDocBuilder.sectionTitleLevel1(PATHS);
+                addPathsTitle(PATHS);
 
                 if (this.operationOrdering != null) {
                     Set<PathOperation> sortedOperations = new TreeSet<>(this.operationOrdering);
@@ -217,7 +223,7 @@ public class PathsDocument extends MarkupDocument {
 
 
             } else {
-                this.markupDocBuilder.sectionTitleLevel1(RESOURCES);
+                addPathsTitle(RESOURCES);
 
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(allOperations, tagOrdering, operationOrdering);
 
@@ -257,7 +263,7 @@ public class PathsDocument extends MarkupDocument {
      */
     private void processOperation(PathOperation operation) {
         if (separatedOperationsEnabled) {
-            MarkupDocBuilder pathDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+            MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
             operation(operation, pathDocBuilder);
             File operationFile = new File(outputDirectory, resolveOperationDocument(operation));
 
@@ -327,8 +333,7 @@ public class PathsDocument extends MarkupDocument {
         String document = resolveOperationDocument(operation);
         String operationName = operationName(operation);
 
-        MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-        addOperationTitle(ref.crossReference(document, operationName, operationName).toString(), docBuilder);
+        addOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
     }
 
     /**
@@ -341,7 +346,7 @@ public class PathsDocument extends MarkupDocument {
     private void operationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
         String operationName = operationName(operation);
 
-        addOperationTitle(operationName, docBuilder);
+        addOperationTitle(operationName, null, docBuilder);
         if(operationName.equals(operation.getOperation().getSummary())) {
             docBuilder.listing(operation.getMethod() + " " + operation.getPath());
         }
@@ -351,13 +356,14 @@ public class PathsDocument extends MarkupDocument {
      * Adds a operation title to the document.
      *
      * @param title the operation title
+     * @param anchor optional anchor (null => auto-generate from title)
      * @param docBuilder the docbuilder do use for output
      */
-    private void addOperationTitle(String title, MarkupDocBuilder docBuilder) {
+    private void addOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         if(pathsGroupedBy == GroupBy.AS_IS){
-            docBuilder.sectionTitleLevel2(title);
+            docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         }else{
-            docBuilder.sectionTitleLevel3(title);
+            docBuilder.sectionTitleWithAnchorLevel3(title, anchor);
         }
     }
 
@@ -439,12 +445,12 @@ public class PathsDocument extends MarkupDocument {
         if (displayParameters) {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN, 1),
-                    new MarkupTableColumn(NAME_COLUMN, 1),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
-                    new MarkupTableColumn(REQUIRED_COLUMN, 1),
-                    new MarkupTableColumn(SCHEMA_COLUMN, 1),
-                    new MarkupTableColumn(DEFAULT_COLUMN, 1));
+                    new MarkupTableColumn(TYPE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(NAME_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
+                    new MarkupTableColumn(REQUIRED_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             for(Parameter parameter : parameters) {
                 if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
@@ -459,7 +465,7 @@ public class PathsDocument extends MarkupDocument {
                             type = new RefType(type);
                         }
                     }
-                    String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
+                    String parameterType = WordUtils.capitalize(parameter.getIn());
 
                     List<String> content = Arrays.asList(
                             parameterType,
@@ -681,9 +687,9 @@ public class PathsDocument extends MarkupDocument {
             Map<String, SecuritySchemeDefinition> securityDefinitions = swagger.getSecurityDefinitions();
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN, 1),
-                    new MarkupTableColumn(NAME_COLUMN, 1),
-                    new MarkupTableColumn(SCOPES_COLUMN, 6));
+                    new MarkupTableColumn(TYPE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(NAME_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
+                    new MarkupTableColumn(SCOPES_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"));
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
@@ -691,8 +697,7 @@ public class PathsDocument extends MarkupDocument {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    MarkupDocBuilder ref = MarkupDocBuilders.documentBuilder(docBuilder);
-                    List<String> content = Arrays.asList(type, ref.crossReference(securityKey, securityKey).toString(),
+                    List<String> content = Arrays.asList(type, docBuilder.copy().crossReference(securityKey, securityKey).toString(),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }
@@ -741,9 +746,9 @@ public class PathsDocument extends MarkupDocument {
         if(MapUtils.isNotEmpty(responses)){
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(HTTP_CODE_COLUMN, 1),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
-                    new MarkupTableColumn(SCHEMA_COLUMN, 1));
+                    new MarkupTableColumn(HTTP_CODE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             Set<String> responseNames;
             if (this.responseOrdering == null)
                 responseNames = new LinkedHashSet<>();
