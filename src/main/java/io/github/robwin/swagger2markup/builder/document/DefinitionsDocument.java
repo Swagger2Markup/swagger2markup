@@ -124,7 +124,6 @@ public class DefinitionsDocument extends MarkupDocument {
 
     private void addDefinitionsTitle(String title) {
         this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, DEFINITIONS_ANCHOR);
-
     }
 
     /**
