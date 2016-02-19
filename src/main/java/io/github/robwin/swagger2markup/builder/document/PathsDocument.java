@@ -465,7 +465,7 @@ public class PathsDocument extends MarkupDocument {
                             type = new RefType(type);
                         }
                     }
-                    String parameterType = WordUtils.capitalize(parameter.getIn() + PARAMETER);
+                    String parameterType = WordUtils.capitalize(parameter.getIn());
 
                     List<String> content = Arrays.asList(
                             parameterType,
