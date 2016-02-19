@@ -22,6 +22,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -29,7 +30,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -213,7 +213,13 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
                     options.add("header");
                     hasHeader = true;
                 }
-                cols.add(String.valueOf(col.widthRatio));
+                String languageStyle = col.markupSpecifiers.get(MarkupLanguage.ASCIIDOC);
+                if (languageStyle != null && isNoneBlank(languageStyle)) {
+                    cols.add(languageStyle);
+                }
+                else {
+                    cols.add(String.valueOf(col.widthRatio));
+                }
             }
         }
 
