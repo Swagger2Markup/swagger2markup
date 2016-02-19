@@ -475,7 +475,7 @@ public class Swagger2MarkupConverter {
         }
 
         /**
-         * Pptionally prefix all anchors for unicity
+         * Optionally prefix all anchors for unicity
          * @param anchorPrefix anchor prefix (null = no prefix)
          * @return the Swagger2MarkupConverter.Builder
          */
