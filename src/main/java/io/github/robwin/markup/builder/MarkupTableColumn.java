@@ -15,7 +15,8 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Header constructor
+     * Header constructor.
+     *
      * @param header header name
      */
     public MarkupTableColumn(String header) {
@@ -23,7 +24,8 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Header and specifiers constructor
+     * Header and specifiers constructor.
+     *
      * @param header header name
      * @param widthRatio width ratio
      */
@@ -33,7 +35,8 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Set header name for this column
+     * Set header name for this column.
+     *
      * @param header header name
      * @return this builder
      */
@@ -43,7 +46,9 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Set column width ratio for this column
+     * Set column width ratio for this column.<br/>
+     * Limited support : Markdown does not support column width specifiers and will ignore {@code widthRatio}.
+     *
      * @param widthRatio width ratio integer value [0-100]. Accept relative width specifiers [0-9] for languages supporting it.
      * @return this builder
      */
@@ -53,9 +58,10 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Overrides all other specifiers (for the specified language) with this language-dependent {@code specifiers} string
+     * Overrides all other specifiers (for the specified language) with this language-dependent {@code specifiers} string.
+     *
      * @param language apply the {@code specifiers} to this language only
-     * @param specifiers RAW language-dependent specifiers for the column
+     * @param specifiers RAW language-dependent specifiers string for the column
      * @return this builder
      */
     public MarkupTableColumn withMarkupSpecifiers(MarkupLanguage language, String specifiers) {
