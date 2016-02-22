@@ -282,8 +282,10 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     @Override
     public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
         Files.createDirectories(Paths.get(directory));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileName), charset)){
+        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileName), charset)) {
             writer.write(documentBuilder.toString());
+            writer.write(newLine);
+            writer.write(newLine);
         }
         if (logger.isInfoEnabled()) {
             logger.info("{} was written to: {}", fileName, directory);
