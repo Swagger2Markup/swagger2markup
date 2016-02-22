@@ -30,6 +30,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -47,6 +48,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
     private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
+    private static final int MAX_TITLE_LEVEL = 5;
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -266,6 +268,34 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder importMarkup(String text) {
+        return importMarkup(text, 0);
+    }
+
+    protected void importMarkup(Markup titlePrefix, String text, int levelOffset) {
+        if (levelOffset > MAX_TITLE_LEVEL)
+            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max title level (%d)", levelOffset, MAX_TITLE_LEVEL));
+
+        StringBuffer leveledText = new StringBuffer();
+        Matcher sections = Pattern.compile(String.format("^(%s{1,%d})(\\s+.*)$", titlePrefix, MAX_TITLE_LEVEL), Pattern.MULTILINE).matcher(text);
+
+        while (sections.find()) {
+            int titleLevel = sections.group(1).length();
+            String title = sections.group(2);
+
+            if (titleLevel + levelOffset > MAX_TITLE_LEVEL)
+                throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) > max title level (%d)", levelOffset, title, titleLevel, MAX_TITLE_LEVEL));
+            else
+                sections.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), titleLevel + levelOffset) + title);
+        }
+        sections.appendTail(leveledText);
+
+        documentBuilder.append(newLine);
+        documentBuilder.append(leveledText.toString());
+        documentBuilder.append(newLine);
+    }
+
+    @Override
     public MarkupDocBuilder table(List<List<String>> cells) {
         return tableWithColumnSpecs(null, cells);
     }
@@ -279,6 +309,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return fileName + "." + markup;
     }
 
+    /**
+     * 2 newLines are needed at the end of file for file to be included without protection.
+     */
     @Override
     public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
         Files.createDirectories(Paths.get(directory));

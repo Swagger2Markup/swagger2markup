@@ -255,6 +255,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder importMarkup(String markupText, int levelOffset) {
+        importMarkup(AsciiDoc.TITLE, markupText, levelOffset);
+        return this;
+    }
+
+    @Override
     public String addfileExtension(String fileName) {
         return addfileExtension(AsciiDoc.FILE_EXTENSION, fileName);
     }

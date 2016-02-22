@@ -387,6 +387,25 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder newLine(boolean forceLineBreak);
 
     /**
+     * Import some markup text into this builder.<br/>
+     * This is an alias for {@link #importMarkup(String, int) importMarkup(text, 0)}.
+     *
+     * @param text markup text to import
+     * @return this builder
+     */
+    MarkupDocBuilder importMarkup(String text);
+
+    /**
+     * Import some markup text into this builder.
+     *
+     * @param markupText markup text to import
+     * @param levelOffset adapt section leveling by adding {@code levelOffset} [0-5]
+     * @return this builder
+     * @throws IllegalArgumentException if levelOffset is too high for the imported markup
+     */
+    MarkupDocBuilder importMarkup(String markupText, int levelOffset);
+
+    /**
      * Returns a string representation of the document.
      */
     String toString();
