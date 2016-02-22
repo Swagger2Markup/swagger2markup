@@ -18,7 +18,6 @@
  */
 package io.github.robwin.markup.builder;
 
-import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -40,6 +39,9 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
+    /**
+     * Explicit line break default behavior for line returns, when not specified. Please, change documentation accordingly.
+     */
     private static final boolean LINE_BREAK_DEFAULT = false;
 
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
