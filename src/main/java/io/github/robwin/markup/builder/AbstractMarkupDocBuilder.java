@@ -275,6 +275,8 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected void importMarkup(Markup titlePrefix, String text, int levelOffset) {
         if (levelOffset > MAX_TITLE_LEVEL)
             throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max title level (%d)", levelOffset, MAX_TITLE_LEVEL));
+        if (levelOffset < 0)
+            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) < 0", levelOffset));
 
         StringBuffer leveledText = new StringBuffer();
         Matcher sections = Pattern.compile(String.format("^(%s{1,%d})(\\s+.*)$", titlePrefix, MAX_TITLE_LEVEL), Pattern.MULTILINE).matcher(text);
