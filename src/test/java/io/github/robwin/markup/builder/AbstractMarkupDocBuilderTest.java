@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 
 public class AbstractMarkupDocBuilderTest {
@@ -17,6 +18,8 @@ public class AbstractMarkupDocBuilderTest {
     @Before
     public void setUp() {
         builder = mock(AbstractMarkupDocBuilder.class, Mockito.CALLS_REAL_METHODS);
+        builder.newLine = System.getProperty("line.separator");
+        builder.documentBuilder = new StringBuilder();
     }
 
     private String normalize(Markup markup, String anchor) {
@@ -64,4 +67,51 @@ public class AbstractMarkupDocBuilderTest {
         assertNormalization(Markdown.SPACE_ESCAPE, "", "  @#&(){}[]!$*%+=/:.;,?\\<>| ");
         assertNormalization(Markdown.SPACE_ESCAPE, "sub-action-html-query-value", " /sub/action.html/?query=value ");
     }
+
+    private void assertImportMarkup(Markup markup, String expected, String text, int levelOffset) {
+        builder.documentBuilder = new StringBuilder();
+        builder.importMarkup(markup, text, levelOffset);
+        assertEquals(expected, builder.documentBuilder.toString());
+    }
+
+    private void assertImportMarkupException(Markup markup, String expected, String text, int levelOffset) {
+        builder.documentBuilder = new StringBuilder();
+        try {
+            builder.importMarkup(markup, text, levelOffset);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException e) {
+            assertEquals(expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testImportMarkupAsciiDoc() {
+        assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 0);
+        assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 5);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
+
+        assertImportMarkup(AsciiDoc.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 0);
+        assertImportMarkup(AsciiDoc.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 5);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
+
+        assertImportMarkup(AsciiDoc.TITLE, "\n= title\nline 1\nline 2\n", "= title\nline 1\nline 2", 0);
+        assertImportMarkup(AsciiDoc.TITLE, "\n===== title\nline 1\nline 2\n", "= title\nline 1\nline 2", 4);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (5) set title ' title' level (1) > max title level (5)", "= title\nline 1\nline 2", 5);
+    }
+
+    @Test
+    public void testImportMarkupMarkdown() {
+        assertImportMarkup(Markdown.TITLE, "\n\n", "", 0);
+        assertImportMarkup(Markdown.TITLE, "\n\n", "", 5);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
+
+        assertImportMarkup(Markdown.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 0);
+        assertImportMarkup(Markdown.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 5);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
+
+        assertImportMarkup(Markdown.TITLE, "\n# title\nline 1\nline 2\n", "# title\nline 1\nline 2", 0);
+        assertImportMarkup(Markdown.TITLE, "\n##### title\nline 1\nline 2\n", "# title\nline 1\nline 2", 4);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (5) set title ' title' level (1) > max title level (5)", "# title\nline 1\nline 2", 5);
+    }
+
 }
