@@ -18,9 +18,12 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -35,6 +38,7 @@ import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.github.robwin.swagger2markup.utils.TagUtils;
 import io.swagger.models.*;
+import io.swagger.models.Path;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
@@ -42,16 +46,16 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.output.StringBuilderWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.util.*;
 
 import static io.github.robwin.swagger2markup.utils.TagUtils.convertTagsListToMap;
@@ -77,7 +81,6 @@ public class PathsDocument extends MarkupDocument {
     private final String SECURITY;
     private final String TYPE_COLUMN;
     private final String HTTP_CODE_COLUMN;
-    private final String PARAMETER;
 
     private static final String PATHS_ANCHOR = "paths";
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
@@ -88,8 +91,10 @@ public class PathsDocument extends MarkupDocument {
 
     private boolean examplesEnabled;
     private String examplesFolderPath;
-    private boolean handWrittenDescriptionsEnabled;
+    private boolean descriptionsEnabled;
     private String descriptionsFolderPath;
+    protected boolean operationExtensionsEnabled;
+    protected String operationExtensionsFolderPath;
     private final GroupBy pathsGroupedBy;
     private final int inlineSchemaDepthLevel;
     private final Comparator<String> tagOrdering;
@@ -119,7 +124,6 @@ public class PathsDocument extends MarkupDocument {
         SECURITY = labels.getString("security");
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
-        PARAMETER = labels.getString("parameter");
 
         this.pathsDocument = swagger2MarkupConfig.getPathsDocument();
         this.inlineSchemaDepthLevel = swagger2MarkupConfig.getInlineSchemaDepthLevel();
@@ -129,10 +133,13 @@ public class PathsDocument extends MarkupDocument {
             this.examplesFolderPath = swagger2MarkupConfig.getExamplesFolderPath();
         }
         if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
-            this.handWrittenDescriptionsEnabled = true;
+            this.descriptionsEnabled = true;
             this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + DESCRIPTION_FOLDER_NAME;
         }
-
+        if(isNotBlank(swagger2MarkupConfig.getOperationExtensionsFolderPath())){
+            this.operationExtensionsEnabled = true;
+            this.operationExtensionsFolderPath = swagger2MarkupConfig.getOperationExtensionsFolderPath();
+        }
         if(examplesEnabled){
             if (logger.isDebugEnabled()) {
                 logger.debug("Include examples is enabled.");
@@ -142,7 +149,7 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Include examples is disabled.");
             }
         }
-        if(handWrittenDescriptionsEnabled){
+        if(descriptionsEnabled){
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written descriptions is enabled.");
             }
@@ -321,6 +328,7 @@ public class PathsDocument extends MarkupDocument {
             tagsSection(operation, docBuilder);
             securitySchemeSection(operation, docBuilder);
             examplesSection(operation, docBuilder);
+            extensionsSection(operation, docBuilder);
         }
     }
 
@@ -394,7 +402,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if(handWrittenDescriptionsEnabled){
+        if(descriptionsEnabled){
             Optional<String> description = handWrittenOperationDescription(normalizeFileName(operation.getId()), DESCRIPTION_FILE_NAME);
             if (!description.isPresent())
                 description = handWrittenOperationDescription(normalizeFileName(operation.getTitle()), DESCRIPTION_FILE_NAME);
@@ -539,7 +547,7 @@ public class PathsDocument extends MarkupDocument {
      * @return the description of a parameter.
      */
     private String parameterDescription(final PathOperation operation, Parameter parameter){
-        if (handWrittenDescriptionsEnabled) {
+        if (descriptionsEnabled) {
             final String parameterName = parameter.getName();
             if (isNotBlank(parameterName)) {
                 Optional<String> description = handWrittenOperationDescription(new File(normalizeFileName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
@@ -814,6 +822,50 @@ public class PathsDocument extends MarkupDocument {
             }
         }
 
+    }
+
+    /**
+     * Builds extension sections
+     *
+     * @param operation  the Swagger Operation
+     * @param docBuilder the MarkupDocBuilder document builder
+     */
+    private void extensionsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+        if (this.operationExtensionsEnabled) {
+            final Collection<String> filenameExtensions = Collections2.transform(markupLanguage.getFileNameExtensions(), new Function<String, String>() {
+                public String apply(String input) {
+                    return StringUtils.stripStart(input, ".");
+                }
+            });
+            File operationExtensionsPath = new File(new File(this.operationExtensionsFolderPath), normalizeFileName(operation.getId()));
+
+            File[] extensionFiles = operationExtensionsPath.listFiles(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.startsWith(EXTENSION_FILENAME_PREFIX) && FilenameUtils.isExtension(name, filenameExtensions);
+                }
+            });
+
+            if (extensionFiles != null) {
+                List<File> extensions = Arrays.asList(extensionFiles);
+                Collections.sort(extensions, Ordering.natural());
+
+                for (File extension : extensions) {
+                    Optional<FileReader> extensionContent = operationExtension(extension.getAbsoluteFile());
+
+                    if (extensionContent.isPresent()) {
+                        int levelOffset = 3;
+                        if (pathsGroupedBy == GroupBy.AS_IS) {
+                            levelOffset = 2;
+                        }
+                        try {
+                            docBuilder.importMarkup(extensionContent.get(), levelOffset);
+                        } catch (IOException e) {
+                            throw new RuntimeException(String.format("Failed to read extension file: %s", extension), e);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

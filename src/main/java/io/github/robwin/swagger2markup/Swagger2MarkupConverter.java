@@ -148,6 +148,8 @@ public class Swagger2MarkupConverter {
         private String examplesFolderPath;
         private String schemasFolderPath;
         private String descriptionsFolderPath;
+        private String operationExtensionsFolderPath;
+        private String definitionExtensionsFolderPath;
         private boolean separatedDefinitions;
         private boolean separatedOperations;
         private GroupBy pathsGroupedBy = GroupBy.AS_IS;
@@ -233,8 +235,9 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build() {
-            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
-                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
+            return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage,
+                    examplesFolderPath, schemasFolderPath, descriptionsFolderPath, operationExtensionsFolderPath, definitionExtensionsFolderPath,
+                    separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
                     outputLanguage, inlineSchemaDepthLevel,
                     tagOrdering, operationOrdering, definitionOrdering, parameterOrdering, propertyOrdering, responseOrdering,
                     interDocumentCrossReferences, interDocumentCrossReferencesPrefix, flatBody, anchorPrefix));
@@ -262,6 +265,28 @@ public class Swagger2MarkupConverter {
             return this;
         }
 
+        /**
+         * Include extensions into Paths document
+         *
+         * @param operationExtensionsFolderPath the path to the folder where the operation extension documents reside
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withOperationExtensions(String operationExtensionsFolderPath) {
+            this.operationExtensionsFolderPath = operationExtensionsFolderPath;
+            return this;
+        }
+        
+        /**
+         * Include extensions into Definitions document
+         *
+         * @param definitionExtensionsFolderPath the path to the folder where the definition extension documents reside
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withDefinitionExtensions(String definitionExtensionsFolderPath) {
+            this.definitionExtensionsFolderPath = definitionExtensionsFolderPath;
+            return this;
+        }
+        
         /**
          * In addition to the definitions file, also create separate definition files for each model definition.
          *

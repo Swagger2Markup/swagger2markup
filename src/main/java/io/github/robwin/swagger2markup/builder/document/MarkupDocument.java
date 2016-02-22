@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
@@ -32,17 +33,23 @@ import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -50,6 +57,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 public abstract class MarkupDocument {
 
     protected static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
+    protected static final String EXTENSION_FILENAME_PREFIX = "extension-";
 
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
@@ -63,7 +71,9 @@ public abstract class MarkupDocument {
     protected final String CONSUMES;
     protected final String TAGS;
     protected final String NO_CONTENT;
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
+
     protected Swagger swagger;
     protected MarkupLanguage markupLanguage;
     protected MarkupDocBuilder markupDocBuilder;
@@ -74,7 +84,6 @@ public abstract class MarkupDocument {
     protected boolean useInterDocumentCrossReferences;
     protected String interDocumentCrossReferencesPrefix;
     protected Comparator<String> propertyOrdering;
-
 
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
         this.swagger = swagger2MarkupConfig.getSwagger();
@@ -197,6 +206,33 @@ public abstract class MarkupDocument {
         }
 
         return localDefinitions;
+    }
+
+    /**
+     * Reads an extension
+     *
+     * @param extension extension file
+     * @return extension content reader
+     */
+    protected Optional<FileReader> operationExtension(File extension) {
+
+        if (Files.isReadable(extension.toPath())) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Extension file processed: {}", extension);
+            }
+            try {
+                return Optional.of(new FileReader(extension));
+            } catch (IOException e) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(String.format("Failed to read extension file: %s", extension), e);
+                }
+            }
+        } else {
+            if (logger.isWarnEnabled()) {
+                logger.warn("Extension file is not readable: {}", extension);
+            }
+        }
+        return Optional.absent();
     }
 
     /**

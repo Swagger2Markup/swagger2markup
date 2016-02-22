@@ -35,6 +35,8 @@ public class Swagger2MarkupConfig {
     private final String examplesFolderPath;
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
+    private final String operationExtensionsFolderPath;
+    private final String definitionExtensionsFolderPath;
     private final boolean separatedDefinitions;
     private final boolean separatedOperations;
     private final GroupBy pathsGroupedBy;
@@ -67,6 +69,8 @@ public class Swagger2MarkupConfig {
      * @param examplesFolderPath examplesFolderPath the path to the folder where the example documents reside
      * @param schemasFolderPath the path to the folder where the schema documents reside
      * @param descriptionsFolderPath the path to the folder where the description documents reside
+     * @param operationExtensionsFolderPath the path to the folder where the operation extension documents reside
+     * @param definitionExtensionsFolderPath the path to the folder where the definition extension documents reside
      * @param separatedDefinitions specified if in addition to the definitions file, also separate definition files for each model definition should be created
      * @param separatedOperations specified if in addition to the paths file, also separate operation files for each operation should be created
      * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
@@ -85,7 +89,8 @@ public class Swagger2MarkupConfig {
      * @param anchorPrefix optionally prefix all anchors for unicity
      */
     public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
-                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
+                                String schemasFolderPath, String descriptionsFolderPath, String operationExtensionsFolderPath, String definitionExtensionsFolderPath,
+                                boolean separatedDefinitions, boolean separatedOperations,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering,
                                 Comparator<String> definitionOrdering, Comparator<Parameter> parameterOrdering, Comparator<String> propertyOrdering,
@@ -97,6 +102,8 @@ public class Swagger2MarkupConfig {
         this.examplesFolderPath = examplesFolderPath;
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
+        this.operationExtensionsFolderPath = operationExtensionsFolderPath;
+        this.definitionExtensionsFolderPath = definitionExtensionsFolderPath;
         this.separatedDefinitions = separatedDefinitions;
         this.separatedOperations = separatedOperations;
         this.pathsGroupedBy = pathsGroupedBy;
@@ -133,6 +140,14 @@ public class Swagger2MarkupConfig {
 
     public String getDescriptionsFolderPath() {
         return descriptionsFolderPath;
+    }
+
+    public String getOperationExtensionsFolderPath() {
+        return operationExtensionsFolderPath;
+    }
+
+    public String getDefinitionExtensionsFolderPath() {
+        return definitionExtensionsFolderPath;
     }
 
     public boolean isSeparatedDefinitions() {

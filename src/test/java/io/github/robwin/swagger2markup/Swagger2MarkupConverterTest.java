@@ -369,6 +369,51 @@ public class Swagger2MarkupConverterTest {
                 "== Определения");
     }
 
+    @Test
+    public void testSwagger2AsciiDocExtensions() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withOperationExtensions("src/docs/asciidoc/extensions")
+                .withDefinitionExtensions("src/docs/asciidoc/extensions")
+                .build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "paths.adoc").toPath()))).contains(
+                "Pet update request extension");
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath()))).contains(
+                "Pet extension");
+
+    }
+
+    @Test
+    public void testSwagger2MarkdownExtensions() throws IOException {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        File outputDirectory = new File("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .withOperationExtensions("src/docs/markdown/extensions")
+                .withDefinitionExtensions("src/docs/markdown/extensions")
+                .build()
+                .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "paths.md").toPath()))).contains(
+                "Pet update request extension");
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.md").toPath()))).contains(
+                "Pet extension");
+
+    }
+
     /**
      * Given a markdown document to search, this checks to see if the specified tables
      * have all of the expected fields listed.

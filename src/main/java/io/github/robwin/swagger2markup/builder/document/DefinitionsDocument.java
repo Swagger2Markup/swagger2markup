@@ -18,9 +18,12 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -33,9 +36,12 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -62,8 +68,10 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String DESCRIPTION_FILE_NAME = "description";
     private boolean schemasEnabled;
     private String schemasFolderPath;
-    private boolean handWrittenDescriptionsEnabled;
+    private boolean descriptionsEnabled;
     private String descriptionsFolderPath;
+    protected boolean definitionExtensionsEnabled;
+    protected String definitionExtensionsFolderPath;
     private final int inlineSchemaDepthLevel;
     private final Comparator<String> definitionOrdering;
 
@@ -82,8 +90,12 @@ public class DefinitionsDocument extends MarkupDocument {
             this.schemasFolderPath = swagger2MarkupConfig.getSchemasFolderPath();
         }
         if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
-            this.handWrittenDescriptionsEnabled = true;
+            this.descriptionsEnabled = true;
             this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + DESCRIPTION_FOLDER_NAME;
+        }
+        if(isNotBlank(swagger2MarkupConfig.getDefinitionExtensionsFolderPath())){
+            this.definitionExtensionsEnabled = true;
+            this.definitionExtensionsFolderPath = swagger2MarkupConfig.getDefinitionExtensionsFolderPath();
         }
         if(schemasEnabled){
             if (logger.isDebugEnabled()) {
@@ -94,7 +106,7 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Include schemas is disabled.");
             }
         }
-        if(handWrittenDescriptionsEnabled){
+        if(descriptionsEnabled){
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written descriptions is enabled.");
             }
@@ -225,6 +237,7 @@ public class DefinitionsDocument extends MarkupDocument {
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, inlineSchemaDepthLevel, docBuilder);
         definitionSchema(definitionName, docBuilder);
+        extensionsSection(definitionName, docBuilder);
     }
 
     /**
@@ -259,8 +272,8 @@ public class DefinitionsDocument extends MarkupDocument {
         @Override
         public String getDescription(Property property, String propertyName) {
             String description;
-            if(handWrittenDescriptionsEnabled){
-                description = handWrittenPathDescription(type.getName().toLowerCase() + "/" + propertyName.toLowerCase(), DESCRIPTION_FILE_NAME);
+            if(descriptionsEnabled){
+                description = handWrittenPathDescription(new File(normalizeFileName(type.getName()), normalizeFileName(propertyName)).toString(), DESCRIPTION_FILE_NAME);
                 if(isBlank(description)) {
                     if (logger.isInfoEnabled()) {
                         logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
@@ -322,8 +335,8 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder){
-        if(handWrittenDescriptionsEnabled){
-            String description = handWrittenPathDescription(definitionName.toLowerCase(), DESCRIPTION_FILE_NAME);
+        if(descriptionsEnabled){
+            String description = handWrittenPathDescription(normalizeFileName(definitionName), DESCRIPTION_FILE_NAME);
             if(isNotBlank(description)){
                 docBuilder.paragraph(description);
             }else{
@@ -439,6 +452,46 @@ public class DefinitionsDocument extends MarkupDocument {
             }
         }
 
+    }
+
+    /**
+     * Builds extension sections
+     *
+     * @param definitionName name of the definition
+     * @param docBuilder the MarkupDocBuilder document builder
+     */
+    private void extensionsSection(String definitionName, MarkupDocBuilder docBuilder) {
+        if (this.definitionExtensionsEnabled) {
+            final Collection<String> filenameExtensions = Collections2.transform(markupLanguage.getFileNameExtensions(), new Function<String, String>() {
+                public String apply(String input) {
+                    return StringUtils.stripStart(input, ".");
+                }
+            });
+            File definitionExtensionsPath = new File(new File(this.definitionExtensionsFolderPath), normalizeFileName(definitionName));
+
+            File[] extensionFiles = definitionExtensionsPath.listFiles(new FilenameFilter() {
+                public boolean accept(File dir, String name) {
+                    return name.startsWith(EXTENSION_FILENAME_PREFIX) && FilenameUtils.isExtension(name, filenameExtensions);
+                }
+            });
+
+            if (extensionFiles != null) {
+                List<File> extensions = Arrays.asList(extensionFiles);
+                Collections.sort(extensions, Ordering.natural());
+
+                for (File extension : extensions) {
+                    Optional<FileReader> extensionContent = operationExtension(extension.getAbsoluteFile());
+
+                    if (extensionContent.isPresent()) {
+                        try {
+                            docBuilder.importMarkup(extensionContent.get(), 2);
+                        } catch (IOException e) {
+                            throw new RuntimeException(String.format("Failed to read extension file: %s", extension), e);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**
