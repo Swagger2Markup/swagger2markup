@@ -18,9 +18,13 @@
  */
 package io.github.robwin.swagger2markup;
 
-import com.google.common.collect.*;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -181,7 +185,7 @@ public class Swagger2MarkupConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withDescriptions("src/docs/asciidoc")
+                .withDefinitionDescriptions("src/docs/asciidoc/definitions")
                 .build();
 
         Swagger2MarkupConverter.from(file.getAbsolutePath())
@@ -265,7 +269,7 @@ public class Swagger2MarkupConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withDescriptions("src/docs/markdown")
+                .withDefinitionDescriptions("src/docs/markdown/definitions")
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file.getAbsolutePath())
@@ -457,6 +461,82 @@ public class Swagger2MarkupConverterTest {
                 "Pet update request extension");
         assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.md").toPath()))).contains(
                 "Pet extension");
+
+    }
+
+    @Test
+    public void testSwagger2MarkupConfigDefaultPaths() {
+        //Given
+        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withDefinitionDescriptions()
+                .withDefinitionExtensions()
+                .withExamples()
+                .withOperationDescriptions()
+                .withOperationExtensions()
+                .withSchemas()
+                .build();
+
+        Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(file.getPath())
+                .withConfig(config)
+                .build();
+
+        //Then
+        assertThat(converterBuilder.config.getDefinitionDescriptionsPath()).isEqualTo(new File(file.getParent(), "definitions").getPath());
+        assertThat(converterBuilder.config.getDefinitionExtensionsPath()).isEqualTo(new File(file.getParent(), "definitions").getPath());
+        assertThat(converterBuilder.config.getExamplesPath()).isEqualTo(new File(file.getParent(), "operations").getPath());
+        assertThat(converterBuilder.config.getOperationDescriptionsPath()).isEqualTo(new File(file.getParent(), "operations").getPath());
+        assertThat(converterBuilder.config.getOperationExtensionsPath()).isEqualTo(new File(file.getParent(), "operations").getPath());
+        assertThat(converterBuilder.config.getSchemasPath()).isEqualTo(new File(file.getParent(), "definitions").getPath());
+    }
+
+    @Test
+    public void testSwagger2MarkupConfigDefaultPathsWithUrl() {
+        //Given
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withDefinitionDescriptions()
+                .withDefinitionExtensions()
+                .withExamples()
+                .withOperationDescriptions()
+                .withOperationExtensions()
+                .withSchemas()
+                .build();
+
+        Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from("http://petstore.swagger.io/v2/swagger.json")
+                .withConfig(config)
+                .build();
+
+        //Then
+        assertThat(converterBuilder.config.getDefinitionDescriptionsPath()).isEqualTo("http:/petstore.swagger.io/v2/definitions");
+        assertThat(converterBuilder.config.getDefinitionExtensionsPath()).isEqualTo("http:/petstore.swagger.io/v2/definitions");
+        assertThat(converterBuilder.config.getExamplesPath()).isEqualTo("http:/petstore.swagger.io/v2/operations");
+        assertThat(converterBuilder.config.getOperationDescriptionsPath()).isEqualTo("http:/petstore.swagger.io/v2/operations");
+        assertThat(converterBuilder.config.getOperationExtensionsPath()).isEqualTo("http:/petstore.swagger.io/v2/operations");
+        assertThat(converterBuilder.config.getSchemasPath()).isEqualTo("http:/petstore.swagger.io/v2/definitions");
+    }
+
+    @Test
+    public void testSwagger2MarkupConfigDefaultPathsWithoutFile() {
+        //Given
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withDefinitionDescriptions()
+                .build();
+
+        //Then
+        try {
+            Swagger2MarkupConverter.from(new Swagger())
+                    .withConfig(config)
+                    .build();
+            fail("No RuntimeException thrown");
+        } catch (RuntimeException e) {
+            assertThat(e.getMessage()).isEqualTo("'definitionDescriptions' configuration entry is not set and has no default");
+        }
 
     }
 

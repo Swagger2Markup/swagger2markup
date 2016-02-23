@@ -31,6 +31,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
@@ -43,8 +44,8 @@ import java.util.Properties;
 public class Swagger2MarkupConverter {
     private static final Logger LOG = LoggerFactory.getLogger(Swagger2MarkupConverter.class);
 
-    private Swagger2MarkupConfig config;
-    private Swagger swagger;
+    Swagger2MarkupConfig config;
+    Swagger swagger;
 
     /**
      * Creates a Swagger2MarkupConverter.Builder using a given Swagger source.
@@ -126,10 +127,10 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(String directory) throws IOException {
-        new OverviewDocument(swagger,config, directory).build().writeToFile(directory, config.getOverviewDocument(), StandardCharsets.UTF_8);
-        new PathsDocument(swagger,config, directory).build().writeToFile(directory, config.getPathsDocument(), StandardCharsets.UTF_8);
-        new DefinitionsDocument(swagger,config, directory).build().writeToFile(directory, config.getDefinitionsDocument(), StandardCharsets.UTF_8);
-        new SecurityDocument(swagger,config, directory).build().writeToFile(directory, config.getSecurityDocument(), StandardCharsets.UTF_8);
+        new OverviewDocument(swagger, config, directory).build().writeToFile(directory, config.getOverviewDocument(), StandardCharsets.UTF_8);
+        new PathsDocument(swagger, config, directory).build().writeToFile(directory, config.getPathsDocument(), StandardCharsets.UTF_8);
+        new DefinitionsDocument(swagger, config, directory).build().writeToFile(directory, config.getDefinitionsDocument(), StandardCharsets.UTF_8);
+        new SecurityDocument(swagger, config, directory).build().writeToFile(directory, config.getSecurityDocument(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -139,15 +140,16 @@ public class Swagger2MarkupConverter {
      */
     private String buildDocuments() {
         StringBuilder sb = new StringBuilder();
-        sb.append(new OverviewDocument(swagger,config, null).build().toString());
-        sb.append(new PathsDocument(swagger,config, null).build().toString());
-        sb.append(new DefinitionsDocument(swagger,config, null).build().toString());
-        sb.append(new SecurityDocument(swagger,config, null).build().toString());
+        sb.append(new OverviewDocument(swagger, config, null).build().toString());
+        sb.append(new PathsDocument(swagger, config, null).build().toString());
+        sb.append(new DefinitionsDocument(swagger, config, null).build().toString());
+        sb.append(new SecurityDocument(swagger, config, null).build().toString());
         return sb.toString();
     }
 
     public static class Builder {
         private final Swagger swagger;
+        private final String swaggerLocation;
         private Swagger2MarkupConfig config;
 
         /**
@@ -156,6 +158,7 @@ public class Swagger2MarkupConverter {
          * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
          */
         Builder(String swaggerLocation) {
+            this.swaggerLocation = swaggerLocation;
             swagger = new SwaggerParser().read(swaggerLocation);
             if (swagger == null) {
                 throw new IllegalArgumentException("Failed to read the Swagger source");
@@ -169,6 +172,7 @@ public class Swagger2MarkupConverter {
          */
         Builder(Swagger swagger) {
             this.swagger = swagger;
+            this.swaggerLocation = null;
         }
 
         /**
@@ -199,6 +203,8 @@ public class Swagger2MarkupConverter {
                 converter.config = Swagger2MarkupConfig.ofDefaults().build();
             else
                 converter.config = config;
+
+            converter.config.configurePathsDefaults(this.swaggerLocation == null ? null : new File(swaggerLocation).getParentFile());
 
             return converter;
         }

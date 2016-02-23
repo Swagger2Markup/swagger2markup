@@ -51,11 +51,10 @@ public class SecurityDocument extends MarkupDocument {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
-        super(swagger, swagger2MarkupConfig, outputDirectory);
+    public SecurityDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory) {
+        super(swagger, config, outputDirectory);
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
-                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         SECURITY = labels.getString("security");
         TYPE = labels.getString("security_type");
         NAME = labels.getString("security_name");

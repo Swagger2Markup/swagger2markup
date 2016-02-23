@@ -26,24 +26,35 @@ import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.PathOperation;
 import io.swagger.models.HttpMethod;
-import io.swagger.models.Swagger;
 import io.swagger.models.parameters.Parameter;
 
-import javax.annotation.Nullable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Comparator;
 import java.util.Properties;
 
 public class Swagger2MarkupConfig {
 
+    static final String OPERATIONS_FOLDER = "operations";
+    static final String DEFINITIONS_FOLDER = "definitions";
+
     private MarkupLanguage markupLanguage;
-    private String examplesFolderPath;
-    private String schemasFolderPath;
-    private String descriptionsFolderPath;
-    private String operationExtensionsFolderPath;
-    private String definitionExtensionsFolderPath;
+    private boolean examples;
+    private String examplesPath;
+    private boolean schemas;
+    private String schemasPath;
+    private boolean operationDescriptions;
+    private String operationDescriptionsPath;
+    private boolean definitionDescriptions;
+    private String definitionDescriptionsPath;
+    private boolean operationExtensions;
+    private String operationExtensionsPath;
+    private boolean definitionExtensions;
+    private String definitionExtensionsPath;
     private boolean separatedDefinitions;
     private boolean separatedOperations;
-    private GroupBy pathsGroupedBy;
+    private GroupBy operationsGroupedBy;
     @Deprecated
     private OrderBy definitionsOrderedBy;
     private Language outputLanguage;
@@ -74,28 +85,101 @@ public class Swagger2MarkupConfig {
         return new Builder(properties);
     }
 
+    /**
+     * Automatically set default path for external files based on Swagger file base path.<br/>
+     * If {@code basePath} is null, default path can't be set and a RuntimeException is thrown.
+     *
+     * @param basePath base path to set default paths
+     * @throws RuntimeException if basePath == null and any path is not configured
+     */
+    public void configurePathsDefaults(File basePath) {
+        if (examples && examplesPath == null) {
+            if (basePath == null)
+                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "examplesPath"));
+            examplesPath = new File(basePath, OPERATIONS_FOLDER).getPath();
+        }
+
+        if (schemas && schemasPath == null) {
+            if (basePath == null)
+                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "schemasPath"));
+            schemasPath = new File(basePath, DEFINITIONS_FOLDER).getPath();
+        }
+
+        if (operationDescriptions && operationDescriptionsPath == null) {
+            if (basePath == null)
+                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "operationDescriptions"));
+            operationDescriptionsPath = new File(basePath, OPERATIONS_FOLDER).getPath();
+        }
+
+        if (definitionDescriptions && definitionDescriptionsPath == null) {
+            if (basePath == null)
+                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "definitionDescriptions"));
+            definitionDescriptionsPath = new File(basePath, DEFINITIONS_FOLDER).getPath();
+        }
+
+        if (operationExtensions && operationExtensionsPath == null) {
+            if (basePath == null)
+                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "operationExtensions"));
+            operationExtensionsPath = new File(basePath, OPERATIONS_FOLDER).getPath();
+        }
+
+        if (definitionExtensions && definitionExtensionsPath == null) {
+            if (basePath == null)
+                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "definitionExtensions"));
+            definitionExtensionsPath = new File(basePath, DEFINITIONS_FOLDER).getPath();
+        }
+    }
+
     public MarkupLanguage getMarkupLanguage() {
         return markupLanguage;
     }
 
-    public String getExamplesFolderPath() {
-        return examplesFolderPath;
+    public boolean isExamples() {
+        return examples;
     }
 
-    public String getSchemasFolderPath() {
-        return schemasFolderPath;
+    public String getExamplesPath() {
+        return examplesPath;
     }
 
-    public String getDescriptionsFolderPath() {
-        return descriptionsFolderPath;
+    public boolean isSchemas() {
+        return schemas;
     }
 
-    public String getOperationExtensionsFolderPath() {
-        return operationExtensionsFolderPath;
+    public String getSchemasPath() {
+        return schemasPath;
     }
 
-    public String getDefinitionExtensionsFolderPath() {
-        return definitionExtensionsFolderPath;
+    public boolean isOperationDescriptions() {
+        return operationDescriptions;
+    }
+
+    public String getOperationDescriptionsPath() {
+        return operationDescriptionsPath;
+    }
+
+    public boolean isDefinitionDescriptions() {
+        return definitionDescriptions;
+    }
+
+    public String getDefinitionDescriptionsPath() {
+        return definitionDescriptionsPath;
+    }
+
+    public boolean isOperationExtensions() {
+        return operationExtensions;
+    }
+
+    public String getOperationExtensionsPath() {
+        return operationExtensionsPath;
+    }
+
+    public boolean isDefinitionExtensions() {
+        return definitionExtensions;
+    }
+
+    public String getDefinitionExtensionsPath() {
+        return definitionExtensionsPath;
     }
 
     public boolean isSeparatedDefinitions() {
@@ -106,8 +190,8 @@ public class Swagger2MarkupConfig {
         return separatedOperations;
     }
 
-    public GroupBy getPathsGroupedBy() {
-        return pathsGroupedBy;
+    public GroupBy getOperationsGroupedBy() {
+        return operationsGroupedBy;
     }
 
     public OrderBy getDefinitionsOrderedBy() {
@@ -188,13 +272,8 @@ public class Swagger2MarkupConfig {
 
     public static class Builder {
 
-        static final String OVERVIEW_DOCUMENT = "overview";
-        static final String PATHS_DOCUMENT = "paths";
-        static final String DEFINITIONS_DOCUMENT = "definitions";
-        static final String SECURITY_DOCUMENT = "security";
-
-        static final String SEPARATED_DEFINITIONS_FOLDER = "definitions";
-        static final String SEPARATED_OPERATIONS_FOLDER = "operations";
+        private static final String PROPERTIES_PREFIX = "swagger2markup.";
+        private static final String PROPERTIES_DEFAULT = "/io/github/robwin/swagger2markup/config/default.properties";
 
         static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
                 .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
@@ -228,74 +307,68 @@ public class Swagger2MarkupConfig {
                     }
                 });
 
-        private static final String PROPERTIES_PREFIX = "swagger2markup.";
-
         private Swagger2MarkupConfig config = new Swagger2MarkupConfig();
 
         public Builder() {
-            config.markupLanguage = MarkupLanguage.ASCIIDOC;
-            config.separatedDefinitions = false;
-            config.separatedOperations = false;
-            config.pathsGroupedBy = GroupBy.AS_IS;
-            config.definitionsOrderedBy = OrderBy.NATURAL;
-            config.outputLanguage = Language.EN;
-            config.inlineSchemaDepthLevel = 0;
+            this(new Properties());
+        }
+
+        public Builder(Properties properties) {
+
+            Properties safeProperties = new Properties(defaultProperties());
+            safeProperties.putAll(properties);
+
+            config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
+            config.examples = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examples"));
+            config.examplesPath = safeProperties.getProperty(PROPERTIES_PREFIX + "examplesPath");
+            config.schemas = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemas"));
+            config.schemasPath = safeProperties.getProperty(PROPERTIES_PREFIX + "schemasPath");
+            config.operationDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptions"));
+            config.operationDescriptionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsPath");
+            config.definitionDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptions"));
+            config.definitionDescriptionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsPath");
+            config.operationExtensions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationExtensions"));
+            config.operationExtensionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "operationExtensionsPath");
+            config.definitionExtensions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionExtensions"));
+            config.definitionExtensionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionExtensionsPath");
+            config.separatedDefinitions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitions"));
+            config.separatedOperations = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperations"));
+            config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
+            config.definitionsOrderedBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsOrderedBy"));
+            config.outputLanguage = Language.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "outputLanguage"));
+            config.inlineSchemaDepthLevel = Integer.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
+            config.interDocumentCrossReferences = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferences"));
+            config.interDocumentCrossReferencesPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix");
+            config.flatBody = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "flatBody"));
+            config.anchorPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "anchorPrefix");
+            config.overviewDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "overviewDocument");
+            config.pathsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "pathsDocument");
+            config.definitionsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsDocument");
+            config.securityDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "securityDocument");
+            config.separatedOperationsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsFolder");
+            config.separatedDefinitionsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsFolder");
+
             config.tagOrdering = Ordering.natural();
             config.operationOrdering = OPERATION_PATH_COMPARATOR.compound(OPERATION_METHOD_COMPARATOR);
             config.definitionOrdering = Ordering.natural();
             config.parameterOrdering = PARAMETER_IN_COMPARATOR.compound(PARAMETER_NAME_COMPARATOR);
             config.propertyOrdering = Ordering.natural();
             config.responseOrdering = Ordering.natural();
-            config.interDocumentCrossReferences = false;
-            config.interDocumentCrossReferencesPrefix = "";
-            config.flatBody = false;
-
-            config.overviewDocument = OVERVIEW_DOCUMENT;
-            config.pathsDocument = PATHS_DOCUMENT;
-            config.definitionsDocument = DEFINITIONS_DOCUMENT;
-            config.securityDocument = SECURITY_DOCUMENT;
-            config.separatedOperationsFolder = SEPARATED_OPERATIONS_FOLDER;
-            config.separatedDefinitionsFolder = SEPARATED_DEFINITIONS_FOLDER;
-
         }
 
-        public Builder(Properties properties) {
-            this();
+        private Properties defaultProperties() {
+            Properties defaultProperties = new Properties();
+            try {
+                InputStream defaultPropertiesStream = Swagger2MarkupConfig.class.getResourceAsStream(PROPERTIES_DEFAULT);
+                if (defaultPropertiesStream == null)
+                    throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT));
+                defaultProperties.load(defaultPropertiesStream);
+            } catch (IOException e) {
+                throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
+            }
 
-            if (properties.containsKey(PROPERTIES_PREFIX + "markupLanguage"))
-                config.markupLanguage = MarkupLanguage.valueOf(properties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "examplesFolderPath"))
-                config.examplesFolderPath = properties.getProperty(PROPERTIES_PREFIX + "examplesFolderPath");
-            if (properties.containsKey(PROPERTIES_PREFIX + "schemasFolderPath"))
-                config.schemasFolderPath = properties.getProperty(PROPERTIES_PREFIX + "schemasFolderPath");
-            if (properties.containsKey(PROPERTIES_PREFIX + "descriptionsFolderPath"))
-                config.descriptionsFolderPath = properties.getProperty(PROPERTIES_PREFIX + "descriptionsFolderPath");
-            if (properties.containsKey(PROPERTIES_PREFIX + "operationExtensionsFolderPath"))
-                config.operationExtensionsFolderPath = properties.getProperty(PROPERTIES_PREFIX + "operationExtensionsFolderPath");
-            if (properties.containsKey(PROPERTIES_PREFIX + "definitionExtensionsFolderPath"))
-                config.definitionExtensionsFolderPath = properties.getProperty(PROPERTIES_PREFIX + "definitionExtensionsFolderPath");
-            if (properties.containsKey(PROPERTIES_PREFIX + "separatedDefinitions"))
-                config.separatedDefinitions = Boolean.valueOf(properties.getProperty(PROPERTIES_PREFIX + "separatedDefinitions"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "separatedOperations"))
-                config.separatedOperations = Boolean.valueOf(properties.getProperty(PROPERTIES_PREFIX + "separatedOperations"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "pathsGroupedBy"))
-                config.pathsGroupedBy = GroupBy.valueOf(properties.getProperty(PROPERTIES_PREFIX + "pathsGroupedBy"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "definitionsOrderedBy"))
-                config.definitionsOrderedBy = OrderBy.valueOf(properties.getProperty(PROPERTIES_PREFIX + "definitionsOrderedBy"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "outputLanguage"))
-                config.outputLanguage = Language.valueOf(properties.getProperty(PROPERTIES_PREFIX + "outputLanguage"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"))
-                config.inlineSchemaDepthLevel = Integer.valueOf(properties.getProperty(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "interDocumentCrossReferences"))
-                config.interDocumentCrossReferences = Boolean.valueOf(properties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferences"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix"))
-                config.interDocumentCrossReferencesPrefix = properties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix");
-            if (properties.containsKey(PROPERTIES_PREFIX + "flatBody"))
-                config.flatBody = Boolean.valueOf(properties.getProperty(PROPERTIES_PREFIX + "flatBody"));
-            if (properties.containsKey(PROPERTIES_PREFIX + "anchorPrefix"))
-                config.anchorPrefix = properties.getProperty(PROPERTIES_PREFIX + "anchorPrefix");
+            return defaultProperties;
         }
-
 
         public Swagger2MarkupConfig build() {
             return config;
@@ -315,56 +388,138 @@ public class Swagger2MarkupConfig {
         /**
          * Include examples into the Paths document
          *
-         * @param examplesFolderPath the path to the folder where the example documents reside
+         * @param examplesPath the path to the folder where the example documents reside. Use default path if null.
          * @return this builder
          */
-        public Builder withExamples(String examplesFolderPath) {
-            config.examplesFolderPath = examplesFolderPath;
+        public Builder withExamples(String examplesPath) {
+            config.examples = true;
+            config.examplesPath = examplesPath;
+            return this;
+        }
+
+        /**
+         * Include examples into the Paths document.<br/>
+         * This is an alias for {@link #withExamples(String) withExamples(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withExamples() {
+            withExamples(null);
             return this;
         }
 
         /**
          * Include (JSON, XML) schemas into the Definitions document
          *
-         * @param schemasFolderPath the path to the folder where the schema documents reside
+         * @param schemasPath the path to the folder where the schema documents reside. Use default path if null.
          * @return this builder
          */
-        public Builder withSchemas(String schemasFolderPath) {
-            config.schemasFolderPath = schemasFolderPath;
+        public Builder withSchemas(String schemasPath) {
+            config.schemas = true;
+            config.schemasPath = schemasPath;
             return this;
         }
 
         /**
-         * Include hand-written descriptions into the Paths and Definitions document
+         * Include (JSON, XML) schemas into the Definitions document.<br/>
+         * This is an alias for {@link #withSchemas(String) withSchemas(null)}.
          *
-         * @param descriptionsFolderPath the path to the folder where the description documents reside
          * @return this builder
          */
-        public Builder withDescriptions(String descriptionsFolderPath) {
-            config.descriptionsFolderPath = descriptionsFolderPath;
+        public Builder withSchemas() {
+            withSchemas(null);
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document
+         *
+         * @param operationDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
+         * @return this builder
+         */
+        public Builder withOperationDescriptions(String operationDescriptionsPath) {
+            config.operationDescriptions = true;
+            config.operationDescriptionsPath = operationDescriptionsPath;
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document.<br/>
+         * This is an alias for {@link #withOperationDescriptions(String) withOperationDescriptions(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withOperationDescriptions() {
+            withOperationDescriptions(null);
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Definitions document
+         *
+         * @param definitionDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
+         * @return this builder
+         */
+        public Builder withDefinitionDescriptions(String definitionDescriptionsPath) {
+            config.definitionDescriptions = true;
+            config.definitionDescriptionsPath = definitionDescriptionsPath;
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document.<br/>
+         * This is an alias for {@link #withDefinitionDescriptions(String) withDefinitionDescriptions(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withDefinitionDescriptions() {
+            withDefinitionDescriptions(null);
             return this;
         }
 
         /**
          * Include extensions into Paths document
          *
-         * @param operationExtensionsFolderPath the path to the folder where the operation extension documents reside
+         * @param operationExtensionsFolderPath the path to the folder where the operation extension documents reside. Use default path if null.
          * @return this builder
          */
         public Builder withOperationExtensions(String operationExtensionsFolderPath) {
-            config.operationExtensionsFolderPath = operationExtensionsFolderPath;
+            config.operationExtensions = true;
+            config.operationExtensionsPath = operationExtensionsFolderPath;
             return this;
         }
 
+        /**
+         * Include extensions into Paths document.<br/>
+         * This is an alias for {@link #withOperationExtensions(String) withOperationExtensions(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withOperationExtensions() {
+            withOperationExtensions(null);
+            return this;
+        }
 
         /**
          * Include extensions into Definitions document
          *
-         * @param definitionExtensionsFolderPath the path to the folder where the definition extension documents reside
+         * @param definitionExtensionsFolderPath the path to the folder where the definition extension documents reside. Use default path if null.
          * @return this builder
          */
         public Builder withDefinitionExtensions(String definitionExtensionsFolderPath) {
-            config.definitionExtensionsFolderPath = definitionExtensionsFolderPath;
+            config.definitionExtensions = true;
+            config.definitionExtensionsPath = definitionExtensionsFolderPath;
+            return this;
+        }
+
+        /**
+         * Include extensions into Definitions document.<br/>
+         * This is an alias for {@link #withDefinitionExtensions(String) withDefinitionExtensions(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withDefinitionExtensions() {
+            withDefinitionExtensions(null);
             return this;
         }
 
@@ -397,7 +552,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withPathsGroupedBy(GroupBy pathsGroupedBy) {
-            config.pathsGroupedBy = pathsGroupedBy;
+            config.operationsGroupedBy = pathsGroupedBy;
             return this;
         }
 
@@ -522,17 +677,6 @@ public class Swagger2MarkupConfig {
             return this;
         }
 
-
-        /**
-         * Enable use of inter-document cross-references when needed
-         *
-         * @return this builder
-         */
-        public Builder withInterDocumentCrossReferences() {
-            config.interDocumentCrossReferences = true;
-            return this;
-        }
-
         /**
          * Enable use of inter-document cross-references when needed
          *
@@ -540,11 +684,19 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
-            if (prefix == null)
-                return withInterDocumentCrossReferences();
-
             config.interDocumentCrossReferences = true;
             config.interDocumentCrossReferencesPrefix = prefix;
+            return this;
+        }
+
+        /**
+         * Enable use of inter-document cross-references when needed.<br/>
+         * This is an alias for {@link #withInterDocumentCrossReferences(String) withInterDocumentCrossReferences(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withInterDocumentCrossReferences() {
+            withInterDocumentCrossReferences(null);
             return this;
         }
 

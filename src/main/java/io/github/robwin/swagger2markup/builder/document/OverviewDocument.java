@@ -46,11 +46,10 @@ public class OverviewDocument extends MarkupDocument {
     private final String BASE_PATH;
     private final String SCHEMES;
 
-    public OverviewDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger, swagger2MarkupConfig, outputDirectory);
+    public OverviewDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory){
+        super(swagger, config, outputDirectory);
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
-                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         OVERVIEW = labels.getString("overview");
         CURRENT_VERSION = labels.getString("current_version");
         VERSION = labels.getString("version");

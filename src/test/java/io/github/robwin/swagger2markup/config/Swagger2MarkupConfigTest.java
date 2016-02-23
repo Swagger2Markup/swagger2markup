@@ -18,28 +18,16 @@
  */
 package io.github.robwin.swagger2markup.config;
 
-import com.google.common.collect.*;
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.fail;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
 public class Swagger2MarkupConfigTest {
@@ -49,28 +37,35 @@ public class Swagger2MarkupConfigTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults().build();
 
         assertThat(config.getAnchorPrefix()).isNull();
-        assertThat(config.getDefinitionExtensionsFolderPath()).isNull();
+        assertThat(config.isDefinitionExtensions()).isFalse();
+        assertThat(config.getDefinitionExtensionsPath()).isNull();
         assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
-        assertThat(config.getDefinitionsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.DEFINITIONS_DOCUMENT);
+        assertThat(config.getDefinitionsDocument()).isEqualTo("definitions");
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.NATURAL);
-        assertThat(config.getDescriptionsFolderPath()).isNull();
-        assertThat(config.getExamplesFolderPath()).isNull();
+        assertThat(config.isOperationDescriptions()).isFalse();
+        assertThat(config.getOperationDescriptionsPath()).isNull();
+        assertThat(config.isDefinitionDescriptions()).isFalse();
+        assertThat(config.getDefinitionDescriptionsPath()).isNull();
+        assertThat(config.isExamples()).isFalse();
+        assertThat(config.getExamplesPath()).isNull();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
-        assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("");
+        assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
-        assertThat(config.getOperationExtensionsFolderPath()).isNull();
+        assertThat(config.isOperationExtensions()).isFalse();
+        assertThat(config.getOperationExtensionsPath()).isNull();
         assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.OPERATION_PATH_COMPARATOR.compound(Swagger2MarkupConfig.Builder.OPERATION_METHOD_COMPARATOR));
         assertThat(config.getOutputLanguage()).isEqualTo(Language.EN);
-        assertThat(config.getOverviewDocument()).isEqualTo(Swagger2MarkupConfig.Builder.OVERVIEW_DOCUMENT);
+        assertThat(config.getOverviewDocument()).isEqualTo("overview");
         assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.PARAMETER_IN_COMPARATOR.compound(Swagger2MarkupConfig.Builder.PARAMETER_NAME_COMPARATOR));
-        assertThat(config.getPathsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.PATHS_DOCUMENT);
-        assertThat(config.getPathsGroupedBy()).isEqualTo(GroupBy.AS_IS);
+        assertThat(config.getPathsDocument()).isEqualTo("paths");
+        assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.AS_IS);
         assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural());
-        assertThat(config.getSchemasFolderPath()).isNull();
-        assertThat(config.getSecurityDocument()).isEqualTo(Swagger2MarkupConfig.Builder.SECURITY_DOCUMENT);
-        assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_DEFINITIONS_FOLDER);
-        assertThat(config.getSeparatedOperationsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_OPERATIONS_FOLDER);
+        assertThat(config.isSchemas()).isFalse();
+        assertThat(config.getSchemasPath()).isNull();
+        assertThat(config.getSecurityDocument()).isEqualTo("security");
+        assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo("definitions");
+        assertThat(config.getSeparatedOperationsFolder()).isEqualTo("operations");
         assertThat(config.getTagOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.isFlatBody()).isFalse();
         assertThat(config.isInterDocumentCrossReferences()).isFalse();
@@ -80,7 +75,7 @@ public class Swagger2MarkupConfigTest {
 
 
     @Test
-    public void testSwagger2MarkupConfig() throws IOException {
+    public void testSwagger2MarkupConfigOfProperties() throws IOException {
 
         Properties properties = new Properties();
         properties.load(Swagger2MarkupConfigTest.class.getResourceAsStream("/config/config.properties"));
@@ -88,25 +83,32 @@ public class Swagger2MarkupConfigTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofProperties(properties).build();
 
         assertThat(config.getAnchorPrefix()).isEqualTo("anchorPrefix");
-        assertThat(config.getDefinitionExtensionsFolderPath()).isEqualTo("definitionExtensions");
+        assertThat(config.isDefinitionExtensions()).isTrue();
+        assertThat(config.getDefinitionExtensionsPath()).isEqualTo("definitionExtensions");
         //assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural()); // Not supported
         //assertThat(config.getDefinitionsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.DEFINITIONS_DOCUMENT); // Not supported
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.AS_IS);
-        assertThat(config.getDescriptionsFolderPath()).isEqualTo("descriptions");
-        assertThat(config.getExamplesFolderPath()).isEqualTo("examples");
+        assertThat(config.isOperationDescriptions()).isTrue();
+        assertThat(config.getOperationDescriptionsPath()).isEqualTo("operationDescriptions");
+        assertThat(config.isDefinitionDescriptions()).isTrue();
+        assertThat(config.getDefinitionDescriptionsPath()).isEqualTo("definitionDescriptions");
+        assertThat(config.isExamples()).isTrue();
+        assertThat(config.getExamplesPath()).isEqualTo("examples");
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
-        assertThat(config.getOperationExtensionsFolderPath()).isEqualTo("operationExtensions");
+        assertThat(config.isOperationExtensions()).isTrue();
+        assertThat(config.getOperationExtensionsPath()).isEqualTo("operationExtensions");
         //assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.OPERATION_PATH_COMPARATOR.compound(Swagger2MarkupConfig.Builder.OPERATION_METHOD_COMPARATOR)); // Not supported
         assertThat(config.getOutputLanguage()).isEqualTo(Language.RU);
         //assertThat(config.getOverviewDocument()).isEqualTo(Swagger2MarkupConfig.Builder.OVERVIEW_DOCUMENT); // Not supported
         //assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.PARAMETER_IN_COMPARATOR.compound(Swagger2MarkupConfig.Builder.PARAMETER_NAME_COMPARATOR)); // Not supported
         //assertThat(config.getPathsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.PATHS_DOCUMENT); // Not supported
-        assertThat(config.getPathsGroupedBy()).isEqualTo(GroupBy.TAGS);
+        assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.TAGS);
         //assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural()); // Not supported
         //assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural()); // Not supported
-        assertThat(config.getSchemasFolderPath()).isEqualTo("schemas");
+        assertThat(config.isSchemas()).isTrue();
+        assertThat(config.getSchemasPath()).isEqualTo("schemas");
         //assertThat(config.getSecurityDocument()).isEqualTo(Swagger2MarkupConfig.Builder.SECURITY_DOCUMENT); // Not supported
         //assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_DEFINITIONS_FOLDER); // Not supported
         //assertThat(config.getSeparatedOperationsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_OPERATIONS_FOLDER); // Not supported

@@ -86,32 +86,13 @@ public class PathsDocument extends MarkupDocument {
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
     private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
-    private static final String DESCRIPTION_FOLDER_NAME = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
 
-    private boolean examplesEnabled;
-    private String examplesFolderPath;
-    private boolean descriptionsEnabled;
-    private String descriptionsFolderPath;
-    protected boolean operationExtensionsEnabled;
-    protected String operationExtensionsFolderPath;
-    private final GroupBy pathsGroupedBy;
-    private final int inlineSchemaDepthLevel;
-    private final Comparator<String> tagOrdering;
-    private final Comparator<PathOperation> operationOrdering;
-    private final Comparator<Parameter> parameterOrdering;
-    private final Comparator<String> responseOrdering;
-    private boolean separatedOperationsEnabled;
-    private String separatedOperationsFolder;
-    private String pathsDocument;
-    private final boolean flatBody;
 
+    public PathsDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory){
+        super(swagger,config, outputDirectory);
 
-    public PathsDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger,swagger2MarkupConfig, outputDirectory);
-
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
-                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
         PATHS = labels.getString("paths");
         RESOURCES = labels.getString("resources");
@@ -125,22 +106,7 @@ public class PathsDocument extends MarkupDocument {
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
 
-        this.pathsDocument = swagger2MarkupConfig.getPathsDocument();
-        this.inlineSchemaDepthLevel = swagger2MarkupConfig.getInlineSchemaDepthLevel();
-        this.pathsGroupedBy = swagger2MarkupConfig.getPathsGroupedBy();
-        if(isNotBlank(swagger2MarkupConfig.getExamplesFolderPath())){
-            this.examplesEnabled = true;
-            this.examplesFolderPath = swagger2MarkupConfig.getExamplesFolderPath();
-        }
-        if(isNotBlank(swagger2MarkupConfig.getDescriptionsFolderPath())){
-            this.descriptionsEnabled = true;
-            this.descriptionsFolderPath = swagger2MarkupConfig.getDescriptionsFolderPath() + "/" + DESCRIPTION_FOLDER_NAME;
-        }
-        if(isNotBlank(swagger2MarkupConfig.getOperationExtensionsFolderPath())){
-            this.operationExtensionsEnabled = true;
-            this.operationExtensionsFolderPath = swagger2MarkupConfig.getOperationExtensionsFolderPath();
-        }
-        if(examplesEnabled){
+        if(config.isExamples()){
             if (logger.isDebugEnabled()) {
                 logger.debug("Include examples is enabled.");
             }
@@ -149,19 +115,17 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Include examples is disabled.");
             }
         }
-        if(descriptionsEnabled){
+        if(config.isOperationDescriptions()){
             if (logger.isDebugEnabled()) {
-                logger.debug("Include hand-written descriptions is enabled.");
+                logger.debug("Include hand-written operation descriptions is enabled.");
             }
         }else{
             if (logger.isDebugEnabled()) {
-                logger.debug("Include hand-written descriptions is disabled.");
+                logger.debug("Include hand-written operation descriptions is disabled.");
             }
         }
 
-        this.separatedOperationsEnabled = swagger2MarkupConfig.isSeparatedOperations();
-        this.separatedOperationsFolder = swagger2MarkupConfig.getSeparatedOperationsFolder();
-        if(this.separatedOperationsEnabled){
+        if(config.isSeparatedOperations()){
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated operation files is enabled.");
             }
@@ -171,12 +135,6 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Create separated operation files is disabled.");
             }
         }
-        this.tagOrdering = swagger2MarkupConfig.getTagOrdering();
-        this.operationOrdering = swagger2MarkupConfig.getOperationOrdering();
-        this.parameterOrdering = swagger2MarkupConfig.getParameterOrdering();
-        this.responseOrdering = swagger2MarkupConfig.getResponseOrdering();
-
-        this.flatBody = swagger2MarkupConfig.isFlatBody();
     }
 
     /**
@@ -215,11 +173,11 @@ public class PathsDocument extends MarkupDocument {
 
         if (allOperations.size() > 0) {
 
-            if (pathsGroupedBy == GroupBy.AS_IS) {
+            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
                 addPathsTitle(PATHS);
 
-                if (this.operationOrdering != null) {
-                    Set<PathOperation> sortedOperations = new TreeSet<>(this.operationOrdering);
+                if (config.getOperationOrdering() != null) {
+                    Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
                     sortedOperations.addAll(allOperations);
                     allOperations = sortedOperations;
                 }
@@ -232,7 +190,7 @@ public class PathsDocument extends MarkupDocument {
             } else {
                 addPathsTitle(RESOURCES);
 
-                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(allOperations, tagOrdering, operationOrdering);
+                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(allOperations, config.getTagOrdering(), config.getOperationOrdering());
 
                 Map<String, Tag> tagsMap = convertTagsListToMap(swagger.getTags());
                 for (String tagName : operationsGroupedByTag.keySet()) {
@@ -258,10 +216,10 @@ public class PathsDocument extends MarkupDocument {
      * @return operation filename
      */
     private String resolveOperationDocument(PathOperation operation) {
-        if (this.separatedOperationsEnabled)
-            return new File(this.separatedOperationsFolder, this.markupDocBuilder.addfileExtension(normalizeFileName(operation.getId()))).getPath();
+        if (config.isSeparatedOperations())
+            return new File(config.getSeparatedOperationsFolder(), this.markupDocBuilder.addfileExtension(normalizeFileName(operation.getId()))).getPath();
         else
-            return this.markupDocBuilder.addfileExtension(this.pathsDocument);
+            return this.markupDocBuilder.addfileExtension(config.getPathsDocument());
     }
 
     /**
@@ -269,7 +227,7 @@ public class PathsDocument extends MarkupDocument {
      * @param operation operation
      */
     private void processOperation(PathOperation operation) {
-        if (separatedOperationsEnabled) {
+        if (config.isSeparatedOperations()) {
             MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
             operation(operation, pathDocBuilder);
             File operationFile = new File(outputDirectory, resolveOperationDocument(operation));
@@ -320,9 +278,9 @@ public class PathsDocument extends MarkupDocument {
         if(operation != null){
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
-            inlineDefinitions(parametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), inlineSchemaDepthLevel, docBuilder);
-            inlineDefinitions(bodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), inlineSchemaDepthLevel, docBuilder);
-            inlineDefinitions(responsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), inlineSchemaDepthLevel, docBuilder);
+            inlineDefinitions(parametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
+            inlineDefinitions(bodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
+            inlineDefinitions(responsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
             consumesSection(operation, docBuilder);
             producesSection(operation, docBuilder);
             tagsSection(operation, docBuilder);
@@ -368,7 +326,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void addOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        if(pathsGroupedBy == GroupBy.AS_IS){
+        if(config.getOperationsGroupedBy() == GroupBy.AS_IS){
             docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         }else{
             docBuilder.sectionTitleWithAnchorLevel3(title, anchor);
@@ -382,7 +340,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void addOperationSectionTitle(String title, MarkupDocBuilder docBuilder) {
-        if(pathsGroupedBy == GroupBy.AS_IS){
+        if(config.getOperationsGroupedBy() == GroupBy.AS_IS){
             docBuilder.sectionTitleLevel3(title);
         }else{
             docBuilder.sectionTitleLevel4(title);
@@ -402,7 +360,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if(descriptionsEnabled){
+        if(config.isOperationDescriptions()){
             Optional<String> description = handWrittenOperationDescription(normalizeFileName(operation.getId()), DESCRIPTION_FILE_NAME);
             if (!description.isPresent())
                 description = handWrittenOperationDescription(normalizeFileName(operation.getTitle()), DESCRIPTION_FILE_NAME);
@@ -433,13 +391,13 @@ public class PathsDocument extends MarkupDocument {
      * @return true if parameter can be displayed
      */
     private boolean filterParameter(Parameter parameter) {
-        return (!this.flatBody || !StringUtils.equals(parameter.getIn(), "body"));
+        return (!config.isFlatBody() || !StringUtils.equals(parameter.getIn(), "body"));
     }
 
     private List<ObjectType> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
-        if (this.parameterOrdering != null)
-            Collections.sort(parameters, this.parameterOrdering);
+        if (config.getParameterOrdering() != null)
+            Collections.sort(parameters, config.getParameterOrdering());
         List<ObjectType> localDefinitions = new ArrayList<>();
 
         boolean displayParameters = false;
@@ -463,7 +421,7 @@ public class PathsDocument extends MarkupDocument {
                 if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
 
-                    if (inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
+                    if (config.getInlineSchemaDepthLevel() > 0 && type instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
                             String localTypeName = parameter.getName();
 
@@ -501,7 +459,7 @@ public class PathsDocument extends MarkupDocument {
     private List<ObjectType> bodyParameterSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
 
-        if (this.flatBody) {
+        if (config.isFlatBody()) {
             List<Parameter> parameters = operation.getOperation().getParameters();
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
@@ -513,7 +471,7 @@ public class PathsDocument extends MarkupDocument {
                             docBuilder.paragraph(parameter.getDescription());
                         }
 
-                        MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(this.markupLanguage);
+                        MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage());
                         typeInfos.italicText(REQUIRED_COLUMN).textLine(": " + parameter.getRequired());
                         typeInfos.italicText(NAME_COLUMN).textLine(": " + parameter.getName());
                         if (!(type instanceof ObjectType)) {
@@ -523,7 +481,7 @@ public class PathsDocument extends MarkupDocument {
                         } else {
                             docBuilder.paragraph(typeInfos.toString());
 
-                            localDefinitions.addAll(typeProperties((ObjectType)type, operation.getId(), this.inlineSchemaDepthLevel, new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            localDefinitions.addAll(typeProperties((ObjectType)type, operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
@@ -547,7 +505,7 @@ public class PathsDocument extends MarkupDocument {
      * @return the description of a parameter.
      */
     private String parameterDescription(final PathOperation operation, Parameter parameter){
-        if (descriptionsEnabled) {
+        if (config.isOperationDescriptions()) {
             final String parameterName = parameter.getName();
             if (isNotBlank(parameterName)) {
                 Optional<String> description = handWrittenOperationDescription(new File(normalizeFileName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
@@ -591,15 +549,15 @@ public class PathsDocument extends MarkupDocument {
     }
 
     private void tagsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if(pathsGroupedBy == GroupBy.AS_IS) {
+        if(config.getOperationsGroupedBy() == GroupBy.AS_IS) {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 addOperationSectionTitle(TAGS, docBuilder);
                 Set<String> sortedTags;
-                if (tagOrdering == null)
+                if (config.getTagOrdering() == null)
                     sortedTags = new LinkedHashSet<>();
                 else
-                    sortedTags = new TreeSet<>(this.tagOrdering);
+                    sortedTags = new TreeSet<>(config.getTagOrdering());
                 sortedTags.addAll(tags);
                 docBuilder.unorderedList(new ArrayList<>(sortedTags));
             }
@@ -619,7 +577,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if(examplesEnabled){
+        if(config.isExamples()){
             Optional<String> curlExample = example(normalizeFileName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
             if (!curlExample.isPresent())
                 curlExample = example(normalizeFileName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
@@ -657,8 +615,8 @@ public class PathsDocument extends MarkupDocument {
      * @return the content of the file
      */
     private Optional<String> example(String exampleFolder, String exampleFileName) {
-        for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
-            java.nio.file.Path path = Paths.get(examplesFolderPath, exampleFolder, exampleFileName + fileNameExtension);
+        for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
+            java.nio.file.Path path = Paths.get(config.getExamplesPath(), exampleFolder, exampleFileName + fileNameExtension);
             if (Files.isReadable(path)) {
                 if (logger.isInfoEnabled()) {
                     logger.info("Example file processed: {}", path);
@@ -677,7 +635,7 @@ public class PathsDocument extends MarkupDocument {
             }
         }
         if (logger.isWarnEnabled()) {
-            logger.warn("No example file found with correct file name extension in folder: {}", Paths.get(examplesFolderPath, exampleFolder));
+            logger.warn("No example file found with correct file name extension in folder: {}", Paths.get(config.getExamplesPath(), exampleFolder));
         }
         return Optional.absent();
     }
@@ -722,8 +680,8 @@ public class PathsDocument extends MarkupDocument {
      * @return the content of the file
      */
     private Optional<String> handWrittenOperationDescription(String descriptionFolder, String descriptionFileName){
-        for (String fileNameExtension : markupLanguage.getFileNameExtensions()) {
-            java.nio.file.Path path = Paths.get(descriptionsFolderPath, descriptionFolder, descriptionFileName + fileNameExtension);
+        for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
+            java.nio.file.Path path = Paths.get(config.getOperationDescriptionsPath(), descriptionFolder, descriptionFileName + fileNameExtension);
             if (Files.isReadable(path)) {
                 if (logger.isInfoEnabled()) {
                     logger.info("Description file processed: {}", path);
@@ -742,7 +700,7 @@ public class PathsDocument extends MarkupDocument {
             }
         }
         if (logger.isWarnEnabled()) {
-            logger.warn("No description file found with correct file name extension in folder: {}", Paths.get(descriptionsFolderPath, descriptionFolder));
+            logger.warn("No description file found with correct file name extension in folder: {}", Paths.get(config.getOperationDescriptionsPath(), descriptionFolder));
         }
         return Optional.absent();
     }
@@ -758,10 +716,10 @@ public class PathsDocument extends MarkupDocument {
                     new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             Set<String> responseNames;
-            if (this.responseOrdering == null)
+            if (config.getResponseOrdering() == null)
                 responseNames = new LinkedHashSet<>();
             else
-                responseNames = new TreeSet<>(this.responseOrdering);
+                responseNames = new TreeSet<>(config.getResponseOrdering());
             responseNames.addAll(responses.keySet());
 
             for(String responseName : responseNames){
@@ -770,7 +728,7 @@ public class PathsDocument extends MarkupDocument {
                 if(response.getSchema() != null){
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
-                    if (this.inlineSchemaDepthLevel > 0 && type instanceof ObjectType) {
+                    if (config.getInlineSchemaDepthLevel() > 0 && type instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
                             String localTypeName = RESPONSE + " " + responseName;
 
@@ -831,13 +789,13 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the MarkupDocBuilder document builder
      */
     private void extensionsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (this.operationExtensionsEnabled) {
-            final Collection<String> filenameExtensions = Collections2.transform(markupLanguage.getFileNameExtensions(), new Function<String, String>() {
+        if (config.isOperationExtensions()) {
+            final Collection<String> filenameExtensions = Collections2.transform(config.getMarkupLanguage().getFileNameExtensions(), new Function<String, String>() {
                 public String apply(String input) {
                     return StringUtils.stripStart(input, ".");
                 }
             });
-            File operationExtensionsPath = new File(new File(this.operationExtensionsFolderPath), normalizeFileName(operation.getId()));
+            File operationExtensionsPath = new File(new File(config.getOperationExtensionsPath()), normalizeFileName(operation.getId()));
 
             File[] extensionFiles = operationExtensionsPath.listFiles(new FilenameFilter() {
                 public boolean accept(File dir, String name) {
@@ -854,7 +812,7 @@ public class PathsDocument extends MarkupDocument {
 
                     if (extensionContent.isPresent()) {
                         int levelOffset = 3;
-                        if (pathsGroupedBy == GroupBy.AS_IS) {
+                        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
                             levelOffset = 2;
                         }
                         try {
@@ -879,8 +837,8 @@ public class PathsDocument extends MarkupDocument {
         public String apply(String definitionName) {
             String defaultResolver = super.apply(definitionName);
 
-            if (defaultResolver != null && separatedOperationsEnabled)
-                return interDocumentCrossReferencesPrefix + new File("..", defaultResolver).getPath();
+            if (defaultResolver != null && config.isSeparatedOperations())
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File("..", defaultResolver).getPath();
             else
                 return defaultResolver;
         }

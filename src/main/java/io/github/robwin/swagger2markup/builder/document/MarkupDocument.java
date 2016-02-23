@@ -75,30 +75,18 @@ public abstract class MarkupDocument {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected Swagger swagger;
-    protected MarkupLanguage markupLanguage;
+    protected Swagger2MarkupConfig config;
     protected MarkupDocBuilder markupDocBuilder;
-    protected boolean separatedDefinitionsEnabled;
-    protected String separatedDefinitionsFolder;
-    protected String definitionsDocument;
     protected String outputDirectory;
-    protected boolean useInterDocumentCrossReferences;
-    protected String interDocumentCrossReferencesPrefix;
-    protected Comparator<String> propertyOrdering;
 
-    MarkupDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
+    MarkupDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory) {
         this.swagger = swagger;
-        this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
-        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage).withAnchorPrefix(swagger2MarkupConfig.getAnchorPrefix());
-        this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();
-        this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
-        this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();
+        this.config = config;
         this.outputDirectory = outputDirectory;
-        this.useInterDocumentCrossReferences = swagger2MarkupConfig.isInterDocumentCrossReferences();
-        this.interDocumentCrossReferencesPrefix = swagger2MarkupConfig.getInterDocumentCrossReferencesPrefix();
-        this.propertyOrdering = swagger2MarkupConfig.getPropertyOrdering();
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
-                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage()).withAnchorPrefix(config.getAnchorPrefix());
+
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
         REQUIRED_COLUMN = labels.getString("required_column");
         SCHEMA_COLUMN = labels.getString("schema_column");
@@ -173,10 +161,10 @@ public abstract class MarkupDocument {
                 new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
         if (MapUtils.isNotEmpty(type.getProperties())) {
             Set<String> propertyNames;
-            if (this.propertyOrdering == null)
+            if (config.getPropertyOrdering() == null)
                 propertyNames = new LinkedHashSet<>();
             else
-                propertyNames = new TreeSet<>(this.propertyOrdering);
+                propertyNames = new TreeSet<>(config.getPropertyOrdering());
             propertyNames.addAll(type.getProperties().keySet());
 
             for (String propertyName: propertyNames) {
@@ -258,12 +246,12 @@ public abstract class MarkupDocument {
         public DefinitionDocumentResolverDefault() {}
 
         public String apply(String definitionName) {
-            if (!useInterDocumentCrossReferences || outputDirectory == null)
+            if (!config.isInterDocumentCrossReferences() || outputDirectory == null)
                 return null;
-            else if (separatedDefinitionsEnabled)
-                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
+            else if (config.isSeparatedDefinitions())
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
             else
-                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(definitionsDocument);
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(config.getDefinitionsDocument());
         }
     }
 }
