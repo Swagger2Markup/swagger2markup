@@ -403,7 +403,7 @@ public interface MarkupDocBuilder {
      * Newlines are normalized in the process.
      *
      * @param markupText markup reader to read data from
-     * @param levelOffset adapt section leveling by adding {@code levelOffset} [0-5]
+     * @param levelOffset adapt section leveling by adding {@code levelOffset} [-5, 5]
      * @return this builder
      * @throws IllegalArgumentException if levelOffset is too high for the imported markup
      * @throws IOException if I/O error occurs while reading {@code markupText}
