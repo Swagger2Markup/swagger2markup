@@ -50,7 +50,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
     private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
-    private static final int MAX_TITLE_LEVEL = 4;
+    private static final int MAX_TITLE_LEVEL = 5;
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
