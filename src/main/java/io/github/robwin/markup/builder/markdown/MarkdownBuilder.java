@@ -26,9 +26,12 @@ import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -38,6 +41,9 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder
 {
+    private static final int MAX_TITLE_LEVEL = 5;
+    private static final char TITLE_PREFIX = '#';
+    private static Pattern TITLE_PATTERN = Pattern.compile(String.format("^%c({1,%d})( .*)$", TITLE_PREFIX, MAX_TITLE_LEVEL));
 
     @Override
     public MarkupDocBuilder copy() {
@@ -240,6 +246,12 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     @Override
     public MarkupDocBuilder newLine(boolean forceLineBreak) {
         newLine(Markdown.LINE_BREAK, forceLineBreak);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
+        importMarkup(Markdown.TITLE, markupText, levelOffset);
         return this;
     }
 

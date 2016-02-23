@@ -29,6 +29,7 @@ public enum Markdown implements Markup {
     TABLE_COLUMN_DELIMITER_ESCAPE("\\|"),
     TABLE_ROW("-"),
     LISTING("```"),
+    TITLE("#"),
     DOCUMENT_TITLE("# "),
     SECTION_TITLE_LEVEL1("## "),
     SECTION_TITLE_LEVEL2("### "),

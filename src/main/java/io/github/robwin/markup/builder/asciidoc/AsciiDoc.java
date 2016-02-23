@@ -31,6 +31,7 @@ public enum AsciiDoc implements Markup {
     TABLE_COLUMN_DELIMITER_ESCAPE("\\|"), // AsciiDoctor supports both \| and {vbar}
     LISTING("----"),
     HARDBREAKS("[%hardbreaks]"),
+    TITLE("="),
     DOCUMENT_TITLE("= "),
     SECTION_TITLE_LEVEL1("== "),
     SECTION_TITLE_LEVEL2("=== "),

@@ -19,6 +19,7 @@
 package io.github.robwin.markup.builder;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -385,6 +386,29 @@ public interface MarkupDocBuilder {
      * @return this builder
      */
     MarkupDocBuilder newLine(boolean forceLineBreak);
+
+    /**
+     * Import some markup text into this builder.<br/>
+     * This is an alias for {@link #importMarkup(Reader, int) importMarkup(markupText, 0)}.
+     * Newlines are normalized in the process.
+     *
+     * @param markupText markup reader to read data from
+     * @return this builder
+     * @throws IOException if I/O error occurs while reading {@code markupText}
+     */
+    MarkupDocBuilder importMarkup(Reader markupText) throws IOException;
+
+    /**
+     * Import some markup text into this builder.
+     * Newlines are normalized in the process.
+     *
+     * @param markupText markup reader to read data from
+     * @param levelOffset adapt section leveling by adding {@code levelOffset} [0-5]
+     * @return this builder
+     * @throws IllegalArgumentException if levelOffset is too high for the imported markup
+     * @throws IOException if I/O error occurs while reading {@code markupText}
+     */
+    MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException;
 
     /**
      * Returns a string representation of the document.
