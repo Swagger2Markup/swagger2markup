@@ -27,6 +27,8 @@ import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -255,7 +257,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(String markupText, int levelOffset) {
+    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
         importMarkup(AsciiDoc.TITLE, markupText, levelOffset);
         return this;
     }

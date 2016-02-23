@@ -23,8 +23,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -268,31 +270,39 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(String text) {
-        return importMarkup(text, 0);
+    public MarkupDocBuilder importMarkup(Reader markupText) throws IOException {
+        return importMarkup(markupText, 0);
     }
 
-    protected void importMarkup(Markup titlePrefix, String text, int levelOffset) {
+    protected void importMarkup(Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
         if (levelOffset > MAX_TITLE_LEVEL)
             throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         if (levelOffset < -MAX_TITLE_LEVEL)
             throw new IllegalArgumentException(String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
+        final Pattern titlePattern = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", titlePrefix, MAX_TITLE_LEVEL + 1));
+
         StringBuffer leveledText = new StringBuffer();
-        Matcher sections = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", titlePrefix, MAX_TITLE_LEVEL + 1), Pattern.MULTILINE).matcher(text);
+        try (BufferedReader bufferedReader = new BufferedReader(markupText)) {
+            String readLine;
+            while ((readLine = bufferedReader.readLine()) != null) {
+                Matcher titleMatcher = titlePattern.matcher(readLine);
 
-        while (sections.find()) {
-            int titleLevel = sections.group(1).length() - 1;
-            String title = sections.group(2);
+                while (titleMatcher.find()) {
+                    int titleLevel = titleMatcher.group(1).length() - 1;
+                    String title = titleMatcher.group(2);
 
-            if (titleLevel + levelOffset > MAX_TITLE_LEVEL)
-                throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) > max title level (%d)", levelOffset, title, titleLevel, MAX_TITLE_LEVEL));
-            if (titleLevel + levelOffset < 0)
-                throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
-            else
-                sections.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset) + " " + title);
+                    if (titleLevel + levelOffset > MAX_TITLE_LEVEL)
+                        throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) > max title level (%d)", levelOffset, title, titleLevel, MAX_TITLE_LEVEL));
+                    if (titleLevel + levelOffset < 0)
+                        throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
+                    else
+                        titleMatcher.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset) + " " + title);
+                }
+                titleMatcher.appendTail(leveledText);
+                leveledText.append(newLine);
+            }
         }
-        sections.appendTail(leveledText);
 
         documentBuilder.append(newLine);
         documentBuilder.append(leveledText.toString());
