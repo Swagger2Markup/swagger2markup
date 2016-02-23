@@ -26,6 +26,8 @@ import io.github.robwin.markup.builder.MarkupTableColumn;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -248,7 +250,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(String markupText, int levelOffset) {
+    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
         importMarkup(Markdown.TITLE, markupText, levelOffset);
         return this;
     }
