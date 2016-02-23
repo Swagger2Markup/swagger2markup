@@ -48,7 +48,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
     private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
-    private static final int MAX_TITLE_LEVEL = 5;
+    private static final int MAX_TITLE_LEVEL = 4;
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -274,21 +274,23 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     protected void importMarkup(Markup titlePrefix, String text, int levelOffset) {
         if (levelOffset > MAX_TITLE_LEVEL)
-            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max title level (%d)", levelOffset, MAX_TITLE_LEVEL));
-        if (levelOffset < 0)
-            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) < 0", levelOffset));
+            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
+        if (levelOffset < -MAX_TITLE_LEVEL)
+            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
         StringBuffer leveledText = new StringBuffer();
-        Matcher sections = Pattern.compile(String.format("^(%s{1,%d})(\\s+.*)$", titlePrefix, MAX_TITLE_LEVEL), Pattern.MULTILINE).matcher(text);
+        Matcher sections = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", titlePrefix, MAX_TITLE_LEVEL + 1), Pattern.MULTILINE).matcher(text);
 
         while (sections.find()) {
-            int titleLevel = sections.group(1).length();
+            int titleLevel = sections.group(1).length() - 1;
             String title = sections.group(2);
 
             if (titleLevel + levelOffset > MAX_TITLE_LEVEL)
                 throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) > max title level (%d)", levelOffset, title, titleLevel, MAX_TITLE_LEVEL));
+            if (titleLevel + levelOffset < 0)
+                throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
             else
-                sections.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), titleLevel + levelOffset) + title);
+                sections.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset) + " " + title);
         }
         sections.appendTail(leveledText);
 

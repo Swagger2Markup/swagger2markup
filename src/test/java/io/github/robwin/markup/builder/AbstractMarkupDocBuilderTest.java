@@ -87,37 +87,41 @@ public class AbstractMarkupDocBuilderTest {
     @Test
     public void testImportMarkupAsciiDoc() {
         assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 0);
-        assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 5);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-1) < 0", "", -1);
+        assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 4);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (5) > max levelOffset (4)", "", 5);
+        assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", -4);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-5) < min levelOffset (-4)", "", -5);
 
         assertImportMarkup(AsciiDoc.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 0);
-        assertImportMarkup(AsciiDoc.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 5);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-1) < 0", "", -1);
+        assertImportMarkup(AsciiDoc.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 4);
 
         assertImportMarkup(AsciiDoc.TITLE, "\n= title\nline 1\nline 2\n", "= title\nline 1\nline 2", 0);
         assertImportMarkup(AsciiDoc.TITLE, "\n===== title\nline 1\nline 2\n", "= title\nline 1\nline 2", 4);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (5) set title ' title' level (1) > max title level (5)", "= title\nline 1\nline 2", 5);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-1) < 0", "= title\nline 1\nline 2", -1);
+        assertImportMarkup(AsciiDoc.TITLE, "\n= title\nline 1\nline 2\n", "===== title\nline 1\nline 2", -4);
+
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (4) set title 'title' level (1) > max title level (4)", "== title\nline 1\nline 2", 4);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-1) set title 'title' level (0) < 0", "= title\nline 1\nline 2", -1);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-3) set title 'title' level (1) < 0", "== title\nline 1\nline 2", -3);
     }
 
     @Test
     public void testImportMarkupMarkdown() {
         assertImportMarkup(Markdown.TITLE, "\n\n", "", 0);
-        assertImportMarkup(Markdown.TITLE, "\n\n", "", 5);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-1) < 0", "", -1);
+        assertImportMarkup(Markdown.TITLE, "\n\n", "", 4);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (5) > max levelOffset (4)", "", 5);
+        assertImportMarkup(Markdown.TITLE, "\n\n", "", -4);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-5) < min levelOffset (-4)", "", -5);
 
         assertImportMarkup(Markdown.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 0);
-        assertImportMarkup(Markdown.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 5);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (6) > max title level (5)", "", 6);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-1) < 0", "", -1);
+        assertImportMarkup(Markdown.TITLE, "\nline 1\nline 2\n", "line 1\nline 2", 4);
 
         assertImportMarkup(Markdown.TITLE, "\n# title\nline 1\nline 2\n", "# title\nline 1\nline 2", 0);
         assertImportMarkup(Markdown.TITLE, "\n##### title\nline 1\nline 2\n", "# title\nline 1\nline 2", 4);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (5) set title ' title' level (1) > max title level (5)", "# title\nline 1\nline 2", 5);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-1) < 0", "= title\nline 1\nline 2", -1);
+        assertImportMarkup(Markdown.TITLE, "\n# title\nline 1\nline 2\n", "##### title\nline 1\nline 2", -4);
+
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (4) set title 'title' level (1) > max title level (4)", "## title\nline 1\nline 2", 4);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-1) set title 'title' level (0) < 0", "# title\nline 1\nline 2", -1);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-3) set title 'title' level (1) < 0", "## title\nline 1\nline 2", -3);
     }
 
 }
