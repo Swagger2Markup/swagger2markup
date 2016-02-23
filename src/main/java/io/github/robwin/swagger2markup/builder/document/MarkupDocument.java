@@ -85,8 +85,8 @@ public abstract class MarkupDocument {
     protected String interDocumentCrossReferencesPrefix;
     protected Comparator<String> propertyOrdering;
 
-    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
-        this.swagger = swagger2MarkupConfig.getSwagger();
+    MarkupDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
+        this.swagger = swagger;
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage).withAnchorPrefix(swagger2MarkupConfig.getAnchorPrefix());
         this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();

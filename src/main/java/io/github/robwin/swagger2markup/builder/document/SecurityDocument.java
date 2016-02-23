@@ -21,6 +21,7 @@ package io.github.robwin.swagger2markup.builder.document;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.swagger.models.Swagger;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.BasicAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
@@ -50,8 +51,8 @@ public class SecurityDocument extends MarkupDocument {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
-        super(swagger2MarkupConfig, outputDirectory);
+    public SecurityDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
+        super(swagger, swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());

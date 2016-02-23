@@ -107,8 +107,8 @@ public class PathsDocument extends MarkupDocument {
     private final boolean flatBody;
 
 
-    public PathsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger2MarkupConfig, outputDirectory);
+    public PathsDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
+        super(swagger,swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());

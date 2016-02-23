@@ -30,6 +30,7 @@ import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.RefModel;
+import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
@@ -75,8 +76,8 @@ public class DefinitionsDocument extends MarkupDocument {
     private final int inlineSchemaDepthLevel;
     private final Comparator<String> definitionOrdering;
 
-    public DefinitionsDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger2MarkupConfig, outputDirectory);
+    public DefinitionsDocument(Swagger swagger, Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
+        super(swagger, swagger2MarkupConfig, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());

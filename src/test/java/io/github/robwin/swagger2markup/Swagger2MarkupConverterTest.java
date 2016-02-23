@@ -18,11 +18,9 @@
  */
 package io.github.robwin.swagger2markup;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
@@ -41,7 +39,6 @@ import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
 public class Swagger2MarkupConverterTest {
-
 
     @Test
     public void testSwagger2AsciiDocConversionFromString() throws IOException {
@@ -100,8 +97,12 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withInlineSchemaDepthLevel(1)
+                .build();
         Swagger2MarkupConverter.from(file.getAbsolutePath())
-                .withInlineSchemaDepthLevel(1).build()
+                .withConfig(config)
+                .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -117,8 +118,11 @@ public class Swagger2MarkupConverterTest {
         File outputDirectory = new File("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory);
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath())
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withPathsGroupedBy(GroupBy.TAGS)
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
                 .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
@@ -136,8 +140,12 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
         //When
         try {
-            Swagger2MarkupConverter.from(file.getAbsolutePath())
+            Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                     .withPathsGroupedBy(GroupBy.TAGS)
+                    .build();
+
+            Swagger2MarkupConverter.from(file.getAbsolutePath())
+                    .withConfig(config)
                     .build()
                     .intoFolder(outputDirectory.getAbsolutePath());
             // If NullPointerException was not thrown, test would fail the specified message
@@ -172,8 +180,12 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/asciidoc")
-                .withExamples("src/docs/asciidoc/paths").build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withDescriptions("src/docs/asciidoc")
+                .build();
+
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config).build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -230,8 +242,12 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
+                .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -248,8 +264,13 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withDescriptions("src/docs/markdown").
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withDescriptions("src/docs/markdown")
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
+                .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -266,8 +287,11 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedDefinitions().build()
-            .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withSeparatedDefinitions()
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withConfig(config).build()
+                .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
         String[] directories = outputDirectory.list();
@@ -288,7 +312,10 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedOperations().build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withSeparatedOperations()
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath()).withConfig(config).build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -309,8 +336,13 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedDefinitions().
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withSeparatedDefinitions()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
+                .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         //Then
@@ -332,8 +364,13 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath()).withSeparatedDefinitions().
-                withMarkupLanguage(MarkupLanguage.MARKDOWN).build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withSeparatedDefinitions()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
+                .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
         // Then
@@ -359,8 +396,11 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath())
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withOutputLanguage(Language.RU)
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
                 .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
@@ -377,9 +417,12 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath())
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withOperationExtensions("src/docs/asciidoc/extensions")
                 .withDefinitionExtensions("src/docs/asciidoc/extensions")
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
                 .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
@@ -399,10 +442,13 @@ public class Swagger2MarkupConverterTest {
         FileUtils.deleteQuietly(outputDirectory);
 
         //When
-        Swagger2MarkupConverter.from(file.getAbsolutePath())
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .withOperationExtensions("src/docs/markdown/extensions")
                 .withDefinitionExtensions("src/docs/markdown/extensions")
+                .build();
+        Swagger2MarkupConverter.from(file.getAbsolutePath())
+                .withConfig(config)
                 .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
@@ -418,7 +464,7 @@ public class Swagger2MarkupConverterTest {
      * Given a markdown document to search, this checks to see if the specified tables
      * have all of the expected fields listed.
      *
-     * @param doc markdown document file to inspect
+     * @param doc           markdown document file to inspect
      * @param fieldsByTable map of table name (header) to field names expected
      *                      to be found in that table.
      * @throws IOException if the markdown document could not be read
@@ -426,33 +472,33 @@ public class Swagger2MarkupConverterTest {
     private static void verifyMarkdownContainsFieldsInTables(File doc, Map<String, Set<String>> fieldsByTable) throws IOException {
         final List<String> lines = Files.readAllLines(doc.toPath(), Charset.defaultCharset());
         final Map<String, Set<String>> fieldsLeftByTable = Maps.newHashMap();
-        for(Map.Entry<String, Set<String>> entry : fieldsByTable.entrySet()) {
+        for (Map.Entry<String, Set<String>> entry : fieldsByTable.entrySet()) {
             fieldsLeftByTable.put(entry.getKey(), Sets.newHashSet(entry.getValue()));
         }
         String inTable = null;
-        for(String line : lines) {
+        for (String line : lines) {
             // If we've found every field we care about, quit early
-            if(fieldsLeftByTable.isEmpty()) {
+            if (fieldsLeftByTable.isEmpty()) {
                 return;
             }
 
             // Transition to a new table if we encounter a header
             final String currentHeader = getTableHeader(line);
-            if(inTable == null || currentHeader != null) {
+            if (inTable == null || currentHeader != null) {
                 inTable = currentHeader;
             }
 
             // If we're in a table that we care about, inspect this potential table row
-            if (inTable != null && fieldsLeftByTable.containsKey(inTable)){
+            if (inTable != null && fieldsLeftByTable.containsKey(inTable)) {
                 // If we're still in a table, read the row and check for the field name
                 //  NOTE: If there was at least one pipe, then there's at least 2 fields
                 String[] parts = line.split("\\|");
-                if(parts.length > 1) {
+                if (parts.length > 1) {
                     final String fieldName = parts[1];
                     final Set<String> fieldsLeft = fieldsLeftByTable.get(inTable);
                     // Mark the field as found and if this table has no more fields to find,
                     //  remove it from the "fieldsLeftByTable" map to mark the table as done
-                    if(fieldsLeft.remove(fieldName) && fieldsLeft.isEmpty()) {
+                    if (fieldsLeft.remove(fieldName) && fieldsLeft.isEmpty()) {
                         fieldsLeftByTable.remove(inTable);
                     }
                 }
@@ -460,7 +506,7 @@ public class Swagger2MarkupConverterTest {
         }
 
         // After reading the file, if there were still types, fail
-        if(!fieldsLeftByTable.isEmpty()) {
+        if (!fieldsLeftByTable.isEmpty()) {
             fail(String.format("Markdown file '%s' did not contain expected fields (by table): %s",
                     doc, fieldsLeftByTable));
         }
