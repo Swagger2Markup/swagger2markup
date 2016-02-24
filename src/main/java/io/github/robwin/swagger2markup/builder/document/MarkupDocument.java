@@ -19,21 +19,19 @@
 package io.github.robwin.swagger2markup.builder.document;
 
 import com.google.common.base.Optional;
-import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
-import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,15 +39,12 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -57,7 +52,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public abstract class MarkupDocument {
 
     protected static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
-    protected static final String EXTENSION_FILENAME_PREFIX = "extension-";
 
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
@@ -74,14 +68,14 @@ public abstract class MarkupDocument {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected Swagger swagger;
+    protected Swagger2MarkupConverter.Context globalContext;
     protected Swagger2MarkupConfig config;
     protected MarkupDocBuilder markupDocBuilder;
     protected String outputDirectory;
 
-    MarkupDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory) {
-        this.swagger = swagger;
-        this.config = config;
+    MarkupDocument(Swagger2MarkupConverter.Context globalContext, String outputDirectory) {
+        this.globalContext = globalContext;
+        this.config = globalContext.config;
         this.outputDirectory = outputDirectory;
 
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage()).withAnchorPrefix(config.getAnchorPrefix());

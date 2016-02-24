@@ -18,31 +18,24 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.extension.DefinitionsContentExtension;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.RefModel;
-import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -67,8 +60,8 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String XML = "xml";
     private static final String DESCRIPTION_FILE_NAME = "description";
 
-    public DefinitionsDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory){
-        super(swagger, config, outputDirectory);
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context, String outputDirectory){
+        super(context, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
@@ -107,7 +100,7 @@ public class DefinitionsDocument extends MarkupDocument {
 
     @Override
     public MarkupDocument build(){
-        definitions(swagger.getDefinitions());
+        definitions(globalContext.swagger.getDefinitions());
         return this;
     }
 
@@ -122,7 +115,11 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void definitions(Map<String, Model> definitions){
         if(MapUtils.isNotEmpty(definitions)){
+
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, null, this.markupDocBuilder));
             addDefinitionsTitle(DEFINITIONS);
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEGIN, null, this.markupDocBuilder));
+
             Set<String> definitionNames;
             if (config.getDefinitionOrdering() == null)
               definitionNames = new LinkedHashSet<>();
@@ -144,6 +141,20 @@ public class DefinitionsDocument extends MarkupDocument {
                     }
                 }
             }
+
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_END, null, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_AFTER, null, this.markupDocBuilder));
+        }
+    }
+
+    /**
+     * Apply extension context to all DefinitionsContentExtension
+     *
+     * @param context context
+     */
+    private void applyDefinitionExtension(DefinitionsContentExtension.Context context) {
+        for (DefinitionsContentExtension extension : globalContext.extensionRegistry.getExtensions(DefinitionsContentExtension.class)) {
+            extension.apply(globalContext, context);
         }
     }
 
@@ -210,11 +221,12 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
+        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_BEGIN, definitionName, docBuilder));
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
         definitionSchema(definitionName, docBuilder);
-        extensionsSection(definitionName, docBuilder);
+        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_END, definitionName, docBuilder));
     }
 
     /**
@@ -317,9 +329,6 @@ public class DefinitionsDocument extends MarkupDocument {
             if(isNotBlank(description)){
                 docBuilder.paragraph(description);
             }else{
-                if (logger.isInfoEnabled()) {
-                    logger.info("Hand-written definition description cannot be read. Trying to use description from Swagger source.");
-                }
                 modelDescription(model, docBuilder);
             }
         }
@@ -362,8 +371,8 @@ public class DefinitionsDocument extends MarkupDocument {
                 }
             }
         }
-        if (logger.isWarnEnabled()) {
-            logger.info("No description file found with correct file name extension in folder: {}", Paths.get(config.getDefinitionDescriptionsPath(), descriptionFolder));
+        if (logger.isDebugEnabled()) {
+            logger.debug("No description file found with correct file name extension in folder: {}", Paths.get(config.getDefinitionDescriptionsPath(), descriptionFolder));
         }
         return null;
     }
@@ -429,46 +438,6 @@ public class DefinitionsDocument extends MarkupDocument {
             }
         }
 
-    }
-
-    /**
-     * Builds extension sections
-     *
-     * @param definitionName name of the definition
-     * @param docBuilder the MarkupDocBuilder document builder
-     */
-    private void extensionsSection(String definitionName, MarkupDocBuilder docBuilder) {
-        if (config.isDefinitionExtensions()) {
-            final Collection<String> filenameExtensions = Collections2.transform(config.getMarkupLanguage().getFileNameExtensions(), new Function<String, String>() {
-                public String apply(String input) {
-                    return StringUtils.stripStart(input, ".");
-                }
-            });
-            File definitionExtensionsPath = new File(new File(config.getDefinitionExtensionsPath()), normalizeFileName(definitionName));
-
-            File[] extensionFiles = definitionExtensionsPath.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.startsWith(EXTENSION_FILENAME_PREFIX) && FilenameUtils.isExtension(name, filenameExtensions);
-                }
-            });
-
-            if (extensionFiles != null) {
-                List<File> extensions = Arrays.asList(extensionFiles);
-                Collections.sort(extensions, Ordering.natural());
-
-                for (File extension : extensions) {
-                    Optional<FileReader> extensionContent = operationExtension(extension.getAbsoluteFile());
-
-                    if (extensionContent.isPresent()) {
-                        try {
-                            docBuilder.importMarkup(extensionContent.get(), 2);
-                        } catch (IOException e) {
-                            throw new RuntimeException(String.format("Failed to read extension file: %s", extension), e);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /**

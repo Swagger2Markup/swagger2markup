@@ -23,29 +23,35 @@ import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
 import io.github.robwin.swagger2markup.builder.document.PathsDocument;
 import io.github.robwin.swagger2markup.builder.document.SecurityDocument;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.extension.Extension;
+import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
+import io.github.robwin.swagger2markup.extension.SwaggerExtension;
 import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
+
 /**
  * @author Robert Winkler
  */
 public class Swagger2MarkupConverter {
-    private static final Logger LOG = LoggerFactory.getLogger(Swagger2MarkupConverter.class);
 
-    Swagger2MarkupConfig config;
-    Swagger swagger;
+    public static class Context {
+        public Swagger2MarkupConfig config;
+        public Swagger2MarkupExtensionRegistry extensionRegistry;
+        public Swagger swagger;
+        public String swaggerLocation;
+    }
+
+    Context globalContext;
 
     /**
      * Creates a Swagger2MarkupConverter.Builder using a given Swagger source.
@@ -54,7 +60,7 @@ public class Swagger2MarkupConverter {
      * @return a Swagger2MarkupConverter
      */
     public static Builder from(String swaggerLocation) {
-        Validate.notEmpty(swaggerLocation, "swaggerLocation must not be empty!");
+        Validate.notEmpty(swaggerLocation, "swaggerLocation must not be empty");
         return new Builder(swaggerLocation);
     }
 
@@ -65,7 +71,7 @@ public class Swagger2MarkupConverter {
      * @return a Swagger2MarkupConverter
      */
     public static Builder from(Swagger swagger) {
-        Validate.notNull(swagger, "Swagger must not be null!");
+        Validate.notNull(swagger, "Swagger must not be null");
         return new Builder(swagger);
     }
 
@@ -78,7 +84,7 @@ public class Swagger2MarkupConverter {
      * @throws java.io.IOException if String can not be parsed
      */
     public static Builder fromString(String swaggerAsString) throws IOException {
-        Validate.notEmpty(swaggerAsString, "swaggerAsString must not be null!");
+        Validate.notEmpty(swaggerAsString, "swaggerAsString must not be null");
         return from(new StringReader(swaggerAsString));
     }
 
@@ -90,12 +96,18 @@ public class Swagger2MarkupConverter {
      * @throws java.io.IOException if source can not be parsed
      */
     public static Builder from(Reader swaggerReader) throws IOException {
-        Validate.notNull(swaggerReader, "swaggerReader must not be null!");
+        Validate.notNull(swaggerReader, "swaggerReader must not be null");
         Swagger swagger = new SwaggerParser().parse(IOUtils.toString(swaggerReader));
         if (swagger == null)
             throw new IllegalArgumentException("Swagger source is in the wrong format");
 
         return new Builder(swagger);
+    }
+
+    protected void applySwaggerExtensions() {
+        for (SwaggerExtension swaggerExtension : globalContext.extensionRegistry.getExtensions(SwaggerExtension.class)) {
+            swaggerExtension.apply(globalContext);
+        }
     }
 
     /**
@@ -106,7 +118,9 @@ public class Swagger2MarkupConverter {
      * @throws IOException if the files cannot be written
      */
     public void intoFolder(String targetFolderPath) throws IOException {
-        Validate.notEmpty(targetFolderPath, "folderPath must not be null!");
+        Validate.notEmpty(targetFolderPath, "folderPath must not be null");
+
+        applySwaggerExtensions();
         buildDocuments(targetFolderPath);
     }
 
@@ -117,6 +131,7 @@ public class Swagger2MarkupConverter {
      * @throws java.io.IOException if files can not be read
      */
     public String asString() throws IOException {
+        applySwaggerExtensions();
         return buildDocuments();
     }
 
@@ -127,10 +142,10 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(String directory) throws IOException {
-        new OverviewDocument(swagger, config, directory).build().writeToFile(directory, config.getOverviewDocument(), StandardCharsets.UTF_8);
-        new PathsDocument(swagger, config, directory).build().writeToFile(directory, config.getPathsDocument(), StandardCharsets.UTF_8);
-        new DefinitionsDocument(swagger, config, directory).build().writeToFile(directory, config.getDefinitionsDocument(), StandardCharsets.UTF_8);
-        new SecurityDocument(swagger, config, directory).build().writeToFile(directory, config.getSecurityDocument(), StandardCharsets.UTF_8);
+        new OverviewDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getOverviewDocument(), StandardCharsets.UTF_8);
+        new PathsDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getPathsDocument(), StandardCharsets.UTF_8);
+        new DefinitionsDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getDefinitionsDocument(), StandardCharsets.UTF_8);
+        new SecurityDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getSecurityDocument(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -140,10 +155,10 @@ public class Swagger2MarkupConverter {
      */
     private String buildDocuments() {
         StringBuilder sb = new StringBuilder();
-        sb.append(new OverviewDocument(swagger, config, null).build().toString());
-        sb.append(new PathsDocument(swagger, config, null).build().toString());
-        sb.append(new DefinitionsDocument(swagger, config, null).build().toString());
-        sb.append(new SecurityDocument(swagger, config, null).build().toString());
+        sb.append(new OverviewDocument(globalContext, null).build().toString());
+        sb.append(new PathsDocument(globalContext, null).build().toString());
+        sb.append(new DefinitionsDocument(globalContext, null).build().toString());
+        sb.append(new SecurityDocument(globalContext, null).build().toString());
         return sb.toString();
     }
 
@@ -151,6 +166,10 @@ public class Swagger2MarkupConverter {
         private final Swagger swagger;
         private final String swaggerLocation;
         private Swagger2MarkupConfig config;
+        private Swagger2MarkupExtensionRegistry extensionRegistry;
+
+        @Deprecated
+        private SwaggerExtension preProcessSwaggerExtension;
 
         /**
          * Creates a Builder using a given Swagger source.
@@ -176,13 +195,20 @@ public class Swagger2MarkupConverter {
         }
 
         /**
-         * Customize the Swagger data in any useful way
+         * Customize the Swagger data in any useful way.<br/>
+         * Use the new extension system instead, by providing a {@link io.github.robwin.swagger2markup.extension.SwaggerExtension} extension.
          *
          * @param preProcessor function object to mutate the swagger object
          * @return the Swagger2MarkupConverter.Builder
          */
-        public Builder preProcessSwagger(Consumer<Swagger> preProcessor) {
-            preProcessor.accept(this.swagger);
+        @Deprecated
+        public Builder preProcessSwagger(final Consumer<Swagger> preProcessor) {
+            this.preProcessSwaggerExtension = new SwaggerExtension() {
+                @Override
+                public void apply(Context globalContext) {
+                    preProcessor.accept(globalContext.swagger);
+                }
+            };
             return this;
         }
 
@@ -196,15 +222,34 @@ public class Swagger2MarkupConverter {
             return this;
         }
 
-        public Swagger2MarkupConverter build() {
-            Swagger2MarkupConverter converter = new Swagger2MarkupConverter();
-            converter.swagger = this.swagger;
-            if (config == null)
-                converter.config = Swagger2MarkupConfig.ofDefaults().build();
-            else
-                converter.config = config;
+        public Builder withExtensionRegistry(Swagger2MarkupExtensionRegistry registry) {
+            this.extensionRegistry = registry;
+            return this;
+        }
 
-            converter.config.configurePathsDefaults(this.swaggerLocation == null ? null : new File(swaggerLocation).getParentFile());
+        public Swagger2MarkupConverter build() {
+            Context context = new Context();
+
+            context.swagger = this.swagger;
+            context.swaggerLocation = this.swaggerLocation;
+
+            if (config == null)
+                context.config = Swagger2MarkupConfig.ofDefaults().build();
+            else
+                context.config = config;
+            context.config.setGlobalContext(context);
+
+            if (extensionRegistry == null)
+                context.extensionRegistry = Swagger2MarkupExtensionRegistry.ofDefaults().build();
+            else
+                context.extensionRegistry = extensionRegistry;
+            if (preProcessSwaggerExtension != null)
+                context.extensionRegistry.registerExtension(preProcessSwaggerExtension);
+            for (Extension extension : context.extensionRegistry.getExtensions())
+                extension.setGlobalContext(context);
+
+            Swagger2MarkupConverter converter = new Swagger2MarkupConverter();
+            converter.globalContext = context;
 
             return converter;
         }

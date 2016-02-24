@@ -24,6 +24,9 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
+import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
+import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -422,11 +425,14 @@ public class Swagger2MarkupConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withOperationExtensions("src/docs/asciidoc/extensions")
-                .withDefinitionExtensions("src/docs/asciidoc/extensions")
+                .build();
+        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofDefaults()
+                .withExtension(new DynamicDefinitionsContentExtension("src/docs/asciidoc/extensions"))
+                .withExtension(new DynamicOperationsContentExtension("src/docs/asciidoc/extensions"))
                 .build();
         Swagger2MarkupConverter.from(file.getAbsolutePath())
                 .withConfig(config)
+                .withExtensionRegistry(registry)
                 .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
@@ -448,11 +454,14 @@ public class Swagger2MarkupConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .withOperationExtensions("src/docs/markdown/extensions")
-                .withDefinitionExtensions("src/docs/markdown/extensions")
+                .build();
+        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofDefaults()
+                .withExtension(new DynamicDefinitionsContentExtension("src/docs/markdown/extensions"))
+                .withExtension(new DynamicOperationsContentExtension("src/docs/markdown/extensions"))
                 .build();
         Swagger2MarkupConverter.from(file.getAbsolutePath())
                 .withConfig(config)
+                .withExtensionRegistry(registry)
                 .build()
                 .intoFolder(outputDirectory.getAbsolutePath());
 
@@ -472,10 +481,8 @@ public class Swagger2MarkupConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
-                .withDefinitionExtensions()
                 .withExamples()
                 .withOperationDescriptions()
-                .withOperationExtensions()
                 .withSchemas()
                 .build();
 
@@ -484,12 +491,12 @@ public class Swagger2MarkupConverterTest {
                 .build();
 
         //Then
-        assertThat(converterBuilder.config.getDefinitionDescriptionsPath()).isEqualTo(new File(file.getParent(), "definitions").getPath());
-        assertThat(converterBuilder.config.getDefinitionExtensionsPath()).isEqualTo(new File(file.getParent(), "definitions").getPath());
-        assertThat(converterBuilder.config.getExamplesPath()).isEqualTo(new File(file.getParent(), "operations").getPath());
-        assertThat(converterBuilder.config.getOperationDescriptionsPath()).isEqualTo(new File(file.getParent(), "operations").getPath());
-        assertThat(converterBuilder.config.getOperationExtensionsPath()).isEqualTo(new File(file.getParent(), "operations").getPath());
-        assertThat(converterBuilder.config.getSchemasPath()).isEqualTo(new File(file.getParent(), "definitions").getPath());
+        String basePath = new File(converterBuilder.globalContext.swaggerLocation).getParent();
+        assertThat(basePath).isEqualTo(file.getParent());
+        assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsPath()).isEqualTo(basePath);
+        assertThat(converterBuilder.globalContext.config.getExamplesPath()).isEqualTo(basePath);
+        assertThat(converterBuilder.globalContext.config.getOperationDescriptionsPath()).isEqualTo(basePath);
+        assertThat(converterBuilder.globalContext.config.getSchemasPath()).isEqualTo(basePath);
     }
 
     @Test
@@ -499,10 +506,8 @@ public class Swagger2MarkupConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
-                .withDefinitionExtensions()
                 .withExamples()
                 .withOperationDescriptions()
-                .withOperationExtensions()
                 .withSchemas()
                 .build();
 
@@ -511,12 +516,12 @@ public class Swagger2MarkupConverterTest {
                 .build();
 
         //Then
-        assertThat(converterBuilder.config.getDefinitionDescriptionsPath()).isEqualTo("http:/petstore.swagger.io/v2/definitions");
-        assertThat(converterBuilder.config.getDefinitionExtensionsPath()).isEqualTo("http:/petstore.swagger.io/v2/definitions");
-        assertThat(converterBuilder.config.getExamplesPath()).isEqualTo("http:/petstore.swagger.io/v2/operations");
-        assertThat(converterBuilder.config.getOperationDescriptionsPath()).isEqualTo("http:/petstore.swagger.io/v2/operations");
-        assertThat(converterBuilder.config.getOperationExtensionsPath()).isEqualTo("http:/petstore.swagger.io/v2/operations");
-        assertThat(converterBuilder.config.getSchemasPath()).isEqualTo("http:/petstore.swagger.io/v2/definitions");
+        String basePath = new File(converterBuilder.globalContext.swaggerLocation).getParent();
+        assertThat(basePath).isEqualTo("http://petstore.swagger.io/v2");
+        assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsPath()).isEqualTo(basePath);
+        assertThat(converterBuilder.globalContext.config.getExamplesPath()).isEqualTo(basePath);
+        assertThat(converterBuilder.globalContext.config.getOperationDescriptionsPath()).isEqualTo(basePath);
+        assertThat(converterBuilder.globalContext.config.getSchemasPath()).isEqualTo(basePath);
     }
 
     @Test
@@ -535,7 +540,7 @@ public class Swagger2MarkupConverterTest {
                     .build();
             fail("No RuntimeException thrown");
         } catch (RuntimeException e) {
-            assertThat(e.getMessage()).isEqualTo("'definitionDescriptions' configuration entry is not set and has no default");
+            assertThat(e.getMessage()).isEqualTo("'definitionDescriptionsPath' configuration entry is not set and has no default");
         }
 
     }

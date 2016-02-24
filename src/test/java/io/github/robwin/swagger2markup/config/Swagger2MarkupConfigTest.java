@@ -37,8 +37,6 @@ public class Swagger2MarkupConfigTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults().build();
 
         assertThat(config.getAnchorPrefix()).isNull();
-        assertThat(config.isDefinitionExtensions()).isFalse();
-        assertThat(config.getDefinitionExtensionsPath()).isNull();
         assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitions");
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.NATURAL);
@@ -51,8 +49,6 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
-        assertThat(config.isOperationExtensions()).isFalse();
-        assertThat(config.getOperationExtensionsPath()).isNull();
         assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.OPERATION_PATH_COMPARATOR.compound(Swagger2MarkupConfig.Builder.OPERATION_METHOD_COMPARATOR));
         assertThat(config.getOutputLanguage()).isEqualTo(Language.EN);
         assertThat(config.getOverviewDocument()).isEqualTo("overview");
@@ -83,8 +79,6 @@ public class Swagger2MarkupConfigTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofProperties(properties).build();
 
         assertThat(config.getAnchorPrefix()).isEqualTo("anchorPrefix");
-        assertThat(config.isDefinitionExtensions()).isTrue();
-        assertThat(config.getDefinitionExtensionsPath()).isEqualTo("definitionExtensions");
         //assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural()); // Not supported
         //assertThat(config.getDefinitionsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.DEFINITIONS_DOCUMENT); // Not supported
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.AS_IS);
@@ -97,8 +91,6 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
-        assertThat(config.isOperationExtensions()).isTrue();
-        assertThat(config.getOperationExtensionsPath()).isEqualTo("operationExtensions");
         //assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.OPERATION_PATH_COMPARATOR.compound(Swagger2MarkupConfig.Builder.OPERATION_METHOD_COMPARATOR)); // Not supported
         assertThat(config.getOutputLanguage()).isEqualTo(Language.RU);
         //assertThat(config.getOverviewDocument()).isEqualTo(Swagger2MarkupConfig.Builder.OVERVIEW_DOCUMENT); // Not supported

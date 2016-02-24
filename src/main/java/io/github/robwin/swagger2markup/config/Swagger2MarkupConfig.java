@@ -21,12 +21,11 @@ package io.github.robwin.swagger2markup.config;
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.swagger2markup.GroupBy;
-import io.github.robwin.swagger2markup.Language;
-import io.github.robwin.swagger2markup.OrderBy;
-import io.github.robwin.swagger2markup.PathOperation;
+import io.github.robwin.swagger2markup.*;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +35,7 @@ import java.util.Properties;
 
 public class Swagger2MarkupConfig {
 
-    static final String OPERATIONS_FOLDER = "operations";
-    static final String DEFINITIONS_FOLDER = "definitions";
+    private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfig.class);
 
     private MarkupLanguage markupLanguage;
     private boolean examples;
@@ -48,10 +46,6 @@ public class Swagger2MarkupConfig {
     private String operationDescriptionsPath;
     private boolean definitionDescriptions;
     private String definitionDescriptionsPath;
-    private boolean operationExtensions;
-    private String operationExtensionsPath;
-    private boolean definitionExtensions;
-    private String definitionExtensionsPath;
     private boolean separatedDefinitions;
     private boolean separatedOperations;
     private GroupBy operationsGroupedBy;
@@ -86,47 +80,66 @@ public class Swagger2MarkupConfig {
     }
 
     /**
-     * Automatically set default path for external files based on Swagger file base path.<br/>
+     * Global context lazy initialization
+     *
+     * @param globalContext Partially initialized global context (globalContext.extensionRegistry == null)
+     */
+    public void setGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+        configureDefaultContentPaths(globalContext.swaggerLocation != null ? new File(globalContext.swaggerLocation).getParentFile() : null);
+        onUpdateGlobalContext(globalContext);
+    }
+
+    /**
+     * Overridable onUpdateGlobalContext event listener.
+     *
+     * @param globalContext Partially initialized global context (globalContext.extensionRegistry == null)
+     */
+    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+        /* must be left empty */
+    }
+
+    /**
+     * Automatically set default path for external content files based on specified {@code basePath}.<br/>
      * If {@code basePath} is null, default path can't be set and a RuntimeException is thrown.
      *
      * @param basePath base path to set default paths
      * @throws RuntimeException if basePath == null and any path is not configured
      */
-    public void configurePathsDefaults(File basePath) {
+    private void configureDefaultContentPaths(File basePath) {
         if (examples && examplesPath == null) {
-            if (basePath == null)
-                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "examplesPath"));
-            examplesPath = new File(basePath, OPERATIONS_FOLDER).getPath();
+            if (basePath == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("No explicit '%s' set and no default available > Disable %s", "examplesPath", "examples");
+                examples = false;
+            } else
+                examplesPath = basePath.getPath();
         }
 
         if (schemas && schemasPath == null) {
-            if (basePath == null)
-                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "schemasPath"));
-            schemasPath = new File(basePath, DEFINITIONS_FOLDER).getPath();
+            if (basePath == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("No explicit '%s' set and no default available > Disable %s", "schemasPath", "schemas");
+                schemas = false;
+            } else
+                schemasPath = basePath.getPath();
         }
 
         if (operationDescriptions && operationDescriptionsPath == null) {
-            if (basePath == null)
-                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "operationDescriptions"));
-            operationDescriptionsPath = new File(basePath, OPERATIONS_FOLDER).getPath();
+            if (basePath == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("No explicit '%s' set and no default available > Disable %s", "operationDescriptionsPath", "operationDescriptions");
+                operationDescriptions = false;
+            } else
+                operationDescriptionsPath = basePath.getPath();
         }
 
         if (definitionDescriptions && definitionDescriptionsPath == null) {
-            if (basePath == null)
-                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "definitionDescriptions"));
-            definitionDescriptionsPath = new File(basePath, DEFINITIONS_FOLDER).getPath();
-        }
-
-        if (operationExtensions && operationExtensionsPath == null) {
-            if (basePath == null)
-                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "operationExtensions"));
-            operationExtensionsPath = new File(basePath, OPERATIONS_FOLDER).getPath();
-        }
-
-        if (definitionExtensions && definitionExtensionsPath == null) {
-            if (basePath == null)
-                throw new RuntimeException(String.format("'%s' configuration entry is not set and has no default", "definitionExtensions"));
-            definitionExtensionsPath = new File(basePath, DEFINITIONS_FOLDER).getPath();
+            if (basePath == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("No explicit '%s' set and no default available > Disable %s", "definitionDescriptionsPath", "definitionDescriptions");
+                definitionDescriptions = false;
+            } else
+                definitionDescriptionsPath = basePath.getPath();
         }
     }
 
@@ -164,22 +177,6 @@ public class Swagger2MarkupConfig {
 
     public String getDefinitionDescriptionsPath() {
         return definitionDescriptionsPath;
-    }
-
-    public boolean isOperationExtensions() {
-        return operationExtensions;
-    }
-
-    public String getOperationExtensionsPath() {
-        return operationExtensionsPath;
-    }
-
-    public boolean isDefinitionExtensions() {
-        return definitionExtensions;
-    }
-
-    public String getDefinitionExtensionsPath() {
-        return definitionExtensionsPath;
     }
 
     public boolean isSeparatedDefinitions() {
@@ -327,10 +324,6 @@ public class Swagger2MarkupConfig {
             config.operationDescriptionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsPath");
             config.definitionDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptions"));
             config.definitionDescriptionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsPath");
-            config.operationExtensions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationExtensions"));
-            config.operationExtensionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "operationExtensionsPath");
-            config.definitionExtensions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionExtensions"));
-            config.definitionExtensionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionExtensionsPath");
             config.separatedDefinitions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitions"));
             config.separatedOperations = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperations"));
             config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
@@ -393,6 +386,7 @@ public class Swagger2MarkupConfig {
          */
         public Builder withExamples(String examplesPath) {
             config.examples = true;
+
             config.examplesPath = examplesPath;
             return this;
         }
@@ -467,59 +461,13 @@ public class Swagger2MarkupConfig {
         }
 
         /**
-         * Include hand-written descriptions into the Paths document.<br/>
+         * Include hand-written descriptions into the Definitions document.<br/>
          * This is an alias for {@link #withDefinitionDescriptions(String) withDefinitionDescriptions(null)}.
          *
          * @return this builder
          */
         public Builder withDefinitionDescriptions() {
             withDefinitionDescriptions(null);
-            return this;
-        }
-
-        /**
-         * Include extensions into Paths document
-         *
-         * @param operationExtensionsFolderPath the path to the folder where the operation extension documents reside. Use default path if null.
-         * @return this builder
-         */
-        public Builder withOperationExtensions(String operationExtensionsFolderPath) {
-            config.operationExtensions = true;
-            config.operationExtensionsPath = operationExtensionsFolderPath;
-            return this;
-        }
-
-        /**
-         * Include extensions into Paths document.<br/>
-         * This is an alias for {@link #withOperationExtensions(String) withOperationExtensions(null)}.
-         *
-         * @return this builder
-         */
-        public Builder withOperationExtensions() {
-            withOperationExtensions(null);
-            return this;
-        }
-
-        /**
-         * Include extensions into Definitions document
-         *
-         * @param definitionExtensionsFolderPath the path to the folder where the definition extension documents reside. Use default path if null.
-         * @return this builder
-         */
-        public Builder withDefinitionExtensions(String definitionExtensionsFolderPath) {
-            config.definitionExtensions = true;
-            config.definitionExtensionsPath = definitionExtensionsFolderPath;
-            return this;
-        }
-
-        /**
-         * Include extensions into Definitions document.<br/>
-         * This is an alias for {@link #withDefinitionExtensions(String) withDefinitionExtensions(null)}.
-         *
-         * @return this builder
-         */
-        public Builder withDefinitionExtensions() {
-            withDefinitionExtensions(null);
             return this;
         }
 
@@ -557,7 +505,8 @@ public class Swagger2MarkupConfig {
         }
 
         /**
-         * Specifies if the definitions should be ordered by natural ordering or stay as-is.
+         * Specifies if the definitions should be ordered by natural ordering or stay as-is.<br/>
+         * Use {@link #withDefinitionOrdering(Comparator)} instead.
          *
          * @param definitionsOrderedBy the OrderBy enum
          * @return this builder

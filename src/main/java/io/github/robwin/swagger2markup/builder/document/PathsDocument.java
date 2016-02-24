@@ -18,19 +18,17 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.collect.Collections2;
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.PathOperation;
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.extension.OperationsContentExtension;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -38,7 +36,6 @@ import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.github.robwin.swagger2markup.utils.TagUtils;
 import io.swagger.models.*;
-import io.swagger.models.Path;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
@@ -51,11 +48,10 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static io.github.robwin.swagger2markup.utils.TagUtils.convertTagsListToMap;
@@ -89,8 +85,8 @@ public class PathsDocument extends MarkupDocument {
     private static final String DESCRIPTION_FILE_NAME = "description";
 
 
-    public PathsDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory){
-        super(swagger,config, outputDirectory);
+    public PathsDocument(Swagger2MarkupConverter.Context globalContext, String outputDirectory){
+        super(globalContext, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
@@ -157,7 +153,7 @@ public class PathsDocument extends MarkupDocument {
      */
     private void operations(){
         Set<PathOperation> allOperations = new LinkedHashSet<>();
-        Map<String, Path> paths = swagger.getPaths();
+        Map<String, Path> paths = globalContext.swagger.getPaths();
 
         if (paths != null) {
             for (Map.Entry<String, Path> path : paths.entrySet()) {
@@ -173,9 +169,16 @@ public class PathsDocument extends MarkupDocument {
 
         if (allOperations.size() > 0) {
 
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEFORE, null, this.markupDocBuilder));
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
                 addPathsTitle(PATHS);
+                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, null, this.markupDocBuilder));
+            } else {
+                addPathsTitle(RESOURCES);
+                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, null, this.markupDocBuilder));
+            }
 
+            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
                 if (config.getOperationOrdering() != null) {
                     Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
                     sortedOperations.addAll(allOperations);
@@ -185,14 +188,10 @@ public class PathsDocument extends MarkupDocument {
                 for (PathOperation operation : allOperations) {
                     processOperation(operation);
                 }
-
-
             } else {
-                addPathsTitle(RESOURCES);
-
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(allOperations, config.getTagOrdering(), config.getOperationOrdering());
 
-                Map<String, Tag> tagsMap = convertTagsListToMap(swagger.getTags());
+                Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.swagger.getTags());
                 for (String tagName : operationsGroupedByTag.keySet()) {
                     this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
 
@@ -206,8 +205,22 @@ public class PathsDocument extends MarkupDocument {
                     }
                 }
             }
+
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_END, null, this.markupDocBuilder));
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_AFTER, null, this.markupDocBuilder));
         }
 
+    }
+
+    /**
+     * Apply extension context to all OperationsContentExtension
+     *
+     * @param context context
+     */
+    private void applyOperationExtension(OperationsContentExtension.Context context) {
+        for (OperationsContentExtension extension : globalContext.extensionRegistry.getExtensions(OperationsContentExtension.class)) {
+            extension.apply(globalContext, context);
+        }
     }
 
     /**
@@ -257,7 +270,6 @@ public class PathsDocument extends MarkupDocument {
         }
     }
 
-
     /**
      * Returns the operation name depending on available informations.
      * The summary is used to name the operation, or else the operation summary is used.
@@ -276,6 +288,7 @@ public class PathsDocument extends MarkupDocument {
      */
     private void operation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if(operation != null){
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.OP_BEGIN, operation, docBuilder));
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
             inlineDefinitions(parametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
@@ -286,7 +299,7 @@ public class PathsDocument extends MarkupDocument {
             tagsSection(operation, docBuilder);
             securitySchemeSection(operation, docBuilder);
             examplesSection(operation, docBuilder);
-            extensionsSection(operation, docBuilder);
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.OP_END, operation, docBuilder));
         }
     }
 
@@ -368,9 +381,6 @@ public class PathsDocument extends MarkupDocument {
             if (description.isPresent()) {
                 operationDescription(description.get(), docBuilder);
             } else {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Hand-written description cannot be read. Trying to use description from Swagger source.");
-                }
                 operationDescription(operation.getOperation().getDescription(), docBuilder);
             }
         }else {
@@ -411,7 +421,7 @@ public class PathsDocument extends MarkupDocument {
         if (displayParameters) {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(TYPE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
                     new MarkupTableColumn(NAME_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
                     new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
                     new MarkupTableColumn(REQUIRED_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
@@ -515,15 +525,9 @@ public class PathsDocument extends MarkupDocument {
                 if (description.isPresent()) {
                     return description.get();
                 } else {
-                    if (logger.isWarnEnabled()) {
-                        logger.warn("Hand-written description file cannot be read. Trying to use description from Swagger source.");
-                    }
                     return defaultString(parameter.getDescription());
                 }
             } else {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("Hand-written description file cannot be read, because name of parameter is empty. Trying to use description from Swagger source.");
-                }
                 return defaultString(parameter.getDescription());
             }
         } else {
@@ -629,13 +633,13 @@ public class PathsDocument extends MarkupDocument {
                     }
                 }
             } else {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("Example file is not readable: {}", path);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Example file is not readable: {}", path);
                 }
             }
         }
-        if (logger.isWarnEnabled()) {
-            logger.warn("No example file found with correct file name extension in folder: {}", Paths.get(config.getExamplesPath(), exampleFolder));
+        if (logger.isDebugEnabled()) {
+            logger.debug("No example file found with correct file name extension in folder: {}", Paths.get(config.getExamplesPath(), exampleFolder));
         }
         return Optional.absent();
     }
@@ -650,7 +654,7 @@ public class PathsDocument extends MarkupDocument {
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
         if (CollectionUtils.isNotEmpty(securitySchemes)) {
             addOperationSectionTitle(SECURITY, docBuilder);
-            Map<String, SecuritySchemeDefinition> securityDefinitions = swagger.getSecurityDefinitions();
+            Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.swagger.getSecurityDefinitions();
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
@@ -694,13 +698,13 @@ public class PathsDocument extends MarkupDocument {
                     }
                 }
             } else {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("Description file is not readable: {}", path);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Description file is not readable: {}", path);
                 }
             }
         }
-        if (logger.isWarnEnabled()) {
-            logger.warn("No description file found with correct file name extension in folder: {}", Paths.get(config.getOperationDescriptionsPath(), descriptionFolder));
+        if (logger.isDebugEnabled()) {
+            logger.debug("No description file found with correct file name extension in folder: {}", Paths.get(config.getOperationDescriptionsPath(), descriptionFolder));
         }
         return Optional.absent();
     }
@@ -780,50 +784,6 @@ public class PathsDocument extends MarkupDocument {
             }
         }
 
-    }
-
-    /**
-     * Builds extension sections
-     *
-     * @param operation  the Swagger Operation
-     * @param docBuilder the MarkupDocBuilder document builder
-     */
-    private void extensionsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (config.isOperationExtensions()) {
-            final Collection<String> filenameExtensions = Collections2.transform(config.getMarkupLanguage().getFileNameExtensions(), new Function<String, String>() {
-                public String apply(String input) {
-                    return StringUtils.stripStart(input, ".");
-                }
-            });
-            File operationExtensionsPath = new File(new File(config.getOperationExtensionsPath()), normalizeFileName(operation.getId()));
-
-            File[] extensionFiles = operationExtensionsPath.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.startsWith(EXTENSION_FILENAME_PREFIX) && FilenameUtils.isExtension(name, filenameExtensions);
-                }
-            });
-
-            if (extensionFiles != null) {
-                List<File> extensions = Arrays.asList(extensionFiles);
-                Collections.sort(extensions, Ordering.natural());
-
-                for (File extension : extensions) {
-                    Optional<FileReader> extensionContent = operationExtension(extension.getAbsoluteFile());
-
-                    if (extensionContent.isPresent()) {
-                        int levelOffset = 3;
-                        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                            levelOffset = 2;
-                        }
-                        try {
-                            docBuilder.importMarkup(extensionContent.get(), levelOffset);
-                        } catch (IOException e) {
-                            throw new RuntimeException(String.format("Failed to read extension file: %s", extension), e);
-                        }
-                    }
-                }
-            }
-        }
     }
 
     /**

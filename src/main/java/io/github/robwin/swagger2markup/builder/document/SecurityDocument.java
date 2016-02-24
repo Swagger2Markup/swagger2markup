@@ -18,24 +18,17 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import io.github.robwin.markup.builder.MarkupTableColumn;
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
-import io.swagger.models.Swagger;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.extension.SecurityContentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
-import io.swagger.models.auth.BasicAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 import org.apache.commons.collections.MapUtils;
 
-import com.google.common.base.Joiner;
+import java.util.*;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -51,8 +44,8 @@ public class SecurityDocument extends MarkupDocument {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocument(Swagger swagger, Swagger2MarkupConfig config, String outputDirectory) {
-        super(swagger, config, outputDirectory);
+    public SecurityDocument(Swagger2MarkupConverter.Context context, String outputDirectory) {
+        super(context, outputDirectory);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         SECURITY = labels.getString("security");
@@ -84,9 +77,13 @@ public class SecurityDocument extends MarkupDocument {
      * Builds all security definition of the Swagger model.
      */
     private void security() {
-        Map<String, SecuritySchemeDefinition> definitions = swagger.getSecurityDefinitions();
+        Map<String, SecuritySchemeDefinition> definitions = globalContext.swagger.getSecurityDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
+
+            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             addSecurityTitle(SECURITY);
+            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+
             for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
                 markupDocBuilder.sectionTitleLevel2(entry.getKey());
                 SecuritySchemeDefinition securityScheme = entry.getValue();
@@ -115,8 +112,21 @@ public class SecurityDocument extends MarkupDocument {
                     markupDocBuilder.tableWithColumnSpecs(cols, cells);
 
                 }
-
             }
+
+            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+        }
+    }
+
+    /**
+     * Apply extension context to all SecurityContentExtension
+     *
+     * @param context context
+     */
+    private void applyOverviewExtension(SecurityContentExtension.Context context) {
+        for (SecurityContentExtension extension : globalContext.extensionRegistry.getExtensions(SecurityContentExtension.class)) {
+            extension.apply(globalContext, context);
         }
     }
 }
