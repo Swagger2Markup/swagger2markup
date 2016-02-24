@@ -163,7 +163,7 @@ public final class PropertyUtils {
                 return  "string";
             case "ref":
                 if (property != null && property instanceof RefProperty) {
-                    return markupDocBuilder.crossReferenceAnchorAsString(null, ((RefProperty) property).getSimpleRef(), ((RefProperty) property).getSimpleRef());
+                    return markupDocBuilder.copy().crossReference(((RefProperty) property).getSimpleRef()).toString();
                 }
             default:
                 return type;
