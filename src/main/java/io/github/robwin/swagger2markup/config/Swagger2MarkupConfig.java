@@ -23,7 +23,6 @@ import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Language;
 import io.github.robwin.swagger2markup.OrderBy;
 import io.github.robwin.swagger2markup.PathOperation;
-import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
 
 import java.util.Comparator;
@@ -33,7 +32,6 @@ public class Swagger2MarkupConfig {
     private final Swagger swagger;
     private final MarkupLanguage markupLanguage;
     private final String examplesFolderPath;
-    private final boolean generateExamples;
     private final String schemasFolderPath;
     private final String descriptionsFolderPath;
     private final boolean separatedDefinitions;
@@ -75,7 +73,7 @@ public class Swagger2MarkupConfig {
      * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
      * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
      */
-    public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath, boolean generateExamples,
+    public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
                                 String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
                                 GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
                                 int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering,
@@ -84,7 +82,6 @@ public class Swagger2MarkupConfig {
         this.swagger = swagger;
         this.markupLanguage = markupLanguage;
         this.examplesFolderPath = examplesFolderPath;
-        this.generateExamples = generateExamples;
         this.schemasFolderPath = schemasFolderPath;
         this.descriptionsFolderPath = descriptionsFolderPath;
         this.separatedDefinitions = separatedDefinitions;
@@ -110,10 +107,6 @@ public class Swagger2MarkupConfig {
 
     public String getExamplesFolderPath() {
         return examplesFolderPath;
-    }
-
-    public boolean shouldGenerateExamples() {
-        return generateExamples;
     }
 
     public String getSchemasFolderPath() {

@@ -19,6 +19,7 @@
 package io.github.robwin.swagger2markup.utils;
 
 import com.google.common.base.Function;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.type.ArrayType;
 import io.github.robwin.swagger2markup.type.BasicType;
 import io.github.robwin.swagger2markup.type.EnumType;
@@ -31,16 +32,20 @@ import io.swagger.models.properties.DoubleProperty;
 import io.swagger.models.properties.FloatProperty;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.ObjectProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 import io.swagger.models.refs.RefFormat;
+import io.swagger.util.Json;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -123,12 +128,45 @@ public final class PropertyUtils {
         return defaultValue;
     }
 
-    public static String getExample(Property property) {
+    public static String getExample(Property property, MarkupDocBuilder markupDocBuilder) {
         Validate.notNull(property, "parameter must not be null!");
-        String examplesValue = "";
+        Object examplesValue;
         if (property.getExample() != null) {
             examplesValue = property.getExample();
+        } else if (property instanceof MapProperty) {
+            Map<String, Object> exampleMap = new HashMap<>();
+            Property additionalProperty = ((MapProperty) property).getAdditionalProperties();
+            if (additionalProperty.getExample() != null) {
+                examplesValue = additionalProperty.getExample();
+            } else {
+                exampleMap.put("string", exampleFromType(additionalProperty.getType(), additionalProperty, markupDocBuilder));
+                examplesValue = Json.pretty(exampleMap);
+            }
+        } else if (property instanceof ArrayProperty) {
+            Property itemProperty = ((ArrayProperty) property).getItems();
+            examplesValue = "[ " + exampleFromType(itemProperty.getType(), itemProperty, markupDocBuilder) + " ]";
+        } else {
+            examplesValue = exampleFromType(property.getType(), property, markupDocBuilder);
         }
-        return examplesValue;
+        return String.valueOf(examplesValue);
+    }
+
+    public static Object exampleFromType(String type, Property property, MarkupDocBuilder markupDocBuilder) {
+        switch (type) {
+            case "integer":
+                return 0;
+            case "number":
+                return 0.0;
+            case "boolean":
+                return true;
+            case "string":
+                return  "string";
+            case "ref":
+                if (property != null && property instanceof RefProperty) {
+                    return markupDocBuilder.crossReferenceAnchorAsString(null, ((RefProperty) property).getSimpleRef(), ((RefProperty) property).getSimpleRef());
+                }
+            default:
+                return type;
+        }
     }
 }

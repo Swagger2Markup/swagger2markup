@@ -189,7 +189,7 @@ public abstract class MarkupDocument {
                             Boolean.toString(property.getRequired()),
                             propertyType.displaySchema(docBuilder),
                             PropertyUtils.getDefaultValue(property),
-                            PropertyUtils.getExample(property)
+                            PropertyUtils.getExample(property, markupDocBuilder)
                     );
                     cells.add(content);
                 }
