@@ -18,8 +18,17 @@ paths:
       tags:
         - All
       parameters:
+        - name: Version
+          description: The API version
+          type: string
+          in: query
+        - name: Option
+          description: An optional option
+          type: string
+          in: query
         - name: LaunchCommandRequest
-          description: Launch something
+          description: |
+            Launch something new
           in: body
           schema:
             description: Inline schema

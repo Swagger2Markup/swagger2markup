@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -31,6 +32,7 @@ import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -46,6 +48,8 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  * @author Robert Winkler
  */
 public abstract class MarkupDocument {
+
+    protected static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     protected final String DEFAULT_COLUMN;
     protected final String EXAMPLE_COLUMN;
@@ -70,20 +74,20 @@ public abstract class MarkupDocument {
     protected String outputDirectory;
     protected boolean useInterDocumentCrossReferences;
     protected String interDocumentCrossReferencesPrefix;
+    protected Comparator<String> propertyOrdering;
 
-
-    protected static AtomicInteger typeIdCount = new AtomicInteger(0);
 
     MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
         this.swagger = swagger2MarkupConfig.getSwagger();
         this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
-        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage);
+        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage).withAnchorPrefix(swagger2MarkupConfig.getAnchorPrefix());
         this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();
         this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
         this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();
         this.outputDirectory = outputDirectory;
         this.useInterDocumentCrossReferences = swagger2MarkupConfig.isInterDocumentCrossReferences();
         this.interDocumentCrossReferencesPrefix = swagger2MarkupConfig.getInterDocumentCrossReferencesPrefix();
+        this.propertyOrdering = swagger2MarkupConfig.getPropertyOrdering();
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
                 swagger2MarkupConfig.getOutputLanguage().toLocale());
@@ -129,77 +133,71 @@ public abstract class MarkupDocument {
     }
 
     /**
-     * Create a normalized filename for a separated definition file
-     * @param definitionName name of the definition
-     * @return a normalized filename for the separated definition file
+     * Create a normalized filename
+     * @param name current name of the file
+     * @return a normalized filename
      */
-    protected String normalizeDefinitionFileName(String definitionName) {
-        return definitionName.toLowerCase();
+    protected String normalizeFileName(String name) {
+        String fileName = FILENAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
+        fileName = fileName.replaceAll(String.format("([%1$s])([%1$s]+)", "-_"), "$1");
+        fileName = StringUtils.strip(fileName, "_-");
+        fileName = fileName.trim().toLowerCase();
+        return fileName;
     }
 
     /**
-     * Make the type {@code name} unique in the scope of the program execution by appending an increment.
-     * @param name type name
-     * @return unique type name
-     */
-    public String uniqueTypeName(String name) {
-        return name + "-" + typeIdCount.getAndIncrement();
-    }
-
-    /**
-     * Build the property table for an object type
+     * Build a generic property table for any ObjectType
      * @param type to display
+     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
      * @param depth current inline schema object depth
      * @param propertyDescriptor property descriptor to apply to properties
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      * @param docBuilder the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    public List<Type> typeProperties(Type type, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
-        List<Type> localDefinitions = new ArrayList<>();
-        if (type instanceof ObjectType) {
-            ObjectType objectType = (ObjectType) type;
-            List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(NAME_COLUMN, 1),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6),
-                    new MarkupTableColumn(REQUIRED_COLUMN, 1),
-                    new MarkupTableColumn(SCHEMA_COLUMN, 1),
-                    new MarkupTableColumn(DEFAULT_COLUMN, 1),
-                    new MarkupTableColumn(EXAMPLE_COLUMN, 1)
-                );
-            if (MapUtils.isNotEmpty(objectType.getProperties())) {
-                for (Map.Entry<String, Property> propertyEntry : objectType.getProperties().entrySet()) {
-                    Property property = propertyEntry.getValue();
-                    String propertyName = propertyEntry.getKey();
-                    Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
-                    if (depth > 0 && propertyType instanceof ObjectType) {
-                        if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
-                            propertyType.setName(propertyName);
-                            propertyType.setUniqueName(uniqueTypeName(propertyName));
-                            localDefinitions.add(propertyType);
+    public List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<List<String>> cells = new ArrayList<>();
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn(NAME_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
+                new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
+                new MarkupTableColumn(REQUIRED_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                new MarkupTableColumn(EXAMPLE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+        if (MapUtils.isNotEmpty(type.getProperties())) {
+            Set<String> propertyNames;
+            if (this.propertyOrdering == null)
+                propertyNames = new LinkedHashSet<>();
+            else
+                propertyNames = new TreeSet<>(this.propertyOrdering);
+            propertyNames.addAll(type.getProperties().keySet());
 
-                            propertyType = new RefType(propertyType);
-                        }
+            for (String propertyName: propertyNames) {
+                Property property = type.getProperties().get(propertyName);
+                Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
+                if (depth > 0 && propertyType instanceof ObjectType) {
+                    if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
+                        propertyType.setName(propertyName);
+                        propertyType.setUniqueName(uniquePrefix + " " + propertyName);
+                        localDefinitions.add((ObjectType)propertyType);
+
+                        propertyType = new RefType(propertyType);
                     }
-
-                    List<String> content = Arrays.asList(
-                            propertyName,
-                            propertyDescriptor.getDescription(property, propertyName),
-                            Boolean.toString(property.getRequired()),
-                            propertyType.displaySchema(docBuilder),
-                            PropertyUtils.getDefaultValue(property),
-                            PropertyUtils.getExample(property, markupDocBuilder)
-                    );
-                    cells.add(content);
                 }
-                docBuilder.tableWithColumnSpecs(cols, cells);
+
+                List<String> content = Arrays.asList(
+                        propertyName,
+                        propertyDescriptor.getDescription(property, propertyName),
+                        Boolean.toString(property.getRequired()),
+                        propertyType.displaySchema(docBuilder),
+                        PropertyUtils.getDefaultValue(property),
+                    PropertyUtils.getExample(property, markupDocBuilder)
+                    );
+                cells.add(content);
             }
-            else {
-                docBuilder.textLine(NO_CONTENT);
-            }
-        }
-        else {
+            docBuilder.tableWithColumnSpecs(cols, cells);
+        } else {
             docBuilder.textLine(NO_CONTENT);
         }
 
@@ -232,7 +230,7 @@ public abstract class MarkupDocument {
             if (!useInterDocumentCrossReferences || outputDirectory == null)
                 return null;
             else if (separatedDefinitionsEnabled)
-                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeDefinitionFileName(definitionName))).getPath();
+                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
             else
                 return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(definitionsDocument);
         }

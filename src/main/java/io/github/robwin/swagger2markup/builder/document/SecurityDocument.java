@@ -41,6 +41,7 @@ import com.google.common.base.Joiner;
  */
 public class SecurityDocument extends MarkupDocument {
 
+    private static final String SECURITY_ANCHOR = "security";
     private final String SECURITY;
     private final String TYPE;
     private final String NAME;
@@ -74,13 +75,18 @@ public class SecurityDocument extends MarkupDocument {
         return this;
     }
 
+    private void addSecurityTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, SECURITY_ANCHOR);
+
+    }
+
     /**
      * Builds all security definition of the Swagger model.
      */
     private void security() {
         Map<String, SecuritySchemeDefinition> definitions = swagger.getSecurityDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
-            markupDocBuilder.sectionTitleLevel1(SECURITY);
+            addSecurityTitle(SECURITY);
             for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
                 markupDocBuilder.sectionTitleLevel2(entry.getKey());
                 SecuritySchemeDefinition securityScheme = entry.getValue();
@@ -109,7 +115,6 @@ public class SecurityDocument extends MarkupDocument {
                     markupDocBuilder.tableWithColumnSpecs(cols, cells);
 
                 }
-
 
             }
         }

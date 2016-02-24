@@ -20,7 +20,6 @@ package io.github.robwin.swagger2markup;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
-
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
 import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
@@ -30,8 +29,8 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Swagger;
+import io.swagger.models.parameters.Parameter;
 import io.swagger.parser.SwaggerParser;
-
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -147,7 +146,6 @@ public class Swagger2MarkupConverter {
     public static class Builder {
         private final Swagger swagger;
         private String examplesFolderPath;
-        private boolean generateExamples = false;
         private String schemasFolderPath;
         private String descriptionsFolderPath;
         private boolean separatedDefinitions;
@@ -158,30 +156,58 @@ public class Swagger2MarkupConverter {
         private Language outputLanguage = Language.EN;
         private int inlineSchemaDepthLevel = 0;
         private Comparator<String> tagOrdering = Ordering.natural();
+        private boolean flatBody = false;
+        private String anchorPrefix;
 
-        private static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
+        public static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
                 .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
                 .onResultOf(new Function<PathOperation, HttpMethod>() {
                     @Nullable
                     @Override
-                    public HttpMethod apply(@Nullable PathOperation input) {
-                        return input.getMethod();
+                    public HttpMethod apply(@Nullable PathOperation operation) {
+                        return operation.getMethod();
                     }
                 });
 
-        private static final Ordering<PathOperation> OPERATION_PATH_COMPARATOR = Ordering
+        public static final Ordering<PathOperation> OPERATION_PATH_COMPARATOR = Ordering
                 .natural()
                 .onResultOf(new Function<PathOperation, String>() {
                     @Nullable
                     @Override
-                    public String apply(@Nullable PathOperation input) {
-                        return input.getPath();
+                    public String apply(@Nullable PathOperation operation) {
+                        return operation.getPath();
                     }
                 });
 
         private Comparator<PathOperation> operationOrdering = OPERATION_PATH_COMPARATOR.compound(OPERATION_METHOD_COMPARATOR);
 
         private Comparator<String> definitionOrdering = Ordering.natural();
+
+        public static final Ordering<Parameter> PARAMETER_IN_COMPARATOR = Ordering
+                .explicit("header", "path", "query", "formData", "body")
+                .onResultOf(new Function<Parameter, String>() {
+                    @Nullable
+                    @Override
+                    public String apply(@Nullable Parameter parameter) {
+                        return parameter.getIn();
+                    }
+                });
+
+        public static final Ordering<Parameter> PARAMETER_NAME_COMPARATOR = Ordering
+                .natural()
+                .onResultOf(new Function<Parameter, String>() {
+                    @Nullable
+                    @Override
+                    public String apply(@Nullable Parameter parameter) {
+                        return parameter.getName();
+                    }
+                });
+
+        private Comparator<Parameter> parameterOrdering = PARAMETER_IN_COMPARATOR.compound(PARAMETER_NAME_COMPARATOR);
+
+        private Comparator<String> propertyOrdering = Ordering.natural();
+        private Comparator<String> responseOrdering = Ordering.natural();
+
         private boolean interDocumentCrossReferences = false;
         private String interDocumentCrossReferencesPrefix = "";
 
@@ -208,10 +234,10 @@ public class Swagger2MarkupConverter {
 
         public Swagger2MarkupConverter build() {
             return new Swagger2MarkupConverter(new Swagger2MarkupConfig(swagger, markupLanguage, examplesFolderPath,
-                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations,
-                    pathsGroupedBy, definitionsOrderedBy, outputLanguage, inlineSchemaDepthLevel, tagOrdering,
-                    operationOrdering, definitionOrdering, interDocumentCrossReferences,
-                    interDocumentCrossReferencesPrefix));
+                    schemasFolderPath, descriptionsFolderPath, separatedDefinitions, separatedOperations, pathsGroupedBy, definitionsOrderedBy,
+                    outputLanguage, inlineSchemaDepthLevel,
+                    tagOrdering, operationOrdering, definitionOrdering, parameterOrdering, propertyOrdering, responseOrdering,
+                    interDocumentCrossReferences, interDocumentCrossReferencesPrefix, flatBody, anchorPrefix));
         }
 
         /**
@@ -327,7 +353,7 @@ public class Swagger2MarkupConverter {
         /**
          * Specifies maximum depth level for inline object schema displaying (0 = no inline schemas)
          *
-         * @param inlineSchemaDepthLevel
+         * @param inlineSchemaDepthLevel number of recursion levels for inline schemas display
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
@@ -340,7 +366,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param tagOrdering
+         * @param tagOrdering tag comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withTagOrdering(Comparator<String> tagOrdering) {
@@ -353,7 +379,7 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied on operation 'path', then explicit ordering is applied on operation 'method'
          * Set ordering to null to keep swagger original order
          *
-         * @param operationOrdering
+         * @param operationOrdering operation comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
@@ -366,11 +392,50 @@ public class Swagger2MarkupConverter {
          * By default, natural ordering is applied.
          * Set ordering to null to keep swagger original order
          *
-         * @param definitionOrdering
+         * @param definitionOrdering definition comparator
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withDefinitionOrdering(Comparator<String> definitionOrdering) {
             this.definitionOrdering = definitionOrdering;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order parameters.
+         * By default, explicit ordering is applied on parameter 'in', then natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param parameterOrdering parameter comparator
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withParameterOrdering(Comparator<Parameter> parameterOrdering) {
+            this.parameterOrdering = parameterOrdering;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order properties.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param propertyOrdering property comparator
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withPropertyOrdering(Comparator<String> propertyOrdering) {
+            this.propertyOrdering = propertyOrdering;
+            return this;
+        }
+
+        /**
+         * Specifies a custom comparator function to order responses.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param responseOrdering response comparator
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withResponseOrdering(Comparator<String> responseOrdering) {
+            this.responseOrdering = responseOrdering;
             return this;
         }
 
@@ -387,7 +452,7 @@ public class Swagger2MarkupConverter {
         /**
          * Enable use of inter-document cross-references when needed
          *
-         * @param prefix Prefix to document in all inter-document cross-references
+         * @param prefix Prefix to document in all inter-document cross-references (null = no prefix)
          * @return the Swagger2MarkupConverter.Builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
@@ -396,6 +461,26 @@ public class Swagger2MarkupConverter {
 
             this.interDocumentCrossReferences = true;
             this.interDocumentCrossReferencesPrefix = prefix;
+            return this;
+        }
+
+        /**
+         * Optionally isolate the body parameter, if any, from other parameters
+         *
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withFlatBody() {
+            this.flatBody = true;
+            return this;
+        }
+
+        /**
+         * Optionally prefix all anchors for unicity
+         * @param anchorPrefix anchor prefix (null = no prefix)
+         * @return the Swagger2MarkupConverter.Builder
+         */
+        public Builder withAnchorPrefix(String anchorPrefix) {
+            this.anchorPrefix = anchorPrefix;
             return this;
         }
     }
