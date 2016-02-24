@@ -61,6 +61,25 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithExamples() throws IOException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
+        File outputDirectory = new File("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory);
+
+        //When
+        Swagger2MarkupConverter.fromString(swaggerJsonString).build()
+            .intoFolder(outputDirectory.getAbsolutePath());
+
+        //Then
+        String[] directories = outputDirectory.list();
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "paths.adoc").toPath())))
+            .contains("==== Example HTTP response");
+        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath())))
+            .contains("|name||true|string||doggie");
+    }
+
+    @Test
     public void testSwagger2AsciiDocConversionAsString() throws IOException {
         //Given
         File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());

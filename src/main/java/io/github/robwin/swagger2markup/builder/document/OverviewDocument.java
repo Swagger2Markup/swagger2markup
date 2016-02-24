@@ -30,6 +30,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 
 public class OverviewDocument extends MarkupDocument {
 
+    private static final String OVERVIEW_ANCHOR = "overview";
     private final String OVERVIEW;
     private final String CURRENT_VERSION;
     private final String VERSION;
@@ -77,6 +78,10 @@ public class OverviewDocument extends MarkupDocument {
         return this;
     }
 
+    private void addOverviewTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, OVERVIEW_ANCHOR);
+    }
+
 
     /**
      * Builds the document header of the swagger model
@@ -84,7 +89,7 @@ public class OverviewDocument extends MarkupDocument {
     private void overview() {
         Info info = swagger.getInfo();
         this.markupDocBuilder.documentTitle(info.getTitle());
-        this.markupDocBuilder.sectionTitleLevel1(OVERVIEW);
+        addOverviewTitle(OVERVIEW);
         if(isNotBlank(info.getDescription())){
             this.markupDocBuilder.textLine(info.getDescription());
         }
