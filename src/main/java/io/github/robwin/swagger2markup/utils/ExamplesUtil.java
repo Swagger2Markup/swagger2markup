@@ -3,6 +3,8 @@ package io.github.robwin.swagger2markup.utils;
 import com.google.common.base.Optional;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.PathOperation;
+import io.swagger.models.ArrayModel;
+import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.Operation;
 import io.swagger.models.RefModel;
@@ -80,13 +82,19 @@ public class ExamplesUtil {
             if (parameter instanceof BodyParameter) {
                 example = ((BodyParameter) parameter).getExamples();
                 if (example == null) {
-                    if (((BodyParameter) parameter).getSchema() instanceof RefModel) {
-                        String simpleRef = ((RefModel) ((BodyParameter) parameter).getSchema()).getSimpleRef();
+                    Model schema = ((BodyParameter) parameter).getSchema();
+                    if (schema instanceof RefModel) {
+                        String simpleRef = ((RefModel) schema).getSimpleRef();
                         example = generateExampleForRefModel(simpleRef, definitions, markupDocBuilder);
+                    } else if (schema instanceof ComposedModel) {
+                        example = exampleMapForProperties(getPropertiesForComposedModel(
+                            (ComposedModel) schema, definitions), definitions, markupDocBuilder);
+                    } else if (schema instanceof ArrayModel) {
+                        example = generateExampleForArrayModel((ArrayModel) schema, definitions, markupDocBuilder);
                     } else {
-                        example = ((BodyParameter) parameter).getSchema().getExample();
+                        example = schema.getExample();
                         if (example == null) {
-                            example = exampleMapForProperties(((BodyParameter) parameter).getSchema().getProperties(), definitions, markupDocBuilder);
+                            example = exampleMapForProperties(schema.getProperties(), definitions, markupDocBuilder);
                         }
                     }
                 }
@@ -147,10 +155,36 @@ public class ExamplesUtil {
         if (model != null) {
             example = model.getExample();
             if (example == null) {
-                example = exampleMapForProperties(model.getProperties(), definitions, markupDocBuilder);
+                if (model instanceof ComposedModel) {
+                    example = exampleMapForProperties(getPropertiesForComposedModel((ComposedModel) model, definitions), definitions, markupDocBuilder);
+                } else {
+                    example = exampleMapForProperties(model.getProperties(), definitions, markupDocBuilder);
+                }
             }
         }
         return example;
+    }
+
+    private static Map<String, Property> getPropertiesForComposedModel(ComposedModel model, Map<String, Model> definitions) {
+        Map<String, Property> combinedProperties;
+        if (model.getParent() instanceof RefModel) {
+            combinedProperties = definitions.get(((RefModel) model.getParent()).getSimpleRef()).getProperties();
+            if (combinedProperties == null) {
+                return null;
+            }
+        } else {
+            combinedProperties = model.getParent().getProperties();
+        }
+        Map<String, Property> childProperties;
+        if (model.getChild() instanceof RefModel) {
+            childProperties = definitions.get(((RefModel) model.getChild()).getSimpleRef()).getProperties();
+        } else {
+            childProperties = model.getChild().getProperties();
+        }
+        if (childProperties != null) {
+            combinedProperties.putAll(childProperties);
+        }
+        return combinedProperties;
     }
 
     /**
@@ -193,6 +227,25 @@ public class ExamplesUtil {
         }
         exampleMap.put("string", PropertyUtils.exampleFromType(valueProperty.getType(), valueProperty, markupDocBuilder));
         return exampleMap;
+    }
+
+    public static Object generateExampleForArrayModel(ArrayModel model, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
+        if (model.getExample() != null) {
+            return model.getExample();
+        } else if (model.getProperties() != null) {
+            return new Object[] {exampleMapForProperties(model.getProperties(), definitions, markupDocBuilder)};
+        } else {
+            Property itemProperty = model.getItems();
+            if (itemProperty.getExample() != null) {
+                return new Object[] { convertStringToType(itemProperty.getExample(), itemProperty.getType()) };
+            } else if (itemProperty instanceof ArrayProperty) {
+                return new Object[] { generateExampleForArrayProperty((ArrayProperty) itemProperty, definitions, markupDocBuilder) };
+            } else if (itemProperty instanceof RefProperty) {
+                return new Object[] { generateExampleForRefModel(((RefProperty) itemProperty).getSimpleRef(), definitions, markupDocBuilder) };
+            } else {
+                return new Object[] { PropertyUtils.exampleFromType(itemProperty.getType(), itemProperty, markupDocBuilder) };
+            }
+        }
     }
 
     /**

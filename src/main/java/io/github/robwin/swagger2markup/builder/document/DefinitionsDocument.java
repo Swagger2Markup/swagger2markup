@@ -20,7 +20,6 @@ package io.github.robwin.swagger2markup.builder.document;
 
 import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -40,9 +39,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.Set;
+import java.util.TreeSet;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -305,7 +314,7 @@ public class DefinitionsDocument extends MarkupDocument {
         }
         if(model instanceof ComposedModel) {
             ComposedModel composedModel = (ComposedModel)model;
-            ImmutableMap.Builder<String, Property> allProperties = ImmutableMap.builder();
+            Map<String, Property> allProperties = new HashMap<>();
             if(composedModel.getAllOf() != null) {
                 for(Model innerModel : composedModel.getAllOf()) {
                     Map<String, Property> innerProperties = getAllProperties(definitions, innerModel);
@@ -314,7 +323,7 @@ public class DefinitionsDocument extends MarkupDocument {
                     }
                 }
             }
-            return allProperties.build();
+            return ImmutableMap.copyOf(allProperties);
         }
         else {
             return model.getProperties();
