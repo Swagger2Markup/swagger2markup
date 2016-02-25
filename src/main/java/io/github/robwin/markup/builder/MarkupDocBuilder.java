@@ -21,6 +21,7 @@ package io.github.robwin.markup.builder;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -444,24 +445,55 @@ public interface MarkupDocBuilder {
     String addfileExtension(String fileName);
 
     /**
+     * Add an extension to file depending on markup language.
+     *
+     * @param file without extension
+     * @return file with an extension
+     */
+    Path addfileExtension(Path file);
+
+    /**
      * Writes the content of the builder to a file and clears the builder.<br/>
-     * An extension will be dynamically added to fileName depending on the markup language.
+     * An extension will be dynamically added to fileName depending on the markup language.<br/>
+     * Use {@link #writeToFile(Path, Charset)} instead.
      *
      * @param directory the directory where the generated file should be stored
      * @param fileName the base name of the file without extension
      * @param charset the the charset to use for encoding
      * @throws java.io.IOException if the file cannot be written
      */
+    @Deprecated
     void writeToFile(String directory, String fileName, Charset charset) throws IOException;
 
     /**
-     * Writes the content of the builder to a file and clears the builder.
+     * Writes the content of the builder to a file and clears the builder.<br/>
+     * Use {@link #writeToFileWithoutExtension(Path, Charset)} instead.
      *
      * @param directory the directory where the generated file should be stored
      * @param fileName the name of the file
      * @param charset the the charset to use for encoding
      * @throws java.io.IOException if the file cannot be written
      */
+    @Deprecated
      void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException;
+
+    /**
+     * Writes the content of the builder to a file and clears the builder.<br/>
+     * An extension will be dynamically added to fileName depending on the markup language.
+     *
+     * @param file the generated file without extension
+     * @param charset the the charset to use for encoding
+     * @throws java.io.IOException if the file cannot be written
+     */
+    void writeToFile(Path file, Charset charset) throws IOException;
+
+    /**
+     * Writes the content of the builder to a file and clears the builder.
+     *
+     * @param file the generated file
+     * @param charset the the charset to use for encoding
+     * @throws java.io.IOException if the file cannot be written
+     */
+    void writeToFileWithoutExtension(Path file, Charset charset) throws IOException;
 
 }
