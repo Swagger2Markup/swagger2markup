@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
@@ -323,21 +324,36 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return fileName + "." + markup;
     }
 
+    @Override
+    public Path addfileExtension(Path file) {
+        return file.resolveSibling(addfileExtension(file.getFileName().toString()));
+    }
+
     /**
      * 2 newLines are needed at the end of file for file to be included without protection.
      */
     @Override
-    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
-        Files.createDirectories(Paths.get(directory));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileName), charset)) {
+    public void writeToFileWithoutExtension(Path file, Charset charset) throws IOException {
+        Files.createDirectories(file.getParent());
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
             writer.write(documentBuilder.toString());
             writer.write(newLine);
             writer.write(newLine);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("{} was written to: {}", fileName, directory);
+            logger.info("{} was written to: {}", file);
         }
         documentBuilder = new StringBuilder();
+    }
+
+    @Override
+    public void writeToFile(Path file, Charset charset) throws IOException {
+        writeToFileWithoutExtension(file.resolveSibling(addfileExtension(file.getFileName().toString())), charset);
+    }
+
+    @Override
+    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
+        writeToFileWithoutExtension(Paths.get(directory, fileName), charset);
     }
 
     @Override
