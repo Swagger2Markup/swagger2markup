@@ -18,18 +18,19 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.collect.Ordering;
+import com.google.common.base.Optional;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
-import io.swagger.models.Swagger;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,8 +38,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -49,7 +52,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public abstract class MarkupDocument {
 
-    protected static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
+    private static final Pattern NAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
@@ -63,33 +66,22 @@ public abstract class MarkupDocument {
     protected final String CONSUMES;
     protected final String TAGS;
     protected final String NO_CONTENT;
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    protected Swagger swagger;
-    protected MarkupLanguage markupLanguage;
+
+    protected Swagger2MarkupConverter.Context globalContext;
+    protected Swagger2MarkupConfig config;
     protected MarkupDocBuilder markupDocBuilder;
-    protected boolean separatedDefinitionsEnabled;
-    protected String separatedDefinitionsFolder;
-    protected String definitionsDocument;
     protected String outputDirectory;
-    protected boolean useInterDocumentCrossReferences;
-    protected String interDocumentCrossReferencesPrefix;
-    protected Comparator<String> propertyOrdering;
 
-
-    MarkupDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory) {
-        this.swagger = swagger2MarkupConfig.getSwagger();
-        this.markupLanguage = swagger2MarkupConfig.getMarkupLanguage();
-        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(markupLanguage).withAnchorPrefix(swagger2MarkupConfig.getAnchorPrefix());
-        this.separatedDefinitionsEnabled = swagger2MarkupConfig.isSeparatedDefinitions();
-        this.separatedDefinitionsFolder = swagger2MarkupConfig.getSeparatedDefinitionsFolder();
-        this.definitionsDocument = swagger2MarkupConfig.getDefinitionsDocument();
+    MarkupDocument(Swagger2MarkupConverter.Context globalContext, String outputDirectory) {
+        this.globalContext = globalContext;
+        this.config = globalContext.config;
         this.outputDirectory = outputDirectory;
-        this.useInterDocumentCrossReferences = swagger2MarkupConfig.isInterDocumentCrossReferences();
-        this.interDocumentCrossReferencesPrefix = swagger2MarkupConfig.getInterDocumentCrossReferencesPrefix();
-        this.propertyOrdering = swagger2MarkupConfig.getPropertyOrdering();
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
-                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage()).withAnchorPrefix(config.getAnchorPrefix());
+
+        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
         REQUIRED_COLUMN = labels.getString("required_column");
         SCHEMA_COLUMN = labels.getString("schema_column");
@@ -131,12 +123,14 @@ public abstract class MarkupDocument {
     }
 
     /**
-     * Create a normalized filename
+     * Create a normalized name from an arbitrary string.<br/>
+     * Paths separators are replaced, so this function can't be applied on a whole path, but must be called on each path sections.
+     *
      * @param name current name of the file
      * @return a normalized filename
      */
-    protected String normalizeFileName(String name) {
-        String fileName = FILENAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
+    public static String normalizeName(String name) {
+        String fileName = NAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
         fileName = fileName.replaceAll(String.format("([%1$s])([%1$s]+)", "-_"), "$1");
         fileName = StringUtils.strip(fileName, "_-");
         fileName = fileName.trim().toLowerCase();
@@ -153,7 +147,7 @@ public abstract class MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    public List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    protected List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
@@ -164,10 +158,10 @@ public abstract class MarkupDocument {
                 new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
         if (MapUtils.isNotEmpty(type.getProperties())) {
             Set<String> propertyNames;
-            if (this.propertyOrdering == null)
+            if (config.getPropertyOrdering() == null)
                 propertyNames = new LinkedHashSet<>();
             else
-                propertyNames = new TreeSet<>(this.propertyOrdering);
+                propertyNames = new TreeSet<>(config.getPropertyOrdering());
             propertyNames.addAll(type.getProperties().keySet());
 
             for (String propertyName: propertyNames) {
@@ -200,9 +194,36 @@ public abstract class MarkupDocument {
     }
 
     /**
+     * Reads an extension
+     *
+     * @param extension extension file
+     * @return extension content reader
+     */
+    protected Optional<FileReader> operationExtension(File extension) {
+
+        if (Files.isReadable(extension.toPath())) {
+            if (logger.isInfoEnabled()) {
+                logger.info("Extension file processed: {}", extension);
+            }
+            try {
+                return Optional.of(new FileReader(extension));
+            } catch (IOException e) {
+                if (logger.isWarnEnabled()) {
+                    logger.warn(String.format("Failed to read extension file: %s", extension), e);
+                }
+            }
+        } else {
+            if (logger.isWarnEnabled()) {
+                logger.warn("Extension file is not readable: {}", extension);
+            }
+        }
+        return Optional.absent();
+    }
+
+    /**
      * A functor to return descriptions for a given property
      */
-    public class PropertyDescriptor {
+    class PropertyDescriptor {
         protected Type type;
 
         public PropertyDescriptor(Type type) {
@@ -222,12 +243,12 @@ public abstract class MarkupDocument {
         public DefinitionDocumentResolverDefault() {}
 
         public String apply(String definitionName) {
-            if (!useInterDocumentCrossReferences || outputDirectory == null)
+            if (!config.isInterDocumentCrossReferences() || outputDirectory == null)
                 return null;
-            else if (separatedDefinitionsEnabled)
-                return interDocumentCrossReferencesPrefix + new File(separatedDefinitionsFolder, markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
+            else if (config.isSeparatedDefinitions())
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(IOUtils.normalizeName(definitionName))).getPath();
             else
-                return interDocumentCrossReferencesPrefix + markupDocBuilder.addfileExtension(definitionsDocument);
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(config.getDefinitionsDocument());
         }
     }
 }
