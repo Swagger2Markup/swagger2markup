@@ -23,6 +23,7 @@ import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsCo
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
 import org.junit.Test;
 
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,8 +48,8 @@ public class Swagger2MarkupExtensionRegistryTest {
         Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofDefaults();
 
         registryBuilder.withExtension(new MySwaggerExtension());
-        registryBuilder.withExtension(new DynamicDefinitionsContentExtension("src/docs/asciidoc/extensions"));
-        registryBuilder.withExtension(new DynamicOperationsContentExtension("src/docs/asciidoc/extensions"));
+        registryBuilder.withExtension(new DynamicDefinitionsContentExtension(Paths.get("src/docs/asciidoc/extensions")));
+        registryBuilder.withExtension(new DynamicOperationsContentExtension(Paths.get("src/docs/asciidoc/extensions")));
 
         try {
             registryBuilder.withExtension(new AbstractExtension() {
@@ -74,7 +75,7 @@ public class Swagger2MarkupExtensionRegistryTest {
                 .withExtension(ext1)
                 .build();
         List<Extension> extensions = registry.getExtensions(Extension.class);
-        assertThat(extensions.size()).isEqualTo(5);
+        assertThat(extensions.size()).isEqualTo(7);
         assertThat(extensions).contains(ext1, ext2, ext3);
         assertThat(registry.getExtensions(SwaggerExtension.class)).isEqualTo(Arrays.asList(ext2, ext3, ext1));
     }

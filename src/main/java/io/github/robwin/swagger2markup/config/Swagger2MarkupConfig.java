@@ -22,14 +22,16 @@ import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.*;
+import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Properties;
 
@@ -39,13 +41,13 @@ public class Swagger2MarkupConfig {
 
     private MarkupLanguage markupLanguage;
     private boolean examples;
-    private String examplesPath;
+    private URI examplesUri;
     private boolean schemas;
-    private String schemasPath;
+    private URI schemasUri;
     private boolean operationDescriptions;
-    private String operationDescriptionsPath;
+    private URI operationDescriptionsUri;
     private boolean definitionDescriptions;
-    private String definitionDescriptionsPath;
+    private URI definitionDescriptionsUri;
     private boolean separatedDefinitions;
     private boolean separatedOperations;
     private GroupBy operationsGroupedBy;
@@ -85,7 +87,7 @@ public class Swagger2MarkupConfig {
      * @param globalContext Partially initialized global context (globalContext.extensionRegistry == null)
      */
     public void setGlobalContext(Swagger2MarkupConverter.Context globalContext) {
-        configureDefaultContentPaths(globalContext.swaggerLocation != null ? new File(globalContext.swaggerLocation).getParentFile() : null);
+        configureDefaultContentPaths(globalContext.swaggerLocation);
         onUpdateGlobalContext(globalContext);
     }
 
@@ -99,47 +101,55 @@ public class Swagger2MarkupConfig {
     }
 
     /**
-     * Automatically set default path for external content files based on specified {@code basePath}.<br/>
-     * If {@code basePath} is null, default path can't be set and a RuntimeException is thrown.
+     * Automatically set default path for external content files based on specified {@code swaggerLocation}.<br/>
+     * If {@code swaggerLocation} is null, default path can't be set and features are disabled.<br/>
+     * Paths have to be explicitly set when swaggerLocation.scheme != 'file' to limit the number of URL requests.
      *
-     * @param basePath base path to set default paths
+     * @param swaggerLocation base path to set default paths
      * @throws RuntimeException if basePath == null and any path is not configured
      */
-    private void configureDefaultContentPaths(File basePath) {
-        if (examples && examplesPath == null) {
-            if (basePath == null) {
+    private void configureDefaultContentPaths(URI swaggerLocation) {
+        URI baseURI = null;
+
+        if (swaggerLocation != null) {
+            if (swaggerLocation.getScheme().equals("file"))
+                baseURI = IOUtils.uriParent(swaggerLocation);
+        }
+
+        if (examples && examplesUri == null) {
+            if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '{}' set and no default available > Disable {}", "examplesPath", "examples");
+                    logger.warn("Disable {} > No explicit '{}' set and no default available", "examples", "examplesUri");
                 examples = false;
             } else
-                examplesPath = basePath.getPath();
+                examplesUri = baseURI;
         }
 
-        if (schemas && schemasPath == null) {
-            if (basePath == null) {
+        if (schemas && schemasUri == null) {
+            if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '{}' set and no default available > Disable {}", "schemasPath", "schemas");
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "schemas", "schemasUri");
                 schemas = false;
             } else
-                schemasPath = basePath.getPath();
+                schemasUri = baseURI;
         }
 
-        if (operationDescriptions && operationDescriptionsPath == null) {
-            if (basePath == null) {
+        if (operationDescriptions && operationDescriptionsUri == null) {
+            if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '{}' set and no default available > Disable {}", "operationDescriptionsPath", "operationDescriptions");
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "operationDescriptions", "operationDescriptionsUri");
                 operationDescriptions = false;
             } else
-                operationDescriptionsPath = basePath.getPath();
+                operationDescriptionsUri = baseURI;
         }
 
-        if (definitionDescriptions && definitionDescriptionsPath == null) {
-            if (basePath == null) {
+        if (definitionDescriptions && definitionDescriptionsUri == null) {
+            if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '{}' set and no default available > Disable {}", "definitionDescriptionsPath", "definitionDescriptions");
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "definitionDescriptions", "definitionDescriptionsUri");
                 definitionDescriptions = false;
             } else
-                definitionDescriptionsPath = basePath.getPath();
+                definitionDescriptionsUri = baseURI;
         }
     }
 
@@ -151,32 +161,32 @@ public class Swagger2MarkupConfig {
         return examples;
     }
 
-    public String getExamplesPath() {
-        return examplesPath;
+    public URI getExamplesUri() {
+        return examplesUri;
     }
 
     public boolean isSchemas() {
         return schemas;
     }
 
-    public String getSchemasPath() {
-        return schemasPath;
+    public URI getSchemasUri() {
+        return schemasUri;
     }
 
     public boolean isOperationDescriptions() {
         return operationDescriptions;
     }
 
-    public String getOperationDescriptionsPath() {
-        return operationDescriptionsPath;
+    public URI getOperationDescriptionsUri() {
+        return operationDescriptionsUri;
     }
 
     public boolean isDefinitionDescriptions() {
         return definitionDescriptions;
     }
 
-    public String getDefinitionDescriptionsPath() {
-        return definitionDescriptionsPath;
+    public URI getDefinitionDescriptionsUri() {
+        return definitionDescriptionsUri;
     }
 
     public boolean isSeparatedDefinitions() {
@@ -317,13 +327,17 @@ public class Swagger2MarkupConfig {
 
             config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
             config.examples = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examples"));
-            config.examplesPath = safeProperties.getProperty(PROPERTIES_PREFIX + "examplesPath");
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "examplesUri"))
+                config.examplesUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesUri"));
             config.schemas = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemas"));
-            config.schemasPath = safeProperties.getProperty(PROPERTIES_PREFIX + "schemasPath");
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
+                config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
             config.operationDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptions"));
-            config.operationDescriptionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsPath");
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "operationDescriptionsUri"))
+                config.operationDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsUri"));
             config.definitionDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptions"));
-            config.definitionDescriptionsPath = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsPath");
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "definitionDescriptionsUri"))
+                config.definitionDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsUri"));
             config.separatedDefinitions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitions"));
             config.separatedOperations = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperations"));
             config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
@@ -381,24 +395,46 @@ public class Swagger2MarkupConfig {
         /**
          * Include examples into the Paths document
          *
-         * @param examplesPath the path to the folder where the example documents reside. Use default path if null.
+         * @param examplesUri the URI to the folder where the example documents reside. Use default URI if null.
          * @return this builder
          */
-        public Builder withExamples(String examplesPath) {
+        public Builder withExamples(URI examplesUri) {
             config.examples = true;
 
-            config.examplesPath = examplesPath;
+            config.examplesUri = examplesUri;
             return this;
         }
 
         /**
+         * Include examples into the Paths document
+         *
+         * @param examplesPath the path to the folder where the example documents reside. Use default path if null.
+         * @return this builder
+         */
+        public Builder withExamples(Path examplesPath) {
+            return withExamples(examplesPath.toUri());
+        }
+
+        /**
          * Include examples into the Paths document.<br/>
-         * This is an alias for {@link #withExamples(String) withExamples(null)}.
+         * This is an alias for {@link #withExamples(URI) withExamples(null)}.
          *
          * @return this builder
          */
         public Builder withExamples() {
-            withExamples(null);
+            withExamples((URI) null);
+            return this;
+        }
+
+        /**
+         * Include (JSON, XML) schemas into the Definitions document
+         *
+         * @param schemasUri the URI to the folder where the schema documents reside. Use default URI if null.
+         * @return this builder
+         */
+        public Builder withSchemas(URI schemasUri) {
+            config.schemas = true;
+            config.schemasUri = schemasUri;
             return this;
         }
 
@@ -408,20 +444,30 @@ public class Swagger2MarkupConfig {
          * @param schemasPath the path to the folder where the schema documents reside. Use default path if null.
          * @return this builder
          */
-        public Builder withSchemas(String schemasPath) {
-            config.schemas = true;
-            config.schemasPath = schemasPath;
-            return this;
+        public Builder withSchemas(Path schemasPath) {
+            return withSchemas(schemasPath.toUri());
         }
 
         /**
          * Include (JSON, XML) schemas into the Definitions document.<br/>
-         * This is an alias for {@link #withSchemas(String) withSchemas(null)}.
+         * This is an alias for {@link #withSchemas(URI) withSchemas(null)}.
          *
          * @return this builder
          */
         public Builder withSchemas() {
-            withSchemas(null);
+            withSchemas((URI) null);
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document
+         *
+         * @param operationDescriptionsUri the URI to the folder where the description documents reside. Use default URI if null.
+         * @return this builder
+         */
+        public Builder withOperationDescriptions(URI operationDescriptionsUri) {
+            config.operationDescriptions = true;
+            config.operationDescriptionsUri = operationDescriptionsUri;
             return this;
         }
 
@@ -431,20 +477,30 @@ public class Swagger2MarkupConfig {
          * @param operationDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
          * @return this builder
          */
-        public Builder withOperationDescriptions(String operationDescriptionsPath) {
-            config.operationDescriptions = true;
-            config.operationDescriptionsPath = operationDescriptionsPath;
-            return this;
+        public Builder withOperationDescriptions(Path operationDescriptionsPath) {
+            return withOperationDescriptions(operationDescriptionsPath.toUri());
         }
 
         /**
          * Include hand-written descriptions into the Paths document.<br/>
-         * This is an alias for {@link #withOperationDescriptions(String) withOperationDescriptions(null)}.
+         * This is an alias for {@link #withOperationDescriptions(URI) withOperationDescriptions(null)}.
          *
          * @return this builder
          */
         public Builder withOperationDescriptions() {
-            withOperationDescriptions(null);
+            withOperationDescriptions((URI) null);
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Definitions document
+         *
+         * @param definitionDescriptionsUri the URI to the folder where the description documents reside. Use default URI if null.
+         * @return this builder
+         */
+        public Builder withDefinitionDescriptions(URI definitionDescriptionsUri) {
+            config.definitionDescriptions = true;
+            config.definitionDescriptionsUri = definitionDescriptionsUri;
             return this;
         }
 
@@ -454,20 +510,18 @@ public class Swagger2MarkupConfig {
          * @param definitionDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
          * @return this builder
          */
-        public Builder withDefinitionDescriptions(String definitionDescriptionsPath) {
-            config.definitionDescriptions = true;
-            config.definitionDescriptionsPath = definitionDescriptionsPath;
-            return this;
+        public Builder withDefinitionDescriptions(Path definitionDescriptionsPath) {
+            return withDefinitionDescriptions(definitionDescriptionsPath.toUri());
         }
 
         /**
          * Include hand-written descriptions into the Definitions document.<br/>
-         * This is an alias for {@link #withDefinitionDescriptions(String) withDefinitionDescriptions(null)}.
+         * This is an alias for {@link #withDefinitionDescriptions(URI) withDefinitionDescriptions(null)}.
          *
          * @return this builder
          */
         public Builder withDefinitionDescriptions() {
-            withDefinitionDescriptions(null);
+            withDefinitionDescriptions((URI) null);
             return this;
         }
 

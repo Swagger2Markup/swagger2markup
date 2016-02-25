@@ -26,6 +26,7 @@ import io.github.robwin.swagger2markup.OrderBy;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Properties;
 
 import static org.assertj.core.api.BDDAssertions.assertThat;
@@ -41,11 +42,11 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitions");
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.isOperationDescriptions()).isFalse();
-        assertThat(config.getOperationDescriptionsPath()).isNull();
+        assertThat(config.getOperationDescriptionsUri()).isNull();
         assertThat(config.isDefinitionDescriptions()).isFalse();
-        assertThat(config.getDefinitionDescriptionsPath()).isNull();
+        assertThat(config.getDefinitionDescriptionsUri()).isNull();
         assertThat(config.isExamples()).isFalse();
-        assertThat(config.getExamplesPath()).isNull();
+        assertThat(config.getExamplesUri()).isNull();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
@@ -58,7 +59,7 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.isSchemas()).isFalse();
-        assertThat(config.getSchemasPath()).isNull();
+        assertThat(config.getSchemasUri()).isNull();
         assertThat(config.getSecurityDocument()).isEqualTo("security");
         assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo("definitions");
         assertThat(config.getSeparatedOperationsFolder()).isEqualTo("operations");
@@ -83,11 +84,11 @@ public class Swagger2MarkupConfigTest {
         //assertThat(config.getDefinitionsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.DEFINITIONS_DOCUMENT); // Not supported
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.isOperationDescriptions()).isTrue();
-        assertThat(config.getOperationDescriptionsPath()).isEqualTo("operationDescriptions");
+        assertThat(config.getOperationDescriptionsUri()).isEqualTo(URI.create("operationDescriptions"));
         assertThat(config.isDefinitionDescriptions()).isTrue();
-        assertThat(config.getDefinitionDescriptionsPath()).isEqualTo("definitionDescriptions");
+        assertThat(config.getDefinitionDescriptionsUri()).isEqualTo(URI.create("definitionDescriptions"));
         assertThat(config.isExamples()).isTrue();
-        assertThat(config.getExamplesPath()).isEqualTo("examples");
+        assertThat(config.getExamplesUri()).isEqualTo(URI.create("examples"));
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
@@ -100,7 +101,7 @@ public class Swagger2MarkupConfigTest {
         //assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural()); // Not supported
         //assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural()); // Not supported
         assertThat(config.isSchemas()).isTrue();
-        assertThat(config.getSchemasPath()).isEqualTo("schemas");
+        assertThat(config.getSchemasUri()).isEqualTo(URI.create("schemas"));
         //assertThat(config.getSecurityDocument()).isEqualTo(Swagger2MarkupConfig.Builder.SECURITY_DOCUMENT); // Not supported
         //assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_DEFINITIONS_FOLDER); // Not supported
         //assertThat(config.getSeparatedOperationsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_OPERATIONS_FOLDER); // Not supported

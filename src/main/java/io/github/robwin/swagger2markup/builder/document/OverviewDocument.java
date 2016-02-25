@@ -181,7 +181,7 @@ public class OverviewDocument extends MarkupDocument {
      */
     private void applyOverviewExtension(OverviewContentExtension.Context context) {
         for (OverviewContentExtension extension : globalContext.extensionRegistry.getExtensions(OverviewContentExtension.class)) {
-            extension.apply(globalContext, context);
+            extension.apply(context);
         }
     }
 

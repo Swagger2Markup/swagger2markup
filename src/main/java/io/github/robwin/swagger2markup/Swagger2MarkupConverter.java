@@ -26,7 +26,6 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Extension;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.SwaggerExtension;
-import io.github.robwin.swagger2markup.utils.Consumer;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.io.IOUtils;
@@ -35,6 +34,7 @@ import org.apache.commons.lang3.Validate;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
 
@@ -48,20 +48,20 @@ public class Swagger2MarkupConverter {
         public Swagger2MarkupConfig config;
         public Swagger2MarkupExtensionRegistry extensionRegistry;
         public Swagger swagger;
-        public String swaggerLocation;
+        public URI swaggerLocation;
     }
 
     Context globalContext;
 
     /**
-     * Creates a Swagger2MarkupConverter.Builder using a given Swagger source.
+     * Creates a Swagger2MarkupConverter.Builder using a given Swagger URI.
      *
-     * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
+     * @param swaggerUri the Swagger URI
      * @return a Swagger2MarkupConverter
      */
-    public static Builder from(String swaggerLocation) {
-        Validate.notEmpty(swaggerLocation, "swaggerLocation must not be empty");
-        return new Builder(swaggerLocation);
+    public static Builder from(URI swaggerUri) {
+        Validate.notNull(swaggerUri, "swaggerUri must not be null");
+        return new Builder(swaggerUri);
     }
 
     /**
@@ -71,21 +71,20 @@ public class Swagger2MarkupConverter {
      * @return a Swagger2MarkupConverter
      */
     public static Builder from(Swagger swagger) {
-        Validate.notNull(swagger, "Swagger must not be null");
+        Validate.notNull(swagger, "swagger must not be null");
         return new Builder(swagger);
     }
 
     /**
      * Creates a Swagger2MarkupConverter.Builder from a given Swagger YAML or JSON String.
-     * You should use {@link #from(Reader)} instead.
      *
-     * @param swaggerAsString the Swagger YAML or JSON String.
+     * @param swaggerString the Swagger YAML or JSON String.
      * @return a Swagger2MarkupConverter
      * @throws java.io.IOException if String can not be parsed
      */
-    public static Builder fromString(String swaggerAsString) throws IOException {
-        Validate.notEmpty(swaggerAsString, "swaggerAsString must not be null");
-        return from(new StringReader(swaggerAsString));
+    public static Builder from(String swaggerString) throws IOException {
+        Validate.notEmpty(swaggerString, "swaggerString must not be null");
+        return from(new StringReader(swaggerString));
     }
 
     /**
@@ -164,22 +163,22 @@ public class Swagger2MarkupConverter {
 
     public static class Builder {
         private final Swagger swagger;
-        private final String swaggerLocation;
+        private final URI swaggerLocation;
         private Swagger2MarkupConfig config;
         private Swagger2MarkupExtensionRegistry extensionRegistry;
 
-        @Deprecated
-        private SwaggerExtension preProcessSwaggerExtension;
-
         /**
-         * Creates a Builder using a given Swagger source.
+         * Creates a Builder from an URI.
          *
-         * @param swaggerLocation the Swagger location. Can be a HTTP url or a path to a local file.
+         * @param swagger the Swagger URI
          */
-        Builder(String swaggerLocation) {
-            this.swaggerLocation = swaggerLocation;
-            swagger = new SwaggerParser().read(swaggerLocation);
-            if (swagger == null) {
+        Builder(URI swagger) {
+            this.swaggerLocation = swagger;
+            String parserLocation = swagger.toString();
+            if (swagger.getScheme().equals("file"))
+                parserLocation = swagger.getPath();
+            this.swagger = new SwaggerParser().read(parserLocation);
+            if (this.swagger == null) {
                 throw new IllegalArgumentException("Failed to read the Swagger source");
             }
         }
@@ -192,24 +191,6 @@ public class Swagger2MarkupConverter {
         Builder(Swagger swagger) {
             this.swagger = swagger;
             this.swaggerLocation = null;
-        }
-
-        /**
-         * Customize the Swagger data in any useful way.<br/>
-         * Use the new extension system instead, by providing a {@link io.github.robwin.swagger2markup.extension.SwaggerExtension} extension.
-         *
-         * @param preProcessor function object to mutate the swagger object
-         * @return the Swagger2MarkupConverter.Builder
-         */
-        @Deprecated
-        public Builder preProcessSwagger(final Consumer<Swagger> preProcessor) {
-            this.preProcessSwaggerExtension = new SwaggerExtension() {
-                @Override
-                public void apply(Context globalContext) {
-                    preProcessor.accept(globalContext.swagger);
-                }
-            };
-            return this;
         }
 
         public Builder withConfig(Swagger2MarkupConfig config) {
@@ -243,8 +224,6 @@ public class Swagger2MarkupConverter {
                 context.extensionRegistry = Swagger2MarkupExtensionRegistry.ofDefaults().build();
             else
                 context.extensionRegistry = extensionRegistry;
-            if (preProcessSwaggerExtension != null)
-                context.extensionRegistry.registerExtension(preProcessSwaggerExtension);
             for (Extension extension : context.extensionRegistry.getExtensions())
                 extension.setGlobalContext(context);
 

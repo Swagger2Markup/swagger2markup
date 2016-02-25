@@ -2,7 +2,6 @@ package io.github.robwin.swagger2markup.extension;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.PathOperation;
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 
 public abstract class OperationsContentExtension extends AbstractExtension {
 
@@ -15,23 +14,22 @@ public abstract class OperationsContentExtension extends AbstractExtension {
         OP_END
     }
 
-    public static class Context {
+    public static class Context extends ContentContext {
         public Position position;
-        public MarkupDocBuilder docBuilder;
         /**
          * null if position == DOC_*
          */
         public PathOperation operation;
 
-        public Context(Position position, PathOperation operation, MarkupDocBuilder docBuilder) {
+        public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
+            super(docBuilder);
             this.position = position;
             this.operation = operation;
-            this.docBuilder = docBuilder;
         }
     }
 
     public OperationsContentExtension() {
     }
 
-    public abstract void apply(Swagger2MarkupConverter.Context globalContext, Context context);
+    public abstract void apply(Context context);
 }

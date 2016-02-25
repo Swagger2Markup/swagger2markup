@@ -126,7 +126,7 @@ public class SecurityDocument extends MarkupDocument {
      */
     private void applyOverviewExtension(SecurityContentExtension.Context context) {
         for (SecurityContentExtension extension : globalContext.extensionRegistry.getExtensions(SecurityContentExtension.class)) {
-            extension.apply(globalContext, context);
+            extension.apply(context);
         }
     }
 }

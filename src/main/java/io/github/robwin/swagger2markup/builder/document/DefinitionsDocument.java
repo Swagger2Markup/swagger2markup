@@ -18,6 +18,7 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
@@ -31,18 +32,19 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
-import static org.apache.commons.lang3.StringUtils.*;
+import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -116,9 +118,9 @@ public class DefinitionsDocument extends MarkupDocument {
     private void definitions(Map<String, Model> definitions){
         if(MapUtils.isNotEmpty(definitions)){
 
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, null, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder, null));
             addDefinitionsTitle(DEFINITIONS);
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEGIN, null, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder, null));
 
             Set<String> definitionNames;
             if (config.getDefinitionOrdering() == null)
@@ -142,8 +144,8 @@ public class DefinitionsDocument extends MarkupDocument {
                 }
             }
 
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_END, null, this.markupDocBuilder));
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_AFTER, null, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_END, this.markupDocBuilder, null));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_AFTER, this.markupDocBuilder, null));
         }
     }
 
@@ -154,7 +156,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void applyDefinitionExtension(DefinitionsContentExtension.Context context) {
         for (DefinitionsContentExtension extension : globalContext.extensionRegistry.getExtensions(DefinitionsContentExtension.class)) {
-            extension.apply(globalContext, context);
+            extension.apply(context);
         }
     }
 
@@ -165,7 +167,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private String resolveDefinitionDocument(String definitionName) {
         if (config.isSeparatedDefinitions())
-            return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
+            return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(normalizeName(definitionName))).getPath();
         else
             return markupDocBuilder.addfileExtension(config.getDefinitionsDocument());
     }
@@ -221,12 +223,12 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
-        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_BEGIN, definitionName, docBuilder));
+        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_BEGIN, docBuilder, definitionName));
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
         definitionSchema(definitionName, docBuilder);
-        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_END, definitionName, docBuilder));
+        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_END, docBuilder, definitionName));
     }
 
     /**
@@ -260,20 +262,17 @@ public class DefinitionsDocument extends MarkupDocument {
 
         @Override
         public String getDescription(Property property, String propertyName) {
-            String description;
             if(config.isDefinitionDescriptions()){
-                description = handWrittenPathDescription(new File(normalizeFileName(type.getName()), normalizeFileName(propertyName)).toString(), DESCRIPTION_FILE_NAME);
-                if(isBlank(description)) {
-                    if (logger.isInfoEnabled()) {
-                        logger.info("Hand-written description file cannot be read. Trying to use description from Swagger source.");
-                    }
-                    description = defaultString(property.getDescription());
+                Optional<String> description = handWrittenDefinitionDescription(new File(normalizeName(type.getName()), normalizeName(propertyName)).toString(), DESCRIPTION_FILE_NAME);
+                if(description.isPresent()) {
+                    return description.get();
+                } else {
+                    return defaultString(property.getDescription());
                 }
             }
             else{
-                description = defaultString(property.getDescription());
+                return defaultString(property.getDescription());
             }
-            return description;
         }
     }
 
@@ -325,9 +324,9 @@ public class DefinitionsDocument extends MarkupDocument {
 
     private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder){
         if(config.isDefinitionDescriptions()){
-            String description = handWrittenPathDescription(normalizeFileName(definitionName), DESCRIPTION_FILE_NAME);
-            if(isNotBlank(description)){
-                docBuilder.paragraph(description);
+            Optional<String> description = handWrittenDefinitionDescription(normalizeName(definitionName), DESCRIPTION_FILE_NAME);
+            if(description.isPresent()){
+                docBuilder.paragraph(description.get());
             }else{
                 modelDescription(model, docBuilder);
             }
@@ -351,58 +350,49 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param descriptionFileName the name of the description file
      * @return the content of the file
      */
-    private String handWrittenPathDescription(String descriptionFolder, String descriptionFileName){
+    private Optional<String> handWrittenDefinitionDescription(String descriptionFolder, String descriptionFileName){
         for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
-            java.nio.file.Path path = Paths.get(config.getDefinitionDescriptionsPath(), descriptionFolder, descriptionFileName + fileNameExtension);
-            if (Files.isReadable(path)) {
+            URI contentUri = config.getDefinitionDescriptionsUri().resolve(descriptionFolder).resolve(descriptionFileName + fileNameExtension);
+
+            try (Reader reader = io.github.robwin.swagger2markup.utils.IOUtils.uriReader(contentUri)) {
                 if (logger.isInfoEnabled()) {
-                    logger.info("Description file processed: {}", path);
+                    logger.info("Definition description content processed {}", contentUri);
                 }
-                try {
-                    return FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim();
-                } catch (IOException e) {
-                    if (logger.isWarnEnabled()) {
-                        logger.warn(String.format("Failed to read description file: %s", path), e);
-                    }
-                }
-            } else {
+
+                return Optional.of(IOUtils.toString(reader).trim());
+            } catch (IOException e) {
                 if (logger.isDebugEnabled()) {
-                    logger.debug("Description file is not readable: {}", path);
+                    logger.debug("Failed to read Operation description content {} > {}", contentUri, e.getMessage());
                 }
             }
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("No description file found with correct file name extension in folder: {}", Paths.get(config.getDefinitionDescriptionsPath(), descriptionFolder));
-        }
-        return null;
+
+        return Optional.absent();
     }
 
     private void definitionSchema(String definitionName, MarkupDocBuilder docBuilder) {
         if(config.isSchemas()) {
             if (isNotBlank(definitionName)) {
-                schema(JSON_SCHEMA, config.getSchemasPath(), definitionName + JSON_SCHEMA_EXTENSION, JSON, docBuilder);
-                schema(XML_SCHEMA, config.getSchemasPath(), definitionName + XML_SCHEMA_EXTENSION, XML, docBuilder);
+                schema(JSON_SCHEMA, config.getSchemasUri(), definitionName + JSON_SCHEMA_EXTENSION, JSON, docBuilder);
+                schema(XML_SCHEMA, config.getSchemasUri(), definitionName + XML_SCHEMA_EXTENSION, XML, docBuilder);
             }
         }
     }
 
-    private void schema(String title, String schemasFolderPath, String schemaName, String language, MarkupDocBuilder docBuilder) {
-        java.nio.file.Path path = Paths.get(schemasFolderPath, schemaName);
-        if (Files.isReadable(path)) {
-            docBuilder.sectionTitleLevel3(title);
-            try {
-                docBuilder.source(FileUtils.readFileToString(path.toFile(), StandardCharsets.UTF_8).trim(), language);
-            } catch (IOException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to read schema file: %s", path), e);
-                }
-            }
+    private void schema(String title, URI schemasFolderPath, String schemaName, String language, MarkupDocBuilder docBuilder) {
+        URI contentUri = schemasFolderPath.resolve(schemaName);
+
+        try (Reader reader = io.github.robwin.swagger2markup.utils.IOUtils.uriReader(contentUri)) {
             if (logger.isInfoEnabled()) {
-                logger.info("Schema file processed: {}", path);
+                logger.info("Schema content processed {}", contentUri);
             }
-        } else {
+
+            docBuilder.sectionTitleLevel3(title);
+            docBuilder.source(IOUtils.toString(reader).trim(), language);
+
+        } catch (IOException e) {
             if (logger.isDebugEnabled()) {
-                logger.debug("Schema file is not readable: {}", path);
+                logger.debug("Failed to read Schema content {} > {}", contentUri, e.getMessage());
             }
         }
     }
@@ -452,7 +442,7 @@ public class DefinitionsDocument extends MarkupDocument {
             String defaultResolver = super.apply(definitionName);
 
             if (defaultResolver != null && config.isSeparatedDefinitions())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(normalizeFileName(definitionName));
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(normalizeName(definitionName));
             else
                 return defaultResolver;
         }

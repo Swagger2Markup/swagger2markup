@@ -1,7 +1,6 @@
 package io.github.robwin.swagger2markup.extension;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 
 public abstract class DefinitionsContentExtension extends AbstractExtension {
 
@@ -11,26 +10,25 @@ public abstract class DefinitionsContentExtension extends AbstractExtension {
         DOC_BEGIN,
         DOC_END,
         DEF_BEGIN,
-        DEF_END
+        DEF_END;
     }
 
-    public static class Context {
+    public static class Context extends ContentContext {
         public Position position;
-        public MarkupDocBuilder docBuilder;
         /**
          * null if position == DOC_*
          */
         public String definitionName;
 
-        public Context(Position position, String definitionName, MarkupDocBuilder docBuilder) {
+        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName) {
+            super(docBuilder);
             this.position = position;
             this.definitionName = definitionName;
-            this.docBuilder = docBuilder;
         }
     }
 
     public DefinitionsContentExtension() {
     }
 
-    public abstract void apply(Swagger2MarkupConverter.Context globalContext, Context context);
+    public abstract void apply(Context context);
 }

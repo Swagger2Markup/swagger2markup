@@ -1,7 +1,6 @@
 package io.github.robwin.swagger2markup.extension;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 
 public abstract class OverviewContentExtension extends AbstractExtension {
 
@@ -12,18 +11,17 @@ public abstract class OverviewContentExtension extends AbstractExtension {
         DOC_END
     }
 
-    public static class Context {
+    public static class Context extends ContentContext {
         public Position position;
-        public MarkupDocBuilder docBuilder;
 
         public Context(Position position, MarkupDocBuilder docBuilder) {
+            super(docBuilder);
             this.position = position;
-            this.docBuilder = docBuilder;
         }
     }
 
     public OverviewContentExtension() {
     }
 
-    public abstract void apply(Swagger2MarkupConverter.Context globalContext, Context context);
+    public abstract void apply(Context context);
 }

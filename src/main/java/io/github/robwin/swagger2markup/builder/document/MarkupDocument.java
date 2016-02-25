@@ -29,6 +29,7 @@ import io.github.robwin.swagger2markup.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
@@ -51,7 +52,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public abstract class MarkupDocument {
 
-    protected static final Pattern FILENAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
+    private static final Pattern NAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     protected final String DEFAULT_COLUMN;
     protected final String REQUIRED_COLUMN;
@@ -122,12 +123,14 @@ public abstract class MarkupDocument {
     }
 
     /**
-     * Create a normalized filename
+     * Create a normalized name from an arbitrary string.<br/>
+     * Paths separators are replaced, so this function can't be applied on a whole path, but must be called on each path sections.
+     *
      * @param name current name of the file
      * @return a normalized filename
      */
-    protected String normalizeFileName(String name) {
-        String fileName = FILENAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
+    public static String normalizeName(String name) {
+        String fileName = NAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
         fileName = fileName.replaceAll(String.format("([%1$s])([%1$s]+)", "-_"), "$1");
         fileName = StringUtils.strip(fileName, "_-");
         fileName = fileName.trim().toLowerCase();
@@ -144,7 +147,7 @@ public abstract class MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    public List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    protected List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
@@ -220,7 +223,7 @@ public abstract class MarkupDocument {
     /**
      * A functor to return descriptions for a given property
      */
-    public class PropertyDescriptor {
+    class PropertyDescriptor {
         protected Type type;
 
         public PropertyDescriptor(Type type) {
@@ -243,7 +246,7 @@ public abstract class MarkupDocument {
             if (!config.isInterDocumentCrossReferences() || outputDirectory == null)
                 return null;
             else if (config.isSeparatedDefinitions())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(normalizeFileName(definitionName))).getPath();
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(IOUtils.normalizeName(definitionName))).getPath();
             else
                 return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(config.getDefinitionsDocument());
         }
