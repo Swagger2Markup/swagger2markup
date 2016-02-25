@@ -36,7 +36,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 
 /**
@@ -195,11 +194,6 @@ public class Swagger2MarkupConverter {
 
         public Builder withConfig(Swagger2MarkupConfig config) {
             this.config = config;
-            return this;
-        }
-
-        public Builder withConfig(Properties config) {
-            this.config = Swagger2MarkupConfig.ofProperties(config).build();
             return this;
         }
 
