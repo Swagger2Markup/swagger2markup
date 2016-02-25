@@ -23,6 +23,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MarkupDocBuilderTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
         tableRowsInPSV = new ArrayList<>();
         tableRowsInPSV.add("Header 1 | Header 2 | Header2");
         tableRowsInPSV.add("Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3");
@@ -60,7 +61,8 @@ public class MarkupDocBuilderTest {
     @Test
     public void testToAsciiDocFile() throws IOException {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
-        builder.documentTitle("Test title")
+
+        builder = builder.documentTitle("Test title")
                 .sectionTitleLevel1("Section Level 1a")
                 .sectionTitleWithAnchorLevel1("Section with anchor Level 1a", "level-1a")
                 .sectionTitleWithAnchorLevel1("Section with anchor Level 1a")
@@ -92,8 +94,12 @@ public class MarkupDocBuilderTest {
                 .crossReferenceRaw("./document.adoc", "anchor", "text").newLine(true)
                 .crossReferenceRaw("  \u0240 µ&|ù This .:/-_  ").newLine(true)
                 .crossReference("./document.adoc", "anchor", "text").newLine(true)
-                .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true)
-                .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
+                .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
+
+        builder.writeToFileWithoutExtension(builder.addfileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
+        builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension("build/tmp", builder.addfileExtension("test"), StandardCharsets.UTF_8);
+        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
@@ -104,9 +110,10 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-     public void testToMarkdownDocFile() throws IOException {
+    public void testToMarkdownDocFile() throws IOException {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
-        builder.documentTitle("Test title")
+
+        builder = builder.documentTitle("Test title")
                 .sectionTitleLevel1("Section Level 1a")
                 .sectionTitleWithAnchorLevel1("Section with anchor Level 1a", "level-1a")
                 .sectionTitleWithAnchorLevel1("Section with anchor Level 1a")
@@ -138,8 +145,12 @@ public class MarkupDocBuilderTest {
                 .crossReferenceRaw("./document.md", "anchor", "text").newLine(true)
                 .crossReferenceRaw("  \u0240 µ&|ù This .:/-_  ").newLine(true)
                 .crossReference("./document.md", "anchor", "text").newLine(true)
-                .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true)
-                .writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
+                .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
+
+        builder.writeToFileWithoutExtension(builder.addfileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
+        builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension("build/tmp", builder.addfileExtension("test"), StandardCharsets.UTF_8);
+        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")

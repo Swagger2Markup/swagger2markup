@@ -91,9 +91,9 @@ public class AbstractMarkupDocBuilderTest {
     public void testImportMarkupAsciiDoc() throws IOException {
         assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 0);
         assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", 4);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (5) > max levelOffset (4)", "", 5);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (6) > max levelOffset (5)", "", 6);
         assertImportMarkup(AsciiDoc.TITLE, "\n\n", "", -4);
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-5) < min levelOffset (-4)", "", -5);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-6) < min levelOffset (-5)", "", -6);
 
         assertImportMarkup(AsciiDoc.TITLE, "\n= title\nline 1\nline 2\n\n", "=   title\r\nline 1\r\nline 2", 0);
 
@@ -104,7 +104,7 @@ public class AbstractMarkupDocBuilderTest {
         assertImportMarkup(AsciiDoc.TITLE, "\n===== title\nline 1\nline 2\n\n", "= title\nline 1\nline 2", 4);
         assertImportMarkup(AsciiDoc.TITLE, "\n= title\nline 1\nline 2\n\n", "===== title\nline 1\nline 2", -4);
 
-        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (4) set title 'title' level (1) > max title level (4)", "== title\nline 1\nline 2", 4);
+        assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "== title\nline 1\nline 2", 5);
         assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-1) set title 'title' level (0) < 0", "= title\nline 1\nline 2", -1);
         assertImportMarkupException(AsciiDoc.TITLE, "Specified levelOffset (-3) set title 'title' level (1) < 0", "== title\nline 1\nline 2", -3);
     }
@@ -114,8 +114,8 @@ public class AbstractMarkupDocBuilderTest {
         assertImportMarkup(Markdown.TITLE, "\n\n", "", 0);
         assertImportMarkup(Markdown.TITLE, "\n\n", "", 4);
         assertImportMarkup(Markdown.TITLE, "\n\n", "", -4);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (5) > max levelOffset (4)", "", 5);
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-5) < min levelOffset (-4)", "", -5);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (6) > max levelOffset (5)", "", 6);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-6) < min levelOffset (-5)", "", -6);
 
         assertImportMarkup(Markdown.TITLE, "\n# title\nline 1\nline 2\n\n", "#   title\r\nline 1\r\nline 2", 0);
 
@@ -126,7 +126,7 @@ public class AbstractMarkupDocBuilderTest {
         assertImportMarkup(Markdown.TITLE, "\n##### title\nline 1\nline 2\n\n", "# title\nline 1\nline 2", 4);
         assertImportMarkup(Markdown.TITLE, "\n# title\nline 1\nline 2\n\n", "##### title\nline 1\nline 2", -4);
 
-        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (4) set title 'title' level (1) > max title level (4)", "## title\nline 1\nline 2", 4);
+        assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "## title\nline 1\nline 2", 5);
         assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-1) set title 'title' level (0) < 0", "# title\nline 1\nline 2", -1);
         assertImportMarkupException(Markdown.TITLE, "Specified levelOffset (-3) set title 'title' level (1) < 0", "## title\nline 1\nline 2", -3);
     }

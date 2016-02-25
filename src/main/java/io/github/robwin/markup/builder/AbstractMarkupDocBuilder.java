@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
@@ -50,7 +51,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
     private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
-    private static final int MAX_TITLE_LEVEL = 4;
+    private static final int MAX_TITLE_LEVEL = 5;
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -323,21 +324,36 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return fileName + "." + markup;
     }
 
+    @Override
+    public Path addfileExtension(Path file) {
+        return file.resolveSibling(addfileExtension(file.getFileName().toString()));
+    }
+
     /**
      * 2 newLines are needed at the end of file for file to be included without protection.
      */
     @Override
-    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
-        Files.createDirectories(Paths.get(directory));
-        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(directory, fileName), charset)) {
+    public void writeToFileWithoutExtension(Path file, Charset charset) throws IOException {
+        Files.createDirectories(file.getParent());
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
             writer.write(documentBuilder.toString());
             writer.write(newLine);
             writer.write(newLine);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("{} was written to: {}", fileName, directory);
+            logger.info("{} was written to: {}", file);
         }
         documentBuilder = new StringBuilder();
+    }
+
+    @Override
+    public void writeToFile(Path file, Charset charset) throws IOException {
+        writeToFileWithoutExtension(file.resolveSibling(addfileExtension(file.getFileName().toString())), charset);
+    }
+
+    @Override
+    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
+        writeToFileWithoutExtension(Paths.get(directory, fileName), charset);
     }
 
     @Override
