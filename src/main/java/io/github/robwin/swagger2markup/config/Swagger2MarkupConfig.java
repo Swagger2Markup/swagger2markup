@@ -109,7 +109,7 @@ public class Swagger2MarkupConfig {
         if (examples && examplesPath == null) {
             if (basePath == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '%s' set and no default available > Disable %s", "examplesPath", "examples");
+                    logger.warn("No explicit '{}' set and no default available > Disable {}", "examplesPath", "examples");
                 examples = false;
             } else
                 examplesPath = basePath.getPath();
@@ -118,7 +118,7 @@ public class Swagger2MarkupConfig {
         if (schemas && schemasPath == null) {
             if (basePath == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '%s' set and no default available > Disable %s", "schemasPath", "schemas");
+                    logger.warn("No explicit '{}' set and no default available > Disable {}", "schemasPath", "schemas");
                 schemas = false;
             } else
                 schemasPath = basePath.getPath();
@@ -127,7 +127,7 @@ public class Swagger2MarkupConfig {
         if (operationDescriptions && operationDescriptionsPath == null) {
             if (basePath == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '%s' set and no default available > Disable %s", "operationDescriptionsPath", "operationDescriptions");
+                    logger.warn("No explicit '{}' set and no default available > Disable {}", "operationDescriptionsPath", "operationDescriptions");
                 operationDescriptions = false;
             } else
                 operationDescriptionsPath = basePath.getPath();
@@ -136,7 +136,7 @@ public class Swagger2MarkupConfig {
         if (definitionDescriptions && definitionDescriptionsPath == null) {
             if (basePath == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("No explicit '%s' set and no default available > Disable %s", "definitionDescriptionsPath", "definitionDescriptions");
+                    logger.warn("No explicit '{}' set and no default available > Disable {}", "definitionDescriptionsPath", "definitionDescriptions");
                 definitionDescriptions = false;
             } else
                 definitionDescriptionsPath = basePath.getPath();
