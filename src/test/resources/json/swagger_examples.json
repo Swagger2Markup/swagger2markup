@@ -828,6 +828,12 @@
                     "type": "string",
                     "example": "doggie"
                 },
+                "nicknames": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                },
                 "photoUrls": {
                     "type": "array",
                     "items": {
@@ -843,6 +849,10 @@
                 "status": {
                     "type": "string",
                     "description": "pet status in the store"
+                },
+                "weight": {
+                    "type": "number",
+                    "description": "the weight of the pet"
                 }
             }
         },
