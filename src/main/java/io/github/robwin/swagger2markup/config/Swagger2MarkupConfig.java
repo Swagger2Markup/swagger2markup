@@ -316,11 +316,11 @@ public class Swagger2MarkupConfig {
 
         private Swagger2MarkupConfig config = new Swagger2MarkupConfig();
 
-        public Builder() {
+        Builder() {
             this(new Properties());
         }
 
-        public Builder(Properties properties) {
+        Builder(Properties properties) {
 
             Properties safeProperties = new Properties(defaultProperties());
             safeProperties.putAll(properties);

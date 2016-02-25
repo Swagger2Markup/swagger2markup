@@ -24,8 +24,8 @@ public class Swagger2MarkupExtensionRegistry {
 
     protected final Multimap<Class<? extends Extension>, Extension> extensions;
 
-    public Swagger2MarkupExtensionRegistry() {
-        extensions = MultimapBuilder.hashKeys().arrayListValues().build();
+    public Swagger2MarkupExtensionRegistry(Multimap<Class<? extends Extension>, Extension> extensions) {
+        this.extensions = extensions;
     }
 
     public static Builder ofEmpty() {
@@ -38,9 +38,10 @@ public class Swagger2MarkupExtensionRegistry {
 
     public static class Builder {
 
-        Swagger2MarkupExtensionRegistry registry = new Swagger2MarkupExtensionRegistry();
+        private final Multimap<Class<? extends Extension>, Extension> extensions;
 
-        public Builder(boolean useDefaults) {
+        Builder(boolean useDefaults) {
+            extensions = MultimapBuilder.hashKeys().arrayListValues().build();
             if (useDefaults) {
                 withExtension(new DynamicOverviewContentExtension());
                 withExtension(new DynamicSecurityContentExtension());
@@ -50,24 +51,24 @@ public class Swagger2MarkupExtensionRegistry {
         }
 
         public Swagger2MarkupExtensionRegistry build() {
-            return registry;
+            return new Swagger2MarkupExtensionRegistry(extensions);
         }
 
         public Builder withExtension(Extension extension) {
-            registry.registerExtension(extension);
+            registerExtension(extension);
             return this;
         }
-    }
 
-    public void registerExtension(Extension extension) {
-        for (Class<? extends Extension> extensionPoint : EXTENSION_POINTS) {
-            if (extensionPoint.isInstance(extension)) {
-                extensions.put(extensionPoint, extension);
-                return;
+        public void registerExtension(Extension extension) {
+            for (Class<? extends Extension> extensionPoint : EXTENSION_POINTS) {
+                if (extensionPoint.isInstance(extension)) {
+                    extensions.put(extensionPoint, extension);
+                    return;
+                }
             }
-        }
 
-        throw new IllegalArgumentException("Provided extension class does not extend any of the supported extension points");
+            throw new IllegalArgumentException("Provided extension class does not extend any of the supported extension points");
+        }
     }
 
     @SuppressWarnings(value = "unchecked")
