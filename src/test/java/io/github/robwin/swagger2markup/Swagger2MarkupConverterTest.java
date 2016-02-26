@@ -449,6 +449,27 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithFrenchOutputLanguage() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withOutputLanguage(Language.FR)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .intoFolder(outputDirectory);
+
+        //Then
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
+                .contains("== D\u0233finitions");
+    }
+
+    @Test
     public void testSwagger2AsciiDocExtensions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
