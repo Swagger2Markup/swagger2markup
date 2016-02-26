@@ -256,7 +256,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public String addfileExtension(String fileName) {
-        return addfileExtension(Markdown.FILE_EXTENSION, fileName);
+    public String addFileExtension(String fileName) {
+        return addFileExtension(Markdown.FILE_EXTENSION, fileName);
     }
 }

@@ -263,8 +263,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public String addfileExtension(String fileName) {
-        return addfileExtension(AsciiDoc.FILE_EXTENSION, fileName);
+    public String addFileExtension(String fileName) {
+        return addFileExtension(AsciiDoc.FILE_EXTENSION, fileName);
     }
 
 }
