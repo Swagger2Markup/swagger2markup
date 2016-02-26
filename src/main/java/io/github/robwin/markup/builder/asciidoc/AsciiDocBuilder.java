@@ -20,18 +20,13 @@ package io.github.robwin.markup.builder.asciidoc;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.*;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -40,19 +35,27 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
+    private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
+        put(MarkupBlockStyle.EXAMPLE, "====");
+        put(MarkupBlockStyle.LISTING, "----");
+        put(MarkupBlockStyle.LITERAL, "....");
+        put(MarkupBlockStyle.PASSTHROUGH, "++++");
+        put(MarkupBlockStyle.SIDEBAR, "****");
+    }};
+
     @Override
     public MarkupDocBuilder copy() {
         return new AsciiDocBuilder().withAnchorPrefix(anchorPrefix);
     }
 
     @Override
-    public MarkupDocBuilder documentTitle(String title){
+    public MarkupDocBuilder documentTitle(String title) {
         documentTitle(AsciiDoc.DOCUMENT_TITLE, title);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel1(String title){
+    public MarkupDocBuilder sectionTitleLevel1(String title) {
         sectionTitleLevel1(AsciiDoc.SECTION_TITLE_LEVEL1, title, null);
         return this;
     }
@@ -64,7 +67,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel2(String title){
+    public MarkupDocBuilder sectionTitleLevel2(String title) {
         sectionTitleLevel2(AsciiDoc.SECTION_TITLE_LEVEL2, title, null);
         return this;
     }
@@ -76,7 +79,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel3(String title){
+    public MarkupDocBuilder sectionTitleLevel3(String title) {
         sectionTitleLevel3(AsciiDoc.SECTION_TITLE_LEVEL3, title, null);
         return this;
     }
@@ -88,7 +91,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel4(String title){
+    public MarkupDocBuilder sectionTitleLevel4(String title) {
         sectionTitleLevel4(AsciiDoc.SECTION_TITLE_LEVEL4, title, null);
         return this;
     }
@@ -100,19 +103,29 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder paragraph(String text){
+    public MarkupDocBuilder paragraph(String text) {
         paragraph(AsciiDoc.HARDBREAKS, text);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder listing(String text){
-        listing(AsciiDoc.LISTING, text);
+    public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
+        if (admonition != null)
+            documentBuilder.append("[").append(admonition).append("]").append(newLine);
+        if (title != null)
+            documentBuilder.append(".").append(title).append(newLine);
+
+        delimitedBlockText(new Markup() {
+            public String toString() {
+                assert (BLOCK_STYLE.containsKey(style));
+                return BLOCK_STYLE.get(style);
+            }
+        }, text);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder boldText(String text){
+    public MarkupDocBuilder boldText(String text) {
         boldText(AsciiDoc.BOLD, text);
         return this;
     }
@@ -124,7 +137,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder unorderedList(List<String> list){
+    public MarkupDocBuilder unorderedList(List<String> list) {
         unorderedList(AsciiDoc.LIST_ENTRY, list);
         return this;
     }
@@ -136,18 +149,19 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder source(String text, String language){
-        documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
-        listing(AsciiDoc.LISTING, text);
+    public MarkupDocBuilder listing(String text, String language) {
+        if (language != null)
+            documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
+        block(text, MarkupBlockStyle.LISTING);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV){
+    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV) {
         newLine();
         documentBuilder.append("[options=\"header\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
-        for(String row : rowsInPSV){
+        for (String row : rowsInPSV) {
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(row).append(newLine);
         }
         documentBuilder.append(AsciiDoc.TABLE).append(newLine).append(newLine);
@@ -218,8 +232,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
                 String languageStyle = col.markupSpecifiers.get(MarkupLanguage.ASCIIDOC);
                 if (languageStyle != null && isNoneBlank(languageStyle)) {
                     cols.add(languageStyle);
-                }
-                else {
+                } else {
                     cols.add(String.valueOf(col.widthRatio));
                 }
             }
