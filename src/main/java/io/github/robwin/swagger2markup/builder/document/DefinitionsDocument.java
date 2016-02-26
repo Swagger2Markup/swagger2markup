@@ -385,7 +385,7 @@ public class DefinitionsDocument extends MarkupDocument {
             }
 
             docBuilder.sectionTitleLevel3(title);
-            docBuilder.source(IOUtils.toString(reader).trim(), language);
+            docBuilder.listing(IOUtils.toString(reader).trim(), language);
 
         } catch (IOException e) {
             if (logger.isDebugEnabled()) {

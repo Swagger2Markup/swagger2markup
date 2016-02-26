@@ -21,10 +21,7 @@ package io.github.robwin.swagger2markup.builder.document;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilders;
-import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.*;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.PathOperation;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
@@ -77,6 +74,8 @@ public class PathsDocument extends MarkupDocument {
     private final String TYPE_COLUMN;
     private final String HTTP_CODE_COLUMN;
 
+    private final String DEPRECATED_OPERATION;
+
     private static final String PATHS_ANCHOR = "paths";
     private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
     private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
@@ -100,6 +99,7 @@ public class PathsDocument extends MarkupDocument {
         SECURITY = labels.getString("security");
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
+        DEPRECATED_OPERATION = labels.getString("operation.deprecated");
 
         if (config.isExamples()) {
             if (logger.isDebugEnabled()) {
@@ -288,6 +288,7 @@ public class PathsDocument extends MarkupDocument {
     private void operation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
             applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.OP_BEGIN, docBuilder, operation));
+            deprecatedSection(operation, docBuilder);
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
             inlineDefinitions(parametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
@@ -313,6 +314,19 @@ public class PathsDocument extends MarkupDocument {
         String operationName = operationName(operation);
 
         addOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
+    }
+
+    /**
+     * Builds a warning if method is deprecated.
+     *
+     * @param operation  the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
+     */
+    private void deprecatedSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+        Boolean deprecated = operation.getOperation().isDeprecated();
+        if (deprecated != null && deprecated) {
+            docBuilder.block(DEPRECATED_OPERATION, MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.CAUTION);
+        }
     }
 
     /**
