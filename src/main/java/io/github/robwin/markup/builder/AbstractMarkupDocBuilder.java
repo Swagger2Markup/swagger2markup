@@ -70,11 +70,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return this.anchorPrefix;
     }
 
-    protected void documentTitle(Markup markup, String title){
+    protected void documentTitle(Markup markup, String title) {
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
-    protected void sectionTitleLevel1(Markup markup, String title, String anchor){
+    protected void sectionTitleLevel1(Markup markup, String title, String anchor) {
         documentBuilder.append(newLine);
         if (anchor != null)
             anchor(anchor).newLine();
@@ -86,7 +86,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return sectionTitleWithAnchorLevel1(title, title);
     }
 
-    protected void sectionTitleLevel2(Markup markup, String title, String anchor){
+    protected void sectionTitleLevel2(Markup markup, String title, String anchor) {
         documentBuilder.append(newLine);
         if (anchor != null)
             anchor(anchor).newLine();
@@ -98,7 +98,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return sectionTitleWithAnchorLevel2(title, title);
     }
 
-    protected void sectionTitleLevel3(Markup markup, String title, String anchor){
+    protected void sectionTitleLevel3(Markup markup, String title, String anchor) {
         documentBuilder.append(newLine);
         if (anchor != null)
             anchor(anchor).newLine();
@@ -110,7 +110,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return sectionTitleWithAnchorLevel3(title, title);
     }
 
-    protected void sectionTitleLevel4(Markup markup, String title, String anchor){
+    protected void sectionTitleLevel4(Markup markup, String title, String anchor) {
         documentBuilder.append(newLine);
         if (anchor != null)
             anchor(anchor).newLine();
@@ -123,61 +123,68 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder textLine(String text, boolean forceLineBreak){
+    public MarkupDocBuilder textLine(String text, boolean forceLineBreak) {
         text(text);
         newLine(forceLineBreak);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder textLine(String text){
+    public MarkupDocBuilder textLine(String text) {
         textLine(text, LINE_BREAK_DEFAULT);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder text(String text){
+    public MarkupDocBuilder text(String text) {
         documentBuilder.append(text);
         return this;
     }
 
-    protected void paragraph(Markup markup, String text){
+    protected void paragraph(Markup markup, String text) {
         documentBuilder.append(markup).append(newLine).append(text).append(newLine).append(newLine);
     }
 
-    protected void listing(Markup markup, String text){
-        delimitedBlockText(markup, text);
+    @Override
+    public MarkupDocBuilder block(String text, MarkupBlockStyle style) {
+        return block(text, style, null, null);
     }
 
-    protected void delimitedBlockText(Markup markup, String text){
-        documentBuilder.append(markup).append(newLine).append(text).append(newLine).append(markup).append(newLine).append(newLine);
+    @Override
+    public MarkupDocBuilder listing(String text) {
+        return listing(text, null);
     }
 
-    protected void delimitedTextWithoutLineBreaks(Markup markup, String text){
+    protected void delimitedBlockText(Markup markup, String text) {
+        if (markup != null)
+            documentBuilder.append(markup).append(newLine);
+        documentBuilder.append(text).append(newLine);
+        if (markup != null)
+            documentBuilder.append(markup).append(newLine);
+        documentBuilder.append(newLine);
+    }
+
+    protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
         documentBuilder.append(markup).append(text).append(markup);
     }
 
-    protected void preserveLineBreaks(Markup markup){
-        documentBuilder.append(markup).append(newLine);
-    }
-
-    protected void boldText(Markup markup, String text){
+    protected void boldText(Markup markup, String text) {
         delimitedTextWithoutLineBreaks(markup, text);
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak){
+    public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak) {
         boldText(text);
         newLine(forceLineBreak);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text){
+    public MarkupDocBuilder boldTextLine(String text) {
         return boldTextLine(text, LINE_BREAK_DEFAULT);
     }
 
-    protected void italicText(Markup markup, String text){
+    protected void italicText(Markup markup, String text) {
         delimitedTextWithoutLineBreaks(markup, text);
     }
 
@@ -193,9 +200,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return italicTextLine(text, LINE_BREAK_DEFAULT);
     }
 
-    protected void unorderedList(Markup markup, List<String> list){
+    protected void unorderedList(Markup markup, List<String> list) {
         documentBuilder.append(newLine);
-        for(String listEntry : list){
+        for (String listEntry : list) {
             unorderedListItem(markup, listEntry);
         }
         documentBuilder.append(newLine);
@@ -258,14 +265,14 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return crossReference(null, anchor, null);
     }
 
-    protected void newLine(Markup markup, boolean forceLineBreak){
+    protected void newLine(Markup markup, boolean forceLineBreak) {
         if (forceLineBreak)
             documentBuilder.append(markup);
         documentBuilder.append(newLine);
     }
 
     @Override
-    public MarkupDocBuilder newLine(){
+    public MarkupDocBuilder newLine() {
         newLine(LINE_BREAK_DEFAULT);
         return this;
     }
@@ -316,7 +323,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return documentBuilder.toString();
     }
 
@@ -336,14 +343,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     public void writeToFileWithoutExtension(Path file, Charset charset) throws IOException {
         Files.createDirectories(file.getParent());
         try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
-            writer.write(documentBuilder.toString());
+            writer.write(toString());
             writer.write(newLine);
             writer.write(newLine);
         }
         if (logger.isInfoEnabled()) {
             logger.info("{} was written to: {}", file);
         }
-        documentBuilder = new StringBuilder();
     }
 
     @Override

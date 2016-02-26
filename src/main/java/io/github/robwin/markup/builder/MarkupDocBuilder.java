@@ -181,8 +181,30 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder paragraph(String text);
 
     /**
-     * Builds a literal text block.<br/>
-     * Line breaks are respected.
+     * Builds a block of {@code text} with specified {@code style}.
+     *
+     * @param text text
+     * @param style block style
+     * @param title an optional title for the block. No title if null.
+     * @param admonition an optional admonition for the block. No admonition if null.
+     * @return this builder
+     */
+    MarkupDocBuilder block(String text, MarkupBlockStyle style, String title, MarkupAdmonition admonition);
+
+    /**
+     * Builds a block of {@code text} with specified {@code style}.<br/>
+     * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle, null, null)}.
+     *
+     * @param text text
+     * @param style block style
+     * @return this builder
+     */
+    MarkupDocBuilder block(String text, MarkupBlockStyle style);
+
+    /**
+     * Builds a listing text block.<br/>
+     * This is an alias for {@link #listing(String, String) listing(String, null)}.
+     * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle.LISTING, null, null)}.
      *
      * @param text multi-line text
      * @return this builder
@@ -194,10 +216,10 @@ public interface MarkupDocBuilder {
      * Line breaks are respected.
      *
      * @param text multi-line text
-     * @param language source code language
+     * @param language source code language. Simple listing if {@code language} == null.
      * @return this builder
      */
-    MarkupDocBuilder source(String text, String language);
+    MarkupDocBuilder listing(String text, String language);
 
     /**
      * Builds a bold text line.<br/>
@@ -453,7 +475,7 @@ public interface MarkupDocBuilder {
     Path addfileExtension(Path file);
 
     /**
-     * Writes the content of the builder to a file and clears the builder.<br/>
+     * Writes the content of the builder to a file.<br/>
      * An extension will be dynamically added to fileName depending on the markup language.<br/>
      * Use {@link #writeToFile(Path, Charset)} instead.
      *
@@ -466,7 +488,7 @@ public interface MarkupDocBuilder {
     void writeToFile(String directory, String fileName, Charset charset) throws IOException;
 
     /**
-     * Writes the content of the builder to a file and clears the builder.<br/>
+     * Writes the content of the builder to a file.<br/>
      * Use {@link #writeToFileWithoutExtension(Path, Charset)} instead.
      *
      * @param directory the directory where the generated file should be stored
@@ -478,7 +500,7 @@ public interface MarkupDocBuilder {
      void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException;
 
     /**
-     * Writes the content of the builder to a file and clears the builder.<br/>
+     * Writes the content of the builder to a file.<br/>
      * An extension will be dynamically added to fileName depending on the markup language.
      *
      * @param file the generated file without extension
@@ -488,7 +510,7 @@ public interface MarkupDocBuilder {
     void writeToFile(Path file, Charset charset) throws IOException;
 
     /**
-     * Writes the content of the builder to a file and clears the builder.
+     * Writes the content of the builder to a file.
      *
      * @param file the generated file
      * @param charset the the charset to use for encoding

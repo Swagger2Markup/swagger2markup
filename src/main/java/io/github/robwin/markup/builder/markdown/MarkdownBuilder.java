@@ -20,18 +20,13 @@ package io.github.robwin.markup.builder.markdown;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-import io.github.robwin.markup.builder.AbstractMarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.regex.Pattern;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -39,11 +34,15 @@ import static org.apache.commons.lang3.StringUtils.join;
 /**
  * @author Robert Winkler
  */
-public class MarkdownBuilder extends AbstractMarkupDocBuilder
-{
-    private static final int MAX_TITLE_LEVEL = 5;
-    private static final char TITLE_PREFIX = '#';
-    private static Pattern TITLE_PATTERN = Pattern.compile(String.format("^%c({1,%d})( .*)$", TITLE_PREFIX, MAX_TITLE_LEVEL));
+public class MarkdownBuilder extends AbstractMarkupDocBuilder {
+
+    private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
+        put(MarkupBlockStyle.EXAMPLE, null);
+        put(MarkupBlockStyle.LISTING, Markdown.LISTING.toString());
+        put(MarkupBlockStyle.LITERAL, Markdown.LISTING.toString());
+        put(MarkupBlockStyle.PASSTHROUGH, null);
+        put(MarkupBlockStyle.SIDEBAR, null);
+    }};
 
     @Override
     public MarkupDocBuilder copy() {
@@ -51,13 +50,13 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder documentTitle(String title){
+    public MarkupDocBuilder documentTitle(String title) {
         documentTitle(Markdown.DOCUMENT_TITLE, title);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel1(String title){
+    public MarkupDocBuilder sectionTitleLevel1(String title) {
         sectionTitleLevel1(Markdown.SECTION_TITLE_LEVEL1, title, null);
         return this;
     }
@@ -69,7 +68,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel2(String title){
+    public MarkupDocBuilder sectionTitleLevel2(String title) {
         sectionTitleLevel2(Markdown.SECTION_TITLE_LEVEL2, title, null);
         return this;
     }
@@ -81,7 +80,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel3(String title){
+    public MarkupDocBuilder sectionTitleLevel3(String title) {
         sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL3, title, null);
         return this;
     }
@@ -93,7 +92,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel4(String title){
+    public MarkupDocBuilder sectionTitleLevel4(String title) {
         sectionTitleLevel4(Markdown.SECTION_TITLE_LEVEL4, title, null);
         return this;
     }
@@ -105,27 +104,42 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder paragraph(String text){
+    public MarkupDocBuilder paragraph(String text) {
         paragraph(Markdown.HARDBREAKS, text);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder listing(String text){
-        listing(Markdown.LISTING, text);
+    public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
+        if (admonition != null)
+            documentBuilder.append(StringUtils.capitalize(admonition.name())).append(" : ");
+        if (title != null) {
+            if (admonition != null)
+                documentBuilder.append(" | ");
+            documentBuilder.append(title).append(" : ");
+        }
+        if (admonition != null || title != null)
+            documentBuilder.append(newLine);
+
+        delimitedBlockText(new Markup() {
+            public String toString() {
+                String separator = BLOCK_STYLE.get(style);
+                return separator;
+            }
+        }, text);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder source(String text, String language){
-        documentBuilder.append(Markdown.LISTING).append(language).append(newLine).
-                append(text).append(newLine).
-                append(Markdown.LISTING).append(newLine).append(newLine);
+    public MarkupDocBuilder listing(String text, String language) {
+        if (language != null)
+            text = language + " :" + newLine + text;
+        block(text, MarkupBlockStyle.LISTING);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder boldText(String text){
+    public MarkupDocBuilder boldText(String text) {
         boldText(Markdown.BOLD, text);
         return this;
     }
@@ -137,7 +151,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder unorderedList(List<String> list){
+    public MarkupDocBuilder unorderedList(List<String> list) {
         unorderedList(Markdown.LIST_ENTRY, list);
         return this;
     }
@@ -149,7 +163,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
     }
 
     @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV){
+    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV) {
         String headersInPSV = rowsInPSV.get(0);
         List<String> contentRowsInPSV = rowsInPSV.subList(1, rowsInPSV.size());
         String[] headersAsArray = headersInPSV.split(String.format("\\%s", Markdown.TABLE_COLUMN_DELIMITER.toString()));
@@ -163,15 +177,15 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder
         newLine();
         // Header/Content separator
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-        for(String header : headers){
-            for(int i = 1; i<5; i++) {
+        for (String header : headers) {
+            for (int i = 1; i < 5; i++) {
                 documentBuilder.append(Markdown.TABLE_ROW);
             }
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
         }
         newLine();
         // Content
-        for(String contentRowInPSV : contentRowsInPSV){
+        for (String contentRowInPSV : contentRowsInPSV) {
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
             documentBuilder.append(contentRowInPSV);
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
