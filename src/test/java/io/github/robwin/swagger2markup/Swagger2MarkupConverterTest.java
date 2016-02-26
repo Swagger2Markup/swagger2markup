@@ -74,6 +74,31 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithExamples() throws IOException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withExamples(Paths.get("src/docs/asciidoc/paths"))
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .intoFolder(outputDirectory);
+
+        //Then
+        String[] directories = outputDirectory.toFile().list();
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc"))))
+                .contains("==== Example HTTP response");
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc"))))
+                .contains("|name||true|string||doggie");
+    }
+
+    @Test
     public void testSwagger2AsciiDocConversionAsString() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
@@ -419,7 +444,7 @@ public class Swagger2MarkupConverterTest {
                 .intoFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")),  Charset.forName("UTF-8")))
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
                 .contains("== Определения");
     }
 

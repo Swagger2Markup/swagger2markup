@@ -29,6 +29,7 @@ import io.github.robwin.swagger2markup.extension.OperationsContentExtension;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
 import io.github.robwin.swagger2markup.type.Type;
+import io.github.robwin.swagger2markup.utils.ExamplesUtil;
 import io.github.robwin.swagger2markup.utils.ParameterUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.github.robwin.swagger2markup.utils.TagUtils;
@@ -36,6 +37,7 @@ import io.swagger.models.*;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
+import io.swagger.util.Json;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.IOUtils;
@@ -61,6 +63,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class PathsDocument extends MarkupDocument {
 
     private final String RESPONSE;
+    private final String REQUEST;
     private final String PATHS;
     private final String RESOURCES;
     private final String PARAMETERS;
@@ -88,6 +91,7 @@ public class PathsDocument extends MarkupDocument {
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
+        REQUEST = labels.getString("request");
         PATHS = labels.getString("paths");
         RESOURCES = labels.getString("resources");
         PARAMETERS = labels.getString("parameters");
@@ -596,7 +600,7 @@ public class PathsDocument extends MarkupDocument {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void examplesSection1(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (config.isExamples()) {
             Optional<String> curlExample = example(normalizeName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
             if (!curlExample.isPresent())
@@ -623,6 +627,73 @@ public class PathsDocument extends MarkupDocument {
             if (responseExample.isPresent()) {
                 addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
                 docBuilder.paragraph(responseExample.get());
+            }
+        }
+    }
+
+    /**
+     * Builds the example section of a Swagger Operation. Tries to load the examples from
+     * curl-request.adoc, http-request.adoc and http-response.adoc or
+     * curl-request.md, http-request.md and http-response.md.
+     * Operation folder search order :
+     * - normalizeOperationFileName(operation.operationId)
+     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
+     * - then, normalizeOperationFileName(operation.summary)
+     *
+     * @param operation  the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
+     */
+    private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+
+        if (globalContext.config.isExamples()) {
+            Optional<String> curlExample;
+            Optional<String> requestExample;
+            Optional<String> responseExample;
+            Optional<Map<String, Object>> generatedRequestExampleMap;
+            Optional<Map<String, Object>> generatedResponseExampleMap;
+
+            curlExample = example(normalizeName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
+            if (!curlExample.isPresent())
+                curlExample = example(normalizeName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
+            requestExample = example(normalizeName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
+            if (!requestExample.isPresent())
+                requestExample = example(normalizeName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
+            responseExample = example(normalizeName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
+            if (!responseExample.isPresent())
+                responseExample = example(normalizeName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
+
+            generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(operation, globalContext.swagger.getDefinitions(), markupDocBuilder);
+            generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(operation.getOperation(), globalContext.swagger.getDefinitions(), markupDocBuilder);
+
+            if (curlExample.isPresent()) {
+                addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
+                docBuilder.paragraph(curlExample.get());
+            }
+
+            if (requestExample.isPresent() || generatedRequestExampleMap.isPresent()) {
+                addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
+                if (requestExample.isPresent()) {
+                    docBuilder.paragraph(requestExample.get());
+                }
+                if (generatedRequestExampleMap.isPresent() && generatedRequestExampleMap.get().size() > 0) {
+                    for (Map.Entry<String, Object> request : generatedRequestExampleMap.get().entrySet()) {
+                        docBuilder.sectionTitleLevel4(REQUEST + " " + request.getKey() + " :");
+                        docBuilder.listing(Json.pretty(request.getValue()));
+                    }
+                }
+            }
+
+            if (responseExample.isPresent() || generatedResponseExampleMap.isPresent()) {
+                addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
+                if (responseExample.isPresent()) {
+                    docBuilder.paragraph(responseExample.get());
+                }
+                if (generatedResponseExampleMap.isPresent() && generatedResponseExampleMap.get().size() > 0) {
+                    for (Map.Entry<String, Object> response : generatedResponseExampleMap.get().entrySet()) {
+                        docBuilder.sectionTitleLevel4(RESPONSE + " " + response.getKey() + " :");
+                        docBuilder.listing(Json.pretty(response.getValue()));
+                    }
+                }
             }
         }
     }
