@@ -167,9 +167,9 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private String resolveDefinitionDocument(String definitionName) {
         if (config.isSeparatedDefinitions())
-            return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(normalizeName(definitionName))).getPath();
+            return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(normalizeName(definitionName))).getPath();
         else
-            return markupDocBuilder.addfileExtension(config.getDefinitionsDocument());
+            return markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
     }
 
     /**
@@ -439,7 +439,7 @@ public class DefinitionsDocument extends MarkupDocument {
             String defaultResolver = super.apply(definitionName);
 
             if (defaultResolver != null && config.isSeparatedDefinitions())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(normalizeName(definitionName));
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(normalizeName(definitionName));
             else
                 return defaultResolver;
         }

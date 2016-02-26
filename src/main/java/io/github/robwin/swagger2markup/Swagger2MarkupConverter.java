@@ -214,7 +214,7 @@ public class Swagger2MarkupConverter {
          * @param swaggerPath the local Path
          */
         Builder(Path swaggerPath) {
-            this.swaggerLocation = swaggerPath.toUri();
+            this.swaggerLocation = swaggerPath.toAbsolutePath().toUri();
             this.swagger = readSwagger(swaggerPath.toString());
         }
 

@@ -246,9 +246,9 @@ public abstract class MarkupDocument {
             if (!config.isInterDocumentCrossReferences() || outputPath == null)
                 return null;
             else if (config.isSeparatedDefinitions())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(IOUtils.normalizeName(definitionName))).getPath();
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(IOUtils.normalizeName(definitionName))).getPath();
             else
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addfileExtension(config.getDefinitionsDocument());
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
         }
     }
 }
