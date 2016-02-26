@@ -62,7 +62,7 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String XML = "xml";
     private static final String DESCRIPTION_FILE_NAME = "description";
 
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath){
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
         super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
@@ -70,30 +70,30 @@ public class DefinitionsDocument extends MarkupDocument {
         JSON_SCHEMA = labels.getString("json_schema");
         XML_SCHEMA = labels.getString("xml_schema");
 
-        if(config.isSchemas()){
+        if (config.isSchemas()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include schemas is enabled.");
             }
-        }else{
+        } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include schemas is disabled.");
             }
         }
-        if(config.isDefinitionDescriptions()){
+        if (config.isDefinitionDescriptions()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written definition descriptions is enabled.");
             }
-        }else{
+        } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written definition descriptions is disabled.");
             }
         }
-        if(config.isSeparatedDefinitions()){
+        if (config.isSeparatedDefinitions()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
             }
             Validate.notNull(outputPath, "Output directory is required for separated definition files!");
-        }else{
+        } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is disabled.");
             }
@@ -101,7 +101,7 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     @Override
-    public MarkupDocument build(){
+    public MarkupDocument build() {
         definitions(globalContext.swagger.getDefinitions());
         return this;
     }
@@ -115,8 +115,8 @@ public class DefinitionsDocument extends MarkupDocument {
      *
      * @param definitions the Swagger definitions
      */
-    private void definitions(Map<String, Model> definitions){
-        if(MapUtils.isNotEmpty(definitions)){
+    private void definitions(Map<String, Model> definitions) {
+        if (MapUtils.isNotEmpty(definitions)) {
 
             applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder, null));
             addDefinitionsTitle(DEFINITIONS);
@@ -124,19 +124,19 @@ public class DefinitionsDocument extends MarkupDocument {
 
             Set<String> definitionNames;
             if (config.getDefinitionOrdering() == null)
-              definitionNames = new LinkedHashSet<>();
+                definitionNames = new LinkedHashSet<>();
             else
-              definitionNames = new TreeSet<>(config.getDefinitionOrdering());
+                definitionNames = new TreeSet<>(config.getDefinitionOrdering());
             definitionNames.addAll(definitions.keySet());
-            for(String definitionName : definitionNames){
+            for (String definitionName : definitionNames) {
                 Model model = definitions.get(definitionName);
-                if(isNotBlank(definitionName)) {
+                if (isNotBlank(definitionName)) {
                     if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
                         processDefinition(definitions, definitionName, model);
                         if (logger.isInfoEnabled()) {
                             logger.info("Definition processed: {}", definitionName);
                         }
-                    }else{
+                    } else {
                         if (logger.isDebugEnabled()) {
                             logger.debug("Definition was ignored: {}", definitionName);
                         }
@@ -162,6 +162,7 @@ public class DefinitionsDocument extends MarkupDocument {
 
     /**
      * Create the definition filename depending on the generation mode
+     *
      * @param definitionName definition name
      * @return definition filename
      */
@@ -174,9 +175,10 @@ public class DefinitionsDocument extends MarkupDocument {
 
     /**
      * Generate definition files depending on the generation mode
-     * @param definitions all available definitions to be able to verify references
+     *
+     * @param definitions    all available definitions to be able to verify references
      * @param definitionName definition name to process
-     * @param model definition model to process
+     * @param model          definition model to process
      */
     private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
@@ -216,10 +218,10 @@ public class DefinitionsDocument extends MarkupDocument {
      * Builds a concrete definition
      *
      * @param definitionName the name of the definition
-     * @param model the Swagger Model of the definition
-     * @param docBuilder the docbuilder do use for output
+     * @param model          the Swagger Model of the definition
+     * @param docBuilder     the docbuilder do use for output
      */
-    private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
+    private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
         applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_BEGIN, docBuilder, definitionName));
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
@@ -230,17 +232,19 @@ public class DefinitionsDocument extends MarkupDocument {
 
     /**
      * Builds a cross-reference to a separated definition file.
+     *
      * @param definitionName definition name to target
-     * @param docBuilder the docbuilder do use for output
+     * @param docBuilder     the docbuilder do use for output
      */
-    private void definitionRef(String definitionName, MarkupDocBuilder docBuilder){
+    private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
         addDefinitionTitle(docBuilder.copy().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**
      * Builds definition title
-     * @param title definition title
-     * @param anchor optional anchor (null => auto-generate from title)
+     *
+     * @param title      definition title
+     * @param anchor     optional anchor (null => auto-generate from title)
      * @param docBuilder the docbuilder do use for output
      */
     private void addDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
@@ -259,15 +263,14 @@ public class DefinitionsDocument extends MarkupDocument {
 
         @Override
         public String getDescription(Property property, String propertyName) {
-            if(config.isDefinitionDescriptions()){
+            if (config.isDefinitionDescriptions()) {
                 Optional<String> description = handWrittenDefinitionDescription(new File(normalizeName(type.getName()), normalizeName(propertyName)).toString(), DESCRIPTION_FILE_NAME);
-                if(description.isPresent()) {
+                if (description.isPresent()) {
                     return description.get();
                 } else {
                     return defaultString(property.getDescription());
                 }
-            }
-            else{
+            } else {
                 return defaultString(property.getDescription());
             }
         }
@@ -275,13 +278,14 @@ public class DefinitionsDocument extends MarkupDocument {
 
     /**
      * Builds the properties of a definition and inline schemas.
-     * @param definitions all available definitions
+     *
+     * @param definitions    all available definitions
      * @param definitionName name of the definition to display
-     * @param model model of the definition to display
-     * @param docBuilder the docbuilder do use for output
+     * @param model          model of the definition to display
+     * @param docBuilder     the docbuilder do use for output
      * @return a list of inlined types.
      */
-    private List<ObjectType> propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder){
+    private List<ObjectType> propertiesSection(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
         Map<String, Property> properties = getAllProperties(definitions, model);
         ObjectType type = new ObjectType(definitionName, properties);
 
@@ -289,46 +293,44 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
-        if(model instanceof RefModel) {
-            RefModel refModel = (RefModel)model;
+        if (model instanceof RefModel) {
+            RefModel refModel = (RefModel) model;
             String ref;
-            if(refModel.getRefFormat().equals(RefFormat.INTERNAL)){
+            if (refModel.getRefFormat().equals(RefFormat.INTERNAL)) {
                 ref = refModel.getSimpleRef();
-            }else{
+            } else {
                 ref = model.getReference();
             }
             return definitions.containsKey(ref)
                     ? getAllProperties(definitions, definitions.get(ref))
                     : null;
         }
-        if(model instanceof ComposedModel) {
-            ComposedModel composedModel = (ComposedModel)model;
-            ImmutableMap.Builder<String, Property> allProperties = ImmutableMap.builder();
-            if(composedModel.getAllOf() != null) {
-                for(Model innerModel : composedModel.getAllOf()) {
+        if (model instanceof ComposedModel) {
+            ComposedModel composedModel = (ComposedModel) model;
+            Map<String, Property> allProperties = new HashMap<>();
+            if (composedModel.getAllOf() != null) {
+                for (Model innerModel : composedModel.getAllOf()) {
                     Map<String, Property> innerProperties = getAllProperties(definitions, innerModel);
-                    if(innerProperties != null) {
+                    if (innerProperties != null) {
                         allProperties.putAll(innerProperties);
                     }
                 }
             }
-            return allProperties.build();
-        }
-        else {
+            return ImmutableMap.copyOf(allProperties);
+        } else {
             return model.getProperties();
         }
     }
 
-    private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder){
-        if(config.isDefinitionDescriptions()){
+    private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
+        if (config.isDefinitionDescriptions()) {
             Optional<String> description = handWrittenDefinitionDescription(normalizeName(definitionName), DESCRIPTION_FILE_NAME);
-            if(description.isPresent()){
+            if (description.isPresent()) {
                 docBuilder.paragraph(description.get());
-            }else{
+            } else {
                 modelDescription(model, docBuilder);
             }
-        }
-        else{
+        } else {
             modelDescription(model, docBuilder);
         }
     }
@@ -343,11 +345,11 @@ public class DefinitionsDocument extends MarkupDocument {
     /**
      * Reads a hand-written description
      *
-     * @param descriptionFolder the name of the folder where the description file resides
+     * @param descriptionFolder   the name of the folder where the description file resides
      * @param descriptionFileName the name of the description file
      * @return the content of the file
      */
-    private Optional<String> handWrittenDefinitionDescription(String descriptionFolder, String descriptionFileName){
+    private Optional<String> handWrittenDefinitionDescription(String descriptionFolder, String descriptionFileName) {
         for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
             URI contentUri = config.getDefinitionDescriptionsUri().resolve(descriptionFolder).resolve(descriptionFileName + fileNameExtension);
 
@@ -368,7 +370,7 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     private void definitionSchema(String definitionName, MarkupDocBuilder docBuilder) {
-        if(config.isSchemas()) {
+        if (config.isSchemas()) {
             if (isNotBlank(definitionName)) {
                 schema(JSON_SCHEMA, config.getSchemasUri(), definitionName + JSON_SCHEMA_EXTENSION, JSON, docBuilder);
                 schema(XML_SCHEMA, config.getSchemasUri(), definitionName + XML_SCHEMA_EXTENSION, XML, docBuilder);
@@ -398,8 +400,9 @@ public class DefinitionsDocument extends MarkupDocument {
     /**
      * Builds the title of an inline schema.
      * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.
-     * @param title inline schema title
-     * @param anchor inline schema anchor
+     *
+     * @param title      inline schema title
+     * @param anchor     inline schema anchor
      * @param docBuilder the docbuilder do use for output
      */
     private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
@@ -410,14 +413,15 @@ public class DefinitionsDocument extends MarkupDocument {
 
     /**
      * Builds inline schema definitions
-     * @param definitions all inline definitions to display
+     *
+     * @param definitions  all inline definitions to display
      * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param depth current inline schema depth
-     * @param docBuilder the docbuilder do use for output
+     * @param depth        current inline schema depth
+     * @param docBuilder   the docbuilder do use for output
      */
     private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
-        if(CollectionUtils.isNotEmpty(definitions)){
-            for (ObjectType definition: definitions) {
+        if (CollectionUtils.isNotEmpty(definitions)) {
+            for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
                 List<ObjectType> localDefinitions = typeProperties(definition, uniquePrefix, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
@@ -433,7 +437,8 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     class DefinitionDocumentResolverFromDefinition extends DefinitionDocumentResolverDefault {
 
-        public DefinitionDocumentResolverFromDefinition() {}
+        public DefinitionDocumentResolverFromDefinition() {
+        }
 
         public String apply(String definitionName) {
             String defaultResolver = super.apply(definitionName);

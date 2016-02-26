@@ -56,6 +56,7 @@ public abstract class MarkupDocument {
     private static final Pattern NAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
 
     protected final String DEFAULT_COLUMN;
+    protected final String EXAMPLE_COLUMN;
     protected final String REQUIRED_COLUMN;
     protected final String SCHEMA_COLUMN;
     protected final String NAME_COLUMN;
@@ -84,6 +85,7 @@ public abstract class MarkupDocument {
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
+        EXAMPLE_COLUMN = labels.getString("example_column");
         REQUIRED_COLUMN = labels.getString("required_column");
         SCHEMA_COLUMN = labels.getString("schema_column");
         NAME_COLUMN = labels.getString("name_column");
@@ -114,8 +116,8 @@ public abstract class MarkupDocument {
     /**
      * Writes the content of the builder to a file and clears the builder.
      *
-     * @param file the generated file
-     * @param charset   the the charset to use for encoding
+     * @param file    the generated file
+     * @param charset the the charset to use for encoding
      * @throws IOException if the file cannot be written
      */
     public void writeToFile(Path file, Charset charset) throws IOException {
@@ -139,12 +141,13 @@ public abstract class MarkupDocument {
 
     /**
      * Build a generic property table for any ObjectType
-     * @param type to display
-     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param depth current inline schema object depth
-     * @param propertyDescriptor property descriptor to apply to properties
+     *
+     * @param type                       to display
+     * @param uniquePrefix               unique prefix to prepend to inline object names to enforce unicity
+     * @param depth                      current inline schema object depth
+     * @param propertyDescriptor         property descriptor to apply to properties
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
-     * @param docBuilder the docbuilder do use for output
+     * @param docBuilder                 the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
     protected List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
@@ -155,7 +158,8 @@ public abstract class MarkupDocument {
                 new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
                 new MarkupTableColumn(REQUIRED_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+                new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                new MarkupTableColumn(EXAMPLE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
         if (MapUtils.isNotEmpty(type.getProperties())) {
             Set<String> propertyNames;
             if (config.getPropertyOrdering() == null)
@@ -164,14 +168,14 @@ public abstract class MarkupDocument {
                 propertyNames = new TreeSet<>(config.getPropertyOrdering());
             propertyNames.addAll(type.getProperties().keySet());
 
-            for (String propertyName: propertyNames) {
+            for (String propertyName : propertyNames) {
                 Property property = type.getProperties().get(propertyName);
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
                 if (depth > 0 && propertyType instanceof ObjectType) {
                     if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
                         propertyType.setName(propertyName);
                         propertyType.setUniqueName(uniquePrefix + " " + propertyName);
-                        localDefinitions.add((ObjectType)propertyType);
+                        localDefinitions.add((ObjectType) propertyType);
 
                         propertyType = new RefType(propertyType);
                     }
@@ -182,7 +186,9 @@ public abstract class MarkupDocument {
                         propertyDescriptor.getDescription(property, propertyName),
                         Boolean.toString(property.getRequired()),
                         propertyType.displaySchema(docBuilder),
-                        PropertyUtils.getDefaultValue(property));
+                        PropertyUtils.getDefaultValue(property),
+                        PropertyUtils.getExample(property, markupDocBuilder)
+                );
                 cells.add(content);
             }
             docBuilder.tableWithColumnSpecs(cols, cells);
@@ -191,33 +197,6 @@ public abstract class MarkupDocument {
         }
 
         return localDefinitions;
-    }
-
-    /**
-     * Reads an extension
-     *
-     * @param extension extension file
-     * @return extension content reader
-     */
-    protected Optional<FileReader> operationExtension(File extension) {
-
-        if (Files.isReadable(extension.toPath())) {
-            if (logger.isInfoEnabled()) {
-                logger.info("Extension file processed: {}", extension);
-            }
-            try {
-                return Optional.of(new FileReader(extension));
-            } catch (IOException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to read extension file: %s", extension), e);
-                }
-            }
-        } else {
-            if (logger.isWarnEnabled()) {
-                logger.warn("Extension file is not readable: {}", extension);
-            }
-        }
-        return Optional.absent();
     }
 
     /**
@@ -240,7 +219,8 @@ public abstract class MarkupDocument {
      */
     class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
 
-        public DefinitionDocumentResolverDefault() {}
+        public DefinitionDocumentResolverDefault() {
+        }
 
         public String apply(String definitionName) {
             if (!config.isInterDocumentCrossReferences() || outputPath == null)
