@@ -35,7 +35,11 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
@@ -53,14 +57,29 @@ public class Swagger2MarkupConverter {
     Context globalContext;
 
     /**
-     * Creates a Swagger2MarkupConverter.Builder using a given Swagger URI.
+     * Creates a Swagger2MarkupConverter.Builder using a remote URL.
      *
-     * @param swaggerUri the Swagger URI
+     * @param swaggerURL the remote URL
      * @return a Swagger2MarkupConverter
      */
-    public static Builder from(URI swaggerUri) {
-        Validate.notNull(swaggerUri, "swaggerUri must not be null");
-        return new Builder(swaggerUri);
+    public static Builder from(URL swaggerURL){
+        Validate.notNull(swaggerURL, "swaggerURL must not be null");
+        try {
+            return new Builder(swaggerURL.toURI());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("swaggerURL is in a wrong format", e);
+        }
+    }
+
+    /**
+     * Creates a Swagger2MarkupConverter.Builder using a local Path.
+     *
+     * @param swaggerPath the local Path
+     * @return a Swagger2MarkupConverter
+     */
+    public static Builder from(Path swaggerPath) {
+        Validate.notNull(swaggerPath, "swaggerPath must not be null");
+        return new Builder(swaggerPath.toUri());
     }
 
     /**
@@ -97,7 +116,7 @@ public class Swagger2MarkupConverter {
         Validate.notNull(swaggerReader, "swaggerReader must not be null");
         Swagger swagger = new SwaggerParser().parse(IOUtils.toString(swaggerReader));
         if (swagger == null)
-            throw new IllegalArgumentException("Swagger source is in the wrong format");
+            throw new IllegalArgumentException("Swagger source is in a wrong format");
 
         return new Builder(swagger);
     }
@@ -169,13 +188,15 @@ public class Swagger2MarkupConverter {
         /**
          * Creates a Builder from an URI.
          *
-         * @param swagger the Swagger URI
+         * @param swaggerUri the Swagger URI
          */
-        Builder(URI swagger) {
-            this.swaggerLocation = swagger;
-            String parserLocation = swagger.toString();
-            if (swagger.getScheme().equals("file"))
-                parserLocation = swagger.getPath();
+        Builder(URI swaggerUri) {
+            this.swaggerLocation = swaggerUri;
+            String parserLocation = swaggerUri.toString();
+            if (swaggerUri.getScheme().equals("file")) {
+                Path swaggerPath = Paths.get(swaggerUri);
+                parserLocation = swaggerPath.toString();
+            }
             this.swagger = new SwaggerParser().read(parserLocation);
             if (this.swagger == null) {
                 throw new IllegalArgumentException("Failed to read the Swagger source");
