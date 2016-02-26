@@ -41,7 +41,6 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -85,8 +84,8 @@ public class PathsDocument extends MarkupDocument {
     private static final String DESCRIPTION_FILE_NAME = "description";
 
 
-    public PathsDocument(Swagger2MarkupConverter.Context globalContext, String outputDirectory) {
-        super(globalContext, outputDirectory);
+    public PathsDocument(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
+        super(globalContext, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
@@ -125,7 +124,7 @@ public class PathsDocument extends MarkupDocument {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated operation files is enabled.");
             }
-            Validate.notEmpty(outputDirectory, "Output directory is required for separated operation files!");
+            Validate.notNull(outputPath, "Output directory is required for separated operation files!");
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated operation files is disabled.");
@@ -245,13 +244,10 @@ public class PathsDocument extends MarkupDocument {
         if (config.isSeparatedOperations()) {
             MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
             operation(operation, pathDocBuilder);
-            File operationFile = new File(outputDirectory, resolveOperationDocument(operation));
+            java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
 
             try {
-                String operationDirectory = FilenameUtils.getFullPath(operationFile.getPath());
-                String operationFileName = FilenameUtils.getName(operationFile.getPath());
-
-                pathDocBuilder.writeToFileWithoutExtension(operationDirectory, operationFileName, StandardCharsets.UTF_8);
+                pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
                     logger.warn(String.format("Failed to write operation file: %s", operationFile), e);

@@ -42,6 +42,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -72,12 +73,12 @@ public abstract class MarkupDocument {
     protected Swagger2MarkupConverter.Context globalContext;
     protected Swagger2MarkupConfig config;
     protected MarkupDocBuilder markupDocBuilder;
-    protected String outputDirectory;
+    protected Path outputPath;
 
-    MarkupDocument(Swagger2MarkupConverter.Context globalContext, String outputDirectory) {
+    MarkupDocument(Swagger2MarkupConverter.Context globalContext, Path outputPath) {
         this.globalContext = globalContext;
         this.config = globalContext.config;
-        this.outputDirectory = outputDirectory;
+        this.outputPath = outputPath;
 
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage()).withAnchorPrefix(config.getAnchorPrefix());
 
@@ -113,13 +114,12 @@ public abstract class MarkupDocument {
     /**
      * Writes the content of the builder to a file and clears the builder.
      *
-     * @param directory the directory where the generated file should be stored
-     * @param fileName  the name of the file
+     * @param file the generated file
      * @param charset   the the charset to use for encoding
      * @throws IOException if the file cannot be written
      */
-    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        markupDocBuilder.writeToFile(directory, fileName, charset);
+    public void writeToFile(Path file, Charset charset) throws IOException {
+        markupDocBuilder.writeToFile(file, charset);
     }
 
     /**
@@ -243,7 +243,7 @@ public abstract class MarkupDocument {
         public DefinitionDocumentResolverDefault() {}
 
         public String apply(String definitionName) {
-            if (!config.isInterDocumentCrossReferences() || outputDirectory == null)
+            if (!config.isInterDocumentCrossReferences() || outputPath == null)
                 return null;
             else if (config.isSeparatedDefinitions())
                 return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addfileExtension(IOUtils.normalizeName(definitionName))).getPath();

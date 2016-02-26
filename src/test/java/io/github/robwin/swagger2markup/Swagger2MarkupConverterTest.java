@@ -60,15 +60,15 @@ public class Swagger2MarkupConverterTest {
     public void testSwagger2AsciiDocConversionFromString() throws IOException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger.json"));
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConverter.from(swaggerJsonString).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
@@ -87,81 +87,81 @@ public class Swagger2MarkupConverterTest {
 
 
     @Test
-    public void testSwagger2AsciiDocConversion() throws IOException{
+    public void testSwagger2AsciiDocConversion() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(file.toPath()).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConverter.from(file).build()
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
-    public void testSwagger2AsciiDocWithInlineSchema() throws IOException {
+    public void testSwagger2AsciiDocWithInlineSchema() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withInlineSchemaDepthLevel(1)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
-    public void testSwagger2AsciiDocGroupedByTags() throws IOException {
+    public void testSwagger2AsciiDocGroupedByTags() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withPathsGroupedBy(GroupBy.TAGS)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
-    public void testSwagger2AsciiDocGroupedByTagsWithMissingTag() throws IOException {
+    public void testSwagger2AsciiDocGroupedByTagsWithMissingTag() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger_missing_tag.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger_missing_tag.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
         try {
             Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                     .withPathsGroupedBy(GroupBy.TAGS)
                     .build();
 
-            Swagger2MarkupConverter.from(file.toPath())
+            Swagger2MarkupConverter.from(file)
                     .withConfig(config)
                     .build()
-                    .intoFolder(outputDirectory.getAbsolutePath());
+                    .intoFolder(outputDirectory);
             // If NullPointerException was not thrown, test would fail the specified message
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (Exception e) {
@@ -170,230 +170,230 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testOldSwaggerSpec2AsciiDocConversion() throws IOException {
+    public void testOldSwaggerSpec2AsciiDocConversion() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/error_swagger_12.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/error_swagger_12.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(file.toPath()).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConverter.from(file).build()
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithDescriptionsAndExamples() throws IOException {
+    public void testSwagger2AsciiDocConversionWithDescriptionsAndExamples() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions(Paths.get("src/docs/asciidoc/definitions"))
                 .build();
 
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionDoesNotContainUriScheme() throws IOException {
+    public void testSwagger2AsciiDocConversionDoesNotContainUriScheme() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_should_not_contain_uri_scheme.yaml").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_should_not_contain_uri_scheme.yaml").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(file.toPath()).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConverter.from(file).build()
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "overview.adoc").toPath())))
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc"))))
                 .doesNotContain("=== URI scheme");
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionContainsUriScheme() throws IOException {
+    public void testSwagger2AsciiDocConversionContainsUriScheme() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_should_contain_uri_scheme.yaml").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_should_contain_uri_scheme.yaml").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(file.toPath()).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConverter.from(file).build()
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "overview.adoc").toPath())))
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc"))))
                 .contains("=== URI scheme");
     }
 
     @Test
-    public void testSwagger2MarkdownConversion() throws IOException {
+    public void testSwagger2MarkdownConversion() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.md", "overview.md", "paths.md", "security.md"));
     }
 
     @Test
-    public void testSwagger2MarkdownConversionWithDescriptions() throws IOException {
+    public void testSwagger2MarkdownConversionWithDescriptions() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions(Paths.get("src/docs/markdown/definitions"))
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.md", "overview.md", "paths.md", "security.md"));
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithSeparatedDefinitions() throws IOException {
+    public void testSwagger2AsciiDocConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withSeparatedDefinitions()
                 .build();
-        Swagger2MarkupConverter.from(file.toPath()).withConfig(config).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(5).containsAll(
                 asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
-        File definitionsDirectory = new File(outputDirectory, "definitions");
-        String[] definitions = definitionsDirectory.list();
+        Path definitionsDirectory = outputDirectory.resolve("definitions");
+        String[] definitions = definitionsDirectory.toFile().list();
         assertThat(definitions).hasSize(6).containsAll(
                 asList("identified.adoc", "user.adoc", "category.adoc", "pet.adoc", "tag.adoc", "order.adoc"));
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithSeparatedOperations() throws IOException {
+    public void testSwagger2AsciiDocConversionWithSeparatedOperations() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withSeparatedOperations()
                 .build();
-        Swagger2MarkupConverter.from(file.toPath()).withConfig(config).build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(5).containsAll(
                 asList("operations", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
 
-        File pathsDirectory = new File(outputDirectory, "operations");
-        String[] paths = pathsDirectory.list();
+        Path pathsDirectory = outputDirectory.resolve("operations");
+        String[] paths = pathsDirectory.toFile().list();
         assertThat(paths).hasSize(18);
     }
 
     @Test
-    public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException {
+    public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(5).containsAll(
                 asList("definitions", "definitions.md", "overview.md", "paths.md", "security.md"));
 
-        File definitionsDirectory = new File(outputDirectory, "definitions");
-        String[] definitions = definitionsDirectory.list();
+        Path definitionsDirectory = outputDirectory.resolve("definitions");
+        String[] definitions = definitionsDirectory.toFile().list();
         assertThat(definitions).hasSize(6).containsAll(
                 asList("identified.md", "user.md", "category.md", "pet.md", "tag.md", "order.md"));
     }
 
     @Test
-    public void testSwagger2MarkdownConversionHandlesComposition() throws IOException {
+    public void testSwagger2MarkdownConversionHandlesComposition() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         // Then
-        String[] directories = outputDirectory.list();
+        String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(5).containsAll(
                 asList("definitions", "definitions.md", "overview.md", "paths.md", "security.md"));
-        File definitionsDirectory = new File(outputDirectory, "definitions");
+        Path definitionsDirectory = outputDirectory.resolve("definitions");
         verifyMarkdownContainsFieldsInTables(
-                new File(definitionsDirectory, "user.md"),
+                definitionsDirectory.resolve("user.md").toFile(),
                 ImmutableMap.<String, Set<String>>builder()
                         .put("User", ImmutableSet.of("id", "username", "firstName",
                                 "lastName", "email", "password", "phone", "userStatus"))
@@ -403,32 +403,32 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithRussianOutputLanguage() throws IOException {
+    public void testSwagger2AsciiDocConversionWithRussianOutputLanguage() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withOutputLanguage(Language.RU)
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath()),  Charset.forName("UTF-8")))
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")),  Charset.forName("UTF-8")))
                 .contains("== Определения");
     }
 
     @Test
-    public void testSwagger2AsciiDocExtensions() throws IOException {
+    public void testSwagger2AsciiDocExtensions() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
@@ -437,26 +437,26 @@ public class Swagger2MarkupConverterTest {
                 .withExtension(new DynamicDefinitionsContentExtension(Paths.get("src/docs/asciidoc/extensions")))
                 .withExtension(new DynamicOperationsContentExtension(Paths.get("src/docs/asciidoc/extensions")))
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .withExtensionRegistry(registry)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "paths.adoc").toPath()))).contains(
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc")))).contains(
                 "Pet update request extension");
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.adoc").toPath()))).contains(
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")))).contains(
                 "Pet extension");
 
     }
 
     @Test
-    public void testSwagger2MarkdownExtensions() throws IOException {
+    public void testSwagger2MarkdownExtensions() throws IOException, URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        File outputDirectory = new File("build/docs/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory);
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
@@ -466,24 +466,24 @@ public class Swagger2MarkupConverterTest {
                 .withExtension(new DynamicDefinitionsContentExtension(Paths.get("src/docs/markdown/extensions")))
                 .withExtension(new DynamicOperationsContentExtension(Paths.get("src/docs/markdown/extensions")))
                 .build();
-        Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .withExtensionRegistry(registry)
                 .build()
-                .intoFolder(outputDirectory.getAbsolutePath());
+                .intoFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "paths.md").toPath()))).contains(
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("paths.md")))).contains(
                 "Pet update request extension");
-        assertThat(new String(Files.readAllBytes(new File(outputDirectory, "definitions.md").toPath()))).contains(
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.md")))).contains(
                 "Pet extension");
 
     }
 
     @Test
-    public void testSwagger2MarkupConfigDefaultPaths() {
+    public void testSwagger2MarkupConfigDefaultPaths() throws URISyntaxException {
         //Given
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
@@ -493,7 +493,7 @@ public class Swagger2MarkupConverterTest {
                 .withSchemas()
                 .build();
 
-        Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(file.toPath())
+        Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build();
 
@@ -604,8 +604,8 @@ public class Swagger2MarkupConverterTest {
     /*
     @Test
     public void testSwagger2HtmlConversion() throws IOException {
-        File file = new File(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").getFile());
-        String asciiDoc =  Swagger2MarkupConverter.from(file.toPath()).build().asString();
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        String asciiDoc =  Swagger2MarkupConverter.from(file).build().asString();
         String path = "build/docs/generated/asciidocAsString";
         Files.createDirectories(Paths.get(path));
         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(path, "swagger.adoc"), StandardCharsets.UTF_8)){

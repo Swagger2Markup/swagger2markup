@@ -32,7 +32,6 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -41,6 +40,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -62,8 +62,8 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String XML = "xml";
     private static final String DESCRIPTION_FILE_NAME = "description";
 
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context, String outputDirectory){
-        super(context, outputDirectory);
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath){
+        super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
@@ -92,7 +92,7 @@ public class DefinitionsDocument extends MarkupDocument {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
             }
-            Validate.notEmpty(outputDirectory, "Output directory is required for separated definition files!");
+            Validate.notNull(outputPath, "Output directory is required for separated definition files!");
         }else{
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is disabled.");
@@ -183,12 +183,9 @@ public class DefinitionsDocument extends MarkupDocument {
         if (config.isSeparatedDefinitions()) {
             MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy();
             definition(definitions, definitionName, model, defDocBuilder);
-            File definitionFile = new File(outputDirectory, resolveDefinitionDocument(definitionName));
+            Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             try {
-                String definitionDirectory = FilenameUtils.getFullPath(definitionFile.getPath());
-                String definitionFileName = FilenameUtils.getName(definitionFile.getPath());
-
-                defDocBuilder.writeToFileWithoutExtension(definitionDirectory, definitionFileName, StandardCharsets.UTF_8);
+                defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
                     logger.warn(String.format("Failed to write definition file: %s", definitionFile), e);

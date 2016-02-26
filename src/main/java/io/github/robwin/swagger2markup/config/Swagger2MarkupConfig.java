@@ -88,16 +88,6 @@ public class Swagger2MarkupConfig {
      */
     public void setGlobalContext(Swagger2MarkupConverter.Context globalContext) {
         configureDefaultContentPaths(globalContext.swaggerLocation);
-        onUpdateGlobalContext(globalContext);
-    }
-
-    /**
-     * Overridable onUpdateGlobalContext event listener.
-     *
-     * @param globalContext Partially initialized global context (globalContext.extensionRegistry == null)
-     */
-    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
-        /* must be left empty */
     }
 
     /**

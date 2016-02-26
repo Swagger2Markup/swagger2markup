@@ -26,6 +26,7 @@ import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections.MapUtils;
 
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -44,8 +45,8 @@ public class SecurityDocument extends MarkupDocument {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocument(Swagger2MarkupConverter.Context context, String outputDirectory) {
-        super(context, outputDirectory);
+    public SecurityDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
+        super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         SECURITY = labels.getString("security");
