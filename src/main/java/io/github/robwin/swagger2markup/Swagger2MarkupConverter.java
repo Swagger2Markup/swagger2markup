@@ -39,7 +39,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 
 /**
@@ -64,11 +63,7 @@ public class Swagger2MarkupConverter {
      */
     public static Builder from(URL swaggerURL){
         Validate.notNull(swaggerURL, "swaggerURL must not be null");
-        try {
-            return new Builder(swaggerURL.toURI());
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("swaggerURL is in a wrong format", e);
-        }
+        return new Builder(swaggerURL);
     }
 
     /**
@@ -79,7 +74,7 @@ public class Swagger2MarkupConverter {
      */
     public static Builder from(Path swaggerPath) {
         Validate.notNull(swaggerPath, "swaggerPath must not be null");
-        return new Builder(swaggerPath.toUri());
+        return new Builder(swaggerPath);
     }
 
     /**
@@ -186,21 +181,41 @@ public class Swagger2MarkupConverter {
         private Swagger2MarkupExtensionRegistry extensionRegistry;
 
         /**
-         * Creates a Builder from an URI.
+         * Creates a Builder from a remote URL.
          *
-         * @param swaggerUri the Swagger URI
+         * @param swaggerUrl the remote URL
          */
-        Builder(URI swaggerUri) {
-            this.swaggerLocation = swaggerUri;
-            String parserLocation = swaggerUri.toString();
-            if (swaggerUri.getScheme().equals("file")) {
-                Path swaggerPath = Paths.get(swaggerUri);
-                parserLocation = swaggerPath.toString();
+        Builder(URL swaggerUrl) {
+            try {
+                this.swaggerLocation = swaggerUrl.toURI();
+            } catch (URISyntaxException e) {
+                throw new IllegalArgumentException("swaggerURL is in a wrong format", e);
             }
-            this.swagger = new SwaggerParser().read(parserLocation);
-            if (this.swagger == null) {
+            this.swagger = readSwagger(swaggerUrl.toString());
+        }
+
+        /**
+         * Uses the SwaggerParser to read the Swagger source.
+         *
+         * @param swaggerLocation the location of the Swagger source
+         * @return the Swagger model
+         */
+        private Swagger readSwagger(String swaggerLocation){
+            Swagger swagger = new SwaggerParser().read(swaggerLocation);
+            if (swagger == null) {
                 throw new IllegalArgumentException("Failed to read the Swagger source");
             }
+            return swagger;
+        }
+
+        /**
+         * Creates a Builder from a local Path.
+         *
+         * @param swaggerPath the local Path
+         */
+        Builder(Path swaggerPath) {
+            this.swaggerLocation = swaggerPath.toUri();
+            this.swagger = readSwagger(swaggerPath.toString());
         }
 
         /**
