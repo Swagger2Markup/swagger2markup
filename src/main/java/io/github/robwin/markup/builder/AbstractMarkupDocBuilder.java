@@ -320,13 +320,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return documentBuilder.toString();
     }
 
-    protected String addfileExtension(Markup markup, String fileName) {
+    protected String addFileExtension(Markup markup, String fileName) {
         return fileName + "." + markup;
     }
 
     @Override
-    public Path addfileExtension(Path file) {
-        return file.resolveSibling(addfileExtension(file.getFileName().toString()));
+    public Path addFileExtension(Path file) {
+        return file.resolveSibling(addFileExtension(file.getFileName().toString()));
     }
 
     /**
@@ -348,7 +348,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public void writeToFile(Path file, Charset charset) throws IOException {
-        writeToFileWithoutExtension(file.resolveSibling(addfileExtension(file.getFileName().toString())), charset);
+        writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset);
     }
 
     @Override
@@ -358,6 +358,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(directory, addfileExtension(fileName), charset);
+        writeToFileWithoutExtension(directory, addFileExtension(fileName), charset);
     }
 }

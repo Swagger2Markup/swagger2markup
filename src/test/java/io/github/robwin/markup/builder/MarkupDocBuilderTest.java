@@ -96,9 +96,9 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.adoc", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        builder.writeToFileWithoutExtension(builder.addfileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addfileExtension("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
         builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC).withAnchorPrefix(" mdb test- ");
@@ -147,9 +147,9 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.md", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        builder.writeToFileWithoutExtension(builder.addfileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addfileExtension("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
         builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN).withAnchorPrefix(" mdb test- ");

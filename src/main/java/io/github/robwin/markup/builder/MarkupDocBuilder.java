@@ -442,7 +442,7 @@ public interface MarkupDocBuilder {
      * @param fileName without extension
      * @return fileName with an extension
      */
-    String addfileExtension(String fileName);
+    String addFileExtension(String fileName);
 
     /**
      * Add an extension to file depending on markup language.
@@ -450,7 +450,7 @@ public interface MarkupDocBuilder {
      * @param file without extension
      * @return file with an extension
      */
-    Path addfileExtension(Path file);
+    Path addFileExtension(Path file);
 
     /**
      * Writes the content of the builder to a file and clears the builder.<br/>
