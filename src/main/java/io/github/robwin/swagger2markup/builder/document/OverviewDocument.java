@@ -22,6 +22,7 @@ import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.extension.OverviewContentExtension;
 import io.swagger.models.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -47,8 +48,8 @@ public class OverviewDocument extends MarkupDocument {
     private final String BASE_PATH;
     private final String SCHEMES;
 
-    public OverviewDocument(Swagger2MarkupConverter.Context context, String outputDirectory){
-        super(context, outputDirectory);
+    public OverviewDocument(Swagger2MarkupConverter.Context context, Path outputPath){
+        super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
         OVERVIEW = labels.getString("overview");

@@ -131,14 +131,14 @@ public class Swagger2MarkupConverter {
      * Builds the document with the given markup language and stores
      * the files in the given folder.
      *
-     * @param targetFolderPath the target folder
+     * @param outputPath the output directory path
      * @throws IOException if the files cannot be written
      */
-    public void intoFolder(String targetFolderPath) throws IOException {
-        Validate.notEmpty(targetFolderPath, "folderPath must not be null");
+    public void intoFolder(Path outputPath) throws IOException {
+        Validate.notNull(outputPath, "outputPath must not be null");
 
         applySwaggerExtensions();
-        buildDocuments(targetFolderPath);
+        buildDocuments(outputPath);
     }
 
     /**
@@ -155,14 +155,14 @@ public class Swagger2MarkupConverter {
     /**
      * Builds all documents and writes them to a directory
      *
-     * @param directory the directory where the generated file should be stored
+     * @param outputPath the directory path where the generated file should be stored
      * @throws IOException if a file cannot be written
      */
-    private void buildDocuments(String directory) throws IOException {
-        new OverviewDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getOverviewDocument(), StandardCharsets.UTF_8);
-        new PathsDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getPathsDocument(), StandardCharsets.UTF_8);
-        new DefinitionsDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getDefinitionsDocument(), StandardCharsets.UTF_8);
-        new SecurityDocument(globalContext, directory).build().writeToFile(directory, globalContext.config.getSecurityDocument(), StandardCharsets.UTF_8);
+    private void buildDocuments(Path outputPath) throws IOException {
+        new OverviewDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getOverviewDocument()), StandardCharsets.UTF_8);
+        new PathsDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getPathsDocument()), StandardCharsets.UTF_8);
+        new DefinitionsDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
+        new SecurityDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getSecurityDocument()), StandardCharsets.UTF_8);
     }
 
     /**
