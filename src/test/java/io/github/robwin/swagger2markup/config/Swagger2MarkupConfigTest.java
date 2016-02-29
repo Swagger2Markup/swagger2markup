@@ -46,7 +46,6 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.isDefinitionDescriptions()).isFalse();
         assertThat(config.getDefinitionDescriptionsUri()).isNull();
         assertThat(config.isExamples()).isFalse();
-        assertThat(config.getExamplesUri()).isNull();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
@@ -88,7 +87,6 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.isDefinitionDescriptions()).isTrue();
         assertThat(config.getDefinitionDescriptionsUri()).isEqualTo(URI.create("definitionDescriptions"));
         assertThat(config.isExamples()).isTrue();
-        assertThat(config.getExamplesUri()).isEqualTo(URI.create("examples"));
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);

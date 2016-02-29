@@ -58,23 +58,19 @@ public class DynamicDefinitionsContentExtension extends DefinitionsContentExtens
 
         if (contentPath != null) {
             DynamicContentExtension dynamicContent = new DynamicContentExtension(globalContext, context);
-            int levelOffset;
 
             switch (context.position) {
                 case DOC_BEFORE:
                 case DOC_AFTER:
-                    levelOffset = 0;
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset);
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
                 case DOC_BEGIN:
                 case DOC_END:
-                    levelOffset = 1;
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset);
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
                 case DEF_BEGIN:
                 case DEF_END:
-                    levelOffset = 2;
-                    dynamicContent.extensionsSection(contentPath.resolve(Paths.get(IOUtils.normalizeName(context.definitionName))), contentPrefix(context.position), levelOffset);
+                    dynamicContent.extensionsSection(contentPath.resolve(Paths.get(IOUtils.normalizeName(context.definitionName))), contentPrefix(context.position), levelOffset(context));
                     break;
                 default:
                     throw new RuntimeException(String.format("Unknown position '%s'", context.position));

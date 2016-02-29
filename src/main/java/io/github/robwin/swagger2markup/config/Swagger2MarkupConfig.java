@@ -41,7 +41,6 @@ public class Swagger2MarkupConfig {
 
     private MarkupLanguage markupLanguage;
     private boolean examples;
-    private URI examplesUri;
     private boolean schemas;
     private URI schemasUri;
     private boolean operationDescriptions;
@@ -106,15 +105,6 @@ public class Swagger2MarkupConfig {
                 baseURI = IOUtils.uriParent(swaggerLocation);
         }
 
-        if (examples && examplesUri == null) {
-            if (baseURI == null) {
-                if (logger.isWarnEnabled())
-                    logger.warn("Disable {} > No explicit '{}' set and no default available", "examples", "examplesUri");
-                examples = false;
-            } else
-                examplesUri = baseURI;
-        }
-
         if (schemas && schemasUri == null) {
             if (baseURI == null) {
                 if (logger.isWarnEnabled())
@@ -149,10 +139,6 @@ public class Swagger2MarkupConfig {
 
     public boolean isExamples() {
         return examples;
-    }
-
-    public URI getExamplesUri() {
-        return examplesUri;
     }
 
     public boolean isSchemas() {
@@ -317,8 +303,6 @@ public class Swagger2MarkupConfig {
 
             config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
             config.examples = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examples"));
-            if (safeProperties.containsKey(PROPERTIES_PREFIX + "examplesUri"))
-                config.examplesUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesUri"));
             config.schemas = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemas"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
                 config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
@@ -385,34 +369,10 @@ public class Swagger2MarkupConfig {
         /**
          * Include examples into the Paths document
          *
-         * @param examplesUri the URI to the folder where the example documents reside. Use default URI if null.
-         * @return this builder
-         */
-        public Builder withExamples(URI examplesUri) {
-            config.examples = true;
-
-            config.examplesUri = examplesUri;
-            return this;
-        }
-
-        /**
-         * Include examples into the Paths document
-         *
-         * @param examplesPath the path to the folder where the example documents reside. Use default path if null.
-         * @return this builder
-         */
-        public Builder withExamples(Path examplesPath) {
-            return withExamples(examplesPath.toUri());
-        }
-
-        /**
-         * Include examples into the Paths document.<br/>
-         * This is an alias for {@link #withExamples(URI) withExamples(null)}.
-         *
          * @return this builder
          */
         public Builder withExamples() {
-            withExamples((URI) null);
+            config.examples = true;
             return this;
         }
 

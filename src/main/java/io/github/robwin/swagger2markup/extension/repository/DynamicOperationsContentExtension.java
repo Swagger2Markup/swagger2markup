@@ -1,6 +1,5 @@
 package io.github.robwin.swagger2markup.extension.repository;
 
-import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.extension.OperationsContentExtension;
 import io.github.robwin.swagger2markup.utils.IOUtils;
@@ -59,26 +58,19 @@ public class DynamicOperationsContentExtension extends OperationsContentExtensio
 
         if (contentPath != null) {
             DynamicContentExtension dynamicContent = new DynamicContentExtension(globalContext, context);
-            int levelOffset;
 
             switch (context.position) {
                 case DOC_BEFORE:
                 case DOC_AFTER:
-                    levelOffset = 0;
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset);
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
                 case DOC_BEGIN:
                 case DOC_END:
-                    levelOffset = 1;
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset);
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
                 case OP_BEGIN:
                 case OP_END:
-                    levelOffset = 3;
-                    if (globalContext.config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                        levelOffset = 2;
-                    }
-                    dynamicContent.extensionsSection(contentPath.resolve(IOUtils.normalizeName(context.operation.getId())), contentPrefix(context.position), levelOffset);
+                    dynamicContent.extensionsSection(contentPath.resolve(IOUtils.normalizeName(context.operation.getId())), contentPrefix(context.position), levelOffset(context));
                     break;
                 default:
                     throw new RuntimeException(String.format("Unknown position '%s'", context.position));
