@@ -348,7 +348,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             writer.write(newLine);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("{} was written to: {}", file);
+            logger.info("Markup document written to: {}", file);
         }
     }
 
