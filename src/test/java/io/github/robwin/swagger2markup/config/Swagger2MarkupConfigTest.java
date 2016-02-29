@@ -41,11 +41,11 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitions");
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.NATURAL);
-        assertThat(config.isOperationDescriptions()).isFalse();
+        assertThat(config.isOperationDescriptionsEnabled()).isFalse();
         assertThat(config.getOperationDescriptionsUri()).isNull();
-        assertThat(config.isDefinitionDescriptions()).isFalse();
+        assertThat(config.isDefinitionDescriptionsEnabled()).isFalse();
         assertThat(config.getDefinitionDescriptionsUri()).isNull();
-        assertThat(config.isExamples()).isFalse();
+        assertThat(config.isExamplesEnabled()).isFalse();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
@@ -57,16 +57,16 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.AS_IS);
         assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural());
-        assertThat(config.isSchemas()).isFalse();
+        assertThat(config.isSchemasEnabled()).isFalse();
         assertThat(config.getSchemasUri()).isNull();
         assertThat(config.getSecurityDocument()).isEqualTo("security");
         assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo("definitions");
         assertThat(config.getSeparatedOperationsFolder()).isEqualTo("operations");
         assertThat(config.getTagOrdering()).isEqualTo(Ordering.natural());
-        assertThat(config.isFlatBody()).isFalse();
-        assertThat(config.isInterDocumentCrossReferences()).isFalse();
-        assertThat(config.isSeparatedDefinitions()).isFalse();
-        assertThat(config.isSeparatedOperations()).isFalse();
+        assertThat(config.isFlatBodyEnabled()).isFalse();
+        assertThat(config.isInterDocumentCrossReferencesEnabled()).isFalse();
+        assertThat(config.isSeparatedDefinitionsEnabled()).isFalse();
+        assertThat(config.isSeparatedOperationsEnabled()).isFalse();
     }
 
 
@@ -82,11 +82,11 @@ public class Swagger2MarkupConfigTest {
         //assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural()); // Not supported
         //assertThat(config.getDefinitionsDocument()).isEqualTo(Swagger2MarkupConfig.Builder.DEFINITIONS_DOCUMENT); // Not supported
         assertThat(config.getDefinitionsOrderedBy()).isEqualTo(OrderBy.AS_IS);
-        assertThat(config.isOperationDescriptions()).isTrue();
+        assertThat(config.isOperationDescriptionsEnabled()).isTrue();
         assertThat(config.getOperationDescriptionsUri()).isEqualTo(URI.create("operationDescriptions"));
-        assertThat(config.isDefinitionDescriptions()).isTrue();
+        assertThat(config.isDefinitionDescriptionsEnabled()).isTrue();
         assertThat(config.getDefinitionDescriptionsUri()).isEqualTo(URI.create("definitionDescriptions"));
-        assertThat(config.isExamples()).isTrue();
+        assertThat(config.isExamplesEnabled()).isTrue();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
@@ -98,16 +98,16 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.TAGS);
         //assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural()); // Not supported
         //assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural()); // Not supported
-        assertThat(config.isSchemas()).isTrue();
+        assertThat(config.isSchemasEnabled()).isTrue();
         assertThat(config.getSchemasUri()).isEqualTo(URI.create("schemas"));
         //assertThat(config.getSecurityDocument()).isEqualTo(Swagger2MarkupConfig.Builder.SECURITY_DOCUMENT); // Not supported
         //assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_DEFINITIONS_FOLDER); // Not supported
         //assertThat(config.getSeparatedOperationsFolder()).isEqualTo(Swagger2MarkupConfig.Builder.SEPARATED_OPERATIONS_FOLDER); // Not supported
         //assertThat(config.getTagOrdering()).isEqualTo(Ordering.natural()); // Not supported
-        assertThat(config.isFlatBody()).isTrue();
-        assertThat(config.isInterDocumentCrossReferences()).isTrue();
-        assertThat(config.isSeparatedDefinitions()).isTrue();
-        assertThat(config.isSeparatedOperations()).isTrue();
+        assertThat(config.isFlatBodyEnabled()).isTrue();
+        assertThat(config.isInterDocumentCrossReferencesEnabled()).isTrue();
+        assertThat(config.isSeparatedDefinitionsEnabled()).isTrue();
+        assertThat(config.isSeparatedOperationsEnabled()).isTrue();
     }
 
 }

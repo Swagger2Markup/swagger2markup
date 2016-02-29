@@ -65,12 +65,12 @@ public class DefinitionsDocument extends MarkupDocument {
     public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
         super(context, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
         JSON_SCHEMA = labels.getString("json_schema");
         XML_SCHEMA = labels.getString("xml_schema");
 
-        if (config.isSchemas()) {
+        if (config.isSchemasEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include schemas is enabled.");
             }
@@ -79,7 +79,7 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Include schemas is disabled.");
             }
         }
-        if (config.isDefinitionDescriptions()) {
+        if (config.isDefinitionDescriptionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written definition descriptions is enabled.");
             }
@@ -88,7 +88,7 @@ public class DefinitionsDocument extends MarkupDocument {
                 logger.debug("Include hand-written definition descriptions is disabled.");
             }
         }
-        if (config.isSeparatedDefinitions()) {
+        if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
             }
@@ -167,7 +167,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * @return definition filename
      */
     private String resolveDefinitionDocument(String definitionName) {
-        if (config.isSeparatedDefinitions())
+        if (config.isSeparatedDefinitionsEnabled())
             return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(normalizeName(definitionName))).getPath();
         else
             return markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
@@ -182,7 +182,7 @@ public class DefinitionsDocument extends MarkupDocument {
      */
     private void processDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
-        if (config.isSeparatedDefinitions()) {
+        if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy();
             definition(definitions, definitionName, model, defDocBuilder);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
@@ -263,7 +263,7 @@ public class DefinitionsDocument extends MarkupDocument {
 
         @Override
         public String getDescription(Property property, String propertyName) {
-            if (config.isDefinitionDescriptions()) {
+            if (config.isDefinitionDescriptionsEnabled()) {
                 Optional<String> description = handWrittenDefinitionDescription(new File(normalizeName(type.getName()), normalizeName(propertyName)).toString(), DESCRIPTION_FILE_NAME);
                 if (description.isPresent()) {
                     return description.get();
@@ -323,7 +323,7 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        if (config.isDefinitionDescriptions()) {
+        if (config.isDefinitionDescriptionsEnabled()) {
             Optional<String> description = handWrittenDefinitionDescription(normalizeName(definitionName), DESCRIPTION_FILE_NAME);
             if (description.isPresent()) {
                 docBuilder.paragraph(description.get());
@@ -370,7 +370,7 @@ public class DefinitionsDocument extends MarkupDocument {
     }
 
     private void definitionSchema(String definitionName, MarkupDocBuilder docBuilder) {
-        if (config.isSchemas()) {
+        if (config.isSchemasEnabled()) {
             if (isNotBlank(definitionName)) {
                 schema(JSON_SCHEMA, config.getSchemasUri(), definitionName + JSON_SCHEMA_EXTENSION, JSON, docBuilder);
                 schema(XML_SCHEMA, config.getSchemasUri(), definitionName + XML_SCHEMA_EXTENSION, XML, docBuilder);
@@ -443,7 +443,7 @@ public class DefinitionsDocument extends MarkupDocument {
         public String apply(String definitionName) {
             String defaultResolver = super.apply(definitionName);
 
-            if (defaultResolver != null && config.isSeparatedDefinitions())
+            if (defaultResolver != null && config.isSeparatedDefinitionsEnabled())
                 return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(normalizeName(definitionName));
             else
                 return defaultResolver;

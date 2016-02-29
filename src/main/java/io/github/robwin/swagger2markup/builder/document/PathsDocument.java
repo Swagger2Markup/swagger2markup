@@ -85,7 +85,7 @@ public class PathsDocument extends MarkupDocument {
     public PathsDocument(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
         super(globalContext, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
         REQUEST = labels.getString("request");
         PATHS = labels.getString("paths");
@@ -100,7 +100,7 @@ public class PathsDocument extends MarkupDocument {
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
         DEPRECATED_OPERATION = labels.getString("operation.deprecated");
 
-        if (config.isExamples()) {
+        if (config.isExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include examples is enabled.");
             }
@@ -109,7 +109,7 @@ public class PathsDocument extends MarkupDocument {
                 logger.debug("Include examples is disabled.");
             }
         }
-        if (config.isOperationDescriptions()) {
+        if (config.isOperationDescriptionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written operation descriptions is enabled.");
             }
@@ -119,7 +119,7 @@ public class PathsDocument extends MarkupDocument {
             }
         }
 
-        if (config.isSeparatedOperations()) {
+        if (config.isSeparatedOperationsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated operation files is enabled.");
             }
@@ -228,7 +228,7 @@ public class PathsDocument extends MarkupDocument {
      * @return operation filename
      */
     private String resolveOperationDocument(PathOperation operation) {
-        if (config.isSeparatedOperations())
+        if (config.isSeparatedOperationsEnabled())
             return new File(config.getSeparatedOperationsFolder(), this.markupDocBuilder.addFileExtension(normalizeName(operation.getId()))).getPath();
         else
             return this.markupDocBuilder.addFileExtension(config.getPathsDocument());
@@ -240,7 +240,7 @@ public class PathsDocument extends MarkupDocument {
      * @param operation operation
      */
     private void processOperation(PathOperation operation) {
-        if (config.isSeparatedOperations()) {
+        if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
             operation(operation, pathDocBuilder);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
@@ -386,7 +386,7 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (config.isOperationDescriptions()) {
+        if (config.isOperationDescriptionsEnabled()) {
             Optional<String> description = handWrittenOperationDescription(normalizeName(operation.getId()), DESCRIPTION_FILE_NAME);
             if (!description.isPresent())
                 description = handWrittenOperationDescription(normalizeName(operation.getTitle()), DESCRIPTION_FILE_NAME);
@@ -415,7 +415,7 @@ public class PathsDocument extends MarkupDocument {
      * @return true if parameter can be displayed
      */
     private boolean filterParameter(Parameter parameter) {
-        return (!config.isFlatBody() || !StringUtils.equals(parameter.getIn(), "body"));
+        return (!config.isFlatBodyEnabled() || !StringUtils.equals(parameter.getIn(), "body"));
     }
 
     private List<ObjectType> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
@@ -484,7 +484,7 @@ public class PathsDocument extends MarkupDocument {
     private List<ObjectType> bodyParameterSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
 
-        if (config.isFlatBody()) {
+        if (config.isFlatBodyEnabled()) {
             List<Parameter> parameters = operation.getOperation().getParameters();
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
@@ -530,7 +530,7 @@ public class PathsDocument extends MarkupDocument {
      * @return the description of a parameter.
      */
     private String parameterDescription(final PathOperation operation, Parameter parameter) {
-        if (config.isOperationDescriptions()) {
+        if (config.isOperationDescriptionsEnabled()) {
             final String parameterName = parameter.getName();
             if (isNotBlank(parameterName)) {
                 Optional<String> description = handWrittenOperationDescription(new File(normalizeName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
@@ -591,7 +591,7 @@ public class PathsDocument extends MarkupDocument {
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
 
-        if (globalContext.config.isExamples()) {
+        if (globalContext.config.isExamplesEnabled()) {
             Optional<Map<String, Object>> generatedRequestExampleMap;
             Optional<Map<String, Object>> generatedResponseExampleMap;
 
@@ -772,7 +772,7 @@ public class PathsDocument extends MarkupDocument {
         public String apply(String definitionName) {
             String defaultResolver = super.apply(definitionName);
 
-            if (defaultResolver != null && config.isSeparatedOperations())
+            if (defaultResolver != null && config.isSeparatedOperationsEnabled())
                 return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File("..", defaultResolver).getPath();
             else
                 return defaultResolver;
