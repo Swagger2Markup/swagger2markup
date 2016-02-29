@@ -20,6 +20,7 @@ package io.github.robwin.markup.builder;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,52 +75,97 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         documentBuilder.append(markup).append(title).append(newLine).append(newLine);
     }
 
-    protected void sectionTitleLevel1(Markup markup, String title, String anchor) {
+    protected void sectionTitleWithAnchorLevel(Markup markup, int level, String title, String anchor) {
+        Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
         documentBuilder.append(newLine);
         if (anchor != null)
             anchor(anchor).newLine();
-        documentBuilder.append(markup).append(title).append(newLine);
+        documentBuilder.append(StringUtils.repeat(markup.toString(), level + 1)).append(" ").append(title).append(newLine);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleLevel(int level, String title) {
+        return sectionTitleWithAnchorLevel(level, title, null);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title) {
+        return sectionTitleWithAnchorLevel(level, title, null);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleLevel1(String title) {
+        return sectionTitleLevel(1, title);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel1(String title, String anchor) {
+        return sectionTitleWithAnchorLevel(1, title, anchor);
     }
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel1(String title) {
-        return sectionTitleWithAnchorLevel1(title, title);
+        return sectionTitleWithAnchorLevel1(title, null);
     }
 
-    protected void sectionTitleLevel2(Markup markup, String title, String anchor) {
-        documentBuilder.append(newLine);
-        if (anchor != null)
-            anchor(anchor).newLine();
-        documentBuilder.append(markup).append(title).append(newLine);
+    @Override
+    public MarkupDocBuilder sectionTitleLevel2(String title) {
+        return sectionTitleLevel(2, title);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel2(String title, String anchor) {
+        return sectionTitleWithAnchorLevel(2, title, anchor);
     }
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel2(String title) {
-        return sectionTitleWithAnchorLevel2(title, title);
+        return sectionTitleWithAnchorLevel2(title, null);
     }
 
-    protected void sectionTitleLevel3(Markup markup, String title, String anchor) {
-        documentBuilder.append(newLine);
-        if (anchor != null)
-            anchor(anchor).newLine();
-        documentBuilder.append(markup).append(title).append(newLine);
+    @Override
+    public MarkupDocBuilder sectionTitleLevel3(String title) {
+        return sectionTitleLevel(3, title);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel3(String title, String anchor) {
+        return sectionTitleWithAnchorLevel(3, title, anchor);
     }
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel3(String title) {
-        return sectionTitleWithAnchorLevel3(title, title);
+        return sectionTitleWithAnchorLevel3(title, null);
     }
 
-    protected void sectionTitleLevel4(Markup markup, String title, String anchor) {
-        documentBuilder.append(newLine);
-        if (anchor != null)
-            anchor(anchor).newLine();
-        documentBuilder.append(markup).append(title).append(newLine);
+    @Override
+    public MarkupDocBuilder sectionTitleLevel4(String title) {
+        return sectionTitleLevel(4, title);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel4(String title, String anchor) {
+        return sectionTitleWithAnchorLevel(4, title, anchor);
     }
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel4(String title) {
-        return sectionTitleWithAnchorLevel4(title, title);
+        return sectionTitleWithAnchorLevel4(title, null);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleLevel5(String title) {
+        return sectionTitleLevel(5, title);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel5(String title, String anchor) {
+        return sectionTitleWithAnchorLevel(5, title, anchor);
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel5(String title) {
+        return sectionTitleWithAnchorLevel5(title, null);
     }
 
     @Override
@@ -348,7 +394,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             writer.write(newLine);
         }
         if (logger.isInfoEnabled()) {
-            logger.info("{} was written to: {}", file);
+            logger.info("Markup document written to: {}", file);
         }
     }
 

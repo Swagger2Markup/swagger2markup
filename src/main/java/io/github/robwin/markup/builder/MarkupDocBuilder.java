@@ -38,6 +38,36 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder documentTitle(String title);
 
     /**
+     * Builds a section {@code title}.
+     *
+     * @param title title
+     * @param level section title level [1, 5]
+     * @return this builder
+     */
+    MarkupDocBuilder sectionTitleLevel(int level, String title);
+
+    /**
+     * Builds a section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Specified {@code anchor} will be normalized anyway.
+     *
+     * @param title title
+     * @param level section title level [1, 5]
+     * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
+     * @return this builder
+     */
+    MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor);
+
+    /**
+     * Builds a section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * This is an alias for {@link #sectionTitleWithAnchorLevel(int, String, String) sectionTitleWithAnchorLevel(level, title, null)}.
+     *
+     * @param title title
+     * @param level section title level [1, 5]
+     * @return this builder
+     */
+    MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title);
+
+    /**
      * Builds a level 1 section {@code title}.
      *
      * @param title title
@@ -145,6 +175,33 @@ public interface MarkupDocBuilder {
      */
     MarkupDocBuilder sectionTitleWithAnchorLevel4(String title);
 
+    /**
+     * Builds a level 5 section {@code title}.
+     *
+     * @param title title
+     * @return this builder
+     */
+    MarkupDocBuilder sectionTitleLevel5(String title);
+
+    /**
+     * Builds a level 5 section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Specified {@code anchor} will be normalized anyway.
+     *
+     * @param title title
+     * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
+     * @return this builder
+     */
+    MarkupDocBuilder sectionTitleWithAnchorLevel5(String title, String anchor);
+
+    /**
+     * Builds a level 5 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * This is an alias for {@link #sectionTitleWithAnchorLevel5(String, String) sectionTitleWithAnchorLevel5(title, null)}.
+     *
+     * @param title title
+     * @return this builder
+     */
+    MarkupDocBuilder sectionTitleWithAnchorLevel5(String title);
+    
     /**
      * Builds a regular text line.<br/>
      * This is an alias for {@link #textLine(String, boolean) textLine(text, false)}.
