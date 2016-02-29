@@ -56,50 +56,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleLevel1(String title) {
-        sectionTitleLevel1(Markdown.SECTION_TITLE_LEVEL1, title, null);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleWithAnchorLevel1(String title, String anchor) {
-        sectionTitleLevel1(Markdown.SECTION_TITLE_LEVEL1, title, (anchor == null ? title : anchor));
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleLevel2(String title) {
-        sectionTitleLevel2(Markdown.SECTION_TITLE_LEVEL2, title, null);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleWithAnchorLevel2(String title, String anchor) {
-        sectionTitleLevel2(Markdown.SECTION_TITLE_LEVEL2, title, (anchor == null ? title : anchor));
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleLevel3(String title) {
-        sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL3, title, null);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleWithAnchorLevel3(String title, String anchor) {
-        sectionTitleLevel3(Markdown.SECTION_TITLE_LEVEL3, title, (anchor == null ? title : anchor));
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleLevel4(String title) {
-        sectionTitleLevel4(Markdown.SECTION_TITLE_LEVEL4, title, null);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder sectionTitleWithAnchorLevel4(String title, String anchor) {
-        sectionTitleLevel4(Markdown.SECTION_TITLE_LEVEL4, title, (anchor == null ? title : anchor));
+    public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
+        sectionTitleWithAnchorLevel(Markdown.TITLE, level, title, anchor);
         return this;
     }
 
