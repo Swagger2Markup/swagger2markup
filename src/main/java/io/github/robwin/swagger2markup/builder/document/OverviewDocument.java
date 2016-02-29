@@ -51,7 +51,7 @@ public class OverviewDocument extends MarkupDocument {
     public OverviewDocument(Swagger2MarkupConverter.Context context, Path outputPath){
         super(context, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         OVERVIEW = labels.getString("overview");
         CURRENT_VERSION = labels.getString("current_version");
         VERSION = labels.getString("version");

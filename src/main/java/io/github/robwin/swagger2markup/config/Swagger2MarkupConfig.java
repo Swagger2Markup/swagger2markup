@@ -40,16 +40,16 @@ public class Swagger2MarkupConfig {
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfig.class);
 
     private MarkupLanguage markupLanguage;
-    private boolean examples;
+    private boolean examplesEnabled;
     private URI examplesUri;
-    private boolean schemas;
+    private boolean schemasEnabled;
     private URI schemasUri;
-    private boolean operationDescriptions;
+    private boolean operationDescriptionsEnabled;
     private URI operationDescriptionsUri;
-    private boolean definitionDescriptions;
+    private boolean definitionDescriptionsEnabled;
     private URI definitionDescriptionsUri;
-    private boolean separatedDefinitions;
-    private boolean separatedOperations;
+    private boolean separatedDefinitionsEnabled;
+    private boolean separatedOperationsEnabled;
     private GroupBy operationsGroupedBy;
     @Deprecated
     private OrderBy definitionsOrderedBy;
@@ -61,9 +61,9 @@ public class Swagger2MarkupConfig {
     private Comparator<Parameter> parameterOrdering;
     private Comparator<String> propertyOrdering;
     private Comparator<String> responseOrdering;
-    private boolean interDocumentCrossReferences;
+    private boolean interDocumentCrossReferencesEnabled;
     private String interDocumentCrossReferencesPrefix;
-    private boolean flatBody;
+    private boolean flatBodyEnabled;
     private String anchorPrefix;
 
     private String overviewDocument;
@@ -106,38 +106,38 @@ public class Swagger2MarkupConfig {
                 baseURI = IOUtils.uriParent(swaggerLocation);
         }
 
-        if (examples && examplesUri == null) {
+        if (examplesEnabled && examplesUri == null) {
             if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("Disable {} > No explicit '{}' set and no default available", "examples", "examplesUri");
-                examples = false;
+                    logger.warn("Disable {} > No explicit '{}' set and no default available", "examplesEnabled", "examplesUri");
+                examplesEnabled = false;
             } else
                 examplesUri = baseURI;
         }
 
-        if (schemas && schemasUri == null) {
+        if (schemasEnabled && schemasUri == null) {
             if (baseURI == null) {
                 if (logger.isWarnEnabled())
                     logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "schemas", "schemasUri");
-                schemas = false;
+                schemasEnabled = false;
             } else
                 schemasUri = baseURI;
         }
 
-        if (operationDescriptions && operationDescriptionsUri == null) {
+        if (operationDescriptionsEnabled && operationDescriptionsUri == null) {
             if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "operationDescriptions", "operationDescriptionsUri");
-                operationDescriptions = false;
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "operationDescriptionsEnabled", "operationDescriptionsUri");
+                operationDescriptionsEnabled = false;
             } else
                 operationDescriptionsUri = baseURI;
         }
 
-        if (definitionDescriptions && definitionDescriptionsUri == null) {
+        if (definitionDescriptionsEnabled && definitionDescriptionsUri == null) {
             if (baseURI == null) {
                 if (logger.isWarnEnabled())
-                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "definitionDescriptions", "definitionDescriptionsUri");
-                definitionDescriptions = false;
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "definitionDescriptionsEnabled", "definitionDescriptionsUri");
+                definitionDescriptionsEnabled = false;
             } else
                 definitionDescriptionsUri = baseURI;
         }
@@ -147,44 +147,44 @@ public class Swagger2MarkupConfig {
         return markupLanguage;
     }
 
-    public boolean isExamples() {
-        return examples;
+    public boolean isExamplesEnabled() {
+        return examplesEnabled;
     }
 
     public URI getExamplesUri() {
         return examplesUri;
     }
 
-    public boolean isSchemas() {
-        return schemas;
+    public boolean isSchemasEnabled() {
+        return schemasEnabled;
     }
 
     public URI getSchemasUri() {
         return schemasUri;
     }
 
-    public boolean isOperationDescriptions() {
-        return operationDescriptions;
+    public boolean isOperationDescriptionsEnabled() {
+        return operationDescriptionsEnabled;
     }
 
     public URI getOperationDescriptionsUri() {
         return operationDescriptionsUri;
     }
 
-    public boolean isDefinitionDescriptions() {
-        return definitionDescriptions;
+    public boolean isDefinitionDescriptionsEnabled() {
+        return definitionDescriptionsEnabled;
     }
 
     public URI getDefinitionDescriptionsUri() {
         return definitionDescriptionsUri;
     }
 
-    public boolean isSeparatedDefinitions() {
-        return separatedDefinitions;
+    public boolean isSeparatedDefinitionsEnabled() {
+        return separatedDefinitionsEnabled;
     }
 
-    public boolean isSeparatedOperations() {
-        return separatedOperations;
+    public boolean isSeparatedOperationsEnabled() {
+        return separatedOperationsEnabled;
     }
 
     public GroupBy getOperationsGroupedBy() {
@@ -227,16 +227,16 @@ public class Swagger2MarkupConfig {
         return responseOrdering;
     }
 
-    public boolean isInterDocumentCrossReferences() {
-        return interDocumentCrossReferences;
+    public boolean isInterDocumentCrossReferencesEnabled() {
+        return interDocumentCrossReferencesEnabled;
     }
 
     public String getInterDocumentCrossReferencesPrefix() {
         return interDocumentCrossReferencesPrefix;
     }
 
-    public boolean isFlatBody() {
-        return flatBody;
+    public boolean isFlatBodyEnabled() {
+        return flatBodyEnabled;
     }
 
     public String getAnchorPrefix() {
@@ -316,27 +316,27 @@ public class Swagger2MarkupConfig {
             safeProperties.putAll(properties);
 
             config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
-            config.examples = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examples"));
+            config.examplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "examplesUri"))
                 config.examplesUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesUri"));
-            config.schemas = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemas"));
+            config.schemasEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
                 config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
-            config.operationDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptions"));
+            config.operationDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "operationDescriptionsUri"))
                 config.operationDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsUri"));
-            config.definitionDescriptions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptions"));
+            config.definitionDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "definitionDescriptionsUri"))
                 config.definitionDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsUri"));
-            config.separatedDefinitions = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitions"));
-            config.separatedOperations = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperations"));
+            config.separatedDefinitionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsEnabled"));
+            config.separatedOperationsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsEnabled"));
             config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
             config.definitionsOrderedBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsOrderedBy"));
             config.outputLanguage = Language.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "outputLanguage"));
             config.inlineSchemaDepthLevel = Integer.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
-            config.interDocumentCrossReferences = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferences"));
+            config.interDocumentCrossReferencesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesEnabled"));
             config.interDocumentCrossReferencesPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix");
-            config.flatBody = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "flatBody"));
+            config.flatBodyEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "flatBodyEnabled"));
             config.anchorPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "anchorPrefix");
             config.overviewDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "overviewDocument");
             config.pathsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "pathsDocument");
@@ -389,7 +389,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withExamples(URI examplesUri) {
-            config.examples = true;
+            config.examplesEnabled = true;
 
             config.examplesUri = examplesUri;
             return this;
@@ -423,7 +423,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withSchemas(URI schemasUri) {
-            config.schemas = true;
+            config.schemasEnabled = true;
             config.schemasUri = schemasUri;
             return this;
         }
@@ -456,7 +456,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOperationDescriptions(URI operationDescriptionsUri) {
-            config.operationDescriptions = true;
+            config.operationDescriptionsEnabled = true;
             config.operationDescriptionsUri = operationDescriptionsUri;
             return this;
         }
@@ -489,7 +489,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withDefinitionDescriptions(URI definitionDescriptionsUri) {
-            config.definitionDescriptions = true;
+            config.definitionDescriptionsEnabled = true;
             config.definitionDescriptionsUri = definitionDescriptionsUri;
             return this;
         }
@@ -521,7 +521,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withSeparatedDefinitions() {
-            config.separatedDefinitions = true;
+            config.separatedDefinitionsEnabled = true;
             return this;
         }
 
@@ -532,7 +532,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withSeparatedOperations() {
-            config.separatedOperations = true;
+            config.separatedOperationsEnabled = true;
             return this;
         }
 
@@ -576,9 +576,9 @@ public class Swagger2MarkupConfig {
 
 
         /**
-         * Specifies maximum depth level for inline object schema displaying (0 = no inline schemas)
+         * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled)
          *
-         * @param inlineSchemaDepthLevel number of recursion levels for inline schemas display
+         * @param inlineSchemaDepthLevel number of recursion levels for inline schemasEnabled display
          * @return this builder
          */
         public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
@@ -677,7 +677,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
-            config.interDocumentCrossReferences = true;
+            config.interDocumentCrossReferencesEnabled = true;
             config.interDocumentCrossReferencesPrefix = prefix;
             return this;
         }
@@ -699,7 +699,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withFlatBody() {
-            config.flatBody = true;
+            config.flatBodyEnabled = true;
             return this;
         }
 

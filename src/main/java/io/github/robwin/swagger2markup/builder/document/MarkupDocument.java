@@ -18,7 +18,6 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import com.google.common.base.Optional;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -38,10 +37,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -83,7 +80,7 @@ public abstract class MarkupDocument {
 
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage()).withAnchorPrefix(config.getAnchorPrefix());
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
         EXAMPLE_COLUMN = labels.getString("example_column");
         REQUIRED_COLUMN = labels.getString("required_column");
@@ -223,9 +220,9 @@ public abstract class MarkupDocument {
         }
 
         public String apply(String definitionName) {
-            if (!config.isInterDocumentCrossReferences() || outputPath == null)
+            if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
                 return null;
-            else if (config.isSeparatedDefinitions())
+            else if (config.isSeparatedDefinitionsEnabled())
                 return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(IOUtils.normalizeName(definitionName))).getPath();
             else
                 return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getDefinitionsDocument());

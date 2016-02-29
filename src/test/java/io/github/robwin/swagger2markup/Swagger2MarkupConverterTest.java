@@ -586,7 +586,7 @@ public class Swagger2MarkupConverterTest {
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(new Swagger())
                 .withConfig(config)
                 .build();
-        assertThat(converter.globalContext.config.isDefinitionDescriptions()).isFalse();
+        assertThat(converter.globalContext.config.isDefinitionDescriptionsEnabled()).isFalse();
     }
 
     /**
