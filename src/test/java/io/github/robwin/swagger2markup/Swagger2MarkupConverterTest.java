@@ -27,6 +27,7 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.extension.repository.SpringRestDocsExtension;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -74,6 +75,33 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithSpringRestDocsExtension() throws IOException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger.json"));
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
+                .withExtension(new SpringRestDocsExtension(Paths.get("src/docs/asciidoc/paths").toUri()).withDefaultSnippets())
+                .build();
+
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .withExtensionRegistry(registry)
+                .build()
+                .intoFolder(outputDirectory);
+
+        //Then
+        String[] directories = outputDirectory.toFile().list();
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc"))))
+                .contains("==== HTTP request", "==== HTTP response", "==== Curl request", "===== curl-request");
+    }
+
+    @Test
     public void testSwagger2AsciiDocConversionWithExamples() throws IOException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
@@ -82,7 +110,7 @@ public class Swagger2MarkupConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withExamples(Paths.get("src/docs/asciidoc/paths"))
+                .withExamples()
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -534,7 +562,6 @@ public class Swagger2MarkupConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
-                .withExamples()
                 .withOperationDescriptions()
                 .withSchemas()
                 .build();
@@ -546,7 +573,6 @@ public class Swagger2MarkupConverterTest {
         //Then
         URI baseUri = io.github.robwin.swagger2markup.utils.IOUtils.uriParent(converterBuilder.globalContext.swaggerLocation);
         assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isEqualTo(baseUri);
-        assertThat(converterBuilder.globalContext.config.getExamplesUri()).isEqualTo(baseUri);
         assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isEqualTo(baseUri);
         assertThat(converterBuilder.globalContext.config.getSchemasUri()).isEqualTo(baseUri);
     }
@@ -558,7 +584,6 @@ public class Swagger2MarkupConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
-                .withExamples()
                 .withOperationDescriptions()
                 .withSchemas()
                 .build();
@@ -569,7 +594,6 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isNull();
-        assertThat(converterBuilder.globalContext.config.getExamplesUri()).isNull();
         assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isNull();
         assertThat(converterBuilder.globalContext.config.getSchemasUri()).isNull();
     }

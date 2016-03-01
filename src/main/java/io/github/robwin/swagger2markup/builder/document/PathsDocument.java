@@ -69,7 +69,6 @@ public class PathsDocument extends MarkupDocument {
     private final String PARAMETERS;
     private final String BODY_PARAMETER;
     private final String RESPONSES;
-    private final String EXAMPLE_CURL;
     private final String EXAMPLE_REQUEST;
     private final String EXAMPLE_RESPONSE;
 
@@ -80,9 +79,6 @@ public class PathsDocument extends MarkupDocument {
     private final String DEPRECATED_OPERATION;
 
     private static final String PATHS_ANCHOR = "paths";
-    private static final String REQUEST_EXAMPLE_FILE_NAME = "http-request";
-    private static final String RESPONSE_EXAMPLE_FILE_NAME = "http-response";
-    private static final String CURL_EXAMPLE_FILE_NAME = "curl-request";
     private static final String DESCRIPTION_FILE_NAME = "description";
 
 
@@ -97,7 +93,6 @@ public class PathsDocument extends MarkupDocument {
         PARAMETERS = labels.getString("parameters");
         BODY_PARAMETER = labels.getString("body_parameter");
         RESPONSES = labels.getString("responses");
-        EXAMPLE_CURL = labels.getString("example_curl");
         EXAMPLE_REQUEST = labels.getString("example_request");
         EXAMPLE_RESPONSE = labels.getString("example_response");
         SECURITY = labels.getString("security");
@@ -589,56 +584,7 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
-     * Builds the example section of a Swagger Operation. Tries to load the examples from
-     * curl-request.adoc, http-request.adoc and http-response.adoc or
-     * curl-request.md, http-request.md and http-response.md.
-     * Operation folder search order :
-     * - normalizeOperationFileName(operation.operationId)
-     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
-     * - then, normalizeOperationFileName(operation.summary)
-     *
-     * @param operation  the Swagger Operation
-     * @param docBuilder the docbuilder do use for output
-     */
-    private void examplesSection1(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (config.isExamplesEnabled()) {
-            Optional<String> curlExample = example(normalizeName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
-            if (!curlExample.isPresent())
-                curlExample = example(normalizeName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
-
-            if (curlExample.isPresent()) {
-                addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
-                docBuilder.paragraph(curlExample.get());
-            }
-
-            Optional<String> requestExample = example(normalizeName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
-            if (!requestExample.isPresent())
-                requestExample = example(normalizeName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
-
-            if (requestExample.isPresent()) {
-                addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
-                docBuilder.paragraph(requestExample.get());
-            }
-
-            Optional<String> responseExample = example(normalizeName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
-            if (!responseExample.isPresent())
-                responseExample = example(normalizeName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
-
-            if (responseExample.isPresent()) {
-                addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
-                docBuilder.paragraph(responseExample.get());
-            }
-        }
-    }
-
-    /**
-     * Builds the example section of a Swagger Operation. Tries to load the examples from
-     * curl-request.adoc, http-request.adoc and http-response.adoc or
-     * curl-request.md, http-request.md and http-response.md.
-     * Operation folder search order :
-     * - normalizeOperationFileName(operation.operationId)
-     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
-     * - then, normalizeOperationFileName(operation.summary)
+     * Builds the example section of a Swagger Operation.
      *
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
@@ -646,35 +592,17 @@ public class PathsDocument extends MarkupDocument {
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
 
         if (globalContext.config.isExamplesEnabled()) {
-            Optional<String> curlExample;
-            Optional<String> requestExample;
-            Optional<String> responseExample;
             Optional<Map<String, Object>> generatedRequestExampleMap;
             Optional<Map<String, Object>> generatedResponseExampleMap;
-
-            curlExample = example(normalizeName(operation.getId()), CURL_EXAMPLE_FILE_NAME);
-            if (!curlExample.isPresent())
-                curlExample = example(normalizeName(operation.getTitle()), CURL_EXAMPLE_FILE_NAME);
-            requestExample = example(normalizeName(operation.getId()), REQUEST_EXAMPLE_FILE_NAME);
-            if (!requestExample.isPresent())
-                requestExample = example(normalizeName(operation.getTitle()), REQUEST_EXAMPLE_FILE_NAME);
-            responseExample = example(normalizeName(operation.getId()), RESPONSE_EXAMPLE_FILE_NAME);
-            if (!responseExample.isPresent())
-                responseExample = example(normalizeName(operation.getTitle()), RESPONSE_EXAMPLE_FILE_NAME);
 
             generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(operation, globalContext.swagger.getDefinitions(), markupDocBuilder);
             generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(operation.getOperation(), globalContext.swagger.getDefinitions(), markupDocBuilder);
 
-            if (curlExample.isPresent()) {
-                addOperationSectionTitle(EXAMPLE_CURL, docBuilder);
-                docBuilder.paragraph(curlExample.get());
-            }
 
-            if (requestExample.isPresent() || generatedRequestExampleMap.isPresent()) {
+
+            if (generatedRequestExampleMap.isPresent()) {
                 addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
-                if (requestExample.isPresent()) {
-                    docBuilder.paragraph(requestExample.get());
-                }
+
                 if (generatedRequestExampleMap.isPresent() && generatedRequestExampleMap.get().size() > 0) {
                     for (Map.Entry<String, Object> request : generatedRequestExampleMap.get().entrySet()) {
                         docBuilder.sectionTitleLevel4(REQUEST + " " + request.getKey() + " :");
@@ -683,11 +611,8 @@ public class PathsDocument extends MarkupDocument {
                 }
             }
 
-            if (responseExample.isPresent() || generatedResponseExampleMap.isPresent()) {
+            if (generatedResponseExampleMap.isPresent()) {
                 addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
-                if (responseExample.isPresent()) {
-                    docBuilder.paragraph(responseExample.get());
-                }
                 if (generatedResponseExampleMap.isPresent() && generatedResponseExampleMap.get().size() > 0) {
                     for (Map.Entry<String, Object> response : generatedResponseExampleMap.get().entrySet()) {
                         docBuilder.sectionTitleLevel4(RESPONSE + " " + response.getKey() + " :");
@@ -696,33 +621,6 @@ public class PathsDocument extends MarkupDocument {
                 }
             }
         }
-    }
-
-    /**
-     * Reads an example
-     *
-     * @param exampleFolder   the name of the folder where the example file resides
-     * @param exampleFileName the name of the example file
-     * @return the content of the file
-     */
-    private Optional<String> example(String exampleFolder, String exampleFileName) {
-        for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
-            URI contentUri = config.getExamplesUri().resolve(exampleFolder).resolve(exampleFileName + fileNameExtension);
-
-            try (Reader reader = io.github.robwin.swagger2markup.utils.IOUtils.uriReader(contentUri)) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Example content processed {}", contentUri);
-                }
-
-                return Optional.of(IOUtils.toString(reader).trim());
-            } catch (IOException e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Failed to read example content {} > {}", contentUri, e.getMessage());
-                }
-            }
-        }
-
-        return Optional.absent();
     }
 
     /**
@@ -744,7 +642,7 @@ public class PathsDocument extends MarkupDocument {
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
-                    String type = "UNKNOWN";
+                    String type = "UNKNOWN"; // FIXME -> labels
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }

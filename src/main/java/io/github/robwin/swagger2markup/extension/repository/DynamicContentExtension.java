@@ -12,8 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,17 +21,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class DynamicContentExtension {
+public class DynamicContentExtension extends ContentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicContentExtension.class);
 
-    private final Swagger2MarkupConverter.Context globalContext;
-    private final ContentContext contentContext;
-
-
     public DynamicContentExtension(Swagger2MarkupConverter.Context globalContext, ContentContext contentContext) {
-        this.globalContext = globalContext;
-        this.contentContext = contentContext;
+        super(globalContext, contentContext);
     }
 
     /**
@@ -63,13 +58,15 @@ public class DynamicContentExtension {
                 Collections.sort(extensions, Ordering.natural());
 
                 for (Path extension : extensions) {
-                    Optional<FileReader> extensionContent = operationExtension(extension);
+                    Optional<Reader> extensionContent = readContentPath(extension);
 
                     if (extensionContent.isPresent()) {
                         try {
                             contentContext.docBuilder.importMarkup(extensionContent.get(), levelOffset);
                         } catch (IOException e) {
                             throw new RuntimeException(String.format("Failed to read extension file: %s", extension), e);
+                        } finally {
+                            extensionContent.get().close();
                         }
                     }
                 }
@@ -79,33 +76,6 @@ public class DynamicContentExtension {
                 logger.debug("Failed to read extension files from {}", contentPath);
 
         }
-    }
-
-    /**
-     * Reads an extension
-     *
-     * @param extension extension file
-     * @return extension content reader
-     */
-    protected Optional<FileReader> operationExtension(Path extension) {
-
-        if (Files.isReadable(extension)) {
-            if (logger.isInfoEnabled()) {
-                logger.info("Extension file processed: {}", extension);
-            }
-            try {
-                return Optional.of(new FileReader(extension.toFile()));
-            } catch (IOException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to read extension file: %s", extension), e);
-                }
-            }
-        } else {
-            if (logger.isWarnEnabled()) {
-                logger.warn("Extension file is not readable: {}", extension);
-            }
-        }
-        return Optional.absent();
     }
 
 }
