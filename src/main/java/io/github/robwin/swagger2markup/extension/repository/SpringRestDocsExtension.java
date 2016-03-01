@@ -50,17 +50,14 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
 
     /**
      * Builds the subdirectory name where are stored snippets for the given {@code operation}.<br/>
-     * Default implementation use {@code normalizeName(<operation id>)}, or {@code normalizeName(<operation path>_<operation method>)} if operation id is not set.<br/>
+     * Default implementation use {@code normalizeName(<operation id>)}, or {@code normalizeName(<operation path> lowercase(<operation method>))} if operation id is not set.<br/>
      * You can override this method to configure your own folder normalization.
      *
      * @param operation current operation
      * @return subdirectory normalized name
      */
     public String operationFolderName(PathOperation operation) {
-        String id = operation.getOperation().getOperationId();
-        if (id == null)
-            id = operation.getId();
-        return IOUtils.normalizeName(id);
+        return IOUtils.normalizeName(operation.getId());
     }
 
     /**

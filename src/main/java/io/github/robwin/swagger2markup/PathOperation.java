@@ -37,6 +37,12 @@ public class PathOperation {
         return operationName;
     }
 
+    /**
+     * Returns an unique id for the operation.<br/>
+     * Use {@code <operation id>}, then {@code <operation path> lowercase(<operation method>)} if operation id is not set.
+     *
+     * @return operation unique id
+     */
     public String getId() {
         String id = operation.getOperationId();
 
