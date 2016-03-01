@@ -14,18 +14,18 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Dynamically search for markup files in {@code contentPath} to append in Definitions, with the format :<br/>
- * - {@code dyndefs-doc-before-*.<markup.ext>} : import before Definitions document with levelOffset = 0<br/>
- * - {@code dyndefs-doc-after-*.<markup.ext>} : import after Definitions document with levelOffset = 0<br/>
- * - {@code dyndefs-doc-begin-*.<markup.ext>} : import just after Definitions document main title with levelOffset = 1<br/>
- * - {@code dyndefs-doc-end-*.<markup.ext>} : import at the end of Definitions document with levelOffset = 1<br/>
- * - {@code dyndefs-def-begin-*.<markup.ext>} : import just after each definition title with levelOffset = 2<br/>
- * - {@code dyndefs-def-end-*.<markup.ext>} : import at the end of each definition with levelOffset = 2<br/>
+ * - {@code doc-before-*.<markup.ext>} : import before Definitions document with levelOffset = 0<br/>
+ * - {@code doc-after-*.<markup.ext>} : import after Definitions document with levelOffset = 0<br/>
+ * - {@code doc-begin-*.<markup.ext>} : import just after Definitions document main title with levelOffset = 1<br/>
+ * - {@code doc-end-*.<markup.ext>} : import at the end of Definitions document with levelOffset = 1<br/>
+ * - {@code def-begin-*.<markup.ext>} : import just after each definition title with levelOffset = 2<br/>
+ * - {@code def-end-*.<markup.ext>} : import at the end of each definition with levelOffset = 2<br/>
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
 public class DynamicDefinitionsContentExtension extends DefinitionsContentExtension {
 
-    protected static final String EXTENSION_FILENAME_PREFIX = "dyndefs-";
+    protected static final String EXTENSION_FILENAME_PREFIX = "";
     private static final Logger logger = LoggerFactory.getLogger(DynamicDefinitionsContentExtension.class);
 
     protected Path contentPath;

@@ -13,16 +13,16 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Dynamically search for markup files in {@code contentPath} to append to Overview, with the format :<br/>
- * - {@code dynoview-doc-before-*.<markup.ext>} : import before Overview document with levelOffset = 0<br/>
- * - {@code dynoview-doc-after-*.<markup.ext>} : import after Overview document with levelOffset = 0<br/>
- * - {@code dynoview-doc-begin-*.<markup.ext>} : import just after Overview document main title with levelOffset = 1<br/>
- * - {@code dynoview-doc-end-*.<markup.ext>} : import at the end of Overview document with levelOffset = 1<br/>
+ * - {@code doc-before-*.<markup.ext>} : import before Overview document with levelOffset = 0<br/>
+ * - {@code doc-after-*.<markup.ext>} : import after Overview document with levelOffset = 0<br/>
+ * - {@code doc-begin-*.<markup.ext>} : import just after Overview document main title with levelOffset = 1<br/>
+ * - {@code doc-end-*.<markup.ext>} : import at the end of Overview document with levelOffset = 1<br/>
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
 public class DynamicOverviewContentExtension extends OverviewContentExtension {
 
-    protected static final String EXTENSION_FILENAME_PREFIX = "dynoview-";
+    protected static final String EXTENSION_FILENAME_PREFIX = "";
     private static final Logger logger = LoggerFactory.getLogger(DynamicOverviewContentExtension.class);
 
     protected Path contentPath;
