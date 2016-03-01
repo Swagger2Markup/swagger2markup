@@ -493,8 +493,8 @@ public class Swagger2MarkupConverterTest {
                 .intoFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
-                .contains("== D\u0233finitions");
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc")), Charset.forName("UTF-8")))
+                .contains("== Sch\u00E9ma d'URI");
     }
 
     @Test

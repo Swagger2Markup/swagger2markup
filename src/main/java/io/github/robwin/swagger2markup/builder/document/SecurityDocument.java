@@ -89,19 +89,19 @@ public class SecurityDocument extends MarkupDocument {
                 markupDocBuilder.sectionTitleLevel2(entry.getKey());
                 SecuritySchemeDefinition securityScheme = entry.getValue();
                 String type = securityScheme.getType();
-                markupDocBuilder.textLine(TYPE + type);
+                markupDocBuilder.textLine(TYPE + " : " + type);
                 if (securityScheme instanceof ApiKeyAuthDefinition) {
-                    markupDocBuilder.textLine(NAME + ((ApiKeyAuthDefinition) securityScheme).getName());
-                    markupDocBuilder.textLine(IN + ((ApiKeyAuthDefinition) securityScheme).getIn());
+                    markupDocBuilder.textLine(NAME + " : " + ((ApiKeyAuthDefinition) securityScheme).getName());
+                    markupDocBuilder.textLine(IN + " : " + ((ApiKeyAuthDefinition) securityScheme).getIn());
                 } else if (securityScheme instanceof OAuth2Definition) {
                     OAuth2Definition oauth2Scheme = (OAuth2Definition) securityScheme;
                     String flow = oauth2Scheme.getFlow();
-                    markupDocBuilder.textLine(FLOW + flow);
+                    markupDocBuilder.textLine(FLOW + " : " + flow);
                     if (isNotBlank(oauth2Scheme.getAuthorizationUrl())) {
-                        markupDocBuilder.textLine(AUTHORIZATION_URL + oauth2Scheme.getAuthorizationUrl());
+                        markupDocBuilder.textLine(AUTHORIZATION_URL + " : " + oauth2Scheme.getAuthorizationUrl());
                     }
                     if (isNotBlank(oauth2Scheme.getTokenUrl())) {
-                        markupDocBuilder.textLine(TOKEN_URL + oauth2Scheme.getTokenUrl());
+                        markupDocBuilder.textLine(TOKEN_URL + " : " + oauth2Scheme.getTokenUrl());
                     }
                     List<List<String>> cells = new ArrayList<>();
                     List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN, 1),

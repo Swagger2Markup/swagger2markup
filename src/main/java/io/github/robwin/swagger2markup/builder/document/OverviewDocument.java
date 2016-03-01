@@ -101,16 +101,16 @@ public class OverviewDocument extends MarkupDocument {
         }
         if(isNotBlank(info.getVersion())){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
-            this.markupDocBuilder.textLine(VERSION + info.getVersion());
+            this.markupDocBuilder.textLine(VERSION + " : " + info.getVersion());
         }
         Contact contact = info.getContact();
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
             if(isNotBlank(contact.getName())){
-                this.markupDocBuilder.textLine(CONTACT_NAME + contact.getName());
+                this.markupDocBuilder.textLine(CONTACT_NAME + " : " + contact.getName());
             }
             if(isNotBlank(contact.getEmail())){
-                this.markupDocBuilder.textLine(CONTACT_EMAIL + contact.getEmail());
+                this.markupDocBuilder.textLine(CONTACT_EMAIL + " : " + contact.getEmail());
             }
         }
 
@@ -118,30 +118,30 @@ public class OverviewDocument extends MarkupDocument {
         if(license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
             if (isNotBlank(license.getName())) {
-                this.markupDocBuilder.textLine(LICENSE + license.getName());
+                this.markupDocBuilder.textLine(LICENSE + " : " + license.getName());
             }
             if (isNotBlank(license.getUrl())) {
-                this.markupDocBuilder.textLine(LICENSE_URL + license.getUrl());
+                this.markupDocBuilder.textLine(LICENSE_URL + " : " + license.getUrl());
             }
         }
         if(isNotBlank(info.getTermsOfService())){
-            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + info.getTermsOfService());
+            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + " : " + info.getTermsOfService());
         }
 
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
             if (isNotBlank(swagger.getHost())) {
-                this.markupDocBuilder.textLine(HOST + swagger.getHost());
+                this.markupDocBuilder.textLine(HOST + " : " + swagger.getHost());
             }
             if (isNotBlank(swagger.getBasePath())) {
-                this.markupDocBuilder.textLine(BASE_PATH + swagger.getBasePath());
+                this.markupDocBuilder.textLine(BASE_PATH + " : " + swagger.getBasePath());
             }
             if (isNotEmpty(swagger.getSchemes())) {
                 List<String> schemes = new ArrayList<>();
                 for (Scheme scheme : swagger.getSchemes()) {
                     schemes.add(scheme.toString());
                 }
-                this.markupDocBuilder.textLine(SCHEMES + join(schemes, ", "));
+                this.markupDocBuilder.textLine(SCHEMES + " : " + join(schemes, ", "));
             }
         }
 
@@ -152,7 +152,7 @@ public class OverviewDocument extends MarkupDocument {
                 String name = tag.getName();
                 String description = tag.getDescription();
                 if(isNoneBlank(description)){
-                    tags.add(name + ": " +   description);
+                    tags.add(name + " : " +   description);
                 }else{
                     tags.add(name);
                 }
