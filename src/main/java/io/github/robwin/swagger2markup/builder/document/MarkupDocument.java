@@ -132,7 +132,7 @@ public abstract class MarkupDocument {
         String fileName = NAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
         fileName = fileName.replaceAll(String.format("([%1$s])([%1$s]+)", "-_"), "$1");
         fileName = StringUtils.strip(fileName, "_-");
-        fileName = fileName.trim().toLowerCase();
+        fileName = fileName.trim();
         return fileName;
     }
 

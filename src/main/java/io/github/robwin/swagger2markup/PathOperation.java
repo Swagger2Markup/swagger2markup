@@ -32,7 +32,7 @@ public class PathOperation {
     public String getTitle() {
         String operationName = operation.getSummary();
         if (isBlank(operationName)) {
-            operationName = getMethod() + " " + getPath();
+            operationName = getMethod().toString() + " " + getPath();
         }
         return operationName;
     }
@@ -41,7 +41,7 @@ public class PathOperation {
         String id = operation.getOperationId();
 
         if (id == null)
-            id = getPath() + " " + getMethod();
+            id = getPath() + " " + getMethod().toString().toLowerCase();
 
         return id;
     }
