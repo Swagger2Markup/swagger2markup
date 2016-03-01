@@ -25,6 +25,7 @@ import io.github.robwin.swagger2markup.*;
 import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,15 +51,19 @@ public class Swagger2MarkupConfig {
     private boolean separatedDefinitionsEnabled;
     private boolean separatedOperationsEnabled;
     private GroupBy operationsGroupedBy;
-    @Deprecated
-    private OrderBy definitionsOrderedBy;
     private Language outputLanguage;
     private int inlineSchemaDepthLevel;
+    private OrderBy tagOrderBy;
     private Comparator<String> tagOrdering;
+    private OrderBy operationOrderBy;
     private Comparator<PathOperation> operationOrdering;
+    private OrderBy definitionOrderBy;
     private Comparator<String> definitionOrdering;
+    private OrderBy parameterOrderBy;
     private Comparator<Parameter> parameterOrdering;
+    private OrderBy propertyOrderBy;
     private Comparator<String> propertyOrdering;
+    private OrderBy responseOrderBy;
     private Comparator<String> responseOrdering;
     private boolean interDocumentCrossReferencesEnabled;
     private String interDocumentCrossReferencesPrefix;
@@ -177,10 +182,6 @@ public class Swagger2MarkupConfig {
         return operationsGroupedBy;
     }
 
-    public OrderBy getDefinitionsOrderedBy() {
-        return definitionsOrderedBy;
-    }
-
     public Language getOutputLanguage() {
         return outputLanguage;
     }
@@ -189,24 +190,48 @@ public class Swagger2MarkupConfig {
         return inlineSchemaDepthLevel;
     }
 
+    public OrderBy getTagOrderBy() {
+        return tagOrderBy;
+    }
+
     public Comparator<String> getTagOrdering() {
         return tagOrdering;
+    }
+
+    public OrderBy getOperationOrderBy() {
+        return operationOrderBy;
     }
 
     public Comparator<PathOperation> getOperationOrdering() {
         return operationOrdering;
     }
 
+    public OrderBy getDefinitionOrderBy() {
+        return definitionOrderBy;
+    }
+
     public Comparator<String> getDefinitionOrdering() {
         return definitionOrdering;
+    }
+
+    public OrderBy getParameterOrderBy() {
+        return parameterOrderBy;
     }
 
     public Comparator<Parameter> getParameterOrdering() {
         return parameterOrdering;
     }
 
+    public OrderBy getPropertyOrderBy() {
+        return propertyOrderBy;
+    }
+
     public Comparator<String> getPropertyOrdering() {
         return propertyOrdering;
+    }
+
+    public OrderBy getResponseOrderBy() {
+        return responseOrderBy;
     }
 
     public Comparator<String> getResponseOrdering() {
@@ -258,15 +283,15 @@ public class Swagger2MarkupConfig {
         private static final String PROPERTIES_PREFIX = "swagger2markup.";
         private static final String PROPERTIES_DEFAULT = "/io/github/robwin/swagger2markup/config/default.properties";
 
-        static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
-                .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
+        static final Ordering<PathOperation> OPERATION_METHOD_NATURAL_ORDERING = Ordering
+                .explicit(HttpMethod.POST, HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
                 .onResultOf(new Function<PathOperation, HttpMethod>() {
                     public HttpMethod apply(PathOperation operation) {
                         return operation.getMethod();
                     }
                 });
 
-        static final Ordering<PathOperation> OPERATION_PATH_COMPARATOR = Ordering
+        static final Ordering<PathOperation> OPERATION_PATH_NATURAL_ORDERING = Ordering
                 .natural()
                 .onResultOf(new Function<PathOperation, String>() {
                     public String apply(PathOperation operation) {
@@ -274,7 +299,7 @@ public class Swagger2MarkupConfig {
                     }
                 });
 
-        static final Ordering<Parameter> PARAMETER_IN_COMPARATOR = Ordering
+        static final Ordering<Parameter> PARAMETER_IN_NATURAL_ORDERING = Ordering
                 .explicit("header", "path", "query", "formData", "body")
                 .onResultOf(new Function<Parameter, String>() {
                     public String apply(Parameter parameter) {
@@ -282,7 +307,7 @@ public class Swagger2MarkupConfig {
                     }
                 });
 
-        static final Ordering<Parameter> PARAMETER_NAME_COMPARATOR = Ordering
+        static final Ordering<Parameter> PARAMETER_NAME_NATURAL_ORDERING = Ordering
                 .natural()
                 .onResultOf(new Function<Parameter, String>() {
                     public String apply(Parameter parameter) {
@@ -290,7 +315,7 @@ public class Swagger2MarkupConfig {
                     }
                 });
 
-        private Swagger2MarkupConfig config = new Swagger2MarkupConfig();
+        Swagger2MarkupConfig config = new Swagger2MarkupConfig();
 
         Builder() {
             this(new Properties());
@@ -315,7 +340,6 @@ public class Swagger2MarkupConfig {
             config.separatedDefinitionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsEnabled"));
             config.separatedOperationsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsEnabled"));
             config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
-            config.definitionsOrderedBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsOrderedBy"));
             config.outputLanguage = Language.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "outputLanguage"));
             config.inlineSchemaDepthLevel = Integer.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
             config.interDocumentCrossReferencesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesEnabled"));
@@ -328,13 +352,12 @@ public class Swagger2MarkupConfig {
             config.securityDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "securityDocument");
             config.separatedOperationsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsFolder");
             config.separatedDefinitionsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsFolder");
-
-            config.tagOrdering = Ordering.natural();
-            config.operationOrdering = OPERATION_PATH_COMPARATOR.compound(OPERATION_METHOD_COMPARATOR);
-            config.definitionOrdering = Ordering.natural();
-            config.parameterOrdering = PARAMETER_IN_COMPARATOR.compound(PARAMETER_NAME_COMPARATOR);
-            config.propertyOrdering = Ordering.natural();
-            config.responseOrdering = Ordering.natural();
+            config.tagOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "tagOrderBy"));
+            config.operationOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationOrderBy"));
+            config.definitionOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionOrderBy"));
+            config.parameterOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "parameterOrderBy"));
+            config.propertyOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "propertyOrderBy"));
+            config.responseOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "responseOrderBy"));
         }
 
         private Properties defaultProperties() {
@@ -352,7 +375,24 @@ public class Swagger2MarkupConfig {
         }
 
         public Swagger2MarkupConfig build() {
+            buildNaturalOrdering();
+
             return config;
+        }
+
+        private void buildNaturalOrdering() {
+            if (config.tagOrderBy == OrderBy.NATURAL)
+                config.tagOrdering = Ordering.natural();
+            if (config.operationOrderBy == OrderBy.NATURAL)
+                config.operationOrdering = OPERATION_PATH_NATURAL_ORDERING.compound(OPERATION_METHOD_NATURAL_ORDERING);
+            if (config.definitionOrderBy == OrderBy.NATURAL)
+                config.definitionOrdering = Ordering.natural();
+            if (config.parameterOrderBy == OrderBy.NATURAL)
+                config.parameterOrdering = PARAMETER_IN_NATURAL_ORDERING.compound(PARAMETER_NAME_NATURAL_ORDERING);
+            if (config.propertyOrderBy == OrderBy.NATURAL)
+                config.propertyOrdering = Ordering.natural();
+            if (config.responseOrderBy == OrderBy.NATURAL)
+                config.responseOrdering = Ordering.natural();
         }
 
         /**
@@ -509,21 +549,6 @@ public class Swagger2MarkupConfig {
         }
 
         /**
-         * Specifies if the definitions should be ordered by natural ordering or stay as-is.<br/>
-         * Use {@link #withDefinitionOrdering(Comparator)} instead.
-         *
-         * @param definitionsOrderedBy the OrderBy enum
-         * @return this builder
-         */
-        @Deprecated
-        public Builder withDefinitionsOrderedBy(OrderBy definitionsOrderedBy) {
-            config.definitionsOrderedBy = definitionsOrderedBy;
-            config.definitionOrdering = Ordering.natural();
-            return this;
-        }
-
-
-        /**
          * Specifies labels language of output files
          *
          * @param language the enum
@@ -533,7 +558,6 @@ public class Swagger2MarkupConfig {
             config.outputLanguage = language;
             return this;
         }
-
 
         /**
          * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled)
@@ -546,86 +570,170 @@ public class Swagger2MarkupConfig {
             return this;
         }
 
+        /**
+         * Specifies tag ordering.<br/>
+         * By default tag ordering == {@link io.github.robwin.swagger2markup.OrderBy#NATURAL}.<br/>
+         * Use {@link #withTagOrdering(Comparator)} to set a custom ordering.
+         *
+         * @param orderBy tag ordering
+         * @return this builder
+         */
+        public Builder withTagOrdering(OrderBy orderBy) {
+            Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
+            config.tagOrderBy = orderBy;
+            return this;
+        }
 
         /**
          * Specifies a custom comparator function to order tags.
-         * By default, natural ordering is applied.
-         * Set ordering to null to keep swagger original order
          *
-         * @param tagOrdering tag comparator
+         * @param tagOrdering tag ordering
          * @return this builder
          */
         public Builder withTagOrdering(Comparator<String> tagOrdering) {
+            Validate.notNull(tagOrdering);
+
+            config.tagOrderBy = OrderBy.CUSTOM;
             config.tagOrdering = tagOrdering;
             return this;
         }
 
+        /**
+         * Specifies operation ordering.<br/>
+         * By default operation ordering == {@link io.github.robwin.swagger2markup.OrderBy#AS_IS}.<br/>
+         * Use {@link #withOperationOrdering(Comparator)} to set a custom ordering.
+         *
+         * @param orderBy operation ordering
+         * @return this builder
+         */
+        public Builder withOperationOrdering(OrderBy orderBy) {
+            Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
+            config.operationOrderBy = orderBy;
+            return this;
+        }
 
         /**
          * Specifies a custom comparator function to order operations.
-         * By default, natural ordering is applied on operation 'path', then explicit ordering is applied on operation 'method'
-         * Set ordering to null to keep swagger original order
          *
-         * @param operationOrdering operation comparator
+         * @param operationOrdering operation ordering
          * @return this builder
          */
         public Builder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
+            Validate.notNull(operationOrdering);
+
+            config.operationOrderBy = OrderBy.CUSTOM;
             config.operationOrdering = operationOrdering;
             return this;
         }
 
+        /**
+         * Specifies definition ordering.<br/>
+         * By default definition ordering == {@link io.github.robwin.swagger2markup.OrderBy#NATURAL}.<br/>
+         * Use {@link #withDefinitionOrdering(Comparator)} to set a custom ordering.
+         *
+         * @param orderBy definition ordering
+         * @return this builder
+         */
+        public Builder withDefinitionOrdering(OrderBy orderBy) {
+            Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
+            config.definitionOrderBy = orderBy;
+            return this;
+        }
 
         /**
          * Specifies a custom comparator function to order definitions.
-         * By default, natural ordering is applied.
-         * Set ordering to null to keep swagger original order
          *
-         * @param definitionOrdering definition comparator
+         * @param definitionOrdering definition ordering
          * @return this builder
          */
         public Builder withDefinitionOrdering(Comparator<String> definitionOrdering) {
+            Validate.notNull(definitionOrdering);
+
+            config.definitionOrderBy = OrderBy.CUSTOM;
             config.definitionOrdering = definitionOrdering;
             return this;
         }
 
+        /**
+         * Specifies parameter ordering.<br/>
+         * By default parameter ordering == {@link io.github.robwin.swagger2markup.OrderBy#NATURAL}.<br/>
+         * Use {@link #withParameterOrdering(Comparator)} to set a custom ordering.
+         *
+         * @param orderBy parameter ordering
+         * @return this builder
+         */
+        public Builder withParameterOrdering(OrderBy orderBy) {
+            Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
+            config.parameterOrderBy = orderBy;
+            return this;
+        }
 
         /**
          * Specifies a custom comparator function to order parameters.
-         * By default, explicit ordering is applied on parameter 'in', then natural ordering is applied.
-         * Set ordering to null to keep swagger original order
          *
-         * @param parameterOrdering parameter comparator
+         * @param parameterOrdering parameter ordering
          * @return this builder
          */
         public Builder withParameterOrdering(Comparator<Parameter> parameterOrdering) {
+            Validate.notNull(parameterOrdering);
+
+            config.parameterOrderBy = OrderBy.CUSTOM;
             config.parameterOrdering = parameterOrdering;
             return this;
         }
 
+        /**
+         * Specifies property ordering.<br/>
+         * By default property ordering == {@link io.github.robwin.swagger2markup.OrderBy#NATURAL}.<br/>
+         * Use {@link #withPropertyOrdering(Comparator)} to set a custom ordering.
+         *
+         * @param orderBy property ordering
+         * @return this builder
+         */
+        public Builder withPropertyOrdering(OrderBy orderBy) {
+            Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
+            config.propertyOrderBy = orderBy;
+            return this;
+        }
 
         /**
-         * Specifies a custom comparator function to order properties.
-         * By default, natural ordering is applied.
-         * Set ordering to null to keep swagger original order
+         * Specifies a custom comparator function to order propertys.
          *
-         * @param propertyOrdering property comparator
+         * @param propertyOrdering property ordering
          * @return this builder
          */
         public Builder withPropertyOrdering(Comparator<String> propertyOrdering) {
+            Validate.notNull(propertyOrdering);
+
+            config.propertyOrderBy = OrderBy.CUSTOM;
             config.propertyOrdering = propertyOrdering;
             return this;
         }
 
+        /**
+         * Specifies response ordering.<br/>
+         * By default response ordering == {@link io.github.robwin.swagger2markup.OrderBy#NATURAL}.<br/>
+         * Use {@link #withResponseOrdering(Comparator)} to set a custom ordering.
+         *
+         * @param orderBy response ordering
+         * @return this builder
+         */
+        public Builder withResponseOrdering(OrderBy orderBy) {
+            Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
+            config.responseOrderBy = orderBy;
+            return this;
+        }
 
         /**
          * Specifies a custom comparator function to order responses.
-         * By default, natural ordering is applied.
-         * Set ordering to null to keep swagger original order
          *
-         * @param responseOrdering response comparator
+         * @param responseOrdering response ordering
          * @return this builder
          */
         public Builder withResponseOrdering(Comparator<String> responseOrdering) {
+            Validate.notNull(responseOrdering);
+
+            config.responseOrderBy = OrderBy.CUSTOM;
             config.responseOrdering = responseOrdering;
             return this;
         }
