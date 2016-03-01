@@ -77,6 +77,7 @@ public class PathsDocument extends MarkupDocument {
     private final String HTTP_CODE_COLUMN;
 
     private final String DEPRECATED_OPERATION;
+    private final String UNKNOWN;
 
     private static final String PATHS_ANCHOR = "paths";
     private static final String DESCRIPTION_FILE_NAME = "description";
@@ -99,6 +100,7 @@ public class PathsDocument extends MarkupDocument {
         TYPE_COLUMN = labels.getString("type_column");
         HTTP_CODE_COLUMN = labels.getString("http_code_column");
         DEPRECATED_OPERATION = labels.getString("operation.deprecated");
+        UNKNOWN = labels.getString("unknown");
 
         if (config.isExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -599,7 +601,6 @@ public class PathsDocument extends MarkupDocument {
             generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(operation.getOperation(), globalContext.swagger.getDefinitions(), markupDocBuilder);
 
 
-
             if (generatedRequestExampleMap.isPresent()) {
                 addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
 
@@ -642,7 +643,7 @@ public class PathsDocument extends MarkupDocument {
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
-                    String type = "UNKNOWN"; // FIXME -> labels
+                    String type = UNKNOWN;
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
