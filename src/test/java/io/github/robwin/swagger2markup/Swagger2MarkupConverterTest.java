@@ -60,7 +60,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionFromString() throws IOException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -77,7 +77,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionWithSpringRestDocsExtension() throws IOException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -129,7 +129,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionAsString() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
 
         //When
         String asciiDocAsString = Swagger2MarkupConverter.from(file).build()
@@ -142,7 +142,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversion() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -181,7 +181,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocGroupedByTags() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
@@ -240,9 +240,9 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithDescriptionsAndExamples() throws IOException, URISyntaxException {
+    public void testSwagger2AsciiDocConversionWithDefinitionDescriptions() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -304,7 +304,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2MarkdownConversion() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -326,7 +326,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2MarkdownConversionWithDescriptions() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -349,7 +349,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -367,14 +367,14 @@ public class Swagger2MarkupConverterTest {
 
         Path definitionsDirectory = outputDirectory.resolve("definitions");
         String[] definitions = definitionsDirectory.toFile().list();
-        assertThat(definitions).hasSize(6).containsAll(
-                asList("Identified.adoc", "User.adoc", "Category.adoc", "Pet.adoc", "Tag.adoc", "Order.adoc"));
+        assertThat(definitions).hasSize(5).containsAll(
+                asList("Category.adoc", "Order.adoc", "Pet.adoc", "Tag.adoc", "User.adoc"));
     }
 
     @Test
     public void testSwagger2AsciiDocConversionWithSeparatedOperations() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -398,7 +398,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -419,14 +419,14 @@ public class Swagger2MarkupConverterTest {
 
         Path definitionsDirectory = outputDirectory.resolve("definitions");
         String[] definitions = definitionsDirectory.toFile().list();
-        assertThat(definitions).hasSize(6).containsAll(
-                asList("Identified.md", "User.md", "Category.md", "Pet.md", "Tag.md", "Order.md"));
+        assertThat(definitions).hasSize(5).containsAll(
+                asList("Category.md", "Order.md", "Pet.md", "Tag.md", "User.md"));
     }
 
     @Test
     public void testSwagger2MarkdownConversionHandlesComposition() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -458,7 +458,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionWithRussianOutputLanguage() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -479,7 +479,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionWithFrenchOutputLanguage() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -500,7 +500,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2AsciiDocExtensions() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -528,7 +528,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2MarkdownExtensions() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -557,7 +557,7 @@ public class Swagger2MarkupConverterTest {
     @Test
     public void testSwagger2MarkupConfigDefaultPaths() throws URISyntaxException {
         //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
@@ -674,7 +674,7 @@ public class Swagger2MarkupConverterTest {
     /*
     @Test
     public void testSwagger2HtmlConversion() throws IOException {
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/swagger.json").toURI());
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         String asciiDoc =  Swagger2MarkupConverter.from(file).build().asString();
         String path = "build/docs/generated/asciidocAsString";
         Files.createDirectories(Paths.get(path));
