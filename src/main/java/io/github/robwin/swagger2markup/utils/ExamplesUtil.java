@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -158,12 +159,15 @@ public class ExamplesUtil {
     private static Map<String, Property> getPropertiesForComposedModel(ComposedModel model, Map<String, Model> definitions) {
         Map<String, Property> combinedProperties;
         if (model.getParent() instanceof RefModel) {
-            combinedProperties = definitions.get(((RefModel) model.getParent()).getSimpleRef()).getProperties();
-            if (combinedProperties == null) {
+            Map<String, Property> parentProperties = definitions.get(((RefModel) model.getParent()).getSimpleRef()).getProperties();
+            if (parentProperties == null) {
                 return null;
+            } else {
+                combinedProperties = new LinkedHashMap<>(parentProperties);
             }
+
         } else {
-            combinedProperties = model.getParent().getProperties();
+            combinedProperties = new LinkedHashMap<>(model.getParent().getProperties());
         }
         Map<String, Property> childProperties;
         if (model.getChild() instanceof RefModel) {

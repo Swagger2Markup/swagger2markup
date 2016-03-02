@@ -304,8 +304,7 @@ public class DefinitionsDocument extends MarkupDocument {
             return definitions.containsKey(ref)
                     ? getAllProperties(definitions, definitions.get(ref))
                     : null;
-        }
-        if (model instanceof ComposedModel) {
+        } else if (model instanceof ComposedModel) {
             ComposedModel composedModel = (ComposedModel) model;
             Map<String, Property> allProperties = new HashMap<>();
             if (composedModel.getAllOf() != null) {
