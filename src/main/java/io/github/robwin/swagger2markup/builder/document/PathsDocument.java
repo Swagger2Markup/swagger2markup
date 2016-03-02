@@ -102,7 +102,7 @@ public class PathsDocument extends MarkupDocument {
         DEPRECATED_OPERATION = labels.getString("operation.deprecated");
         UNKNOWN = labels.getString("unknown");
 
-        if (config.isExamplesEnabled()) {
+        if (config.isGeneratedExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include examples is enabled.");
             }
@@ -593,26 +593,19 @@ public class PathsDocument extends MarkupDocument {
      */
     private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
 
-        if (globalContext.config.isExamplesEnabled()) {
-            Optional<Map<String, Object>> generatedRequestExampleMap;
-            Optional<Map<String, Object>> generatedResponseExampleMap;
+        Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(globalContext.config.isGeneratedExamplesEnabled(), operation, globalContext.swagger.getDefinitions(), markupDocBuilder);
+        Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(globalContext.config.isGeneratedExamplesEnabled(), operation.getOperation(), globalContext.swagger.getDefinitions(), markupDocBuilder);
 
-            generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(operation, globalContext.swagger.getDefinitions(), markupDocBuilder);
-            generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(operation.getOperation(), globalContext.swagger.getDefinitions(), markupDocBuilder);
-
-            exampleMap(generatedRequestExampleMap, EXAMPLE_REQUEST, REQUEST, docBuilder);
-            exampleMap(generatedResponseExampleMap, EXAMPLE_RESPONSE, RESPONSE, docBuilder);
-        }
+        exampleMap(generatedRequestExampleMap, EXAMPLE_REQUEST, REQUEST, docBuilder);
+        exampleMap(generatedResponseExampleMap, EXAMPLE_RESPONSE, RESPONSE, docBuilder);
     }
 
-    private void exampleMap(Optional<Map<String, Object>> exampleMap, String operationSectionTitle, String sectionTile, MarkupDocBuilder docBuilder){
-        if (exampleMap.isPresent()) {
+    private void exampleMap(Map<String, Object> exampleMap, String operationSectionTitle, String sectionTile, MarkupDocBuilder docBuilder) {
+        if (exampleMap.size() > 0) {
             addOperationSectionTitle(operationSectionTitle, docBuilder);
-            if (exampleMap.get().size() > 0) {
-                for (Map.Entry<String, Object> entry : exampleMap.get().entrySet()) {
-                    docBuilder.sectionTitleLevel4(sectionTile + " " + entry.getKey() + " :");
-                    docBuilder.listing(Json.pretty(entry.getValue()));
-                }
+            for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
+                addOperationSectionTitle(sectionTile + " " + entry.getKey(), docBuilder);
+                docBuilder.listing(Json.pretty(entry.getValue()));
             }
         }
     }

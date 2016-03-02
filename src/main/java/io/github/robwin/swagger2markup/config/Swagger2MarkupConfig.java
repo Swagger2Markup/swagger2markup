@@ -41,7 +41,7 @@ public class Swagger2MarkupConfig {
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfig.class);
 
     private MarkupLanguage markupLanguage;
-    private boolean examplesEnabled;
+    private boolean generatedExamplesEnabled;
     private boolean schemasEnabled;
     private URI schemasUri;
     private boolean operationDescriptionsEnabled;
@@ -142,8 +142,8 @@ public class Swagger2MarkupConfig {
         return markupLanguage;
     }
 
-    public boolean isExamplesEnabled() {
-        return examplesEnabled;
+    public boolean isGeneratedExamplesEnabled() {
+        return generatedExamplesEnabled;
     }
 
     public boolean isSchemasEnabled() {
@@ -327,7 +327,7 @@ public class Swagger2MarkupConfig {
             safeProperties.putAll(properties);
 
             config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
-            config.examplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesEnabled"));
+            config.generatedExamplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "generatedExamplesEnabled"));
             config.schemasEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
                 config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
@@ -408,12 +408,12 @@ public class Swagger2MarkupConfig {
         }
 
         /**
-         * Include examples into the Paths document
+         * Include generated examples into the Paths document
          *
          * @return this builder
          */
-        public Builder withExamples() {
-            config.examplesEnabled = true;
+        public Builder withGeneratedExamples() {
+            config.generatedExamplesEnabled = true;
             return this;
         }
 
