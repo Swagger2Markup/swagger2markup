@@ -195,20 +195,6 @@ public class Swagger2MarkupConverter {
         }
 
         /**
-         * Uses the SwaggerParser to read the Swagger source.
-         *
-         * @param swaggerLocation the location of the Swagger source
-         * @return the Swagger model
-         */
-        private Swagger readSwagger(String swaggerLocation){
-            Swagger swagger = new SwaggerParser().read(swaggerLocation);
-            if (swagger == null) {
-                throw new IllegalArgumentException("Failed to read the Swagger source");
-            }
-            return swagger;
-        }
-
-        /**
          * Creates a Builder from a local Path.
          *
          * @param swaggerPath the local Path
@@ -228,12 +214,28 @@ public class Swagger2MarkupConverter {
             this.swaggerLocation = null;
         }
 
+        /**
+         * Uses the SwaggerParser to read the Swagger source.
+         *
+         * @param swaggerLocation the location of the Swagger source
+         * @return the Swagger model
+         */
+        private Swagger readSwagger(String swaggerLocation){
+            Swagger swagger = new SwaggerParser().read(swaggerLocation);
+            if (swagger == null) {
+                throw new IllegalArgumentException("Failed to read the Swagger source");
+            }
+            return swagger;
+        }
+
         public Builder withConfig(Swagger2MarkupConfig config) {
+            Validate.notNull(config, "config must not be null");
             this.config = config;
             return this;
         }
 
         public Builder withExtensionRegistry(Swagger2MarkupExtensionRegistry registry) {
+            Validate.notNull(config, "registry must not be null");
             this.extensionRegistry = registry;
             return this;
         }

@@ -169,13 +169,13 @@ public class PathsDocument extends MarkupDocument {
 
         if (allOperations.size() > 0) {
 
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder, null));
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
                 addPathsTitle(PATHS);
-                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder, null));
+                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
             } else {
                 addPathsTitle(RESOURCES);
-                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder, null));
+                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
             }
 
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
@@ -206,8 +206,8 @@ public class PathsDocument extends MarkupDocument {
                 }
             }
 
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_END, this.markupDocBuilder, null));
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_AFTER, this.markupDocBuilder, null));
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
 
     }

@@ -118,9 +118,9 @@ public class DefinitionsDocument extends MarkupDocument {
     private void definitions(Map<String, Model> definitions) {
         if (MapUtils.isNotEmpty(definitions)) {
 
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder, null));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             addDefinitionsTitle(DEFINITIONS);
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder, null));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
 
             Set<String> definitionNames;
             if (config.getDefinitionOrdering() == null)
@@ -144,8 +144,8 @@ public class DefinitionsDocument extends MarkupDocument {
                 }
             }
 
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_END, this.markupDocBuilder, null));
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_AFTER, this.markupDocBuilder, null));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
     }
 

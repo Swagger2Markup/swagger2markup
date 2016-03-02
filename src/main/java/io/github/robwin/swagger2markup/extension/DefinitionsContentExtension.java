@@ -1,6 +1,7 @@
 package io.github.robwin.swagger2markup.extension;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import org.apache.commons.lang3.Validate;
 
 public abstract class DefinitionsContentExtension extends AbstractExtension {
 
@@ -10,7 +11,7 @@ public abstract class DefinitionsContentExtension extends AbstractExtension {
         DOC_BEGIN,
         DOC_END,
         DEF_BEGIN,
-        DEF_END;
+        DEF_END
     }
 
     public static class Context extends ContentContext {
@@ -20,11 +21,19 @@ public abstract class DefinitionsContentExtension extends AbstractExtension {
          */
         public String definitionName;
 
+        public Context(Position position, MarkupDocBuilder docBuilder) {
+            super(docBuilder);
+            Validate.isTrue(position != Position.DEF_BEGIN && position != Position.DEF_END, "You must provide a definitionName for this position");
+            this.position = position;
+        }
+
         public Context(Position position, MarkupDocBuilder docBuilder, String definitionName) {
             super(docBuilder);
+            Validate.notNull(definitionName);
             this.position = position;
             this.definitionName = definitionName;
         }
+
     }
 
     public DefinitionsContentExtension() {

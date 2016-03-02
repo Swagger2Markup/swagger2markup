@@ -3,6 +3,7 @@ package io.github.robwin.swagger2markup.extension;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.PathOperation;
+import org.apache.commons.lang3.Validate;
 
 public abstract class OperationsContentExtension extends AbstractExtension {
 
@@ -22,8 +23,15 @@ public abstract class OperationsContentExtension extends AbstractExtension {
          */
         public PathOperation operation;
 
+        public Context(Position position, MarkupDocBuilder docBuilder) {
+            super(docBuilder);
+            Validate.isTrue(position != Position.OP_BEGIN && position != Position.OP_END, "You must provide an operation for this position");
+            this.position = position;
+        }
+
         public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
             super(docBuilder);
+            Validate.notNull(operation);
             this.position = position;
             this.operation = operation;
         }
@@ -36,6 +44,7 @@ public abstract class OperationsContentExtension extends AbstractExtension {
 
     /**
      * Returns title level offset from 1 to apply to content
+     *
      * @param context context
      * @return title level offset
      */
