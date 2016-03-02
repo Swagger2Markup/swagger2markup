@@ -600,25 +600,18 @@ public class PathsDocument extends MarkupDocument {
             generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(operation, globalContext.swagger.getDefinitions(), markupDocBuilder);
             generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(operation.getOperation(), globalContext.swagger.getDefinitions(), markupDocBuilder);
 
+            exampleMap(generatedRequestExampleMap, EXAMPLE_REQUEST, REQUEST, docBuilder);
+            exampleMap(generatedResponseExampleMap, EXAMPLE_RESPONSE, RESPONSE, docBuilder);
+        }
+    }
 
-            if (generatedRequestExampleMap.isPresent()) {
-                addOperationSectionTitle(EXAMPLE_REQUEST, docBuilder);
-
-                if (generatedRequestExampleMap.isPresent() && generatedRequestExampleMap.get().size() > 0) {
-                    for (Map.Entry<String, Object> request : generatedRequestExampleMap.get().entrySet()) {
-                        docBuilder.sectionTitleLevel4(REQUEST + " " + request.getKey() + " :");
-                        docBuilder.listing(Json.pretty(request.getValue()));
-                    }
-                }
-            }
-
-            if (generatedResponseExampleMap.isPresent()) {
-                addOperationSectionTitle(EXAMPLE_RESPONSE, docBuilder);
-                if (generatedResponseExampleMap.isPresent() && generatedResponseExampleMap.get().size() > 0) {
-                    for (Map.Entry<String, Object> response : generatedResponseExampleMap.get().entrySet()) {
-                        docBuilder.sectionTitleLevel4(RESPONSE + " " + response.getKey() + " :");
-                        docBuilder.listing(Json.pretty(response.getValue()));
-                    }
+    private void exampleMap(Optional<Map<String, Object>> exampleMap, String operationSectionTitle, String sectionTile, MarkupDocBuilder docBuilder){
+        if (exampleMap.isPresent()) {
+            addOperationSectionTitle(operationSectionTitle, docBuilder);
+            if (exampleMap.get().size() > 0) {
+                for (Map.Entry<String, Object> entry : exampleMap.get().entrySet()) {
+                    docBuilder.sectionTitleLevel4(sectionTile + " " + entry.getKey() + " :");
+                    docBuilder.listing(Json.pretty(entry.getValue()));
                 }
             }
         }
