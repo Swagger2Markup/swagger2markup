@@ -28,6 +28,7 @@ import io.github.robwin.swagger2markup.type.Type;
 import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.properties.Property;
+import io.swagger.util.Json;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -155,13 +156,15 @@ public abstract class MarkupDocument {
                     }
                 }
 
+                Object example = PropertyUtils.getExample(globalContext.config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
+
                 List<String> content = Arrays.asList(
                         propertyName,
                         propertyDescriptor.getDescription(property, propertyName),
                         Boolean.toString(property.getRequired()),
                         propertyType.displaySchema(docBuilder),
                         PropertyUtils.getDefaultValue(property),
-                        PropertyUtils.getExample(globalContext.config.isGeneratedExamplesEnabled(), property, markupDocBuilder)
+                        example != null ? Json.pretty(example) : ""
                 );
                 cells.add(content);
             }

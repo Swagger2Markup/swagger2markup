@@ -20,7 +20,6 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
-import io.swagger.util.Json;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -110,9 +109,9 @@ public final class PropertyUtils {
      * @param markupDocBuilder doc builder
      * @return property example display string
      */
-    public static String getExample(boolean generateMissingExamples, Property property, MarkupDocBuilder markupDocBuilder) {
+    public static Object getExample(boolean generateMissingExamples, Property property, MarkupDocBuilder markupDocBuilder) {
         Validate.notNull(property, "property must not be null");
-        Object examplesValue = "";
+        Object examplesValue = null;
         if (property.getExample() != null) {
             examplesValue = convertExample(property.getExample(), property.getType());
         } else if (property instanceof MapProperty) {
@@ -135,7 +134,7 @@ public final class PropertyUtils {
             examplesValue = generateExample(property, markupDocBuilder);
         }
 
-        return Json.pretty(examplesValue);
+        return examplesValue;
     }
 
     /**
