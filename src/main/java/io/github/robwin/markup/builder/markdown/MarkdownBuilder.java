@@ -63,7 +63,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder paragraph(String text) {
-        paragraph(Markdown.HARDBREAKS, text);
+        super.paragraph(text);
         return this;
     }
 

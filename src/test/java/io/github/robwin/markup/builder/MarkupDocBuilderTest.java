@@ -18,6 +18,7 @@
  */
 package io.github.robwin.markup.builder;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class MarkupDocBuilderTest {
     List<String> tableRowsInPSV;
     List<MarkupTableColumn> tableColumns;
     List<List<String>> tableCells;
-
+    String newLine = System.getProperty("line.separator");
 
     @Before
     public void setUp() {
@@ -180,4 +181,52 @@ public class MarkupDocBuilderTest {
         assertEquals("<a name=\"mdb-test-anchor\"></a>[text](#mdb-test-anchor)", prefixMarkup);
     }
 
+
+    @Test
+    public void shouldReplaceNewLinesWithSystemNewLine() throws IOException {
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.paragraph("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla" + newLine + newLine, builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.text("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla" , builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.textLine("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla" + newLine,  builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.italicText("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("*Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla*", builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.italicTextLine("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("*Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla*" + newLine, builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.boldText("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("**Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla**", builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.boldTextLine("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("**Long text " + newLine + " bla bla "  + newLine + " bla " + newLine + " bla**" + newLine, builder.toString());
+    }
+
+    @Test
+    public void shouldReplaceTitleNewLinesWithWhiteSpace() throws IOException {
+        String whitespace = " ";
+
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.documentTitle("Long title \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("= Long title " + whitespace + " bla bla "  + whitespace + " bla " + whitespace + " bla" + newLine + newLine, builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.sectionTitleLevel1("Long title \n bla bla \r bla \r\n bla");
+        Assert.assertEquals(newLine + "== Long title " + whitespace + " bla bla "  + whitespace + " bla " + whitespace + " bla" + newLine , builder.toString());
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.sectionTitleLevel2("Long title \n bla bla \r bla \r\n bla");
+        Assert.assertEquals(newLine + "=== Long title " + whitespace + " bla bla "  + whitespace + " bla " + whitespace + " bla" + newLine , builder.toString());
+    }
 }
