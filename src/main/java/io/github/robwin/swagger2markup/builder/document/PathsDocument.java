@@ -49,6 +49,7 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static io.github.robwin.swagger2markup.utils.IOUtils.normalizeName;
 import static io.github.robwin.swagger2markup.utils.TagUtils.convertTagsListToMap;
 import static io.github.robwin.swagger2markup.utils.TagUtils.getTagDescription;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -66,6 +67,7 @@ public class PathsDocument extends MarkupDocument {
     private final String PARAMETERS;
     private final String BODY_PARAMETER;
     private final String RESPONSES;
+    private final String HEADERS_COLUMN;
     private final String EXAMPLE_REQUEST;
     private final String EXAMPLE_RESPONSE;
 
@@ -91,6 +93,7 @@ public class PathsDocument extends MarkupDocument {
         PARAMETERS = labels.getString("parameters");
         BODY_PARAMETER = labels.getString("body_parameter");
         RESPONSES = labels.getString("responses");
+        HEADERS_COLUMN = labels.getString("headers_column");
         EXAMPLE_REQUEST = labels.getString("example_request");
         EXAMPLE_RESPONSE = labels.getString("example_response");
         SECURITY = labels.getString("security");
