@@ -56,8 +56,9 @@ If you’d like an enhancement to be made to Swagger2Markup, pull requests are m
 
 == Companies who use Swagger2Markup
 
-* Deutsche Telekom 
+* Deutsche Telekom AG
 * https://restlet.com/[Restlet] -- Restlet offers an API platform, covering the https://restlet.com/products/restlet-studio/[design], https://restlet.com/products/dhc/[test] and https://restlet.com/products/apispark/[operation] of Web APIs, and uses Swagger2Markup to generate appealing HTML documentation from API definitions.
+* QAware GmbH
 
 == License
 
