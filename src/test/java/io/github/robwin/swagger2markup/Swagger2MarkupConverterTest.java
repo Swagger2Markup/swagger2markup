@@ -23,6 +23,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.assertions.DiffAssertions;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
@@ -154,6 +155,13 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+
+        Path actual = outputDirectory.resolve("overview.adoc");
+        Path expected = Paths.get(Swagger2MarkupConverterTest.class.getResource("/results/asciidoc/default/overview.adoc").toURI());
+
+        DiffAssertions.assertThat(actual)
+                .isEqualTo(expected,"testSwagger2AsciiDocConversion.html");
+
     }
 
     @Test
@@ -173,8 +181,8 @@ public class Swagger2MarkupConverterTest {
                 .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.toFile().list();
-        assertThat(directories).hasSize(4).containsAll(
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
