@@ -19,6 +19,7 @@ package io.github.robwin.swagger2markup.extension.repository;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import io.github.robwin.swagger2markup.PathOperation;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.extension.OperationsContentExtension;
 import io.github.robwin.swagger2markup.utils.IOUtils;
 import org.apache.commons.lang3.Validate;
@@ -38,18 +39,40 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringRestDocsExtension.class);
 
-    protected URI snippetUri;
+    private static final Map<String, String> DEFAULT_SNIPPETS = new LinkedHashMap<String, String>() {{
+        put("http-request", "HTTP request");
+        put("http-response", "HTTP response");
+        put("curl-request", "Curl request");
+    }};
+
+    protected URI snippetBaseUri;
     protected Map<String, String> snippets = new LinkedHashMap<>();
 
     /**
      * Instantiate extension
-     * @param snippetUri base URI where are snippets are stored
+     * @param snippetBaseUri base URI where are snippets are stored
      */
-    public SpringRestDocsExtension(URI snippetUri) {
+    public SpringRestDocsExtension(URI snippetBaseUri) {
         super();
 
-        Validate.notNull(snippetUri);
-        this.snippetUri = snippetUri;
+        Validate.notNull(snippetBaseUri);
+        this.snippetBaseUri = snippetBaseUri;
+    }
+
+    public SpringRestDocsExtension() {
+        super();
+    }
+
+    @Override
+    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+        if (snippetBaseUri == null) {
+            if (globalContext.swaggerLocation == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("Disable SpringRestDocsExtension > Can't set default snippetBaseUri from swaggerLocation. You have to explicitly configure the snippetBaseUri.");
+            } else {
+                snippetBaseUri = IOUtils.uriParent(globalContext.swaggerLocation);
+            }
+        }
     }
 
     /**
@@ -57,23 +80,9 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
      * @return this instance
      */
     public SpringRestDocsExtension withDefaultSnippets() {
-        snippets.put("http-request", "HTTP request");
-        snippets.put("http-response", "HTTP response");
-        snippets.put("curl-request", "Curl request");
+        snippets.putAll(DEFAULT_SNIPPETS);
 
         return this;
-    }
-
-    /**
-     * Builds the subdirectory name where are stored snippets for the given {@code operation}.<br/>
-     * Default implementation use {@code normalizeName(<operation id>)}, or {@code normalizeName(<operation path> lowercase(<operation method>))} if operation id is not set.<br/>
-     * You can override this method to configure your own folder normalization.
-     *
-     * @param operation current operation
-     * @return subdirectory normalized name
-     */
-    public String operationFolderName(PathOperation operation) {
-        return IOUtils.normalizeName(operation.getId());
     }
 
     /**
@@ -85,6 +94,19 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
         this.snippets.putAll(snippets);
 
         return this;
+    }
+
+    /**
+     * Builds snippet URI for the given {@code operation} and {@code snippetName}.<br/>
+     * Default implementation use {@code <snippetBaseUri>/<normalizeName(<operation id>)>/<snippetName>.<markup ext>}.<br/>
+     * You can override this method to configure your own folder normalization.
+     *
+     * @param context current context
+     * @param operation current operation
+     * @return subdirectory normalized name
+     */
+    public URI operationSnippetUri(Context context, PathOperation operation, String snippetName) {
+        return snippetBaseUri.resolve(IOUtils.normalizeName(operation.getId()) + "/").resolve(context.docBuilder.addFileExtension(snippetName));
     }
 
     public void apply(Context context) {
@@ -106,14 +128,15 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
     public void snippetSection(Context context, String snippetName, String title) {
         ContentExtension content = new ContentExtension(globalContext, context);
 
-        Optional<Reader> snippetContent = content.readContentUri(snippetUri.resolve(operationFolderName(context.operation) + "/").resolve(context.docBuilder.addFileExtension(snippetName)));
+        URI snippetUri = operationSnippetUri(context, context.operation, snippetName);
+        Optional<Reader> snippetContent = content.readContentUri(snippetUri);
 
         if (snippetContent.isPresent()) {
             try {
                 context.docBuilder.sectionTitleLevel(1 + levelOffset(context), title);
                 context.docBuilder.importMarkup(snippetContent.get(), levelOffset(context) + 1);
             } catch (IOException e) {
-                throw new RuntimeException(String.format("Failed to process snippet file: %s", snippetName), e);
+                throw new RuntimeException(String.format("Failed to process snippet URI : %s", snippetUri), e);
             } finally {
                 try {
                     snippetContent.get().close();

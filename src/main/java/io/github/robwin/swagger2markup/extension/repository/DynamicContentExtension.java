@@ -80,7 +80,7 @@ public class DynamicContentExtension extends ContentExtension {
                         try {
                             contentContext.docBuilder.importMarkup(extensionContent.get(), levelOffset);
                         } catch (IOException e) {
-                            throw new RuntimeException(String.format("Failed to read extension file: %s", extension), e);
+                            throw new RuntimeException(String.format("Failed to read extension file %s", extension), e);
                         } finally {
                             extensionContent.get().close();
                         }
@@ -89,7 +89,7 @@ public class DynamicContentExtension extends ContentExtension {
             }
         } catch (IOException e) {
             if (logger.isDebugEnabled())
-                logger.debug("Failed to read extension files from {}", contentPath);
+                logger.debug("Failed to read extension files from directory {}", contentPath);
 
         }
     }

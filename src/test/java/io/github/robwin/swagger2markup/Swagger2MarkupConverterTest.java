@@ -25,6 +25,7 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.extension.repository.SchemaExtension;
 import io.github.robwin.swagger2markup.extension.repository.SpringRestDocsExtension;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
@@ -621,7 +622,7 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocExtensions() throws IOException, URISyntaxException {
+    public void testSwagger2AsciiDocDynamicContentExtensions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
@@ -649,7 +650,7 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testSwagger2MarkdownExtensions() throws IOException, URISyntaxException {
+    public void testSwagger2MarkdownDynamicContentExtensions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/docs/markdown/generated");
@@ -686,7 +687,6 @@ public class Swagger2MarkupConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
                 .withOperationDescriptions()
-                .withSchemas()
                 .build();
 
         Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(file)
@@ -697,7 +697,6 @@ public class Swagger2MarkupConverterTest {
         URI baseUri = io.github.robwin.swagger2markup.utils.IOUtils.uriParent(converterBuilder.globalContext.swaggerLocation);
         assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isEqualTo(baseUri);
         assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isEqualTo(baseUri);
-        assertThat(converterBuilder.globalContext.config.getSchemasUri()).isEqualTo(baseUri);
     }
 
     @Test
@@ -708,7 +707,6 @@ public class Swagger2MarkupConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
                 .withOperationDescriptions()
-                .withSchemas()
                 .build();
 
         Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(URI.create("http://petstore.swagger.io/v2/swagger.json").toURL())
@@ -718,7 +716,6 @@ public class Swagger2MarkupConverterTest {
         //Then
         assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isNull();
         assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isNull();
-        assertThat(converterBuilder.globalContext.config.getSchemasUri()).isNull();
     }
 
     @Test
@@ -734,6 +731,32 @@ public class Swagger2MarkupConverterTest {
                 .withConfig(config)
                 .build();
         assertThat(converter.globalContext.config.isDefinitionDescriptionsEnabled()).isFalse();
+    }
+
+    @Test
+    public void testSwagger2AsciiDocSchemaExtension() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .build();
+        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
+                .withExtension(new SchemaExtension(Paths.get("src/docs/asciidoc/extensions").toUri()))
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .withExtensionRegistry(registry)
+                .build()
+                .intoFolder(outputDirectory);
+
+        //Then
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")))).contains(
+                "=== Pet");
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")))).contains(
+                "==== XML Schema");
     }
 
     /**

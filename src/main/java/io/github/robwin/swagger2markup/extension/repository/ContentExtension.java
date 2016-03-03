@@ -52,7 +52,7 @@ public class ContentExtension {
 
         if (Files.isReadable(contentPath)) {
             if (logger.isInfoEnabled()) {
-                logger.info("Content file processed: {}", contentPath);
+                logger.info("Content file {} processed", contentPath);
             }
             try {
                 Reader contentReader = new FileReader(contentPath.toFile());
@@ -60,12 +60,12 @@ public class ContentExtension {
                 return Optional.of(contentReader);
             } catch (IOException e) {
                 if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to read content file: %s", contentPath), e);
+                    logger.warn("Failed to read content file {} > {}", contentPath, e.getMessage());
                 }
             }
         } else {
-            if (logger.isWarnEnabled()) {
-                logger.warn("Content file is not readable: {}", contentPath);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Failed to read content file {}", contentPath);
             }
         }
 
@@ -83,13 +83,13 @@ public class ContentExtension {
             Reader reader = io.github.robwin.swagger2markup.utils.IOUtils.uriReader(contentUri);
 
             if (logger.isInfoEnabled()) {
-                logger.info("Content URI processed {}", contentUri);
+                logger.info("Content URI {} processed", contentUri);
             }
 
             return Optional.of(reader);
         } catch (IOException e) {
-            if (logger.isWarnEnabled()) {
-                logger.warn("Failed to read URI content {} > {}", contentUri, e.getMessage());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Failed to read content URI {} > {}", contentUri, e.getMessage());
             }
         }
 
