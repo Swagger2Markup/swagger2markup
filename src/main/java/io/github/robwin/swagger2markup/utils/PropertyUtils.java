@@ -106,39 +106,42 @@ public final class PropertyUtils {
     /**
      * Return example display string for the given {@code property}.
      *
-     * @param property property
+     * @param property         property
      * @param markupDocBuilder doc builder
      * @return property example display string
      */
-    public static String getExample(Property property, MarkupDocBuilder markupDocBuilder) {
+    public static String getExample(boolean generateMissingExamples, Property property, MarkupDocBuilder markupDocBuilder) {
         Validate.notNull(property, "property must not be null");
-        Object examplesValue;
+        Object examplesValue = "";
         if (property.getExample() != null) {
             examplesValue = convertExample(property.getExample(), property.getType());
         } else if (property instanceof MapProperty) {
             Property additionalProperty = ((MapProperty) property).getAdditionalProperties();
             if (additionalProperty.getExample() != null) {
                 examplesValue = additionalProperty.getExample();
-            } else {
+            } else if (generateMissingExamples) {
                 Map<String, Object> exampleMap = new HashMap<>();
                 exampleMap.put("string", generateExample(additionalProperty, markupDocBuilder));
                 examplesValue = exampleMap;
             }
         } else if (property instanceof ArrayProperty) {
-            Property itemProperty = ((ArrayProperty) property).getItems();
-            List<Object> exampleArray = new ArrayList<>();
-            exampleArray.add(generateExample(itemProperty, markupDocBuilder));
-            examplesValue = exampleArray;
-        } else {
+            if (generateMissingExamples) {
+                Property itemProperty = ((ArrayProperty) property).getItems();
+                List<Object> exampleArray = new ArrayList<>();
+                exampleArray.add(generateExample(itemProperty, markupDocBuilder));
+                examplesValue = exampleArray;
+            }
+        } else if (generateMissingExamples) {
             examplesValue = generateExample(property, markupDocBuilder);
         }
+
         return Json.pretty(examplesValue);
     }
 
     /**
      * Generate a default example value for property.
      *
-     * @param property property
+     * @param property         property
      * @param markupDocBuilder doc builder
      * @return a generated example for the property
      */
@@ -165,7 +168,7 @@ public final class PropertyUtils {
      * Convert a string {@code value} to specified {@code type}.
      *
      * @param value value to convert
-     * @param type target conversion type
+     * @param type  target conversion type
      * @return converted value as object
      */
     public static Object convertExample(String value, String type) {

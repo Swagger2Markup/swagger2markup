@@ -161,7 +161,7 @@ public abstract class MarkupDocument {
                         Boolean.toString(property.getRequired()),
                         propertyType.displaySchema(docBuilder),
                         PropertyUtils.getDefaultValue(property),
-                        PropertyUtils.getExample(property, markupDocBuilder)
+                        PropertyUtils.getExample(globalContext.config.isGeneratedExamplesEnabled(), property, markupDocBuilder)
                 );
                 cells.add(content);
             }
