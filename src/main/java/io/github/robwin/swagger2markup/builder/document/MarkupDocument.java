@@ -32,7 +32,6 @@ import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.github.robwin.swagger2markup.utils.PropertyUtils;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +40,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -50,15 +48,12 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public abstract class MarkupDocument {
 
-    private static final Pattern NAME_FORBIDDEN_PATTERN = Pattern.compile("[^0-9A-Za-z-_]+");
-
     protected final String DEFAULT_COLUMN;
     protected final String EXAMPLE_COLUMN;
     protected final String REQUIRED_COLUMN;
     protected final String SCHEMA_COLUMN;
     protected final String NAME_COLUMN;
     protected final String DESCRIPTION_COLUMN;
-
     protected final String SCOPES_COLUMN;
     protected final String DESCRIPTION;
     protected final String PRODUCES;
@@ -119,21 +114,6 @@ public abstract class MarkupDocument {
      */
     public void writeToFile(Path file, Charset charset) throws IOException {
         markupDocBuilder.writeToFile(file, charset);
-    }
-
-    /**
-     * Create a normalized name from an arbitrary string.<br/>
-     * Paths separators are replaced, so this function can't be applied on a whole path, but must be called on each path sections.
-     *
-     * @param name current name of the file
-     * @return a normalized filename
-     */
-    public static String normalizeName(String name) {
-        String fileName = NAME_FORBIDDEN_PATTERN.matcher(name).replaceAll("_");
-        fileName = fileName.replaceAll(String.format("([%1$s])([%1$s]+)", "-_"), "$1");
-        fileName = StringUtils.strip(fileName, "_-");
-        fileName = fileName.trim();
-        return fileName;
     }
 
     /**
