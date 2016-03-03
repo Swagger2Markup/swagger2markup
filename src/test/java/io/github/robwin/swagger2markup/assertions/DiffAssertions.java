@@ -37,7 +37,7 @@ public class DiffAssertions {
      */
 
     public static DiffAssert assertThat(Path actual) {
-        Validate.notNull(actual, "actual must not be null!");
+        Validate.notNull(actual, "actual must not be null");
         return new DiffAssert(actual);
     }
 }

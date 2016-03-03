@@ -357,23 +357,6 @@ public class Swagger2MarkupConverterTest {
     }
 
     @Test
-    public void testOldSwaggerSpec2AsciiDocConversion() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/error_swagger_12.json").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConverter.from(file).build()
-                .intoFolder(outputDirectory);
-
-        //Then
-        String[] directories = outputDirectory.toFile().list();
-        assertThat(directories).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
-    }
-
-    @Test
     public void testSwagger2AsciiDocConversionWithDefinitionDescriptions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
