@@ -49,7 +49,7 @@ public enum AsciiDoc implements Markup {
     /**
      * @param markup AsciiDoc markup
      */
-    private AsciiDoc(final String markup) {
+    AsciiDoc(final String markup) {
         this.markup = markup;
     }
 

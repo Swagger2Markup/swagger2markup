@@ -53,6 +53,8 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
     private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
     private static final int MAX_TITLE_LEVEL = 5;
+    protected static final String NEW_LINES = "\\r\\n|\\r|\\n";
+    protected static final String WHITESPACE = " ";
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine = System.getProperty("line.separator");
@@ -72,15 +74,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void documentTitle(Markup markup, String title) {
-        documentBuilder.append(markup).append(title).append(newLine).append(newLine);
+        documentBuilder.append(markup).append(replaceNewLinesWithWhiteSpace(title)).append(newLine).append(newLine);
     }
 
     protected void sectionTitleWithAnchorLevel(Markup markup, int level, String title, String anchor) {
         Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
         documentBuilder.append(newLine);
         if (anchor != null)
-            anchor(anchor).newLine();
-        documentBuilder.append(StringUtils.repeat(markup.toString(), level + 1)).append(" ").append(title).append(newLine);
+            anchor(replaceNewLinesWithWhiteSpace(anchor)).newLine();
+        documentBuilder.append(StringUtils.repeat(markup.toString(), level + 1)).append(" ").append(replaceNewLinesWithWhiteSpace(title)).append(newLine);
     }
 
     @Override
@@ -170,7 +172,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder textLine(String text, boolean forceLineBreak) {
-        text(text);
+        text(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
     }
@@ -183,35 +185,41 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder text(String text) {
-        documentBuilder.append(text);
+        documentBuilder.append(replaceNewLines(text));
         return this;
     }
 
     protected void paragraph(Markup markup, String text) {
-        documentBuilder.append(markup).append(newLine).append(text).append(newLine).append(newLine);
+        documentBuilder.append(markup).append(newLine).append(replaceNewLines(text)).append(newLine).append(newLine);
+    }
+
+    @Override
+    public MarkupDocBuilder paragraph(String text) {
+        documentBuilder.append(replaceNewLines(text)).append(newLine).append(newLine);
+        return this;
     }
 
     @Override
     public MarkupDocBuilder block(String text, MarkupBlockStyle style) {
-        return block(text, style, null, null);
+        return block(replaceNewLines(text), style, null, null);
     }
 
     @Override
     public MarkupDocBuilder listing(String text) {
-        return listing(text, null);
+        return listing(replaceNewLines(text), null);
     }
 
     protected void delimitedBlockText(Markup markup, String text) {
         if (markup != null)
             documentBuilder.append(markup).append(newLine);
-        documentBuilder.append(text).append(newLine);
+        documentBuilder.append(replaceNewLines(text)).append(newLine);
         if (markup != null)
             documentBuilder.append(markup).append(newLine);
         documentBuilder.append(newLine);
     }
 
     protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
-        documentBuilder.append(markup).append(text).append(markup);
+        documentBuilder.append(markup).append(replaceNewLines(text)).append(markup);
     }
 
     protected void boldText(Markup markup, String text) {
@@ -220,7 +228,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak) {
-        boldText(text);
+        boldText(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
     }
@@ -396,6 +404,14 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         if (logger.isInfoEnabled()) {
             logger.info("Markup document written to: {}", file);
         }
+    }
+    
+    public String replaceNewLines(String content){
+        return content.replaceAll(NEW_LINES, newLine);
+    }
+
+    public String replaceNewLinesWithWhiteSpace(String content){
+        return content.replaceAll(NEW_LINES, WHITESPACE);
     }
 
     @Override
