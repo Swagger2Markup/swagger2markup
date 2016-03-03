@@ -74,10 +74,12 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void documentTitle(Markup markup, String title) {
+        Validate.notBlank(title, "title must not be null");
         documentBuilder.append(markup).append(replaceNewLinesWithWhiteSpace(title)).append(newLine).append(newLine);
     }
 
     protected void sectionTitleWithAnchorLevel(Markup markup, int level, String title, String anchor) {
+        Validate.notBlank(title, "title must not be null");
         Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
         documentBuilder.append(newLine);
         if (anchor != null)
@@ -172,6 +174,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder textLine(String text, boolean forceLineBreak) {
+        Validate.notBlank(text, "text must not be null");
         text(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
@@ -185,27 +188,32 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder text(String text) {
+        Validate.notBlank(text, "text must not be null");
         documentBuilder.append(replaceNewLines(text));
         return this;
     }
 
     protected void paragraph(Markup markup, String text) {
+        Validate.notBlank(text, "text must not be null");
         documentBuilder.append(markup).append(newLine).append(replaceNewLines(text)).append(newLine).append(newLine);
     }
 
     @Override
     public MarkupDocBuilder paragraph(String text) {
+        Validate.notBlank(text, "text must not be null");
         documentBuilder.append(replaceNewLines(text)).append(newLine).append(newLine);
         return this;
     }
 
     @Override
     public MarkupDocBuilder block(String text, MarkupBlockStyle style) {
+        Validate.notBlank(text, "text must not be null");
         return block(replaceNewLines(text), style, null, null);
     }
 
     @Override
     public MarkupDocBuilder listing(String text) {
+        Validate.notBlank(text, "text must not be null");
         return listing(replaceNewLines(text), null);
     }
 
@@ -219,6 +227,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
+        Validate.notBlank(text, "text must not be null");
         documentBuilder.append(markup).append(replaceNewLines(text)).append(markup);
     }
 
@@ -228,13 +237,14 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak) {
+        Validate.notBlank(text, "text must not be null");
         boldText(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text) {
+    public MarkupDocBuilder boldTextLine(String text) {        
         return boldTextLine(text, LINE_BREAK_DEFAULT);
     }
 
@@ -255,6 +265,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void unorderedList(Markup markup, List<String> list) {
+        Validate.notEmpty(list, "list must not be null");
         documentBuilder.append(newLine);
         for (String listEntry : list) {
             unorderedListItem(markup, listEntry);
@@ -263,11 +274,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void unorderedListItem(Markup markup, String item) {
+        Validate.notBlank(item, "item must not be null");
         documentBuilder.append(markup).append(item).append(newLine);
     }
 
     @Override
     public MarkupDocBuilder anchor(String anchor) {
+        Validate.notBlank(anchor, "anchor must not be null");
         return anchor(anchor, null);
     }
 
@@ -333,6 +346,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText) throws IOException {
+        Validate.notNull(markupText, "markupText must not be null");
         return importMarkup(markupText, 0);
     }
 
