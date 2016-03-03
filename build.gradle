@@ -4,8 +4,8 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.2'
-        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.8'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.10.1'
         classpath 'io.spring.gradle:dependency-management-plugin:0.5.5.RELEASE'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'org.asciidoctor:asciidoctorj:1.5.2'
@@ -55,6 +55,7 @@ dependencies {
     testCompile 'org.asciidoctor:asciidoctorj:1.5.4'
     testCompile 'ch.qos.logback:logback-classic'
     testCompile 'org.assertj:assertj-core'
+    testCompile 'com.sksamuel.diff:diff'
 }
 
 dependencyManagement {
@@ -67,6 +68,7 @@ dependencyManagement {
         dependency "org.slf4j:slf4j-api:1.7.12"
         dependency "ch.qos.logback:logback-classic:1.1.2"
         dependency "org.assertj:assertj-core:2.2.0"
+        dependency "com.sksamuel.diff:diff:1.1.11"
     }
 }
 

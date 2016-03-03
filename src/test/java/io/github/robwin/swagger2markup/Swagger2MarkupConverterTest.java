@@ -20,6 +20,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.assertions.DiffAssertions;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
@@ -148,9 +149,11 @@ public class Swagger2MarkupConverterTest {
 
         String definitionsDocument = new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")));
         assertThat(definitionsDocument)
+                .contains("|name||true|string||\"doggie\"");
+        assertThat(definitionsDocument)
                 .contains("|id||false|integer(int64)||77");
-        assertThat(definitionsDocument).contains("|pictures||false|string(byte) array||[ \"string\" ]");
-        assertThat(definitionsDocument).contains("|shipDate||false|string(date-time)||\"string\"");
+        assertThat(definitionsDocument).contains("|pictures||false|string(byte) array||");
+        assertThat(definitionsDocument).contains("|shipDate||false|string(date-time)||");
         assertThat(definitionsDocument)
                 .doesNotContain("99");
     }
@@ -234,9 +237,13 @@ public class Swagger2MarkupConverterTest {
 
         String definitionsDocument = new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")));
         assertThat(definitionsDocument)
-                .contains("|id||false|integer(int64)||77");
+                .contains("|name||true|string||\"doggie\"");
         assertThat(definitionsDocument)
-                .contains("|name||true|string||doggie");
+                .contains("|id||false|integer(int64)||77");
+        assertThat(definitionsDocument).contains("|pictures||false|string(byte) array||[ \"string\" ]");
+        assertThat(definitionsDocument).contains("|shipDate||false|string(date-time)||\"string\"");
+        assertThat(definitionsDocument)
+                .doesNotContain("99");
         assertThat(definitionsDocument)
                 .contains("|nicknames||false|object||{\n" +
                         "  \"string\" : \"string\"\n" +
@@ -280,6 +287,13 @@ public class Swagger2MarkupConverterTest {
         String[] directories = outputDirectory.toFile().list();
         assertThat(directories).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+
+        Path actual = outputDirectory.resolve("overview.adoc");
+        Path expected = Paths.get(Swagger2MarkupConverterTest.class.getResource("/results/asciidoc/default/overview.adoc").toURI());
+
+        DiffAssertions.assertThat(actual)
+                .isEqualTo(expected,"testSwagger2AsciiDocConversion.html");
+
     }
 
     @Test
@@ -299,8 +313,8 @@ public class Swagger2MarkupConverterTest {
                 .intoFolder(outputDirectory);
 
         //Then
-        String[] directories = outputDirectory.toFile().list();
-        assertThat(directories).hasSize(4).containsAll(
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(
                 asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
@@ -346,23 +360,6 @@ public class Swagger2MarkupConverterTest {
         } catch (Exception e) {
             assertThat(e).hasMessage("Can't GroupBy.TAGS > Operation 'updatePet' has not tags");
         }
-    }
-
-    @Test
-    public void testOldSwaggerSpec2AsciiDocConversion() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(Swagger2MarkupConverterTest.class.getResource("/json/error_swagger_12.json").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConverter.from(file).build()
-                .intoFolder(outputDirectory);
-
-        //Then
-        String[] directories = outputDirectory.toFile().list();
-        assertThat(directories).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
     }
 
     @Test

@@ -1,0 +1,69 @@
+
+[[_definitions]]
+== Definitions
+
+=== Category
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|id||false|integer(int64)||0
+|name||false|string||string
+|===
+
+
+=== Order
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|complete||false|boolean||true
+|id||false|integer(int64)||0
+|petId||false|integer(int64)||0
+|quantity||false|integer(int32)||0
+|shipDate||false|string(date-time)||string
+|status|Order Status|false|string||string
+|===
+
+
+=== Pet
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|category||false|<<_category,Category>>||<<_category>>
+|id||false|integer(int64)||0
+|name||true|string||doggie
+|photoUrls||true|string array||[ string ]
+|status|pet status in the store|false|string||string
+|tags||false|<<_tag,Tag>> array||[ <<_tag>> ]
+|===
+
+
+=== Tag
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|id||false|integer(int64)||0
+|name||false|string||string
+|===
+
+
+=== User
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|email||false|string||string
+|firstName||false|string||string
+|id||false|integer(int64)||0
+|lastName||false|string||string
+|password||false|string||string
+|phone||false|string||string
+|userStatus|User Status|false|integer(int32)||0
+|username||false|string||string
+|===
+
+
+

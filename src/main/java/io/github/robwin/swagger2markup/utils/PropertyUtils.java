@@ -20,7 +20,6 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
-import io.swagger.util.Json;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -106,37 +105,47 @@ public final class PropertyUtils {
     /**
      * Return example display string for the given {@code property}.
      *
-     * @param property property
+     * @param property         property
      * @param markupDocBuilder doc builder
      * @return property example display string
      */
-    public static String getExample(Property property, MarkupDocBuilder markupDocBuilder) {
+    public static Object getExample(boolean generateMissingExamples, Property property, MarkupDocBuilder markupDocBuilder) {
         Validate.notNull(property, "property must not be null");
-        Object examplesValue;
+        Object examplesValue = null;
         if (property.getExample() != null) {
             examplesValue = property.getExample();
         } else if (property instanceof MapProperty) {
-            Map<String, Object> exampleMap = new HashMap<>();
             Property additionalProperty = ((MapProperty) property).getAdditionalProperties();
             if (additionalProperty.getExample() != null) {
                 examplesValue = additionalProperty.getExample();
-            } else {
-                exampleMap.put("string", exampleFromType(additionalProperty.getType(), additionalProperty, markupDocBuilder));
-                examplesValue = Json.pretty(exampleMap);
+            } else if (generateMissingExamples) {
+                Map<String, Object> exampleMap = new HashMap<>();
+                exampleMap.put("string", generateExample(additionalProperty, markupDocBuilder));
+                examplesValue = exampleMap;
             }
         } else if (property instanceof ArrayProperty) {
-            List<Object> exampleArray = new ArrayList<>();
-            Property itemProperty = ((ArrayProperty) property).getItems();
-            exampleArray.add(exampleFromType(itemProperty.getType(), itemProperty, markupDocBuilder));
-            examplesValue = Json.pretty(exampleArray);
-        } else {
-            examplesValue = Json.pretty(exampleFromType(property.getType(), property, markupDocBuilder));
+            if (generateMissingExamples) {
+                Property itemProperty = ((ArrayProperty) property).getItems();
+                List<Object> exampleArray = new ArrayList<>();
+                exampleArray.add(generateExample(itemProperty, markupDocBuilder));
+                examplesValue = exampleArray;
+            }
+        } else if (generateMissingExamples) {
+            examplesValue = generateExample(property, markupDocBuilder);
         }
-        return String.valueOf(examplesValue);
+
+        return examplesValue;
     }
 
-    public static Object exampleFromType(String type, Property property, MarkupDocBuilder markupDocBuilder) {
-        switch (type) {
+    /**
+     * Generate a default example value for property.
+     *
+     * @param property         property
+     * @param markupDocBuilder doc builder
+     * @return a generated example for the property
+     */
+    public static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
+        switch (property.getType()) {
             case "integer":
                 return 0;
             case "number":
@@ -146,11 +155,41 @@ public final class PropertyUtils {
             case "string":
                 return "string";
             case "ref":
-                if (property != null && property instanceof RefProperty) {
+                if (property instanceof RefProperty) {
                     return markupDocBuilder.copy().crossReference(((RefProperty) property).getSimpleRef()).toString();
                 }
             default:
-                return type;
+                return property.getType();
+        }
+    }
+
+    /**
+     * Convert a string {@code value} to specified {@code type}.
+     *
+     * @param value value to convert
+     * @param type  target conversion type
+     * @return converted value as object
+     */
+    public static Object convertExample(String value, String type) {
+        if (value == null) {
+            return null;
+        }
+
+        try {
+            switch (type) {
+                case "integer":
+                    return Integer.valueOf(value);
+                case "number":
+                    return Float.valueOf(value);
+                case "boolean":
+                    return Boolean.valueOf(value);
+                case "string":
+                    return value;
+                default:
+                    return value;
+            }
+        } catch (NumberFormatException e) {
+            throw new RuntimeException(String.format("Value '%s' cannot be converted to '%s'", value, type), e);
         }
     }
 }

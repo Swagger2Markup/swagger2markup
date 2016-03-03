@@ -58,7 +58,7 @@ public class ExamplesUtil {
                         example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, markupDocBuilder);
                     }
                     if (example == null && generateMissingExamples) {
-                        example = PropertyUtils.exampleFromType(schema.getType(), schema, markupDocBuilder);
+                        example = PropertyUtils.generateExample(schema, markupDocBuilder);
                     }
                 }
             }
@@ -117,11 +117,11 @@ public class ExamplesUtil {
                         if (item != null) {
                             abstractSerializableParameterExample = item.getExample();
                             if (abstractSerializableParameterExample == null) {
-                                abstractSerializableParameterExample = PropertyUtils.exampleFromType(item.getType(), item, markupDocBuilder);
+                                abstractSerializableParameterExample = PropertyUtils.generateExample(item, markupDocBuilder);
                             }
                         }
                         if (abstractSerializableParameterExample == null) {
-                            abstractSerializableParameterExample = PropertyUtils.exampleFromType(((AbstractSerializableParameter) parameter).getType(), null, markupDocBuilder);
+                            abstractSerializableParameterExample = ParameterUtils.generateExample((AbstractSerializableParameter)parameter);
                         }
                     }
                     if (parameter instanceof PathParameter) {
@@ -221,7 +221,7 @@ public class ExamplesUtil {
                 }
                 if (exampleObject == null) {
                     Property valueProperty = property.getValue();
-                    exampleObject = PropertyUtils.exampleFromType(valueProperty.getType(), valueProperty, markupDocBuilder);
+                    exampleObject = PropertyUtils.generateExample(valueProperty, markupDocBuilder);
                 }
             }
             exampleMap.put(property.getKey(), exampleObject);
@@ -238,7 +238,7 @@ public class ExamplesUtil {
         if (valueProperty.getExample() != null) {
             return valueProperty.getExample();
         }
-        exampleMap.put("string", PropertyUtils.exampleFromType(valueProperty.getType(), valueProperty, markupDocBuilder));
+        exampleMap.put("string", PropertyUtils.generateExample(valueProperty, markupDocBuilder));
         return exampleMap;
     }
 
@@ -256,7 +256,7 @@ public class ExamplesUtil {
             } else if (itemProperty instanceof RefProperty) {
                 return new Object[]{generateExampleForRefModel(true, ((RefProperty) itemProperty).getSimpleRef(), definitions, markupDocBuilder)};
             } else {
-                return new Object[]{PropertyUtils.exampleFromType(itemProperty.getType(), itemProperty, markupDocBuilder)};
+                return new Object[]{PropertyUtils.generateExample(itemProperty, markupDocBuilder)};
             }
         }
     }
@@ -276,29 +276,8 @@ public class ExamplesUtil {
         } else if (property instanceof RefProperty) {
             return new Object[]{generateExampleForRefModel(true, ((RefProperty) property).getSimpleRef(), definitions, markupDocBuilder)};
         } else {
-            return new Object[]{PropertyUtils.exampleFromType(property.getType(), property, markupDocBuilder)};
+            return new Object[]{PropertyUtils.generateExample(property, markupDocBuilder)};
         }
     }
 
-    public static Object convertStringToType(String value, String type) {
-        if (value == null) {
-            return null;
-        }
-        try {
-            switch (type) {
-                case "integer":
-                    return new Integer(value);
-                case "number":
-                    return new Float(value);
-                case "boolean":
-                    return new Boolean(value);
-                case "string":
-                    return value;
-                default:
-                    return value;
-            }
-        } catch (NumberFormatException e) {
-            throw new RuntimeException(String.format("Value '%s' cannot be converted to '%s'", value, type), e);
-        }
-    }
 }
