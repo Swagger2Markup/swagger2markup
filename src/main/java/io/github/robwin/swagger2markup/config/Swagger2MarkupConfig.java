@@ -1,20 +1,17 @@
 /*
+ * Copyright 2016 Robert Winkler
  *
- *  Copyright 2015 Robert Winkler
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package io.github.robwin.swagger2markup.config;
 
@@ -41,7 +38,7 @@ public class Swagger2MarkupConfig {
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfig.class);
 
     private MarkupLanguage markupLanguage;
-    private boolean examplesEnabled;
+    private boolean generatedExamplesEnabled;
     private boolean schemasEnabled;
     private URI schemasUri;
     private boolean operationDescriptionsEnabled;
@@ -142,8 +139,8 @@ public class Swagger2MarkupConfig {
         return markupLanguage;
     }
 
-    public boolean isExamplesEnabled() {
-        return examplesEnabled;
+    public boolean isGeneratedExamplesEnabled() {
+        return generatedExamplesEnabled;
     }
 
     public boolean isSchemasEnabled() {
@@ -327,7 +324,7 @@ public class Swagger2MarkupConfig {
             safeProperties.putAll(properties);
 
             config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
-            config.examplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesEnabled"));
+            config.generatedExamplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "generatedExamplesEnabled"));
             config.schemasEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
                 config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
@@ -402,27 +399,29 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withMarkupLanguage(MarkupLanguage markupLanguage) {
+            Validate.notNull(markupLanguage, "%s must not be null", "markupLanguage");
             config.markupLanguage = markupLanguage;
             return this;
         }
 
         /**
-         * Include examples into the Paths document
+         * Include generated examples into the Paths document
          *
          * @return this builder
          */
-        public Builder withExamples() {
-            config.examplesEnabled = true;
+        public Builder withGeneratedExamples() {
+            config.generatedExamplesEnabled = true;
             return this;
         }
 
         /**
          * Include (JSON, XML) schemas into the Definitions document
          *
-         * @param schemasUri the URI to the folder where the schema documents reside. Use default URI if null.
+         * @param schemasUri the URI to the folder where the schema documents reside.
          * @return this builder
          */
         public Builder withSchemas(URI schemasUri) {
+            Validate.notNull(schemasUri, "%s must not be null", "schemasUri");
             config.schemasEnabled = true;
             config.schemasUri = schemasUri;
             return this;
@@ -435,6 +434,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withSchemas(Path schemasPath) {
+            Validate.notNull(schemasPath, "%s must not be null", "schemasPath");
             return withSchemas(schemasPath.toUri());
         }
 
@@ -445,7 +445,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withSchemas() {
-            withSchemas((URI) null);
+            config.schemasEnabled = true;
             return this;
         }
 
@@ -456,6 +456,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOperationDescriptions(URI operationDescriptionsUri) {
+            Validate.notNull(operationDescriptionsUri, "%s must not be null", "operationDescriptionsUri");
             config.operationDescriptionsEnabled = true;
             config.operationDescriptionsUri = operationDescriptionsUri;
             return this;
@@ -468,6 +469,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOperationDescriptions(Path operationDescriptionsPath) {
+            Validate.notNull(operationDescriptionsPath, "%s must not be null", "operationDescriptionsPath");
             return withOperationDescriptions(operationDescriptionsPath.toUri());
         }
 
@@ -478,7 +480,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOperationDescriptions() {
-            withOperationDescriptions((URI) null);
+            config.operationDescriptionsEnabled = true;
             return this;
         }
 
@@ -489,6 +491,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withDefinitionDescriptions(URI definitionDescriptionsUri) {
+            Validate.notNull(definitionDescriptionsUri, "%s must not be null", "definitionDescriptionsUri");
             config.definitionDescriptionsEnabled = true;
             config.definitionDescriptionsUri = definitionDescriptionsUri;
             return this;
@@ -501,6 +504,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withDefinitionDescriptions(Path definitionDescriptionsPath) {
+            Validate.notNull(definitionDescriptionsPath, "%s must not be null", "definitionDescriptionsPath");
             return withDefinitionDescriptions(definitionDescriptionsPath.toUri());
         }
 
@@ -511,7 +515,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withDefinitionDescriptions() {
-            withDefinitionDescriptions((URI) null);
+            config.definitionDescriptionsEnabled = true;
             return this;
         }
 
@@ -544,6 +548,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withPathsGroupedBy(GroupBy pathsGroupedBy) {
+            Validate.notNull(pathsGroupedBy, "%s must not be null", "pathsGroupedBy");
             config.operationsGroupedBy = pathsGroupedBy;
             return this;
         }
@@ -555,6 +560,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOutputLanguage(Language language) {
+            Validate.notNull(language, "%s must not be null", "language");
             config.outputLanguage = language;
             return this;
         }
@@ -566,6 +572,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
+            Validate.notNull(inlineSchemaDepthLevel, "%s must not be null", "inlineSchemaDepthLevel");
             config.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
             return this;
         }
@@ -579,6 +586,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withTagOrdering(OrderBy orderBy) {
+            Validate.notNull(orderBy, "%s must not be null", "orderBy");
             Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
             config.tagOrderBy = orderBy;
             return this;
@@ -591,8 +599,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withTagOrdering(Comparator<String> tagOrdering) {
-            Validate.notNull(tagOrdering);
-
+            Validate.notNull(tagOrdering, "%s must not be null", "tagOrdering");
             config.tagOrderBy = OrderBy.CUSTOM;
             config.tagOrdering = tagOrdering;
             return this;
@@ -607,6 +614,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOperationOrdering(OrderBy orderBy) {
+            Validate.notNull(orderBy, "%s must not be null", "orderBy");
             Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
             config.operationOrderBy = orderBy;
             return this;
@@ -619,8 +627,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
-            Validate.notNull(operationOrdering);
-
+            Validate.notNull(operationOrdering, "%s must not be null", "operationOrdering");
             config.operationOrderBy = OrderBy.CUSTOM;
             config.operationOrdering = operationOrdering;
             return this;
@@ -635,6 +642,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withDefinitionOrdering(OrderBy orderBy) {
+            Validate.notNull(orderBy, "%s must not be null", "orderBy");
             Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
             config.definitionOrderBy = orderBy;
             return this;
@@ -647,8 +655,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withDefinitionOrdering(Comparator<String> definitionOrdering) {
-            Validate.notNull(definitionOrdering);
-
+            Validate.notNull(definitionOrdering, "%s must not be null", "definitionOrdering");
             config.definitionOrderBy = OrderBy.CUSTOM;
             config.definitionOrdering = definitionOrdering;
             return this;
@@ -663,6 +670,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withParameterOrdering(OrderBy orderBy) {
+            Validate.notNull(orderBy, "%s must not be null", "orderBy");
             Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
             config.parameterOrderBy = orderBy;
             return this;
@@ -675,7 +683,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withParameterOrdering(Comparator<Parameter> parameterOrdering) {
-            Validate.notNull(parameterOrdering);
+            Validate.notNull(parameterOrdering, "%s must not be null", "parameterOrdering");
 
             config.parameterOrderBy = OrderBy.CUSTOM;
             config.parameterOrdering = parameterOrdering;
@@ -691,6 +699,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withPropertyOrdering(OrderBy orderBy) {
+            Validate.notNull(orderBy, "%s must not be null", "orderBy");
             Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
             config.propertyOrderBy = orderBy;
             return this;
@@ -703,7 +712,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withPropertyOrdering(Comparator<String> propertyOrdering) {
-            Validate.notNull(propertyOrdering);
+            Validate.notNull(propertyOrdering, "%s must not be null", "propertyOrdering");
 
             config.propertyOrderBy = OrderBy.CUSTOM;
             config.propertyOrdering = propertyOrdering;
@@ -719,6 +728,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withResponseOrdering(OrderBy orderBy) {
+            Validate.notNull(orderBy, "%s must not be null", "orderBy");
             Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
             config.responseOrderBy = orderBy;
             return this;
@@ -731,7 +741,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withResponseOrdering(Comparator<String> responseOrdering) {
-            Validate.notNull(responseOrdering);
+            Validate.notNull(responseOrdering, "%s must not be null", "responseOrdering");
 
             config.responseOrderBy = OrderBy.CUSTOM;
             config.responseOrdering = responseOrdering;
@@ -745,6 +755,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
+            Validate.notNull(prefix, "%s must not be null", "prefix");
             config.interDocumentCrossReferencesEnabled = true;
             config.interDocumentCrossReferencesPrefix = prefix;
             return this;
@@ -778,6 +789,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withAnchorPrefix(String anchorPrefix) {
+            Validate.notNull(anchorPrefix, "%s must no be null", "anchorPrefix");
             config.anchorPrefix = anchorPrefix;
             return this;
         }

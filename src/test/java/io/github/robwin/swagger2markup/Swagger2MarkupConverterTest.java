@@ -1,20 +1,17 @@
 /*
+ * Copyright 2016 Robert Winkler
  *
- *  Copyright 2015 Robert Winkler
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package io.github.robwin.swagger2markup;
 
@@ -110,7 +107,6 @@ public class Swagger2MarkupConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withExamples()
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -120,11 +116,141 @@ public class Swagger2MarkupConverterTest {
 
         //Then
         String[] directories = outputDirectory.toFile().list();
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc"))))
-                .contains("==== Example HTTP response");
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc"))))
-                .contains("|name||true|string||doggie");
+        String orderExample = "----\n" +
+                "{\n" +
+                "  \"id\" : 99,\n" +
+                "  \"petId\" : 122,\n" +
+                "  \"quantity\" : 2,\n" +
+                "  \"shipDate\" : \"2016-02-22T23:02:05Z\",\n" +
+                "  \"status\" : \"PENDING\",\n" +
+                "  \"complete\" : true\n" +
+                "}\n" +
+                "----\n";
+        String petResponseExample = "----\n" +
+                "{\n" +
+                "  \"application/json\" : {\n" +
+                "    \"name\" : \"Puma\",\n" +
+                "    \"type\" : 22,\n" +
+                "    \"color\" : \"Black\",\n" +
+                "    \"gender\" : \"Female\",\n" +
+                "    \"breed\" : \"Mixed\"\n" +
+                "  }\n" +
+                "}\n" +
+                "----\n";
+
+        String pathsDocument = new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc")));
+        assertThat(pathsDocument)
+                .contains("==== Response 405\n" + petResponseExample);
+        assertThat(pathsDocument)
+                .contains("==== Request body\n" + orderExample);
+        assertThat(pathsDocument)
+                .contains("==== Response 200\n" + orderExample);
+
+        String definitionsDocument = new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")));
+        assertThat(definitionsDocument)
+                .contains("|id||false|integer(int64)||77");
+        assertThat(definitionsDocument).contains("|pictures||false|string(byte) array||[ \"string\" ]");
+        assertThat(definitionsDocument).contains("|shipDate||false|string(date-time)||\"string\"");
+        assertThat(definitionsDocument)
+                .doesNotContain("99");
     }
+
+    @Test
+    public void testSwagger2AsciiDocConversionWithGeneratedExamples() throws IOException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withGeneratedExamples()
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .intoFolder(outputDirectory);
+
+        //Then
+        String[] directories = outputDirectory.toFile().list();
+        String petGeneratedExample = "----\n" +
+                "{\n" +
+                "  \"tags\" : [ {\n" +
+                "    \"id\" : 0,\n" +
+                "    \"name\" : \"string\"\n" +
+                "  } ],\n" +
+                "  \"id\" : 0,\n" +
+                "  \"nicknames\" : {\n" +
+                "    \"string\" : \"string\"\n" +
+                "  },\n" +
+                "  \"category\" : {\n" +
+                "    \"id\" : 123,\n" +
+                "    \"name\" : \"Canines\"\n" +
+                "  },\n" +
+                "  \"weight\" : 0.0,\n" +
+                "  \"status\" : \"string\",\n" +
+                "  \"name\" : \"doggie\",\n" +
+                "  \"photoUrls\" : [ \"string\" ]\n" +
+                "}\n" +
+                "----\n";
+        String petResponseExample = "----\n" +
+                "{\n" +
+                "  \"application/json\" : {\n" +
+                "    \"name\" : \"Puma\",\n" +
+                "    \"type\" : 22,\n" +
+                "    \"color\" : \"Black\",\n" +
+                "    \"gender\" : \"Female\",\n" +
+                "    \"breed\" : \"Mixed\"\n" +
+                "  }\n" +
+                "}\n" +
+                "----\n";
+        String pathsDocument = new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc")));
+        assertThat(pathsDocument)
+                .contains("==== Request body\n" + petGeneratedExample);
+        assertThat(pathsDocument)
+                .contains("== Request path\n" + "----\n" +
+                        "\"/pets\"\n" +
+                        "----");
+        assertThat(pathsDocument)
+                .contains("==== Request query\n" +
+                        "----\n" +
+                        "{\n" +
+                        "  \"status\" : \"string\"\n" +
+                        "}\n" +
+                        "----\n");
+        assertThat(pathsDocument)
+                .contains("==== Response 405\n" + petResponseExample);
+        assertThat(pathsDocument)
+                .contains("==== Response 200\n" +
+                        "----\n" +
+                        "\"array\"\n" +
+                        "----");
+        assertThat(pathsDocument)
+                .contains("==== Request path\n" +
+                        "----\n" +
+                        "\"/pets/0\"\n" +
+                        "----");
+
+        String definitionsDocument = new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")));
+        assertThat(definitionsDocument)
+                .contains("|id||false|integer(int64)||77");
+        assertThat(definitionsDocument)
+                .contains("|name||true|string||doggie");
+        assertThat(definitionsDocument)
+                .contains("|nicknames||false|object||{\n" +
+                        "  \"string\" : \"string\"\n" +
+                        "}");
+        assertThat(definitionsDocument)
+                .contains("[options=\"header\", cols=\".^1h,.^6,.^1,.^1,.^1,.^1\"]\n" +
+                        "|===\n" +
+                        "|Name|Description|Required|Schema|Default|Example\n" +
+                        "|id||false|integer(int64)||0\n" +
+                        "|===\n");
+
+
+    }
+
 
     @Test
     public void testSwagger2AsciiDocConversionAsString() throws IOException, URISyntaxException {
