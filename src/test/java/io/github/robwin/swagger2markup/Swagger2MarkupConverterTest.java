@@ -237,7 +237,7 @@ public class Swagger2MarkupConverterTest {
         assertThat(definitionsDocument)
                 .contains("|id||false|integer(int64)||77");
         assertThat(definitionsDocument)
-                .contains("|name||true|string||doggie");
+                .contains("|name||true|string||\"doggie\"");
         assertThat(definitionsDocument)
                 .contains("|nicknames||false|object||{\n" +
                         "  \"string\" : \"string\"\n" +

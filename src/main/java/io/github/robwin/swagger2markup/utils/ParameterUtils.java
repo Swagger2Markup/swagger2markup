@@ -16,6 +16,7 @@
 package io.github.robwin.swagger2markup.utils;
 
 import com.google.common.base.Function;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -87,4 +88,25 @@ public final class ParameterUtils {
         return defaultString(defaultValue);
     }
 
+    /**
+     * Generate a default example value for parameter.
+     *
+     * @param parameter parameter
+     * @param markupDocBuilder doc builder
+     * @return a generated example for the parameter
+     */
+    public static Object generateExample(AbstractSerializableParameter parameter, MarkupDocBuilder markupDocBuilder) {
+        switch (parameter.getType()) {
+            case "integer":
+                return 0;
+            case "number":
+                return 0.0;
+            case "boolean":
+                return true;
+            case "string":
+                return "string";
+            default:
+                return parameter.getType();
+        }
+    }
 }
