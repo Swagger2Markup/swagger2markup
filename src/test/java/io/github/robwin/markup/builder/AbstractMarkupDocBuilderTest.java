@@ -21,7 +21,7 @@ public class AbstractMarkupDocBuilderTest {
     @Before
     public void setUp() {
         builder = mock(AbstractMarkupDocBuilder.class, Mockito.CALLS_REAL_METHODS);
-        builder.newLine = System.getProperty("line.separator");
+        builder.newLine = "\n";
         builder.documentBuilder = new StringBuilder();
     }
 
