@@ -1,20 +1,17 @@
 /*
+ * Copyright 2016 Robert Winkler
  *
- *  Copyright 2015 Robert Winkler
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package io.github.robwin.swagger2markup.utils;
 
@@ -27,10 +24,7 @@ import io.swagger.util.Json;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -43,7 +37,7 @@ public final class PropertyUtils {
      * @return the type of the property
      */
     public static Type getType(Property property, Function<String, String> definitionDocumentResolver) {
-        Validate.notNull(property, "property must not be null!");
+        Validate.notNull(property, "property must not be null");
         Type type;
         if (property instanceof RefProperty) {
             RefProperty refProperty = (RefProperty) property;
@@ -82,7 +76,7 @@ public final class PropertyUtils {
      * @return the default value of the property, or otherwise an empty String
      */
     public static String getDefaultValue(Property property) {
-        Validate.notNull(property, "property must not be null!");
+        Validate.notNull(property, "property must not be null");
         String defaultValue = "";
         if (property instanceof BooleanProperty) {
             BooleanProperty booleanProperty = (BooleanProperty) property;
@@ -109,8 +103,15 @@ public final class PropertyUtils {
         return defaultValue;
     }
 
+    /**
+     * Return example display string for the given {@code property}.
+     *
+     * @param property property
+     * @param markupDocBuilder doc builder
+     * @return property example display string
+     */
     public static String getExample(Property property, MarkupDocBuilder markupDocBuilder) {
-        Validate.notNull(property, "parameter must not be null!");
+        Validate.notNull(property, "property must not be null");
         Object examplesValue;
         if (property.getExample() != null) {
             examplesValue = property.getExample();
@@ -124,10 +125,12 @@ public final class PropertyUtils {
                 examplesValue = Json.pretty(exampleMap);
             }
         } else if (property instanceof ArrayProperty) {
+            List<Object> exampleArray = new ArrayList<>();
             Property itemProperty = ((ArrayProperty) property).getItems();
-            examplesValue = "[ " + exampleFromType(itemProperty.getType(), itemProperty, markupDocBuilder) + " ]";
+            exampleArray.add(exampleFromType(itemProperty.getType(), itemProperty, markupDocBuilder));
+            examplesValue = Json.pretty(exampleArray);
         } else {
-            examplesValue = exampleFromType(property.getType(), property, markupDocBuilder);
+            examplesValue = Json.pretty(exampleFromType(property.getType(), property, markupDocBuilder));
         }
         return String.valueOf(examplesValue);
     }

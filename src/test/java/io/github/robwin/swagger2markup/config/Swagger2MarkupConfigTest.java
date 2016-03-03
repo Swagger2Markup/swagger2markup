@@ -1,20 +1,17 @@
 /*
+ * Copyright 2016 Robert Winkler
  *
- *  Copyright 2015 Robert Winkler
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Licensed under the Apache License, Version 2.0 (the "License");
- *  you may not use this file except in compliance with the License.
- *  You may obtain a copy of the License at
+ *        http://www.apache.org/licenses/LICENSE-2.0
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *  See the License for the specific language governing permissions and
- *  limitations under the License.
- *
- *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package io.github.robwin.swagger2markup.config;
 
@@ -45,7 +42,7 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getOperationDescriptionsUri()).isNull();
         assertThat(config.isDefinitionDescriptionsEnabled()).isFalse();
         assertThat(config.getDefinitionDescriptionsUri()).isNull();
-        assertThat(config.isExamplesEnabled()).isFalse();
+        assertThat(config.isGeneratedExamplesEnabled()).isFalse();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
@@ -91,7 +88,7 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getOperationDescriptionsUri()).isEqualTo(URI.create("operationDescriptions"));
         assertThat(config.isDefinitionDescriptionsEnabled()).isTrue();
         assertThat(config.getDefinitionDescriptionsUri()).isEqualTo(URI.create("definitionDescriptions"));
-        assertThat(config.isExamplesEnabled()).isTrue();
+        assertThat(config.isGeneratedExamplesEnabled()).isTrue();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
