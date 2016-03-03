@@ -430,7 +430,7 @@ public class Swagger2MarkupConfig {
         /**
          * Include (JSON, XML) schemas into the Definitions document
          *
-         * @param schemasPath the path to the folder where the schema documents reside. Use default path if null.
+         * @param schemasPath the path to the folder where the schema documents reside.
          * @return this builder
          */
         public Builder withSchemas(Path schemasPath) {
@@ -439,8 +439,8 @@ public class Swagger2MarkupConfig {
         }
 
         /**
-         * Include (JSON, XML) schemas into the Definitions document.<br/>
-         * This is an alias for {@link #withSchemas(URI) withSchemas(null)}.
+         * Include provided schemas into the Definitions document.<br/>
+         * Use default URI.
          *
          * @return this builder
          */
@@ -452,7 +452,7 @@ public class Swagger2MarkupConfig {
         /**
          * Include hand-written descriptions into the Paths document
          *
-         * @param operationDescriptionsUri the URI to the folder where the description documents reside. Use default URI if null.
+         * @param operationDescriptionsUri the URI to the folder where the description documents reside.
          * @return this builder
          */
         public Builder withOperationDescriptions(URI operationDescriptionsUri) {
@@ -465,7 +465,7 @@ public class Swagger2MarkupConfig {
         /**
          * Include hand-written descriptions into the Paths document
          *
-         * @param operationDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
+         * @param operationDescriptionsPath the path to the folder where the description documents reside.
          * @return this builder
          */
         public Builder withOperationDescriptions(Path operationDescriptionsPath) {
@@ -475,7 +475,7 @@ public class Swagger2MarkupConfig {
 
         /**
          * Include hand-written descriptions into the Paths document.<br/>
-         * This is an alias for {@link #withOperationDescriptions(URI) withOperationDescriptions(null)}.
+         * Use default URI.
          *
          * @return this builder
          */
@@ -487,7 +487,7 @@ public class Swagger2MarkupConfig {
         /**
          * Include hand-written descriptions into the Definitions document
          *
-         * @param definitionDescriptionsUri the URI to the folder where the description documents reside. Use default URI if null.
+         * @param definitionDescriptionsUri the URI to the folder where the description documents reside.
          * @return this builder
          */
         public Builder withDefinitionDescriptions(URI definitionDescriptionsUri) {
@@ -500,7 +500,7 @@ public class Swagger2MarkupConfig {
         /**
          * Include hand-written descriptions into the Definitions document
          *
-         * @param definitionDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
+         * @param definitionDescriptionsPath the path to the folder where the description documents reside.
          * @return this builder
          */
         public Builder withDefinitionDescriptions(Path definitionDescriptionsPath) {
@@ -510,7 +510,7 @@ public class Swagger2MarkupConfig {
 
         /**
          * Include hand-written descriptions into the Definitions document.<br/>
-         * This is an alias for {@link #withDefinitionDescriptions(URI) withDefinitionDescriptions(null)}.
+         * Use default URI.
          *
          * @return this builder
          */
@@ -572,7 +572,7 @@ public class Swagger2MarkupConfig {
          * @return this builder
          */
         public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
-            Validate.notNull(inlineSchemaDepthLevel, "%s must not be null", "inlineSchemaDepthLevel");
+            Validate.isTrue(inlineSchemaDepthLevel >= 0, "%s must be >= 0", "inlineSchemaDepthLevel");
             config.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
             return this;
         }
@@ -751,7 +751,7 @@ public class Swagger2MarkupConfig {
         /**
          * Enable use of inter-document cross-references when needed
          *
-         * @param prefix Prefix to document in all inter-document cross-references (null = no prefix)
+         * @param prefix Prefix to document in all inter-document cross-references.
          * @return this builder
          */
         public Builder withInterDocumentCrossReferences(String prefix) {
@@ -762,13 +762,12 @@ public class Swagger2MarkupConfig {
         }
 
         /**
-         * Enable use of inter-document cross-references when needed.<br/>
-         * This is an alias for {@link #withInterDocumentCrossReferences(String) withInterDocumentCrossReferences(null)}.
+         * Enable use of inter-document cross-references when needed.
          *
          * @return this builder
          */
         public Builder withInterDocumentCrossReferences() {
-            withInterDocumentCrossReferences(null);
+            config.interDocumentCrossReferencesEnabled = true;
             return this;
         }
 
@@ -785,7 +784,7 @@ public class Swagger2MarkupConfig {
         /**
          * Optionally prefix all anchors for unicity
          *
-         * @param anchorPrefix anchor prefix (null = no prefix)
+         * @param anchorPrefix anchor prefix.
          * @return this builder
          */
         public Builder withAnchorPrefix(String anchorPrefix) {
