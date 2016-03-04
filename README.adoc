@@ -60,6 +60,7 @@ If you’d like an enhancement to be made to Swagger2Markup, pull requests are m
 * https://restlet.com/[Restlet] -- Restlet offers an API platform, covering the https://restlet.com/products/restlet-studio/[design], https://restlet.com/products/dhc/[test] and https://restlet.com/products/apispark/[operation] of Web APIs, and uses Swagger2Markup to generate appealing HTML documentation from API definitions.
 * http://www.qaware.de/[QAware GmbH]
 * http://www.appdirect.com/[AppDirect] -- The leading commerce platform for selling cloud services.
+* http://www.wescale.com[wescale]
 
 == License
 
