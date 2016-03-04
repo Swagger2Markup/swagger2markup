@@ -35,6 +35,14 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
+    public AsciiDocBuilder(){
+        super(System.getProperty("line.separator"));
+    }
+
+    public AsciiDocBuilder(LineSeparator lineSeparator){
+        super(lineSeparator.toString());
+    }
+
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
         put(MarkupBlockStyle.EXAMPLE, "====");
         put(MarkupBlockStyle.LISTING, "----");
