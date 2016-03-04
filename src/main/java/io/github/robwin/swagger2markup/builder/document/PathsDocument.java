@@ -157,7 +157,7 @@ public class PathsDocument extends MarkupDocument {
 
         if (paths != null) {
             for (Map.Entry<String, Path> path : paths.entrySet()) {
-                Map<HttpMethod, Operation> operations = path.getValue().getOperationMap();
+                Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
 
                 if (operations != null) {
                     for (Map.Entry<HttpMethod, Operation> operation : operations.entrySet()) {

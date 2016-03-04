@@ -255,51 +255,6 @@ POST /pets/{petId}
 |===
 
 
-=== Deletes a pet
-----
-DELETE /pets/{petId}
-----
-
-
-==== Parameters
-
-[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
-|===
-|Type|Name|Description|Required|Schema|Default
-|Header|api_key||true|string|
-|Path|petId|Pet id to delete|true|integer(int64)|
-|===
-
-
-==== Responses
-
-[options="header", cols=".^1h,.^3,.^3,.^1"]
-|===
-|HTTP Code|Description|Headers|Schema
-|400|Invalid pet value|No Content
-|===
-
-
-==== Produces
-
-* application/json
-* application/xml
-
-
-==== Tags
-
-* pet
-
-
-==== Security
-
-[options="header", cols=".^1,.^1h,.^6"]
-|===
-|Type|Name|Scopes
-|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
-|===
-
-
 === Find pet by ID
 ----
 GET /pets/{petId}
@@ -352,6 +307,51 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
+=== Deletes a pet
+----
+DELETE /pets/{petId}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Header|api_key||true|string|
+|Path|petId|Pet id to delete|true|integer(int64)|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1h,.^3,.^3,.^1"]
+|===
+|HTTP Code|Description|Headers|Schema
+|400|Invalid pet value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
 === Place an order for a pet
 ----
 POST /stores/order
@@ -374,47 +374,6 @@ POST /stores/order
 |HTTP Code|Description|Headers|Schema
 |200|successful operation|<<_order,Order>>
 |400|Invalid Order|No Content
-|===
-
-
-==== Produces
-
-* application/json
-* application/xml
-
-
-==== Tags
-
-* store
-
-
-=== Delete purchase order by ID
-----
-DELETE /stores/order/{orderId}
-----
-
-
-==== Description
-[%hardbreaks]
-For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
-
-
-==== Parameters
-
-[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
-|===
-|Type|Name|Description|Required|Schema|Default
-|Path|orderId|ID of the order that needs to be deleted|true|string|
-|===
-
-
-==== Responses
-
-[options="header", cols=".^1h,.^3,.^3,.^1"]
-|===
-|HTTP Code|Description|Headers|Schema
-|400|Invalid ID supplied|No Content
-|404|Order not found|No Content
 |===
 
 
@@ -455,6 +414,47 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 |===
 |HTTP Code|Description|Headers|Schema
 |200|successful operation|<<_order,Order>>
+|400|Invalid ID supplied|No Content
+|404|Order not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+=== Delete purchase order by ID
+----
+DELETE /stores/order/{orderId}
+----
+
+
+==== Description
+[%hardbreaks]
+For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|orderId|ID of the order that needs to be deleted|true|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1h,.^3,.^3,.^1"]
+|===
+|HTTP Code|Description|Headers|Schema
 |400|Invalid ID supplied|No Content
 |404|Order not found|No Content
 |===
@@ -644,6 +644,43 @@ GET /users/logout
 * user
 
 
+=== Get user by user name
+----
+GET /users/{username}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|The name that needs to be fetched. Use user1 for testing.|true|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1h,.^3,.^3,.^1"]
+|===
+|HTTP Code|Description|Headers|Schema
+|200|successful operation|<<_user,User>>
+|400|Invalid username supplied|No Content
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
 === Updated user
 ----
 PUT /users/{username}
@@ -711,43 +748,6 @@ This can only be done by the logged in user.
 [options="header", cols=".^1h,.^3,.^3,.^1"]
 |===
 |HTTP Code|Description|Headers|Schema
-|400|Invalid username supplied|No Content
-|404|User not found|No Content
-|===
-
-
-==== Produces
-
-* application/json
-* application/xml
-
-
-==== Tags
-
-* user
-
-
-=== Get user by user name
-----
-GET /users/{username}
-----
-
-
-==== Parameters
-
-[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
-|===
-|Type|Name|Description|Required|Schema|Default
-|Path|username|The name that needs to be fetched. Use user1 for testing.|true|string|
-|===
-
-
-==== Responses
-
-[options="header", cols=".^1h,.^3,.^3,.^1"]
-|===
-|HTTP Code|Description|Headers|Schema
-|200|successful operation|<<_user,User>>
 |400|Invalid username supplied|No Content
 |404|User not found|No Content
 |===
