@@ -204,51 +204,6 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |===
 
 
-=== Deletes a pet
-----
-DELETE /pets/{petId}
-----
-
-
-==== Parameters
-
-[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
-|===
-|Type|Name|Description|Required|Schema|Default
-|Header|api_key||true|string|
-|Path|petId|Pet id to delete|true|integer(int64)|
-|===
-
-
-==== Responses
-
-[options="header", cols=".^1h,.^3,.^3,.^1"]
-|===
-|HTTP Code|Description|Headers|Schema
-|400|Invalid pet value|No Content
-|===
-
-
-==== Produces
-
-* application/json
-* application/xml
-
-
-==== Tags
-
-* pet
-
-
-==== Security
-
-[options="header", cols=".^1,.^1h,.^6"]
-|===
-|Type|Name|Scopes
-|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
-|===
-
-
 === Updates a pet in the store with form data
 ----
 POST /pets/{petId}
@@ -278,6 +233,51 @@ POST /pets/{petId}
 ==== Consumes
 
 * application/x-www-form-urlencoded
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Deletes a pet
+----
+DELETE /pets/{petId}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Header|api_key||true|string|
+|Path|petId|Pet id to delete|true|integer(int64)|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1h,.^3,.^3,.^1"]
+|===
+|HTTP Code|Description|Headers|Schema
+|400|Invalid pet value|No Content
+|===
 
 
 ==== Produces
@@ -644,47 +644,6 @@ GET /users/logout
 * user
 
 
-=== Delete user
-----
-DELETE /users/{username}
-----
-
-
-==== Description
-[%hardbreaks]
-This can only be done by the logged in user.
-
-
-==== Parameters
-
-[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
-|===
-|Type|Name|Description|Required|Schema|Default
-|Path|username|The name that needs to be deleted|true|string|
-|===
-
-
-==== Responses
-
-[options="header", cols=".^1h,.^3,.^3,.^1"]
-|===
-|HTTP Code|Description|Headers|Schema
-|400|Invalid username supplied|No Content
-|404|User not found|No Content
-|===
-
-
-==== Produces
-
-* application/json
-* application/xml
-
-
-==== Tags
-
-* user
-
-
 === Updated user
 ----
 PUT /users/{username}
@@ -712,6 +671,47 @@ This can only be done by the logged in user.
 |===
 |HTTP Code|Description|Headers|Schema
 |400|Invalid user supplied|No Content
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Delete user
+----
+DELETE /users/{username}
+----
+
+
+==== Description
+[%hardbreaks]
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|The name that needs to be deleted|true|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1h,.^3,.^3,.^1"]
+|===
+|HTTP Code|Description|Headers|Schema
+|400|Invalid username supplied|No Content
 |404|User not found|No Content
 |===
 
