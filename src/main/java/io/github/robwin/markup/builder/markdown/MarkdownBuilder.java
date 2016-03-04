@@ -36,6 +36,14 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
+    public MarkdownBuilder(){
+        super(System.getProperty("line.separator"));
+    }
+
+    public MarkdownBuilder(LineSeparator lineSeparator){
+        super(lineSeparator.toString());
+    }
+
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
         put(MarkupBlockStyle.EXAMPLE, null);
         put(MarkupBlockStyle.LISTING, Markdown.LISTING.toString());

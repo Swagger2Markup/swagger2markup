@@ -18,9 +18,18 @@
  */
 package io.github.robwin.markup.builder;
 
-/**
- * @author Robert Winkler
- */
-public interface Markup {
-    String toString();
+public enum LineSeparator {
+    UNIX("\n"),
+    WINDOWS("\r\n");
+
+    private String lineSeparator;
+
+    LineSeparator(String lineSeparator) {
+        this.lineSeparator = lineSeparator;
+    }
+
+    @Override
+    public String toString() {
+        return lineSeparator;
+    }
 }

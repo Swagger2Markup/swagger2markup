@@ -57,10 +57,14 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected static final String WHITESPACE = " ";
 
     protected StringBuilder documentBuilder = new StringBuilder();
-    protected String newLine = System.getProperty("line.separator");
+    protected String newLine;
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected String anchorPrefix = null;
+
+    public AbstractMarkupDocBuilder(String lineSeparator) {
+        this.newLine = lineSeparator;
+    }
 
     @Override
     public MarkupDocBuilder withAnchorPrefix(String prefix) {

@@ -229,4 +229,12 @@ public class MarkupDocBuilderTest {
         builder.sectionTitleLevel2("Long title \n bla bla \r bla \r\n bla");
         Assert.assertEquals(newLine + "=== Long title " + whitespace + " bla bla "  + whitespace + " bla " + whitespace + " bla" + newLine , builder.toString());
     }
+
+    @Test
+    public void shouldUseProvidedLineSeparator() throws IOException {
+        String lineSeparator = LineSeparator.UNIX.toString();
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
+        builder.paragraph("Long text \n bla bla \r bla \r\n bla");
+        Assert.assertEquals("Long text " + lineSeparator + " bla bla "  + lineSeparator + " bla " + lineSeparator + " bla" + lineSeparator + lineSeparator, builder.toString());
+    }
 }
