@@ -24,7 +24,6 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
-import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -32,7 +31,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -183,21 +181,6 @@ public class MarkdownConverterTest {
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.md")))).contains(
                 "Pet extension");
 
-    }
-
-    @Test
-    public void testSwagger2MarkupConfigDefaultPathsWithoutFile() {
-        //Given
-        //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withDefinitionDescriptions()
-                .build();
-
-        //Then
-        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(new Swagger())
-                .withConfig(config)
-                .build();
-        assertThat(converter.globalContext.config.isDefinitionDescriptionsEnabled()).isFalse();
     }
 
     /**

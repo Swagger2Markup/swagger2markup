@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class GeneralConverterTest {
 
     @Test
-    public void testSwagger2MarkupConfigDefaultPaths() throws URISyntaxException {
+    public void testConfigDefaultPaths() throws URISyntaxException {
         //Given
         Path file = Paths.get(GeneralConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
 
@@ -53,7 +53,7 @@ public class GeneralConverterTest {
     }
 
     @Test
-    public void testSwagger2MarkupConfigDefaultPathsWithUri() throws MalformedURLException {
+    public void testConfigDefaultPathsWithUri() throws MalformedURLException {
         //Given
 
         //When
@@ -74,7 +74,7 @@ public class GeneralConverterTest {
     }
 
     @Test
-    public void testSwagger2MarkupConfigDefaultPathsWithoutFile() {
+    public void testDefaultPathsWithoutFile() {
         //Given
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
