@@ -311,7 +311,13 @@ public class PathsDocument extends MarkupDocument {
      * @param docBuilder the docbuilder do use for output
      */
     private void operationRef(PathOperation operation, MarkupDocBuilder docBuilder) {
-        String document = resolveOperationDocument(operation);
+        String document = null;
+        if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
+            document = null;
+        else if (config.isSeparatedOperationsEnabled())
+            document =  defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
+        else
+            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
         String operationName = operationName(operation);
 
         addOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
