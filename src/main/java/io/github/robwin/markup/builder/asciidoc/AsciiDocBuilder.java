@@ -39,8 +39,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         super(System.getProperty("line.separator"));
     }
 
-    public AsciiDocBuilder(LineSeparator lineSeparator){
-        super(lineSeparator.toString());
+    public AsciiDocBuilder(String lineSeparator){
+        super(lineSeparator);
     }
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{

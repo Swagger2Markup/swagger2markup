@@ -40,8 +40,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         super(System.getProperty("line.separator"));
     }
 
-    public MarkdownBuilder(LineSeparator lineSeparator){
-        super(lineSeparator.toString());
+    public MarkdownBuilder(String lineSeparator){
+        super(lineSeparator);
     }
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
