@@ -19,8 +19,18 @@
 package io.github.robwin.markup.builder;
 
 public enum LineSeparator {
+    /**
+     * Line separator for Unix systems (<tt>\n</tt>).
+     */
     UNIX("\n"),
-    WINDOWS("\r\n");
+    /**
+     * Line separator for Windows systems (<tt>\r\n</tt>).
+     */
+    WINDOWS("\r\n"),
+    /**
+     * Line separator for Macintosh systems (<tt>\r</tt>).
+     */
+    MAC("\r");
 
     private String lineSeparator;
 
