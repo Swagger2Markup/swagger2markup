@@ -48,16 +48,23 @@ public final class MarkupDocBuilders {
 
     /**
      * Creates a MarkupDocBuilder which uses a custom line separator.
+     * If the custom line separator is null, it uses the system line separator.
      *
      * @param markupLanguage the markup language which is used to generate the files
      * @param lineSeparator the line separator which should be used
      * @return a MarkupDocBuilder
      */
     public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage, LineSeparator lineSeparator){
+        String lineSeparatorAsString;
+        if(lineSeparator == null){
+            lineSeparatorAsString = System.getProperty("line.separator");
+        }else{
+            lineSeparatorAsString = lineSeparator.toString();
+        }
         switch(markupLanguage){
-            case MARKDOWN: return new MarkdownBuilder(lineSeparator);
-            case ASCIIDOC: return new AsciiDocBuilder(lineSeparator);
-            default: return new AsciiDocBuilder(lineSeparator);
+            case MARKDOWN: return new MarkdownBuilder(lineSeparatorAsString);
+            case ASCIIDOC: return new AsciiDocBuilder(lineSeparatorAsString);
+            default: return new AsciiDocBuilder(lineSeparatorAsString);
         }
     }
 
