@@ -52,12 +52,6 @@ public class DefinitionsDocument extends MarkupDocument {
     private static final String DEFINITIONS_ANCHOR = "definitions";
     private final String DEFINITIONS;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
-    private final String JSON_SCHEMA;
-    private final String XML_SCHEMA;
-    private static final String JSON_SCHEMA_EXTENSION = ".json";
-    private static final String XML_SCHEMA_EXTENSION = ".xsd";
-    private static final String JSON = "json";
-    private static final String XML = "xml";
     private static final String DESCRIPTION_FILE_NAME = "description";
 
     public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
@@ -65,18 +59,7 @@ public class DefinitionsDocument extends MarkupDocument {
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
-        JSON_SCHEMA = labels.getString("json_schema");
-        XML_SCHEMA = labels.getString("xml_schema");
 
-        if (config.isSchemasEnabled()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Include schemas is enabled.");
-            }
-        } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Include schemas is disabled.");
-            }
-        }
         if (config.isDefinitionDescriptionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include hand-written definition descriptions is enabled.");
@@ -224,7 +207,6 @@ public class DefinitionsDocument extends MarkupDocument {
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
-        definitionSchema(definitionName, docBuilder);
         applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_END, docBuilder, definitionName));
     }
 
@@ -366,34 +348,6 @@ public class DefinitionsDocument extends MarkupDocument {
         return Optional.absent();
     }
 
-    private void definitionSchema(String definitionName, MarkupDocBuilder docBuilder) {
-        if (config.isSchemasEnabled()) {
-            if (isNotBlank(definitionName)) {
-                schema(JSON_SCHEMA, config.getSchemasUri(), definitionName + JSON_SCHEMA_EXTENSION, JSON, docBuilder);
-                schema(XML_SCHEMA, config.getSchemasUri(), definitionName + XML_SCHEMA_EXTENSION, XML, docBuilder);
-            }
-        }
-    }
-
-    private void schema(String title, URI schemasFolderPath, String schemaName, String language, MarkupDocBuilder docBuilder) {
-        URI contentUri = schemasFolderPath.resolve(schemaName);
-
-        try (Reader reader = io.github.robwin.swagger2markup.utils.IOUtils.uriReader(contentUri)) {
-            if (logger.isInfoEnabled()) {
-                logger.info("Schema content processed {}", contentUri);
-            }
-
-            docBuilder.sectionTitleLevel3(title);
-            docBuilder.listing(IOUtils.toString(reader).trim(), language);
-
-        } catch (IOException e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Failed to read Schema content {} > {}", contentUri, e.getMessage());
-            }
-        }
-    }
-
-
     /**
      * Builds the title of an inline schema.
      * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.
@@ -425,7 +379,6 @@ public class DefinitionsDocument extends MarkupDocument {
                     inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }
         }
-
     }
 
     /**

@@ -38,7 +38,6 @@ public class GeneralConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
                 .withOperationDescriptions()
-                .withSchemas()
                 .build();
 
         Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(file)
@@ -49,7 +48,6 @@ public class GeneralConverterTest {
         URI baseUri = io.github.robwin.swagger2markup.utils.IOUtils.uriParent(converterBuilder.globalContext.swaggerLocation);
         assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isEqualTo(baseUri);
         assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isEqualTo(baseUri);
-        assertThat(converterBuilder.globalContext.config.getSchemasUri()).isEqualTo(baseUri);
     }
 
     @Test
@@ -60,7 +58,6 @@ public class GeneralConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withDefinitionDescriptions()
                 .withOperationDescriptions()
-                .withSchemas()
                 .build();
 
         Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(URI.create("http://petstore.swagger.io/v2/swagger.json").toURL())
@@ -70,7 +67,6 @@ public class GeneralConverterTest {
         //Then
         assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isNull();
         assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isNull();
-        assertThat(converterBuilder.globalContext.config.getSchemasUri()).isNull();
     }
 
     @Test

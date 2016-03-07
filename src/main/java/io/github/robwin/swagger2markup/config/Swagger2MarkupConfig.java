@@ -41,8 +41,6 @@ public class Swagger2MarkupConfig {
 
     private MarkupLanguage markupLanguage;
     private boolean generatedExamplesEnabled;
-    private boolean schemasEnabled;
-    private URI schemasUri;
     private boolean operationDescriptionsEnabled;
     private URI operationDescriptionsUri;
     private boolean definitionDescriptionsEnabled;
@@ -110,15 +108,6 @@ public class Swagger2MarkupConfig {
                 baseURI = IOUtils.uriParent(swaggerLocation);
         }
 
-        if (schemasEnabled && schemasUri == null) {
-            if (baseURI == null) {
-                if (logger.isWarnEnabled())
-                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "schemas", "schemasUri");
-                schemasEnabled = false;
-            } else
-                schemasUri = baseURI;
-        }
-
         if (operationDescriptionsEnabled && operationDescriptionsUri == null) {
             if (baseURI == null) {
                 if (logger.isWarnEnabled())
@@ -144,14 +133,6 @@ public class Swagger2MarkupConfig {
 
     public boolean isGeneratedExamplesEnabled() {
         return generatedExamplesEnabled;
-    }
-
-    public boolean isSchemasEnabled() {
-        return schemasEnabled;
-    }
-
-    public URI getSchemasUri() {
-        return schemasUri;
     }
 
     public boolean isOperationDescriptionsEnabled() {
@@ -332,9 +313,6 @@ public class Swagger2MarkupConfig {
 
             config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
             config.generatedExamplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "generatedExamplesEnabled"));
-            config.schemasEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasEnabled"));
-            if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
-                config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
             config.operationDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsEnabled"));
             if (safeProperties.containsKey(PROPERTIES_PREFIX + "operationDescriptionsUri"))
                 config.operationDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsUri"));
@@ -422,41 +400,6 @@ public class Swagger2MarkupConfig {
          */
         public Builder withGeneratedExamples() {
             config.generatedExamplesEnabled = true;
-            return this;
-        }
-
-        /**
-         * Include (JSON, XML) schemas into the Definitions document
-         *
-         * @param schemasUri the URI to the folder where the schema documents reside.
-         * @return this builder
-         */
-        public Builder withSchemas(URI schemasUri) {
-            Validate.notNull(schemasUri, "%s must not be null", "schemasUri");
-            config.schemasEnabled = true;
-            config.schemasUri = schemasUri;
-            return this;
-        }
-
-        /**
-         * Include (JSON, XML) schemas into the Definitions document
-         *
-         * @param schemasPath the path to the folder where the schema documents reside.
-         * @return this builder
-         */
-        public Builder withSchemas(Path schemasPath) {
-            Validate.notNull(schemasPath, "%s must not be null", "schemasPath");
-            return withSchemas(schemasPath.toUri());
-        }
-
-        /**
-         * Include provided schemas into the Definitions document.<br/>
-         * Use default URI.
-         *
-         * @return this builder
-         */
-        public Builder withSchemas() {
-            config.schemasEnabled = true;
             return this;
         }
 

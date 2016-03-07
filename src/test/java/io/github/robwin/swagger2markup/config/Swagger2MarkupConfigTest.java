@@ -58,8 +58,6 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural());
-        assertThat(config.isSchemasEnabled()).isFalse();
-        assertThat(config.getSchemasUri()).isNull();
         assertThat(config.getSecurityDocument()).isEqualTo("security");
         assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo("definitions");
         assertThat(config.getSeparatedOperationsFolder()).isEqualTo("operations");
@@ -104,8 +102,6 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getPropertyOrdering()).isNull();
         assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getResponseOrdering()).isNull();
-        assertThat(config.isSchemasEnabled()).isTrue();
-        assertThat(config.getSchemasUri()).isEqualTo(URI.create("schemas"));
         assertThat(config.getSecurityDocument()).isEqualTo("securityTest");
         assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo("definitionsTest");
         assertThat(config.getSeparatedOperationsFolder()).isEqualTo("operationsTest");

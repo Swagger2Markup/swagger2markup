@@ -21,6 +21,7 @@ import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.extension.repository.SchemaExtension;
 import io.github.robwin.swagger2markup.extension.repository.SpringRestDocsExtension;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -429,5 +430,31 @@ public class AsciidocConverterTest {
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")))).contains(
                 "Pet extension");
 
+    }
+
+    @Test
+    public void testSwagger2AsciiDocSchemaExtension() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .build();
+        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
+                .withExtension(new SchemaExtension(Paths.get("src/docs/asciidoc/extensions").toUri()))
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .withExtensionRegistry(registry)
+                .build()
+                .intoFolder(outputDirectory);
+
+        //Then
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")))).contains(
+                "=== Pet");
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")))).contains(
+                "==== XML Schema");
     }
 }
