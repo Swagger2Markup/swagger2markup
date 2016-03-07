@@ -15,15 +15,16 @@
  */
 package io.github.robwin.swagger2markup;
 
+import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.swagger2markup.assertions.DiffUtils;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.SpringRestDocsExtension;
-import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,8 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -42,6 +45,13 @@ import static org.assertj.core.api.BDDAssertions.assertThat;
 public class AsciidocConverterTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(AsciidocConverterTest.class);
+    private static final String[] EXPECTED_FILES = new String[]{"definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"};
+    private List<String> expectedFiles;
+    
+    @Before
+    public void setUp(){
+        expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
+    }
 
     @Test
     public void testSwagger2AsciiDocConversionAsString() throws IOException, URISyntaxException {
@@ -64,13 +74,15 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(file).build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withLineSeparator(LineSeparator.WINDOWS).build();
+
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
                 .intoFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
@@ -84,20 +96,22 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(swaggerJsonString).build()
+        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+                .withLineSeparator(LineSeparator.WINDOWS).build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build()
                 .intoFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithSpringRestDocsExtension() throws IOException {
+    public void testSwagger2AsciiDocConversionWithSpringRestDocsExtension() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
@@ -119,14 +133,14 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc"))))
-                .contains("==== HTTP request", "==== HTTP response", "==== Curl request", "===== curl-request");
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/spring_rest_docs").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithSpringRestDocsExtension.html");
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithExamples() throws IOException {
+    public void testSwagger2AsciiDocConversionWithExamples() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
@@ -143,51 +157,13 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
-        String orderExample = "----\n" +
-                "{\n" +
-                "  \"id\" : 99,\n" +
-                "  \"petId\" : 122,\n" +
-                "  \"quantity\" : 2,\n" +
-                "  \"shipDate\" : \"2016-02-22T23:02:05Z\",\n" +
-                "  \"status\" : \"PENDING\",\n" +
-                "  \"complete\" : true\n" +
-                "}\n" +
-                "----\n";
-        String petResponseExample = "----\n" +
-                "{\n" +
-                "  \"application/json\" : {\n" +
-                "    \"name\" : \"Puma\",\n" +
-                "    \"type\" : 22,\n" +
-                "    \"color\" : \"Black\",\n" +
-                "    \"gender\" : \"Female\",\n" +
-                "    \"breed\" : \"Mixed\"\n" +
-                "  }\n" +
-                "}\n" +
-                "----\n";
-
-        String pathsDocument = new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc")));
-        assertThat(pathsDocument)
-                .contains("==== Response 405\n" + petResponseExample);
-        assertThat(pathsDocument)
-                .contains("==== Request body\n" + orderExample);
-        assertThat(pathsDocument)
-                .contains("==== Response 200\n" + orderExample);
-
-        String definitionsDocument = new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")));
-        assertThat(definitionsDocument)
-                .contains("|name||true|string||\"doggie\"");
-        assertThat(definitionsDocument)
-                .contains("|id||false|integer(int64)||77");
-        assertThat(definitionsDocument).contains("|pictures||false|string(byte) array||");
-        assertThat(definitionsDocument).contains("|shipDate||false|string(date-time)||");
-        assertThat(definitionsDocument)
-                .doesNotContain("99");
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/examples").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithExamples.html");
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithGeneratedExamples() throws IOException {
+    public void testSwagger2AsciiDocConversionWithGeneratedExamples() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
         Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
@@ -205,85 +181,9 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        String petGeneratedExample = "----\n" +
-                "{\n" +
-                "  \"tags\" : [ {\n" +
-                "    \"id\" : 0,\n" +
-                "    \"name\" : \"string\"\n" +
-                "  } ],\n" +
-                "  \"id\" : 0,\n" +
-                "  \"nicknames\" : {\n" +
-                "    \"string\" : \"string\"\n" +
-                "  },\n" +
-                "  \"category\" : {\n" +
-                "    \"id\" : 123,\n" +
-                "    \"name\" : \"Canines\"\n" +
-                "  },\n" +
-                "  \"weight\" : 0.0,\n" +
-                "  \"status\" : \"string\",\n" +
-                "  \"name\" : \"doggie\",\n" +
-                "  \"photoUrls\" : [ \"string\" ]\n" +
-                "}\n" +
-                "----\n";
-        String petResponseExample = "----\n" +
-                "{\n" +
-                "  \"application/json\" : {\n" +
-                "    \"name\" : \"Puma\",\n" +
-                "    \"type\" : 22,\n" +
-                "    \"color\" : \"Black\",\n" +
-                "    \"gender\" : \"Female\",\n" +
-                "    \"breed\" : \"Mixed\"\n" +
-                "  }\n" +
-                "}\n" +
-                "----\n";
-        String pathsDocument = new String(Files.readAllBytes(outputDirectory.resolve("paths.adoc")));
-        assertThat(pathsDocument)
-                .contains("==== Request body\n" + petGeneratedExample);
-        assertThat(pathsDocument)
-                .contains("== Request path\n" + "----\n" +
-                        "\"/pets\"\n" +
-                        "----");
-        assertThat(pathsDocument)
-                .contains("==== Request query\n" +
-                        "----\n" +
-                        "{\n" +
-                        "  \"status\" : \"string\"\n" +
-                        "}\n" +
-                        "----\n");
-        assertThat(pathsDocument)
-                .contains("==== Response 405\n" + petResponseExample);
-        assertThat(pathsDocument)
-                .contains("==== Response 200\n" +
-                        "----\n" +
-                        "\"array\"\n" +
-                        "----");
-        assertThat(pathsDocument)
-                .contains("==== Request path\n" +
-                        "----\n" +
-                        "\"/pets/0\"\n" +
-                        "----");
-
-        String definitionsDocument = new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")));
-        assertThat(definitionsDocument)
-                .contains("|name||true|string||\"doggie\"");
-        assertThat(definitionsDocument)
-                .contains("|id||false|integer(int64)||77");
-        assertThat(definitionsDocument).contains("|pictures||false|string(byte) array||[ \"string\" ]");
-        assertThat(definitionsDocument).contains("|shipDate||false|string(date-time)||\"string\"");
-        assertThat(definitionsDocument)
-                .doesNotContain("99");
-        assertThat(definitionsDocument)
-                .contains("|nicknames||false|object||{\n" +
-                        "  \"string\" : \"string\"\n" +
-                        "}");
-        assertThat(definitionsDocument)
-                .contains("[options=\"header\", cols=\".^1h,.^6,.^1,.^1,.^1,.^1\"]\n" +
-                        "|===\n" +
-                        "|Name|Description|Required|Schema|Default|Example\n" +
-                        "|id||false|integer(int64)||0\n" +
-                        "|===\n");
-
-
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/generated_examples").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithGeneratedExamples.html");
     }
 
     @Test
@@ -304,8 +204,7 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
     }
 
     @Test
@@ -325,8 +224,9 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/group_by_tags").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocGroupedByTags.html");
     }
 
     @Test
@@ -370,8 +270,7 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
     }
 
     @Test
@@ -387,8 +286,7 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc"))))
                 .doesNotContain("=== URI scheme");
@@ -407,8 +305,7 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc"))))
                 .contains("=== URI scheme");
@@ -431,8 +328,8 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(5).containsAll(
-                asList("definitions", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        expectedFiles.add("definitions");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
 
         Path definitionsDirectory = outputDirectory.resolve("definitions");
         String[] definitions = definitionsDirectory.toFile().list();
@@ -456,8 +353,8 @@ public class AsciidocConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(5).containsAll(
-                asList("operations", "definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"));
+        expectedFiles.add("operations");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
 
         Path pathsDirectory = outputDirectory.resolve("operations");
         String[] paths = pathsDirectory.toFile().list();

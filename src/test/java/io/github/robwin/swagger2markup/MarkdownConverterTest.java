@@ -19,12 +19,15 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.swagger2markup.assertions.DiffUtils;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
 import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +39,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -48,6 +52,14 @@ public class MarkdownConverterTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MarkdownConverterTest.class);
 
+    private static final String[] EXPECTED_FILES = new String[]{"definitions.md", "overview.md", "paths.md", "security.md"};
+    private List<String> expectedFiles;
+
+    @Before
+    public void setUp(){
+        expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
+    }
+
 
     @Test
     public void testSwagger2MarkdownConversion() throws IOException, URISyntaxException {
@@ -59,6 +71,7 @@ public class MarkdownConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .withLineSeparator(LineSeparator.WINDOWS)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -67,8 +80,10 @@ public class MarkdownConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.md", "overview.md", "paths.md", "security.md"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/markdown/default").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
     @Test
@@ -90,8 +105,7 @@ public class MarkdownConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(
-                asList("definitions.md", "overview.md", "paths.md", "security.md"));
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
     }
 
     @Test
@@ -113,8 +127,8 @@ public class MarkdownConverterTest {
 
         //Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(5).containsAll(
-                asList("definitions", "definitions.md", "overview.md", "paths.md", "security.md"));
+        expectedFiles.add("definitions");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
 
         Path definitionsDirectory = outputDirectory.resolve("definitions");
         String[] definitions = definitionsDirectory.toFile().list();
@@ -141,8 +155,8 @@ public class MarkdownConverterTest {
 
         // Then
         String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(5).containsAll(
-                asList("definitions", "definitions.md", "overview.md", "paths.md", "security.md"));
+        expectedFiles.add("definitions");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
         Path definitionsDirectory = outputDirectory.resolve("definitions");
         verifyMarkdownContainsFieldsInTables(
                 definitionsDirectory.resolve("User.md").toFile(),
