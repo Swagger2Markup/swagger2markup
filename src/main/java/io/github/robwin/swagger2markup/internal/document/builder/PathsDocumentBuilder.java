@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.robwin.swagger2markup.internal.builder;
+package io.github.robwin.swagger2markup.internal.document.builder;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;

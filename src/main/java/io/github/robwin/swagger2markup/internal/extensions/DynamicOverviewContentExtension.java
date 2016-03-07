@@ -36,7 +36,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
-public class DynamicOverviewContentExtension extends OverviewContentExtension {
+public final class DynamicOverviewContentExtension extends OverviewContentExtension {
 
     protected static final String EXTENSION_FILENAME_PREFIX = "";
     private static final Logger logger = LoggerFactory.getLogger(DynamicOverviewContentExtension.class);

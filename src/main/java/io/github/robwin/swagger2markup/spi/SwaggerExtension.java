@@ -16,13 +16,16 @@
 
 package io.github.robwin.swagger2markup.spi;
 
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.swagger.models.Swagger;
 
+/**
+ * A SwaggerExtension can be used to preprocess the Swagger model.
+ */
 public abstract class SwaggerExtension extends AbstractExtension {
 
     public SwaggerExtension() {
     }
 
-    public abstract void apply(Swagger2MarkupConverter.Context globalContext);
+    public abstract void apply(Swagger swagger);
 
 }

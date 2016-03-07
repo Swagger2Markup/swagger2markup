@@ -18,6 +18,9 @@ package io.github.robwin.swagger2markup.spi;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 
+/**
+ * A SecurityContentExtension can be used to extend the security document.
+ */
 public abstract class SecurityContentExtension extends AbstractExtension {
 
     public enum Position {

@@ -38,7 +38,7 @@ import java.util.List;
  * <li>JSON Schema (.json)</li>
  * </ul>
  */
-public class SchemaExtension extends DefinitionsContentExtension {
+public final class SchemaExtension extends DefinitionsContentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(SchemaExtension.class);
 
@@ -129,8 +129,8 @@ public class SchemaExtension extends DefinitionsContentExtension {
 
             if (extensionContent.isPresent()) {
                 try {
-                    context.docBuilder.sectionTitleLevel(1 + levelOffset, schema.title);
-                    context.docBuilder.listing(org.apache.commons.io.IOUtils.toString(extensionContent.get()).trim(), schema.language);
+                    context.getMarkupDocBuilder().sectionTitleLevel(1 + levelOffset, schema.title);
+                    context.getMarkupDocBuilder().listing(org.apache.commons.io.IOUtils.toString(extensionContent.get()).trim(), schema.language);
                 } catch (IOException e) {
                     throw new RuntimeException(String.format("Failed to read schema URI : %s", schemaUri), e);
                 } finally {

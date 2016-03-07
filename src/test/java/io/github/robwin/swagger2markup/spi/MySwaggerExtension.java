@@ -15,7 +15,7 @@
  */
 package io.github.robwin.swagger2markup.spi;
 
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.swagger.models.Swagger;
 
 public class MySwaggerExtension extends SwaggerExtension {
 
@@ -23,7 +23,7 @@ public class MySwaggerExtension extends SwaggerExtension {
         super();
     }
 
-    public void apply(Swagger2MarkupConverter.Context globalContext) {
-        globalContext.getSwagger().setHost("host.domain.tld");
+    public void apply(Swagger swagger) {
+        swagger.setHost("host.domain.tld");
     }
 }

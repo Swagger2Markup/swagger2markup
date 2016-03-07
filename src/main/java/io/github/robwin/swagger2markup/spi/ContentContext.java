@@ -19,9 +19,13 @@ package io.github.robwin.swagger2markup.spi;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 public class ContentContext {
-    public MarkupDocBuilder docBuilder;
+    private MarkupDocBuilder docBuilder;
 
-    public ContentContext(MarkupDocBuilder docBuilder) {
+    ContentContext(MarkupDocBuilder docBuilder) {
         this.docBuilder = docBuilder;
+    }
+
+    public MarkupDocBuilder getMarkupDocBuilder() {
+        return docBuilder;
     }
 }

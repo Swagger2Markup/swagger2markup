@@ -21,6 +21,9 @@ import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.internal.model.PathOperation;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * A SecurityContentExtension can be used to extend the paths document.
+ */
 public abstract class OperationsContentExtension extends AbstractExtension {
 
     public enum Position {

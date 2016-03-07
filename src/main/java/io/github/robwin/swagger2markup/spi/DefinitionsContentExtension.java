@@ -19,6 +19,9 @@ package io.github.robwin.swagger2markup.spi;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * A SecurityContentExtension can be used to extend the definitions document.
+ */
 public abstract class DefinitionsContentExtension extends AbstractExtension {
 
     public enum Position {

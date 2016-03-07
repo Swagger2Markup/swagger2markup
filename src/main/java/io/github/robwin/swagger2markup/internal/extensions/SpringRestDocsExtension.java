@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * Append Spring Rest docs generated snippets to Operations content.
  */
-public class SpringRestDocsExtension extends OperationsContentExtension {
+public final class SpringRestDocsExtension extends OperationsContentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringRestDocsExtension.class);
 
@@ -106,7 +106,7 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
      * @return subdirectory normalized name
      */
     public URI operationSnippetUri(Context context, PathOperation operation, String snippetName) {
-        return snippetBaseUri.resolve(IOUtils.normalizeName(operation.getId()) + "/").resolve(context.docBuilder.addFileExtension(snippetName));
+        return snippetBaseUri.resolve(IOUtils.normalizeName(operation.getId()) + "/").resolve(context.getMarkupDocBuilder().addFileExtension(snippetName));
     }
 
     @Override
@@ -134,8 +134,8 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
 
         if (snippetContent.isPresent()) {
             try {
-                context.docBuilder.sectionTitleLevel(1 + levelOffset(context), title);
-                context.docBuilder.importMarkup(snippetContent.get(), levelOffset(context) + 1);
+                context.getMarkupDocBuilder().sectionTitleLevel(1 + levelOffset(context), title);
+                context.getMarkupDocBuilder().importMarkup(snippetContent.get(), levelOffset(context) + 1);
             } catch (IOException e) {
                 throw new RuntimeException(String.format("Failed to process snippet URI : %s", snippetUri), e);
             } finally {

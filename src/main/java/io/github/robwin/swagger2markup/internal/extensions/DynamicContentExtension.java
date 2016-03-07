@@ -37,11 +37,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-public class DynamicContentExtension extends ContentExtension {
+class DynamicContentExtension extends ContentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicContentExtension.class);
 
-    public DynamicContentExtension(Swagger2MarkupConverter.Context globalContext, ContentContext contentContext) {
+    DynamicContentExtension(Swagger2MarkupConverter.Context globalContext, ContentContext contentContext) {
         super(globalContext, contentContext);
     }
 
@@ -78,7 +78,7 @@ public class DynamicContentExtension extends ContentExtension {
 
                     if (extensionContent.isPresent()) {
                         try {
-                            contentContext.docBuilder.importMarkup(extensionContent.get(), levelOffset);
+                            contentContext.getMarkupDocBuilder().importMarkup(extensionContent.get(), levelOffset);
                         } catch (IOException e) {
                             throw new RuntimeException(String.format("Failed to read extension file %s", extension), e);
                         } finally {

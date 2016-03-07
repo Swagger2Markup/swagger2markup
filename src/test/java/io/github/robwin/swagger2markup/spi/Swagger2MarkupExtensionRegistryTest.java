@@ -15,10 +15,10 @@
  */
 package io.github.robwin.swagger2markup.spi;
 
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsContentExtension;
 import io.github.robwin.swagger2markup.internal.extensions.DynamicOperationsContentExtension;
+import io.swagger.models.Swagger;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -52,7 +52,7 @@ public class Swagger2MarkupExtensionRegistryTest {
         Extension ext1 = new MySwaggerExtension();
         Extension ext2 = new MySwaggerExtension();
         Extension ext3 = new SwaggerExtension() {
-            public void apply(Swagger2MarkupConverter.Context globalContext) {
+            public void apply(Swagger swagger) {
             }
         };
 

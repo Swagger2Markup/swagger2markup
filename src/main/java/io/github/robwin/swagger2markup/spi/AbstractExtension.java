@@ -18,7 +18,10 @@ package io.github.robwin.swagger2markup.spi;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 
-public abstract class AbstractExtension implements Extension {
+/**
+ * An abstract extension which must be extended by an extension
+ */
+abstract class AbstractExtension implements Extension {
 
     protected Swagger2MarkupConverter.Context globalContext;
 

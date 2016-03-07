@@ -18,6 +18,9 @@ package io.github.robwin.swagger2markup.spi;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 
+/**
+ * A marker interface which must be implemented by an extension
+ */
 public interface Extension {
 
     /**

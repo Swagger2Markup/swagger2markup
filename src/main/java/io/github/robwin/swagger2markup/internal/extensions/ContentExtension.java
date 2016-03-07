@@ -29,7 +29,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class ContentExtension {
+class ContentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(ContentExtension.class);
 
@@ -37,7 +37,7 @@ public class ContentExtension {
     protected final ContentContext contentContext;
 
 
-    public ContentExtension(Swagger2MarkupConverter.Context globalContext, ContentContext contentContext) {
+    ContentExtension(Swagger2MarkupConverter.Context globalContext, ContentContext contentContext) {
         this.globalContext = globalContext;
         this.contentContext = contentContext;
     }
