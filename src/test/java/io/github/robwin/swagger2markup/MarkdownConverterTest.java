@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.assertions.DiffUtils;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
@@ -71,7 +70,6 @@ public class MarkdownConverterTest {
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .withLineSeparator(LineSeparator.WINDOWS)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

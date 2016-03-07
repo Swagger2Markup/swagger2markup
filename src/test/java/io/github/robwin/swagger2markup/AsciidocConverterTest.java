@@ -15,7 +15,6 @@
  */
 package io.github.robwin.swagger2markup;
 
-import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.swagger2markup.assertions.DiffUtils;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
@@ -76,7 +75,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withLineSeparator(LineSeparator.WINDOWS).build();
+                .build();
 
         Swagger2MarkupConverter.from(file).withConfig(config).build()
                 .intoFolder(outputDirectory);
@@ -98,7 +97,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withLineSeparator(LineSeparator.WINDOWS).build();
+                .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build()
                 .intoFolder(outputDirectory);
