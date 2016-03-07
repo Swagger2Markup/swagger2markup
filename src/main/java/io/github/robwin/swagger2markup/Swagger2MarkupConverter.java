@@ -15,10 +15,10 @@
  */
 package io.github.robwin.swagger2markup;
 
-import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
-import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
-import io.github.robwin.swagger2markup.builder.document.PathsDocument;
-import io.github.robwin.swagger2markup.builder.document.SecurityDocument;
+import io.github.robwin.swagger2markup.builder.DefinitionsDocumentBuilder;
+import io.github.robwin.swagger2markup.builder.OverviewDocumentBuilder;
+import io.github.robwin.swagger2markup.builder.PathsDocumentBuilder;
+import io.github.robwin.swagger2markup.builder.SecurityDocumentBuilder;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.github.robwin.swagger2markup.extension.Extension;
 import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
@@ -151,10 +151,10 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(Path outputPath) throws IOException {
-        new OverviewDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getOverviewDocument()), StandardCharsets.UTF_8);
-        new PathsDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getPathsDocument()), StandardCharsets.UTF_8);
-        new DefinitionsDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
-        new SecurityDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getSecurityDocument()), StandardCharsets.UTF_8);
+        new OverviewDocumentBuilder(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getOverviewDocument()), StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getPathsDocument()), StandardCharsets.UTF_8);
+        new DefinitionsDocumentBuilder(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
+        new SecurityDocumentBuilder(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getSecurityDocument()), StandardCharsets.UTF_8);
     }
 
     /**
@@ -164,10 +164,10 @@ public class Swagger2MarkupConverter {
      */
     private String buildDocuments() {
         StringBuilder sb = new StringBuilder();
-        sb.append(new OverviewDocument(globalContext, null).build().toString());
-        sb.append(new PathsDocument(globalContext, null).build().toString());
-        sb.append(new DefinitionsDocument(globalContext, null).build().toString());
-        sb.append(new SecurityDocument(globalContext, null).build().toString());
+        sb.append(new OverviewDocumentBuilder(globalContext, null).build().toString());
+        sb.append(new PathsDocumentBuilder(globalContext, null).build().toString());
+        sb.append(new DefinitionsDocumentBuilder(globalContext, null).build().toString());
+        sb.append(new SecurityDocumentBuilder(globalContext, null).build().toString());
         return sb.toString();
     }
 

@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.robwin.swagger2markup.builder.document;
+package io.github.robwin.swagger2markup.builder;
 
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.document.MarkupDocument;
 import io.github.robwin.swagger2markup.extension.SecurityContentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
@@ -31,7 +32,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Robert Winkler
  */
-public class SecurityDocument extends MarkupDocument {
+public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String SECURITY_ANCHOR = "security";
     private final String SECURITY;
@@ -42,7 +43,7 @@ public class SecurityDocument extends MarkupDocument {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
+    public SecurityDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath) {
         super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
@@ -56,14 +57,14 @@ public class SecurityDocument extends MarkupDocument {
     }
 
     /**
-     * Builds the security markup document.
+     * Builds the security MarkupDocument.
      *
-     * @return the the security markup document
+     * @return the built MarkupDocument
      */
     @Override
     public MarkupDocument build(){
         security();
-        return this;
+        return new MarkupDocument(markupDocBuilder);
     }
 
     private void addSecurityTitle(String title) {

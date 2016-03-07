@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.robwin.swagger2markup.builder.document;
+package io.github.robwin.swagger2markup.builder;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.document.MarkupDocument;
 import io.github.robwin.swagger2markup.extension.DefinitionsContentExtension;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.Type;
@@ -47,14 +48,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Robert Winkler
  */
-public class DefinitionsDocument extends MarkupDocument {
+public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String DEFINITIONS_ANCHOR = "definitions";
     private final String DEFINITIONS;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private static final String DESCRIPTION_FILE_NAME = "description";
 
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
+    public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath) {
         super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
@@ -81,10 +82,15 @@ public class DefinitionsDocument extends MarkupDocument {
         }
     }
 
+    /**
+     * Builds the definitions MarkupDocument.
+     *
+     * @return the built MarkupDocument
+     */
     @Override
     public MarkupDocument build() {
         definitions(globalContext.swagger.getDefinitions());
-        return this;
+        return new MarkupDocument(markupDocBuilder);
     }
 
     private void addDefinitionsTitle(String title) {

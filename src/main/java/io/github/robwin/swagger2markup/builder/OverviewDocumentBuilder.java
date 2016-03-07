@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.robwin.swagger2markup.builder.document;
+package io.github.robwin.swagger2markup.builder;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.document.MarkupDocument;
 import io.github.robwin.swagger2markup.extension.OverviewContentExtension;
 import io.swagger.models.*;
 
@@ -27,7 +28,7 @@ import java.util.ResourceBundle;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
 
-public class OverviewDocument extends MarkupDocument {
+public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String OVERVIEW_ANCHOR = "overview";
     private final String OVERVIEW;
@@ -45,7 +46,7 @@ public class OverviewDocument extends MarkupDocument {
     private final String BASE_PATH;
     private final String SCHEMES;
 
-    public OverviewDocument(Swagger2MarkupConverter.Context context, Path outputPath){
+    public OverviewDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath){
         super(context, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
@@ -66,14 +67,14 @@ public class OverviewDocument extends MarkupDocument {
     }
 
     /**
-     * Builds the MarkupDocument.
+     * Builds the overview MarkupDocument.
      *
      * @return the built MarkupDocument
      */
     @Override
     public MarkupDocument build(){
         overview();
-        return this;
+        return new MarkupDocument(markupDocBuilder);
     }
 
     private void addOverviewTitle(String title) {

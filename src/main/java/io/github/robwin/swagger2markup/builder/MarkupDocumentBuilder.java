@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.robwin.swagger2markup.builder.document;
+package io.github.robwin.swagger2markup.builder;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
@@ -21,6 +21,7 @@ import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.document.MarkupDocument;
 import io.github.robwin.swagger2markup.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
@@ -35,7 +36,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -44,7 +44,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 /**
  * @author Robert Winkler
  */
-public abstract class MarkupDocument {
+public abstract class MarkupDocumentBuilder {
 
     protected final String DEFAULT_COLUMN;
     protected final String EXAMPLE_COLUMN;
@@ -66,7 +66,7 @@ public abstract class MarkupDocument {
     protected MarkupDocBuilder markupDocBuilder;
     protected Path outputPath;
 
-    MarkupDocument(Swagger2MarkupConverter.Context globalContext, Path outputPath) {
+    MarkupDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Path outputPath) {
         this.globalContext = globalContext;
         this.config = globalContext.config;
         this.outputPath = outputPath;
@@ -96,23 +96,7 @@ public abstract class MarkupDocument {
      */
     public abstract MarkupDocument build() throws IOException;
 
-    /**
-     * Returns a string representation of the document.
-     */
-    public String toString() {
-        return markupDocBuilder.toString();
-    }
 
-    /**
-     * Writes the content of the builder to a file and clears the builder.
-     *
-     * @param file    the generated file
-     * @param charset the the charset to use for encoding
-     * @throws IOException if the file cannot be written
-     */
-    public void writeToFile(Path file, Charset charset) throws IOException {
-        markupDocBuilder.writeToFile(file, charset);
-    }
 
     /**
      * Build a generic property table for any ObjectType

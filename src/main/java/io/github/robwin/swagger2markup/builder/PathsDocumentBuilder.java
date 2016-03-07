@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.robwin.swagger2markup.builder.document;
+package io.github.robwin.swagger2markup.builder;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
@@ -22,6 +22,7 @@ import io.github.robwin.markup.builder.*;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.PathOperation;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.document.MarkupDocument;
 import io.github.robwin.swagger2markup.extension.OperationsContentExtension;
 import io.github.robwin.swagger2markup.type.ObjectType;
 import io.github.robwin.swagger2markup.type.RefType;
@@ -58,7 +59,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Robert Winkler
  */
-public class PathsDocument extends MarkupDocument {
+public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
     private final String RESPONSE;
     private final String REQUEST;
@@ -82,7 +83,7 @@ public class PathsDocument extends MarkupDocument {
     private static final String DESCRIPTION_FILE_NAME = "description";
 
 
-    public PathsDocument(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
+    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
         super(globalContext, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
@@ -134,14 +135,14 @@ public class PathsDocument extends MarkupDocument {
     }
 
     /**
-     * Builds the paths markup document.
+     * Builds the paths MarkupDocument.
      *
-     * @return the the paths markup document
+     * @return the built MarkupDocument
      */
     @Override
     public MarkupDocument build() {
         operations();
-        return this;
+        return new MarkupDocument(markupDocBuilder);
     }
 
     private void addPathsTitle(String title) {
