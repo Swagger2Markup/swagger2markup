@@ -18,7 +18,7 @@ package io.github.robwin.swagger2markup.internal.document.builder;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
-import io.github.robwin.swagger2markup.spi.SecurityContentExtension;
+import io.github.robwin.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
@@ -79,9 +79,9 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
         Map<String, SecuritySchemeDefinition> definitions = globalContext.getSwagger().getSecurityDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
 
-            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             addSecurityTitle(SECURITY);
-            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
 
             for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
                 markupDocBuilder.sectionTitleLevel2(entry.getKey());
@@ -113,8 +113,8 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
                 }
             }
 
-            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyOverviewExtension(new SecurityContentExtension.Context(SecurityContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
     }
 
@@ -123,8 +123,8 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOverviewExtension(SecurityContentExtension.Context context) {
-        for (SecurityContentExtension extension : globalContext.getExtensionRegistry().getExtensions(SecurityContentExtension.class)) {
+    private void applyOverviewExtension(SecurityDocumentExtension.Context context) {
+        for (SecurityDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(SecurityDocumentExtension.class)) {
             extension.apply(context);
         }
     }

@@ -18,7 +18,7 @@ package io.github.robwin.swagger2markup.internal.extensions;
 
 import com.google.common.base.Optional;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
-import io.github.robwin.swagger2markup.spi.DefinitionsContentExtension;
+import io.github.robwin.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.github.robwin.swagger2markup.internal.utils.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ import java.util.List;
  * <li>JSON Schema (.json)</li>
  * </ul>
  */
-public final class SchemaExtension extends DefinitionsContentExtension {
+public final class SchemaExtension extends DefinitionsDocumentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(SchemaExtension.class);
 

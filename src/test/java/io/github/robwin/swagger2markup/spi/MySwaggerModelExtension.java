@@ -13,19 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.robwin.swagger2markup.spi;
 
 import io.swagger.models.Swagger;
 
-/**
- * A SwaggerExtension can be used to preprocess the Swagger model.
- */
-public abstract class SwaggerExtension extends AbstractExtension {
+public class MySwaggerModelExtension extends SwaggerModelExtension {
 
-    public SwaggerExtension() {
+    public MySwaggerModelExtension() {
+        super();
     }
 
-    public abstract void apply(Swagger swagger);
-
+    public void apply(Swagger swagger) {
+        swagger.setHost("host.domain.tld");
+    }
 }

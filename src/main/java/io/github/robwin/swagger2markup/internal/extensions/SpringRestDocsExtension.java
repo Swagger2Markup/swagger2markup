@@ -20,7 +20,7 @@ import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import io.github.robwin.swagger2markup.internal.model.PathOperation;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
-import io.github.robwin.swagger2markup.spi.OperationsContentExtension;
+import io.github.robwin.swagger2markup.spi.PathsDocumentExtension;
 import io.github.robwin.swagger2markup.internal.utils.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ import java.util.Map;
 /**
  * Append Spring Rest docs generated snippets to Operations content.
  */
-public final class SpringRestDocsExtension extends OperationsContentExtension {
+public final class SpringRestDocsExtension extends PathsDocumentExtension {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringRestDocsExtension.class);
 

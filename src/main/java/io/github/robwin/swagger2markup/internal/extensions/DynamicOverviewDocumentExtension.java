@@ -17,7 +17,7 @@
 package io.github.robwin.swagger2markup.internal.extensions;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
-import io.github.robwin.swagger2markup.spi.OverviewContentExtension;
+import io.github.robwin.swagger2markup.spi.OverviewDocumentExtension;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,18 +36,18 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
-public final class DynamicOverviewContentExtension extends OverviewContentExtension {
+public final class DynamicOverviewDocumentExtension extends OverviewDocumentExtension {
 
     protected static final String EXTENSION_FILENAME_PREFIX = "";
-    private static final Logger logger = LoggerFactory.getLogger(DynamicOverviewContentExtension.class);
+    private static final Logger logger = LoggerFactory.getLogger(DynamicOverviewDocumentExtension.class);
 
     protected Path contentPath;
 
-    public DynamicOverviewContentExtension() {
+    public DynamicOverviewDocumentExtension() {
         super();
     }
 
-    public DynamicOverviewContentExtension(Path contentPath) {
+    public DynamicOverviewDocumentExtension(Path contentPath) {
         super();
 
         Validate.notNull(contentPath);

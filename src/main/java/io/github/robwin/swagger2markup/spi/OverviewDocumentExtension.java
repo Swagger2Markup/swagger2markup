@@ -21,7 +21,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 /**
  * A SecurityContentExtension can be used to extend the overview document.
  */
-public abstract class OverviewContentExtension extends AbstractExtension {
+public abstract class OverviewDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOC_BEFORE,
@@ -39,7 +39,7 @@ public abstract class OverviewContentExtension extends AbstractExtension {
         }
     }
 
-    public OverviewContentExtension() {
+    public OverviewDocumentExtension() {
     }
 
     public abstract void apply(Context context);

@@ -17,7 +17,8 @@
 package io.github.robwin.swagger2markup.internal.extensions;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
-import io.github.robwin.swagger2markup.spi.SecurityContentExtension;
+import io.github.robwin.swagger2markup.spi.PathsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.utils.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,26 +29,28 @@ import java.nio.file.Paths;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
- * Dynamically search for markup files in {@code contentPath} to append to Overview, with the format :<br/>
- * - {@code doc-before-*.<markup.ext>} : import before Overview document with levelOffset = 0<br/>
- * - {@code doc-after-*.<markup.ext>} : import after Overview document with levelOffset = 0<br/>
- * - {@code doc-begin-*.<markup.ext>} : import just after Overview document main title with levelOffset = 1<br/>
- * - {@code doc-end-*.<markup.ext>} : import at the end of Overview document with levelOffset = 1<br/>
+ * Dynamically search for markup files in {@code contentPath} to append to Operations, with the format :<br/>
+ * - {@code doc-before-*.<markup.ext>} : import before Paths document with levelOffset = 0<br/>
+ * - {@code doc-after-*.<markup.ext>} : import after Paths document with levelOffset = 0<br/>
+ * - {@code doc-begin-*.<markup.ext>} : import just after Paths document main title with levelOffset = 1<br/>
+ * - {@code doc-end-*.<markup.ext>} : import at the end of Paths document with levelOffset = 1<br/>
+ * - {@code op-begin-*.<markup.ext>} : import just after each operation title with levelOffset = 2(GroupBy.AS_IS) | 3(GroupBy.TAGS)<br/>
+ * - {@code op-end-*.<markup.ext>} : import at the end of each operation with levelOffset = 2(GroupBy.AS_IS) | 3(GroupBy.TAGS)<br/>
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
-public final class DynamicSecurityContentExtension extends SecurityContentExtension {
+public final class DynamicPathsDocumentExtension extends PathsDocumentExtension {
 
     protected static final String EXTENSION_FILENAME_PREFIX = "";
-    private static final Logger logger = LoggerFactory.getLogger(DynamicSecurityContentExtension.class);
+    private static final Logger logger = LoggerFactory.getLogger(DynamicPathsDocumentExtension.class);
 
     protected Path contentPath;
 
-    public DynamicSecurityContentExtension() {
+    public DynamicPathsDocumentExtension() {
         super();
     }
 
-    public DynamicSecurityContentExtension(Path contentPath) {
+    public DynamicPathsDocumentExtension(Path contentPath) {
         super();
 
         Validate.notNull(contentPath);
@@ -59,7 +62,7 @@ public final class DynamicSecurityContentExtension extends SecurityContentExtens
         if (contentPath == null) {
             if (globalContext.getSwaggerLocation() == null || !globalContext.getSwaggerLocation().getScheme().equals("file")) {
                 if (logger.isWarnEnabled())
-                    logger.warn("Disable > DynamicSecurityContentExtension > Can't set default contentPath from swaggerLocation. You have to explicitly configure the content path.");
+                    logger.warn("Disable DynamicOperationsContentExtension > Can't set default contentPath from swaggerLocation. You have to explicitly configure the content path.");
             } else {
                 contentPath = Paths.get(globalContext.getSwaggerLocation()).getParent();
             }
@@ -82,6 +85,10 @@ public final class DynamicSecurityContentExtension extends SecurityContentExtens
                 case DOC_END:
                     dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
+                case OP_BEGIN:
+                case OP_END:
+                    dynamicContent.extensionsSection(contentPath.resolve(IOUtils.normalizeName(context.operation.getId())), contentPrefix(context.position), levelOffset(context));
+                    break;
                 default:
                     throw new RuntimeException(String.format("Unknown position '%s'", context.position));
             }
@@ -91,4 +98,5 @@ public final class DynamicSecurityContentExtension extends SecurityContentExtens
     private String contentPrefix(Position position) {
         return defaultString(EXTENSION_FILENAME_PREFIX) + position.name().toLowerCase().replace('_', '-');
     }
+
 }

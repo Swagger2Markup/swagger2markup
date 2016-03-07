@@ -16,8 +16,8 @@
 package io.github.robwin.swagger2markup.spi;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupExtensionRegistry;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsContentExtension;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicPathsDocumentExtension;
 import io.swagger.models.Swagger;
 import org.junit.Test;
 
@@ -34,9 +34,9 @@ public class Swagger2MarkupExtensionRegistryTest {
     public void testRegistering() {
         Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofDefaults();
 
-        registryBuilder.withExtension(new MySwaggerExtension());
-        registryBuilder.withExtension(new DynamicDefinitionsContentExtension(Paths.get("src/docs/asciidoc/extensions")));
-        registryBuilder.withExtension(new DynamicOperationsContentExtension(Paths.get("src/docs/asciidoc/extensions")));
+        registryBuilder.withExtension(new MySwaggerModelExtension());
+        registryBuilder.withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")));
+        registryBuilder.withExtension(new DynamicPathsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")));
 
         try {
             registryBuilder.withExtension(new AbstractExtension() {
@@ -49,9 +49,9 @@ public class Swagger2MarkupExtensionRegistryTest {
 
     @Test
     public void testListing() {
-        Extension ext1 = new MySwaggerExtension();
-        Extension ext2 = new MySwaggerExtension();
-        Extension ext3 = new SwaggerExtension() {
+        Extension ext1 = new MySwaggerModelExtension();
+        Extension ext2 = new MySwaggerModelExtension();
+        Extension ext3 = new SwaggerModelExtension() {
             public void apply(Swagger swagger) {
             }
         };
@@ -64,6 +64,6 @@ public class Swagger2MarkupExtensionRegistryTest {
         List<Extension> extensions = registry.getExtensions(Extension.class);
         assertThat(extensions.size()).isEqualTo(7);
         assertThat(extensions).contains(ext1, ext2, ext3);
-        assertThat(registry.getExtensions(SwaggerExtension.class)).isEqualTo(Arrays.asList(ext2, ext3, ext1));
+        assertThat(registry.getExtensions(SwaggerModelExtension.class)).isEqualTo(Arrays.asList(ext2, ext3, ext1));
     }
 }

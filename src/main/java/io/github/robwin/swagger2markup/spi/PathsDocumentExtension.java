@@ -24,7 +24,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * A SecurityContentExtension can be used to extend the paths document.
  */
-public abstract class OperationsContentExtension extends AbstractExtension {
+public abstract class PathsDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOC_BEFORE,
@@ -56,7 +56,7 @@ public abstract class OperationsContentExtension extends AbstractExtension {
         }
     }
 
-    public OperationsContentExtension() {
+    public PathsDocumentExtension() {
     }
 
     public abstract void apply(Context context);

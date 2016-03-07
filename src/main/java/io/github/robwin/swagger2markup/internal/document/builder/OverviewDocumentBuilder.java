@@ -17,7 +17,7 @@ package io.github.robwin.swagger2markup.internal.document.builder;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
-import io.github.robwin.swagger2markup.spi.OverviewContentExtension;
+import io.github.robwin.swagger2markup.spi.OverviewDocumentExtension;
 import io.swagger.models.*;
 
 import java.nio.file.Path;
@@ -90,9 +90,9 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         Info info = swagger.getInfo();
         this.markupDocBuilder.documentTitle(info.getTitle());
 
-        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
         addOverviewTitle(OVERVIEW);
-        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
 
         if(isNotBlank(info.getDescription())){
             this.markupDocBuilder.textLine(info.getDescription());
@@ -168,8 +168,8 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
             this.markupDocBuilder.unorderedList(swagger.getProduces());
         }
 
-        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_END, this.markupDocBuilder));
-        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
 
     }
 
@@ -178,8 +178,8 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOverviewExtension(OverviewContentExtension.Context context) {
-        for (OverviewContentExtension extension : globalContext.getExtensionRegistry().getExtensions(OverviewContentExtension.class)) {
+    private void applyOverviewExtension(OverviewDocumentExtension.Context context) {
+        for (OverviewDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(OverviewDocumentExtension.class)) {
             extension.apply(context);
         }
     }

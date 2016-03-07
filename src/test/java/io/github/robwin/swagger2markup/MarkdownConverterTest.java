@@ -21,8 +21,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.assertions.DiffUtils;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsContentExtension;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicPathsDocumentExtension;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -176,8 +176,8 @@ public class MarkdownConverterTest {
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(new DynamicDefinitionsContentExtension(Paths.get("src/docs/markdown/extensions")))
-                .withExtension(new DynamicOperationsContentExtension(Paths.get("src/docs/markdown/extensions")))
+                .withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/docs/markdown/extensions")))
+                .withExtension(new DynamicPathsDocumentExtension(Paths.get("src/docs/markdown/extensions")))
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

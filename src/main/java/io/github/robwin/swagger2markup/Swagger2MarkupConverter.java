@@ -21,7 +21,7 @@ import io.github.robwin.swagger2markup.internal.document.builder.OverviewDocumen
 import io.github.robwin.swagger2markup.internal.document.builder.PathsDocumentBuilder;
 import io.github.robwin.swagger2markup.internal.document.builder.SecurityDocumentBuilder;
 import io.github.robwin.swagger2markup.spi.Extension;
-import io.github.robwin.swagger2markup.spi.SwaggerExtension;
+import io.github.robwin.swagger2markup.spi.SwaggerModelExtension;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.io.IOUtils;
@@ -145,8 +145,8 @@ public class Swagger2MarkupConverter {
     }
 
     private void applySwaggerExtensions() {
-        for (SwaggerExtension swaggerExtension : context.extensionRegistry.getExtensions(SwaggerExtension.class)) {
-            swaggerExtension.apply(context.getSwagger());
+        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getExtensions(SwaggerModelExtension.class)) {
+            swaggerModelExtension.apply(context.getSwagger());
         }
     }
 

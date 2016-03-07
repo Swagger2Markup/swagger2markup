@@ -17,45 +17,29 @@
 package io.github.robwin.swagger2markup.spi;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import org.apache.commons.lang3.Validate;
 
 /**
- * A SecurityContentExtension can be used to extend the definitions document.
+ * A SecurityContentExtension can be used to extend the security document.
  */
-public abstract class DefinitionsContentExtension extends AbstractExtension {
+public abstract class SecurityDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOC_BEFORE,
         DOC_AFTER,
         DOC_BEGIN,
-        DOC_END,
-        DEF_BEGIN,
-        DEF_END
+        DOC_END
     }
 
     public static class Context extends ContentContext {
         public Position position;
-        /**
-         * null if position == DOC_*
-         */
-        public String definitionName;
 
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
-            Validate.isTrue(position != Position.DEF_BEGIN && position != Position.DEF_END, "You must provide a definitionName for this position");
             this.position = position;
         }
-
-        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName) {
-            super(docBuilder);
-            Validate.notNull(definitionName);
-            this.position = position;
-            this.definitionName = definitionName;
-        }
-
     }
 
-    public DefinitionsContentExtension() {
+    public SecurityDocumentExtension() {
     }
 
     public abstract void apply(Context context);
@@ -76,14 +60,11 @@ public abstract class DefinitionsContentExtension extends AbstractExtension {
             case DOC_END:
                 levelOffset = 1;
                 break;
-            case DEF_BEGIN:
-            case DEF_END:
-                levelOffset = 2;
-                break;
             default:
                 throw new RuntimeException(String.format("Unknown position '%s'", context.position));
         }
 
         return levelOffset;
     }
+
 }

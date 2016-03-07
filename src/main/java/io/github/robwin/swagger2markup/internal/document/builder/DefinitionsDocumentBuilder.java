@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
-import io.github.robwin.swagger2markup.spi.DefinitionsContentExtension;
+import io.github.robwin.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.github.robwin.swagger2markup.internal.type.ObjectType;
 import io.github.robwin.swagger2markup.internal.type.Type;
 import io.swagger.models.ComposedModel;
@@ -105,9 +105,9 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void definitions(Map<String, Model> definitions) {
         if (MapUtils.isNotEmpty(definitions)) {
 
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             addDefinitionsTitle(DEFINITIONS);
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
 
             Set<String> definitionNames;
             if (config.getDefinitionOrdering() == null)
@@ -131,8 +131,8 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
                 }
             }
 
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyDefinitionExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
     }
 
@@ -141,8 +141,8 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyDefinitionExtension(DefinitionsContentExtension.Context context) {
-        for (DefinitionsContentExtension extension : globalContext.getExtensionRegistry().getExtensions(DefinitionsContentExtension.class)) {
+    private void applyDefinitionExtension(DefinitionsDocumentExtension.Context context) {
+        for (DefinitionsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(DefinitionsDocumentExtension.class)) {
             extension.apply(context);
         }
     }
@@ -209,11 +209,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_BEGIN, docBuilder, definitionName));
+        applyDefinitionExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEF_BEGIN, docBuilder, definitionName));
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
-        applyDefinitionExtension(new DefinitionsContentExtension.Context(DefinitionsContentExtension.Position.DEF_END, docBuilder, definitionName));
+        applyDefinitionExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEF_END, docBuilder, definitionName));
     }
 
     /**

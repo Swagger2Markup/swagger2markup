@@ -23,7 +23,7 @@ import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.internal.model.PathOperation;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
-import io.github.robwin.swagger2markup.spi.OperationsContentExtension;
+import io.github.robwin.swagger2markup.spi.PathsDocumentExtension;
 import io.github.robwin.swagger2markup.internal.type.ObjectType;
 import io.github.robwin.swagger2markup.internal.type.RefType;
 import io.github.robwin.swagger2markup.internal.type.Type;
@@ -170,13 +170,13 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
         if (allOperations.size() > 0) {
 
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
                 addPathsTitle(PATHS);
-                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+                applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
             } else {
                 addPathsTitle(RESOURCES);
-                applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+                applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
             }
 
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
@@ -207,8 +207,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 }
             }
 
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
 
     }
@@ -218,8 +218,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOperationExtension(OperationsContentExtension.Context context) {
-        for (OperationsContentExtension extension : globalContext.getExtensionRegistry().getExtensions(OperationsContentExtension.class)) {
+    private void applyOperationExtension(PathsDocumentExtension.Context context) {
+        for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(PathsDocumentExtension.class)) {
             extension.apply(context);
         }
     }
@@ -289,7 +289,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void operation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.OP_BEGIN, docBuilder, operation));
+            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_BEGIN, docBuilder, operation));
             deprecatedSection(operation, docBuilder);
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
@@ -301,7 +301,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             tagsSection(operation, docBuilder);
             securitySchemeSection(operation, docBuilder);
             examplesSection(operation, docBuilder);
-            applyOperationExtension(new OperationsContentExtension.Context(OperationsContentExtension.Position.OP_END, docBuilder, operation));
+            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_END, docBuilder, operation));
         }
     }
 

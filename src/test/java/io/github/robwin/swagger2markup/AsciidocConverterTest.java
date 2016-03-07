@@ -16,8 +16,8 @@
 package io.github.robwin.swagger2markup;
 
 import io.github.robwin.swagger2markup.assertions.DiffUtils;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsContentExtension;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicPathsDocumentExtension;
 import io.github.robwin.swagger2markup.internal.extensions.SchemaExtension;
 import io.github.robwin.swagger2markup.internal.extensions.SpringRestDocsExtension;
 import org.apache.commons.io.FileUtils;
@@ -412,8 +412,8 @@ public class AsciidocConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .build();
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(new DynamicDefinitionsContentExtension(Paths.get("src/docs/asciidoc/extensions")))
-                .withExtension(new DynamicOperationsContentExtension(Paths.get("src/docs/asciidoc/extensions")))
+                .withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")))
+                .withExtension(new DynamicPathsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")))
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

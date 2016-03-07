@@ -18,10 +18,10 @@ package io.github.robwin.swagger2markup;
 
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsContentExtension;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicOperationsContentExtension;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicOverviewContentExtension;
-import io.github.robwin.swagger2markup.internal.extensions.DynamicSecurityContentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicPathsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicOverviewDocumentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicSecurityDocumentExtension;
 import io.github.robwin.swagger2markup.spi.*;
 
 import java.util.ArrayList;
@@ -32,11 +32,11 @@ import java.util.Map;
 public class Swagger2MarkupExtensionRegistry {
 
     protected static final List<Class<? extends Extension>> EXTENSION_POINTS = Arrays.<Class<? extends Extension>>asList(
-            SwaggerExtension.class,
-            OverviewContentExtension.class,
-            SecurityContentExtension.class,
-            DefinitionsContentExtension.class,
-            OperationsContentExtension.class
+            SwaggerModelExtension.class,
+            OverviewDocumentExtension.class,
+            SecurityDocumentExtension.class,
+            DefinitionsDocumentExtension.class,
+            PathsDocumentExtension.class
     );
 
     protected final Multimap<Class<? extends Extension>, Extension> extensions;
@@ -60,10 +60,10 @@ public class Swagger2MarkupExtensionRegistry {
         Builder(boolean useDefaults) {
             extensions = MultimapBuilder.hashKeys().arrayListValues().build();
             if (useDefaults) {
-                withExtension(new DynamicOverviewContentExtension());
-                withExtension(new DynamicSecurityContentExtension());
-                withExtension(new DynamicOperationsContentExtension());
-                withExtension(new DynamicDefinitionsContentExtension());
+                withExtension(new DynamicOverviewDocumentExtension());
+                withExtension(new DynamicSecurityDocumentExtension());
+                withExtension(new DynamicPathsDocumentExtension());
+                withExtension(new DynamicDefinitionsDocumentExtension());
             }
         }
 
