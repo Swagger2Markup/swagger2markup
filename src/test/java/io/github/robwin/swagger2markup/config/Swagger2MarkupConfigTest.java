@@ -46,8 +46,8 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
-        assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.AS_IS);
-        assertThat(config.getOperationOrdering()).isNull();
+        assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.NATURAL);
+        assertThat(config.getOperationOrdering()).isNotNull();
         assertThat(config.getOutputLanguage()).isEqualTo(Language.EN);
         assertThat(config.getOverviewDocument()).isEqualTo("overview");
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.NATURAL);
