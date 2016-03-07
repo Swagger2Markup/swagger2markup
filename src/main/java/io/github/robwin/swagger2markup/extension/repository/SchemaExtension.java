@@ -73,7 +73,7 @@ public class SchemaExtension extends DefinitionsContentExtension {
     }
 
     @Override
-    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+    public void init(Swagger2MarkupConverter.Context globalContext) {
         if (schemaBaseUri == null) {
             if (globalContext.swaggerLocation == null) {
                 if (logger.isWarnEnabled())
@@ -84,6 +84,7 @@ public class SchemaExtension extends DefinitionsContentExtension {
         }
     }
 
+    @Override
     public void apply(Context context) {
         Validate.notNull(context);
 

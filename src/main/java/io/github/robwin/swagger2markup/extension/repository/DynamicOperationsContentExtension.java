@@ -58,7 +58,7 @@ public class DynamicOperationsContentExtension extends OperationsContentExtensio
     }
 
     @Override
-    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+    public void init(Swagger2MarkupConverter.Context globalContext) {
         if (contentPath == null) {
             if (globalContext.swaggerLocation == null || !globalContext.swaggerLocation.getScheme().equals("file")) {
                 if (logger.isWarnEnabled())
@@ -69,6 +69,7 @@ public class DynamicOperationsContentExtension extends OperationsContentExtensio
         }
     }
 
+    @Override
     public void apply(Context context) {
         Validate.notNull(context);
 

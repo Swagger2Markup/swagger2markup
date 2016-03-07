@@ -29,15 +29,15 @@ public abstract class AbstractExtension implements Extension {
      */
     public void setGlobalContext(Swagger2MarkupConverter.Context globalContext) {
         this.globalContext = globalContext;
-        onUpdateGlobalContext(globalContext);
+        init(globalContext);
     }
 
     /**
-     * Overridable onUpdateGlobalContext event listener.
+     * Overridable init event listener.
      *
      * @param globalContext Global context
      */
-    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+    public void init(Swagger2MarkupConverter.Context globalContext) {
         /* must be left empty */
     }
 

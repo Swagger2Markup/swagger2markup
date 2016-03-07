@@ -64,7 +64,7 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
     }
 
     @Override
-    public void onUpdateGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+    public void init(Swagger2MarkupConverter.Context globalContext) {
         if (snippetBaseUri == null) {
             if (globalContext.swaggerLocation == null) {
                 if (logger.isWarnEnabled())
@@ -109,6 +109,7 @@ public class SpringRestDocsExtension extends OperationsContentExtension {
         return snippetBaseUri.resolve(IOUtils.normalizeName(operation.getId()) + "/").resolve(context.docBuilder.addFileExtension(snippetName));
     }
 
+    @Override
     public void apply(Context context) {
         Validate.notNull(context);
 
