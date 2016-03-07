@@ -7,7 +7,8 @@ import java.util.Locale;
  */
 public enum Language {
     EN(new Locale("en")),
-    RU(new Locale("ru"));
+    RU(new Locale("ru")),
+    FR(new Locale("fr"));
 
     private final Locale lang;
 

@@ -18,133 +18,163 @@
  */
 package io.github.robwin.swagger2markup.config;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.swagger2markup.GroupBy;
-import io.github.robwin.swagger2markup.Language;
-import io.github.robwin.swagger2markup.OrderBy;
-import io.github.robwin.swagger2markup.PathOperation;
-import io.swagger.models.Swagger;
+import io.github.robwin.swagger2markup.*;
+import io.github.robwin.swagger2markup.utils.IOUtils;
+import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Properties;
 
 public class Swagger2MarkupConfig {
 
-    private final Swagger swagger;
-    private final MarkupLanguage markupLanguage;
-    private final String examplesFolderPath;
-    private final String schemasFolderPath;
-    private final String descriptionsFolderPath;
-    private final boolean separatedDefinitions;
-    private final boolean separatedOperations;
-    private final GroupBy pathsGroupedBy;
+    private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfig.class);
+
+    private MarkupLanguage markupLanguage;
+    private boolean examplesEnabled;
+    private boolean schemasEnabled;
+    private URI schemasUri;
+    private boolean operationDescriptionsEnabled;
+    private URI operationDescriptionsUri;
+    private boolean definitionDescriptionsEnabled;
+    private URI definitionDescriptionsUri;
+    private boolean separatedDefinitionsEnabled;
+    private boolean separatedOperationsEnabled;
+    private GroupBy operationsGroupedBy;
     @Deprecated
-    private final OrderBy definitionsOrderedBy;
-    private final Language outputLanguage;
-    private final int inlineSchemaDepthLevel;
-    private final Comparator<String> tagOrdering;
-    private final Comparator<PathOperation> operationOrdering;
-    private final Comparator<String> definitionOrdering;
-    private final Comparator<Parameter> parameterOrdering;
-    private final Comparator<String> propertyOrdering;
-    private final Comparator<String> responseOrdering;
-    private final boolean interDocumentCrossReferences;
-    private final String interDocumentCrossReferencesPrefix;
-    private final boolean flatBody;
-    private final String anchorPrefix;
+    private OrderBy definitionsOrderedBy;
+    private Language outputLanguage;
+    private int inlineSchemaDepthLevel;
+    private Comparator<String> tagOrdering;
+    private Comparator<PathOperation> operationOrdering;
+    private Comparator<String> definitionOrdering;
+    private Comparator<Parameter> parameterOrdering;
+    private Comparator<String> propertyOrdering;
+    private Comparator<String> responseOrdering;
+    private boolean interDocumentCrossReferencesEnabled;
+    private String interDocumentCrossReferencesPrefix;
+    private boolean flatBodyEnabled;
+    private String anchorPrefix;
 
-    private static final String OVERVIEW_DOCUMENT = "overview";
-    private static final String PATHS_DOCUMENT = "paths";
-    private static final String DEFINITIONS_DOCUMENT = "definitions";
-    private static final String SECURITY_DOCUMENT = "security";
+    private String overviewDocument;
+    private String pathsDocument;
+    private String definitionsDocument;
+    private String securityDocument;
+    private String separatedOperationsFolder;
+    private String separatedDefinitionsFolder;
 
-    private static final String SEPARATED_DEFINITIONS_FOLDER = "definitions";
-    private static final String SEPARATED_OPERATIONS_FOLDER = "operations";
-
-    /**
-     * @param swagger the Swagger source
-     * @param markupLanguage the markup language which is used to generate the files
-     * @param examplesFolderPath examplesFolderPath the path to the folder where the example documents reside
-     * @param schemasFolderPath the path to the folder where the schema documents reside
-     * @param descriptionsFolderPath the path to the folder where the description documents reside
-     * @param separatedDefinitions specified if in addition to the definitions file, also separate definition files for each model definition should be created
-     * @param separatedOperations specified if in addition to the paths file, also separate operation files for each operation should be created
-     * @param pathsGroupedBy specifies if the paths should be grouped by tags or stay as-is
-     * @param definitionsOrderedBy specifies if the definitions should be ordered by natural ordering or stay as-is
-     * @param outputLanguage specifies language of labels in output files
-     * @param inlineSchemaDepthLevel specifies the max depth for inline object schema display (0 = no inline schemas)
-     * @param tagOrdering specifies a custom comparator function to order tags (null = as-is ordering)
-     * @param operationOrdering specifies a custom comparator function to order operations (null = as-is ordering)
-     * @param definitionOrdering specifies a custom comparator function to order definitions (null = as-is ordering)
-     * @param parameterOrdering specifies a custom comparator function to order parameters (null = as-is ordering)
-     * @param propertyOrdering specifies a custom comparator function to order properties (null = as-is ordering)
-     * @param responseOrdering specifies a custom comparator function to order responses (null = as-is ordering)
-     * @param interDocumentCrossReferences enable use of inter-document cross-references when needed
-     * @param interDocumentCrossReferencesPrefix set an optional prefix for inter-document cross-references
-     * @param flatBody optionally isolate the body parameter, if any, from other parameters
-     * @param anchorPrefix optionally prefix all anchors for unicity
-     */
-    public Swagger2MarkupConfig(Swagger swagger, MarkupLanguage markupLanguage, String examplesFolderPath,
-                                String schemasFolderPath, String descriptionsFolderPath, boolean separatedDefinitions, boolean separatedOperations,
-                                GroupBy pathsGroupedBy, OrderBy definitionsOrderedBy, Language outputLanguage,
-                                int inlineSchemaDepthLevel, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering,
-                                Comparator<String> definitionOrdering, Comparator<Parameter> parameterOrdering, Comparator<String> propertyOrdering,
-                                Comparator<String> responseOrdering,
-                                boolean interDocumentCrossReferences, String interDocumentCrossReferencesPrefix,
-                                boolean flatBody, String anchorPrefix) {
-        this.swagger = swagger;
-        this.markupLanguage = markupLanguage;
-        this.examplesFolderPath = examplesFolderPath;
-        this.schemasFolderPath = schemasFolderPath;
-        this.descriptionsFolderPath = descriptionsFolderPath;
-        this.separatedDefinitions = separatedDefinitions;
-        this.separatedOperations = separatedOperations;
-        this.pathsGroupedBy = pathsGroupedBy;
-        this.definitionsOrderedBy = definitionsOrderedBy;
-        this.outputLanguage = outputLanguage;
-        this.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
-        this.tagOrdering = tagOrdering;
-        this.operationOrdering = operationOrdering;
-        this.definitionOrdering = definitionOrdering;
-        this.parameterOrdering = parameterOrdering;
-        this.propertyOrdering = propertyOrdering;
-        this.responseOrdering = responseOrdering;
-        this.interDocumentCrossReferences = interDocumentCrossReferences;
-        this.interDocumentCrossReferencesPrefix = interDocumentCrossReferencesPrefix;
-        this.flatBody = flatBody;
-        this.anchorPrefix = anchorPrefix;
+    public static Builder ofDefaults() {
+        return new Builder();
     }
 
-    public Swagger getSwagger() {
-        return swagger;
+    public static Builder ofProperties(Properties properties) {
+        return new Builder(properties);
+    }
+
+    /**
+     * Global context lazy initialization
+     *
+     * @param globalContext Partially initialized global context (globalContext.extensionRegistry == null)
+     */
+    public void setGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+        configureDefaultContentPaths(globalContext.swaggerLocation);
+    }
+
+    /**
+     * Automatically set default path for external content files based on specified {@code swaggerLocation}.<br/>
+     * If {@code swaggerLocation} is null, default path can't be set and features are disabled.<br/>
+     * Paths have to be explicitly set when swaggerLocation.scheme != 'file' to limit the number of URL requests.
+     *
+     * @param swaggerLocation base path to set default paths
+     * @throws RuntimeException if basePath == null and any path is not configured
+     */
+    private void configureDefaultContentPaths(URI swaggerLocation) {
+        URI baseURI = null;
+
+        if (swaggerLocation != null) {
+            if (swaggerLocation.getScheme().equals("file"))
+                baseURI = IOUtils.uriParent(swaggerLocation);
+        }
+
+        if (schemasEnabled && schemasUri == null) {
+            if (baseURI == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "schemas", "schemasUri");
+                schemasEnabled = false;
+            } else
+                schemasUri = baseURI;
+        }
+
+        if (operationDescriptionsEnabled && operationDescriptionsUri == null) {
+            if (baseURI == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "operationDescriptionsEnabled", "operationDescriptionsUri");
+                operationDescriptionsEnabled = false;
+            } else
+                operationDescriptionsUri = baseURI;
+        }
+
+        if (definitionDescriptionsEnabled && definitionDescriptionsUri == null) {
+            if (baseURI == null) {
+                if (logger.isWarnEnabled())
+                    logger.warn("Disable {} > No explicit '{}' set and no default available > Disable {}", "definitionDescriptionsEnabled", "definitionDescriptionsUri");
+                definitionDescriptionsEnabled = false;
+            } else
+                definitionDescriptionsUri = baseURI;
+        }
     }
 
     public MarkupLanguage getMarkupLanguage() {
         return markupLanguage;
     }
 
-    public String getExamplesFolderPath() {
-        return examplesFolderPath;
+    public boolean isExamplesEnabled() {
+        return examplesEnabled;
     }
 
-    public String getSchemasFolderPath() {
-        return schemasFolderPath;
+    public boolean isSchemasEnabled() {
+        return schemasEnabled;
     }
 
-    public String getDescriptionsFolderPath() {
-        return descriptionsFolderPath;
+    public URI getSchemasUri() {
+        return schemasUri;
     }
 
-    public boolean isSeparatedDefinitions() {
-        return separatedDefinitions;
+    public boolean isOperationDescriptionsEnabled() {
+        return operationDescriptionsEnabled;
     }
 
-    public boolean isSeparatedOperations() {
-        return separatedOperations;
+    public URI getOperationDescriptionsUri() {
+        return operationDescriptionsUri;
     }
 
-    public GroupBy getPathsGroupedBy() {
-        return pathsGroupedBy;
+    public boolean isDefinitionDescriptionsEnabled() {
+        return definitionDescriptionsEnabled;
+    }
+
+    public URI getDefinitionDescriptionsUri() {
+        return definitionDescriptionsUri;
+    }
+
+    public boolean isSeparatedDefinitionsEnabled() {
+        return separatedDefinitionsEnabled;
+    }
+
+    public boolean isSeparatedOperationsEnabled() {
+        return separatedOperationsEnabled;
+    }
+
+    public GroupBy getOperationsGroupedBy() {
+        return operationsGroupedBy;
     }
 
     public OrderBy getDefinitionsOrderedBy() {
@@ -183,43 +213,467 @@ public class Swagger2MarkupConfig {
         return responseOrdering;
     }
 
-    public String getOverviewDocument() {
-        return OVERVIEW_DOCUMENT;
-    }
-
-    public String getPathsDocument() {
-        return PATHS_DOCUMENT;
-    }
-
-    public String getDefinitionsDocument() {
-        return DEFINITIONS_DOCUMENT;
-    }
-
-    public String getSecurityDocument() {
-        return SECURITY_DOCUMENT;
-    }
-
-    public String getSeparatedDefinitionsFolder() {
-        return SEPARATED_DEFINITIONS_FOLDER;
-    }
-
-    public String getSeparatedOperationsFolder() {
-        return SEPARATED_OPERATIONS_FOLDER;
-    }
-
-    public boolean isInterDocumentCrossReferences() {
-        return interDocumentCrossReferences;
+    public boolean isInterDocumentCrossReferencesEnabled() {
+        return interDocumentCrossReferencesEnabled;
     }
 
     public String getInterDocumentCrossReferencesPrefix() {
         return interDocumentCrossReferencesPrefix;
     }
 
-    public boolean isFlatBody() {
-        return flatBody;
+    public boolean isFlatBodyEnabled() {
+        return flatBodyEnabled;
     }
 
     public String getAnchorPrefix() {
         return anchorPrefix;
     }
+
+    public String getOverviewDocument() {
+        return overviewDocument;
+    }
+
+    public String getPathsDocument() {
+        return pathsDocument;
+    }
+
+    public String getDefinitionsDocument() {
+        return definitionsDocument;
+    }
+
+    public String getSecurityDocument() {
+        return securityDocument;
+    }
+
+    public String getSeparatedOperationsFolder() {
+        return separatedOperationsFolder;
+    }
+
+    public String getSeparatedDefinitionsFolder() {
+        return separatedDefinitionsFolder;
+    }
+
+    public static class Builder {
+
+        private static final String PROPERTIES_PREFIX = "swagger2markup.";
+        private static final String PROPERTIES_DEFAULT = "/io/github/robwin/swagger2markup/config/default.properties";
+
+        static final Ordering<PathOperation> OPERATION_METHOD_COMPARATOR = Ordering
+                .explicit(HttpMethod.GET, HttpMethod.PUT, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
+                .onResultOf(new Function<PathOperation, HttpMethod>() {
+                    public HttpMethod apply(PathOperation operation) {
+                        return operation.getMethod();
+                    }
+                });
+
+        static final Ordering<PathOperation> OPERATION_PATH_COMPARATOR = Ordering
+                .natural()
+                .onResultOf(new Function<PathOperation, String>() {
+                    public String apply(PathOperation operation) {
+                        return operation.getPath();
+                    }
+                });
+
+        static final Ordering<Parameter> PARAMETER_IN_COMPARATOR = Ordering
+                .explicit("header", "path", "query", "formData", "body")
+                .onResultOf(new Function<Parameter, String>() {
+                    public String apply(Parameter parameter) {
+                        return parameter.getIn();
+                    }
+                });
+
+        static final Ordering<Parameter> PARAMETER_NAME_COMPARATOR = Ordering
+                .natural()
+                .onResultOf(new Function<Parameter, String>() {
+                    public String apply(Parameter parameter) {
+                        return parameter.getName();
+                    }
+                });
+
+        private Swagger2MarkupConfig config = new Swagger2MarkupConfig();
+
+        Builder() {
+            this(new Properties());
+        }
+
+        Builder(Properties properties) {
+
+            Properties safeProperties = new Properties(defaultProperties());
+            safeProperties.putAll(properties);
+
+            config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
+            config.examplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "examplesEnabled"));
+            config.schemasEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasEnabled"));
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "schemasUri"))
+                config.schemasUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "schemasUri"));
+            config.operationDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsEnabled"));
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "operationDescriptionsUri"))
+                config.operationDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsUri"));
+            config.definitionDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsEnabled"));
+            if (safeProperties.containsKey(PROPERTIES_PREFIX + "definitionDescriptionsUri"))
+                config.definitionDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsUri"));
+            config.separatedDefinitionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsEnabled"));
+            config.separatedOperationsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsEnabled"));
+            config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
+            config.definitionsOrderedBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsOrderedBy"));
+            config.outputLanguage = Language.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "outputLanguage"));
+            config.inlineSchemaDepthLevel = Integer.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
+            config.interDocumentCrossReferencesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesEnabled"));
+            config.interDocumentCrossReferencesPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix");
+            config.flatBodyEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "flatBodyEnabled"));
+            config.anchorPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "anchorPrefix");
+            config.overviewDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "overviewDocument");
+            config.pathsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "pathsDocument");
+            config.definitionsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsDocument");
+            config.securityDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "securityDocument");
+            config.separatedOperationsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsFolder");
+            config.separatedDefinitionsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsFolder");
+
+            config.tagOrdering = Ordering.natural();
+            config.operationOrdering = OPERATION_PATH_COMPARATOR.compound(OPERATION_METHOD_COMPARATOR);
+            config.definitionOrdering = Ordering.natural();
+            config.parameterOrdering = PARAMETER_IN_COMPARATOR.compound(PARAMETER_NAME_COMPARATOR);
+            config.propertyOrdering = Ordering.natural();
+            config.responseOrdering = Ordering.natural();
+        }
+
+        private Properties defaultProperties() {
+            Properties defaultProperties = new Properties();
+            try {
+                InputStream defaultPropertiesStream = Swagger2MarkupConfig.class.getResourceAsStream(PROPERTIES_DEFAULT);
+                if (defaultPropertiesStream == null)
+                    throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT));
+                defaultProperties.load(defaultPropertiesStream);
+            } catch (IOException e) {
+                throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
+            }
+
+            return defaultProperties;
+        }
+
+        public Swagger2MarkupConfig build() {
+            return config;
+        }
+
+        /**
+         * Specifies the markup language which should be used to generate the files
+         *
+         * @param markupLanguage the markup language which is used to generate the files
+         * @return this builder
+         */
+        public Builder withMarkupLanguage(MarkupLanguage markupLanguage) {
+            config.markupLanguage = markupLanguage;
+            return this;
+        }
+
+        /**
+         * Include examples into the Paths document
+         *
+         * @return this builder
+         */
+        public Builder withExamples() {
+            config.examplesEnabled = true;
+            return this;
+        }
+
+        /**
+         * Include (JSON, XML) schemas into the Definitions document
+         *
+         * @param schemasUri the URI to the folder where the schema documents reside. Use default URI if null.
+         * @return this builder
+         */
+        public Builder withSchemas(URI schemasUri) {
+            config.schemasEnabled = true;
+            config.schemasUri = schemasUri;
+            return this;
+        }
+
+        /**
+         * Include (JSON, XML) schemas into the Definitions document
+         *
+         * @param schemasPath the path to the folder where the schema documents reside. Use default path if null.
+         * @return this builder
+         */
+        public Builder withSchemas(Path schemasPath) {
+            return withSchemas(schemasPath.toUri());
+        }
+
+        /**
+         * Include (JSON, XML) schemas into the Definitions document.<br/>
+         * This is an alias for {@link #withSchemas(URI) withSchemas(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withSchemas() {
+            withSchemas((URI) null);
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document
+         *
+         * @param operationDescriptionsUri the URI to the folder where the description documents reside. Use default URI if null.
+         * @return this builder
+         */
+        public Builder withOperationDescriptions(URI operationDescriptionsUri) {
+            config.operationDescriptionsEnabled = true;
+            config.operationDescriptionsUri = operationDescriptionsUri;
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document
+         *
+         * @param operationDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
+         * @return this builder
+         */
+        public Builder withOperationDescriptions(Path operationDescriptionsPath) {
+            return withOperationDescriptions(operationDescriptionsPath.toUri());
+        }
+
+        /**
+         * Include hand-written descriptions into the Paths document.<br/>
+         * This is an alias for {@link #withOperationDescriptions(URI) withOperationDescriptions(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withOperationDescriptions() {
+            withOperationDescriptions((URI) null);
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Definitions document
+         *
+         * @param definitionDescriptionsUri the URI to the folder where the description documents reside. Use default URI if null.
+         * @return this builder
+         */
+        public Builder withDefinitionDescriptions(URI definitionDescriptionsUri) {
+            config.definitionDescriptionsEnabled = true;
+            config.definitionDescriptionsUri = definitionDescriptionsUri;
+            return this;
+        }
+
+        /**
+         * Include hand-written descriptions into the Definitions document
+         *
+         * @param definitionDescriptionsPath the path to the folder where the description documents reside. Use default path if null.
+         * @return this builder
+         */
+        public Builder withDefinitionDescriptions(Path definitionDescriptionsPath) {
+            return withDefinitionDescriptions(definitionDescriptionsPath.toUri());
+        }
+
+        /**
+         * Include hand-written descriptions into the Definitions document.<br/>
+         * This is an alias for {@link #withDefinitionDescriptions(URI) withDefinitionDescriptions(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withDefinitionDescriptions() {
+            withDefinitionDescriptions((URI) null);
+            return this;
+        }
+
+        /**
+         * In addition to the definitions file, also create separate definition files for each model definition.
+         *
+         * @return this builder
+         */
+        public Builder withSeparatedDefinitions() {
+            config.separatedDefinitionsEnabled = true;
+            return this;
+        }
+
+
+        /**
+         * In addition to the paths file, also create separate path files for each path.
+         *
+         * @return this builder
+         */
+        public Builder withSeparatedOperations() {
+            config.separatedOperationsEnabled = true;
+            return this;
+        }
+
+
+        /**
+         * Specifies if the paths should be grouped by tags or stay as-is.
+         *
+         * @param pathsGroupedBy the GroupBy enum
+         * @return this builder
+         */
+        public Builder withPathsGroupedBy(GroupBy pathsGroupedBy) {
+            config.operationsGroupedBy = pathsGroupedBy;
+            return this;
+        }
+
+        /**
+         * Specifies if the definitions should be ordered by natural ordering or stay as-is.<br/>
+         * Use {@link #withDefinitionOrdering(Comparator)} instead.
+         *
+         * @param definitionsOrderedBy the OrderBy enum
+         * @return this builder
+         */
+        @Deprecated
+        public Builder withDefinitionsOrderedBy(OrderBy definitionsOrderedBy) {
+            config.definitionsOrderedBy = definitionsOrderedBy;
+            config.definitionOrdering = Ordering.natural();
+            return this;
+        }
+
+
+        /**
+         * Specifies labels language of output files
+         *
+         * @param language the enum
+         * @return this builder
+         */
+        public Builder withOutputLanguage(Language language) {
+            config.outputLanguage = language;
+            return this;
+        }
+
+
+        /**
+         * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled)
+         *
+         * @param inlineSchemaDepthLevel number of recursion levels for inline schemasEnabled display
+         * @return this builder
+         */
+        public Builder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
+            config.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
+            return this;
+        }
+
+
+        /**
+         * Specifies a custom comparator function to order tags.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param tagOrdering tag comparator
+         * @return this builder
+         */
+        public Builder withTagOrdering(Comparator<String> tagOrdering) {
+            config.tagOrdering = tagOrdering;
+            return this;
+        }
+
+
+        /**
+         * Specifies a custom comparator function to order operations.
+         * By default, natural ordering is applied on operation 'path', then explicit ordering is applied on operation 'method'
+         * Set ordering to null to keep swagger original order
+         *
+         * @param operationOrdering operation comparator
+         * @return this builder
+         */
+        public Builder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
+            config.operationOrdering = operationOrdering;
+            return this;
+        }
+
+
+        /**
+         * Specifies a custom comparator function to order definitions.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param definitionOrdering definition comparator
+         * @return this builder
+         */
+        public Builder withDefinitionOrdering(Comparator<String> definitionOrdering) {
+            config.definitionOrdering = definitionOrdering;
+            return this;
+        }
+
+
+        /**
+         * Specifies a custom comparator function to order parameters.
+         * By default, explicit ordering is applied on parameter 'in', then natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param parameterOrdering parameter comparator
+         * @return this builder
+         */
+        public Builder withParameterOrdering(Comparator<Parameter> parameterOrdering) {
+            config.parameterOrdering = parameterOrdering;
+            return this;
+        }
+
+
+        /**
+         * Specifies a custom comparator function to order properties.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param propertyOrdering property comparator
+         * @return this builder
+         */
+        public Builder withPropertyOrdering(Comparator<String> propertyOrdering) {
+            config.propertyOrdering = propertyOrdering;
+            return this;
+        }
+
+
+        /**
+         * Specifies a custom comparator function to order responses.
+         * By default, natural ordering is applied.
+         * Set ordering to null to keep swagger original order
+         *
+         * @param responseOrdering response comparator
+         * @return this builder
+         */
+        public Builder withResponseOrdering(Comparator<String> responseOrdering) {
+            config.responseOrdering = responseOrdering;
+            return this;
+        }
+
+        /**
+         * Enable use of inter-document cross-references when needed
+         *
+         * @param prefix Prefix to document in all inter-document cross-references (null = no prefix)
+         * @return this builder
+         */
+        public Builder withInterDocumentCrossReferences(String prefix) {
+            config.interDocumentCrossReferencesEnabled = true;
+            config.interDocumentCrossReferencesPrefix = prefix;
+            return this;
+        }
+
+        /**
+         * Enable use of inter-document cross-references when needed.<br/>
+         * This is an alias for {@link #withInterDocumentCrossReferences(String) withInterDocumentCrossReferences(null)}.
+         *
+         * @return this builder
+         */
+        public Builder withInterDocumentCrossReferences() {
+            withInterDocumentCrossReferences(null);
+            return this;
+        }
+
+        /**
+         * Optionally isolate the body parameter, if any, from other parameters
+         *
+         * @return this builder
+         */
+        public Builder withFlatBody() {
+            config.flatBodyEnabled = true;
+            return this;
+        }
+
+        /**
+         * Optionally prefix all anchors for unicity
+         *
+         * @param anchorPrefix anchor prefix (null = no prefix)
+         * @return this builder
+         */
+        public Builder withAnchorPrefix(String anchorPrefix) {
+            config.anchorPrefix = anchorPrefix;
+            return this;
+        }
+
+    }
+
 }

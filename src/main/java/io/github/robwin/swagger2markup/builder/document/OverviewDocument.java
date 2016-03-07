@@ -18,9 +18,11 @@
  */
 package io.github.robwin.swagger2markup.builder.document;
 
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.extension.OverviewContentExtension;
 import io.swagger.models.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -46,11 +48,10 @@ public class OverviewDocument extends MarkupDocument {
     private final String BASE_PATH;
     private final String SCHEMES;
 
-    public OverviewDocument(Swagger2MarkupConfig swagger2MarkupConfig, String outputDirectory){
-        super(swagger2MarkupConfig, outputDirectory);
+    public OverviewDocument(Swagger2MarkupConverter.Context context, Path outputPath){
+        super(context, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("lang/labels",
-                swagger2MarkupConfig.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         OVERVIEW = labels.getString("overview");
         CURRENT_VERSION = labels.getString("current_version");
         VERSION = labels.getString("version");
@@ -87,9 +88,14 @@ public class OverviewDocument extends MarkupDocument {
      * Builds the document header of the swagger model
      */
     private void overview() {
+        Swagger swagger = globalContext.swagger;
         Info info = swagger.getInfo();
         this.markupDocBuilder.documentTitle(info.getTitle());
+
+        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
         addOverviewTitle(OVERVIEW);
+        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+
         if(isNotBlank(info.getDescription())){
             this.markupDocBuilder.textLine(info.getDescription());
         }
@@ -164,5 +170,20 @@ public class OverviewDocument extends MarkupDocument {
             this.markupDocBuilder.unorderedList(swagger.getProduces());
         }
 
+        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_END, this.markupDocBuilder));
+        applyOverviewExtension(new OverviewContentExtension.Context(OverviewContentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+
     }
+
+    /**
+     * Apply extension context to all OverviewContentExtension
+     *
+     * @param context context
+     */
+    private void applyOverviewExtension(OverviewContentExtension.Context context) {
+        for (OverviewContentExtension extension : globalContext.extensionRegistry.getExtensions(OverviewContentExtension.class)) {
+            extension.apply(context);
+        }
+    }
+
 }
