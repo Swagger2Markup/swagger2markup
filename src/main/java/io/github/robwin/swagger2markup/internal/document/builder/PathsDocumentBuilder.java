@@ -156,7 +156,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         Set<PathOperation> allOperations = new LinkedHashSet<>();
         Map<String, Path> paths = globalContext.getSwagger().getPaths();
 
-        if (paths != null) {
+        if (MapUtils.isNotEmpty(paths)) {
             for (Map.Entry<String, Path> path : paths.entrySet()) {
                 Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
 
@@ -168,7 +168,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             }
         }
 
-        if (allOperations.size() > 0) {
+        if (CollectionUtils.isNotEmpty(allOperations)) {
 
             applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
@@ -684,7 +684,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
                     new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(HEADERS_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             Set<String> responseNames;
             if (config.getResponseOrdering() == null)
