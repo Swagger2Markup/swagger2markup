@@ -15,7 +15,6 @@
  */
 package io.github.robwin.swagger2markup;
 
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
 import io.swagger.models.Swagger;
 import org.junit.Test;
 
@@ -40,14 +39,14 @@ public class GeneralConverterTest {
                 .withOperationDescriptions()
                 .build();
 
-        Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(file)
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build();
 
         //Then
-        URI baseUri = io.github.robwin.swagger2markup.utils.IOUtils.uriParent(converterBuilder.globalContext.swaggerLocation);
-        assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isEqualTo(baseUri);
-        assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isEqualTo(baseUri);
+        URI baseUri = io.github.robwin.swagger2markup.internal.utils.IOUtils.uriParent(converter.getContext().getSwaggerLocation());
+        assertThat(converter.getContext().getConfig().getDefinitionDescriptionsUri()).isEqualTo(baseUri);
+        assertThat(converter.getContext().getConfig().getOperationDescriptionsUri()).isEqualTo(baseUri);
     }
 
     @Test
@@ -65,8 +64,8 @@ public class GeneralConverterTest {
                 .build();
 
         //Then
-        assertThat(converterBuilder.globalContext.config.getDefinitionDescriptionsUri()).isNull();
-        assertThat(converterBuilder.globalContext.config.getOperationDescriptionsUri()).isNull();
+        assertThat(converterBuilder.getContext().getConfig().getDefinitionDescriptionsUri()).isNull();
+        assertThat(converterBuilder.getContext().getConfig().getOperationDescriptionsUri()).isNull();
     }
 
     @Test
@@ -81,6 +80,6 @@ public class GeneralConverterTest {
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(new Swagger())
                 .withConfig(config)
                 .build();
-        assertThat(converter.globalContext.config.isDefinitionDescriptionsEnabled()).isFalse();
+        assertThat(converter.getContext().getConfig().isDefinitionDescriptionsEnabled()).isFalse();
     }
 }

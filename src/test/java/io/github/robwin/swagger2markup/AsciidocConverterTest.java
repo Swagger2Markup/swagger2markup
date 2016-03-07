@@ -16,12 +16,10 @@
 package io.github.robwin.swagger2markup;
 
 import io.github.robwin.swagger2markup.assertions.DiffUtils;
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
-import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
-import io.github.robwin.swagger2markup.extension.repository.DynamicDefinitionsContentExtension;
-import io.github.robwin.swagger2markup.extension.repository.DynamicOperationsContentExtension;
-import io.github.robwin.swagger2markup.extension.repository.SchemaExtension;
-import io.github.robwin.swagger2markup.extension.repository.SpringRestDocsExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicDefinitionsContentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.DynamicOperationsContentExtension;
+import io.github.robwin.swagger2markup.internal.extensions.SchemaExtension;
+import io.github.robwin.swagger2markup.internal.extensions.SpringRestDocsExtension;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
