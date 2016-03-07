@@ -157,7 +157,7 @@ public class PathsDocument extends MarkupDocument {
 
         if (paths != null) {
             for (Map.Entry<String, Path> path : paths.entrySet()) {
-                Map<HttpMethod, Operation> operations = path.getValue().getOperationMap();
+                Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
 
                 if (operations != null) {
                     for (Map.Entry<HttpMethod, Operation> operation : operations.entrySet()) {
@@ -504,7 +504,7 @@ public class PathsDocument extends MarkupDocument {
                             docBuilder.paragraph(parameter.getDescription());
                         }
 
-                        MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage());
+                        MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator());
                         typeInfos.italicText(REQUIRED_COLUMN).textLine(": " + parameter.getRequired());
                         typeInfos.italicText(NAME_COLUMN).textLine(": " + parameter.getName());
                         if (!(type instanceof ObjectType)) {
@@ -682,7 +682,8 @@ public class PathsDocument extends MarkupDocument {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(HEADERS_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             Set<String> responseNames;
             if (config.getResponseOrdering() == null)
@@ -693,6 +694,12 @@ public class PathsDocument extends MarkupDocument {
 
             for (String responseName : responseNames) {
                 Response response = responses.get(responseName);
+                Map<String, Property> headers = response.getHeaders();
+
+                List<String> headersToRender = new LinkedList<>();
+                if(MapUtils.isNotEmpty(headers)){
+
+                }
 
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();

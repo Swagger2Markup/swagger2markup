@@ -17,11 +17,13 @@ package io.github.robwin.swagger2markup.config;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
+import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.swagger2markup.*;
 import io.github.robwin.swagger2markup.utils.IOUtils;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +66,7 @@ public class Swagger2MarkupConfig {
     private String interDocumentCrossReferencesPrefix;
     private boolean flatBodyEnabled;
     private String anchorPrefix;
+    private LineSeparator lineSeparator;
 
     private String overviewDocument;
     private String pathsDocument;
@@ -256,6 +259,10 @@ public class Swagger2MarkupConfig {
         return separatedDefinitionsFolder;
     }
 
+    public LineSeparator getLineSeparator() {
+        return lineSeparator;
+    }
+
     public static class Builder {
 
         private static final String PROPERTIES_PREFIX = "swagger2markup.";
@@ -333,6 +340,10 @@ public class Swagger2MarkupConfig {
             config.parameterOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "parameterOrderBy"));
             config.propertyOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "propertyOrderBy"));
             config.responseOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "responseOrderBy"));
+            String lineSeparator = safeProperties.getProperty(PROPERTIES_PREFIX + "lineSeparator");
+            if(StringUtils.isNoneBlank(lineSeparator)){
+                config.lineSeparator = LineSeparator.valueOf(lineSeparator);
+            }
         }
 
         private Properties defaultProperties() {
@@ -726,13 +737,25 @@ public class Swagger2MarkupConfig {
 
         /**
          * Optionally prefix all anchors for unicity
-         *
+         *.
          * @param anchorPrefix anchor prefix.
          * @return this builder
          */
         public Builder withAnchorPrefix(String anchorPrefix) {
             Validate.notNull(anchorPrefix, "%s must no be null", "anchorPrefix");
             config.anchorPrefix = anchorPrefix;
+            return this;
+        }
+
+        /**
+         * Specifies the line separator which should be used .
+         *
+         * @param lineSeparator the lineSeparator
+         * @return this builder
+         */
+        public Builder withLineSeparator(LineSeparator lineSeparator) {
+            Validate.notNull(lineSeparator, "%s must no be null", "lineSeparator");
+            config.lineSeparator = lineSeparator;
             return this;
         }
 

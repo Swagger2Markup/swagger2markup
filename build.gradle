@@ -6,7 +6,6 @@ buildscript {
     dependencies {
         classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
         classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.10.1'
-        classpath 'io.spring.gradle:dependency-management-plugin:0.5.5.RELEASE'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'org.asciidoctor:asciidoctorj:1.5.2'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.2'
@@ -22,7 +21,6 @@ apply plugin: 'maven-publish'
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: "com.jfrog.artifactory"
 apply from: 'gradle/publishing.gradle'
@@ -41,34 +39,20 @@ repositories {
     }
     jcenter()
     mavenCentral()
-    mavenLocal()
+    //mavenLocal()
 }
 
 dependencies {
-    compile 'io.github.robwin:markup-document-builder'
-    compile 'io.swagger:swagger-compat-spec-parser'
-    compile 'commons-collections:commons-collections'
-    compile 'commons-io:commons-io'
-    compile 'org.slf4j:slf4j-api'
-    testCompile 'junit:junit'
+    compile 'io.github.robwin:markup-document-builder:0.1.6-SNAPSHOT'
+    compile 'io.swagger:swagger-compat-spec-parser:1.0.17'
+    compile 'commons-collections:commons-collections:3.2.1'
+    compile 'commons-io:commons-io:2.4'
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    testCompile 'junit:junit:4.11'
     testCompile 'org.asciidoctor:asciidoctorj:1.5.4'
-    testCompile 'ch.qos.logback:logback-classic'
-    testCompile 'org.assertj:assertj-core'
-    testCompile 'com.sksamuel.diff:diff'
-}
-
-dependencyManagement {
-    dependencies {
-        dependency "io.github.robwin:markup-document-builder:0.1.6-SNAPSHOT"
-        dependency "io.swagger:swagger-compat-spec-parser:1.0.17"
-        dependency "commons-collections:commons-collections:3.2.1"
-        dependency "commons-io:commons-io:2.4"
-        dependency "junit:junit:4.11"
-        dependency "org.slf4j:slf4j-api:1.7.12"
-        dependency "ch.qos.logback:logback-classic:1.1.2"
-        dependency "org.assertj:assertj-core:2.2.0"
-        dependency "com.sksamuel.diff:diff:1.1.11"
-    }
+    testCompile 'ch.qos.logback:logback-classic:1.1.2'
+    testCompile 'org.assertj:assertj-core:2.2.0'
+    testCompile 'com.sksamuel.diff:diff:1.1.11'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

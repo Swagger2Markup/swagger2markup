@@ -7,8 +7,17 @@
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
 |===
 |Name|Description|Required|Schema|Default|Example
+|id||false|integer(int64)||123
+|name||false|string||"Canines"
+|===
+
+
+=== Identified
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
 |id||false|integer(int64)||
-|name||false|string||
 |===
 
 
@@ -18,15 +27,18 @@
 |===
 |Name|Description|Required|Schema|Default|Example
 |complete||false|boolean||
-|id||false|integer(int64)||
+|id||false|integer(int64)||77
 |petId||false|integer(int64)||
 |quantity||false|integer(int32)||
 |shipDate||false|string(date-time)||
-|status|Order Status|false|string||
+|status|Order Status|false|string||"DONE"
 |===
 
 
 === Pet
+[%hardbreaks]
+Test description
+
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
 |===
@@ -34,9 +46,11 @@
 |category||false|<<_category,Category>>||
 |id||false|integer(int64)||
 |name||true|string||"doggie"
+|nicknames||false|object||
 |photoUrls||true|string array||
 |status|pet status in the store|false|string||
 |tags||false|<<_tag,Tag>> array||
+|weight|the weight of the pet|false|number||
 |===
 
 
@@ -61,6 +75,7 @@
 |lastName||false|string||
 |password||false|string||
 |phone||false|string||
+|pictures||false|string(byte) array||
 |userStatus|User Status|false|integer(int32)||
 |username||false|string||
 |===
