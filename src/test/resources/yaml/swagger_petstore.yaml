@@ -40,12 +40,7 @@ paths:
         - application/json
         - application/xml
       parameters:
-        - in: body
-          name: body
-          description: Pet object that needs to be added to the store
-          required: false
-          schema:
-            $ref: "#/definitions/Pet"
+        - $ref: "#/parameters/PetBody"
       responses:
         "405":
           description: Invalid input
@@ -66,19 +61,14 @@ paths:
         - application/json
         - application/xml
       parameters:
-        - in: body
-          name: body
-          description: Pet object that needs to be added to the store
-          required: false
-          schema:
-            $ref: "#/definitions/Pet"
+        - $ref: "#/parameters/PetBody"
       responses:
         "405":
           description: Validation exception
         "404":
           description: Pet not found
         "400":
-          description: Invalid ID supplied
+          $ref: "#/responses/InvalidId"
       security:
         - petstore_auth:
           - write_pets
@@ -202,7 +192,7 @@ paths:
               description: The number of seconds left in the current period
               type: integer
         "400":
-          description: Invalid ID supplied
+          $ref: "#/responses/InvalidId"
       security:
         - api_key: []
         - petstore_auth:
@@ -338,7 +328,7 @@ paths:
               description: The number of seconds left in the current period
               type: integer
         "400":
-          description: Invalid ID supplied
+          $ref: "#/responses/InvalidId"
     delete:
       tags:
         - store
@@ -358,7 +348,7 @@ paths:
         "404":
           description: Order not found
         "400":
-          description: Invalid ID supplied
+          $ref: "#/responses/InvalidId"
   /users:
     post:
       tags:
@@ -555,6 +545,17 @@ paths:
           description: User not found
         "400":
           description: Invalid username supplied
+parameters:
+  PetBody:
+    in: body
+    name: body
+    description: Pet object that needs to be added to the store
+    required: false
+    schema:
+      $ref: "#/definitions/Pet"
+responses:
+  InvalidId:
+    description: Invalid ID supplied
 securityDefinitions:
   api_key:
     type: apiKey
