@@ -17,8 +17,8 @@
 package io.github.robwin.swagger2markup.internal.extensions;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
-import io.github.robwin.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.github.robwin.swagger2markup.internal.utils.IOUtils;
+import io.github.robwin.swagger2markup.spi.DefinitionsDocumentExtension;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,22 +26,18 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
 /**
  * Dynamically search for markup files in {@code contentPath} to append in Definitions, with the format :<br/>
- * - {@code doc-before-*.<markup.ext>} : import before Definitions document with levelOffset = 0<br/>
- * - {@code doc-after-*.<markup.ext>} : import after Definitions document with levelOffset = 0<br/>
- * - {@code doc-begin-*.<markup.ext>} : import just after Definitions document main title with levelOffset = 1<br/>
- * - {@code doc-end-*.<markup.ext>} : import at the end of Definitions document with levelOffset = 1<br/>
- * - {@code def-begin-*.<markup.ext>} : import just after each definition title with levelOffset = 2<br/>
- * - {@code def-end-*.<markup.ext>} : import at the end of each definition with levelOffset = 2<br/>
+ * - {@code document-before-*.<markup.ext>} : import before Definitions document with levelOffset = 0<br/>
+ * - {@code document-begin-*.<markup.ext>} : import just after Definitions document main title with levelOffset = 1<br/>
+ * - {@code document-end-*.<markup.ext>} : import at the end of Definitions document with levelOffset = 1<br/>
+ * - {@code definition-begin-*.<markup.ext>} : import just after each definition title with levelOffset = 2<br/>
+ * - {@code definition-end-*.<markup.ext>} : import at the end of each definition with levelOffset = 2<br/>
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
 public final class DynamicDefinitionsDocumentExtension extends DefinitionsDocumentExtension {
 
-    protected static final String EXTENSION_FILENAME_PREFIX = "";
     private static final Logger logger = LoggerFactory.getLogger(DynamicDefinitionsDocumentExtension.class);
 
     protected Path contentPath;
@@ -93,6 +89,6 @@ public final class DynamicDefinitionsDocumentExtension extends DefinitionsDocume
     }
 
     public String contentPrefix(Position position) {
-        return defaultString(EXTENSION_FILENAME_PREFIX) + position.name().toLowerCase().replace('_', '-');
+        return position.name().toLowerCase().replace('_', '-');
     }
 }

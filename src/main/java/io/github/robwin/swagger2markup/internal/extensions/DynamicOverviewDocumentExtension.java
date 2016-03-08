@@ -25,20 +25,16 @@ import org.slf4j.LoggerFactory;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
 /**
  * Dynamically search for markup files in {@code contentPath} to append to Overview, with the format :<br/>
- * - {@code doc-before-*.<markup.ext>} : import before Overview document with levelOffset = 0<br/>
- * - {@code doc-after-*.<markup.ext>} : import after Overview document with levelOffset = 0<br/>
- * - {@code doc-begin-*.<markup.ext>} : import just after Overview document main title with levelOffset = 1<br/>
- * - {@code doc-end-*.<markup.ext>} : import at the end of Overview document with levelOffset = 1<br/>
+ * - {@code document-before-*.<markup.ext>} : import before Overview document with levelOffset = 0<br/>
+ * - {@code document-begin-*.<markup.ext>} : import just after Overview document main title with levelOffset = 1<br/>
+ * - {@code document-end-*.<markup.ext>} : import at the end of Overview document with levelOffset = 1<br/>
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
 public final class DynamicOverviewDocumentExtension extends OverviewDocumentExtension {
 
-    protected static final String EXTENSION_FILENAME_PREFIX = "";
     private static final Logger logger = LoggerFactory.getLogger(DynamicOverviewDocumentExtension.class);
 
     protected Path contentPath;
@@ -86,7 +82,7 @@ public final class DynamicOverviewDocumentExtension extends OverviewDocumentExte
     }
 
     private String contentPrefix(Position position) {
-        return defaultString(EXTENSION_FILENAME_PREFIX) + position.name().toLowerCase().replace('_', '-');
+        return position.name().toLowerCase().replace('_', '-');
     }
 
 }
