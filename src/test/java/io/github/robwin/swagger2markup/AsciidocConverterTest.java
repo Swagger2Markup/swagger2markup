@@ -82,7 +82,7 @@ public class AsciidocConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/default").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
@@ -104,7 +104,7 @@ public class AsciidocConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/default").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
@@ -133,7 +133,7 @@ public class AsciidocConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/spring_rest_docs").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/spring_rest_docs").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithSpringRestDocsExtension.html");
     }
 
@@ -156,7 +156,7 @@ public class AsciidocConverterTest {
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/examples").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/examples").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithExamples.html");
     }
 
@@ -180,7 +180,7 @@ public class AsciidocConverterTest {
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/generated_examples").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/generated_examples").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithGeneratedExamples.html");
     }
 
@@ -223,7 +223,7 @@ public class AsciidocConverterTest {
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/asciidoc/group_by_tags").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/group_by_tags").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocGroupedByTags.html");
     }
 

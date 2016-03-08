@@ -78,7 +78,7 @@ public class MarkdownConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/results/markdown/default").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/markdown/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
