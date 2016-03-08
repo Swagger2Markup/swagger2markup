@@ -76,9 +76,9 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         Swagger swagger = globalContext.getSwagger();
         Info info = swagger.getInfo();
         buildDocumentTitle(info.getTitle());
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
         buildOverviewTitle(OVERVIEW);
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
         buildDescription(info.getDescription());
         buildVersionInfoSection(info.getVersion());
         buildContactInfoSection(info.getContact());
@@ -87,8 +87,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         buildTagsSection(swagger.getTags());
         buildConsumesSection(swagger.getConsumes());
         buildProducesSection(swagger.getProduces());
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
         return new MarkupDocument(markupDocBuilder);
     }
 

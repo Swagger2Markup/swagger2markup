@@ -24,10 +24,9 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 public abstract class SecurityDocumentExtension extends AbstractExtension {
 
     public enum Position {
-        DOC_BEFORE,
-        DOC_AFTER,
-        DOC_BEGIN,
-        DOC_END
+        DOCUMENT_BEFORE,
+        DOCUMENT_BEGIN,
+        DOCUMENT_END
     }
 
     public static class Context extends ContentContext {
@@ -52,12 +51,9 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
     protected int levelOffset(Context context) {
         int levelOffset;
         switch (context.position) {
-            case DOC_BEFORE:
-            case DOC_AFTER:
-                levelOffset = 0;
-                break;
-            case DOC_BEGIN:
-            case DOC_END:
+            case DOCUMENT_BEFORE:
+            case DOCUMENT_BEGIN:
+            case DOCUMENT_END:
                 levelOffset = 1;
                 break;
             default:

@@ -114,7 +114,7 @@ public final class SpringRestDocsExtension extends PathsDocumentExtension {
         Validate.notNull(context);
 
         switch (context.position) {
-            case OP_END:
+            case OPERATION_END:
                 snippets(context);
                 break;
         }

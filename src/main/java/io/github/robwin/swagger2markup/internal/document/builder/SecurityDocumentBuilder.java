@@ -65,12 +65,11 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build(){
         Map<String, SecuritySchemeDefinition> definitions = globalContext.getSwagger().getSecurityDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
             buildSecurityTitle(SECURITY);
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildSecuritySchemeDefinitionsSection(definitions);
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }

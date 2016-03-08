@@ -77,16 +77,13 @@ public final class DynamicPathsDocumentExtension extends PathsDocumentExtension 
             DynamicContentExtension dynamicContent = new DynamicContentExtension(globalContext, context);
 
             switch (context.position) {
-                case DOC_BEFORE:
-                case DOC_AFTER:
+                case DOCUMENT_BEFORE:
+                case DOCUMENT_BEGIN:
+                case DOCUMENT_END:
                     dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
-                case DOC_BEGIN:
-                case DOC_END:
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
-                    break;
-                case OP_BEGIN:
-                case OP_END:
+                case OPERATION_BEGIN:
+                case OPERATION_END:
                     dynamicContent.extensionsSection(contentPath.resolve(IOUtils.normalizeName(context.operation.getId())), contentPrefix(context.position), levelOffset(context));
                     break;
                 default:

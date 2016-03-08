@@ -27,12 +27,11 @@ import org.apache.commons.lang3.Validate;
 public abstract class PathsDocumentExtension extends AbstractExtension {
 
     public enum Position {
-        DOC_BEFORE,
-        DOC_AFTER,
-        DOC_BEGIN,
-        DOC_END,
-        OP_BEGIN,
-        OP_END
+        DOCUMENT_BEFORE,
+        DOCUMENT_BEGIN,
+        DOCUMENT_END,
+        OPERATION_BEGIN,
+        OPERATION_END
     }
 
     public static class Context extends ContentContext {
@@ -44,7 +43,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
 
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
-            Validate.isTrue(position != Position.OP_BEGIN && position != Position.OP_END, "You must provide an operation for this position");
+            Validate.isTrue(position != Position.OPERATION_BEGIN && position != Position.OPERATION_END, "You must provide an operation for this position");
             this.position = position;
         }
 
@@ -70,16 +69,13 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
     protected int levelOffset(Context context) {
         int levelOffset;
         switch (context.position) {
-            case DOC_BEFORE:
-            case DOC_AFTER:
-                levelOffset = 0;
-                break;
-            case DOC_BEGIN:
-            case DOC_END:
+            case DOCUMENT_BEFORE:
+            case DOCUMENT_BEGIN:
+            case DOCUMENT_END:
                 levelOffset = 1;
                 break;
-            case OP_BEGIN:
-            case OP_END:
+            case OPERATION_BEGIN:
+            case OPERATION_END:
                 levelOffset = 2;
                 break;
             default:

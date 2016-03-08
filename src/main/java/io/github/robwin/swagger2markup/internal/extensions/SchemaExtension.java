@@ -90,13 +90,12 @@ public final class SchemaExtension extends DefinitionsDocumentExtension {
 
         if (schemaBaseUri != null) {
             switch (context.position) {
-                case DOC_BEFORE:
-                case DOC_AFTER:
-                case DOC_BEGIN:
-                case DOC_END:
-                case DEF_BEGIN:
+                case DOCUMENT_BEFORE:
+                case DOCUMENT_BEGIN:
+                case DOCUMENT_END:
+                case DEFINITION_BEGIN:
                     break;
-                case DEF_END:
+                case DEFINITION_END:
                     for (SchemaMetadata schema : DEFAULT_SCHEMAS) {
                         schemaSection(context, schema, levelOffset(context));
                     }

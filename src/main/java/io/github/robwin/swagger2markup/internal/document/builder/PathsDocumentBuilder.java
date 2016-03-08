@@ -143,48 +143,57 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build() {
         Map<String, Path> paths = globalContext.getSwagger().getPaths();
         if (MapUtils.isNotEmpty(paths)) {
-            Set<PathOperation> pathOperations = getPathOperations(paths);
-            if (CollectionUtils.isNotEmpty(pathOperations)) {
-                applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
-                if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                    buildPathsTitle(PATHS);
-                } else {
-                    buildPathsTitle(RESOURCES);
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
+            buildPathsTitle();
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
+            buildsPathsSection(paths);
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
+        }
+        return new MarkupDocument(markupDocBuilder);
+    }
+
+    private void buildsPathsSection(Map<String, Path> paths) {
+        Set<PathOperation> pathOperations = getPathOperations(paths);
+        if (CollectionUtils.isNotEmpty(pathOperations)) {
+            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+                if (config.getOperationOrdering() != null) {
+                    Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
+                    sortedOperations.addAll(pathOperations);
+                    pathOperations = sortedOperations;
                 }
-                applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
 
-                if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                    if (config.getOperationOrdering() != null) {
-                        Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
-                        sortedOperations.addAll(pathOperations);
-                        pathOperations = sortedOperations;
+                for (PathOperation operation : pathOperations) {
+                    buildOperation(operation);
+                }
+            } else {
+                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
+
+                Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
+                for (String tagName : operationsGroupedByTag.keySet()) {
+                    this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
+
+                    Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
+                    if (tagDescription.isPresent()) {
+                        this.markupDocBuilder.paragraph(tagDescription.get());
                     }
 
-                    for (PathOperation operation : pathOperations) {
+                    for (PathOperation operation : operationsGroupedByTag.get(tagName)) {
                         buildOperation(operation);
-                    }
-                } else {
-                    Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
-
-                    Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
-                    for (String tagName : operationsGroupedByTag.keySet()) {
-                        this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
-
-                        Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
-                        if (tagDescription.isPresent()) {
-                            this.markupDocBuilder.paragraph(tagDescription.get());
-                        }
-
-                        for (PathOperation operation : operationsGroupedByTag.get(tagName)) {
-                            buildOperation(operation);
-                        }
                     }
                 }
             }
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
-        return new MarkupDocument(markupDocBuilder);
+    }
+
+    /**
+     * Builds the path title depending on the operationsGroupedBy configuration setting.
+     */
+    private void buildPathsTitle() {
+        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+            buildPathsTitle(PATHS);
+        } else {
+            buildPathsTitle(RESOURCES);
+        }
     }
 
     /**
@@ -286,7 +295,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_BEGIN, docBuilder, operation));
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_BEGIN, docBuilder, operation));
             deprecatedSection(operation, docBuilder);
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
@@ -298,7 +307,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             tagsSection(operation, docBuilder);
             securitySchemeSection(operation, docBuilder);
             examplesSection(operation, docBuilder);
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_END, docBuilder, operation));
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_END, docBuilder, operation));
         }
     }
 

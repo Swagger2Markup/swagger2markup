@@ -74,12 +74,9 @@ public final class DynamicOverviewDocumentExtension extends OverviewDocumentExte
             DynamicContentExtension dynamicContent = new DynamicContentExtension(globalContext, context);
 
             switch (context.position) {
-                case DOC_BEFORE:
-                case DOC_AFTER:
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
-                    break;
-                case DOC_BEGIN:
-                case DOC_END:
+                case DOCUMENT_BEFORE:
+                case DOCUMENT_BEGIN:
+                case DOCUMENT_END:
                     dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
                 default:

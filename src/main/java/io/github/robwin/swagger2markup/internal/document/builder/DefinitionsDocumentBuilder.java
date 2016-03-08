@@ -91,29 +91,32 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build() {
         Map<String, Model> definitions = globalContext.getSwagger().getDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
             buildDefinitionsTitle(DEFINITIONS);
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
-            Set<String> definitionNames = getDefinitionNames(definitions);
-            for (String definitionName : definitionNames) {
-                Model model = definitions.get(definitionName);
-                if (isNotBlank(definitionName)) {
-                    if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
-                        buildDefinition(definitions, definitionName, model);
-                        if (logger.isInfoEnabled()) {
-                            logger.info("Definition processed: {}", definitionName);
-                        }
-                    } else {
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("Definition was ignored: {}", definitionName);
-                        }
+            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
+            buildDefinitionsSection(definitions);
+            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
+        }
+        return new MarkupDocument(markupDocBuilder);
+    }
+
+    private void buildDefinitionsSection(Map<String, Model> definitions) {
+        Set<String> definitionNames = getDefinitionNames(definitions);
+        for (String definitionName : definitionNames) {
+            Model model = definitions.get(definitionName);
+            if (isNotBlank(definitionName)) {
+                if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
+                    buildDefinition(definitions, definitionName, model);
+                    if (logger.isInfoEnabled()) {
+                        logger.info("Definition processed: {}", definitionName);
+                    }
+                } else {
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Definition was ignored: {}", definitionName);
                     }
                 }
             }
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         }
-        return new MarkupDocument(markupDocBuilder);
     }
 
     private Set<String> getDefinitionNames(Map<String, Model> definitions) {
@@ -203,11 +206,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEF_BEGIN, docBuilder, definitionName));
+        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_BEGIN, docBuilder, definitionName));
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEF_END, docBuilder, definitionName));
+        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_END, docBuilder, definitionName));
     }
 
     /**

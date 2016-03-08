@@ -77,16 +77,13 @@ public final class DynamicDefinitionsDocumentExtension extends DefinitionsDocume
             DynamicContentExtension dynamicContent = new DynamicContentExtension(globalContext, context);
 
             switch (context.position) {
-                case DOC_BEFORE:
-                case DOC_AFTER:
+                case DOCUMENT_BEFORE:
+                case DOCUMENT_BEGIN:
+                case DOCUMENT_END:
                     dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
                     break;
-                case DOC_BEGIN:
-                case DOC_END:
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
-                    break;
-                case DEF_BEGIN:
-                case DEF_END:
+                case DEFINITION_BEGIN:
+                case DEFINITION_END:
                     dynamicContent.extensionsSection(contentPath.resolve(Paths.get(IOUtils.normalizeName(context.definitionName))), contentPrefix(context.position), levelOffset(context));
                     break;
                 default:

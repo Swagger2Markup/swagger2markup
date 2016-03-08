@@ -25,12 +25,11 @@ import org.apache.commons.lang3.Validate;
 public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
     public enum Position {
-        DOC_BEFORE,
-        DOC_AFTER,
-        DOC_BEGIN,
-        DOC_END,
-        DEF_BEGIN,
-        DEF_END
+        DOCUMENT_BEFORE,
+        DOCUMENT_BEGIN,
+        DOCUMENT_END,
+        DEFINITION_BEGIN,
+        DEFINITION_END
     }
 
     public static class Context extends ContentContext {
@@ -42,7 +41,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
-            Validate.isTrue(position != Position.DEF_BEGIN && position != Position.DEF_END, "You must provide a definitionName for this position");
+            Validate.isTrue(position != Position.DEFINITION_BEGIN && position != Position.DEFINITION_END, "You must provide a definitionName for this position");
             this.position = position;
         }
 
@@ -68,16 +67,13 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
     protected int levelOffset(Context context) {
         int levelOffset;
         switch (context.position) {
-            case DOC_BEFORE:
-            case DOC_AFTER:
-                levelOffset = 0;
-                break;
-            case DOC_BEGIN:
-            case DOC_END:
+            case DOCUMENT_BEFORE:
+            case DOCUMENT_BEGIN:
+            case DOCUMENT_END:
                 levelOffset = 1;
                 break;
-            case DEF_BEGIN:
-            case DEF_END:
+            case DEFINITION_BEGIN:
+            case DEFINITION_END:
                 levelOffset = 2;
                 break;
             default:
