@@ -60,7 +60,7 @@ dependencyManagement {
     dependencies {
         dependency "io.github.robwin:markup-document-builder:0.1.6-SNAPSHOT"
         dependency "io.swagger:swagger-compat-spec-parser:1.0.17"
-        dependency "commons-collections:commons-collections:3.2.1"
+        dependency "commons-collections:commons-collections:3.2.2"
         dependency "commons-io:commons-io:2.4"
         dependency "junit:junit:4.11"
         dependency "org.slf4j:slf4j-api:1.7.12"
