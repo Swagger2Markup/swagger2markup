@@ -69,39 +69,51 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     /**
      * Builds the overview MarkupDocument.
      *
-     * @return the built MarkupDocument
+     * @return the overview MarkupDocument
      */
     @Override
     public MarkupDocument build(){
-        overview();
+        Swagger swagger = globalContext.getSwagger();
+        Info info = swagger.getInfo();
+        buildDocumentTitle(info.getTitle());
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+        buildOverviewTitle(OVERVIEW);
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+        buildDescription(info.getDescription());
+        buildVersionInfoSection(info.getVersion());
+        buildContactInfoSection(info.getContact());
+        buildLicenseInfoSection(info.getLicense(), info.getTermsOfService());
+        buildUriSchemeSection(swagger);
+        buildTagsSection(swagger.getTags());
+        buildConsumesSection(swagger.getConsumes());
+        buildProducesSection(swagger.getProduces());
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
         return new MarkupDocument(markupDocBuilder);
     }
 
-    private void addOverviewTitle(String title) {
+    private void buildDocumentTitle(String title) {
+        this.markupDocBuilder.documentTitle(title);
+    }
+
+    private void buildOverviewTitle(String title) {
         this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, OVERVIEW_ANCHOR);
     }
 
-
-    /**
-     * Builds the document header of the swagger model
-     */
-    private void overview() {
-        Swagger swagger = globalContext.getSwagger();
-        Info info = swagger.getInfo();
-        this.markupDocBuilder.documentTitle(info.getTitle());
-
-        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
-        addOverviewTitle(OVERVIEW);
-        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
-
-        if(isNotBlank(info.getDescription())){
-            this.markupDocBuilder.textLine(info.getDescription());
-        }
-        if(isNotBlank(info.getVersion())){
+    private void buildVersionInfoSection(String version) {
+        if(isNotBlank(version)){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
-            this.markupDocBuilder.textLine(VERSION + " : " + info.getVersion());
+            this.markupDocBuilder.textLine(VERSION + " : " + version);
         }
-        Contact contact = info.getContact();
+    }
+
+    private void buildDescription(String description) {
+        if(isNotBlank(description)){
+            this.markupDocBuilder.textLine(description);
+        }
+    }
+
+    private void buildContactInfoSection(Contact contact) {
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
             if(isNotBlank(contact.getName())){
@@ -111,8 +123,9 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                 this.markupDocBuilder.textLine(CONTACT_EMAIL + " : " + contact.getEmail());
             }
         }
+    }
 
-        License license = info.getLicense();
+    private void buildLicenseInfoSection(License license, String termOfService) {
         if(license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
             if (isNotBlank(license.getName())) {
@@ -122,10 +135,12 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                 this.markupDocBuilder.textLine(LICENSE_URL + " : " + license.getUrl());
             }
         }
-        if(isNotBlank(info.getTermsOfService())){
-            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + " : " + info.getTermsOfService());
+        if(isNotBlank(termOfService)){
+            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + " : " + termOfService);
         }
+    }
 
+    private void buildUriSchemeSection(Swagger swagger) {
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
             if (isNotBlank(swagger.getHost())) {
@@ -142,35 +157,37 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                 this.markupDocBuilder.textLine(SCHEMES + " : " + join(schemes, ", "));
             }
         }
+    }
 
-        if(isNotEmpty(swagger.getTags())){
+    private void buildTagsSection(List<Tag> tags) {
+        if(isNotEmpty(tags)){
             this.markupDocBuilder.sectionTitleLevel2(TAGS);
-            List<String> tags = new ArrayList<>();
-            for(Tag tag : swagger.getTags()){
+            List<String> tagsList = new ArrayList<>();
+            for(Tag tag : tags){
                 String name = tag.getName();
                 String description = tag.getDescription();
                 if(isNoneBlank(description)){
-                    tags.add(name + " : " +   description);
+                    tagsList.add(name + " : " +   description);
                 }else{
-                    tags.add(name);
+                    tagsList.add(name);
                 }
             }
-            this.markupDocBuilder.unorderedList(tags);
+            this.markupDocBuilder.unorderedList(tagsList);
         }
+    }
 
-        if(isNotEmpty(swagger.getConsumes())){
+    private void buildConsumesSection(List<String> consumes) {
+        if (isNotEmpty(consumes)) {
             this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
-            this.markupDocBuilder.unorderedList(swagger.getConsumes());
+            this.markupDocBuilder.unorderedList(consumes);
         }
+    }
 
-        if(isNotEmpty(swagger.getProduces())){
+    private void buildProducesSection(List<String> consumes) {
+        if (isNotEmpty(consumes)) {
             this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
-            this.markupDocBuilder.unorderedList(swagger.getProduces());
+            this.markupDocBuilder.unorderedList(consumes);
         }
-
-        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-        applyOverviewExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
-
     }
 
     /**
@@ -178,7 +195,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOverviewExtension(OverviewDocumentExtension.Context context) {
+    private void applyOverviewDocumentExtension(OverviewDocumentExtension.Context context) {
         for (OverviewDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(OverviewDocumentExtension.class)) {
             extension.apply(context);
         }

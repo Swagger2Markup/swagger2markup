@@ -96,8 +96,6 @@ public abstract class MarkupDocumentBuilder {
      */
     public abstract MarkupDocument build() throws IOException;
 
-
-
     /**
      * Build a generic property table for any ObjectType
      *

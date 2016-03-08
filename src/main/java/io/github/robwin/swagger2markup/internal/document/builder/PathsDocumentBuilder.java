@@ -137,80 +137,77 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     /**
      * Builds the paths MarkupDocument.
      *
-     * @return the built MarkupDocument
+     * @return the paths MarkupDocument
      */
     @Override
     public MarkupDocument build() {
-        operations();
+        Map<String, Path> paths = globalContext.getSwagger().getPaths();
+        if (MapUtils.isNotEmpty(paths)) {
+            Set<PathOperation> pathOperations = getPathOperations(paths);
+            if (CollectionUtils.isNotEmpty(pathOperations)) {
+                applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+                if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+                    buildPathsTitle(PATHS);
+                } else {
+                    buildPathsTitle(RESOURCES);
+                }
+                applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+
+                if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+                    if (config.getOperationOrdering() != null) {
+                        Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
+                        sortedOperations.addAll(pathOperations);
+                        pathOperations = sortedOperations;
+                    }
+
+                    for (PathOperation operation : pathOperations) {
+                        buildOperation(operation);
+                    }
+                } else {
+                    Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
+
+                    Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
+                    for (String tagName : operationsGroupedByTag.keySet()) {
+                        this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
+
+                        Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
+                        if (tagDescription.isPresent()) {
+                            this.markupDocBuilder.paragraph(tagDescription.get());
+                        }
+
+                        for (PathOperation operation : operationsGroupedByTag.get(tagName)) {
+                            buildOperation(operation);
+                        }
+                    }
+                }
+            }
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+        }
         return new MarkupDocument(markupDocBuilder);
     }
 
-    private void addPathsTitle(String title) {
-        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, PATHS_ANCHOR);
+    /**
+     * Converts the Swagger paths into a list PathOperations.
+     *
+     * @param paths the Swagger paths
+     * @return the path operations
+     */
+    private Set<PathOperation> getPathOperations(Map<String, Path> paths) {
+        Set<PathOperation> pathOperations = new LinkedHashSet<>();
+        for (Map.Entry<String, Path> path : paths.entrySet()) {
+            Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
+            if (MapUtils.isNotEmpty(operations)) {
+                for (Map.Entry<HttpMethod, Operation> operation : operations.entrySet()) {
+                    pathOperations.add(new PathOperation(operation.getKey(), path.getKey(), operation.getValue()));
+                }
+            }
+        }
+        return pathOperations;
     }
 
-    /**
-     * Builds all operations of the Swagger model. Either grouped as-is or by tags.
-     */
-    private void operations() {
-        Set<PathOperation> allOperations = new LinkedHashSet<>();
-        Map<String, Path> paths = globalContext.getSwagger().getPaths();
-
-        if (MapUtils.isNotEmpty(paths)) {
-            for (Map.Entry<String, Path> path : paths.entrySet()) {
-                Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
-
-                if (operations != null) {
-                    for (Map.Entry<HttpMethod, Operation> operation : operations.entrySet()) {
-                        allOperations.add(new PathOperation(operation.getKey(), path.getKey(), operation.getValue()));
-                    }
-                }
-            }
-        }
-
-        if (CollectionUtils.isNotEmpty(allOperations)) {
-
-            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
-            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                addPathsTitle(PATHS);
-                applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
-            } else {
-                addPathsTitle(RESOURCES);
-                applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
-            }
-
-            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                if (config.getOperationOrdering() != null) {
-                    Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
-                    sortedOperations.addAll(allOperations);
-                    allOperations = sortedOperations;
-                }
-
-                for (PathOperation operation : allOperations) {
-                    processOperation(operation);
-                }
-            } else {
-                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(allOperations, config.getTagOrdering(), config.getOperationOrdering());
-
-                Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
-                for (String tagName : operationsGroupedByTag.keySet()) {
-                    this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
-
-                    Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
-                    if (tagDescription.isPresent()) {
-                        this.markupDocBuilder.paragraph(tagDescription.get());
-                    }
-
-                    for (PathOperation operation : operationsGroupedByTag.get(tagName)) {
-                        processOperation(operation);
-                    }
-                }
-            }
-
-            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
-        }
-
+    private void buildPathsTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, PATHS_ANCHOR);
     }
 
     /**
@@ -218,7 +215,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOperationExtension(PathsDocumentExtension.Context context) {
+    private void applyPathsDocumentExtension(PathsDocumentExtension.Context context) {
         for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(PathsDocumentExtension.class)) {
             extension.apply(context);
         }
@@ -242,10 +239,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param operation operation
      */
-    private void processOperation(PathOperation operation) {
+    private void buildOperation(PathOperation operation) {
         if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
-            operation(operation, pathDocBuilder);
+            buildOperation(operation, pathDocBuilder);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
 
             try {
@@ -259,10 +256,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 logger.info("Separate operation file produced: {}", operationFile);
             }
 
-            operationRef(operation, this.markupDocBuilder);
+            buildOperationRef(operation, this.markupDocBuilder);
 
         } else {
-            operation(operation, this.markupDocBuilder);
+            buildOperation(operation, this.markupDocBuilder);
         }
 
         if (logger.isInfoEnabled()) {
@@ -287,9 +284,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void operation(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
-            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_BEGIN, docBuilder, operation));
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_BEGIN, docBuilder, operation));
             deprecatedSection(operation, docBuilder);
             operationTitle(operation, docBuilder);
             descriptionSection(operation, docBuilder);
@@ -301,7 +298,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             tagsSection(operation, docBuilder);
             securitySchemeSection(operation, docBuilder);
             examplesSection(operation, docBuilder);
-            applyOperationExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_END, docBuilder, operation));
+            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OP_END, docBuilder, operation));
         }
     }
 
@@ -311,7 +308,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void operationRef(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildOperationRef(PathOperation operation, MarkupDocBuilder docBuilder) {
         String document = null;
         if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
             document = null;

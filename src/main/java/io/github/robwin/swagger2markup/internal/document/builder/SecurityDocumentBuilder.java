@@ -59,62 +59,62 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     /**
      * Builds the security MarkupDocument.
      *
-     * @return the built MarkupDocument
+     * @return the security MarkupDocument
      */
     @Override
     public MarkupDocument build(){
-        security();
+        Map<String, SecuritySchemeDefinition> definitions = globalContext.getSwagger().getSecurityDefinitions();
+        if (MapUtils.isNotEmpty(definitions)) {
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
+            buildSecurityTitle(SECURITY);
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
+            buildSecuritySchemeDefinitionsSection(definitions);
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_END, this.markupDocBuilder));
+            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+        }
         return new MarkupDocument(markupDocBuilder);
     }
 
-    private void addSecurityTitle(String title) {
+    private void buildSecurityTitle(String title) {
         this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, SECURITY_ANCHOR);
 
     }
 
-    /**
-     * Builds all security definition of the Swagger model.
-     */
-    private void security() {
-        Map<String, SecuritySchemeDefinition> definitions = globalContext.getSwagger().getSecurityDefinitions();
-        if (MapUtils.isNotEmpty(definitions)) {
-
-            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEFORE, this.markupDocBuilder));
-            addSecurityTitle(SECURITY);
-            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_BEGIN, this.markupDocBuilder));
-
-            for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
-                markupDocBuilder.sectionTitleLevel2(entry.getKey());
-                SecuritySchemeDefinition securityScheme = entry.getValue();
-                String type = securityScheme.getType();
-                markupDocBuilder.textLine(TYPE + " : " + type);
-                if (securityScheme instanceof ApiKeyAuthDefinition) {
-                    markupDocBuilder.textLine(NAME + " : " + ((ApiKeyAuthDefinition) securityScheme).getName());
-                    markupDocBuilder.textLine(IN + " : " + ((ApiKeyAuthDefinition) securityScheme).getIn());
-                } else if (securityScheme instanceof OAuth2Definition) {
-                    OAuth2Definition oauth2Scheme = (OAuth2Definition) securityScheme;
-                    String flow = oauth2Scheme.getFlow();
-                    markupDocBuilder.textLine(FLOW + " : " + flow);
-                    if (isNotBlank(oauth2Scheme.getAuthorizationUrl())) {
-                        markupDocBuilder.textLine(AUTHORIZATION_URL + " : " + oauth2Scheme.getAuthorizationUrl());
-                    }
-                    if (isNotBlank(oauth2Scheme.getTokenUrl())) {
-                        markupDocBuilder.textLine(TOKEN_URL + " : " + oauth2Scheme.getTokenUrl());
-                    }
-                    List<List<String>> cells = new ArrayList<>();
-                    List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN, 1),
-                            new MarkupTableColumn(DESCRIPTION_COLUMN, 6));
-                    for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
-                        List<String> content = Arrays.asList(scope.getKey(), scope.getValue());
-                        cells.add(content);
-                    }
-                    markupDocBuilder.tableWithColumnSpecs(cols, cells);
-
-                }
+    private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> definitions) {
+        for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
+            markupDocBuilder.sectionTitleLevel2(entry.getKey());
+            SecuritySchemeDefinition securityScheme = entry.getValue();
+            buildSecurityScheme(securityScheme);
+            if (logger.isInfoEnabled()) {
+                logger.info("SecuritySchemeDefinition processed: {}", securityScheme.getType());
             }
+        }
+    }
 
-            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_END, this.markupDocBuilder));
-            applyOverviewExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOC_AFTER, this.markupDocBuilder));
+    private void buildSecurityScheme(SecuritySchemeDefinition securityScheme) {
+        String type = securityScheme.getType();
+        markupDocBuilder.textLine(TYPE + " : " + type);
+        if (securityScheme instanceof ApiKeyAuthDefinition) {
+            markupDocBuilder.textLine(NAME + " : " + ((ApiKeyAuthDefinition) securityScheme).getName());
+            markupDocBuilder.textLine(IN + " : " + ((ApiKeyAuthDefinition) securityScheme).getIn());
+        } else if (securityScheme instanceof OAuth2Definition) {
+            OAuth2Definition oauth2Scheme = (OAuth2Definition) securityScheme;
+            String flow = oauth2Scheme.getFlow();
+            markupDocBuilder.textLine(FLOW + " : " + flow);
+            if (isNotBlank(oauth2Scheme.getAuthorizationUrl())) {
+                markupDocBuilder.textLine(AUTHORIZATION_URL + " : " + oauth2Scheme.getAuthorizationUrl());
+            }
+            if (isNotBlank(oauth2Scheme.getTokenUrl())) {
+                markupDocBuilder.textLine(TOKEN_URL + " : " + oauth2Scheme.getTokenUrl());
+            }
+            List<List<String>> cells = new ArrayList<>();
+            List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN, 1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6));
+            for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
+                List<String> content = Arrays.asList(scope.getKey(), scope.getValue());
+                cells.add(content);
+            }
+            markupDocBuilder.tableWithColumnSpecs(cols, cells);
         }
     }
 
@@ -123,7 +123,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOverviewExtension(SecurityDocumentExtension.Context context) {
+    private void applySecurityDocumentExtension(SecurityDocumentExtension.Context context) {
         for (SecurityDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(SecurityDocumentExtension.class)) {
             extension.apply(context);
         }
