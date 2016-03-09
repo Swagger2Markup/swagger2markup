@@ -17,8 +17,10 @@ POST /pets
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 405
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |405|Invalid input|No Content|
 
 
@@ -61,10 +63,24 @@ PUT /pets
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid ID supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|Pet not found|No Content|
+
+
+##### HTTP Code 405
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |405|Validation exception|No Content|
 
 
@@ -111,9 +127,25 @@ Multiple status values can be provided with comma seperated strings
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|[Pet](#pet) array|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid status value|No Content|
 
 
@@ -154,9 +186,25 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|[Pet](#pet) array|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid tag value|No Content|
 
 
@@ -195,8 +243,10 @@ POST /pets/{petId}
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 405
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |405|Invalid input|No Content|
 
 
@@ -242,10 +292,32 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|[Pet](#pet)|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid ID supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|Pet not found|No Content|
 
 
@@ -284,8 +356,10 @@ DELETE /pets/{petId}
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid pet value|No Content|
 
 
@@ -322,9 +396,25 @@ POST /stores/order
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|[Order](#order)|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid Order|No Content|
 
 
@@ -358,10 +448,32 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|[Order](#order)|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid ID supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|Order not found|No Content|
 
 
@@ -395,9 +507,17 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid ID supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|Order not found|No Content|
 
 
@@ -431,8 +551,10 @@ This can only be done by the logged in user.
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code default
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |default|successful operation|No Content|
 
 
@@ -462,8 +584,10 @@ POST /users/createWithArray
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code default
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |default|successful operation|No Content|
 
 
@@ -493,8 +617,10 @@ POST /users/createWithList
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code default
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |default|successful operation|No Content|
 
 
@@ -525,9 +651,25 @@ GET /users/login
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|string|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid username/password supplied|No Content|
 
 
@@ -550,8 +692,10 @@ GET /users/logout
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code default
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |default|successful operation|No Content|
 
 
@@ -581,10 +725,32 @@ GET /users/{username}
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 200
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |200|successful operation|[User](#user)|
+
+**Headers**
+
+|Name|Description|Schema|Default|
+|---|---|---|---|
+|X-Rate-Limit-Limit|successful operation|integer||
+|X-Rate-Limit-Remaining|successful operation|integer||
+|X-Rate-Limit-Reset|successful operation|integer||
+
+
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid username supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|User not found|No Content|
 
 
@@ -619,9 +785,17 @@ This can only be done by the logged in user.
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid user supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|User not found|No Content|
 
 
@@ -655,9 +829,17 @@ This can only be done by the logged in user.
 
 #### Responses
 
-|HTTP Code|Description|Headers|Schema|
-|---|---|---|---|
+##### HTTP Code 400
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |400|Invalid username supplied|No Content|
+
+
+##### HTTP Code 404
+
+|HTTP Code|Description|Schema|
+|---|---|---|
 |404|User not found|No Content|
 
 

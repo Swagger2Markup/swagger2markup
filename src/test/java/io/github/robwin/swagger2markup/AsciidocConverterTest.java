@@ -203,6 +203,8 @@ public class AsciidocConverterTest {
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/asciidoc/inline_schema").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocWithInlineSchema.html");
     }
 
     @Test

@@ -24,9 +24,11 @@ POST /pets
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |405|Invalid input|No Content
 |===
 
@@ -69,11 +71,29 @@ PUT /pets
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |400|Invalid ID supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|Pet not found|No Content
+|===
+
+
+====== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |405|Validation exception|No Content
 |===
 
@@ -121,10 +141,30 @@ Multiple status values can be provided with comma seperated strings
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|<<_pet,Pet>> array
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid status value|No Content
 |===
 
@@ -166,10 +206,30 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|<<_pet,Pet>> array
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid tag value|No Content
 |===
 
@@ -208,9 +268,11 @@ POST /pets/{petId}
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |405|Invalid input|No Content
 |===
 
@@ -257,11 +319,39 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|<<_pet,Pet>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid ID supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|Pet not found|No Content
 |===
 
@@ -300,9 +390,11 @@ DELETE /pets/{petId}
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |400|Invalid pet value|No Content
 |===
 
@@ -344,10 +436,30 @@ POST /stores/order
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|<<_order,Order>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid Order|No Content
 |===
 
@@ -380,11 +492,39 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|<<_order,Order>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid ID supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|Order not found|No Content
 |===
 
@@ -417,10 +557,20 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |400|Invalid ID supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|Order not found|No Content
 |===
 
@@ -458,9 +608,11 @@ This can only be done by the logged in user.
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |default|successful operation|No Content
 |===
 
@@ -488,9 +640,11 @@ POST /users/createWithArray
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |default|successful operation|No Content
 |===
 
@@ -518,9 +672,11 @@ POST /users/createWithList
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |default|successful operation|No Content
 |===
 
@@ -549,10 +705,30 @@ GET /users/login
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|string
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid username/password supplied|No Content
 |===
 
@@ -571,9 +747,11 @@ GET /users/logout
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |default|successful operation|No Content
 |===
 
@@ -601,11 +779,39 @@ GET /users/{username}
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |200|successful operation|<<_user,User>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|successful operation|integer|
+|X-Rate-Limit-Remaining|successful operation|integer|
+|X-Rate-Limit-Reset|successful operation|integer|
+|===
+
+
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |400|Invalid username supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|User not found|No Content
 |===
 
@@ -639,10 +845,20 @@ This can only be done by the logged in user.
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |400|Invalid user supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|User not found|No Content
 |===
 
@@ -675,10 +891,20 @@ This can only be done by the logged in user.
 
 ===== Responses
 
-[options="header", cols=".^1h,.^3,.^3,.^1"]
+====== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
 |===
-|HTTP Code|Description|Headers|Schema
+|HTTP Code|Description|Schema
 |400|Invalid username supplied|No Content
+|===
+
+
+====== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
 |404|User not found|No Content
 |===
 
