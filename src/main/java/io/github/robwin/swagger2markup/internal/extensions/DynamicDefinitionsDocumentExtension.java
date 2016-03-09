@@ -71,19 +71,25 @@ public final class DynamicDefinitionsDocumentExtension extends DefinitionsDocume
 
         if (contentPath != null) {
             DynamicContentExtension dynamicContent = new DynamicContentExtension(globalContext, context);
-
-            switch (context.position) {
+            DynamicDefinitionsDocumentExtension.Position position = context.getPosition();
+            switch (position) {
                 case DOCUMENT_BEFORE:
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(position), levelOffset(context));
+                    break;
                 case DOCUMENT_BEGIN:
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(position), levelOffset(context));
+                    break;
                 case DOCUMENT_END:
-                    dynamicContent.extensionsSection(contentPath, contentPrefix(context.position), levelOffset(context));
+                    dynamicContent.extensionsSection(contentPath, contentPrefix(position), levelOffset(context));
                     break;
                 case DEFINITION_BEGIN:
+                    dynamicContent.extensionsSection(contentPath.resolve(Paths.get(IOUtils.normalizeName(context.getDefinitionName().get()))), contentPrefix(position), levelOffset(context));
+                    break;
                 case DEFINITION_END:
-                    dynamicContent.extensionsSection(contentPath.resolve(Paths.get(IOUtils.normalizeName(context.definitionName))), contentPrefix(context.position), levelOffset(context));
+                    dynamicContent.extensionsSection(contentPath.resolve(Paths.get(IOUtils.normalizeName(context.getDefinitionName().get()))), contentPrefix(position), levelOffset(context));
                     break;
                 default:
-                    throw new RuntimeException(String.format("Unknown position '%s'", context.position));
+                    throw new RuntimeException(String.format("Unknown position '%s'", position));
             }
         }
     }

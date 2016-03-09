@@ -23,7 +23,7 @@ import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.RefParameter;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
@@ -54,7 +54,8 @@ public final class ParameterUtils {
         }
         else if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
-            List enums = serializableParameter.getEnum();
+            @SuppressWarnings("unchecked")
+            List<String> enums = serializableParameter.getEnum();
             if(CollectionUtils.isNotEmpty(enums)){
                 type = new EnumType(null, enums);
             }else{

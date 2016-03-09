@@ -18,7 +18,7 @@ package io.github.robwin.swagger2markup.internal.type;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.Property;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import java.util.Map;
 

@@ -19,8 +19,8 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupDocBuilders;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.robwin.markup.builder.MarkupTableColumn;
-import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.Swagger2MarkupConfig;
+import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
 import io.github.robwin.swagger2markup.internal.type.DefinitionDocumentResolver;
 import io.github.robwin.swagger2markup.internal.type.ObjectType;
@@ -30,7 +30,7 @@ import io.github.robwin.swagger2markup.internal.utils.IOUtils;
 import io.github.robwin.swagger2markup.internal.utils.PropertyUtils;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
 
+import static io.github.robwin.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
@@ -118,13 +119,7 @@ public abstract class MarkupDocumentBuilder {
                 new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(EXAMPLE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
         if (MapUtils.isNotEmpty(type.getProperties())) {
-            Set<String> propertyNames;
-            if (config.getPropertyOrdering() == null)
-                propertyNames = new LinkedHashSet<>();
-            else
-                propertyNames = new TreeSet<>(config.getPropertyOrdering());
-            propertyNames.addAll(type.getProperties().keySet());
-
+            Set<String> propertyNames = toKeySet(type.getProperties(), config.getPropertyOrdering());
             for (String propertyName : propertyNames) {
                 Property property = type.getProperties().get(propertyName);
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);

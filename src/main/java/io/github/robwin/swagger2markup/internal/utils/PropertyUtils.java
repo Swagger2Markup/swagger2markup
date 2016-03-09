@@ -20,7 +20,7 @@ import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.internal.type.*;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.*;

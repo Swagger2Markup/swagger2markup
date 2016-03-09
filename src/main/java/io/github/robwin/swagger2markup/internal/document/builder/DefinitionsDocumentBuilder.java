@@ -28,10 +28,11 @@ import io.swagger.models.Model;
 import io.swagger.models.RefModel;
 import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -44,6 +45,7 @@ import java.util.*;
 import static io.github.robwin.swagger2markup.internal.utils.IOUtils.normalizeName;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static io.github.robwin.swagger2markup.internal.utils.MapUtils.toKeySet;
 
 /**
  * @author Robert Winkler
@@ -101,7 +103,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildDefinitionsSection(Map<String, Model> definitions) {
-        Set<String> definitionNames = getDefinitionNames(definitions);
+        Set<String> definitionNames = toKeySet(definitions, config.getDefinitionOrdering());
         for (String definitionName : definitionNames) {
             Model model = definitions.get(definitionName);
             if (isNotBlank(definitionName)) {
@@ -117,16 +119,6 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
                 }
             }
         }
-    }
-
-    private Set<String> getDefinitionNames(Map<String, Model> definitions) {
-        Set<String> definitionNames;
-        if (config.getDefinitionOrdering() == null)
-            definitionNames = new LinkedHashSet<>();
-        else
-            definitionNames = new TreeSet<>(config.getDefinitionOrdering());
-        definitionNames.addAll(definitions.keySet());
-        return definitionNames;
     }
 
     private void buildDefinitionsTitle(String title) {
@@ -206,11 +198,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_BEGIN, docBuilder, definitionName));
+        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
         addDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_END, docBuilder, definitionName));
+        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_END, docBuilder, definitionName, model));
     }
 
     /**

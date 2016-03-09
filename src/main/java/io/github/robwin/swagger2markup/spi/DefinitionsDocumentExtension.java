@@ -16,8 +16,12 @@
 
 package io.github.robwin.swagger2markup.spi;
 
-import io.github.robwin.markup.builder.MarkupDocBuilder;
 import org.apache.commons.lang3.Validate;
+
+import com.google.common.base.Optional;
+
+import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.swagger.models.Model;
 
 /**
  * A SecurityContentExtension can be used to extend the definitions document.
@@ -33,11 +37,16 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
     }
 
     public static class Context extends ContentContext {
-        public Position position;
+        private Position position;
         /**
          * null if position == DOC_*
          */
-        public String definitionName;
+        private String definitionName;
+
+        /**
+         * null if position == DOC_*
+         */
+        private Model model;
 
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
@@ -45,13 +54,25 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
             this.position = position;
         }
 
-        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName) {
+        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
             super(docBuilder);
             Validate.notNull(definitionName);
             this.position = position;
             this.definitionName = definitionName;
+            this.model = model;
         }
 
+        public Position getPosition() {
+            return position;
+        }
+
+        public Optional<String> getDefinitionName() {
+            return Optional.fromNullable(definitionName);
+        }
+
+        public Optional<Model> getModel() {
+            return Optional.fromNullable(model);
+        }
     }
 
     public DefinitionsDocumentExtension() {

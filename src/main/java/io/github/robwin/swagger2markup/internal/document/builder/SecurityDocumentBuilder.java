@@ -22,7 +22,7 @@ import io.github.robwin.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.MapUtils;
 
 import java.nio.file.Path;
 import java.util.*;

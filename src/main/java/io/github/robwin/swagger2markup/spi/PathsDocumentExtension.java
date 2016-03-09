@@ -16,6 +16,7 @@
 
 package io.github.robwin.swagger2markup.spi;
 
+import com.google.common.base.Optional;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.swagger2markup.GroupBy;
 import io.github.robwin.swagger2markup.internal.model.PathOperation;
@@ -35,11 +36,11 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
     }
 
     public static class Context extends ContentContext {
-        public Position position;
+        private Position position;
         /**
          * null if position == DOC_*
          */
-        public PathOperation operation;
+        private PathOperation operation;
 
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
@@ -52,6 +53,14 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
             Validate.notNull(operation);
             this.position = position;
             this.operation = operation;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public Optional<PathOperation> getOperation() {
+            return Optional.fromNullable(operation);
         }
     }
 

@@ -20,24 +20,21 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.robwin.markup.builder.*;
 import io.github.robwin.swagger2markup.GroupBy;
-import io.github.robwin.swagger2markup.internal.model.PathOperation;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
-import io.github.robwin.swagger2markup.spi.PathsDocumentExtension;
+import io.github.robwin.swagger2markup.internal.model.PathOperation;
 import io.github.robwin.swagger2markup.internal.type.ObjectType;
 import io.github.robwin.swagger2markup.internal.type.RefType;
 import io.github.robwin.swagger2markup.internal.type.Type;
-import io.github.robwin.swagger2markup.internal.utils.ExamplesUtil;
-import io.github.robwin.swagger2markup.internal.utils.ParameterUtils;
-import io.github.robwin.swagger2markup.internal.utils.PropertyUtils;
-import io.github.robwin.swagger2markup.internal.utils.TagUtils;
+import io.github.robwin.swagger2markup.internal.utils.*;
+import io.github.robwin.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.*;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -51,6 +48,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static io.github.robwin.swagger2markup.internal.utils.IOUtils.normalizeName;
+import static io.github.robwin.swagger2markup.internal.utils.ListUtils.*;
+import static io.github.robwin.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.robwin.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
 import static io.github.robwin.swagger2markup.internal.utils.TagUtils.getTagDescription;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -153,21 +152,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildsPathsSection(Map<String, Path> paths) {
-        Set<PathOperation> pathOperations = getPathOperations(paths);
+        Set<PathOperation> pathOperations = toPathOperationsSet(paths);
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
-                if (config.getOperationOrdering() != null) {
-                    Set<PathOperation> sortedOperations = new TreeSet<>(config.getOperationOrdering());
-                    sortedOperations.addAll(pathOperations);
-                    pathOperations = sortedOperations;
-                }
-
                 for (PathOperation operation : pathOperations) {
                     buildOperation(operation);
                 }
             } else {
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
-
                 Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
                 for (String tagName : operationsGroupedByTag.keySet()) {
                     this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
@@ -202,8 +194,13 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param paths the Swagger paths
      * @return the path operations
      */
-    private Set<PathOperation> getPathOperations(Map<String, Path> paths) {
-        Set<PathOperation> pathOperations = new LinkedHashSet<>();
+    private Set<PathOperation> toPathOperationsSet(Map<String, Path> paths) {
+        Set<PathOperation> pathOperations;
+        if (config.getOperationOrdering() != null) {
+            pathOperations = new TreeSet<>(config.getOperationOrdering());
+        }else{
+            pathOperations = new LinkedHashSet<>();
+        }
         for (Map.Entry<String, Path> path : paths.entrySet()) {
             Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
             if (MapUtils.isNotEmpty(operations)) {
@@ -220,7 +217,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Apply extension context to all OperationsContentExtension
+     * Apply extension context to all OperationsContentExtension.
      *
      * @param context context
      */
@@ -244,7 +241,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Generate operations depending on the generation mode.
+     * Builds a path operation depending on generation mode.
      *
      * @param operation operation
      */
@@ -288,7 +285,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Builds an operation.
+     * Builds a path operation.
      *
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
@@ -296,17 +293,17 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
             applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_BEGIN, docBuilder, operation));
-            deprecatedSection(operation, docBuilder);
-            operationTitle(operation, docBuilder);
-            descriptionSection(operation, docBuilder);
-            inlineDefinitions(parametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
-            inlineDefinitions(bodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
-            inlineDefinitions(responsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
-            consumesSection(operation, docBuilder);
-            producesSection(operation, docBuilder);
-            tagsSection(operation, docBuilder);
-            securitySchemeSection(operation, docBuilder);
-            examplesSection(operation, docBuilder);
+            buildDeprecatedSection(operation, docBuilder);
+            buildOperationTitle(operation, docBuilder);
+            buildDescriptionSection(operation, docBuilder);
+            inlineDefinitions(buildParametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
+            inlineDefinitions(buildBodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
+            inlineDefinitions(buildResponsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
+            buildConsumesSection(operation, docBuilder);
+            buildProducesSection(operation, docBuilder);
+            buildTagsSection(operation, docBuilder);
+            buildSecuritySchemeSection(operation, docBuilder);
+            buildExamplesSection(operation, docBuilder);
             applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_END, docBuilder, operation));
         }
     }
@@ -318,7 +315,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the docbuilder do use for output
      */
     private void buildOperationRef(PathOperation operation, MarkupDocBuilder docBuilder) {
-        String document = null;
+        String document;
         if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
             document = null;
         else if (config.isSeparatedOperationsEnabled())
@@ -327,7 +324,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
         String operationName = operationName(operation);
 
-        addOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
+        buildOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
     }
 
     /**
@@ -336,7 +333,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void deprecatedSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildDeprecatedSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Boolean deprecated = operation.getOperation().isDeprecated();
         if (deprecated != null && deprecated) {
             docBuilder.block(DEPRECATED_OPERATION, MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.CAUTION);
@@ -350,10 +347,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void operationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildOperationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
         String operationName = operationName(operation);
 
-        addOperationTitle(operationName, null, docBuilder);
+        buildOperationTitle(operationName, null, docBuilder);
         if (operationName.equals(operation.getOperation().getSummary())) {
             docBuilder.listing(operation.getMethod() + " " + operation.getPath());
         }
@@ -364,9 +361,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param title      the operation title
      * @param anchor     optional anchor (null => auto-generate from title)
-     * @param docBuilder the docbuilder do use for output
+     * @param docBuilder the MarkupDocBuilder to use
      */
-    private void addOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
+    private void buildOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         } else {
@@ -377,14 +374,28 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     /**
      * Adds a operation section title to the document.
      *
-     * @param title      the operation title
-     * @param docBuilder the docbuilder do use for output
+     * @param title      the section title
+     * @param docBuilder the MarkupDocBuilder to use
      */
-    private void addOperationSectionTitle(String title, MarkupDocBuilder docBuilder) {
+    private void buildSectionTitle(String title, MarkupDocBuilder docBuilder) {
         if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleLevel3(title);
         } else {
             docBuilder.sectionTitleLevel4(title);
+        }
+    }
+
+    /**
+     * Adds a response section title to the document.
+     *
+     * @param title      the response title
+     * @param docBuilder the MarkupDocBuilder to use
+     */
+    private void buildResponseTitle(String title, MarkupDocBuilder docBuilder) {
+        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+            docBuilder.sectionTitleLevel4(title);
+        } else {
+            docBuilder.sectionTitleLevel5(title);
         }
     }
 
@@ -400,7 +411,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void descriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildDescriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (config.isOperationDescriptionsEnabled()) {
             Optional<String> description = handWrittenOperationDescription(normalizeName(operation.getId()), DESCRIPTION_FILE_NAME);
             if (!description.isPresent())
@@ -418,7 +429,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
     private void operationDescription(String description, MarkupDocBuilder docBuilder) {
         if (isNotBlank(description)) {
-            addOperationSectionTitle(DESCRIPTION, docBuilder);
+            buildSectionTitle(DESCRIPTION, docBuilder);
             docBuilder.paragraph(description);
         }
     }
@@ -433,19 +444,21 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         return (!config.isFlatBodyEnabled() || !StringUtils.equals(parameter.getIn(), "body"));
     }
 
-    private List<ObjectType> parametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private List<ObjectType> buildParametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (config.getParameterOrdering() != null)
             Collections.sort(parameters, config.getParameterOrdering());
         List<ObjectType> localDefinitions = new ArrayList<>();
 
         boolean displayParameters = false;
-        if (CollectionUtils.isNotEmpty(parameters))
-            for (Parameter p : parameters)
+        if (CollectionUtils.isNotEmpty(parameters)) {
+            for (Parameter p : parameters) {
                 if (filterParameter(p)) {
                     displayParameters = true;
                     break;
                 }
+            }
+        }
 
         if (displayParameters) {
             List<List<String>> cells = new ArrayList<>();
@@ -482,7 +495,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     cells.add(content);
                 }
             }
-            addOperationSectionTitle(PARAMETERS, docBuilder);
+            buildSectionTitle(PARAMETERS, docBuilder);
             docBuilder.tableWithColumnSpecs(cols, cells);
         }
 
@@ -496,7 +509,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the docbuilder do use for output
      * @return a list of inlined types.
      */
-    private List<ObjectType> bodyParameterSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private List<ObjectType> buildBodyParameterSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
 
         if (config.isFlatBodyEnabled()) {
@@ -506,7 +519,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     if (StringUtils.equals(parameter.getIn(), "body")) {
                         Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
 
-                        addOperationSectionTitle(BODY_PARAMETER, docBuilder);
+                        buildSectionTitle(BODY_PARAMETER, docBuilder);
                         if (isNotBlank(parameter.getDescription())) {
                             docBuilder.paragraph(parameter.getDescription());
                         }
@@ -565,35 +578,30 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         }
     }
 
-    private void consumesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildConsumesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<String> consumes = operation.getOperation().getConsumes();
         if (CollectionUtils.isNotEmpty(consumes)) {
-            addOperationSectionTitle(CONSUMES, docBuilder);
+            buildSectionTitle(CONSUMES, docBuilder);
             docBuilder.unorderedList(consumes);
         }
 
     }
 
-    private void producesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildProducesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<String> produces = operation.getOperation().getProduces();
         if (CollectionUtils.isNotEmpty(produces)) {
-            addOperationSectionTitle(PRODUCES, docBuilder);
+            buildSectionTitle(PRODUCES, docBuilder);
             docBuilder.unorderedList(produces);
         }
     }
 
-    private void tagsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildTagsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
-                addOperationSectionTitle(TAGS, docBuilder);
-                Set<String> sortedTags;
-                if (config.getTagOrdering() == null)
-                    sortedTags = new LinkedHashSet<>();
-                else
-                    sortedTags = new TreeSet<>(config.getTagOrdering());
-                sortedTags.addAll(tags);
-                docBuilder.unorderedList(new ArrayList<>(sortedTags));
+                buildSectionTitle(TAGS, docBuilder);
+                Set<String> tagsSet = toSet(tags, config.getTagOrdering());
+                docBuilder.unorderedList(new ArrayList<>(tagsSet));
             }
         }
     }
@@ -604,7 +612,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
-    private void examplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildExamplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
 
         Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, globalContext.getSwagger().getDefinitions(), markupDocBuilder);
         Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation.getOperation(), globalContext.getSwagger().getDefinitions(), markupDocBuilder);
@@ -615,9 +623,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
     private void exampleMap(Map<String, Object> exampleMap, String operationSectionTitle, String sectionTile, MarkupDocBuilder docBuilder) {
         if (exampleMap.size() > 0) {
-            addOperationSectionTitle(operationSectionTitle, docBuilder);
+            buildSectionTitle(operationSectionTitle, docBuilder);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
-                addOperationSectionTitle(sectionTile + " " + entry.getKey(), docBuilder);
+                buildSectionTitle(sectionTile + " " + entry.getKey(), docBuilder);
                 docBuilder.listing(Json.pretty(entry.getValue()));
             }
         }
@@ -629,10 +637,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param operation  the Swagger Operation
      * @param docBuilder the MarkupDocBuilder document builder
      */
-    private void securitySchemeSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildSecuritySchemeSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
         if (CollectionUtils.isNotEmpty(securitySchemes)) {
-            addOperationSectionTitle(SECURITY, docBuilder);
+            buildSectionTitle(SECURITY, docBuilder);
             Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
@@ -681,32 +689,29 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         return Optional.absent();
     }
 
-    private List<ObjectType> responsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private List<ObjectType> buildResponsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
         List<ObjectType> localDefinitions = new ArrayList<>();
 
         if (MapUtils.isNotEmpty(responses)) {
-            List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(
+            buildSectionTitle(RESPONSES, docBuilder);
+
+            List<MarkupTableColumn> responseCols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                     new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
-            Set<String> responseNames;
-            if (config.getResponseOrdering() == null)
-                responseNames = new LinkedHashSet<>();
-            else
-                responseNames = new TreeSet<>(config.getResponseOrdering());
-            responseNames.addAll(responses.keySet());
 
+            List<MarkupTableColumn> responseHeaderCols = Arrays.asList(
+                    new MarkupTableColumn(NAME_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN, 3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(SCHEMA_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(DEFAULT_COLUMN, 1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+
+            Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
             for (String responseName : responseNames) {
+                List<List<String>> cells = new ArrayList<>();
+                List<List<String>> responseHeaderCells = new ArrayList<>();
                 Response response = responses.get(responseName);
-                Map<String, Property> headers = response.getHeaders();
-
-                List<String> headersToRender = new LinkedList<>();
-                if(MapUtils.isNotEmpty(headers)){
-
-                }
-
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
@@ -724,12 +729,31 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 } else {
                     cells.add(Arrays.asList(responseName, response.getDescription(), NO_CONTENT));
                 }
+
+                buildResponseTitle(HTTP_CODE_COLUMN + " " + responseName, docBuilder);
+                docBuilder.tableWithColumnSpecs(responseCols, cells);
+
+                Map<String, Property> headers = response.getHeaders();
+                if(MapUtils.isNotEmpty(headers)) {
+                    docBuilder.boldTextLine(HEADERS_COLUMN);
+                    for(Map.Entry<String, Property> entry : headers.entrySet()){
+                        Property property = entry.getValue();
+                        Type propertyType = PropertyUtils.getType(property, null);
+                        responseHeaderCells.add(Arrays.asList(entry.getKey(),
+                                response.getDescription(),
+                                propertyType.displaySchema(markupDocBuilder),
+                                PropertyUtils.getDefaultValue(property)));
+                    }
+                    docBuilder.tableWithColumnSpecs(responseHeaderCols, responseHeaderCells);
+                }
             }
-            addOperationSectionTitle(RESPONSES, docBuilder);
-            docBuilder.tableWithColumnSpecs(cols, cells);
         }
         return localDefinitions;
     }
+
+
+
+
 
     /**
      * Builds the title of an inline schema.

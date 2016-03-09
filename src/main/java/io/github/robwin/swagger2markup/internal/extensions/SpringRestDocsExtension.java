@@ -113,7 +113,7 @@ public final class SpringRestDocsExtension extends PathsDocumentExtension {
     public void apply(Context context) {
         Validate.notNull(context);
 
-        switch (context.position) {
+        switch (context.getPosition()) {
             case OPERATION_END:
                 snippets(context);
                 break;
@@ -129,7 +129,7 @@ public final class SpringRestDocsExtension extends PathsDocumentExtension {
     public void snippetSection(Context context, String snippetName, String title) {
         ContentExtension content = new ContentExtension(globalContext, context);
 
-        URI snippetUri = operationSnippetUri(context, context.operation, snippetName);
+        URI snippetUri = operationSnippetUri(context, context.getOperation().get(), snippetName);
         Optional<Reader> snippetContent = content.readContentUri(snippetUri);
 
         if (snippetContent.isPresent()) {

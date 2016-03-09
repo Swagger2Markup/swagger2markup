@@ -133,6 +133,7 @@ public class ExamplesUtil {
                     }
                     if (parameter instanceof QueryParameter) {
                         //noinspection unchecked
+                        @SuppressWarnings("unchecked")
                         Map<String, Object> queryExampleMap = (Map<String, Object>) examples.get("query");
                         if (queryExampleMap == null) {
                             queryExampleMap = new HashMap<>();

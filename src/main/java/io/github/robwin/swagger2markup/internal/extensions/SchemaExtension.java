@@ -89,7 +89,7 @@ public final class SchemaExtension extends DefinitionsDocumentExtension {
         Validate.notNull(context);
 
         if (schemaBaseUri != null) {
-            switch (context.position) {
+            switch (context.getPosition()) {
                 case DOCUMENT_BEFORE:
                 case DOCUMENT_BEGIN:
                 case DOCUMENT_END:
@@ -101,7 +101,7 @@ public final class SchemaExtension extends DefinitionsDocumentExtension {
                     }
                     break;
                 default:
-                    throw new RuntimeException(String.format("Unknown position '%s'", context.position));
+                    throw new RuntimeException(String.format("Unknown position '%s'", context.getPosition()));
             }
         }
     }
@@ -121,7 +121,7 @@ public final class SchemaExtension extends DefinitionsDocumentExtension {
 
     private void schemaSection(Context context, SchemaMetadata schema, int levelOffset) {
         ContentExtension contentExtension = new ContentExtension(globalContext, context);
-        URI schemaUri = definitionSchemaUri(context, context.definitionName, schema);
+        URI schemaUri = definitionSchemaUri(context, context.getDefinitionName().get(), schema);
 
         try {
             Optional<Reader> extensionContent = contentExtension.readContentUri(schemaUri);
