@@ -39,15 +39,15 @@ repositories {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.12'
-    compile 'commons-collections:commons-collections:3.2.1'
-    compile 'org.apache.commons:commons-lang3:3.2.1'
+    compile 'org.slf4j:slf4j-api:1.7.18'
+    compile 'org.apache.commons:commons-collections4:4.1'
+    compile 'org.apache.commons:commons-lang3:3.4'
     compile "commons-io:commons-io:2.4"
     compile 'com.google.guava:guava:18.0'
-    compile "commons-codec:commons-codec:1.6"
+    compile "commons-codec:commons-codec:1.10"
     testCompile 'junit:junit:4.11'
     testCompile "org.mockito:mockito-core:1.9.5"
-    testCompile 'ch.qos.logback:logback-classic:1.1.2'
+    testCompile 'ch.qos.logback:logback-classic:1.1.6'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
