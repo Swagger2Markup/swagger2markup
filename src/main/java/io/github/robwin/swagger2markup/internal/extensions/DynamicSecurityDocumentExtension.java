@@ -17,6 +17,7 @@
 package io.github.robwin.swagger2markup.internal.extensions;
 
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
+import io.github.robwin.swagger2markup.internal.utils.IOUtils;
 import io.github.robwin.swagger2markup.spi.SecurityDocumentExtension;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -30,6 +31,8 @@ import java.nio.file.Paths;
  * - {@code document-before-*.<markup.ext>} : import before Overview document with levelOffset = 0<br/>
  * - {@code document-begin-*.<markup.ext>} : import just after Overview document main title with levelOffset = 1<br/>
  * - {@code document-end-*.<markup.ext>} : import at the end of Overview document with levelOffset = 1<br/>
+ * - {@code definition-begin-*.<markup.ext>} : import just after each definition title with levelOffset = 2<br/>
+ * - {@code definition-end-*.<markup.ext>} : import at the end of each definition with levelOffset = 2<br/>
  * <p/>
  * Markup files are appended in the natural order of their names, for each category.
  */
@@ -78,6 +81,12 @@ public final class DynamicSecurityDocumentExtension extends SecurityDocumentExte
                     break;
                 case DOCUMENT_END:
                     dynamicContent.extensionsSection(contentPath, contentPrefix(position), levelOffset(context));
+                    break;
+                case DEFINITION_BEGIN:
+                    dynamicContent.extensionsSection(contentPath.resolve(IOUtils.normalizeName(context.getDefinitionName().get())), contentPrefix(position), levelOffset(context));
+                    break;
+                case DEFINITION_END:
+                    dynamicContent.extensionsSection(contentPath.resolve(IOUtils.normalizeName(context.getDefinitionName().get())), contentPrefix(position), levelOffset(context));
                     break;
                 default:
                     throw new RuntimeException(String.format("Unknown position '%s'", position));
