@@ -1,0 +1,23 @@
+== Introduction
+
+The primary goal of this project is to **simplify the generation of an up-to-date RESTful API documentation by combining documentation that's been hand-written with auto-generated API documentation** produced by https://github.com/swagger-api[Swagger]. The result is intended to be an **up-to-date, easy-to-read, on- and offline user guide**. The output of Swagger2Markup can be used as an alternative to https://github.com/swagger-api/swagger-ui[swagger-ui] and can be served as static content.
+
+Swagger2Markup converts a Swagger JSON or YAML file into several **AsciiDoc** or **GitHub Flavored Markdown**documents which can be combined with hand-written Markup documentation. The Swagger source file can be located locally or remotely via HTTP.
+
+Swagger2Markup uses the __official__ https://github.com/swagger-api/swagger-parser[swagger-parser] and my https://github.com/Swagger2Markup/markup-document-builder[markup-document-builder].
+
+You can use Swagger2Markup to convert your contract-first Swagger YAML file into Markup. As an alternative, you can choose the code-first approach and use Swagger2Markup together with https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-JAX-RS-Project-Setup-1.5.X[Swagger JAX-RS], https://github.com/springfox/springfox[Springfox] or https://github.com/spring-projects/spring-restdocs[spring-restdocs]. If you are are Gradle or Maven user, you can also use the https://github.com/Swagger2Markup/swagger2markup-gradle-plugin[Swagger2Markup Gradle Plugin] or https://github.com/redowl/swagger2markup-maven-plugin[Swagger2markup Maven Plugin].
+
+NOTE: The project requires at least JDK 7.
+
+===  AsciiDoc
+
+http://asciidoctor.org/docs/asciidoc-writers-guide/[AsciiDoc] is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to**HTML**, **PDF** and **EPUB**. AsciiDoc is much better suited for describing public APIs than **JavaDoc** or **Annotations**.
+
+You can generate your HTML5, PDF and EPUB documentation via https://github.com/asciidoctor/asciidoctorj[asciidoctorj] or even better via the https://github.com/asciidoctor/asciidoctor-gradle-plugin[asciidoctor-gradle-plugin] or https://github.com/asciidoctor/asciidoctor-maven-plugin[asciidoctor-maven-plugin].
+
+=== HTML Example
+
+image::images/Swagger2Markup.PNG[]
+
+image::images/Swagger2Markup_definitions.PNG[]

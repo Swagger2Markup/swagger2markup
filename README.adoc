@@ -22,9 +22,9 @@ The project requires at least JDK 7.
 
 == Example
 
-image::images/Swagger2Markup.PNG[]
+image::src/docs/asciidoc/images/Swagger2Markup.PNG[]
 
-image::images/Swagger2Markup_definitions.PNG[]
+image::src/docs/asciidoc/images/Swagger2Markup_definitions.PNG[]
 
 == Reference documentation
 - http://swagger2markup.readme.io/[Reference Documentation]

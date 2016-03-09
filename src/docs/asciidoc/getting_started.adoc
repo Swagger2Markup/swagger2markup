@@ -1,0 +1,36 @@
+== Getting started
+
+The project is published in JCenter and Maven Central. If you use Gradle or Maven, you can include Swagger2Markup as follows.
+
+=== Gradle
+[source,groovy, subs="attributes"]
+----
+repositories {
+    mavenCentral()
+    jCenter()
+}
+
+compile "io.github.robwin:swagger2markup:{project-version}"
+----
+
+=== Maven
+[source,xml, subs="attributes, verbatim"]
+----
+<repositories>
+    <repository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        central
+        <name>bintray</name>
+        <url>http://jcenter.bintray.com</url>
+    </repository>
+</repositories>
+
+<dependency>
+    <groupId>io.github.robwin</groupId>
+    <artifactId>swagger2markup</artifactId>
+    <version>{project-version}</version>
+</dependency>
+----
+
