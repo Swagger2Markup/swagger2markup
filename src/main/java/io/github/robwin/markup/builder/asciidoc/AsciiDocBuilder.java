@@ -18,10 +18,9 @@
  */
 package io.github.robwin.markup.builder.asciidoc;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.*;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Transformer;
 
 import java.io.File;
 import java.io.IOException;
@@ -208,8 +207,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append("[options=\"").append(join(options, ",")).append("\", cols=\"").append(join(cols, ",")).append("\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         if (hasHeader) {
-            Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
-                public String apply(final MarkupTableColumn header) {
+            Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
+                public String transform(final MarkupTableColumn header) {
                     return escapeTableCell(defaultString(header.header));
                 }
             });
@@ -217,8 +216,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
         }
         for (List<String> row : cells) {
-            Collection<String> cellList = Collections2.transform(row, new Function<String, String>() {
-                public String apply(final String cell) {
+            Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
+                public String transform(final String cell) {
                     return escapeTableCell(cell);
                 }
             });

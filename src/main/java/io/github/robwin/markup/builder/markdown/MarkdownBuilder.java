@@ -18,9 +18,9 @@
  */
 package io.github.robwin.markup.builder.markdown;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Collections2;
 import io.github.robwin.markup.builder.*;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -196,8 +196,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         Validate.notEmpty(columnSpecs);
 
         newLine();
-        Collection<String> headerList = Collections2.transform(columnSpecs, new Function<MarkupTableColumn, String>() {
-            public String apply(final MarkupTableColumn header) {
+        Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
+            public String transform(final MarkupTableColumn header) {
                 return escapeTableCell(defaultString(header.header));
             }
         });
@@ -211,8 +211,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append(newLine);
 
         for (List<String> row : cells) {
-            Collection<String> cellList = Collections2.transform(row, new Function<String, String>() {
-                public String apply(final String cell) {
+            Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
+                public String transform(final String cell) {
                     return escapeTableCell(cell);
                 }
             });
