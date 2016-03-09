@@ -535,7 +535,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         } else {
                             docBuilder.paragraph(typeInfos.toString());
 
-                            localDefinitions.addAll(typeProperties((ObjectType) type, operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            localDefinitions.addAll(buildPropertiesTable((ObjectType) type, operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
@@ -783,7 +783,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<ObjectType> localDefinitions = typeProperties(definition, uniquePrefix, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition, uniquePrefix, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }

@@ -161,7 +161,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
 
         if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy();
-            definition(definitions, definitionName, model, defDocBuilder);
+            buildDefinition(definitions, definitionName, model, defDocBuilder);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             try {
                 defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
@@ -177,7 +177,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             definitionRef(definitionName, this.markupDocBuilder);
 
         } else {
-            definition(definitions, definitionName, model, this.markupDocBuilder);
+            buildDefinition(definitions, definitionName, model, this.markupDocBuilder);
         }
     }
 
@@ -198,10 +198,10 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param model          the Swagger Model of the definition
      * @param docBuilder     the docbuilder do use for output
      */
-    private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
+    private void buildDefinition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
         buildDefinitionTitle(definitionName, null, docBuilder);
-        descriptionSection(definitionName, model, docBuilder);
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
+        buildDescriptionParagraph(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
     }
@@ -265,7 +265,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         Map<String, Property> properties = getAllProperties(definitions, model);
         ObjectType type = new ObjectType(definitionName, properties);
 
-        return typeProperties(type, definitionName, 1, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+        return buildPropertiesTable(type, definitionName, 1, new PropertyDescriptor(type), new DefinitionDocumentResolverFromDefinition(), docBuilder);
     }
 
     private Map<String, Property> getAllProperties(Map<String, Model> definitions, Model model) {
@@ -297,7 +297,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         }
     }
 
-    private void descriptionSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
+    private void buildDescriptionParagraph(String definitionName, Model model, MarkupDocBuilder docBuilder) {
         if (config.isDefinitionDescriptionsEnabled()) {
             Optional<String> description = handWrittenDefinitionDescription(normalizeName(definitionName), DESCRIPTION_FILE_NAME);
             if (description.isPresent()) {
@@ -370,7 +370,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<ObjectType> localDefinitions = typeProperties(definition, uniquePrefix, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition, uniquePrefix, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }

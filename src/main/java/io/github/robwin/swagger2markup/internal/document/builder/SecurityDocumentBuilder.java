@@ -15,6 +15,7 @@
  */
 package io.github.robwin.swagger2markup.internal.document.builder;
 
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.swagger2markup.Swagger2MarkupConverter;
 import io.github.robwin.swagger2markup.internal.document.MarkupDocument;
@@ -23,6 +24,7 @@ import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -85,11 +87,22 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
         for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
             String definitionName = entry.getKey();
             SecuritySchemeDefinition definition = entry.getValue();
+            buildSecuritySchemeDefinitionTitle(definitionName);
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
-            markupDocBuilder.sectionTitleLevel2(definitionName);
+            buildDescriptionParagraph(definition.getDescription());
             buildSecurityScheme(definition);
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
         }
+    }
+
+    private void buildDescriptionParagraph(String description) {
+        if(StringUtils.isNotBlank(description)) {
+            markupDocBuilder.paragraph(description);
+        }
+    }
+
+    private MarkupDocBuilder buildSecuritySchemeDefinitionTitle(String definitionName) {
+        return markupDocBuilder.sectionTitleLevel2(definitionName);
     }
 
     private void buildSecurityScheme(SecuritySchemeDefinition securityScheme) {

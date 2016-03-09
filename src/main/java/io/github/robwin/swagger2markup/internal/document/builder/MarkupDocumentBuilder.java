@@ -108,7 +108,7 @@ public abstract class MarkupDocumentBuilder {
      * @param docBuilder                 the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    protected List<ObjectType> typeProperties(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    protected List<ObjectType> buildPropertiesTable(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
