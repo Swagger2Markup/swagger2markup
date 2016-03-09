@@ -35,8 +35,8 @@ public class Swagger2MarkupExtensionRegistryTest {
         Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofDefaults();
 
         registryBuilder.withExtension(new MySwaggerModelExtension());
-        registryBuilder.withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")));
-        registryBuilder.withExtension(new DynamicPathsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")));
+        registryBuilder.withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/test/resources/docs/asciidoc/extensions")));
+        registryBuilder.withExtension(new DynamicPathsDocumentExtension(Paths.get("src/test/resources/docs/asciidoc/extensions")));
 
         try {
             registryBuilder.withExtension(new AbstractExtension() {

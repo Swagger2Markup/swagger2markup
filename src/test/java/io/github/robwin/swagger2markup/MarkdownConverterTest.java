@@ -91,7 +91,7 @@ public class MarkdownConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withDefinitionDescriptions(Paths.get("src/docs/markdown/definitions"))
+                .withDefinitionDescriptions(Paths.get("src/test/resources/docs/markdown/definitions"))
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -176,8 +176,8 @@ public class MarkdownConverterTest {
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/docs/markdown/extensions")))
-                .withExtension(new DynamicPathsDocumentExtension(Paths.get("src/docs/markdown/extensions")))
+                .withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/test/resources/docs/markdown/extensions")))
+                .withExtension(new DynamicPathsDocumentExtension(Paths.get("src/test/resources/docs/markdown/extensions")))
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

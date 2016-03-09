@@ -117,7 +117,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(new SpringRestDocsExtension(Paths.get("src/docs/asciidoc/paths").toUri()).withDefaultSnippets())
+                .withExtension(new SpringRestDocsExtension(Paths.get("src/test/resources/docs/asciidoc/paths").toUri()).withDefaultSnippets())
                 .build();
 
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
@@ -261,7 +261,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
-                .withDefinitionDescriptions(Paths.get("src/docs/asciidoc/definitions"))
+                .withDefinitionDescriptions(Paths.get("src/test/resources/docs/asciidoc/definitions"))
                 .build();
 
         Swagger2MarkupConverter.from(file)
@@ -414,8 +414,8 @@ public class AsciidocConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .build();
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")))
-                .withExtension(new DynamicPathsDocumentExtension(Paths.get("src/docs/asciidoc/extensions")))
+                .withExtension(new DynamicDefinitionsDocumentExtension(Paths.get("src/test/resources/docs/asciidoc/extensions")))
+                .withExtension(new DynamicPathsDocumentExtension(Paths.get("src/test/resources/docs/asciidoc/extensions")))
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -442,7 +442,7 @@ public class AsciidocConverterTest {
         Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
                 .build();
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(new SchemaExtension(Paths.get("src/docs/asciidoc/extensions").toUri()))
+                .withExtension(new SchemaExtension(Paths.get("src/test/resources/docs/asciidoc/extensions").toUri()))
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
