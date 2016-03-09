@@ -27,6 +27,8 @@ import org.apache.commons.collections4.MapUtils;
 import java.nio.file.Path;
 import java.util.*;
 
+import static io.github.robwin.swagger2markup.spi.SecurityDocumentExtension.Context;
+import static io.github.robwin.swagger2markup.spi.SecurityDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -65,11 +67,11 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build(){
         Map<String, SecuritySchemeDefinition> definitions = globalContext.getSwagger().getSecurityDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
             buildSecurityTitle(SECURITY);
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildSecuritySchemeDefinitionsSection(definitions);
-            applySecurityDocumentExtension(new SecurityDocumentExtension.Context(SecurityDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }
@@ -81,12 +83,12 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> definitions) {
         for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
-            markupDocBuilder.sectionTitleLevel2(entry.getKey());
-            SecuritySchemeDefinition securityScheme = entry.getValue();
-            buildSecurityScheme(securityScheme);
-            if (logger.isInfoEnabled()) {
-                logger.info("SecuritySchemeDefinition processed: {}", securityScheme.getType());
-            }
+            String definitionName = entry.getKey();
+            SecuritySchemeDefinition definition = entry.getValue();
+            applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
+            markupDocBuilder.sectionTitleLevel2(definitionName);
+            buildSecurityScheme(definition);
+            applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
         }
     }
 
@@ -122,7 +124,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applySecurityDocumentExtension(SecurityDocumentExtension.Context context) {
+    private void applySecurityDocumentExtension(Context context) {
         for (SecurityDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(SecurityDocumentExtension.class)) {
             extension.apply(context);
         }

@@ -42,12 +42,21 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
          */
         private PathOperation operation;
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
             Validate.isTrue(position != Position.OPERATION_BEGIN && position != Position.OPERATION_END, "You must provide an operation for this position");
             this.position = position;
         }
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         * @param operation the current path operation
+         */
         public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
             super(docBuilder);
             Validate.notNull(operation);

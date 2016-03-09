@@ -52,6 +52,7 @@ import static io.github.robwin.swagger2markup.internal.utils.ListUtils.*;
 import static io.github.robwin.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.robwin.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
 import static io.github.robwin.swagger2markup.internal.utils.TagUtils.getTagDescription;
+import static io.github.robwin.swagger2markup.spi.PathsDocumentExtension.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -142,11 +143,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build() {
         Map<String, Path> paths = globalContext.getSwagger().getPaths();
         if (MapUtils.isNotEmpty(paths)) {
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
             buildPathsTitle();
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildsPathsSection(paths);
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }
@@ -221,7 +222,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyPathsDocumentExtension(PathsDocumentExtension.Context context) {
+    private void applyPathsDocumentExtension(Context context) {
         for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(PathsDocumentExtension.class)) {
             extension.apply(context);
         }
@@ -292,7 +293,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_BEGIN, docBuilder, operation));
+            applyPathsDocumentExtension(new Context(Position.OPERATION_BEGIN, docBuilder, operation));
             buildDeprecatedSection(operation, docBuilder);
             buildOperationTitle(operation, docBuilder);
             buildDescriptionSection(operation, docBuilder);
@@ -304,7 +305,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             buildTagsSection(operation, docBuilder);
             buildSecuritySchemeSection(operation, docBuilder);
             buildExamplesSection(operation, docBuilder);
-            applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_END, docBuilder, operation));
+            applyPathsDocumentExtension(new Context(Position.OPERATION_END, docBuilder, operation));
         }
     }
 

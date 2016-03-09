@@ -32,6 +32,10 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
     public static class Context extends ContentContext {
         private Position position;
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
             this.position = position;

@@ -43,6 +43,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static io.github.robwin.swagger2markup.internal.utils.IOUtils.normalizeName;
+import static io.github.robwin.swagger2markup.spi.DefinitionsDocumentExtension.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static io.github.robwin.swagger2markup.internal.utils.MapUtils.toKeySet;
@@ -93,11 +94,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build() {
         Map<String, Model> definitions = globalContext.getSwagger().getDefinitions();
         if (MapUtils.isNotEmpty(definitions)) {
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
             buildDefinitionsTitle(DEFINITIONS);
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildDefinitionsSection(definitions);
-            applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }
@@ -130,7 +131,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyDefinitionsDocumentExtension(DefinitionsDocumentExtension.Context context) {
+    private void applyDefinitionsDocumentExtension(Context context) {
         for (DefinitionsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(DefinitionsDocumentExtension.class)) {
             extension.apply(context);
         }
@@ -198,11 +199,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
-        addDefinitionTitle(definitionName, null, docBuilder);
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
+        buildDefinitionTitle(definitionName, null, docBuilder);
         descriptionSection(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(DefinitionsDocumentExtension.Position.DEFINITION_END, docBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
     }
 
     /**
@@ -212,7 +213,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
-        addDefinitionTitle(docBuilder.copy().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+        buildDefinitionTitle(docBuilder.copy().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**
@@ -222,7 +223,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param anchor     optional anchor (null => auto-generate from title)
      * @param docBuilder the docbuilder do use for output
      */
-    private void addDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
+    private void buildDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
     }
 

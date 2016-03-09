@@ -48,15 +48,26 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
          */
         private Model model;
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
             Validate.isTrue(position != Position.DEFINITION_BEGIN && position != Position.DEFINITION_END, "You must provide a definitionName for this position");
             this.position = position;
         }
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         * @param definitionName the name of the current definition
+         * @param model the current Model of the definition
+         */
         public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
             super(docBuilder);
             Validate.notNull(definitionName);
+            Validate.notNull(model);
             this.position = position;
             this.definitionName = definitionName;
             this.model = model;

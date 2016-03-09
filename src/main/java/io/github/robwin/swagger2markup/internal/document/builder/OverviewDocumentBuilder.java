@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import static io.github.robwin.swagger2markup.spi.OverviewDocumentExtension.*;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -76,9 +77,9 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         Swagger swagger = globalContext.getSwagger();
         Info info = swagger.getInfo();
         buildDocumentTitle(info.getTitle());
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOCUMENT_BEFORE, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
         buildOverviewTitle(OVERVIEW);
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOCUMENT_BEGIN, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
         buildDescription(info.getDescription());
         buildVersionInfoSection(info.getVersion());
         buildContactInfoSection(info.getContact());
@@ -87,7 +88,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         buildTagsSection(swagger.getTags());
         buildConsumesSection(swagger.getConsumes());
         buildProducesSection(swagger.getProduces());
-        applyOverviewDocumentExtension(new OverviewDocumentExtension.Context(OverviewDocumentExtension.Position.DOCUMENT_END, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
         return new MarkupDocument(markupDocBuilder);
     }
 
@@ -194,7 +195,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param context context
      */
-    private void applyOverviewDocumentExtension(OverviewDocumentExtension.Context context) {
+    private void applyOverviewDocumentExtension(Context context) {
         for (OverviewDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(OverviewDocumentExtension.class)) {
             extension.apply(context);
         }

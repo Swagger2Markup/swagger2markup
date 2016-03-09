@@ -16,7 +16,10 @@
 
 package io.github.robwin.swagger2markup.spi;
 
+import com.google.common.base.Optional;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.swagger.models.auth.SecuritySchemeDefinition;
+import org.apache.commons.lang3.Validate;
 
 /**
  * A SecurityContentExtension can be used to extend the security document.
@@ -26,19 +29,57 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
     public enum Position {
         DOCUMENT_BEFORE,
         DOCUMENT_BEGIN,
-        DOCUMENT_END
+        DOCUMENT_END,
+        DEFINITION_BEGIN,
+        DEFINITION_END
+
     }
 
     public static class Context extends ContentContext {
         private Position position;
+        /**
+         * null if position == DOC_*
+         */
+        private String definitionName;
+        /**
+         * null if position == DOC_*
+         */
+        private SecuritySchemeDefinition definition;
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
             this.position = position;
         }
 
+        /**
+         * @param position the current position
+         * @param docBuilder the MarkupDocBuilder
+         * @param definitionName the name of the current definition
+         * @param definition the current security scheme definition
+         */
+        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, SecuritySchemeDefinition definition) {
+            super(docBuilder);
+            Validate.notNull(definitionName);
+            Validate.notNull(definition);
+            this.position = position;
+            this.definitionName = definitionName;
+            this.definition = definition;
+        }
+
         public Position getPosition() {
             return position;
+        }
+
+        public Optional<String> getDefinitionName() {
+            return Optional.fromNullable(definitionName);
+        }
+
+        public Optional<SecuritySchemeDefinition> getDefinition() {
+            return Optional.fromNullable(definition);
         }
     }
 
@@ -59,6 +100,10 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
             case DOCUMENT_BEGIN:
             case DOCUMENT_END:
                 levelOffset = 1;
+                break;
+            case DEFINITION_BEGIN:
+            case DEFINITION_END:
+                levelOffset = 2;
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown position '%s'", context.position));
