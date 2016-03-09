@@ -198,7 +198,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         newLine();
         Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
             public String transform(final MarkupTableColumn header) {
-                return escapeTableCell(defaultString(header.header));
+                return escapeTableCell(replaceNewLinesWithWhiteSpace(defaultString(header.header)));
             }
         });
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
@@ -213,7 +213,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         for (List<String> row : cells) {
             Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
                 public String transform(final String cell) {
-                    return escapeTableCell(cell);
+                    return escapeTableCell(replaceNewLines(cell));
                 }
             });
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(cellList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);

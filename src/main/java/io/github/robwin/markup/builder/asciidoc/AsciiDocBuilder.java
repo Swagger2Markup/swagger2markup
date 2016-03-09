@@ -209,7 +209,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (hasHeader) {
             Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
                 public String transform(final MarkupTableColumn header) {
-                    return escapeTableCell(defaultString(header.header));
+                    return escapeTableCell(replaceNewLinesWithWhiteSpace(defaultString(header.header)));
                 }
             });
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(headerList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
@@ -218,7 +218,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         for (List<String> row : cells) {
             Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
                 public String transform(final String cell) {
-                    return escapeTableCell(cell);
+                    return escapeTableCell(replaceNewLines(defaultString(cell)));
                 }
             });
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(cellList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
