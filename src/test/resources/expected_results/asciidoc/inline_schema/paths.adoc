@@ -20,8 +20,7 @@ Dummy description
 |Type|Name|Description|Required|Schema|Default
 |Query|Option|An optional option|false|string|
 |Query|Version|The API version|false|string|
-|Body|LaunchCommandRequest|Launch something new
-|false|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>|
+|Body|LaunchCommandRequest|Launch something new|false|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>|
 |===
 
 [[_launchcommand_post_launchcommandrequest]]

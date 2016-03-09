@@ -27,8 +27,7 @@ paths:
           type: string
           in: query
         - name: LaunchCommandRequest
-          description: |
-            Launch something new
+          description: Launch something new
           in: body
           schema:
             description: Inline schema
