@@ -32,6 +32,7 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String OVERVIEW_ANCHOR = "overview";
+    private static final String COLON = " : ";
     private final String OVERVIEW;
     private final String CURRENT_VERSION;
     private final String VERSION;
@@ -80,7 +81,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
         buildOverviewTitle(OVERVIEW);
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-        buildDescription(info.getDescription());
+        buildDescriptionParagraph(info.getDescription());
         buildVersionInfoSection(info.getVersion());
         buildContactInfoSection(info.getContact());
         buildLicenseInfoSection(info.getLicense(), info.getTermsOfService());
@@ -103,13 +104,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private void buildVersionInfoSection(String version) {
         if(isNotBlank(version)){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
-            this.markupDocBuilder.textLine(VERSION + " : " + version);
-        }
-    }
-
-    private void buildDescription(String description) {
-        if(isNotBlank(description)){
-            this.markupDocBuilder.textLine(description);
+            this.markupDocBuilder.textLine(VERSION + COLON + version);
         }
     }
 
@@ -117,10 +112,10 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
             if(isNotBlank(contact.getName())){
-                this.markupDocBuilder.textLine(CONTACT_NAME + " : " + contact.getName());
+                this.markupDocBuilder.textLine(CONTACT_NAME + COLON + contact.getName());
             }
             if(isNotBlank(contact.getEmail())){
-                this.markupDocBuilder.textLine(CONTACT_EMAIL + " : " + contact.getEmail());
+                this.markupDocBuilder.textLine(CONTACT_EMAIL + COLON + contact.getEmail());
             }
         }
     }
@@ -129,14 +124,14 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
             if (isNotBlank(license.getName())) {
-                this.markupDocBuilder.textLine(LICENSE + " : " + license.getName());
+                this.markupDocBuilder.textLine(LICENSE + COLON + license.getName());
             }
             if (isNotBlank(license.getUrl())) {
-                this.markupDocBuilder.textLine(LICENSE_URL + " : " + license.getUrl());
+                this.markupDocBuilder.textLine(LICENSE_URL + COLON + license.getUrl());
             }
         }
         if(isNotBlank(termOfService)){
-            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + " : " + termOfService);
+            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + COLON + termOfService);
         }
     }
 
@@ -144,17 +139,17 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
             if (isNotBlank(swagger.getHost())) {
-                this.markupDocBuilder.textLine(HOST + " : " + swagger.getHost());
+                this.markupDocBuilder.textLine(HOST + COLON + swagger.getHost());
             }
             if (isNotBlank(swagger.getBasePath())) {
-                this.markupDocBuilder.textLine(BASE_PATH + " : " + swagger.getBasePath());
+                this.markupDocBuilder.textLine(BASE_PATH + COLON + swagger.getBasePath());
             }
             if (isNotEmpty(swagger.getSchemes())) {
                 List<String> schemes = new ArrayList<>();
                 for (Scheme scheme : swagger.getSchemes()) {
                     schemes.add(scheme.toString());
                 }
-                this.markupDocBuilder.textLine(SCHEMES + " : " + join(schemes, ", "));
+                this.markupDocBuilder.textLine(SCHEMES + COLON + join(schemes, ", "));
             }
         }
     }
@@ -167,7 +162,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                 String name = tag.getName();
                 String description = tag.getDescription();
                 if(isNoneBlank(description)){
-                    tagsList.add(name + " : " +   description);
+                    tagsList.add(name + COLON +   description);
                 }else{
                     tagsList.add(name);
                 }
