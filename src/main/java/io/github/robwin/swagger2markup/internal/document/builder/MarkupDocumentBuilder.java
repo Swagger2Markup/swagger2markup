@@ -41,6 +41,7 @@ import java.util.*;
 
 import static io.github.robwin.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static org.apache.commons.lang3.StringUtils.defaultString;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
@@ -151,6 +152,12 @@ public abstract class MarkupDocumentBuilder {
         }
 
         return localDefinitions;
+    }
+
+    protected void buildDescriptionParagraph(String description) {
+        if(isNotBlank(description)){
+            this.markupDocBuilder.paragraph(description);
+        }
     }
 
     /**
