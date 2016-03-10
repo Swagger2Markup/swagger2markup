@@ -1,5 +1,5 @@
 
-[[_security]]
+[[_securityscheme]]
 == Security
 
 === api_key

@@ -1,5 +1,5 @@
 
-<a name="security"></a>
+<a name="securityscheme"></a>
 ## Security
 
 ### api_key
