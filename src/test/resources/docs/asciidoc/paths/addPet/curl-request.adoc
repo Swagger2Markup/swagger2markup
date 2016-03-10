@@ -1,7 +1,0 @@
-== curl-request
-
-[source,bash]
-----
-$ curl 'http://localhost:8080/api/pet/' -i -X POST -H 'Content-Type: application/json' -H 'Content-Length: 111' -d '{"id":1,"category":{"id":1,"name":"Hund"},"name":"Wuffy","photoUrls":[],"tags":[],"status":null,"identifier":1}'
-----
-
