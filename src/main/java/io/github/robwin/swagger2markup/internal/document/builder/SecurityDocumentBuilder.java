@@ -24,7 +24,6 @@ import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -38,7 +37,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
-    private static final String SECURITY_ANCHOR = "security";
+    private static final String SECURITY_ANCHOR = "securityScheme";
     private final String SECURITY;
     private final String TYPE;
     private final String NAME;
@@ -80,7 +79,6 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private void buildSecurityTitle(String title) {
         this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, SECURITY_ANCHOR);
-
     }
 
     private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> definitions) {
@@ -92,12 +90,6 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             buildDescriptionParagraph(definition.getDescription());
             buildSecurityScheme(definition);
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
-        }
-    }
-
-    private void buildDescriptionParagraph(String description) {
-        if(StringUtils.isNotBlank(description)) {
-            markupDocBuilder.paragraph(description);
         }
     }
 
