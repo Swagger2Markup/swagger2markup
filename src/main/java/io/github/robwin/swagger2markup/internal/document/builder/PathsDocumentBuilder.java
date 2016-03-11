@@ -737,11 +737,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 Map<String, Property> headers = response.getHeaders();
                 if(MapUtils.isNotEmpty(headers)) {
                     docBuilder.boldTextLine(HEADERS_COLUMN);
-                    for(Map.Entry<String, Property> entry : headers.entrySet()){
-                        Property property = entry.getValue();
+                    for(Map.Entry<String, Property> header : headers.entrySet()){
+                        Property property = header.getValue();
                         Type propertyType = PropertyUtils.getType(property, null);
-                        responseHeaderCells.add(Arrays.asList(entry.getKey(),
-                                response.getDescription(),
+                        responseHeaderCells.add(Arrays.asList(header.getKey(),
+                                property.getDescription(),
                                 propertyType.displaySchema(markupDocBuilder),
                                 PropertyUtils.getDefaultValue(property)));
                     }

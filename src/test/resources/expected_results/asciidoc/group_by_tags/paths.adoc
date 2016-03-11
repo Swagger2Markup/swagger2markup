@@ -154,9 +154,9 @@ Multiple status values can be provided with comma seperated strings
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 
@@ -219,9 +219,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 
@@ -332,9 +332,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 
@@ -449,9 +449,9 @@ POST /stores/order
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 
@@ -505,9 +505,9 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 
@@ -718,9 +718,9 @@ GET /users/login
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 
@@ -792,9 +792,9 @@ GET /users/{username}
 [options="header", cols=".^1h,.^3,.^1,.^1"]
 |===
 |Name|Description|Schema|Default
-|X-Rate-Limit-Limit|successful operation|integer|
-|X-Rate-Limit-Remaining|successful operation|integer|
-|X-Rate-Limit-Reset|successful operation|integer|
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
 |===
 
 

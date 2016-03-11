@@ -62,7 +62,7 @@ public class MarkdownConverterTest {
     public void testSwagger2MarkdownConversion() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        Path outputDirectory = Paths.get("build/docs/markdown/default");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When

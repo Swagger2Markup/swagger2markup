@@ -137,9 +137,9 @@ Multiple status values can be provided with comma seperated strings
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
@@ -196,9 +196,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
@@ -302,9 +302,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
@@ -406,9 +406,9 @@ POST /stores/order
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
@@ -458,9 +458,9 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
@@ -661,9 +661,9 @@ GET /users/login
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
@@ -735,9 +735,9 @@ GET /users/{username}
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|successful operation|integer||
-|X-Rate-Limit-Remaining|successful operation|integer||
-|X-Rate-Limit-Reset|successful operation|integer||
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
