@@ -20,6 +20,7 @@ package io.github.robwin.markup.builder;
 
 
 import io.github.robwin.markup.builder.asciidoc.AsciiDocBuilder;
+import io.github.robwin.markup.builder.atlassian.AtlassianWikiMarkupBuilder;
 import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
 
 /**
@@ -42,6 +43,7 @@ public final class MarkupDocBuilders {
         switch(markupLanguage){
             case MARKDOWN: return new MarkdownBuilder();
             case ASCIIDOC: return new AsciiDocBuilder();
+            case ATLASSIAN: return new AtlassianWikiMarkupBuilder();
             default: return new AsciiDocBuilder();
         }
     }
