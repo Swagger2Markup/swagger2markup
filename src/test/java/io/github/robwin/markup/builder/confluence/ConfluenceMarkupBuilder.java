@@ -114,7 +114,9 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder unorderedList(List<String> list) {
         documentBuilder.append(newLine).append(newLine);
-        list.forEach(item -> documentBuilder.append("* ").append(item).append(newLine));
+        for (String item : list) {
+            documentBuilder.append("* ").append(item).append(newLine);
+        }
         documentBuilder.append(newLine);
         return this;
     }
@@ -135,15 +137,19 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append(newLine);
         if (columnSpecs != null && !columnSpecs.isEmpty()) {
             documentBuilder.append("||");
-            columnSpecs.forEach(spec -> documentBuilder.append(escapeCellContent(spec.header)).append("||"));
+            for (MarkupTableColumn column : columnSpecs) {
+                documentBuilder.append(escapeCellContent(column.header)).append("||");
+            }
             documentBuilder.append(newLine);
         }
-        if (cells != null && !cells.isEmpty()) {
-            cells.forEach(row -> {
+        if (cells != null) {
+            for (List<String> row : cells) {
                 documentBuilder.append("|");
-                row.forEach(cell -> documentBuilder.append(escapeCellContent(cell)).append("|"));
+                for (String cell : row) {
+                    documentBuilder.append(escapeCellContent(cell)).append("|");
+                }
                 documentBuilder.append(newLine);
-            });
+            }
         }
         return this;
     }
@@ -190,7 +196,10 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
         final BufferedReader reader = new BufferedReader(markupText);
-        reader.lines().forEach(documentBuilder::append);
+        String line;
+        while ((line = reader.readLine()) != null) {
+            documentBuilder.append(line);
+        }
         return this;
     }
 
