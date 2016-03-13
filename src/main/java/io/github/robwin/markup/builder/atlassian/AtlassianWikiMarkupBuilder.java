@@ -1,7 +1,6 @@
-package io.github.robwin.markup.builder.confluence;
+package io.github.robwin.markup.builder.atlassian;
 
 import io.github.robwin.markup.builder.*;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,14 +10,15 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-@Ignore
-public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
+public final class AtlassianWikiMarkupBuilder extends AbstractMarkupDocBuilder {
 
     private static final String FILE_EXTENSION = ".txt";
 
-    public static final MarkupLanguage CONFLUENCE = new MarkupLanguage(FILE_EXTENSION, ConfluenceMarkupBuilder.class);
+    public AtlassianWikiMarkupBuilder() {
+        super(System.getProperty("line.separator"));
+    }
 
-    public ConfluenceMarkupBuilder(String lineSeparator) {
+    public AtlassianWikiMarkupBuilder(String lineSeparator) {
         super(lineSeparator);
     }
 
@@ -30,7 +30,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         documentBuilder.append(newLine);
-        documentBuilder.append(".h").append(level + 1).append(" ").append(title);
+        documentBuilder.append("h").append(level + 1).append(". ").append(title);
         if (isNotBlank(anchor)) {
             documentBuilder.append(" {anchor:").append(anchor).append("}");
         }
