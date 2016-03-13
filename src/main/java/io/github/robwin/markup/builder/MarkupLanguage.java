@@ -19,26 +19,36 @@
 
 package io.github.robwin.markup.builder;
 
+import io.github.robwin.markup.builder.asciidoc.AsciiDocBuilder;
+import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
+
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author Robert Winkler
  */
-public enum MarkupLanguage {
-    ASCIIDOC(".adoc,.asciidoc"),
-    MARKDOWN(".md,.markdown");
+public final class MarkupLanguage {
+    public static final MarkupLanguage ASCIIDOC = new MarkupLanguage(".adoc,.asciidoc", AsciiDocBuilder.class);
+    public static final MarkupLanguage MARKDOWN = new MarkupLanguage(".md,.markdown", MarkdownBuilder.class);
 
     private final String fileNameExtensions;
+    private final Class<? extends MarkupDocBuilder> markupDocBuilderClass;
 
     /**
-     * @param fileNameExtensions file name suffix
+     * @param fileNameExtensions    file name suffix
+     * @param markupDocBuilderClass the builder class
      */
-    private MarkupLanguage(final String fileNameExtensions) {
+    public MarkupLanguage(final String fileNameExtensions, Class<? extends MarkupDocBuilder> markupDocBuilderClass) {
         this.fileNameExtensions = fileNameExtensions;
+        this.markupDocBuilderClass = markupDocBuilderClass;
     }
 
     public List<String> getFileNameExtensions() {
         return Arrays.asList(fileNameExtensions.split(","));
+    }
+
+    public Class<? extends MarkupDocBuilder> getMarkupDocBuilderClass() {
+        return markupDocBuilderClass;
     }
 }

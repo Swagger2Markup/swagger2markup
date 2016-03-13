@@ -19,18 +19,24 @@
 package io.github.robwin.markup.builder;
 
 
-import io.github.robwin.markup.builder.asciidoc.AsciiDocBuilder;
-import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * @author Robert Winkler
  */
 public final class MarkupDocBuilders {
 
-    public static final String LINE_SEPARATOR_UNIX	= "\n";
-    public static final String LINE_SEPARATOR_WINDOWS= "\r\n";
+    public static final String LINE_SEPARATOR_UNIX = "\n";
+    public static final String LINE_SEPARATOR_WINDOWS = "\r\n";
 
-    private MarkupDocBuilders(){}
+    private static final Logger LOGGER = LoggerFactory.getLogger(MarkupDocBuilder.class);
+
+    private MarkupDocBuilders() {
+    }
 
     /**
      * Creates a MarkupDocBuilder which uses the system line separator.
@@ -38,12 +44,8 @@ public final class MarkupDocBuilders {
      * @param markupLanguage the markup language which is used to generate the files
      * @return a MarkupDocBuilder
      */
-    public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage){
-        switch(markupLanguage){
-            case MARKDOWN: return new MarkdownBuilder();
-            case ASCIIDOC: return new AsciiDocBuilder();
-            default: return new AsciiDocBuilder();
-        }
+    public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage) {
+        return documentBuilder(markupLanguage, null);
     }
 
     /**
@@ -51,31 +53,36 @@ public final class MarkupDocBuilders {
      * If the custom line separator is null, it uses the system line separator.
      *
      * @param markupLanguage the markup language which is used to generate the files
-     * @param lineSeparator the line separator which should be used
+     * @param lineSeparator  the line separator which should be used
      * @return a MarkupDocBuilder
      */
-    public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage, LineSeparator lineSeparator){
+    public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage, LineSeparator lineSeparator) {
         String lineSeparatorAsString;
-        if(lineSeparator == null){
+        if (lineSeparator == null) {
             lineSeparatorAsString = System.getProperty("line.separator");
-        }else{
+        } else {
             lineSeparatorAsString = lineSeparator.toString();
         }
-        switch(markupLanguage){
-            case MARKDOWN: return new MarkdownBuilder(lineSeparatorAsString);
-            case ASCIIDOC: return new AsciiDocBuilder(lineSeparatorAsString);
-            default: return new AsciiDocBuilder(lineSeparatorAsString);
-        }
+        return createInstance(markupLanguage, lineSeparatorAsString);
     }
 
     /**
      * Instantiate a new builder from {@code docBuilder} with the same configuration.
      * You can use it to build intermediate MarkupDocBuilder for composition purpose.
      */
-    public static MarkupDocBuilder documentBuilder(MarkupDocBuilder docBuilder){
-       return docBuilder.copy();
+    public static MarkupDocBuilder documentBuilder(MarkupDocBuilder docBuilder) {
+        return docBuilder.copy();
     }
 
 
-
+    private static MarkupDocBuilder createInstance(MarkupLanguage markupLanguage, String lineSeparator) {
+        final Class<? extends MarkupDocBuilder> clazz = markupLanguage.getMarkupDocBuilderClass();
+        try {
+            final Constructor<? extends MarkupDocBuilder> constructor = clazz.getConstructor(String.class);
+            return constructor.newInstance(lineSeparator);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            LOGGER.error("Unable to instantiate builder!", e);
+            throw new IllegalStateException(e);
+        }
+    }
 }
