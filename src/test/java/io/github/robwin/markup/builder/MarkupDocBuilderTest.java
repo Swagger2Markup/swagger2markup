@@ -39,17 +39,11 @@ public class MarkupDocBuilderTest {
 
     private final String newLine = System.getProperty("line.separator");
 
-    private List<String> tableRowsInPSV;
     private List<MarkupTableColumn> tableColumns;
     private List<List<String>> tableCells;
 
     @Before
     public void setUp() {
-        tableRowsInPSV = new ArrayList<>();
-        tableRowsInPSV.add("Header 1 | Header 2 | Header 3");
-        tableRowsInPSV.add("Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3");
-        tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
-
         tableColumns = Arrays.asList(
                 new MarkupTableColumn().withHeader("Header1"),
                 new MarkupTableColumn().withWidthRatio(2),
@@ -90,7 +84,6 @@ public class MarkupDocBuilderTest {
                 .block("Literal", MarkupBlockStyle.LITERAL, null, MarkupAdmonition.NOTE)
                 .block("Sidebar", MarkupBlockStyle.SIDEBAR, null, MarkupAdmonition.TIP)
                 .block("Passthrough", MarkupBlockStyle.PASSTHROUGH, null, MarkupAdmonition.WARNING)
-                .tableWithHeaderRow(tableRowsInPSV)
                 .table(tableCells)
                 .tableWithColumnSpecs(tableColumns, tableCells)
                 .sectionTitleLevel1("Section Level 1b")
@@ -151,8 +144,7 @@ public class MarkupDocBuilderTest {
                 .block("Literal", MarkupBlockStyle.LITERAL, null, MarkupAdmonition.NOTE)
                 .block("Sidebar", MarkupBlockStyle.SIDEBAR, null, MarkupAdmonition.TIP)
                 .block("Passthrough", MarkupBlockStyle.PASSTHROUGH, null, MarkupAdmonition.WARNING)
-                .tableWithHeaderRow(tableRowsInPSV)
-                        //.table(tableCells)
+                //.table(tableCells)
                 .tableWithColumnSpecs(tableColumns, tableCells)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
@@ -298,7 +290,7 @@ public class MarkupDocBuilderTest {
         MarkupDocBuilder copy = builder.copy();
 
         Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
-        AbstractMarkupDocBuilder internalCopy = (AbstractMarkupDocBuilder)copy;
+        AbstractMarkupDocBuilder internalCopy = (AbstractMarkupDocBuilder) copy;
         Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
         Assert.assertEquals("anchor-", internalCopy.anchorPrefix);
 
@@ -306,7 +298,7 @@ public class MarkupDocBuilderTest {
         copy = builder.copy();
 
         Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
-        internalCopy = (AbstractMarkupDocBuilder)copy;
+        internalCopy = (AbstractMarkupDocBuilder) copy;
         Assert.assertEquals(LineSeparator.WINDOWS.toString(), internalCopy.newLine);
         Assert.assertNull(internalCopy.anchorPrefix);
 

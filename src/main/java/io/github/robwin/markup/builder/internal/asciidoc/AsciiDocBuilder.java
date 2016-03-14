@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -36,13 +37,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
-    public AsciiDocBuilder(){
-        super();
-    }
-
-    public AsciiDocBuilder(String newLine){
-        super(newLine);
-    }
+    private static final Pattern TITLE_PATTERN = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", AsciiDoc.TITLE, MAX_TITLE_LEVEL + 1));
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
         put(MarkupBlockStyle.EXAMPLE, "====");
@@ -51,6 +46,14 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         put(MarkupBlockStyle.PASSTHROUGH, "++++");
         put(MarkupBlockStyle.SIDEBAR, "****");
     }};
+
+    public AsciiDocBuilder(){
+        super();
+    }
+
+    public AsciiDocBuilder(String newLine){
+        super(newLine);
+    }
 
     @Override
     public MarkupDocBuilder copy() {
@@ -120,18 +123,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (language != null)
             documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
         block(text, MarkupBlockStyle.LISTING);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV) {
-        newLine();
-        documentBuilder.append("[options=\"header\"]").append(newLine);
-        documentBuilder.append(AsciiDoc.TABLE).append(newLine);
-        for (String row : rowsInPSV) {
-            documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(row).append(newLine);
-        }
-        documentBuilder.append(AsciiDoc.TABLE).append(newLine).append(newLine);
         return this;
     }
 
@@ -238,7 +229,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkup(AsciiDoc.TITLE, markupText, levelOffset);
+        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, levelOffset);
         return this;
     }
 

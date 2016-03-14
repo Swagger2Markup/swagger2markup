@@ -346,9 +346,6 @@ public interface MarkupDocBuilder {
      */
     MarkupDocBuilder unorderedListItem(String item);
 
-    @Deprecated
-    MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV);
-
     /**
      * Builds a table without column specifiers, using specified cell values.<br/>
      * This is an alias for {@link #tableWithColumnSpecs(List, List) tableWithColumnSpecs(null, cells)}.<br/>

@@ -16,31 +16,33 @@
  *
  *
  */
-package io.github.robwin.markup.builder.confluence;
+package io.github.robwin.markup.builder.confluenceMarkup;
 
 import io.github.robwin.markup.builder.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public final class ConfluenceBuilder extends AbstractMarkupDocBuilder {
+public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
-    public ConfluenceBuilder() {
+    private static final Pattern TITLE_PATTERN = Pattern.compile("^h([0-9])\\.\\s+(.*)$");
+
+    public ConfluenceMarkupBuilder() {
         super();
     }
 
-    public ConfluenceBuilder(String newLine) {
+    public ConfluenceMarkupBuilder(String newLine) {
         super(newLine);
     }
 
     @Override
     public MarkupDocBuilder copy() {
-        return new ConfluenceBuilder(newLine).withAnchorPrefix(anchorPrefix);
+        return new ConfluenceMarkupBuilder(newLine).withAnchorPrefix(anchorPrefix);
     }
 
     @Override
@@ -65,7 +67,8 @@ public final class ConfluenceBuilder extends AbstractMarkupDocBuilder {
             case SIDEBAR:
                 documentBuilder.append(newLine).append("{quote}").append(newLine);
                 if (isNotBlank(title)) {
-                    documentBuilder.append(title).append(" \\\\ ");
+                    documentBuilder.append(title);
+                    newLine(true);
                 }
                 documentBuilder.append(text);
                 documentBuilder.append(newLine).append("{quote}").append(newLine);
@@ -149,11 +152,6 @@ public final class ConfluenceBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV) {
-        return this;
-    }
-
-    @Override
     public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
         documentBuilder.append(newLine);
         if (columnSpecs != null && !columnSpecs.isEmpty()) {
@@ -179,11 +177,11 @@ public final class ConfluenceBuilder extends AbstractMarkupDocBuilder {
         if (content == null) {
             return " ";
         }
-        return content.replace("|", "\\|").replace(newLine, "\\\\");
+        return content.replace("|", "\\|").replace(newLine, ConfluenceMarkup.LINE_BREAK.toString());
     }
 
     private String normalizeAnchor(String anchor) {
-        return normalizeAnchor(Confluence.SPACE_ESCAPE, anchor);
+        return normalizeAnchor(ConfluenceMarkup.SPACE_ESCAPE, anchor);
     }
 
 
@@ -215,22 +213,18 @@ public final class ConfluenceBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder newLine(boolean forceLineBreak) {
-        documentBuilder.append(" \\\\ ").append(newLine);
+        newLine(ConfluenceMarkup.LINE_BREAK, forceLineBreak);
         return this;
     }
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        final BufferedReader reader = new BufferedReader(markupText);
-        String line;
-        while ((line = reader.readLine()) != null) {
-            documentBuilder.append(line);
-        }
+        importMarkupStyle2(TITLE_PATTERN, "h%d. %s", false, markupText, levelOffset);
         return this;
     }
 
     @Override
     public String addFileExtension(String fileName) {
-        return addFileExtension(Confluence.FILE_EXTENSION, fileName);
+        return addFileExtension(ConfluenceMarkup.FILE_EXTENSION, fileName);
     }
 }
