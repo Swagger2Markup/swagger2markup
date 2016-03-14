@@ -16,40 +16,34 @@
  *
  *
  */
-package io.github.robwin.markup.builder.asciidoc;
+package io.github.robwin.markup.builder.internal.markdown;
 
-
-import io.github.robwin.markup.builder.Markup;
+import io.github.robwin.markup.builder.internal.Markup;
 
 /**
  * @author Robert Winkler
  */
-public enum AsciiDoc implements Markup {
-    LABELED(":: "),
-    TABLE("|==="),
+public enum Markdown implements Markup {
+    HARDBREAKS(""),
     TABLE_COLUMN_DELIMITER("|"),
-    TABLE_COLUMN_DELIMITER_ESCAPE("\\|"), // AsciiDoctor supports both \| and {vbar}
-    LISTING("----"),
-    HARDBREAKS("[%hardbreaks]"),
-    TITLE("="),
-    DOCUMENT_TITLE("= "),
-    BOLD("*"),
-    ITALIC("_"),
+    TABLE_COLUMN_DELIMITER_ESCAPE("\\|"),
+    TABLE_ROW("-"),
+    LISTING("```"),
+    TITLE("#"),
+    DOCUMENT_TITLE("# "),
+    BOLD("**"),
+    ITALIC("*"),
     LIST_ENTRY("* "),
-    CROSS_REFERENCE_START("<<"),
-    CROSS_REFERENCE_END(">>"),
-    ANCHOR_START("[["),
-    ANCHOR_END("]]"),
-    FILE_EXTENSION("adoc"),
-    SPACE_ESCAPE("_"),
-    LINE_BREAK(" +");
+    FILE_EXTENSION("md"),
+    SPACE_ESCAPE("-"),
+    LINE_BREAK("  ");
 
     private final String markup;
 
     /**
      * @param markup AsciiDoc markup
      */
-    AsciiDoc(final String markup) {
+    private Markdown(final String markup) {
         this.markup = markup;
     }
 

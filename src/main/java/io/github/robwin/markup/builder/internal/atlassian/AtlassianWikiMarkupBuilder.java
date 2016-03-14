@@ -1,6 +1,7 @@
-package io.github.robwin.markup.builder.atlassian;
+package io.github.robwin.markup.builder.internal.atlassian;
 
 import io.github.robwin.markup.builder.*;
+import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
 
 import java.io.BufferedReader;
 import java.io.IOException;

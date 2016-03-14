@@ -1,7 +1,7 @@
-package io.github.robwin.markup.builder;
+package io.github.robwin.markup.builder.internal;
 
-import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
-import io.github.robwin.markup.builder.markdown.Markdown;
+import io.github.robwin.markup.builder.internal.asciidoc.AsciiDoc;
+import io.github.robwin.markup.builder.internal.markdown.Markdown;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Before;
 import org.junit.Test;

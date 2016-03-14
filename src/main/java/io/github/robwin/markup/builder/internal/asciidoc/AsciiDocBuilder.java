@@ -16,9 +16,11 @@
  *
  *
  */
-package io.github.robwin.markup.builder.asciidoc;
+package io.github.robwin.markup.builder.internal.asciidoc;
 
 import io.github.robwin.markup.builder.*;
+import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
+import io.github.robwin.markup.builder.internal.Markup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 
