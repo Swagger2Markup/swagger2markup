@@ -52,7 +52,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder copy() {
-        return new AsciiDocBuilder().withAnchorPrefix(anchorPrefix);
+        return new AsciiDocBuilder(newLine).withAnchorPrefix(anchorPrefix);
     }
 
     @Override
