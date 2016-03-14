@@ -11,7 +11,7 @@ ext {
     projectUrl = 'https://github.com/RobWin/markup-document-builder'
     licenseUrl = 'https://github.com/RobWin/markup-document-builder/blob/master/LICENSE.txt'
     scmUrl = 'https://github.com/RobWin/markup-document-builder.git'
-    issueTrackerUrl = 'https://github.com/RobWin/markup-document-builder/issues'
+    issuesUrl = 'https://github.com/RobWin/markup-document-builder/issues'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -100,7 +100,7 @@ bintray {
         repo = 'maven'
         name = 'swagger2markup'
         websiteUrl = projectUrl
-        issueTrackerUrl = issueTrackerUrl
+        issueTrackerUrl = issuesUrl
         vcsUrl = scmUrl
         desc = rootProject.description
         licenses = ['Apache-2.0']
