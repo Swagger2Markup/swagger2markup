@@ -60,8 +60,13 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder copy() {
-        return new MarkdownBuilder(newLine).withAnchorPrefix(anchorPrefix);
+    public MarkupDocBuilder copy(boolean copyBuffer) {
+        MarkdownBuilder builder = new MarkdownBuilder(newLine);
+
+        if (copyBuffer)
+            builder.documentBuilder = new StringBuilder(this.documentBuilder);
+
+        return builder.withAnchorPrefix(anchorPrefix);
     }
 
     @Override

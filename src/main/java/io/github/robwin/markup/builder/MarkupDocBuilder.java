@@ -508,9 +508,10 @@ public interface MarkupDocBuilder {
     /**
      * Builds a new instance of this builder with a state copy.
      *
+     * @param copyBuffer copy current buffer into the new instance
      * @return new builder instance with a state copy
      */
-    MarkupDocBuilder copy();
+    MarkupDocBuilder copy(boolean copyBuffer);
 
     /**
      * Add an extension to fileName depending on markup language.

@@ -41,8 +41,13 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder copy() {
-        return new ConfluenceMarkupBuilder(newLine).withAnchorPrefix(anchorPrefix);
+    public MarkupDocBuilder copy(boolean copyBuffer) {
+        ConfluenceMarkupBuilder builder = new ConfluenceMarkupBuilder(newLine);
+
+        if (copyBuffer)
+            builder.documentBuilder = new StringBuilder(this.documentBuilder);
+
+        return builder.withAnchorPrefix(anchorPrefix);
     }
 
     @Override

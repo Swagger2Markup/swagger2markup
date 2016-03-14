@@ -176,7 +176,7 @@ public class MarkupDocBuilderTest {
 
     @Test
     public void testToAtlassianWikiFile() throws IOException {
-        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN_WIKI);
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
 
         builder = builder.documentTitle("Test title")
                 .sectionTitleLevel(1, "Section Level 1a")
@@ -196,7 +196,7 @@ public class MarkupDocBuilderTest {
                 .sectionTitleWithAnchorLevel(5, "Section with anchor Level 5a")
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
-                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN_WIKI)", "java")
+                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP)", "java")
                 .block("Example", MarkupBlockStyle.EXAMPLE)
                 .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
                 .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
@@ -287,7 +287,7 @@ public class MarkupDocBuilderTest {
     @Test
     public void testCopy() {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX).withAnchorPrefix("anchor-");
-        MarkupDocBuilder copy = builder.copy();
+        MarkupDocBuilder copy = builder.copy(false);
 
         Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
         AbstractMarkupDocBuilder internalCopy = (AbstractMarkupDocBuilder) copy;
@@ -295,12 +295,22 @@ public class MarkupDocBuilderTest {
         Assert.assertEquals("anchor-", internalCopy.anchorPrefix);
 
         builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.WINDOWS);
-        copy = builder.copy();
+        copy = builder.copy(false);
 
         Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
         internalCopy = (AbstractMarkupDocBuilder) copy;
         Assert.assertEquals(LineSeparator.WINDOWS.toString(), internalCopy.newLine);
         Assert.assertNull(internalCopy.anchorPrefix);
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
+        builder.text("This is text");
+        copy = builder.copy(true);
+
+        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
+        internalCopy = (AbstractMarkupDocBuilder) copy;
+        Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
+        Assert.assertNull(internalCopy.anchorPrefix);
+        Assert.assertEquals("This is text", internalCopy.documentBuilder.toString());
 
     }
 }
