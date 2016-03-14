@@ -56,7 +56,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder copy() {
-        return new MarkdownBuilder().withAnchorPrefix(anchorPrefix);
+        return new MarkdownBuilder(newLine).withAnchorPrefix(anchorPrefix);
     }
 
     @Override

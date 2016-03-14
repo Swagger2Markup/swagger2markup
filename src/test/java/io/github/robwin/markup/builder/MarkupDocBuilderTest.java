@@ -46,7 +46,7 @@ public class MarkupDocBuilderTest {
     @Before
     public void setUp() {
         tableRowsInPSV = new ArrayList<>();
-        tableRowsInPSV.add("Header 1 | Header 2 | Header2");
+        tableRowsInPSV.add("Header 1 | Header 2 | Header 3");
         tableRowsInPSV.add("Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3");
         tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
 
@@ -290,5 +290,25 @@ public class MarkupDocBuilderTest {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
         builder.paragraph("Long text \n bla bla \r bla \r\n bla");
         Assert.assertEquals("Long text " + lineSeparator + " bla bla " + lineSeparator + " bla " + lineSeparator + " bla" + lineSeparator + lineSeparator, builder.toString());
+    }
+
+    @Test
+    public void testCopy() {
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX).withAnchorPrefix("anchor-");
+        MarkupDocBuilder copy = builder.copy();
+
+        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
+        AbstractMarkupDocBuilder internalCopy = (AbstractMarkupDocBuilder)copy;
+        Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
+        Assert.assertEquals("anchor-", internalCopy.anchorPrefix);
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.WINDOWS);
+        copy = builder.copy();
+
+        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
+        internalCopy = (AbstractMarkupDocBuilder)copy;
+        Assert.assertEquals(LineSeparator.WINDOWS.toString(), internalCopy.newLine);
+        Assert.assertNull(internalCopy.anchorPrefix);
+
     }
 }
