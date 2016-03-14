@@ -20,9 +20,9 @@ import com.google.common.collect.ImmutableMap;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
+import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.swagger.models.ComposedModel;
 import io.swagger.models.Model;
 import io.swagger.models.RefModel;
@@ -33,7 +33,6 @@ import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
@@ -42,11 +41,12 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
 
+import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
+import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
+import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
-import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.*;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 
 /**
  * @author Robert Winkler
@@ -160,7 +160,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildDefinition(Map<String, Model> definitions, String definitionName, Model model) {
 
         if (config.isSeparatedDefinitionsEnabled()) {
-            MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy();
+            MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy(false);
             buildDefinition(definitions, definitionName, model, defDocBuilder);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             try {
@@ -213,7 +213,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
-        buildDefinitionTitle(docBuilder.copy().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+        buildDefinitionTitle(docBuilder.copy(false).crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**

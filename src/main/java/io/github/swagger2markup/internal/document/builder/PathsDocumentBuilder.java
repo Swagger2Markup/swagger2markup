@@ -50,13 +50,13 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 import static io.github.swagger2markup.internal.utils.ListUtils.toSet;
 import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
 import static io.github.swagger2markup.internal.utils.TagUtils.getTagDescription;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
+import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -252,7 +252,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildOperation(PathOperation operation) {
         if (config.isSeparatedOperationsEnabled()) {
-            MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy();
+            MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy(false);
             buildOperation(operation, pathDocBuilder);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
 
@@ -329,7 +329,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
         String operationName = operationName(operation);
 
-        buildOperationTitle(docBuilder.copy().crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
+        buildOperationTitle(docBuilder.copy(false).crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
     }
 
     /**
@@ -659,7 +659,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    List<String> content = Arrays.asList(type, docBuilder.copy().crossReference(securityKey, securityKey).toString(),
+                    List<String> content = Arrays.asList(type, docBuilder.copy(false).crossReference(securityKey, securityKey).toString(),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }
