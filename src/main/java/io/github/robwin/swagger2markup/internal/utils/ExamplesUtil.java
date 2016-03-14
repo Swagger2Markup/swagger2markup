@@ -115,7 +115,7 @@ public class ExamplesUtil {
                     if (abstractSerializableParameterExample == null) {
                         Property item = ((AbstractSerializableParameter) parameter).getItems();
                         if (item != null) {
-                            abstractSerializableParameterExample = item.getExample();
+                            abstractSerializableParameterExample = PropertyUtils.convertExample(item.getExample(), item.getType());
                             if (abstractSerializableParameterExample == null) {
                                 abstractSerializableParameterExample = PropertyUtils.generateExample(item, markupDocBuilder);
                             }
@@ -211,7 +211,7 @@ public class ExamplesUtil {
     public static Map<String, Object> exampleMapForProperties(Map<String, Property> properties, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
         Map<String, Object> exampleMap = new HashMap<>();
         for (Map.Entry<String, Property> property : properties.entrySet()) {
-            Object exampleObject = property.getValue().getExample();
+            Object exampleObject = PropertyUtils.convertExample(property.getValue().getExample(), property.getValue().getType());
             if (exampleObject == null) {
                 if (property.getValue() instanceof RefProperty) {
                     exampleObject = generateExampleForRefModel(true, ((RefProperty) property.getValue()).getSimpleRef(), definitions, markupDocBuilder);
@@ -251,7 +251,7 @@ public class ExamplesUtil {
         } else {
             Property itemProperty = model.getItems();
             if (itemProperty.getExample() != null) {
-                return new Object[]{itemProperty.getExample()};
+                return new Object[]{PropertyUtils.convertExample(itemProperty.getExample(), itemProperty.getType())};
             } else if (itemProperty instanceof ArrayProperty) {
                 return new Object[]{generateExampleForArrayProperty((ArrayProperty) itemProperty, definitions, markupDocBuilder)};
             } else if (itemProperty instanceof RefProperty) {
@@ -271,7 +271,7 @@ public class ExamplesUtil {
     public static Object[] generateExampleForArrayProperty(ArrayProperty value, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
         Property property = value.getItems();
         if (property.getExample() != null) {
-            return new Object[]{property.getExample()};
+            return new Object[]{PropertyUtils.convertExample(property.getExample(), property.getType())};
         } else if (property instanceof ArrayProperty) {
             return new Object[]{generateExampleForArrayProperty((ArrayProperty) property, definitions, markupDocBuilder)};
         } else if (property instanceof RefProperty) {
