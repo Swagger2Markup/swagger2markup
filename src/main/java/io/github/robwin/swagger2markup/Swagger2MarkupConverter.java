@@ -15,14 +15,13 @@
  */
 package io.github.robwin.swagger2markup;
 
-import io.github.robwin.swagger2markup.builder.document.DefinitionsDocument;
-import io.github.robwin.swagger2markup.builder.document.OverviewDocument;
-import io.github.robwin.swagger2markup.builder.document.PathsDocument;
-import io.github.robwin.swagger2markup.builder.document.SecurityDocument;
-import io.github.robwin.swagger2markup.config.Swagger2MarkupConfig;
-import io.github.robwin.swagger2markup.extension.Extension;
-import io.github.robwin.swagger2markup.extension.Swagger2MarkupExtensionRegistry;
-import io.github.robwin.swagger2markup.extension.SwaggerExtension;
+import com.google.common.annotations.VisibleForTesting;
+import io.github.robwin.swagger2markup.internal.document.builder.DefinitionsDocumentBuilder;
+import io.github.robwin.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
+import io.github.robwin.swagger2markup.internal.document.builder.PathsDocumentBuilder;
+import io.github.robwin.swagger2markup.internal.document.builder.SecurityDocumentBuilder;
+import io.github.robwin.swagger2markup.spi.Extension;
+import io.github.robwin.swagger2markup.spi.SwaggerModelExtension;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.io.IOUtils;
@@ -43,14 +42,21 @@ import java.nio.file.Path;
  */
 public class Swagger2MarkupConverter {
 
-    public static class Context {
-        public Swagger2MarkupConfig config;
-        public Swagger2MarkupExtensionRegistry extensionRegistry;
-        public Swagger swagger;
-        public URI swaggerLocation;
+    private Context context;
+
+    public Swagger2MarkupConverter(Context globalContext) {
+        this.context = globalContext;
     }
 
-    Context globalContext;
+    /**
+     * Returns the global Context
+     *
+     * @return the global Context
+     */
+    @VisibleForTesting
+    Context getContext(){
+        return context;
+    }
 
     /**
      * Creates a Swagger2MarkupConverter.Builder using a remote URL.
@@ -113,12 +119,6 @@ public class Swagger2MarkupConverter {
         return new Builder(swagger);
     }
 
-    protected void applySwaggerExtensions() {
-        for (SwaggerExtension swaggerExtension : globalContext.extensionRegistry.getExtensions(SwaggerExtension.class)) {
-            swaggerExtension.apply(globalContext);
-        }
-    }
-
     /**
      * Builds the document with the given markup language and stores
      * the files in the given folder.
@@ -144,6 +144,12 @@ public class Swagger2MarkupConverter {
         return buildDocuments();
     }
 
+    private void applySwaggerExtensions() {
+        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getExtensions(SwaggerModelExtension.class)) {
+            swaggerModelExtension.apply(context.getSwagger());
+        }
+    }
+
     /**
      * Builds all documents and writes them to a directory
      *
@@ -151,10 +157,10 @@ public class Swagger2MarkupConverter {
      * @throws IOException if a file cannot be written
      */
     private void buildDocuments(Path outputPath) throws IOException {
-        new OverviewDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getOverviewDocument()), StandardCharsets.UTF_8);
-        new PathsDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getPathsDocument()), StandardCharsets.UTF_8);
-        new DefinitionsDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
-        new SecurityDocument(globalContext, outputPath).build().writeToFile(outputPath.resolve(globalContext.config.getSecurityDocument()), StandardCharsets.UTF_8);
+        new OverviewDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
+        new DefinitionsDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
+        new SecurityDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getSecurityDocument()), StandardCharsets.UTF_8);
     }
 
     /**
@@ -164,10 +170,10 @@ public class Swagger2MarkupConverter {
      */
     private String buildDocuments() {
         StringBuilder sb = new StringBuilder();
-        sb.append(new OverviewDocument(globalContext, null).build().toString());
-        sb.append(new PathsDocument(globalContext, null).build().toString());
-        sb.append(new DefinitionsDocument(globalContext, null).build().toString());
-        sb.append(new SecurityDocument(globalContext, null).build().toString());
+        sb.append(new OverviewDocumentBuilder(context, null).build().toString());
+        sb.append(new PathsDocumentBuilder(context, null).build().toString());
+        sb.append(new DefinitionsDocumentBuilder(context, null).build().toString());
+        sb.append(new SecurityDocumentBuilder(context, null).build().toString());
         return sb.toString();
     }
 
@@ -238,30 +244,49 @@ public class Swagger2MarkupConverter {
         }
 
         public Swagger2MarkupConverter build() {
-            Context context = new Context();
-
-            context.swagger = this.swagger;
-            context.swaggerLocation = this.swaggerLocation;
-
             if (config == null)
-                context.config = Swagger2MarkupConfig.ofDefaults().build();
-            else
-                context.config = config;
-            context.config.setGlobalContext(context);
+                config = Swagger2MarkupConfig.ofDefaults().build();
 
             if (extensionRegistry == null)
-                context.extensionRegistry = Swagger2MarkupExtensionRegistry.ofDefaults().build();
-            else
-                context.extensionRegistry = extensionRegistry;
-            for (Extension extension : context.extensionRegistry.getExtensions())
+                extensionRegistry = Swagger2MarkupExtensionRegistry.ofDefaults().build();
+
+            Context context = new Context(config, extensionRegistry, swagger, swaggerLocation);
+            config.setGlobalContext(context);
+
+            for (Extension extension : extensionRegistry.getExtensions())
                 extension.setGlobalContext(context);
+            return new Swagger2MarkupConverter(context);
+        }
+    }
 
-            Swagger2MarkupConverter converter = new Swagger2MarkupConverter();
-            converter.globalContext = context;
+    public static class Context {
+        private Swagger2MarkupConfig config;
+        private Swagger2MarkupExtensionRegistry extensionRegistry;
+        private Swagger swagger;
+        private URI swaggerLocation;
 
-            return converter;
+        Context(Swagger2MarkupConfig config, Swagger2MarkupExtensionRegistry extensionRegistry, Swagger swagger, URI swaggerLocation) {
+            this.config = config;
+            this.extensionRegistry = extensionRegistry;
+            this.swagger = swagger;
+            this.swaggerLocation = swaggerLocation;
         }
 
+        public Swagger2MarkupConfig getConfig() {
+            return config;
+        }
+
+        public Swagger2MarkupExtensionRegistry getExtensionRegistry() {
+            return extensionRegistry;
+        }
+
+        public Swagger getSwagger() {
+            return swagger;
+        }
+
+        public URI getSwaggerLocation() {
+            return swaggerLocation;
+        }
     }
 
 }

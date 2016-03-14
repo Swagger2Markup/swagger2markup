@@ -1,0 +1,984 @@
+
+[[_paths]]
+== Paths
+
+=== Add a new pet to the store
+----
+POST /pets
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Pet object that needs to be added to the store|false|<<_pet,Pet>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|405|Invalid input|No Content
+|===
+
+
+==== Consumes
+
+* application/json
+* application/xml
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP response
+
+==== Response 405
+----
+{
+  "application/json" : {
+    "name" : "Puma",
+    "type" : 22,
+    "color" : "Black",
+    "gender" : "Female",
+    "breed" : "Mixed"
+  }
+}
+----
+
+
+=== Update an existing pet
+----
+PUT /pets
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Pet object that needs to be added to the store|false|<<_pet,Pet>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Pet not found|No Content
+|===
+
+
+===== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|405|Validation exception|No Content
+|===
+
+
+==== Consumes
+
+* application/json
+* application/xml
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Finds Pets by status
+----
+GET /pets/findByStatus
+----
+
+
+==== Description
+[%hardbreaks]
+Multiple status values can be provided with comma seperated strings
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Query|status|Status values that need to be considered for filter|false|multi string array|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_pet,Pet>> array
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid status value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Finds Pets by tags
+----
+GET /pets/findByTags
+----
+
+
+==== Description
+[%hardbreaks]
+Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Query|tags|Tags to filter by|false|multi string array|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_pet,Pet>> array
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid tag value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Updates a pet in the store with form data
+----
+POST /pets/{petId}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|petId|ID of pet that needs to be updated|true|string|
+|FormData|name|Updated name of the pet|true|string|
+|FormData|status|Updated status of the pet|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|405|Invalid input|No Content
+|===
+
+
+==== Consumes
+
+* application/x-www-form-urlencoded
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Find pet by ID
+----
+GET /pets/{petId}
+----
+
+
+==== Description
+[%hardbreaks]
+Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|petId|ID of the pet|true|integer(int64)|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_pet,Pet>>
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Pet not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|apiKey|<<_api_key,api_key>>|
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Deletes a pet
+----
+DELETE /pets/{petId}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Header|api_key||true|string|
+|Path|petId|Pet id to delete|true|integer(int64)|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid pet value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+=== Place an order for a pet
+----
+POST /stores/order
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|order placed for purchasing the pet|false|<<_order,Order>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_order,Order>>
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid Order|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+==== Example HTTP request
+
+==== Request body
+----
+{
+  "id" : 99,
+  "petId" : 122,
+  "quantity" : 2,
+  "shipDate" : "2016-02-22T23:02:05Z",
+  "status" : "PENDING",
+  "complete" : true
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 99,
+  "petId" : 122,
+  "quantity" : 2,
+  "shipDate" : "2016-02-22T23:02:05Z",
+  "status" : "PENDING",
+  "complete" : true
+}
+----
+
+
+=== Find purchase order by ID
+----
+GET /stores/order/{orderId}
+----
+
+
+==== Description
+[%hardbreaks]
+For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|orderId|ID of pet that needs to be fetched|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_order,Order>>
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Order not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 99,
+  "petId" : 122,
+  "quantity" : 2,
+  "shipDate" : "2016-02-22T23:02:05Z",
+  "status" : "PENDING",
+  "complete" : true
+}
+----
+
+
+=== Delete purchase order by ID
+----
+DELETE /stores/order/{orderId}
+----
+
+
+==== Description
+[%hardbreaks]
+For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|orderId|ID of the order that needs to be deleted|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Order not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+=== Create user
+----
+POST /users
+----
+
+
+==== Description
+[%hardbreaks]
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Created user object|false|<<_user,User>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Creates list of users with given input array
+----
+POST /users/createWithArray
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|List of user object|false|<<_user,User>> array|
+|===
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Creates list of users with given input array
+----
+POST /users/createWithList
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|List of user object|false|<<_user,User>> array|
+|===
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Logs user into the system
+----
+GET /users/login
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Query|password|The password for login in clear text|false|string|testPassword
+|Query|username|The user name for login|false|string|testUser
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|string
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid username/password supplied|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Logs out current logged in user session
+----
+GET /users/logout
+----
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Get user by user name
+----
+GET /users/{username}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|The name that needs to be fetched. Use user1 for testing.|true|string|testUser
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_user,User>>
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid username supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Updated user
+----
+PUT /users/{username}
+----
+
+
+==== Description
+[%hardbreaks]
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|name that need to be deleted|true|string|
+|Body|body|Updated user object|false|<<_user,User>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid user supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+=== Delete user
+----
+DELETE /users/{username}
+----
+
+
+==== Description
+[%hardbreaks]
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|The name that needs to be deleted|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid username supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+
