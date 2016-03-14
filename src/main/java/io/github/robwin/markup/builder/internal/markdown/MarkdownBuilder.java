@@ -39,11 +39,11 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     public MarkdownBuilder(){
-        super(System.getProperty("line.separator"));
+        super();
     }
 
-    public MarkdownBuilder(String lineSeparator){
-        super(lineSeparator);
+    public MarkdownBuilder(String newLine){
+        super(newLine);
     }
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{

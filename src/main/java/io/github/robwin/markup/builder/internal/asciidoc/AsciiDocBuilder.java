@@ -37,11 +37,11 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     public AsciiDocBuilder(){
-        super(System.getProperty("line.separator"));
+        super();
     }
 
-    public AsciiDocBuilder(String lineSeparator){
-        super(lineSeparator);
+    public AsciiDocBuilder(String newLine){
+        super(newLine);
     }
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{

@@ -64,8 +64,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     protected String anchorPrefix = null;
 
-    public AbstractMarkupDocBuilder(String lineSeparator) {
-        this.newLine = lineSeparator;
+    public AbstractMarkupDocBuilder() {
+        this(System.getProperty("line.separator"));
+    }
+
+
+    public AbstractMarkupDocBuilder(String newLine) {
+        this.newLine = newLine;
     }
 
     @Override
