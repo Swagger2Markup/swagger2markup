@@ -27,10 +27,7 @@ import io.swagger.models.properties.RefProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ExamplesUtil {
 
@@ -46,7 +43,7 @@ public class ExamplesUtil {
      * @return map containing response examples.
      */
     public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, Operation operation, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
-        Map<String, Object> examples = new HashMap<>();
+        Map<String, Object> examples = new LinkedHashMap<>();
         Map<String, Response> responses = operation.getResponses();
         for (Map.Entry<String, Response> responseEntry : responses.entrySet()) {
             Response response = responseEntry.getValue();
@@ -86,7 +83,7 @@ public class ExamplesUtil {
     public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, PathOperation pathOperation, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
         Operation operation = pathOperation.getOperation();
         List<Parameter> parameters = operation.getParameters();
-        Map<String, Object> examples = new HashMap<>();
+        Map<String, Object> examples = new LinkedHashMap<>();
 
         // Path example should always be included (if generateMissingExamples):
         if (generateMissingExamples)
@@ -142,7 +139,7 @@ public class ExamplesUtil {
                         @SuppressWarnings("unchecked")
                         Map<String, Object> queryExampleMap = (Map<String, Object>) examples.get("query");
                         if (queryExampleMap == null) {
-                            queryExampleMap = new HashMap<>();
+                            queryExampleMap = new LinkedHashMap<>();
                         }
                         queryExampleMap.put(parameter.getName(), abstractSerializableParameterExample);
                         example = queryExampleMap;
@@ -221,7 +218,7 @@ public class ExamplesUtil {
      * @return a Map of examples
      */
     public static Map<String, Object> exampleMapForProperties(Map<String, Property> properties, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
-        Map<String, Object> exampleMap = new HashMap<>();
+        Map<String, Object> exampleMap = new LinkedHashMap<>();
         for (Map.Entry<String, Property> property : properties.entrySet()) {
             Object exampleObject = PropertyUtils.convertExample(property.getValue().getExample(), property.getValue().getType());
             if (exampleObject == null) {
@@ -246,7 +243,7 @@ public class ExamplesUtil {
         if (property.getExample() != null) {
             return property.getExample();
         }
-        Map<String, Object> exampleMap = new HashMap<>();
+        Map<String, Object> exampleMap = new LinkedHashMap<>();
         Property valueProperty = property.getAdditionalProperties();
         if (valueProperty.getExample() != null) {
             return valueProperty.getExample();

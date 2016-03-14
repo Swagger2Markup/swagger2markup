@@ -28,6 +28,7 @@ import org.apache.commons.collections4.MapUtils;
 import java.nio.file.Path;
 import java.util.*;
 
+import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -82,9 +83,9 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> definitions) {
-        for (Map.Entry<String, SecuritySchemeDefinition> entry : definitions.entrySet()) {
-            String definitionName = entry.getKey();
-            SecuritySchemeDefinition definition = entry.getValue();
+        Set<String> definitionNames = toKeySet(definitions, config.getDefinitionOrdering());
+        for (String definitionName : definitionNames) {
+            SecuritySchemeDefinition definition = definitions.get(definitionName);
             buildSecuritySchemeDefinitionTitle(definitionName);
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
             buildDescriptionParagraph(definition.getDescription());
