@@ -16,7 +16,7 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.robwin.markup.builder.internal;
 
 /**
  * @author Robert Winkler

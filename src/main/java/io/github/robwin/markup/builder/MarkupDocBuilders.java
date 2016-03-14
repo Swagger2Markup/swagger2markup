@@ -19,9 +19,9 @@
 package io.github.robwin.markup.builder;
 
 
-import io.github.robwin.markup.builder.asciidoc.AsciiDocBuilder;
-import io.github.robwin.markup.builder.atlassian.AtlassianWikiMarkupBuilder;
-import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
+import io.github.robwin.markup.builder.internal.asciidoc.AsciiDocBuilder;
+import io.github.robwin.markup.builder.internal.atlassian.AtlassianWikiMarkupBuilder;
+import io.github.robwin.markup.builder.internal.markdown.MarkdownBuilder;
 
 /**
  * @author Robert Winkler
