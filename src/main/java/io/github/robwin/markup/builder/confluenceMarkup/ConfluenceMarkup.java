@@ -16,7 +16,7 @@
  *
  *
  */
-package io.github.robwin.markup.builder.confluence;
+package io.github.robwin.markup.builder.confluenceMarkup;
 
 
 import io.github.robwin.markup.builder.Markup;
@@ -24,16 +24,17 @@ import io.github.robwin.markup.builder.Markup;
 /**
  * @author Robert Winkler
  */
-public enum Confluence implements Markup {
+public enum ConfluenceMarkup implements Markup {
     FILE_EXTENSION("txt"),
-    SPACE_ESCAPE("_");
+    SPACE_ESCAPE("_"),
+    LINE_BREAK("\\\\ ");
 
     private final String markup;
 
     /**
      * @param markup AsciiDoc markup
      */
-    Confluence(final String markup) {
+    ConfluenceMarkup(final String markup) {
         this.markup = markup;
     }
 

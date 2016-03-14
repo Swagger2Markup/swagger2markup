@@ -20,7 +20,7 @@ package io.github.robwin.markup.builder;
 
 
 import io.github.robwin.markup.builder.asciidoc.AsciiDocBuilder;
-import io.github.robwin.markup.builder.confluence.ConfluenceBuilder;
+import io.github.robwin.markup.builder.confluenceMarkup.ConfluenceMarkupBuilder;
 import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
 
 /**
@@ -40,7 +40,7 @@ public final class MarkupDocBuilders {
         switch(markupLanguage){
             case MARKDOWN: return new MarkdownBuilder();
             case ASCIIDOC: return new AsciiDocBuilder();
-            case ATLASSIAN_WIKI: return new ConfluenceBuilder();
+            case ATLASSIAN_WIKI: return new ConfluenceMarkupBuilder();
             default: return new AsciiDocBuilder();
         }
     }
@@ -63,7 +63,7 @@ public final class MarkupDocBuilders {
         switch(markupLanguage){
             case MARKDOWN: return new MarkdownBuilder(lineSeparatorAsString);
             case ASCIIDOC: return new AsciiDocBuilder(lineSeparatorAsString);
-            case ATLASSIAN_WIKI: return new ConfluenceBuilder(lineSeparatorAsString);
+            case ATLASSIAN_WIKI: return new ConfluenceMarkupBuilder(lineSeparatorAsString);
             default: return new AsciiDocBuilder(lineSeparatorAsString);
         }
     }

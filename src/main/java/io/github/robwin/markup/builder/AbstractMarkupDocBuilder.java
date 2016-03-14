@@ -47,12 +47,12 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     /**
      * Explicit line break default behavior for line returns, when not specified. Please, change documentation accordingly.
      */
-    private static final boolean LINE_BREAK_DEFAULT = false;
+    protected static final boolean LINE_BREAK_DEFAULT = false;
 
-    private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
-    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
-    private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
-    private static final int MAX_TITLE_LEVEL = 5;
+    protected static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
+    protected static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
+    protected static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
+    protected static final int MAX_TITLE_LEVEL = 5;
     protected static final String NEW_LINES = "\\r\\n|\\r|\\n";
     protected static final String WHITESPACE = " ";
 
@@ -359,13 +359,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return importMarkup(markupText, 0);
     }
 
-    protected void importMarkup(Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
-        if (levelOffset > MAX_TITLE_LEVEL)
-            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
-        if (levelOffset < -MAX_TITLE_LEVEL)
-            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
-
-        final Pattern titlePattern = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", titlePrefix, MAX_TITLE_LEVEL + 1));
+    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
+        Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
+        Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
         StringBuffer leveledText = new StringBuffer();
         try (BufferedReader bufferedReader = new BufferedReader(markupText)) {
@@ -382,7 +378,38 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                     if (titleLevel + levelOffset < 0)
                         throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
                     else
-                        titleMatcher.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset) + " " + title);
+                        titleMatcher.appendReplacement(leveledText, String.format("%s %s", StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset), title));
+                }
+                titleMatcher.appendTail(leveledText);
+                leveledText.append(newLine);
+            }
+        }
+
+        documentBuilder.append(newLine);
+        documentBuilder.append(leveledText.toString());
+        documentBuilder.append(newLine);
+    }
+
+    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, int levelOffset) throws IOException {
+        Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
+        Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
+
+        StringBuffer leveledText = new StringBuffer();
+        try (BufferedReader bufferedReader = new BufferedReader(markupText)) {
+            String readLine;
+            while ((readLine = bufferedReader.readLine()) != null) {
+                Matcher titleMatcher = titlePattern.matcher(readLine);
+
+                while (titleMatcher.find()) {
+                    int titleLevel = Integer.valueOf(titleMatcher.group(1)) - (startFrom0 ? 0 : 1);
+                    String title = titleMatcher.group(2);
+
+                    if (titleLevel + levelOffset > MAX_TITLE_LEVEL)
+                        throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) > max title level (%d)", levelOffset, title, titleLevel, MAX_TITLE_LEVEL));
+                    if (titleLevel + levelOffset < 0)
+                        throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
+                    else
+                        titleMatcher.appendReplacement(leveledText, String.format(titleFormat, (startFrom0 ? 0 : 1) + titleLevel + levelOffset, title));
                 }
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);

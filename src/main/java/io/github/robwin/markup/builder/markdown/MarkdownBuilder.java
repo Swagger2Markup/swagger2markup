@@ -19,6 +19,7 @@
 package io.github.robwin.markup.builder.markdown;
 
 import io.github.robwin.markup.builder.*;
+import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +27,11 @@ import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -36,13 +41,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
-    public MarkdownBuilder(){
-        super();
-    }
-
-    public MarkdownBuilder(String newLine){
-        super(newLine);
-    }
+    private static final Pattern TITLE_PATTERN = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", Markdown.TITLE, MAX_TITLE_LEVEL + 1));
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
         put(MarkupBlockStyle.EXAMPLE, null);
@@ -51,6 +50,14 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         put(MarkupBlockStyle.PASSTHROUGH, null);
         put(MarkupBlockStyle.SIDEBAR, null);
     }};
+
+    public MarkdownBuilder(){
+        super();
+    }
+
+    public MarkdownBuilder(String newLine){
+        super(newLine);
+    }
 
     @Override
     public MarkupDocBuilder copy() {
@@ -128,39 +135,6 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         return this;
     }
 
-    @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV) {
-        String headersInPSV = rowsInPSV.get(0);
-        List<String> contentRowsInPSV = rowsInPSV.subList(1, rowsInPSV.size());
-        String[] headersAsArray = headersInPSV.split(String.format("\\%s", Markdown.TABLE_COLUMN_DELIMITER.toString()));
-        List<String> headers = Arrays.asList(headersAsArray);
-
-        newLine();
-        // Header
-        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-        documentBuilder.append(headersInPSV);
-        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-        newLine();
-        // Header/Content separator
-        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-        for (String header : headers) {
-            for (int i = 1; i < 5; i++) {
-                documentBuilder.append(Markdown.TABLE_ROW);
-            }
-            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-        }
-        newLine();
-        // Content
-        for (String contentRowInPSV : contentRowsInPSV) {
-            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-            documentBuilder.append(contentRowInPSV);
-            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER.toString());
-            newLine();
-        }
-        newLine().newLine();
-        return this;
-    }
-
     private String normalizeAnchor(String anchor) {
         return normalizeAnchor(Markdown.SPACE_ESCAPE, anchor);
     }
@@ -231,7 +205,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkup(Markdown.TITLE, markupText, levelOffset);
+        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, levelOffset);
         return this;
     }
 
