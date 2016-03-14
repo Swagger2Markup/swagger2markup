@@ -48,6 +48,16 @@ dependencies {
     testCompile 'io.github.robwin:assertj-diff:0.1.1'
 }
 
+test {
+    if (System.properties['http.proxyHost']) {
+        systemProperty 'http.proxyHost', System.properties['http.proxyHost']
+        systemProperty 'http.proxyPort', System.properties['http.proxyPort']
+        systemProperty 'http.nonProxyHosts', System.properties['http.nonProxyHosts']
+    }
+    systemProperty 'file.encoding', 'UTF-8'
+    ignoreFailures = true
+}
+
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.11'
