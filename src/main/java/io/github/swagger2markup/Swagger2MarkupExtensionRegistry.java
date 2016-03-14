@@ -42,18 +42,14 @@ public class Swagger2MarkupExtensionRegistry {
     }
 
     public static Builder ofEmpty() {
-        return new Builder(false);
-    }
-
-    public static Builder ofDefaults() {
-        return new Builder(true);
+        return new Builder();
     }
 
     public static class Builder {
 
         private final Multimap<Class<? extends Extension>, Extension> extensions;
 
-        Builder(boolean useDefaults) {
+        Builder() {
             extensions = MultimapBuilder.hashKeys().arrayListValues().build();
         }
 

@@ -29,7 +29,7 @@ public class Swagger2MarkupExtensionRegistryTest {
 
     @Test
     public void testRegistering() {
-        Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofDefaults();
+        Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofEmpty();
 
         registryBuilder.withExtension(new MySwaggerModelExtension());
 
@@ -51,13 +51,13 @@ public class Swagger2MarkupExtensionRegistryTest {
             }
         };
 
-        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofDefaults()
+        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
                 .withExtension(ext2)
                 .withExtension(ext3)
                 .withExtension(ext1)
                 .build();
         List<Extension> extensions = registry.getExtensions(Extension.class);
-        assertThat(extensions.size()).isEqualTo(7);
+        assertThat(extensions.size()).isEqualTo(3);
         assertThat(extensions).contains(ext1, ext2, ext3);
         assertThat(registry.getExtensions(SwaggerModelExtension.class)).isEqualTo(Arrays.asList(ext2, ext3, ext1));
     }
