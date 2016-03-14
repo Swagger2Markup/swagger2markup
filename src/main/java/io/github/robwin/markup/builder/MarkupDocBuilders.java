@@ -28,9 +28,6 @@ import io.github.robwin.markup.builder.markdown.MarkdownBuilder;
  */
 public final class MarkupDocBuilders {
 
-    public static final String LINE_SEPARATOR_UNIX	= "\n";
-    public static final String LINE_SEPARATOR_WINDOWS= "\r\n";
-
     private MarkupDocBuilders(){}
 
     /**
@@ -43,7 +40,7 @@ public final class MarkupDocBuilders {
         switch(markupLanguage){
             case MARKDOWN: return new MarkdownBuilder();
             case ASCIIDOC: return new AsciiDocBuilder();
-            case ATLASSIAN: return new AtlassianWikiMarkupBuilder();
+            case ATLASSIAN_WIKI: return new AtlassianWikiMarkupBuilder();
             default: return new AsciiDocBuilder();
         }
     }
@@ -66,6 +63,7 @@ public final class MarkupDocBuilders {
         switch(markupLanguage){
             case MARKDOWN: return new MarkdownBuilder(lineSeparatorAsString);
             case ASCIIDOC: return new AsciiDocBuilder(lineSeparatorAsString);
+            case ATLASSIAN_WIKI: return new AtlassianWikiMarkupBuilder(lineSeparatorAsString);
             default: return new AsciiDocBuilder(lineSeparatorAsString);
         }
     }
