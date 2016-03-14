@@ -184,7 +184,7 @@ public class MarkupDocBuilderTest {
 
     @Test
     public void testToAtlassianWikiFile() throws IOException {
-        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN);
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN_WIKI);
 
         builder = builder.documentTitle("Test title")
                 .sectionTitleLevel(1, "Section Level 1a")
@@ -204,7 +204,7 @@ public class MarkupDocBuilderTest {
                 .sectionTitleWithAnchorLevel(5, "Section with anchor Level 5a")
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
-                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN)", "java")
+                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN_WIKI)", "java")
                 .block("Example", MarkupBlockStyle.EXAMPLE)
                 .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
                 .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
