@@ -16,13 +16,9 @@ version = '0.1.6-SNAPSHOT'
 group = 'io.github.robwin'
 
 apply plugin: 'java'
-apply plugin: 'maven-publish'
 apply plugin: 'org.asciidoctor.convert'
-apply plugin: 'jacoco'
-apply plugin: 'com.github.kt3k.coveralls'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: "com.jfrog.artifactory"
 apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/coverage.gradle'
 
 tasks.withType(JavaCompile) {
     sourceCompatibility = "1.7"
@@ -48,21 +44,6 @@ dependencies {
     testCompile 'ch.qos.logback:logback-classic:1.1.6'
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
 asciidoctor {
     backends = ['html5', 'pdf']
     attributes = [
@@ -72,43 +53,6 @@ asciidoctor {
             numbered: ''
     ]
     sourceDir "build/tmp"
-}
-
-artifactory {
-    contextUrl = 'https://oss.jfrog.org'
-    resolve {
-        repository {
-            repoKey = 'libs-release'
-        }
-    }
-    publish {
-        repository {
-            repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
-            //when using oss.jfrog.org the credentials are from Bintray. For local build we expect them to be found in
-            //~/.gradle/gradle.properties, otherwise to be set in the build server
-            username = project.hasProperty('bintrayUsername') ? project.bintrayUsername : System.getenv('BINTRAY_USER')
-            password = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
-        }
-        defaults {
-            publications('mavenJava')
-        }
-    }
-    if (System.properties['https.proxyHost']) {
-        clientConfig.proxy.host = System.properties['https.proxyHost']
-        clientConfig.proxy.port = System.properties['https.proxyPort'].toInteger()
-    }
-
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
-    }
-}
-
-tasks.coveralls {
-    dependsOn 'check'
 }
 
 tasks.asciidoctor {
