@@ -56,8 +56,13 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder copy() {
-        return new AsciiDocBuilder(newLine).withAnchorPrefix(anchorPrefix);
+    public MarkupDocBuilder copy(boolean copyBuffer) {
+        AsciiDocBuilder builder = new AsciiDocBuilder(newLine);
+
+        if (copyBuffer)
+            builder.documentBuilder = new StringBuilder(this.documentBuilder);
+
+        return builder.withAnchorPrefix(anchorPrefix);
     }
 
     @Override
