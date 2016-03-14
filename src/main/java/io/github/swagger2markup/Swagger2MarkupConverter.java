@@ -248,7 +248,7 @@ public class Swagger2MarkupConverter {
                 config = Swagger2MarkupConfig.ofDefaults().build();
 
             if (extensionRegistry == null)
-                extensionRegistry = Swagger2MarkupExtensionRegistry.ofDefaults().build();
+                extensionRegistry = Swagger2MarkupExtensionRegistry.ofEmpty().build();
 
             Context context = new Context(config, extensionRegistry, swagger, swaggerLocation);
             config.setGlobalContext(context);
