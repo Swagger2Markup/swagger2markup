@@ -1,8 +1,13 @@
-package io.github.robwin.markup.builder;
+package io.github.robwin.markup.builder.internal;
 
-import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
-import io.github.robwin.markup.builder.markdown.Markdown;
+import io.github.robwin.markup.builder.LineSeparator;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupDocBuilders;
+import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.robwin.markup.builder.internal.asciidoc.AsciiDoc;
+import io.github.robwin.markup.builder.internal.markdown.Markdown;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -184,5 +189,35 @@ public class AbstractMarkupDocBuilderTest {
         assertImportMarkupExceptionConfluenceMarkup("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "h2. title\nline 1\nline 2", 5);
         assertImportMarkupExceptionConfluenceMarkup("Specified levelOffset (-1) set title 'title' level (0) < 0", "h1. title\nline 1\nline 2", -1);
         assertImportMarkupExceptionConfluenceMarkup("Specified levelOffset (-3) set title 'title' level (1) < 0", "h2. title\nline 1\nline 2", -3);
+    }
+
+    @Test
+    public void testCopy() {
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX).withAnchorPrefix("anchor-");
+        MarkupDocBuilder copy = builder.copy(false);
+
+        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
+        AbstractMarkupDocBuilder internalCopy = (AbstractMarkupDocBuilder) copy;
+        Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
+        Assert.assertEquals("anchor-", internalCopy.anchorPrefix);
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.WINDOWS);
+        copy = builder.copy(false);
+
+        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
+        internalCopy = (AbstractMarkupDocBuilder) copy;
+        Assert.assertEquals(LineSeparator.WINDOWS.toString(), internalCopy.newLine);
+        Assert.assertNull(internalCopy.anchorPrefix);
+
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
+        builder.text("This is text");
+        copy = builder.copy(true);
+
+        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
+        internalCopy = (AbstractMarkupDocBuilder) copy;
+        Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
+        Assert.assertNull(internalCopy.anchorPrefix);
+        Assert.assertEquals("This is text", internalCopy.documentBuilder.toString());
+
     }
 }

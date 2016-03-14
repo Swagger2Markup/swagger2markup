@@ -18,6 +18,7 @@
  */
 package io.github.robwin.markup.builder;
 
+import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -284,33 +285,4 @@ public class MarkupDocBuilderTest {
         Assert.assertEquals("Long text " + lineSeparator + " bla bla " + lineSeparator + " bla " + lineSeparator + " bla" + lineSeparator + lineSeparator, builder.toString());
     }
 
-    @Test
-    public void testCopy() {
-        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX).withAnchorPrefix("anchor-");
-        MarkupDocBuilder copy = builder.copy(false);
-
-        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
-        AbstractMarkupDocBuilder internalCopy = (AbstractMarkupDocBuilder) copy;
-        Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
-        Assert.assertEquals("anchor-", internalCopy.anchorPrefix);
-
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.WINDOWS);
-        copy = builder.copy(false);
-
-        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
-        internalCopy = (AbstractMarkupDocBuilder) copy;
-        Assert.assertEquals(LineSeparator.WINDOWS.toString(), internalCopy.newLine);
-        Assert.assertNull(internalCopy.anchorPrefix);
-
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
-        builder.text("This is text");
-        copy = builder.copy(true);
-
-        Assert.assertTrue(copy instanceof AbstractMarkupDocBuilder);
-        internalCopy = (AbstractMarkupDocBuilder) copy;
-        Assert.assertEquals(LineSeparator.UNIX.toString(), internalCopy.newLine);
-        Assert.assertNull(internalCopy.anchorPrefix);
-        Assert.assertEquals("This is text", internalCopy.documentBuilder.toString());
-
-    }
 }

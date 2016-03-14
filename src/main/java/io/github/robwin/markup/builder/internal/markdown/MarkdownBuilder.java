@@ -16,10 +16,14 @@
  *
  *
  */
-package io.github.robwin.markup.builder.markdown;
+package io.github.robwin.markup.builder.internal.markdown;
 
-import io.github.robwin.markup.builder.*;
-import io.github.robwin.markup.builder.asciidoc.AsciiDoc;
+import io.github.robwin.markup.builder.MarkupAdmonition;
+import io.github.robwin.markup.builder.MarkupBlockStyle;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
+import io.github.robwin.markup.builder.internal.Markup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
@@ -210,7 +214,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, levelOffset);
+        importMarkupStyle1(TITLE_PATTERN, Markdown.TITLE, markupText, levelOffset);
         return this;
     }
 

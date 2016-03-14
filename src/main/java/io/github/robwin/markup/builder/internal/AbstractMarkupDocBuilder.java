@@ -16,8 +16,10 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.robwin.markup.builder.internal;
 
+import io.github.robwin.markup.builder.MarkupBlockStyle;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;

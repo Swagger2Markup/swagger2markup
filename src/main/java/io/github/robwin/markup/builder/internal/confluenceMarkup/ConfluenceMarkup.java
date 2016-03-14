@@ -16,11 +16,33 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.robwin.markup.builder.internal.confluenceMarkup;
+
+
+import io.github.robwin.markup.builder.internal.Markup;
 
 /**
  * @author Robert Winkler
  */
-public interface Markup {
-    String toString();
+public enum ConfluenceMarkup implements Markup {
+    FILE_EXTENSION("txt"),
+    SPACE_ESCAPE("_"),
+    LINE_BREAK("\\\\ ");
+
+    private final String markup;
+
+    /**
+     * @param markup AsciiDoc markup
+     */
+    ConfluenceMarkup(final String markup) {
+        this.markup = markup;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Enum#toString()
+     */
+    @Override
+    public String toString() {
+        return markup;
+    }
 }

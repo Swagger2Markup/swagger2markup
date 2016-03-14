@@ -16,9 +16,13 @@
  *
  *
  */
-package io.github.robwin.markup.builder.confluenceMarkup;
+package io.github.robwin.markup.builder.internal.confluenceMarkup;
 
-import io.github.robwin.markup.builder.*;
+import io.github.robwin.markup.builder.MarkupAdmonition;
+import io.github.robwin.markup.builder.MarkupBlockStyle;
+import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
 
 import java.io.IOException;
 import java.io.Reader;
