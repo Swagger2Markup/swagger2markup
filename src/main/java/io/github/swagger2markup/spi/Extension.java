@@ -21,7 +21,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 /**
  * A marker interface which must be implemented by an extension
  */
-public interface Extension {
+interface Extension {
 
     /**
      * Global context lazy initialization

@@ -19,46 +19,34 @@ import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.swagger.models.Swagger;
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 public class Swagger2MarkupExtensionRegistryTest {
 
     @Test
     public void testRegistering() {
         Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofEmpty();
-
-        registryBuilder.withExtension(new MySwaggerModelExtension());
-
-        try {
-            registryBuilder.withExtension(new AbstractExtension() {
-            });
-            fail("No IllegalArgumentException thrown");
-        } catch (IllegalArgumentException e) {
-            assertThat(e.getMessage()).isEqualTo("Provided extension class does not extend any of the supported extension points");
-        }
+        registryBuilder.withSwaggerModelExtension(new MySwaggerModelExtension());
     }
 
     @Test
     public void testListing() {
-        Extension ext1 = new MySwaggerModelExtension();
-        Extension ext2 = new MySwaggerModelExtension();
-        Extension ext3 = new SwaggerModelExtension() {
+        SwaggerModelExtension ext1 = new MySwaggerModelExtension();
+        SwaggerModelExtension ext2 = new MySwaggerModelExtension();
+        SwaggerModelExtension ext3 = new SwaggerModelExtension() {
             public void apply(Swagger swagger) {
             }
         };
 
         Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
-                .withExtension(ext2)
-                .withExtension(ext3)
-                .withExtension(ext1)
+                .withSwaggerModelExtension(ext2)
+                .withSwaggerModelExtension(ext3)
+                .withSwaggerModelExtension(ext1)
                 .build();
-        List<Extension> extensions = registry.getExtensions(Extension.class);
+        List<SwaggerModelExtension> extensions = registry.getSwaggerModelExtensions();
         assertThat(extensions.size()).isEqualTo(3);
         assertThat(extensions).contains(ext1, ext2, ext3);
-        assertThat(registry.getExtensions(SwaggerModelExtension.class)).isEqualTo(Arrays.asList(ext2, ext3, ext1));
     }
 }

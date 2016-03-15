@@ -17,7 +17,7 @@
 package io.github.swagger2markup.internal.utils;
 
 import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.internal.model.PathOperation;
+import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.*;
 import io.swagger.models.parameters.*;
 import io.swagger.models.properties.ArrayProperty;
@@ -27,7 +27,9 @@ import io.swagger.models.properties.RefProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ExamplesUtil {
 

@@ -22,7 +22,7 @@ import io.github.robwin.markup.builder.*;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.internal.model.PathOperation;
+import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
@@ -227,7 +227,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyPathsDocumentExtension(Context context) {
-        for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(PathsDocumentExtension.class)) {
+        for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getPathsDocumentExtensions()) {
             extension.apply(context);
         }
     }

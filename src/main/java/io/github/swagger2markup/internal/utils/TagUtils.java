@@ -19,7 +19,7 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Ordering;
-import io.github.swagger2markup.internal.model.PathOperation;
+import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Tag;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

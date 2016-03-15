@@ -20,8 +20,7 @@ import io.github.swagger2markup.internal.document.builder.DefinitionsDocumentBui
 import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.PathsDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.SecurityDocumentBuilder;
-import io.github.swagger2markup.spi.Extension;
-import io.github.swagger2markup.spi.SwaggerModelExtension;
+import io.github.swagger2markup.spi.*;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.io.IOUtils;
@@ -145,7 +144,7 @@ public class Swagger2MarkupConverter {
     }
 
     private void applySwaggerExtensions() {
-        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getExtensions(SwaggerModelExtension.class)) {
+        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getSwaggerModelExtensions()) {
             swaggerModelExtension.apply(context.getSwagger());
         }
     }
@@ -253,9 +252,26 @@ public class Swagger2MarkupConverter {
             Context context = new Context(config, extensionRegistry, swagger, swaggerLocation);
             config.setGlobalContext(context);
 
-            for (Extension extension : extensionRegistry.getExtensions())
-                extension.setGlobalContext(context);
+            initExtensions(context);
+
             return new Swagger2MarkupConverter(context);
+        }
+
+        private void initExtensions(Context context) {
+            for (SwaggerModelExtension extension : extensionRegistry.getSwaggerModelExtensions())
+                extension.setGlobalContext(context);
+
+            for (OverviewDocumentExtension extension : extensionRegistry.getOverviewDocumentExtensions())
+                extension.setGlobalContext(context);
+
+            for (DefinitionsDocumentExtension extension : extensionRegistry.getDefinitionsDocumentExtensions())
+                extension.setGlobalContext(context);
+
+            for (PathsDocumentExtension extension : extensionRegistry.getPathsDocumentExtensions())
+                extension.setGlobalContext(context);
+
+            for (SecurityDocumentExtension extension : extensionRegistry.getSecurityDocumentExtensions())
+                extension.setGlobalContext(context);
         }
     }
 

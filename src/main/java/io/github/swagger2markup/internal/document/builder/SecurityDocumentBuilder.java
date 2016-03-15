@@ -131,7 +131,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applySecurityDocumentExtension(Context context) {
-        for (SecurityDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(SecurityDocumentExtension.class)) {
+        for (SecurityDocumentExtension extension : globalContext.getExtensionRegistry().getSecurityDocumentExtensions()) {
             extension.apply(context);
         }
     }

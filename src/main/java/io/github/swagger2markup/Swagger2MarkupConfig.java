@@ -19,7 +19,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.internal.model.PathOperation;
+import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.swagger2markup.internal.model;
+package io.github.swagger2markup.model;
 
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;

@@ -191,7 +191,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyOverviewDocumentExtension(Context context) {
-        for (OverviewDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(OverviewDocumentExtension.class)) {
+        for (OverviewDocumentExtension extension : globalContext.getExtensionRegistry().getOverviewDocumentExtensions()) {
             extension.apply(context);
         }
     }

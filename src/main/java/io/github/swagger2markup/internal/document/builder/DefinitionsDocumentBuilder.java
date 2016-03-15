@@ -132,7 +132,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyDefinitionsDocumentExtension(Context context) {
-        for (DefinitionsDocumentExtension extension : globalContext.getExtensionRegistry().getExtensions(DefinitionsDocumentExtension.class)) {
+        for (DefinitionsDocumentExtension extension : globalContext.getExtensionRegistry().getDefinitionsDocumentExtensions()) {
             extension.apply(context);
         }
     }
