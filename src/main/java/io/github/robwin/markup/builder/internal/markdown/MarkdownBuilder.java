@@ -83,12 +83,6 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder paragraph(String text) {
-        super.paragraph(text);
-        return this;
-    }
-
-    @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
         if (admonition != null)
             documentBuilder.append(StringUtils.capitalize(admonition.name().toLowerCase()));

@@ -24,7 +24,6 @@ import io.github.robwin.markup.builder.internal.Markup;
  * @author Robert Winkler
  */
 public enum Markdown implements Markup {
-    HARDBREAKS(""),
     TABLE_COLUMN_DELIMITER("|"),
     TABLE_COLUMN_DELIMITER_ESCAPE("\\|"),
     TABLE_ROW("-"),

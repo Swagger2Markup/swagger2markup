@@ -79,8 +79,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder paragraph(String text) {
-        paragraph(AsciiDoc.HARDBREAKS, text);
-        return this;
+        documentBuilder.append("[%hardbreaks]").append(newLine);
+        return super.paragraph(text);
     }
 
     @Override
