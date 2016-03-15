@@ -25,7 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import static io.github.swagger2markup.spi.OverviewDocumentExtension.*;
+import static io.github.swagger2markup.spi.OverviewDocumentExtension.Context;
+import static io.github.swagger2markup.spi.OverviewDocumentExtension.Position;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -51,7 +52,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     public OverviewDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath){
         super(context, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         OVERVIEW = labels.getString("overview");
         CURRENT_VERSION = labels.getString("current_version");
         VERSION = labels.getString("version");

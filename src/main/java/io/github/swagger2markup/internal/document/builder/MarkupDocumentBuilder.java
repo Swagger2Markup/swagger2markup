@@ -26,8 +26,8 @@ import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.utils.IOUtils;
 import io.github.swagger2markup.internal.utils.PropertyUtils;
+import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.MapUtils;
@@ -75,7 +75,7 @@ public abstract class MarkupDocumentBuilder {
 
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
 
-        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
         EXAMPLE_COLUMN = labels.getString("example_column");
         REQUIRED_COLUMN = labels.getString("required_column");

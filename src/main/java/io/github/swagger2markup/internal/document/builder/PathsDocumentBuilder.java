@@ -22,7 +22,6 @@ import io.github.robwin.markup.builder.*;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
@@ -30,6 +29,7 @@ import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.internal.utils.ParameterUtils;
 import io.github.swagger2markup.internal.utils.PropertyUtils;
 import io.github.swagger2markup.internal.utils.TagUtils;
+import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.*;
 import io.swagger.models.auth.SecuritySchemeDefinition;
@@ -90,7 +90,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
         super(globalContext, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
         REQUEST = labels.getString("request");
         PATHS = labels.getString("paths");

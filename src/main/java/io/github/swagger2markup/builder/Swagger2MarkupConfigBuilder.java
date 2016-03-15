@@ -43,7 +43,7 @@ public class Swagger2MarkupConfigBuilder  {
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfigBuilder.class);
 
     private static final String PROPERTIES_PREFIX = "swagger2markup.";
-    private static final String PROPERTIES_DEFAULT = "/io/github/robwin/swagger2markup/config/default.properties";
+    private static final String PROPERTIES_DEFAULT = "/io/github/swagger2markup/config/default.properties";
 
     static final Ordering<PathOperation> OPERATION_METHOD_NATURAL_ORDERING = Ordering
             .explicit(HttpMethod.POST, HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)

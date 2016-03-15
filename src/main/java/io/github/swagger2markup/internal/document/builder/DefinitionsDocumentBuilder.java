@@ -61,7 +61,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath) {
         super(context, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("io/github/robwin/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
 
         if (config.isDefinitionDescriptionsEnabled()) {
