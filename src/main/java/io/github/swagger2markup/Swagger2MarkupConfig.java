@@ -8,6 +8,7 @@ import io.swagger.models.parameters.Parameter;
 
 import java.net.URI;
 import java.util.Comparator;
+import java.util.Map;
 
 public interface Swagger2MarkupConfig {
     MarkupLanguage getMarkupLanguage();
@@ -77,4 +78,6 @@ public interface Swagger2MarkupConfig {
     String getSeparatedDefinitionsFolder();
 
     LineSeparator getLineSeparator();
+
+    Map<String, String> getExtensionsProperties();
 }

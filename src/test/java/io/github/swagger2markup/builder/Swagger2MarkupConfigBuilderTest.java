@@ -25,6 +25,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.assertj.core.api.BDDAssertions.assertThat;
@@ -33,7 +35,13 @@ public class Swagger2MarkupConfigBuilderTest {
 
     @Test
     public void testConfigOfDefaults() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().build();
+        Map<String, String> extensionsProperties = new HashMap<>();
+        extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
+        extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
+
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withExtensionsProperties(extensionsProperties)
+                .build();
 
         assertThat(config.getAnchorPrefix()).isNull();
         assertThat(config.getDefinitionOrderBy()).isEqualTo(OrderBy.NATURAL);
@@ -68,6 +76,10 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isFalse();
         assertThat(config.isSeparatedDefinitionsEnabled()).isFalse();
         assertThat(config.isSeparatedOperationsEnabled()).isFalse();
+        assertThat(config.getExtensionsProperties()).hasSize(2)
+                .containsKeys("swagger2markup.extensions.uniqueId1.customProperty1",
+                        "swagger2markup.extensions.uniqueId1.customProperty2"
+                );
     }
 
 
@@ -112,6 +124,12 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isTrue();
         assertThat(config.isSeparatedDefinitionsEnabled()).isTrue();
         assertThat(config.isSeparatedOperationsEnabled()).isTrue();
+        assertThat(config.getExtensionsProperties()).hasSize(4)
+                .containsKeys("swagger2markup.extensions.uniqueId1.customProperty1",
+                        "swagger2markup.extensions.uniqueId1.customProperty2",
+                        "swagger2markup.extensions.uniqueId2.customProperty1",
+                        "swagger2markup.extensions.uniqueId2.customProperty2"
+                        );
     }
 
     @Test

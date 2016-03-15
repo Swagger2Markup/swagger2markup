@@ -16,6 +16,8 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.markup.builder.MarkupLanguage;
@@ -26,16 +28,19 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Properties;
 
 public class Swagger2MarkupConfigBuilder  {
@@ -80,47 +85,65 @@ public class Swagger2MarkupConfigBuilder  {
     DefaultSwagger2MarkupConfig config = new DefaultSwagger2MarkupConfig();
 
     public Swagger2MarkupConfigBuilder() {
-        this(new Properties());
+        this(new HashedMap<String, String>());
     }
 
-    public  Swagger2MarkupConfigBuilder(Properties properties) {
+    public Swagger2MarkupConfigBuilder(Properties properties) {
+        this(convertPropertiesToMap(properties));
+    }
 
-        Properties safeProperties = new Properties(defaultProperties());
+    private static Map<String, String> convertPropertiesToMap(Properties properties) {
+        Map<String, String> propertiesMap = new HashedMap<>();
+        for(String propertyName : properties.stringPropertyNames()){
+            propertiesMap.put(propertyName, properties.getProperty(propertyName));
+        }
+        return propertiesMap;
+    }
+
+    public Swagger2MarkupConfigBuilder(Map<String, String> properties) {
+        Map<String, String> safeProperties = convertPropertiesToMap(defaultProperties());
         safeProperties.putAll(properties);
 
-        config.markupLanguage = MarkupLanguage.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "markupLanguage"));
-        config.generatedExamplesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "generatedExamplesEnabled"));
-        config.operationDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsEnabled"));
+        config.markupLanguage = MarkupLanguage.valueOf(safeProperties.get(PROPERTIES_PREFIX + "markupLanguage"));
+        config.generatedExamplesEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "generatedExamplesEnabled"));
+        config.operationDescriptionsEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "operationDescriptionsEnabled"));
         if (safeProperties.containsKey(PROPERTIES_PREFIX + "operationDescriptionsUri"))
-            config.operationDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "operationDescriptionsUri"));
-        config.definitionDescriptionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsEnabled"));
+            config.operationDescriptionsUri = URI.create(safeProperties.get(PROPERTIES_PREFIX + "operationDescriptionsUri"));
+        config.definitionDescriptionsEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "definitionDescriptionsEnabled"));
         if (safeProperties.containsKey(PROPERTIES_PREFIX + "definitionDescriptionsUri"))
-            config.definitionDescriptionsUri = URI.create(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionDescriptionsUri"));
-        config.separatedDefinitionsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsEnabled"));
-        config.separatedOperationsEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsEnabled"));
-        config.operationsGroupedBy = GroupBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationsGroupedBy"));
-        config.outputLanguage = Language.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "outputLanguage"));
-        config.inlineSchemaDepthLevel = Integer.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
-        config.interDocumentCrossReferencesEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesEnabled"));
-        config.interDocumentCrossReferencesPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix");
-        config.flatBodyEnabled = Boolean.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "flatBodyEnabled"));
-        config.anchorPrefix = safeProperties.getProperty(PROPERTIES_PREFIX + "anchorPrefix");
-        config.overviewDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "overviewDocument");
-        config.pathsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "pathsDocument");
-        config.definitionsDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "definitionsDocument");
-        config.securityDocument = safeProperties.getProperty(PROPERTIES_PREFIX + "securityDocument");
-        config.separatedOperationsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedOperationsFolder");
-        config.separatedDefinitionsFolder = safeProperties.getProperty(PROPERTIES_PREFIX + "separatedDefinitionsFolder");
-        config.tagOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "tagOrderBy"));
-        config.operationOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "operationOrderBy"));
-        config.definitionOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "definitionOrderBy"));
-        config.parameterOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "parameterOrderBy"));
-        config.propertyOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "propertyOrderBy"));
-        config.responseOrderBy = OrderBy.valueOf(safeProperties.getProperty(PROPERTIES_PREFIX + "responseOrderBy"));
-        String lineSeparator = safeProperties.getProperty(PROPERTIES_PREFIX + "lineSeparator");
+            config.definitionDescriptionsUri = URI.create(safeProperties.get(PROPERTIES_PREFIX + "definitionDescriptionsUri"));
+        config.separatedDefinitionsEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "separatedDefinitionsEnabled"));
+        config.separatedOperationsEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "separatedOperationsEnabled"));
+        config.operationsGroupedBy = GroupBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "operationsGroupedBy"));
+        config.outputLanguage = Language.valueOf(safeProperties.get(PROPERTIES_PREFIX + "outputLanguage"));
+        config.inlineSchemaDepthLevel = Integer.valueOf(safeProperties.get(PROPERTIES_PREFIX + "inlineSchemaDepthLevel"));
+        config.interDocumentCrossReferencesEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "interDocumentCrossReferencesEnabled"));
+        config.interDocumentCrossReferencesPrefix = safeProperties.get(PROPERTIES_PREFIX + "interDocumentCrossReferencesPrefix");
+        config.flatBodyEnabled = Boolean.valueOf(safeProperties.get(PROPERTIES_PREFIX + "flatBodyEnabled"));
+        config.anchorPrefix = safeProperties.get(PROPERTIES_PREFIX + "anchorPrefix");
+        config.overviewDocument = safeProperties.get(PROPERTIES_PREFIX + "overviewDocument");
+        config.pathsDocument = safeProperties.get(PROPERTIES_PREFIX + "pathsDocument");
+        config.definitionsDocument = safeProperties.get(PROPERTIES_PREFIX + "definitionsDocument");
+        config.securityDocument = safeProperties.get(PROPERTIES_PREFIX + "securityDocument");
+        config.separatedOperationsFolder = safeProperties.get(PROPERTIES_PREFIX + "separatedOperationsFolder");
+        config.separatedDefinitionsFolder = safeProperties.get(PROPERTIES_PREFIX + "separatedDefinitionsFolder");
+        config.tagOrderBy = OrderBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "tagOrderBy"));
+        config.operationOrderBy = OrderBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "operationOrderBy"));
+        config.definitionOrderBy = OrderBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "definitionOrderBy"));
+        config.parameterOrderBy = OrderBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "parameterOrderBy"));
+        config.propertyOrderBy = OrderBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "propertyOrderBy"));
+        config.responseOrderBy = OrderBy.valueOf(safeProperties.get(PROPERTIES_PREFIX + "responseOrderBy"));
+        String lineSeparator = safeProperties.get(PROPERTIES_PREFIX + "lineSeparator");
         if(StringUtils.isNoneBlank(lineSeparator)){
             config.lineSeparator = LineSeparator.valueOf(lineSeparator);
         }
+
+        config.extensionsProperties = Maps.filterKeys(safeProperties, new Predicate<String>(){
+            @Override
+            public boolean apply(@Nullable String propertyName) {
+                return StringUtils.contains(propertyName, "extensions");
+            }
+        });
     }
 
     private Properties defaultProperties() {
@@ -536,6 +559,12 @@ public class Swagger2MarkupConfigBuilder  {
         return this;
     }
 
+    public Swagger2MarkupConfigBuilder withExtensionsProperties(Map<String, String> extensionsProperties) {
+        Validate.notEmpty(extensionsProperties, "%s must no be null", "extensionsProperties");
+        config.extensionsProperties = extensionsProperties;
+        return this;
+    }
+
     static class DefaultSwagger2MarkupConfig implements Swagger2MarkupConfig{
 
         private MarkupLanguage markupLanguage;
@@ -573,6 +602,8 @@ public class Swagger2MarkupConfigBuilder  {
         private String securityDocument;
         private String separatedOperationsFolder;
         private String separatedDefinitionsFolder;
+
+        private Map<String, String> extensionsProperties;
 
         @Override
         public MarkupLanguage getMarkupLanguage() {
@@ -742,6 +773,11 @@ public class Swagger2MarkupConfigBuilder  {
         @Override
         public LineSeparator getLineSeparator() {
             return lineSeparator;
+        }
+
+        @Override
+        public Map<String, String> getExtensionsProperties() {
+            return extensionsProperties;
         }
     }
 }
