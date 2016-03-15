@@ -34,7 +34,6 @@ public enum Markdown implements Markup {
     BOLD("**"),
     ITALIC("*"),
     LIST_ENTRY("* "),
-    FILE_EXTENSION("md"),
     SPACE_ESCAPE("-"),
     LINE_BREAK("  ");
 

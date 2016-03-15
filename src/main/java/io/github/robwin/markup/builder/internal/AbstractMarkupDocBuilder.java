@@ -446,10 +446,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return documentBuilder.toString();
     }
 
-    protected String addFileExtension(Markup markup, String fileName) {
-        return fileName + "." + markup;
-    }
-
     @Override
     public Path addFileExtension(Path file) {
         return file.resolveSibling(addFileExtension(file.getFileName().toString()));

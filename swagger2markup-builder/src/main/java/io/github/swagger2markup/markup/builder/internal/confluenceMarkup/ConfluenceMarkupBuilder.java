@@ -115,7 +115,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             anchor = title;
         documentBuilder.append(" ");
         anchor(replaceNewLinesWithWhiteSpace(anchor));
-        
+
         documentBuilder.append(newLine);
 
         return this;

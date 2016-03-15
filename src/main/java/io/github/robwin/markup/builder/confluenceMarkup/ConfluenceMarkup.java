@@ -32,7 +32,6 @@ public enum ConfluenceMarkup implements Markup {
     LIST_ENTRY("* "),
     ANCHOR_START("{anchor:"),
     ANCHOR_END("}"),
-    FILE_EXTENSION("txt"),
     SPACE_ESCAPE("_"),
     LINE_BREAK("\\\\ ");
 
