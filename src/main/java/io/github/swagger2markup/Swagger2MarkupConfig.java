@@ -195,5 +195,8 @@ public interface Swagger2MarkupConfig {
      */
     LineSeparator getLineSeparator();
 
+    /**
+     * Returns properties for extensions.
+     */
     Map<String, String> getExtensionsProperties();
 }
