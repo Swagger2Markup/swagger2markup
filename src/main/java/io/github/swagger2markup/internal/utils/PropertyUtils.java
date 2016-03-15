@@ -158,7 +158,7 @@ public final class PropertyUtils {
                 return "string";
             case "ref":
                 if (property instanceof RefProperty) {
-                    return markupDocBuilder.copy().crossReference(((RefProperty) property).getSimpleRef()).toString();
+                    return markupDocBuilder.copy(false).crossReference(((RefProperty) property).getSimpleRef()).toString();
                 }
             default:
                 return property.getType();
