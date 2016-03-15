@@ -18,10 +18,7 @@
  */
 package io.github.robwin.markup.builder.internal.confluenceMarkup;
 
-import io.github.robwin.markup.builder.MarkupAdmonition;
-import io.github.robwin.markup.builder.MarkupBlockStyle;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.*;
 import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.internal.Markup;
 import org.apache.commons.lang3.StringUtils;
@@ -278,6 +275,6 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public String addFileExtension(String fileName) {
-        return addFileExtension(ConfluenceMarkup.FILE_EXTENSION, fileName);
+        return fileName + MarkupLanguage.CONFLUENCE_MARKUP.getFileNameExtensions().get(0);
     }
 }

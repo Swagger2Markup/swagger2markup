@@ -18,10 +18,7 @@
  */
 package io.github.robwin.markup.builder.internal.markdown;
 
-import io.github.robwin.markup.builder.MarkupAdmonition;
-import io.github.robwin.markup.builder.MarkupBlockStyle;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.robwin.markup.builder.*;
 import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
 import io.github.robwin.markup.builder.internal.Markup;
 import org.apache.commons.collections4.CollectionUtils;
@@ -55,11 +52,11 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         put(MarkupBlockStyle.SIDEBAR, "");
     }};
 
-    public MarkdownBuilder(){
+    public MarkdownBuilder() {
         super();
     }
 
-    public MarkdownBuilder(String newLine){
+    public MarkdownBuilder(String newLine) {
         super(newLine);
     }
 
@@ -178,7 +175,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         Validate.notEmpty(columnSpecs);
 
         newLine();
-        Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
+        Collection<String> headerList = CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
             public String transform(final MarkupTableColumn header) {
                 return escapeTableCell(replaceNewLinesWithWhiteSpace(defaultString(header.header)));
             }
@@ -193,7 +190,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append(newLine);
 
         for (List<String> row : cells) {
-            Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
+            Collection<String> cellList = CollectionUtils.collect(row, new Transformer<String, String>() {
                 public String transform(final String cell) {
                     return escapeTableCell(replaceNewLines(cell));
                 }
@@ -219,6 +216,6 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public String addFileExtension(String fileName) {
-        return addFileExtension(Markdown.FILE_EXTENSION, fileName);
+        return fileName + MarkupLanguage.MARKDOWN.getFileNameExtensions().get(0);
     }
 }
