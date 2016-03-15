@@ -253,13 +253,13 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text) {
         documentBuilder.append("[");
+        if (isNotBlank(text)) {
+            documentBuilder.append(text).append("|");
+        }
         if (isNotBlank(document)) {
             documentBuilder.append(document);
         }
         documentBuilder.append("#").append(anchor);
-        if (isNotBlank(text)) {
-            documentBuilder.append("|").append(text);
-        }
         documentBuilder.append("]");
         return this;
     }
