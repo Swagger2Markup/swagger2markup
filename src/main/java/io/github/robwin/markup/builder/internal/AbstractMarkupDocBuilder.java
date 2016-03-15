@@ -204,11 +204,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return this;
     }
 
-    protected void paragraph(Markup markup, String text) {
-        Validate.notBlank(text, "text must not be null");
-        documentBuilder.append(markup).append(newLine).append(replaceNewLines(text)).append(newLine).append(newLine);
-    }
-
     @Override
     public MarkupDocBuilder paragraph(String text) {
         Validate.notBlank(text, "text must not be null");
