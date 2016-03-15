@@ -33,7 +33,7 @@ public enum ConfluenceMarkup implements Markup {
     ANCHOR_START("{anchor:"),
     ANCHOR_END("}"),
     SPACE_ESCAPE("_"),
-    LINE_BREAK("\\\\ ");
+    LINE_BREAK(" \\\\ ");
 
     private final String markup;
 
