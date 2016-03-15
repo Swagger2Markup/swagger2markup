@@ -33,7 +33,6 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -473,15 +472,5 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     @Override
     public void writeToFile(Path file, Charset charset) throws IOException {
         writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset);
-    }
-
-    @Override
-    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(Paths.get(directory, fileName), charset);
-    }
-
-    @Override
-    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(directory, addFileExtension(fileName), charset);
     }
 }
