@@ -81,7 +81,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder documentTitle(String title) {
         Validate.notBlank(title, "title must not be null");
-        documentBuilder.append(String.format(TITLE_FORMAT, 0, title));
+        documentBuilder.append(String.format(TITLE_FORMAT, 1, title));
         documentBuilder.append(newLine).append(newLine);
         return this;
     }
