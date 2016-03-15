@@ -279,17 +279,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Returns the operation name depending on available informations.
-     * The summary is used to name the operation, or else the operation summary is used.
-     *
-     * @param operation operation
-     * @return operation name
-     */
-    private String operationName(PathOperation operation) {
-        return operation.getTitle();
-    }
-
-    /**
      * Builds a path operation.
      *
      * @param operation  the Swagger Operation
@@ -327,9 +316,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             document =  defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
         else
             document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
-        String operationName = operationName(operation);
 
-        buildOperationTitle(docBuilder.copy(false).crossReference(document, operationName, operationName).toString(), "ref-" + operationName, docBuilder);
+        buildOperationTitle(docBuilder.copy(false).crossReference(document, operation.getId(), operation.getTitle()).toString(), "ref-" + operation.getId(), docBuilder);
     }
 
     /**
@@ -353,10 +341,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the docbuilder do use for output
      */
     private void buildOperationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
-        String operationName = operationName(operation);
-
-        buildOperationTitle(operationName, null, docBuilder);
-        if (operationName.equals(operation.getOperation().getSummary())) {
+        buildOperationTitle(operation.getTitle(), operation.getId(), docBuilder);
+        if (operation.getTitle().equals(operation.getOperation().getSummary())) {
             docBuilder.listing(operation.getMethod() + " " + operation.getPath());
         }
     }

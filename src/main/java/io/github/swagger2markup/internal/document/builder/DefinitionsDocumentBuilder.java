@@ -199,7 +199,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void buildDefinition(Map<String, Model> definitions, String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        buildDefinitionTitle(definitionName, null, docBuilder);
+        buildDefinitionTitle(definitionName, definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
         buildDescriptionParagraph(definitionName, model, docBuilder);
         inlineDefinitions(propertiesSection(definitions, definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
