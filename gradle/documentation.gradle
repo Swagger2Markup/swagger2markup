@@ -1,0 +1,34 @@
+apply plugin: 'org.asciidoctor.convert'
+apply plugin: 'org.ajoberstar.github-pages'
+
+asciidoctor {
+    sources {
+        include 'index.adoc'
+    }
+    backends = ['html5', 'pdf']
+    attributes = [
+            doctype: 'book',
+            toc: 'left',
+            toclevels: '3',
+            numbered: '',
+            sectlinks: '',
+            sectanchors: '',
+            hardbreaks: '',
+    ]
+}
+
+publishGhPages.dependsOn asciidoctor
+
+githubPages {
+    repoUri = 'https://github.com/Swagger2Markup/swagger2markup.git'
+
+    credentials {
+        username = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
+        password = project.hasProperty('githubPassword') ? project.githubPassword : System.getenv('GITHUB_PASSWORD')
+    }
+
+    pages {
+        from file(asciidoctor.outputDir.path + '/html5')
+        into project.version
+    }
+}

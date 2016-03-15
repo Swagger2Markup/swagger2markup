@@ -56,32 +56,32 @@ POST /pets
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/pets"
+----
+
+
 ==== Request body
 ----
 {
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
   "id" : 0,
-  "nicknames" : {
-    "string" : "string"
-  },
   "category" : {
     "id" : 123,
     "name" : "Canines"
   },
-  "weight" : 0.0,
-  "status" : "string",
   "name" : "doggie",
-  "photoUrls" : [ "string" ]
+  "nicknames" : {
+    "string" : "string"
+  },
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string",
+  "weight" : 0.0
 }
-----
-
-
-==== Request path
-----
-"/pets"
 ----
 
 
@@ -173,32 +173,32 @@ PUT /pets
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/pets"
+----
+
+
 ==== Request body
 ----
 {
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
   "id" : 0,
-  "nicknames" : {
-    "string" : "string"
-  },
   "category" : {
     "id" : 123,
     "name" : "Canines"
   },
-  "weight" : 0.0,
-  "status" : "string",
   "name" : "doggie",
-  "photoUrls" : [ "string" ]
+  "nicknames" : {
+    "string" : "string"
+  },
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string",
+  "weight" : 0.0
 }
-----
-
-
-==== Request path
-----
-"/pets"
 ----
 
 
@@ -264,17 +264,17 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/pets/findByStatus"
+----
+
+
 ==== Request query
 ----
 {
   "status" : "string"
 }
-----
-
-
-==== Request path
-----
-"/pets/findByStatus"
 ----
 
 
@@ -348,17 +348,17 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/pets/findByTags"
+----
+
+
 ==== Request query
 ----
 {
   "tags" : "string"
 }
-----
-
-
-==== Request path
-----
-"/pets/findByTags"
 ----
 
 
@@ -425,15 +425,15 @@ POST /pets/{petId}
 
 ==== Example HTTP request
 
-==== Request formData
-----
-"string"
-----
-
-
 ==== Request path
 ----
 "/pets/string"
+----
+
+
+==== Request formData
+----
+"string"
 ----
 
 
@@ -520,22 +520,22 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 ==== Response 200
 ----
 {
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
   "id" : 0,
-  "nicknames" : {
-    "string" : "string"
-  },
   "category" : {
     "id" : 123,
     "name" : "Canines"
   },
-  "weight" : 0.0,
-  "status" : "string",
   "name" : "doggie",
-  "photoUrls" : [ "string" ]
+  "nicknames" : {
+    "string" : "string"
+  },
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string",
+  "weight" : 0.0
 }
 ----
 
@@ -649,6 +649,12 @@ POST /stores/order
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/stores/order"
+----
+
+
 ==== Request body
 ----
 {
@@ -659,12 +665,6 @@ POST /stores/order
   "status" : "PENDING",
   "complete" : true
 }
-----
-
-
-==== Request path
-----
-"/stores/order"
 ----
 
 
@@ -869,25 +869,25 @@ This can only be done by the logged in user.
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/users"
+----
+
+
 ==== Request body
 ----
 {
   "id" : 0,
-  "lastName" : "string",
-  "phone" : "string",
   "username" : "string",
-  "email" : "string",
-  "userStatus" : 0,
-  "pictures" : [ "string" ],
   "firstName" : "string",
-  "password" : "string"
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
 }
-----
-
-
-==== Request path
-----
-"/users"
 ----
 
 
@@ -930,25 +930,25 @@ POST /users/createWithArray
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/users/createWithArray"
+----
+
+
 ==== Request body
 ----
 [ {
   "id" : 0,
-  "lastName" : "string",
-  "phone" : "string",
   "username" : "string",
-  "email" : "string",
-  "userStatus" : 0,
-  "pictures" : [ "string" ],
   "firstName" : "string",
-  "password" : "string"
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
 } ]
-----
-
-
-==== Request path
-----
-"/users/createWithArray"
 ----
 
 
@@ -991,25 +991,25 @@ POST /users/createWithList
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/users/createWithList"
+----
+
+
 ==== Request body
 ----
 [ {
   "id" : 0,
-  "lastName" : "string",
-  "phone" : "string",
   "username" : "string",
-  "email" : "string",
-  "userStatus" : 0,
-  "pictures" : [ "string" ],
   "firstName" : "string",
-  "password" : "string"
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
 } ]
-----
-
-
-==== Request path
-----
-"/users/createWithList"
 ----
 
 
@@ -1062,18 +1062,18 @@ GET /users/login
 
 ==== Example HTTP request
 
-==== Request query
-----
-{
-  "username" : "string",
-  "password" : "string"
-}
-----
-
-
 ==== Request path
 ----
 "/users/login"
+----
+
+
+==== Request query
+----
+{
+  "password" : "string",
+  "username" : "string"
+}
 ----
 
 
@@ -1190,14 +1190,14 @@ GET /users/{username}
 ----
 {
   "id" : 0,
-  "lastName" : "string",
-  "phone" : "string",
   "username" : "string",
-  "email" : "string",
-  "userStatus" : 0,
-  "pictures" : [ "string" ],
   "firstName" : "string",
-  "password" : "string"
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
 }
 ----
 
@@ -1256,25 +1256,25 @@ This can only be done by the logged in user.
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/users/string"
+----
+
+
 ==== Request body
 ----
 {
   "id" : 0,
-  "lastName" : "string",
-  "phone" : "string",
   "username" : "string",
-  "email" : "string",
-  "userStatus" : 0,
-  "pictures" : [ "string" ],
   "firstName" : "string",
-  "password" : "string"
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
 }
-----
-
-
-==== Request path
-----
-"/users/string"
 ----
 
 
