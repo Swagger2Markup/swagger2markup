@@ -16,20 +16,16 @@
 package io.github.swagger2markup;
 
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.utils.IOUtils;
-import io.swagger.models.Swagger;
 import org.junit.Test;
 
 import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GeneralConverterTest {
 
+    /*
     @Test
     public void testConfigDefaultPaths() throws URISyntaxException {
         //Given
@@ -50,6 +46,7 @@ public class GeneralConverterTest {
         assertThat(converter.getContext().getConfig().getDefinitionDescriptionsUri()).isEqualTo(baseUri);
         assertThat(converter.getContext().getConfig().getOperationDescriptionsUri()).isEqualTo(baseUri);
     }
+    */
 
     @Test
     public void testConfigDefaultPathsWithUri() throws MalformedURLException {
@@ -70,6 +67,7 @@ public class GeneralConverterTest {
         assertThat(converterBuilder.getContext().getConfig().getOperationDescriptionsUri()).isNull();
     }
 
+    /*
     @Test
     public void testDefaultPathsWithoutFile() {
         //Given
@@ -84,4 +82,5 @@ public class GeneralConverterTest {
                 .build();
         assertThat(converter.getContext().getConfig().isDefinitionDescriptionsEnabled()).isFalse();
     }
+    */
 }
