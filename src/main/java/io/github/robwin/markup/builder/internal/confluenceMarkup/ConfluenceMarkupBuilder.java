@@ -214,7 +214,10 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             for (List<String> row : cells) {
                 documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 for (String cell : row) {
-                    documentBuilder.append(escapeCellContent(cell)).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
+                    String cellContent = escapeCellContent(cell);
+                    if (StringUtils.isBlank(cellContent))
+                        cellContent = " ";
+                    documentBuilder.append(cellContent).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 }
                 documentBuilder.append(newLine);
             }
