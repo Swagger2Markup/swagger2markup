@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.spi;
+package io.github.swagger2markup.builder;
 
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.spi.SwaggerModelExtension;
 import io.swagger.models.Swagger;
 import org.junit.Test;
 
@@ -23,11 +24,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Swagger2MarkupExtensionRegistryTest {
+public class Swagger2MarkupExtensionRegistryBuilderTest {
 
     @Test
     public void testRegistering() {
-        Swagger2MarkupExtensionRegistry.Builder registryBuilder = Swagger2MarkupExtensionRegistry.ofEmpty();
+        Swagger2MarkupExtensionRegistryBuilder registryBuilder = new Swagger2MarkupExtensionRegistryBuilder();
         registryBuilder.withSwaggerModelExtension(new MySwaggerModelExtension());
     }
 
@@ -40,7 +41,7 @@ public class Swagger2MarkupExtensionRegistryTest {
             }
         };
 
-        Swagger2MarkupExtensionRegistry registry = Swagger2MarkupExtensionRegistry.ofEmpty()
+        Swagger2MarkupExtensionRegistry registry = new Swagger2MarkupExtensionRegistryBuilder()
                 .withSwaggerModelExtension(ext2)
                 .withSwaggerModelExtension(ext3)
                 .withSwaggerModelExtension(ext1)

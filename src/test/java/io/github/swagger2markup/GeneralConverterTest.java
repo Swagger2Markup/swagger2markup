@@ -15,6 +15,7 @@
  */
 package io.github.swagger2markup;
 
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.Swagger;
 import org.junit.Test;
@@ -35,7 +36,7 @@ public class GeneralConverterTest {
         Path file = Paths.get(GeneralConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withDefinitionDescriptions()
                 .withOperationDescriptions()
                 .build();
@@ -55,7 +56,7 @@ public class GeneralConverterTest {
         //Given
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withDefinitionDescriptions()
                 .withOperationDescriptions()
                 .build();
@@ -73,7 +74,7 @@ public class GeneralConverterTest {
     public void testDefaultPathsWithoutFile() {
         //Given
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withDefinitionDescriptions()
                 .build();
 

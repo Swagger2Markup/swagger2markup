@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup;
+package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.Language;
+import io.github.swagger2markup.OrderBy;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -25,11 +29,11 @@ import java.util.Properties;
 
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
-public class Swagger2MarkupConfigTest {
+public class Swagger2MarkupConfigBuilderTest {
 
     @Test
     public void testConfigOfDefaults() {
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults().build();
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().build();
 
         assertThat(config.getAnchorPrefix()).isNull();
         assertThat(config.getDefinitionOrderBy()).isEqualTo(OrderBy.NATURAL);
@@ -48,7 +52,7 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getOutputLanguage()).isEqualTo(Language.EN);
         assertThat(config.getOverviewDocument()).isEqualTo("overview");
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.NATURAL);
-        assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.PARAMETER_IN_NATURAL_ORDERING.compound(Swagger2MarkupConfig.Builder.PARAMETER_NAME_NATURAL_ORDERING));
+        assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.PARAMETER_IN_NATURAL_ORDERING.compound(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING));
         assertThat(config.getPathsDocument()).isEqualTo("paths");
         assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.AS_IS);
         assertThat(config.getPropertyOrderBy()).isEqualTo(OrderBy.NATURAL);
@@ -71,9 +75,9 @@ public class Swagger2MarkupConfigTest {
     public void testConfigOfProperties() throws IOException {
 
         Properties properties = new Properties();
-        properties.load(Swagger2MarkupConfigTest.class.getResourceAsStream("/config/config.properties"));
+        properties.load(Swagger2MarkupConfigBuilderTest.class.getResourceAsStream("/config/config.properties"));
 
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofProperties(properties).build();
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(properties).build();
 
         assertThat(config.getAnchorPrefix()).isEqualTo("anchorPrefix");
         assertThat(config.getDefinitionOrderBy()).isEqualTo(OrderBy.AS_IS);
@@ -88,7 +92,7 @@ public class Swagger2MarkupConfigTest {
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
         assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.NATURAL);
-        assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.OPERATION_PATH_NATURAL_ORDERING.compound(Swagger2MarkupConfig.Builder.OPERATION_METHOD_NATURAL_ORDERING));
+        assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.OPERATION_PATH_NATURAL_ORDERING.compound(Swagger2MarkupConfigBuilder.OPERATION_METHOD_NATURAL_ORDERING));
         assertThat(config.getOutputLanguage()).isEqualTo(Language.RU);
         assertThat(config.getOverviewDocument()).isEqualTo("overviewTest");
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.AS_IS);
@@ -112,7 +116,7 @@ public class Swagger2MarkupConfigTest {
 
     @Test
     public void testConfigBuilder() {
-        Swagger2MarkupConfig.Builder builder = Swagger2MarkupConfig.ofDefaults();
+        Swagger2MarkupConfigBuilder builder = new Swagger2MarkupConfigBuilder();
 
         try {
             builder.withTagOrdering(OrderBy.CUSTOM);
@@ -128,9 +132,9 @@ public class Swagger2MarkupConfigTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
-        builder.withOperationOrdering(Swagger2MarkupConfig.Builder.OPERATION_PATH_NATURAL_ORDERING);
+        builder.withOperationOrdering(Swagger2MarkupConfigBuilder.OPERATION_PATH_NATURAL_ORDERING);
         assertThat(builder.config.getOperationOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.OPERATION_PATH_NATURAL_ORDERING);
+        assertThat(builder.config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.OPERATION_PATH_NATURAL_ORDERING);
 
         try {
             builder.withDefinitionOrdering(OrderBy.CUSTOM);
@@ -146,9 +150,9 @@ public class Swagger2MarkupConfigTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
-        builder.withParameterOrdering(Swagger2MarkupConfig.Builder.PARAMETER_NAME_NATURAL_ORDERING);
+        builder.withParameterOrdering(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING);
         assertThat(builder.config.getParameterOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfig.Builder.PARAMETER_NAME_NATURAL_ORDERING);
+        assertThat(builder.config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING);
 
         try {
             builder.withPropertyOrdering(OrderBy.CUSTOM);

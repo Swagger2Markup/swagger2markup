@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.spi;
+package io.github.swagger2markup.builder;
 
+import io.github.swagger2markup.spi.SwaggerModelExtension;
 import io.swagger.models.Swagger;
 
 public class MySwaggerModelExtension extends SwaggerModelExtension {

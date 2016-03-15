@@ -16,6 +16,7 @@
 package io.github.swagger2markup;
 
 import io.github.swagger2markup.assertions.DiffUtils;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -68,7 +69,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .build();
 
         Swagger2MarkupConverter.from(file).withConfig(config).build()
@@ -90,7 +91,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build()
@@ -112,7 +113,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -135,7 +136,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withGeneratedExamples()
                 .build();
 
@@ -159,7 +160,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInlineSchemaDepthLevel(1)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -181,7 +182,7 @@ public class AsciidocConverterTest {
         Path outputDirectory = Paths.get("build/docs/asciidoc/group_by_tags");
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withPathsGroupedBy(GroupBy.TAGS)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -204,7 +205,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
         try {
-            Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+            Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                     .withPathsGroupedBy(GroupBy.TAGS)
                     .build();
 
@@ -227,7 +228,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withDefinitionDescriptions(Paths.get("src/test/resources/docs/asciidoc/definitions"))
                 .build();
 
@@ -287,7 +288,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .build();
         Swagger2MarkupConverter.from(file).withConfig(config).build()
@@ -312,7 +313,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedOperations()
                 .build();
         Swagger2MarkupConverter.from(file).withConfig(config).build()
@@ -336,7 +337,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withOutputLanguage(Language.RU)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -357,7 +358,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withOutputLanguage(Language.FR)
                 .build();
         Swagger2MarkupConverter.from(file)

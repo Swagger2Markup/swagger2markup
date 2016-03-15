@@ -21,6 +21,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.robwin.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.assertions.DiffUtils;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -64,7 +65,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -88,7 +89,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withDefinitionDescriptions(Paths.get("src/test/resources/docs/markdown/definitions"))
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
@@ -110,7 +111,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
@@ -138,7 +139,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = Swagger2MarkupConfig.ofDefaults()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();

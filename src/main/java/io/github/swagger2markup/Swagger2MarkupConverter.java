@@ -16,6 +16,8 @@
 package io.github.swagger2markup;
 
 import com.google.common.annotations.VisibleForTesting;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
 import io.github.swagger2markup.internal.document.builder.DefinitionsDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.PathsDocumentBuilder;
@@ -244,13 +246,12 @@ public class Swagger2MarkupConverter {
 
         public Swagger2MarkupConverter build() {
             if (config == null)
-                config = Swagger2MarkupConfig.ofDefaults().build();
+                config = new Swagger2MarkupConfigBuilder().build();
 
             if (extensionRegistry == null)
-                extensionRegistry = Swagger2MarkupExtensionRegistry.ofEmpty().build();
+                extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
 
             Context context = new Context(config, extensionRegistry, swagger, swaggerLocation);
-            config.setGlobalContext(context);
 
             initExtensions(context);
 
