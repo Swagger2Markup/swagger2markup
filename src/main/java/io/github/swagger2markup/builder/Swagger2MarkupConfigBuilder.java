@@ -43,11 +43,12 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
 
+import static io.github.swagger2markup.Swagger2MarkupConfig.*;
+
 public class Swagger2MarkupConfigBuilder  {
 
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfigBuilder.class);
 
-    private static final String PROPERTIES_PREFIX = "swagger2markup.";
     private static final String PROPERTIES_DEFAULT = "/io/github/swagger2markup/config/default.properties";
 
     static final Ordering<PathOperation> OPERATION_METHOD_NATURAL_ORDERING = Ordering
@@ -141,7 +142,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.extensionsProperties = Maps.filterKeys(safeProperties, new Predicate<String>(){
             @Override
             public boolean apply(@Nullable String propertyName) {
-                return StringUtils.contains(propertyName, "extensions");
+                return StringUtils.startsWith(propertyName, EXTENSION_PREFIX);
             }
         });
     }
