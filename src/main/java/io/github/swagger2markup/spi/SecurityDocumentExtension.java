@@ -22,7 +22,7 @@ import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.lang3.Validate;
 
 /**
- * A SecurityContentExtension can be used to extend the security document.
+ * SecurityContentExtension extension point can be used to extend the security document content.
  */
 public abstract class SecurityDocumentExtension extends AbstractExtension {
 
@@ -32,7 +32,6 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
         DOCUMENT_END,
         DEFINITION_BEGIN,
         DEFINITION_END
-
     }
 
     public static class Context extends ContentContext {

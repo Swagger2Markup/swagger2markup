@@ -19,7 +19,7 @@ package io.github.swagger2markup.spi;
 import io.swagger.models.Swagger;
 
 /**
- * A SwaggerExtension can be used to preprocess the Swagger model.
+ * SwaggerModelExtension extension point can be used to preprocess the Swagger model.
  */
 public abstract class SwaggerModelExtension extends AbstractExtension {
 

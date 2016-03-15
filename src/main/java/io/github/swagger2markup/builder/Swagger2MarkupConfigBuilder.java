@@ -182,7 +182,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies the markup language which should be used to generate the files
+     * Specifies the markup language which should be used to generate the files.
      *
      * @param markupLanguage the markup language which is used to generate the files
      * @return this builder
@@ -194,7 +194,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Include generated examples into the Paths document
+     * Include generated examples into the documents.
      *
      * @return this builder
      */
@@ -204,7 +204,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Include hand-written descriptions into the Paths document
+     * Include hand-written descriptions into the Paths document.
      *
      * @param operationDescriptionsUri the URI to the folder where the description documents reside.
      * @return this builder
@@ -217,7 +217,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Include hand-written descriptions into the Paths document
+     * Include hand-written descriptions into the Paths document.
      *
      * @param operationDescriptionsPath the path to the folder where the description documents reside.
      * @return this builder
@@ -239,7 +239,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Include hand-written descriptions into the Definitions document
+     * Include hand-written descriptions into the Definitions document.
      *
      * @param definitionDescriptionsUri the URI to the folder where the description documents reside.
      * @return this builder
@@ -252,7 +252,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Include hand-written descriptions into the Definitions document
+     * Include hand-written descriptions into the Definitions document.
      *
      * @param definitionDescriptionsPath the path to the folder where the description documents reside.
      * @return this builder
@@ -274,7 +274,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * In addition to the definitions file, also create separate definition files for each model definition.
+     * In addition to the Definitions file, also create separate definition files for each model definition.
      *
      * @return this builder
      */
@@ -285,7 +285,7 @@ public class Swagger2MarkupConfigBuilder  {
 
 
     /**
-     * In addition to the paths file, also create separate path files for each path.
+     * In addition to the Paths file, also create separate operation files for each operation.
      *
      * @return this builder
      */
@@ -296,7 +296,7 @@ public class Swagger2MarkupConfigBuilder  {
 
 
     /**
-     * Specifies if the paths should be grouped by tags or stay as-is.
+     * Specifies if the operations should be grouped by tags or stay as-is.
      *
      * @param pathsGroupedBy the GroupBy enum
      * @return this builder
@@ -308,7 +308,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies labels language of output files
+     * Specifies labels language of output files.
      *
      * @param language the enum
      * @return this builder
@@ -320,7 +320,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled)
+     * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled).
      *
      * @param inlineSchemaDepthLevel number of recursion levels for inline schemasEnabled display
      * @return this builder
@@ -460,7 +460,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies a custom comparator function to order propertys.
+     * Specifies a custom comparator function to order properties.
      *
      * @param propertyOrdering property ordering
      * @return this builder
@@ -503,7 +503,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Enable use of inter-document cross-references when needed
+     * Enable use of inter-document cross-references when needed.
      *
      * @param prefix Prefix to document in all inter-document cross-references.
      * @return this builder
@@ -526,7 +526,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Optionally isolate the body parameter, if any, from other parameters
+     * Optionally isolate the body parameter, if any, from other parameters.
      *
      * @return this builder
      */
@@ -536,8 +536,8 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Optionally prefix all anchors for unicity
-     *.
+     * Optionally prefix all anchors for uniqueness.
+     *
      * @param anchorPrefix anchor prefix.
      * @return this builder
      */
@@ -548,7 +548,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies the line separator which should be used .
+     * Specifies the line separator which should be used.
      *
      * @param lineSeparator the lineSeparator
      * @return this builder

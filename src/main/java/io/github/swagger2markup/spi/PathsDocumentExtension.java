@@ -16,16 +16,14 @@
 
 package io.github.swagger2markup.spi;
 
-import org.apache.commons.lang3.Validate;
-
 import com.google.common.base.Optional;
-
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.model.PathOperation;
+import org.apache.commons.lang3.Validate;
 
 /**
- * A SecurityContentExtension can be used to extend the paths document.
+ * PathsDocumentExtension extension point can be used to extend the paths document content.
  */
 public abstract class PathsDocumentExtension extends AbstractExtension {
 

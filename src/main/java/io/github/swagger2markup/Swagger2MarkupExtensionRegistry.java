@@ -19,14 +19,37 @@ import io.github.swagger2markup.spi.*;
 
 import java.util.List;
 
+/**
+ * Extension points registry interface.
+ */
 public interface Swagger2MarkupExtensionRegistry {
+    /**
+     * SwaggerModelExtension extension point can be used to preprocess the Swagger model.
+     * @return registered extensions extending SwaggerModelExtension extension point
+     */
     List<SwaggerModelExtension> getSwaggerModelExtensions();
 
+    /**
+     * OverviewDocumentExtension extension point can be used to extend the overview document content.
+     * @return registered extensions extending OverviewDocumentExtension extension point
+     */
     List<OverviewDocumentExtension> getOverviewDocumentExtensions();
 
+    /**
+     * DefinitionsDocumentExtension extension point can be used to extend the definitions document content.
+     * @return registered extensions extending DefinitionsDocumentExtension extension point
+     */
     List<DefinitionsDocumentExtension> getDefinitionsDocumentExtensions();
 
+    /**
+     * SecurityContentExtension extension point can be used to extend the security document content.
+     * @return registered extensions extending SecurityContentExtension extension point
+     */
     List<SecurityDocumentExtension> getSecurityDocumentExtensions();
 
+    /**
+     * PathsDocumentExtension extension point can be used to extend the paths document content.
+     * @return registered extensions extending PathsDocumentExtension extension point
+     */
     List<PathsDocumentExtension> getPathsDocumentExtensions();
 }

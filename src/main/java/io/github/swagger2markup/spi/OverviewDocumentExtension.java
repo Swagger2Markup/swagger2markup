@@ -19,7 +19,7 @@ package io.github.swagger2markup.spi;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 
 /**
- * A SecurityContentExtension can be used to extend the overview document.
+ * OverviewDocumentExtension extension point can be used to extend the overview document content.
  */
 public abstract class OverviewDocumentExtension extends AbstractExtension {
 
