@@ -103,8 +103,6 @@ public class MarkupDocBuilderTest {
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
-        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
@@ -163,8 +161,6 @@ public class MarkupDocBuilderTest {
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
-        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
@@ -223,8 +219,6 @@ public class MarkupDocBuilderTest {
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
-        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
 
