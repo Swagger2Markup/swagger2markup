@@ -228,18 +228,31 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return listing(replaceNewLines(text), null);
     }
 
-    protected void delimitedBlockText(Markup markup, String text) {
-        if (markup != null)
-            documentBuilder.append(markup).append(newLine);
+    protected void delimitedBlockText(Markup begin, String text, Markup end) {
+        Validate.notBlank(text, "text must not be null");
+        if (!StringUtils.isBlank(begin.toString()))
+            documentBuilder.append(begin).append(newLine);
         documentBuilder.append(replaceNewLines(text)).append(newLine);
-        if (markup != null)
-            documentBuilder.append(markup).append(newLine);
+        if (!StringUtils.isBlank(end.toString()))
+            documentBuilder.append(end).append(newLine);
         documentBuilder.append(newLine);
     }
 
-    protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
+    protected void delimitedTextWithoutLineBreaks(Markup begin, String text, Markup end) {
         Validate.notBlank(text, "text must not be null");
-        documentBuilder.append(markup).append(replaceNewLines(text)).append(markup);
+        if (!StringUtils.isBlank(begin.toString()))
+            documentBuilder.append(begin);
+        documentBuilder.append(replaceNewLines(text));
+        if (!StringUtils.isBlank(end.toString()))
+            documentBuilder.append(end);
+    }
+
+    protected void delimitedBlockText(Markup markup, String text) {
+        delimitedBlockText(markup, text, markup);
+    }
+
+    protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
+        delimitedTextWithoutLineBreaks(markup, text, markup);
     }
 
     protected void boldText(Markup markup, String text) {
@@ -255,7 +268,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text) {        
+    public MarkupDocBuilder boldTextLine(String text) {
         return boldTextLine(text, LINE_BREAK_DEFAULT);
     }
 
@@ -457,12 +470,12 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             logger.info("Markup document written to: {}", file);
         }
     }
-    
-    public String replaceNewLines(String content){
+
+    public String replaceNewLines(String content) {
         return content.replaceAll(NEW_LINES, newLine);
     }
 
-    public String replaceNewLinesWithWhiteSpace(String content){
+    public String replaceNewLinesWithWhiteSpace(String content) {
         return content.replaceAll(NEW_LINES, WHITESPACE);
     }
 

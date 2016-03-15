@@ -23,18 +23,45 @@ import io.github.robwin.markup.builder.MarkupBlockStyle;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
 import io.github.robwin.markup.builder.MarkupTableColumn;
 import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
+import io.github.robwin.markup.builder.internal.Markup;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("^h([0-9])\\.\\s+(.*)$");
+    private static final String TITLE_FORMAT = "h%d. %s";
+
+    /**
+     * Associate macro name to block style.<br/>
+     * ending ':' means the macro supports title attribute.<br/>
+     * '>ADMONITION_BLOCK' means value should refer to {@link #ADMONITION_BLOCK_STYLE}.
+     */
+    private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
+        put(MarkupBlockStyle.EXAMPLE, ">ADMONITION_BLOCK");
+        put(MarkupBlockStyle.LISTING, "code:");
+        put(MarkupBlockStyle.LITERAL, "noformat");
+        put(MarkupBlockStyle.PASSTHROUGH, "html");
+        put(MarkupBlockStyle.SIDEBAR, ">ADMONITION_BLOCK");
+    }};
+
+    private static final Map<MarkupAdmonition, String> ADMONITION_BLOCK_STYLE = new HashMap<MarkupAdmonition, String>() {{
+        put(null, "panel:");
+        put(MarkupAdmonition.CAUTION, "note:");
+        put(MarkupAdmonition.IMPORTANT, "alert:");
+        put(MarkupAdmonition.NOTE, "info:");
+        put(MarkupAdmonition.TIP, "tip:");
+        put(MarkupAdmonition.WARNING, "warning:");
+    }};
 
     public ConfluenceMarkupBuilder() {
         super();
@@ -56,107 +83,123 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder documentTitle(String title) {
+        Validate.notBlank(title, "title must not be null");
+        documentBuilder.append(String.format(TITLE_FORMAT, 0, title));
+        documentBuilder.append(newLine).append(newLine);
         return this;
     }
 
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
+        Validate.notBlank(title, "title must not be null");
+        Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
+
         documentBuilder.append(newLine);
-        documentBuilder.append("h").append(level + 1).append(". ").append(title);
+        documentBuilder.append(String.format(TITLE_FORMAT, level + 1, title));
         if (isNotBlank(anchor)) {
-            documentBuilder.append(" {anchor:").append(anchor).append("}");
+            documentBuilder.append(" ");
+            anchor(anchor);
+            documentBuilder.append(newLine);
         }
-        documentBuilder.append(newLine).append(newLine);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder block(String text, MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
-        switch (style) {
-            case SIDEBAR:
-                documentBuilder.append(newLine).append("{quote}").append(newLine);
-                if (isNotBlank(title)) {
-                    documentBuilder.append(title);
-                    newLine(true);
-                }
-                documentBuilder.append(text);
-                documentBuilder.append(newLine).append("{quote}").append(newLine);
-                break;
-            case EXAMPLE:
-            case LITERAL:
-                documentBuilder.append(newLine);
-                if (isBlank(title)) {
-                    documentBuilder.append("{panel}");
-                } else {
-                    documentBuilder.append("{panel:title=").append(title).append("}");
-                }
-                documentBuilder.append(newLine);
-                documentBuilder.append(text);
-                documentBuilder.append(newLine).append("{panel}").append(newLine);
-                break;
-            case LISTING:
-                documentBuilder.append(newLine);
-                if (isBlank(title)) {
-                    documentBuilder.append("{code}");
-                } else {
-                    documentBuilder.append("{code:title=").append(title).append("}");
-                }
-                documentBuilder.append(newLine);
-                documentBuilder.append(text);
-                documentBuilder.append(newLine).append("{code}").append(newLine);
-                break;
-            case PASSTHROUGH:
-                documentBuilder.append(newLine).append("{noformat}").append(newLine);
-                if (isNotBlank(title)) {
-                    documentBuilder.append(title);
-                    documentBuilder.append(newLine);
-                }
-                documentBuilder.append(text);
-                documentBuilder.append(newLine).append("{noformat}").append(newLine);
-                break;
-        }
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder listing(String text, String language) {
         documentBuilder.append(newLine);
-        if (isBlank(language)) {
-            documentBuilder.append("{code}");
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
+
+        String block = BLOCK_STYLE.get(style);
+
+        boolean admonitionBlock = block.equals(">ADMONITION_BLOCK");
+        if (admonitionBlock) {
+            block = ADMONITION_BLOCK_STYLE.get(admonition);
+        }
+
+        boolean supportTitle = false;
+        if (block.endsWith(":")) {
+            supportTitle = true;
+            block = StringUtils.stripEnd(block, ":");
+        }
+
+        String titleString = null;
+        if (admonition != null && !admonitionBlock) {
+            titleString = StringUtils.capitalize(admonition.name().toLowerCase());
+        }
+        if (title != null) {
+            titleString = (titleString == null ? "" : titleString + " | ") + title;
+        }
+
+        final String finalBlock = block;
+        Markup blockMarkup = new Markup() {
+            @Override
+            public String toString() {
+                return String.format("{%s}", finalBlock);
+            }
+        };
+
+        if (!supportTitle) {
+            if (titleString != null)
+                documentBuilder.append(titleString).append(" : ").append(newLine);
+            delimitedBlockText(blockMarkup, text);
         } else {
-            documentBuilder.append("{code:language=").append(language).append("}");
+            final String finalTitleString = titleString;
+            delimitedBlockText(new Markup() {
+                @Override
+                public String toString() {
+                    if (finalTitleString == null)
+                        return String.format("{%s}", finalBlock);
+                    else
+                        return String.format("{%s:title=%s}", finalBlock, finalTitleString);
+                }
+            }, text, blockMarkup);
         }
-        documentBuilder.append(newLine);
-        documentBuilder.append(text);
-        documentBuilder.append(newLine).append("{code}").append(newLine).append(newLine);
+
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder listing(String text, final String language) {
+        Markup blockMarkup = new Markup() {
+            @Override
+            public String toString() {
+                return String.format("{%s}", "code");
+            }
+        };
+
+        if (language != null) {
+            delimitedBlockText(new Markup() {
+                @Override
+                public String toString() {
+                    return String.format("{code:language=%s}", language);
+                }
+            }, text, blockMarkup);
+        } else {
+            delimitedBlockText(blockMarkup, text);
+        }
         return this;
     }
 
     @Override
     public MarkupDocBuilder boldText(String text) {
-        documentBuilder.append("*").append(text).append("*");
+        boldText(ConfluenceMarkup.BOLD, text);
         return this;
     }
 
     @Override
     public MarkupDocBuilder italicText(String text) {
-        documentBuilder.append("_").append(text).append("_");
+        italicText(ConfluenceMarkup.ITALIC, text);
         return this;
     }
 
     @Override
     public MarkupDocBuilder unorderedList(List<String> list) {
-        documentBuilder.append(newLine).append(newLine);
-        for (String item : list) {
-            documentBuilder.append("* ").append(item).append(newLine);
-        }
-        documentBuilder.append(newLine);
+        unorderedList(ConfluenceMarkup.LIST_ENTRY, list);
         return this;
     }
 
     @Override
     public MarkupDocBuilder unorderedListItem(String item) {
-        documentBuilder.append("* ").append(item);
+        unorderedListItem(ConfluenceMarkup.LIST_ENTRY, item);
         return this;
     }
 
@@ -172,9 +215,9 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         }
         if (cells != null) {
             for (List<String> row : cells) {
-                documentBuilder.append("|");
+                documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 for (String cell : row) {
-                    documentBuilder.append(escapeCellContent(cell)).append("|");
+                    documentBuilder.append(escapeCellContent(cell)).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 }
                 documentBuilder.append(newLine);
             }
@@ -186,7 +229,8 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         if (content == null) {
             return " ";
         }
-        return content.replace("|", "\\|").replace(newLine, ConfluenceMarkup.LINE_BREAK.toString());
+        return content.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), ConfluenceMarkup.TABLE_COLUMN_DELIMITER_ESCAPE.toString())
+                .replace(newLine, ConfluenceMarkup.LINE_BREAK.toString());
     }
 
     private String normalizeAnchor(String anchor) {
@@ -196,13 +240,13 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder anchor(String anchor, String text) {
-        documentBuilder.append("{anchor:").append(normalizeAnchor(anchor)).append("}");
+        documentBuilder.append(ConfluenceMarkup.ANCHOR_START).append(normalizeAnchor(anchor)).append(ConfluenceMarkup.ANCHOR_END);
         return this;
     }
 
     @Override
     public MarkupDocBuilder crossReference(String document, String anchor, String text) {
-        crossReferenceRaw(document, anchor, text);
+        crossReferenceRaw(document, normalizeAnchor(anchor), text);
         return this;
     }
 
@@ -212,7 +256,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         if (isNotBlank(document)) {
             documentBuilder.append(document);
         }
-        documentBuilder.append("#").append(normalizeAnchor(anchor));
+        documentBuilder.append("#").append(anchor);
         if (isNotBlank(text)) {
             documentBuilder.append("|").append(text);
         }
@@ -228,7 +272,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle2(TITLE_PATTERN, "h%d. %s", false, markupText, levelOffset);
+        importMarkupStyle2(TITLE_PATTERN, TITLE_FORMAT, false, markupText, levelOffset);
         return this;
     }
 
