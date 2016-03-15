@@ -47,11 +47,11 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
-        put(MarkupBlockStyle.EXAMPLE, null);
+        put(MarkupBlockStyle.EXAMPLE, "");
         put(MarkupBlockStyle.LISTING, Markdown.LISTING.toString());
         put(MarkupBlockStyle.LITERAL, Markdown.LISTING.toString());
-        put(MarkupBlockStyle.PASSTHROUGH, null);
-        put(MarkupBlockStyle.SIDEBAR, null);
+        put(MarkupBlockStyle.PASSTHROUGH, "");
+        put(MarkupBlockStyle.SIDEBAR, "");
     }};
 
     @Override
@@ -85,19 +85,18 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
         if (admonition != null)
-            documentBuilder.append(StringUtils.capitalize(admonition.name())).append(" : ");
+            documentBuilder.append(StringUtils.capitalize(admonition.name().toLowerCase()));
         if (title != null) {
             if (admonition != null)
                 documentBuilder.append(" | ");
-            documentBuilder.append(title).append(" : ");
+            documentBuilder.append(title);
         }
         if (admonition != null || title != null)
-            documentBuilder.append(newLine);
+            documentBuilder.append(" : ").append(newLine);
 
         delimitedBlockText(new Markup() {
             public String toString() {
-                String separator = BLOCK_STYLE.get(style);
-                return separator;
+                return BLOCK_STYLE.get(style);
             }
         }, text);
         return this;

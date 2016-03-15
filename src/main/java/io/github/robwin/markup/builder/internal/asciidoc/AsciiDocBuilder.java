@@ -92,7 +92,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
         delimitedBlockText(new Markup() {
             public String toString() {
-                assert (BLOCK_STYLE.containsKey(style));
                 return BLOCK_STYLE.get(style);
             }
         }, text);

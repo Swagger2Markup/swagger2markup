@@ -216,9 +216,9 @@ public class MarkupDocBuilderTest {
                 .anchor("anchor", "text").newLine()
                 .anchor(" Simple    anchor").newLine()
                 .anchor("  \u0240 µ&|ù This .:/-_#  ").newLine()
-                .crossReferenceRaw("./document.md", "anchor", "text").newLine(true)
+                .crossReferenceRaw("./document.txt", "anchor", "text").newLine(true)
                 .crossReferenceRaw("  \u0240 µ&|ù This .:/-_  ").newLine(true)
-                .crossReference("./document.md", "anchor", "text").newLine(true)
+                .crossReference("./document.txt", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);

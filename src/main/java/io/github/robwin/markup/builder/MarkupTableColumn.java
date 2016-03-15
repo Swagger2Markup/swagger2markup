@@ -49,7 +49,7 @@ public class MarkupTableColumn {
      * Set column width ratio for this column.<br/>
      * Limited support : Markdown does not support column width specifiers and will ignore {@code widthRatio}.
      *
-     * @param widthRatio width ratio integer value [0-100]. Accept relative width specifiers [0-9] for languages supporting it.
+     * @param widthRatio width ratio integer value [0-100]. Accept relative width specifiers (e.g.: 1, 2, 3, .. with Sum{i=0->nbCols}(widthRatio(i)) != 100).
      * @return this builder
      */
     public MarkupTableColumn withWidthRatio(Integer widthRatio) {
