@@ -19,7 +19,7 @@
 |petId||false|integer(int64)|||
 |quantity||false|integer(int32)|||
 |shipDate||false|string(date-time)|||
-|status|Order Status|false|string|||
+|status|Order Status|false|enum (Ordered, Cancelled)|||
 
 
 ### Pet
@@ -30,7 +30,7 @@
 |id||false|integer(int64)|||
 |name||true|string||"doggie"|
 |photoUrls||true|string array|||
-|status|pet status in the store|false|string|||
+|status|pet status in the store,|false|enum (Dead, Alive)|||
 |tags||false|[Tag](#tag) array|||
 
 
