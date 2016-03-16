@@ -26,6 +26,8 @@ import org.apache.commons.configuration.ConfigurationConverter;
 import org.apache.commons.configuration.MapConfiguration;
 
 import java.net.URI;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -140,6 +142,34 @@ public class Swagger2MarkupProperties {
         Optional<String> property = getString(key);
         if(property.isPresent()){
             return URI.create(property.get());
+        }else{
+            throw new IllegalStateException(String.format("required key [%s] not found", key));
+        }
+    }
+
+    /**
+     * Return the Path property value associated with the given key, or
+     * {@code defaultValue} if the key cannot be resolved.
+     * @param key the property name to resolve
+     * @throws IllegalStateException if the value cannot be mapped to the enum
+     */
+    public Optional<Path> getPath(String key){
+        Optional<String> property = getString(key);
+        if(property.isPresent()){
+            return Optional.of(Paths.get(property.get()));
+        }else{
+            return Optional.absent();
+        }
+    }
+
+    /**
+     * Return the Path property value associated with the given key (never {@code null}).
+     * @throws IllegalStateException if the key cannot be resolved
+     */
+    public Path getRequiredPath(String key){
+        Optional<String> property = getString(key);
+        if(property.isPresent()){
+            return Paths.get(property.get());
         }else{
             throw new IllegalStateException(String.format("required key [%s] not found", key));
         }
