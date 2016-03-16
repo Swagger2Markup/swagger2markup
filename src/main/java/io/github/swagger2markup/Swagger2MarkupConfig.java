@@ -3,12 +3,12 @@ package io.github.swagger2markup;
 
 import io.github.robwin.markup.builder.LineSeparator;
 import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.builder.Swagger2MarkupProperties;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.parameters.Parameter;
 
 import java.net.URI;
 import java.util.Comparator;
-import java.util.Map;
 
 /**
  * Swagger2Markup configuration interface.
@@ -18,12 +18,12 @@ public interface Swagger2MarkupConfig {
     /**
      * Prefix for Swagger2Markup properties
      */
-    String PROPERTIES_PREFIX = "swagger2markup.";
+    String PROPERTIES_PREFIX = "swagger2markup";
 
     /**
      * Prefix for Swagger2Markup extension properties
      */
-    String EXTENSION_PREFIX = PROPERTIES_PREFIX + "extensions.";
+    String EXTENSION_PREFIX = "extensions";
 
     /**
      * Specifies the markup language which should be used to generate the files.
@@ -198,5 +198,5 @@ public interface Swagger2MarkupConfig {
     /**
      * Returns properties for extensions.
      */
-    Map<String, String> getExtensionsProperties();
+    Swagger2MarkupProperties getExtensionsProperties();
 }

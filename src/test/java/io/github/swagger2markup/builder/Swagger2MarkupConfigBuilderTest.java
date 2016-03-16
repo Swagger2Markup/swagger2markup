@@ -24,7 +24,6 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -38,9 +37,10 @@ public class Swagger2MarkupConfigBuilderTest {
         Map<String, String> extensionsProperties = new HashMap<>();
         extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
         extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
+        extensionsProperties.put("swagger2markup.uniqueId1.customProperty1", "123");
+        extensionsProperties.put("swagger2markup.uniqueId1.customProperty2", "123");
 
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withExtensionsProperties(extensionsProperties)
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(extensionsProperties)
                 .build();
 
         assertThat(config.getAnchorPrefix()).isNull();
@@ -48,9 +48,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitions");
         assertThat(config.isOperationDescriptionsEnabled()).isFalse();
-        assertThat(config.getOperationDescriptionsUri()).isNull();
         assertThat(config.isDefinitionDescriptionsEnabled()).isFalse();
-        assertThat(config.getDefinitionDescriptionsUri()).isNull();
         assertThat(config.isGeneratedExamplesEnabled()).isFalse();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
@@ -76,9 +74,9 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isFalse();
         assertThat(config.isSeparatedDefinitionsEnabled()).isFalse();
         assertThat(config.isSeparatedOperationsEnabled()).isFalse();
-        assertThat(config.getExtensionsProperties()).hasSize(2)
-                .containsKeys("swagger2markup.extensions.uniqueId1.customProperty1",
-                        "swagger2markup.extensions.uniqueId1.customProperty2"
+        assertThat(config.getExtensionsProperties().getKeys()).hasSize(2)
+                .containsOnly("uniqueId1.customProperty1",
+                        "uniqueId1.customProperty2"
                 );
     }
 
@@ -95,10 +93,8 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getDefinitionOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getDefinitionOrdering()).isNull();
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitionsTest");
-        assertThat(config.isOperationDescriptionsEnabled()).isTrue();
-        assertThat(config.getOperationDescriptionsUri()).isEqualTo(URI.create("operationDescriptions"));
-        assertThat(config.isDefinitionDescriptionsEnabled()).isTrue();
-        assertThat(config.getDefinitionDescriptionsUri()).isEqualTo(URI.create("definitionDescriptions"));
+        assertThat(config.isOperationDescriptionsEnabled()).isFalse();
+        assertThat(config.isDefinitionDescriptionsEnabled()).isFalse();
         assertThat(config.isGeneratedExamplesEnabled()).isTrue();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
@@ -124,11 +120,11 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isTrue();
         assertThat(config.isSeparatedDefinitionsEnabled()).isTrue();
         assertThat(config.isSeparatedOperationsEnabled()).isTrue();
-        assertThat(config.getExtensionsProperties()).hasSize(4)
-                .containsKeys("swagger2markup.extensions.uniqueId1.customProperty1",
-                        "swagger2markup.extensions.uniqueId1.customProperty2",
-                        "swagger2markup.extensions.uniqueId2.customProperty1",
-                        "swagger2markup.extensions.uniqueId2.customProperty2"
+        assertThat(config.getExtensionsProperties().getKeys()).hasSize(4)
+                .containsOnly("uniqueId1.customProperty1",
+                        "uniqueId1.customProperty2",
+                        "uniqueId2.customProperty1",
+                        "uniqueId2.customProperty2"
                         );
     }
 
