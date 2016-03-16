@@ -27,7 +27,6 @@ import io.github.robwin.markup.builder.internal.Markup;
 public enum AsciiDoc implements Markup {
     TABLE("|==="),
     TABLE_COLUMN_DELIMITER("|"),
-    TABLE_COLUMN_DELIMITER_ESCAPE("\\|"), // AsciiDoctor supports both \| and {vbar}
     TITLE("="),
     DOCUMENT_TITLE("= "),
     BOLD("*"),

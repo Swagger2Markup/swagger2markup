@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -213,10 +214,14 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         if (cells != null) {
             for (List<String> row : cells) {
                 documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
-                for (String cell : row) {
+                ListIterator<String> cellIterator = row.listIterator();
+                while (cellIterator.hasNext()) {
+                    int cellIndex = cellIterator.nextIndex();
+                    if (columnSpecs != null && columnSpecs.size() > cellIndex && columnSpecs.get(cellIndex).headerColumn)
+                        documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
+
+                    String cell = cellIterator.next();
                     String cellContent = escapeCellContent(cell);
-                    if (StringUtils.isBlank(cellContent))
-                        cellContent = " ";
                     documentBuilder.append(cellContent).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 }
                 documentBuilder.append(newLine);
@@ -226,10 +231,10 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     private String escapeCellContent(String content) {
-        if (content == null) {
+        if (StringUtils.isBlank(content)) {
             return " ";
         }
-        return content.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), ConfluenceMarkup.TABLE_COLUMN_DELIMITER_ESCAPE.toString())
+        return content.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString())
                 .replace(newLine, ConfluenceMarkup.LINE_BREAK.toString());
     }
 

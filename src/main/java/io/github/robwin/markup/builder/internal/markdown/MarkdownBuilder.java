@@ -161,7 +161,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     private String escapeTableCell(String cell) {
-        return cell.replace(Markdown.TABLE_COLUMN_DELIMITER.toString(), Markdown.TABLE_COLUMN_DELIMITER_ESCAPE.toString());
+        return cell.replace(Markdown.TABLE_COLUMN_DELIMITER.toString(), "\\" + Markdown.TABLE_COLUMN_DELIMITER.toString());
     }
 
     @Override
