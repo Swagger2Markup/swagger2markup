@@ -88,7 +88,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             SecuritySchemeDefinition definition = definitions.get(definitionName);
             buildSecuritySchemeDefinitionTitle(definitionName);
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
-            buildDescriptionParagraph(definition.getDescription());
+            buildDescriptionParagraph(definition.getDescription(), this.markupDocBuilder);
             buildSecurityScheme(definition);
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
         }

@@ -31,6 +31,12 @@ public interface Swagger2MarkupConfig {
     MarkupLanguage getMarkupLanguage();
 
     /**
+     * Specifies the markup language used in Swagger descriptions.<br/>
+     * By default, {@link io.github.robwin.markup.builder.MarkupLanguage#MARKDOWN} is assumed.
+     */
+    MarkupLanguage getSwaggerMarkupLanguage();
+
+    /**
      * Include generated examples into the documents.
      */
     boolean isGeneratedExamplesEnabled();

@@ -10,7 +10,6 @@ POST /LaunchCommand
 
 
 ==== Description
-[%hardbreaks]
 Dummy description
 
 

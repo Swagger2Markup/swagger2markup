@@ -82,7 +82,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
         buildOverviewTitle(OVERVIEW);
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-        buildDescriptionParagraph(info.getDescription());
+        buildDescriptionParagraph(info.getDescription(), this.markupDocBuilder);
         buildVersionInfoSection(info.getVersion());
         buildContactInfoSection(info.getContact());
         buildLicenseInfoSection(info.getLicense(), info.getTermsOfService());

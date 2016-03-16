@@ -1,0 +1,19 @@
+
+[[_user]]
+=== User
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|email||false|string||
+|firstName||false|string||
+|id||false|integer(int64)||
+|lastName||false|string||
+|password||false|string||
+|phone||false|string||
+|userStatus|User Status|false|integer(int32)||
+|username||false|string||
+|===
+
+
+

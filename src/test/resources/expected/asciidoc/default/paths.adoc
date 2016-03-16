@@ -1,20 +1,15 @@
 
 [[_paths]]
-== Resources
-
-=== Pet
-[%hardbreaks]
-Pet resource
-
+== Paths
 
 [[_addpet]]
-==== Add a new pet to the store
+=== Add a new pet to the store
 ----
 POST /pets
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -23,9 +18,9 @@ POST /pets
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 405
+===== HTTP Code 405
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -34,19 +29,24 @@ POST /pets
 |===
 
 
-===== Consumes
+==== Consumes
 
 * application/json
 * application/xml
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -56,13 +56,13 @@ POST /pets
 
 
 [[_updatepet]]
-==== Update an existing pet
+=== Update an existing pet
 ----
 PUT /pets
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -71,9 +71,9 @@ PUT /pets
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -82,7 +82,7 @@ PUT /pets
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -91,7 +91,7 @@ PUT /pets
 |===
 
 
-====== HTTP Code 405
+===== HTTP Code 405
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -100,19 +100,24 @@ PUT /pets
 |===
 
 
-===== Consumes
+==== Consumes
 
 * application/json
 * application/xml
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -122,18 +127,17 @@ PUT /pets
 
 
 [[_findpetsbystatus]]
-==== Finds Pets by status
+=== Finds Pets by status
 ----
 GET /pets/findByStatus
 ----
 
 
-===== Description
-[%hardbreaks]
+==== Description
 Multiple status values can be provided with comma seperated strings
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -142,9 +146,9 @@ Multiple status values can be provided with comma seperated strings
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -163,7 +167,7 @@ Multiple status values can be provided with comma seperated strings
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -172,13 +176,18 @@ Multiple status values can be provided with comma seperated strings
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -188,18 +197,17 @@ Multiple status values can be provided with comma seperated strings
 
 
 [[_findpetsbytags]]
-==== Finds Pets by tags
+=== Finds Pets by tags
 ----
 GET /pets/findByTags
 ----
 
 
-===== Description
-[%hardbreaks]
+==== Description
 Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -208,9 +216,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -229,7 +237,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -238,13 +246,18 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -254,13 +267,13 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 
 [[_updatepetwithform]]
-==== Updates a pet in the store with form data
+=== Updates a pet in the store with form data
 ----
 POST /pets/{petId}
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -271,9 +284,9 @@ POST /pets/{petId}
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 405
+===== HTTP Code 405
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -282,18 +295,23 @@ POST /pets/{petId}
 |===
 
 
-===== Consumes
+==== Consumes
 
 * application/x-www-form-urlencoded
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -303,18 +321,17 @@ POST /pets/{petId}
 
 
 [[_getpetbyid]]
-==== Find pet by ID
+=== Find pet by ID
 ----
 GET /pets/{petId}
 ----
 
 
-===== Description
-[%hardbreaks]
-Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
+==== Description
+Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error conditions
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -323,9 +340,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -344,7 +361,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -353,7 +370,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -362,13 +379,18 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -379,13 +401,13 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 
 [[_deletepet]]
-==== Deletes a pet
+=== Deletes a pet
 ----
 DELETE /pets/{petId}
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -395,9 +417,9 @@ DELETE /pets/{petId}
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -406,13 +428,18 @@ DELETE /pets/{petId}
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-===== Security
+==== Tags
+
+* pet
+
+
+==== Security
 
 [options="header", cols=".^1h,.^1h,.^6"]
 |===
@@ -421,19 +448,14 @@ DELETE /pets/{petId}
 |===
 
 
-=== Store
-[%hardbreaks]
-Store resource
-
-
 [[_placeorder]]
-==== Place an order for a pet
+=== Place an order for a pet
 ----
 POST /stores/order
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -442,9 +464,9 @@ POST /stores/order
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -463,7 +485,7 @@ POST /stores/order
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -472,25 +494,29 @@ POST /stores/order
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* store
+
+
 [[_getorderbyid]]
-==== Find purchase order by ID
+=== Find purchase order by ID
 ----
 GET /stores/order/{orderId}
 ----
 
 
-===== Description
-[%hardbreaks]
-For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
+==== Description
+For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values will generated exceptions
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -499,9 +525,9 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -520,7 +546,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -529,7 +555,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -538,25 +564,29 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* store
+
+
 [[_deleteorder]]
-==== Delete purchase order by ID
+=== Delete purchase order by ID
 ----
 DELETE /stores/order/{orderId}
 ----
 
 
-===== Description
-[%hardbreaks]
-For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+==== Description
+For valid response try integer IDs with value &lt; 1000. Anything above 1000 or nonintegers will generate API errors
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -565,9 +595,9 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -576,7 +606,7 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -585,30 +615,29 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
-=== User
-[%hardbreaks]
-User resource
+==== Tags
+
+* store
 
 
 [[_createuser]]
-==== Create user
+=== Create user
 ----
 POST /users
 ----
 
 
-===== Description
-[%hardbreaks]
+==== Description
 This can only be done by the logged in user.
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -617,9 +646,9 @@ This can only be done by the logged in user.
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code default
+===== HTTP Code default
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -628,20 +657,25 @@ This can only be done by the logged in user.
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_createuserswitharrayinput]]
-==== Creates list of users with given input array
+=== Creates list of users with given input array
 ----
 POST /users/createWithArray
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -650,9 +684,9 @@ POST /users/createWithArray
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code default
+===== HTTP Code default
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -661,20 +695,25 @@ POST /users/createWithArray
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_createuserswithlistinput]]
-==== Creates list of users with given input array
+=== Creates list of users with given input array
 ----
 POST /users/createWithList
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -683,9 +722,9 @@ POST /users/createWithList
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code default
+===== HTTP Code default
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -694,20 +733,25 @@ POST /users/createWithList
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_loginuser]]
-==== Logs user into the system
+=== Logs user into the system
 ----
 GET /users/login
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -717,9 +761,9 @@ GET /users/login
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -738,7 +782,7 @@ GET /users/login
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -747,22 +791,27 @@ GET /users/login
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_logoutuser]]
-==== Logs out current logged in user session
+=== Logs out current logged in user session
 ----
 GET /users/logout
 ----
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code default
+===== HTTP Code default
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -771,20 +820,25 @@ GET /users/logout
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_getuserbyname]]
-==== Get user by user name
+=== Get user by user name
 ----
 GET /users/{username}
 ----
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -793,9 +847,9 @@ GET /users/{username}
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 200
+===== HTTP Code 200
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -814,7 +868,7 @@ GET /users/{username}
 |===
 
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -823,7 +877,7 @@ GET /users/{username}
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -832,25 +886,29 @@ GET /users/{username}
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_updateuser]]
-==== Updated user
+=== Updated user
 ----
 PUT /users/{username}
 ----
 
 
-===== Description
-[%hardbreaks]
+==== Description
 This can only be done by the logged in user.
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -860,9 +918,9 @@ This can only be done by the logged in user.
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -871,7 +929,7 @@ This can only be done by the logged in user.
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -880,25 +938,29 @@ This can only be done by the logged in user.
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
 
 
+==== Tags
+
+* user
+
+
 [[_deleteuser]]
-==== Delete user
+=== Delete user
 ----
 DELETE /users/{username}
 ----
 
 
-===== Description
-[%hardbreaks]
+==== Description
 This can only be done by the logged in user.
 
 
-===== Parameters
+==== Parameters
 
 [options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
 |===
@@ -907,9 +969,9 @@ This can only be done by the logged in user.
 |===
 
 
-===== Responses
+==== Responses
 
-====== HTTP Code 400
+===== HTTP Code 400
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -918,7 +980,7 @@ This can only be done by the logged in user.
 |===
 
 
-====== HTTP Code 404
+===== HTTP Code 404
 
 [options="header", cols=".^1h,.^3,.^1"]
 |===
@@ -927,10 +989,15 @@ This can only be done by the logged in user.
 |===
 
 
-===== Produces
+==== Produces
 
 * application/json
 * application/xml
+
+
+==== Tags
+
+* user
 
 
 

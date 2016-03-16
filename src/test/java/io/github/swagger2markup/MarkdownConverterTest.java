@@ -61,7 +61,7 @@ public class MarkdownConverterTest {
     public void testSwagger2MarkdownConversion() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/markdown/default");
+        Path outputDirectory = Paths.get("build/test/markdown/default");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -77,7 +77,7 @@ public class MarkdownConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected_results/markdown/default").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2MarkdownConversion.html");
     }
 
@@ -85,7 +85,7 @@ public class MarkdownConverterTest {
     public void testSwagger2MarkdownConversionWithDescriptions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        Path outputDirectory = Paths.get("build/test/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -107,7 +107,7 @@ public class MarkdownConverterTest {
     public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        Path outputDirectory = Paths.get("build/test/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -135,7 +135,7 @@ public class MarkdownConverterTest {
     public void testSwagger2MarkdownConversionHandlesComposition() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/markdown/generated");
+        Path outputDirectory = Paths.get("build/test/markdown/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When

@@ -36,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -138,7 +139,7 @@ public abstract class MarkupDocumentBuilder {
 
                 List<String> content = Arrays.asList(
                         propertyName,
-                        propertyDescriptor.getDescription(property, propertyName),
+                        swaggerMarkupDescription(propertyDescriptor.getDescription(property, propertyName)),
                         Boolean.toString(property.getRequired()),
                         propertyType.displaySchema(docBuilder),
                         PropertyUtils.getDefaultValue(property),
@@ -154,9 +155,23 @@ public abstract class MarkupDocumentBuilder {
         return localDefinitions;
     }
 
-    protected void buildDescriptionParagraph(String description) {
-        if(isNotBlank(description)){
-            this.markupDocBuilder.paragraph(description);
+    /**
+     * Returns converted markup text from Swagger.
+     *
+     * @param markupText text to convert
+     * @return converted markup text
+     */
+    protected String swaggerMarkupDescription(String markupText) {
+        try {
+            return markupDocBuilder.copy(false).importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {
+        if (isNotBlank(description)) {
+            docBuilder.paragraph(swaggerMarkupDescription(description));
         }
     }
 
