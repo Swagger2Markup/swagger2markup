@@ -123,8 +123,26 @@ public class Swagger2MarkupProperties {
      * @param key the property name to resolve
      * @throws IllegalStateException if the value cannot be mapped to the enum
      */
-    public URI getURI(String key){
-        return URI.create(configuration.getString(key));
+    public Optional<URI> getURI(String key){
+        Optional<String> property = getString(key);
+        if(property.isPresent()){
+            return Optional.of(URI.create(property.get()));
+        }else{
+            return Optional.absent();
+        }
+    }
+
+    /**
+     * Return the URI property value associated with the given key (never {@code null}).
+     * @throws IllegalStateException if the key cannot be resolved
+     */
+    public URI getRequiredURI(String key){
+        Optional<String> property = getString(key);
+        if(property.isPresent()){
+            return URI.create(property.get());
+        }else{
+            throw new IllegalStateException(String.format("required key [%s] not found", key));
+        }
     }
 
     /**
