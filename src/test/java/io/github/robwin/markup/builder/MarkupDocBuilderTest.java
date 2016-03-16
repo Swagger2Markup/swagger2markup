@@ -18,12 +18,15 @@
  */
 package io.github.robwin.markup.builder;
 
+import io.github.robwin.markup.builder.assertions.DiffUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,7 +58,7 @@ public class MarkupDocBuilderTest {
 
 
     @Test
-    public void testToAsciiDocFile() throws IOException {
+    public void testAsciiDoc() throws IOException, URISyntaxException {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
 
         builder = builder.documentTitle("Test title")
@@ -101,9 +104,17 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.adoc", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
-        builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/asciidoc");
 
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
+        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+
+        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testAsciiDoc.html");
+    }
+
+    @Test
+    public void testAsciiDocWithAnchorPrefix() {
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
                 .crossReference("anchor", "text")
@@ -113,7 +124,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void testToMarkdownDocFile() throws IOException {
+    public void testMarkdown() throws IOException, URISyntaxException {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
 
         builder = builder.documentTitle("Test title")
@@ -159,9 +170,18 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.md", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
-        builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/markdown");
 
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
+        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+
+        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testMarkdown.html");
+
+    }
+
+    @Test
+    public void testMarkdownWithAnchorPrefix() {
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
                 .crossReference("anchor", "text")
@@ -171,7 +191,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void testToAtlassianWikiFile() throws IOException {
+    public void testConfluenceMarkup() throws IOException, URISyntaxException {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
 
         builder = builder.documentTitle("Test title")
@@ -217,10 +237,24 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.txt", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
-        builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/confluenceMarkup");
+
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
+        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+
+        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testConfluenceMarkup.html");
     }
 
+    @Test
+    public void testConfluenceMarkupWithAnchorPrefix() {
+        MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP).withAnchorPrefix(" mdb test- ");
+        String prefixMarkup = builderWithConfig.anchor("anchor", "text")
+                .crossReference("anchor", "text")
+                .toString();
+
+        assertEquals("{anchor:mdb_test-anchor}[text|#mdb_test-anchor]", prefixMarkup);
+    }
 
     @Test
     public void shouldReplaceNewLinesWithSystemNewLine() throws IOException {
