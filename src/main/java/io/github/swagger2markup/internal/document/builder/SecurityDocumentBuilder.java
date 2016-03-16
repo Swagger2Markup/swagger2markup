@@ -115,8 +115,8 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
                 markupDocBuilder.textLine(TOKEN_URL + " : " + oauth2Scheme.getTokenUrl());
             }
             List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN, 1),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN, 6));
+            List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6));
             for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
                 List<String> content = Arrays.asList(scope.getKey(), scope.getValue());
                 cells.add(content);

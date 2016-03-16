@@ -48,7 +48,7 @@ POST /pets
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
@@ -135,7 +135,7 @@ PUT /pets
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
@@ -196,7 +196,7 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
@@ -257,7 +257,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
@@ -311,7 +311,7 @@ POST /pets/{petId}
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
@@ -381,7 +381,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |apiKey|<<_api_key,api_key>>|
@@ -430,7 +430,7 @@ DELETE /pets/{petId}
 
 ==== Security
 
-[options="header", cols=".^1,.^1h,.^6"]
+[options="header", cols=".^1h,.^1h,.^6"]
 |===
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
