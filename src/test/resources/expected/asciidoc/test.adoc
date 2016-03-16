@@ -35,7 +35,6 @@
 ====== Section with anchor Level 5a
 
 ====== Section with anchor Level 5a
-[%hardbreaks]
 Paragraph with long text bla bla bla bla bla
 
 ----
