@@ -180,7 +180,20 @@ public class Swagger2MarkupProperties {
      * {@code defaultValue} if the key cannot be resolved.
      * @param key the property name to resolve
      */
-    public MarkupLanguage getMarkupLanguage(String key){
+    public Optional<MarkupLanguage> getMarkupLanguage(String key){
+        Optional<String> property = getString(key);
+        if(property.isPresent()){
+            return Optional.of(MarkupLanguage.valueOf(property.get()));
+        }else{
+            return Optional.absent();
+        }
+    }
+
+    /**
+     * Return the MarkupLanguage property value associated with the given key (never {@code null}).
+     * @throws IllegalStateException if the key cannot be resolved
+     */
+    public MarkupLanguage getRequiredMarkupLanguage(String key){
         return MarkupLanguage.valueOf(configuration.getString(key));
     }
 

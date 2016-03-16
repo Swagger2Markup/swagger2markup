@@ -107,7 +107,7 @@ public class Swagger2MarkupConfigBuilder  {
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Swagger2MarkupProperties swagger2MarkupProperties = new Swagger2MarkupProperties(swagger2markupConfiguration);
 
-        config.markupLanguage = swagger2MarkupProperties.getMarkupLanguage("markupLanguage");
+        config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage("markupLanguage");
         config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean("generatedExamplesEnabled");
         config.operationDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("operationDescriptionsEnabled");
         config.definitionDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("definitionDescriptionsEnabled");
