@@ -2,6 +2,7 @@
 [[_paths]]
 == Paths
 
+[[_launchcommand_post]]
 === LaunchCommand
 ----
 POST /LaunchCommand

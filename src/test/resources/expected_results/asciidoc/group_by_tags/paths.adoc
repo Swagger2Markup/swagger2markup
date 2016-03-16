@@ -7,6 +7,7 @@
 Pet resource
 
 
+[[_addpet]]
 ==== Add a new pet to the store
 ----
 POST /pets
@@ -54,6 +55,7 @@ POST /pets
 |===
 
 
+[[_updatepet]]
 ==== Update an existing pet
 ----
 PUT /pets
@@ -119,6 +121,7 @@ PUT /pets
 |===
 
 
+[[_findpetsbystatus]]
 ==== Finds Pets by status
 ----
 GET /pets/findByStatus
@@ -184,6 +187,7 @@ Multiple status values can be provided with comma seperated strings
 |===
 
 
+[[_findpetsbytags]]
 ==== Finds Pets by tags
 ----
 GET /pets/findByTags
@@ -249,6 +253,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |===
 
 
+[[_updatepetwithform]]
 ==== Updates a pet in the store with form data
 ----
 POST /pets/{petId}
@@ -297,6 +302,7 @@ POST /pets/{petId}
 |===
 
 
+[[_getpetbyid]]
 ==== Find pet by ID
 ----
 GET /pets/{petId}
@@ -372,6 +378,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
+[[_deletepet]]
 ==== Deletes a pet
 ----
 DELETE /pets/{petId}
@@ -419,6 +426,7 @@ DELETE /pets/{petId}
 Store resource
 
 
+[[_placeorder]]
 ==== Place an order for a pet
 ----
 POST /stores/order
@@ -470,6 +478,7 @@ POST /stores/order
 * application/xml
 
 
+[[_getorderbyid]]
 ==== Find purchase order by ID
 ----
 GET /stores/order/{orderId}
@@ -535,6 +544,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 * application/xml
 
 
+[[_deleteorder]]
 ==== Delete purchase order by ID
 ----
 DELETE /stores/order/{orderId}
@@ -586,6 +596,7 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 User resource
 
 
+[[_createuser]]
 ==== Create user
 ----
 POST /users
@@ -623,6 +634,7 @@ This can only be done by the logged in user.
 * application/xml
 
 
+[[_createuserswitharrayinput]]
 ==== Creates list of users with given input array
 ----
 POST /users/createWithArray
@@ -655,6 +667,7 @@ POST /users/createWithArray
 * application/xml
 
 
+[[_createuserswithlistinput]]
 ==== Creates list of users with given input array
 ----
 POST /users/createWithList
@@ -687,6 +700,7 @@ POST /users/createWithList
 * application/xml
 
 
+[[_loginuser]]
 ==== Logs user into the system
 ----
 GET /users/login
@@ -739,6 +753,7 @@ GET /users/login
 * application/xml
 
 
+[[_logoutuser]]
 ==== Logs out current logged in user session
 ----
 GET /users/logout
@@ -762,6 +777,7 @@ GET /users/logout
 * application/xml
 
 
+[[_getuserbyname]]
 ==== Get user by user name
 ----
 GET /users/{username}
@@ -822,6 +838,7 @@ GET /users/{username}
 * application/xml
 
 
+[[_updateuser]]
 ==== Updated user
 ----
 PUT /users/{username}
@@ -869,6 +886,7 @@ This can only be done by the logged in user.
 * application/xml
 
 
+[[_deleteuser]]
 ==== Delete user
 ----
 DELETE /users/{username}

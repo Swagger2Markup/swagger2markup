@@ -2,6 +2,7 @@
 <a name="definitions"></a>
 ## Definitions
 
+<a name="category"></a>
 ### Category
 
 |Name|Description|Required|Schema|Default|Example|
@@ -10,6 +11,7 @@
 |name||false|string|||
 
 
+<a name="order"></a>
 ### Order
 
 |Name|Description|Required|Schema|Default|Example|
@@ -22,6 +24,7 @@
 |status|Order Status|false|enum (Ordered, Cancelled)|||
 
 
+<a name="pet"></a>
 ### Pet
 
 |Name|Description|Required|Schema|Default|Example|
@@ -34,6 +37,7 @@
 |tags||false|[Tag](#tag) array|||
 
 
+<a name="tag"></a>
 ### Tag
 
 |Name|Description|Required|Schema|Default|Example|
@@ -42,6 +46,7 @@
 |name||false|string|||
 
 
+<a name="user"></a>
 ### User
 
 |Name|Description|Required|Schema|Default|Example|
