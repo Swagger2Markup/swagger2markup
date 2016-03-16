@@ -2,6 +2,7 @@
 [[_definitions]]
 == Definitions
 
+[[_category]]
 === Category
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -12,6 +13,7 @@
 |===
 
 
+[[_order]]
 === Order
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -22,10 +24,11 @@
 |petId||false|integer(int64)||
 |quantity||false|integer(int32)||
 |shipDate||false|string(date-time)||
-|status|Order Status|false|string||
+|status|Order Status|false|enum (Ordered, Cancelled)||
 |===
 
 
+[[_pet]]
 === Pet
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -35,11 +38,12 @@
 |id||false|integer(int64)||
 |name||true|string||"doggie"
 |photoUrls||true|string array||
-|status|pet status in the store|false|string||
+|status|pet status in the store,|false|enum (Dead, Alive)||
 |tags||false|<<_tag,Tag>> array||
 |===
 
 
+[[_tag]]
 === Tag
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -50,6 +54,7 @@
 |===
 
 
+[[_user]]
 === User
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]

@@ -2,6 +2,7 @@
 [[_definitions]]
 == Definitions
 
+[[_error]]
 === Error
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -12,6 +13,7 @@
 |===
 
 
+[[_externallocation]]
 === ExternalLocation
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -21,6 +23,7 @@
 |===
 
 
+[[_inlinedepthschema]]
 === InlineDepthSchema
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
@@ -50,6 +53,7 @@
 |===
 
 
+[[_location]]
 === Location
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]

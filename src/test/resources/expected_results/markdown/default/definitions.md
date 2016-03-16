@@ -2,6 +2,7 @@
 <a name="definitions"></a>
 ## Definitions
 
+<a name="category"></a>
 ### Category
 
 |Name|Description|Required|Schema|Default|Example|
@@ -10,6 +11,7 @@
 |name||false|string|||
 
 
+<a name="order"></a>
 ### Order
 
 |Name|Description|Required|Schema|Default|Example|
@@ -19,9 +21,10 @@
 |petId||false|integer(int64)|||
 |quantity||false|integer(int32)|||
 |shipDate||false|string(date-time)|||
-|status|Order Status|false|string|||
+|status|Order Status|false|enum (Ordered, Cancelled)|||
 
 
+<a name="pet"></a>
 ### Pet
 
 |Name|Description|Required|Schema|Default|Example|
@@ -30,10 +33,11 @@
 |id||false|integer(int64)|||
 |name||true|string||"doggie"|
 |photoUrls||true|string array|||
-|status|pet status in the store|false|string|||
+|status|pet status in the store,|false|enum (Dead, Alive)|||
 |tags||false|[Tag](#tag) array|||
 
 
+<a name="tag"></a>
 ### Tag
 
 |Name|Description|Required|Schema|Default|Example|
@@ -42,6 +46,7 @@
 |name||false|string|||
 
 
+<a name="user"></a>
 ### User
 
 |Name|Description|Required|Schema|Default|Example|

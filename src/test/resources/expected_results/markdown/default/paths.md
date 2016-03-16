@@ -2,6 +2,7 @@
 <a name="paths"></a>
 ## Paths
 
+<a name="addpet"></a>
 ### Add a new pet to the store
 ```
 POST /pets
@@ -48,6 +49,7 @@ POST /pets
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="updatepet"></a>
 ### Update an existing pet
 ```
 PUT /pets
@@ -108,6 +110,7 @@ PUT /pets
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="findpetsbystatus"></a>
 ### Finds Pets by status
 ```
 GET /pets/findByStatus
@@ -167,6 +170,7 @@ Multiple status values can be provided with comma seperated strings
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="findpetsbytags"></a>
 ### Finds Pets by tags
 ```
 GET /pets/findByTags
@@ -226,6 +230,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="updatepetwithform"></a>
 ### Updates a pet in the store with form data
 ```
 POST /pets/{petId}
@@ -273,6 +278,7 @@ POST /pets/{petId}
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="getpetbyid"></a>
 ### Find pet by ID
 ```
 GET /pets/{petId}
@@ -340,6 +346,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="deletepet"></a>
 ### Deletes a pet
 ```
 DELETE /pets/{petId}
@@ -381,6 +388,7 @@ DELETE /pets/{petId}
 |oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
 
 
+<a name="placeorder"></a>
 ### Place an order for a pet
 ```
 POST /stores/order
@@ -429,6 +437,7 @@ POST /stores/order
 * store
 
 
+<a name="getorderbyid"></a>
 ### Find purchase order by ID
 ```
 GET /stores/order/{orderId}
@@ -488,6 +497,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 * store
 
 
+<a name="deleteorder"></a>
 ### Delete purchase order by ID
 ```
 DELETE /stores/order/{orderId}
@@ -532,6 +542,7 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 * store
 
 
+<a name="createuser"></a>
 ### Create user
 ```
 POST /users
@@ -569,6 +580,7 @@ This can only be done by the logged in user.
 * user
 
 
+<a name="createuserswitharrayinput"></a>
 ### Creates list of users with given input array
 ```
 POST /users/createWithArray
@@ -602,6 +614,7 @@ POST /users/createWithArray
 * user
 
 
+<a name="createuserswithlistinput"></a>
 ### Creates list of users with given input array
 ```
 POST /users/createWithList
@@ -635,6 +648,7 @@ POST /users/createWithList
 * user
 
 
+<a name="loginuser"></a>
 ### Logs user into the system
 ```
 GET /users/login
@@ -684,6 +698,7 @@ GET /users/login
 * user
 
 
+<a name="logoutuser"></a>
 ### Logs out current logged in user session
 ```
 GET /users/logout
@@ -710,6 +725,7 @@ GET /users/logout
 * user
 
 
+<a name="getuserbyname"></a>
 ### Get user by user name
 ```
 GET /users/{username}
@@ -765,6 +781,7 @@ GET /users/{username}
 * user
 
 
+<a name="updateuser"></a>
 ### Updated user
 ```
 PUT /users/{username}
@@ -810,6 +827,7 @@ This can only be done by the logged in user.
 * user
 
 
+<a name="deleteuser"></a>
 ### Delete user
 ```
 DELETE /users/{username}

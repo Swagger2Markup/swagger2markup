@@ -623,7 +623,10 @@ definitions:
           $ref: "#/definitions/Tag"
       status:
         type: string
-        description: pet status in the store
+        description: pet status in the store,
+        enum:
+          - Dead
+          - Alive
   Tag:
     type: object
     properties:
@@ -650,5 +653,8 @@ definitions:
       status:
         type: string
         description: Order Status
+        enum:
+          - Ordered
+          - Cancelled
       complete:
         type: boolean

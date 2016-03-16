@@ -65,7 +65,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversion() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/default");
+        Path outputDirectory = Paths.get("build/test/asciidoc/default");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -87,7 +87,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionFromString() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
-        Path outputDirectory = Paths.get("build/docs/asciidoc/default");
+        Path outputDirectory = Paths.get("build/test/asciidoc/default");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -109,7 +109,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithExamples() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
-        Path outputDirectory = Paths.get("build/docs/asciidoc/examples");
+        Path outputDirectory = Paths.get("build/test/asciidoc/examples");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -132,7 +132,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithGeneratedExamples() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated_examples");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated_examples");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -156,7 +156,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocWithInlineSchema() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/inline_schema");
+        Path outputDirectory = Paths.get("build/test/asciidoc/inline_schema");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -179,7 +179,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocGroupedByTags() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/group_by_tags");
+        Path outputDirectory = Paths.get("build/test/asciidoc/group_by_tags");
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
@@ -201,7 +201,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocGroupedByTagsWithMissingTag() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_missing_tag.json").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
         try {
@@ -224,7 +224,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithDefinitionDescriptions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -245,7 +245,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionDoesNotContainUriScheme() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_should_not_contain_uri_scheme.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -264,7 +264,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionContainsUriScheme() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_should_contain_uri_scheme.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -284,7 +284,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -309,7 +309,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithSeparatedOperations() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -333,7 +333,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithRussianOutputLanguage() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -354,7 +354,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionWithFrenchOutputLanguage() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/docs/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When

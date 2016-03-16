@@ -56,12 +56,4 @@ public class IOUtils {
         return new BufferedReader(new InputStreamReader(uri.toURL().openStream(), StandardCharsets.UTF_8));
     }
 
-    /**
-     * Return URI parent
-     * @param uri source URI
-     * @return URI parent
-     */
-    public static URI uriParent(URI uri) {
-        return uri.getPath().endsWith("/") ? uri.resolve("src/main") : uri.resolve(".");
-    }
 }
