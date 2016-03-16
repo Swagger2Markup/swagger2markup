@@ -176,7 +176,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     private String escapeTableCell(String cell) {
-        return cell.replace(AsciiDoc.TABLE_COLUMN_DELIMITER.toString(), AsciiDoc.TABLE_COLUMN_DELIMITER_ESCAPE.toString());
+        return cell.replace(AsciiDoc.TABLE_COLUMN_DELIMITER.toString(), "\\" + AsciiDoc.TABLE_COLUMN_DELIMITER.toString());
     }
 
     @Override
@@ -195,7 +195,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
                 if (languageStyle != null && isNoneBlank(languageStyle)) {
                     cols.add(languageStyle);
                 } else {
-                    cols.add(String.valueOf(col.widthRatio));
+                    cols.add(String.valueOf(col.widthRatio) + (col.headerColumn ? "h" : ""));
                 }
             }
         }

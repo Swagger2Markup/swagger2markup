@@ -25,7 +25,6 @@ import io.github.robwin.markup.builder.internal.Markup;
  */
 public enum Markdown implements Markup {
     TABLE_COLUMN_DELIMITER("|"),
-    TABLE_COLUMN_DELIMITER_ESCAPE("\\|"),
     TABLE_ROW("-"),
     LISTING("```"),
     TITLE("#"),
