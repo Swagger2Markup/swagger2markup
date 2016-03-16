@@ -1,0 +1,17 @@
+
+[[_pet]]
+=== Pet
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|category||false|<<_category,Category>>||
+|id||false|integer(int64)||
+|name||true|string||"doggie"
+|photoUrls||true|string array||
+|status|pet status in the store,|false|enum (Dead, Alive)||
+|tags||false|<<_tag,Tag>> array||
+|===
+
+
+

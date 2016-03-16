@@ -40,7 +40,6 @@
 
 [[_pet]]
 === Pet
-[%hardbreaks]
 Test description
 
 

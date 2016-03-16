@@ -55,6 +55,37 @@ POST /pets
 |===
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/pets"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "category" : {
+    "id" : 123,
+    "name" : "Canines"
+  },
+  "name" : "doggie",
+  "nicknames" : {
+    "string" : "string"
+  },
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string",
+  "weight" : 0.0
+}
+----
+
+
 ==== Example HTTP response
 
 ==== Response 405
@@ -142,6 +173,37 @@ PUT /pets
 |===
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/pets"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "category" : {
+    "id" : 123,
+    "name" : "Canines"
+  },
+  "name" : "doggie",
+  "nicknames" : {
+    "string" : "string"
+  },
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string",
+  "weight" : 0.0
+}
+----
+
+
 [[_findpetsbystatus]]
 === Finds Pets by status
 ----
@@ -150,7 +212,6 @@ GET /pets/findByStatus
 
 
 ==== Description
-[%hardbreaks]
 Multiple status values can be provided with comma seperated strings
 
 
@@ -203,6 +264,30 @@ Multiple status values can be provided with comma seperated strings
 |===
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/findByStatus"
+----
+
+
+==== Request query
+----
+{
+  "status" : "string"
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+"array"
+----
+
+
 [[_findpetsbytags]]
 === Finds Pets by tags
 ----
@@ -211,7 +296,6 @@ GET /pets/findByTags
 
 
 ==== Description
-[%hardbreaks]
 Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
 
 
@@ -262,6 +346,30 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
 |===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/findByTags"
+----
+
+
+==== Request query
+----
+{
+  "tags" : "string"
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+"array"
+----
 
 
 [[_updatepetwithform]]
@@ -318,6 +426,20 @@ POST /pets/{petId}
 |===
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/string"
+----
+
+
+==== Request formData
+----
+"string"
+----
+
+
 [[_getpetbyid]]
 === Find pet by ID
 ----
@@ -326,8 +448,7 @@ GET /pets/{petId}
 
 
 ==== Description
-[%hardbreaks]
-Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
+Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error conditions
 
 
 ==== Parameters
@@ -389,6 +510,39 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 |===
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/0"
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 0,
+  "category" : {
+    "id" : 123,
+    "name" : "Canines"
+  },
+  "name" : "doggie",
+  "nicknames" : {
+    "string" : "string"
+  },
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string",
+  "weight" : 0.0
+}
+----
+
+
 [[_deletepet]]
 === Deletes a pet
 ----
@@ -435,6 +589,20 @@ DELETE /pets/{petId}
 |Type|Name|Scopes
 |oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
 |===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/0"
+----
+
+
+==== Request header
+----
+"string"
+----
 
 
 [[_placeorder]]
@@ -486,6 +654,12 @@ POST /stores/order
 
 ==== Example HTTP request
 
+==== Request path
+----
+"/stores/order"
+----
+
+
 ==== Request body
 ----
 {
@@ -522,8 +696,7 @@ GET /stores/order/{orderId}
 
 
 ==== Description
-[%hardbreaks]
-For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
+For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values will generated exceptions
 
 
 ==== Parameters
@@ -575,6 +748,14 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 * store
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/stores/order/string"
+----
+
+
 ==== Example HTTP response
 
 ==== Response 200
@@ -598,8 +779,7 @@ DELETE /stores/order/{orderId}
 
 
 ==== Description
-[%hardbreaks]
-For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
+For valid response try integer IDs with value &lt; 1000. Anything above 1000 or nonintegers will generate API errors
 
 
 ==== Parameters
@@ -642,6 +822,14 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 * store
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/stores/order/string"
+----
+
+
 [[_createuser]]
 === Create user
 ----
@@ -650,7 +838,6 @@ POST /users
 
 
 ==== Description
-[%hardbreaks]
 This can only be done by the logged in user.
 
 
@@ -683,6 +870,30 @@ This can only be done by the logged in user.
 ==== Tags
 
 * user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
+}
+----
 
 
 [[_createuserswitharrayinput]]
@@ -723,6 +934,30 @@ POST /users/createWithArray
 * user
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/users/createWithArray"
+----
+
+
+==== Request body
+----
+[ {
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
+} ]
+----
+
+
 [[_createuserswithlistinput]]
 === Creates list of users with given input array
 ----
@@ -759,6 +994,30 @@ POST /users/createWithList
 ==== Tags
 
 * user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/createWithList"
+----
+
+
+==== Request body
+----
+[ {
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
+} ]
+----
 
 
 [[_loginuser]]
@@ -809,6 +1068,31 @@ GET /users/login
 * user
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/users/login"
+----
+
+
+==== Request query
+----
+{
+  "password" : "string",
+  "username" : "string"
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+"string"
+----
+
+
 [[_logoutuser]]
 === Logs out current logged in user session
 ----
@@ -836,6 +1120,14 @@ GET /users/logout
 ==== Tags
 
 * user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/logout"
+----
 
 
 [[_getuserbyname]]
@@ -894,6 +1186,32 @@ GET /users/{username}
 * user
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/users/string"
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
+}
+----
+
+
 [[_updateuser]]
 === Updated user
 ----
@@ -902,7 +1220,6 @@ PUT /users/{username}
 
 
 ==== Description
-[%hardbreaks]
 This can only be done by the logged in user.
 
 
@@ -947,6 +1264,30 @@ This can only be done by the logged in user.
 * user
 
 
+==== Example HTTP request
+
+==== Request path
+----
+"/users/string"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0,
+  "pictures" : [ "string" ]
+}
+----
+
+
 [[_deleteuser]]
 === Delete user
 ----
@@ -955,7 +1296,6 @@ DELETE /users/{username}
 
 
 ==== Description
-[%hardbreaks]
 This can only be done by the logged in user.
 
 
@@ -997,6 +1337,14 @@ This can only be done by the logged in user.
 ==== Tags
 
 * user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/string"
+----
 
 
 

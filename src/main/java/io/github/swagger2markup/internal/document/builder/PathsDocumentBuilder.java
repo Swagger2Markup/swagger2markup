@@ -421,7 +421,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void operationDescription(String description, MarkupDocBuilder docBuilder) {
         if (isNotBlank(description)) {
             buildSectionTitle(DESCRIPTION, docBuilder);
-            docBuilder.paragraph(description);
+            buildDescriptionParagraph(description, docBuilder);
         }
     }
 
@@ -479,7 +479,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     List<String> content = Arrays.asList(
                             parameterType,
                             parameter.getName(),
-                            parameterDescription(operation, parameter),
+                            swaggerMarkupDescription(parameterDescription(operation, parameter)),
                             Boolean.toString(parameter.getRequired()),
                             type.displaySchema(markupDocBuilder),
                             ParameterUtils.getDefaultValue(parameter));
@@ -512,7 +512,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                         buildSectionTitle(BODY_PARAMETER, docBuilder);
                         if (isNotBlank(parameter.getDescription())) {
-                            docBuilder.paragraph(parameter.getDescription());
+                            buildDescriptionParagraph(parameter.getDescription(), docBuilder);
                         }
 
                         MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator());
@@ -716,9 +716,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                             type = new RefType(type);
                         }
                     }
-                    cells.add(Arrays.asList(responseName, response.getDescription(), type.displaySchema(markupDocBuilder)));
+                    cells.add(Arrays.asList(responseName, swaggerMarkupDescription(response.getDescription()), type.displaySchema(markupDocBuilder)));
                 } else {
-                    cells.add(Arrays.asList(responseName, response.getDescription(), NO_CONTENT));
+                    cells.add(Arrays.asList(responseName, swaggerMarkupDescription(response.getDescription()), NO_CONTENT));
                 }
 
                 buildResponseTitle(HTTP_CODE_COLUMN + " " + responseName, docBuilder);
@@ -731,7 +731,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         Property property = header.getValue();
                         Type propertyType = PropertyUtils.getType(property, null);
                         responseHeaderCells.add(Arrays.asList(header.getKey(),
-                                property.getDescription(),
+                                swaggerMarkupDescription(property.getDescription()),
                                 propertyType.displaySchema(markupDocBuilder),
                                 PropertyUtils.getDefaultValue(property)));
                     }

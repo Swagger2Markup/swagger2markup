@@ -108,6 +108,7 @@ public class Swagger2MarkupConfigBuilder  {
         Swagger2MarkupProperties swagger2MarkupProperties = new Swagger2MarkupProperties(swagger2markupConfiguration);
 
         config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage("markupLanguage");
+        config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage("swaggerMarkupLanguage");
         config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean("generatedExamplesEnabled");
         config.operationDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("operationDescriptionsEnabled");
         config.definitionDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("definitionDescriptionsEnabled");
@@ -171,6 +172,18 @@ public class Swagger2MarkupConfigBuilder  {
     public Swagger2MarkupConfigBuilder withMarkupLanguage(MarkupLanguage markupLanguage) {
         Validate.notNull(markupLanguage, "%s must not be null", "markupLanguage");
         config.markupLanguage = markupLanguage;
+        return this;
+    }
+
+    /**
+     * Specifies the markup language used in Swagger descriptions.
+     *
+     * @param swaggerMarkupLanguage the markup language used in Swagger descriptions
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withSwaggerMarkupLanguage(MarkupLanguage swaggerMarkupLanguage) {
+        Validate.notNull(swaggerMarkupLanguage, "%s must not be null", "swaggerMarkupLanguage");
+        config.markupLanguage = swaggerMarkupLanguage;
         return this;
     }
 
@@ -543,6 +556,7 @@ public class Swagger2MarkupConfigBuilder  {
     static class DefaultSwagger2MarkupConfig implements Swagger2MarkupConfig{
 
         private MarkupLanguage markupLanguage;
+        private MarkupLanguage swaggerMarkupLanguage;
         private boolean generatedExamplesEnabled;
         private boolean operationDescriptionsEnabled;
         private URI operationDescriptionsUri;
@@ -583,6 +597,11 @@ public class Swagger2MarkupConfigBuilder  {
         @Override
         public MarkupLanguage getMarkupLanguage() {
             return markupLanguage;
+        }
+
+        @Override
+        public MarkupLanguage getSwaggerMarkupLanguage() {
+            return swaggerMarkupLanguage;
         }
 
         @Override

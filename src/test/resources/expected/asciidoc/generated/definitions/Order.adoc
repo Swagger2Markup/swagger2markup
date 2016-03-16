@@ -1,0 +1,17 @@
+
+[[_order]]
+=== Order
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|complete||false|boolean||
+|id||false|integer(int64)||
+|petId||false|integer(int64)||
+|quantity||false|integer(int32)||
+|shipDate||false|string(date-time)||
+|status|Order Status|false|enum (Ordered, Cancelled)||
+|===
+
+
+

@@ -301,7 +301,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         if (config.isDefinitionDescriptionsEnabled()) {
             Optional<String> description = handWrittenDefinitionDescription(normalizeName(definitionName), DESCRIPTION_FILE_NAME);
             if (description.isPresent()) {
-                docBuilder.paragraph(description.get());
+                buildDescriptionParagraph(description.get(), docBuilder);
             } else {
                 modelDescription(model, docBuilder);
             }
@@ -313,7 +313,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void modelDescription(Model model, MarkupDocBuilder docBuilder) {
         String description = model.getDescription();
         if (isNotBlank(description)) {
-            docBuilder.paragraph(description);
+            buildDescriptionParagraph(description, docBuilder);
         }
     }
 

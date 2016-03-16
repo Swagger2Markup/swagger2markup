@@ -3,7 +3,6 @@
 
 [[_overview]]
 == Overview
-[%hardbreaks]
 Service API
 
 
