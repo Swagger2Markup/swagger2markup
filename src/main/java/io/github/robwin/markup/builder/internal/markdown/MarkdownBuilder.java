@@ -60,6 +60,10 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         super(newLine);
     }
 
+    protected MarkupLanguage getMarkupLanguage() {
+        return MarkupLanguage.MARKDOWN;
+    }
+
     @Override
     public MarkupDocBuilder copy(boolean copyBuffer) {
         MarkdownBuilder builder = new MarkdownBuilder(newLine);
@@ -203,8 +207,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle1(TITLE_PATTERN, Markdown.TITLE, markupText, levelOffset);
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        importMarkupStyle1(TITLE_PATTERN, Markdown.TITLE, markupText, markupLanguage, levelOffset);
         return this;
     }
 

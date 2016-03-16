@@ -55,6 +55,10 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         super(newLine);
     }
 
+    protected MarkupLanguage getMarkupLanguage() {
+        return MarkupLanguage.ASCIIDOC;
+    }
+
     @Override
     public MarkupDocBuilder copy(boolean copyBuffer) {
         AsciiDocBuilder builder = new AsciiDocBuilder(newLine);
@@ -232,8 +236,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, levelOffset);
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, markupLanguage, levelOffset);
         return this;
     }
 

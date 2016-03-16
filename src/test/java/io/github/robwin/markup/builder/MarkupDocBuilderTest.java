@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -310,6 +312,144 @@ public class MarkupDocBuilderTest {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
         builder.paragraph("Long text \n bla bla \r bla \r\n bla");
         Assert.assertEquals("Long text " + lineSeparator + " bla bla " + lineSeparator + " bla " + lineSeparator + " bla" + lineSeparator + lineSeparator, builder.toString());
+    }
+
+    private void assertImportMarkup(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) {
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(markupLanguage);
+        try {
+            builder.importMarkup(new StringReader(text), markupLanguage, levelOffset);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(expected, builder.toString());
+    }
+
+    private void assertImportMarkupException(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        try {
+            assertImportMarkup(expected, text, markupLanguage, levelOffset);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException e) {
+            Assert.assertEquals(expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testImportMarkupAsciiDoc() throws IOException {
+        assertImportMarkup("\n\n", "", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("\n\n", "", MarkupLanguage.ASCIIDOC, 4);
+        assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.ASCIIDOC, 6);
+        assertImportMarkup("\n\n", "", MarkupLanguage.ASCIIDOC, -4);
+        assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.ASCIIDOC, -6);
+
+        assertImportMarkup("\n= title\nline 1\nline 2\n\n", "=   title\r\nline 1\r\nline 2", MarkupLanguage.ASCIIDOC, 0);
+
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.ASCIIDOC, 4);
+
+        assertImportMarkup("\n= title\nline 1\nline 2\n= title 2\nline 3\n\n", "= title\nline 1\nline 2\n= title 2\nline 3", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("\n===== title\nline 1\nline 2\n\n", "= title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, 4);
+        assertImportMarkup("\n= title\nline 1\nline 2\n\n", "===== title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, -4);
+
+        assertImportMarkupException("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "== title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, 5);
+        assertImportMarkupException("Specified levelOffset (-1) set title 'title' level (0) < 0", "= title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, -1);
+        assertImportMarkupException("Specified levelOffset (-3) set title 'title' level (1) < 0", "== title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, -3);
+    }
+
+    @Test
+    public void testImportMarkupMarkdown() throws IOException {
+        assertImportMarkup("\n\n", "", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("\n\n", "", MarkupLanguage.MARKDOWN, 4);
+        assertImportMarkup("\n\n", "", MarkupLanguage.MARKDOWN, -4);
+        assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.MARKDOWN, 6);
+        assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.MARKDOWN, -6);
+
+        assertImportMarkup("\n# title\nline 1\nline 2\n\n", "#   title\r\nline 1\r\nline 2", MarkupLanguage.MARKDOWN, 0);
+
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.MARKDOWN, 4);
+
+        assertImportMarkup("\n# title\nline 1\nline 2\n# title 2\nline 3\n\n", "# title\nline 1\nline 2\n# title 2\nline 3", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("\n##### title\nline 1\nline 2\n\n", "# title\nline 1\nline 2", MarkupLanguage.MARKDOWN, 4);
+        assertImportMarkup("\n# title\nline 1\nline 2\n\n", "##### title\nline 1\nline 2", MarkupLanguage.MARKDOWN, -4);
+
+        assertImportMarkupException("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "## title\nline 1\nline 2", MarkupLanguage.MARKDOWN, 5);
+        assertImportMarkupException("Specified levelOffset (-1) set title 'title' level (0) < 0", "# title\nline 1\nline 2", MarkupLanguage.MARKDOWN, -1);
+        assertImportMarkupException("Specified levelOffset (-3) set title 'title' level (1) < 0", "## title\nline 1\nline 2", MarkupLanguage.MARKDOWN, -3);
+    }
+
+    @Test
+    public void testImportMarkupConfluenceMarkup() throws IOException {
+        assertImportMarkup("\n\n", "", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("\n\n", "", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+        assertImportMarkup("\n\n", "", MarkupLanguage.CONFLUENCE_MARKUP, -4);
+        assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.CONFLUENCE_MARKUP, 6);
+        assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.CONFLUENCE_MARKUP, -6);
+
+        assertImportMarkup("\nh1. title\nline 1\nline 2\n\n", "h1.   title\r\nline 1\r\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+
+        assertImportMarkup("\nh1. title\nline 1\nline 2\nh1. title 2\nline 3\n\n", "h1. title\nline 1\nline 2\nh1. title 2\nline 3", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("\nh5. title\nline 1\nline 2\n\n", "h1. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+        assertImportMarkup("\nh1. title\nline 1\nline 2\n\n", "h5. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, -4);
+
+        assertImportMarkupException("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "h2. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 5);
+        assertImportMarkupException("Specified levelOffset (-1) set title 'title' level (0) < 0", "h1. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, -1);
+        assertImportMarkupException("Specified levelOffset (-3) set title 'title' level (1) < 0", "h2. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, -3);
+    }
+
+    @Test
+    public void importMarkupConversion() throws IOException {
+        // ASCIIDOC -> ASCIIDOC
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // ASCIIDOC -> MARKDOWN
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
+        // Assert.assertEquals("\n# Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // ASCIIDOC -> CONFLUENCE_MARKUP
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
+        // Assert.assertEquals("\nh1. Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // MARKDOWN -> ASCIIDOC
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // MARKDOWN -> MARKDOWN
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
+        Assert.assertEquals("\n# Title\n\n", builder.toString());
+
+        // MARKDOWN -> CONFLUENCE_MARKUP
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
+        // Assert.assertEquals("\nh1. Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\n# Title\n\n", builder.toString());
+
+        // CONFLUENCE_MARKUP -> ASCIIDOC
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
+        // Assert.assertEquals("\n= Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\nh1. Title\n\n", builder.toString());
+
+        // CONFLUENCE_MARKUP -> MARKDOWN
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
+        // Assert.assertEquals("\n# Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\nh1. Title\n\n", builder.toString());
+
+        // CONFLUENCE_MARKUP -> CONFLUENCE_MARKUP
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
+        Assert.assertEquals("\nh1. Title\n\n", builder.toString());
     }
 
 }

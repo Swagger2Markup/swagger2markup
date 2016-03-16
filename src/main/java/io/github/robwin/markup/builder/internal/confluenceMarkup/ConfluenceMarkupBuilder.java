@@ -69,6 +69,10 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         super(newLine);
     }
 
+    protected MarkupLanguage getMarkupLanguage() {
+        return MarkupLanguage.CONFLUENCE_MARKUP;
+    }
+
     @Override
     public MarkupDocBuilder copy(boolean copyBuffer) {
         ConfluenceMarkupBuilder builder = new ConfluenceMarkupBuilder(newLine);
@@ -276,8 +280,8 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle2(TITLE_PATTERN, TITLE_FORMAT, false, markupText, levelOffset);
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        importMarkupStyle2(TITLE_PATTERN, TITLE_FORMAT, false, markupText, markupLanguage, levelOffset);
         return this;
     }
 

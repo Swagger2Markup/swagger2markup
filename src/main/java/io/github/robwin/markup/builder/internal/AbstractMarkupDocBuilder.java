@@ -20,6 +20,8 @@ package io.github.robwin.markup.builder.internal;
 
 import io.github.robwin.markup.builder.MarkupBlockStyle;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupLanguage;
+import nl.jworks.markdown_to_asciidoc.Converter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -67,10 +69,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         this(System.getProperty("line.separator"));
     }
 
-
     public AbstractMarkupDocBuilder(String newLine) {
         this.newLine = newLine;
     }
+
+    protected abstract MarkupLanguage getMarkupLanguage();
 
     @Override
     public MarkupDocBuilder withAnchorPrefix(String prefix) {
@@ -363,12 +366,25 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText) throws IOException {
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage) throws IOException {
         Validate.notNull(markupText, "markupText must not be null");
-        return importMarkup(markupText, 0);
+        Validate.notNull(markupLanguage, "markupLanguage must not be null");
+        return importMarkup(markupText, markupLanguage, 0);
     }
 
-    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
+    protected String convert(String markupText, MarkupLanguage markupLanguage) {
+        if (markupLanguage == getMarkupLanguage())
+            return markupText;
+        else {
+            if (markupLanguage == MarkupLanguage.MARKDOWN && getMarkupLanguage() == MarkupLanguage.ASCIIDOC) {
+                return Converter.convertMarkdownToAsciiDoc(markupText) + newLine;
+            } else {
+                return markupText;
+            }
+        }
+    }
+
+    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
         Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
@@ -395,11 +411,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         }
 
         documentBuilder.append(newLine);
-        documentBuilder.append(leveledText.toString());
+        documentBuilder.append(convert(leveledText.toString(), markupLanguage));
         documentBuilder.append(newLine);
     }
 
-    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, int levelOffset) throws IOException {
+    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
         Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
@@ -426,7 +442,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         }
 
         documentBuilder.append(newLine);
-        documentBuilder.append(leveledText.toString());
+        documentBuilder.append(convert(leveledText.toString(), markupLanguage));
         documentBuilder.append(newLine);
     }
 

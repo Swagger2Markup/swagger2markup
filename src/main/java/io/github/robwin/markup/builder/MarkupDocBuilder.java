@@ -466,26 +466,32 @@ public interface MarkupDocBuilder {
 
     /**
      * Import some markup text into this builder.<br/>
-     * This is an alias for {@link #importMarkup(Reader, int) importMarkup(markupText, 0)}.
-     * Newlines are normalized in the process.
+     * This is an alias for {@link #importMarkup(Reader, MarkupLanguage, int) importMarkup(markupText, markupLanguage, 0)}.
      *
      * @param markupText markup reader to read data from
+     * @param markupLanguage identify the imported markup language
      * @return this builder
      * @throws IOException if I/O error occurs while reading {@code markupText}
      */
-    MarkupDocBuilder importMarkup(Reader markupText) throws IOException;
+    MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage) throws IOException;
 
     /**
-     * Import some markup text into this builder.
+     * Import some markup text into this builder.<br/>
+     * If {@code markupLanguage} is different from current builder language, markupText is converted when supported, or conversion is just ignored.<br/>
+     * Currently supported conversions :
+     * <li>
+     *     <ul>Markdown -> AsciiDoc</ul>
+     * </li>
      * Newlines are normalized in the process.
      *
      * @param markupText markup reader to read data from
+     * @param markupLanguage identify the imported markup language
      * @param levelOffset adapt section leveling by adding {@code levelOffset} [-5, 5]
      * @return this builder
      * @throws IllegalArgumentException if levelOffset is too high for the imported markup
      * @throws IOException if I/O error occurs while reading {@code markupText}
      */
-    MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException;
+    MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException;
 
     /**
      * Returns a string representation of the document.
