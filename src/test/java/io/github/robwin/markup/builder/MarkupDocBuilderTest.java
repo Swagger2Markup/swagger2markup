@@ -335,10 +335,10 @@ public class MarkupDocBuilderTest {
 
     @Test
     public void testImportMarkupAsciiDoc() throws IOException {
-        assertImportMarkup("\n\n", "", MarkupLanguage.ASCIIDOC, 0);
-        assertImportMarkup("\n\n", "", MarkupLanguage.ASCIIDOC, 4);
+        assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, 4);
         assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.ASCIIDOC, 6);
-        assertImportMarkup("\n\n", "", MarkupLanguage.ASCIIDOC, -4);
+        assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, -4);
         assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.ASCIIDOC, -6);
 
         assertImportMarkup("\n= title\nline 1\nline 2\n\n", "=   title\r\nline 1\r\nline 2", MarkupLanguage.ASCIIDOC, 0);
@@ -357,9 +357,9 @@ public class MarkupDocBuilderTest {
 
     @Test
     public void testImportMarkupMarkdown() throws IOException {
-        assertImportMarkup("\n\n", "", MarkupLanguage.MARKDOWN, 0);
-        assertImportMarkup("\n\n", "", MarkupLanguage.MARKDOWN, 4);
-        assertImportMarkup("\n\n", "", MarkupLanguage.MARKDOWN, -4);
+        assertImportMarkup("", "", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("", "", MarkupLanguage.MARKDOWN, 4);
+        assertImportMarkup("", "", MarkupLanguage.MARKDOWN, -4);
         assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.MARKDOWN, 6);
         assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.MARKDOWN, -6);
 
@@ -379,9 +379,9 @@ public class MarkupDocBuilderTest {
 
     @Test
     public void testImportMarkupConfluenceMarkup() throws IOException {
-        assertImportMarkup("\n\n", "", MarkupLanguage.CONFLUENCE_MARKUP, 0);
-        assertImportMarkup("\n\n", "", MarkupLanguage.CONFLUENCE_MARKUP, 4);
-        assertImportMarkup("\n\n", "", MarkupLanguage.CONFLUENCE_MARKUP, -4);
+        assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+        assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, -4);
         assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.CONFLUENCE_MARKUP, 6);
         assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.CONFLUENCE_MARKUP, -6);
 

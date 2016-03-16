@@ -410,9 +410,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             }
         }
 
-        documentBuilder.append(newLine);
-        documentBuilder.append(convert(leveledText.toString(), markupLanguage));
-        documentBuilder.append(newLine);
+        if (!StringUtils.isBlank(leveledText)) {
+            documentBuilder.append(newLine);
+            documentBuilder.append(convert(leveledText.toString(), markupLanguage));
+            documentBuilder.append(newLine);
+        }
     }
 
     protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
@@ -441,9 +443,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             }
         }
 
-        documentBuilder.append(newLine);
-        documentBuilder.append(convert(leveledText.toString(), markupLanguage));
-        documentBuilder.append(newLine);
+        if (!StringUtils.isBlank(leveledText)) {
+            documentBuilder.append(newLine);
+            documentBuilder.append(convert(leveledText.toString(), markupLanguage));
+            documentBuilder.append(newLine);
+        }
     }
 
     @Override
