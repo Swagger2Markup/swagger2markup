@@ -346,9 +346,6 @@ public interface MarkupDocBuilder {
      */
     MarkupDocBuilder unorderedListItem(String item);
 
-    @Deprecated
-    MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV);
-
     /**
      * Builds a table without column specifiers, using specified cell values.<br/>
      * This is an alias for {@link #tableWithColumnSpecs(List, List) tableWithColumnSpecs(null, cells)}.<br/>
@@ -511,9 +508,10 @@ public interface MarkupDocBuilder {
     /**
      * Builds a new instance of this builder with a state copy.
      *
+     * @param copyBuffer copy current buffer into the new instance
      * @return new builder instance with a state copy
      */
-    MarkupDocBuilder copy();
+    MarkupDocBuilder copy(boolean copyBuffer);
 
     /**
      * Add an extension to fileName depending on markup language.
@@ -530,31 +528,6 @@ public interface MarkupDocBuilder {
      * @return file with an extension
      */
     Path addFileExtension(Path file);
-
-    /**
-     * Writes the content of the builder to a file.<br/>
-     * An extension will be dynamically added to fileName depending on the markup language.<br/>
-     * Use {@link #writeToFile(Path, Charset)} instead.
-     *
-     * @param directory the directory where the generated file should be stored
-     * @param fileName the base name of the file without extension
-     * @param charset the the charset to use for encoding
-     * @throws java.io.IOException if the file cannot be written
-     */
-    @Deprecated
-    void writeToFile(String directory, String fileName, Charset charset) throws IOException;
-
-    /**
-     * Writes the content of the builder to a file.<br/>
-     * Use {@link #writeToFileWithoutExtension(Path, Charset)} instead.
-     *
-     * @param directory the directory where the generated file should be stored
-     * @param fileName the name of the file
-     * @param charset the the charset to use for encoding
-     * @throws java.io.IOException if the file cannot be written
-     */
-    @Deprecated
-     void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException;
 
     /**
      * Writes the content of the builder to a file.<br/>

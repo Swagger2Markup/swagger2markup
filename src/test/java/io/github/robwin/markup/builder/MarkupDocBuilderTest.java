@@ -39,21 +39,15 @@ public class MarkupDocBuilderTest {
 
     private final String newLine = System.getProperty("line.separator");
 
-    private List<String> tableRowsInPSV;
     private List<MarkupTableColumn> tableColumns;
     private List<List<String>> tableCells;
 
     @Before
     public void setUp() {
-        tableRowsInPSV = new ArrayList<>();
-        tableRowsInPSV.add("Header 1 | Header 2 | Header2");
-        tableRowsInPSV.add("Row 1, Column 1 | Row 1, Column 2 | Row 1, Column 3");
-        tableRowsInPSV.add("Row 2, Column 1 | Row 2, Column 2 | Row 2, Column 3");
-
         tableColumns = Arrays.asList(
                 new MarkupTableColumn().withHeader("Header1"),
                 new MarkupTableColumn().withWidthRatio(2),
-                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1));
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
         tableCells = new ArrayList<>();
         tableCells.add(Arrays.asList("Row 1 | Column 1", "Row 1 | Column 2", "Row 1 | Column 3"));
         tableCells.add(Arrays.asList("Row 2 | Column 1", "Row 2 | Column 2", "Row 2 | Column 3"));
@@ -90,7 +84,6 @@ public class MarkupDocBuilderTest {
                 .block("Literal", MarkupBlockStyle.LITERAL, null, MarkupAdmonition.NOTE)
                 .block("Sidebar", MarkupBlockStyle.SIDEBAR, null, MarkupAdmonition.TIP)
                 .block("Passthrough", MarkupBlockStyle.PASSTHROUGH, null, MarkupAdmonition.WARNING)
-                .tableWithHeaderRow(tableRowsInPSV)
                 .table(tableCells)
                 .tableWithColumnSpecs(tableColumns, tableCells)
                 .sectionTitleLevel1("Section Level 1b")
@@ -110,8 +103,6 @@ public class MarkupDocBuilderTest {
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
-        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
@@ -151,8 +142,7 @@ public class MarkupDocBuilderTest {
                 .block("Literal", MarkupBlockStyle.LITERAL, null, MarkupAdmonition.NOTE)
                 .block("Sidebar", MarkupBlockStyle.SIDEBAR, null, MarkupAdmonition.TIP)
                 .block("Passthrough", MarkupBlockStyle.PASSTHROUGH, null, MarkupAdmonition.WARNING)
-                .tableWithHeaderRow(tableRowsInPSV)
-                        //.table(tableCells)
+                //.table(tableCells)
                 .tableWithColumnSpecs(tableColumns, tableCells)
                 .sectionTitleLevel1("Section Level 1b")
                 .sectionTitleLevel2("Section Level 2b")
@@ -171,8 +161,6 @@ public class MarkupDocBuilderTest {
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
-        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
 
         MarkupDocBuilder builderWithConfig = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN).withAnchorPrefix(" mdb test- ");
         String prefixMarkup = builderWithConfig.anchor("anchor", "text")
@@ -184,7 +172,7 @@ public class MarkupDocBuilderTest {
 
     @Test
     public void testToAtlassianWikiFile() throws IOException {
-        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN_WIKI);
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
 
         builder = builder.documentTitle("Test title")
                 .sectionTitleLevel(1, "Section Level 1a")
@@ -204,7 +192,7 @@ public class MarkupDocBuilderTest {
                 .sectionTitleWithAnchorLevel(5, "Section with anchor Level 5a")
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .listing("Source code listing")
-                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ATLASSIAN_WIKI)", "java")
+                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP)", "java")
                 .block("Example", MarkupBlockStyle.EXAMPLE)
                 .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
                 .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
@@ -224,15 +212,13 @@ public class MarkupDocBuilderTest {
                 .anchor("anchor", "text").newLine()
                 .anchor(" Simple    anchor").newLine()
                 .anchor("  \u0240 µ&|ù This .:/-_#  ").newLine()
-                .crossReferenceRaw("./document.md", "anchor", "text").newLine(true)
+                .crossReferenceRaw("./document.txt", "anchor", "text").newLine(true)
                 .crossReferenceRaw("  \u0240 µ&|ù This .:/-_  ").newLine(true)
-                .crossReference("./document.md", "anchor", "text").newLine(true)
+                .crossReference("./document.txt", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
         builder.writeToFileWithoutExtension(builder.addFileExtension(Paths.get("build/tmp/test")), StandardCharsets.UTF_8);
         builder.writeToFile(Paths.get("build/tmp/test"), StandardCharsets.UTF_8);
-        builder.writeToFileWithoutExtension("build/tmp", builder.addFileExtension("test"), StandardCharsets.UTF_8);
-        builder.writeToFile("build/tmp", "test", StandardCharsets.UTF_8);
     }
 
 
@@ -291,4 +277,5 @@ public class MarkupDocBuilderTest {
         builder.paragraph("Long text \n bla bla \r bla \r\n bla");
         Assert.assertEquals("Long text " + lineSeparator + " bla bla " + lineSeparator + " bla " + lineSeparator + " bla" + lineSeparator + lineSeparator, builder.toString());
     }
+
 }

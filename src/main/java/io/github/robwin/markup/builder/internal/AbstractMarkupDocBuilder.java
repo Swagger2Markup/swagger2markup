@@ -33,7 +33,6 @@ import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -49,12 +48,12 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     /**
      * Explicit line break default behavior for line returns, when not specified. Please, change documentation accordingly.
      */
-    private static final boolean LINE_BREAK_DEFAULT = false;
+    protected static final boolean LINE_BREAK_DEFAULT = false;
 
-    private static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
-    private static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
-    private static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
-    private static final int MAX_TITLE_LEVEL = 5;
+    protected static final Pattern ANCHOR_UNIGNORABLE_PATTERN = Pattern.compile("[^0-9a-zA-Z-_]+");
+    protected static final Pattern ANCHOR_IGNORABLE_PATTERN = Pattern.compile("[\\s@#&(){}\\[\\]!$*%+=/:.;,?\\\\<>|]+");
+    protected static final String ANCHOR_SEPARATION_CHARACTERS = "_-";
+    protected static final int MAX_TITLE_LEVEL = 5;
     protected static final String NEW_LINES = "\\r\\n|\\r|\\n";
     protected static final String WHITESPACE = " ";
 
@@ -64,8 +63,13 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     protected String anchorPrefix = null;
 
-    public AbstractMarkupDocBuilder(String lineSeparator) {
-        this.newLine = lineSeparator;
+    public AbstractMarkupDocBuilder() {
+        this(System.getProperty("line.separator"));
+    }
+
+
+    public AbstractMarkupDocBuilder(String newLine) {
+        this.newLine = newLine;
     }
 
     @Override
@@ -199,11 +203,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return this;
     }
 
-    protected void paragraph(Markup markup, String text) {
-        Validate.notBlank(text, "text must not be null");
-        documentBuilder.append(markup).append(newLine).append(replaceNewLines(text)).append(newLine).append(newLine);
-    }
-
     @Override
     public MarkupDocBuilder paragraph(String text) {
         Validate.notBlank(text, "text must not be null");
@@ -223,18 +222,31 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return listing(replaceNewLines(text), null);
     }
 
-    protected void delimitedBlockText(Markup markup, String text) {
-        if (markup != null)
-            documentBuilder.append(markup).append(newLine);
+    protected void delimitedBlockText(Markup begin, String text, Markup end) {
+        Validate.notBlank(text, "text must not be null");
+        if (!StringUtils.isBlank(begin.toString()))
+            documentBuilder.append(begin).append(newLine);
         documentBuilder.append(replaceNewLines(text)).append(newLine);
-        if (markup != null)
-            documentBuilder.append(markup).append(newLine);
+        if (!StringUtils.isBlank(end.toString()))
+            documentBuilder.append(end).append(newLine);
         documentBuilder.append(newLine);
     }
 
-    protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
+    protected void delimitedTextWithoutLineBreaks(Markup begin, String text, Markup end) {
         Validate.notBlank(text, "text must not be null");
-        documentBuilder.append(markup).append(replaceNewLines(text)).append(markup);
+        if (!StringUtils.isBlank(begin.toString()))
+            documentBuilder.append(begin);
+        documentBuilder.append(replaceNewLines(text));
+        if (!StringUtils.isBlank(end.toString()))
+            documentBuilder.append(end);
+    }
+
+    protected void delimitedBlockText(Markup markup, String text) {
+        delimitedBlockText(markup, text, markup);
+    }
+
+    protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
+        delimitedTextWithoutLineBreaks(markup, text, markup);
     }
 
     protected void boldText(Markup markup, String text) {
@@ -250,7 +262,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder boldTextLine(String text) {        
+    public MarkupDocBuilder boldTextLine(String text) {
         return boldTextLine(text, LINE_BREAK_DEFAULT);
     }
 
@@ -356,13 +368,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return importMarkup(markupText, 0);
     }
 
-    protected void importMarkup(Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
-        if (levelOffset > MAX_TITLE_LEVEL)
-            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
-        if (levelOffset < -MAX_TITLE_LEVEL)
-            throw new IllegalArgumentException(String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
-
-        final Pattern titlePattern = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", titlePrefix, MAX_TITLE_LEVEL + 1));
+    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
+        Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
+        Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
         StringBuffer leveledText = new StringBuffer();
         try (BufferedReader bufferedReader = new BufferedReader(markupText)) {
@@ -379,7 +387,38 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                     if (titleLevel + levelOffset < 0)
                         throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
                     else
-                        titleMatcher.appendReplacement(leveledText, StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset) + " " + title);
+                        titleMatcher.appendReplacement(leveledText, String.format("%s %s", StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset), title));
+                }
+                titleMatcher.appendTail(leveledText);
+                leveledText.append(newLine);
+            }
+        }
+
+        documentBuilder.append(newLine);
+        documentBuilder.append(leveledText.toString());
+        documentBuilder.append(newLine);
+    }
+
+    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, int levelOffset) throws IOException {
+        Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
+        Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
+
+        StringBuffer leveledText = new StringBuffer();
+        try (BufferedReader bufferedReader = new BufferedReader(markupText)) {
+            String readLine;
+            while ((readLine = bufferedReader.readLine()) != null) {
+                Matcher titleMatcher = titlePattern.matcher(readLine);
+
+                while (titleMatcher.find()) {
+                    int titleLevel = Integer.valueOf(titleMatcher.group(1)) - (startFrom0 ? 0 : 1);
+                    String title = titleMatcher.group(2);
+
+                    if (titleLevel + levelOffset > MAX_TITLE_LEVEL)
+                        throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) > max title level (%d)", levelOffset, title, titleLevel, MAX_TITLE_LEVEL));
+                    if (titleLevel + levelOffset < 0)
+                        throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
+                    else
+                        titleMatcher.appendReplacement(leveledText, String.format(titleFormat, (startFrom0 ? 0 : 1) + titleLevel + levelOffset, title));
                 }
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
@@ -399,10 +438,6 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     @Override
     public String toString() {
         return documentBuilder.toString();
-    }
-
-    protected String addFileExtension(Markup markup, String fileName) {
-        return fileName + "." + markup;
     }
 
     @Override
@@ -425,27 +460,17 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             logger.info("Markup document written to: {}", file);
         }
     }
-    
-    public String replaceNewLines(String content){
+
+    public String replaceNewLines(String content) {
         return content.replaceAll(NEW_LINES, newLine);
     }
 
-    public String replaceNewLinesWithWhiteSpace(String content){
+    public String replaceNewLinesWithWhiteSpace(String content) {
         return content.replaceAll(NEW_LINES, WHITESPACE);
     }
 
     @Override
     public void writeToFile(Path file, Charset charset) throws IOException {
         writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset);
-    }
-
-    @Override
-    public void writeToFileWithoutExtension(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(Paths.get(directory, fileName), charset);
-    }
-
-    @Override
-    public void writeToFile(String directory, String fileName, Charset charset) throws IOException {
-        writeToFileWithoutExtension(directory, addFileExtension(fileName), charset);
     }
 }

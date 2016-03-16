@@ -28,7 +28,7 @@ import java.util.List;
 public enum MarkupLanguage {
     ASCIIDOC(".adoc,.asciidoc"),
     MARKDOWN(".md,.markdown"),
-    ATLASSIAN_WIKI(".txt");
+    CONFLUENCE_MARKUP(".txt");
 
     private final String fileNameExtensions;
 

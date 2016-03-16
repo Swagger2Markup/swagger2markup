@@ -16,31 +16,30 @@
  *
  *
  */
-package io.github.robwin.markup.builder.internal.markdown;
+package io.github.robwin.markup.builder.internal.confluenceMarkup;
+
 
 import io.github.robwin.markup.builder.internal.Markup;
 
 /**
  * @author Robert Winkler
  */
-public enum Markdown implements Markup {
+public enum ConfluenceMarkup implements Markup {
     TABLE_COLUMN_DELIMITER("|"),
-    TABLE_ROW("-"),
-    LISTING("```"),
-    TITLE("#"),
-    DOCUMENT_TITLE("# "),
-    BOLD("**"),
-    ITALIC("*"),
+    BOLD("*"),
+    ITALIC("_"),
     LIST_ENTRY("* "),
-    SPACE_ESCAPE("-"),
-    LINE_BREAK("  ");
+    ANCHOR_START("{anchor:"),
+    ANCHOR_END("}"),
+    SPACE_ESCAPE("_"),
+    LINE_BREAK(" \\\\ ");
 
     private final String markup;
 
     /**
      * @param markup AsciiDoc markup
      */
-    private Markdown(final String markup) {
+    ConfluenceMarkup(final String markup) {
         this.markup = markup;
     }
 

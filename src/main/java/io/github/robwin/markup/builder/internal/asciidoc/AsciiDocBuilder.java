@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -36,13 +37,7 @@ import static org.apache.commons.lang3.StringUtils.*;
  */
 public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
-    public AsciiDocBuilder(){
-        super(System.getProperty("line.separator"));
-    }
-
-    public AsciiDocBuilder(String lineSeparator){
-        super(lineSeparator);
-    }
+    private static final Pattern TITLE_PATTERN = Pattern.compile(String.format("^(%s{1,%d})\\s+(.*)$", AsciiDoc.TITLE, MAX_TITLE_LEVEL + 1));
 
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
         put(MarkupBlockStyle.EXAMPLE, "====");
@@ -52,9 +47,22 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         put(MarkupBlockStyle.SIDEBAR, "****");
     }};
 
+    public AsciiDocBuilder(){
+        super();
+    }
+
+    public AsciiDocBuilder(String newLine){
+        super(newLine);
+    }
+
     @Override
-    public MarkupDocBuilder copy() {
-        return new AsciiDocBuilder().withAnchorPrefix(anchorPrefix);
+    public MarkupDocBuilder copy(boolean copyBuffer) {
+        AsciiDocBuilder builder = new AsciiDocBuilder(newLine);
+
+        if (copyBuffer)
+            builder.documentBuilder = new StringBuilder(this.documentBuilder);
+
+        return builder.withAnchorPrefix(anchorPrefix);
     }
 
     @Override
@@ -71,8 +79,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder paragraph(String text) {
-        paragraph(AsciiDoc.HARDBREAKS, text);
-        return this;
+        documentBuilder.append("[%hardbreaks]").append(newLine);
+        return super.paragraph(text);
     }
 
     @Override
@@ -84,7 +92,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
         delimitedBlockText(new Markup() {
             public String toString() {
-                assert (BLOCK_STYLE.containsKey(style));
                 return BLOCK_STYLE.get(style);
             }
         }, text);
@@ -120,18 +127,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (language != null)
             documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
         block(text, MarkupBlockStyle.LISTING);
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder tableWithHeaderRow(List<String> rowsInPSV) {
-        newLine();
-        documentBuilder.append("[options=\"header\"]").append(newLine);
-        documentBuilder.append(AsciiDoc.TABLE).append(newLine);
-        for (String row : rowsInPSV) {
-            documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(row).append(newLine);
-        }
-        documentBuilder.append(AsciiDoc.TABLE).append(newLine).append(newLine);
         return this;
     }
 
@@ -181,7 +176,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     private String escapeTableCell(String cell) {
-        return cell.replace(AsciiDoc.TABLE_COLUMN_DELIMITER.toString(), AsciiDoc.TABLE_COLUMN_DELIMITER_ESCAPE.toString());
+        return cell.replace(AsciiDoc.TABLE_COLUMN_DELIMITER.toString(), "\\" + AsciiDoc.TABLE_COLUMN_DELIMITER.toString());
     }
 
     @Override
@@ -200,7 +195,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
                 if (languageStyle != null && isNoneBlank(languageStyle)) {
                     cols.add(languageStyle);
                 } else {
-                    cols.add(String.valueOf(col.widthRatio));
+                    cols.add(String.valueOf(col.widthRatio) + (col.headerColumn ? "h" : ""));
                 }
             }
         }
@@ -238,13 +233,13 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkup(AsciiDoc.TITLE, markupText, levelOffset);
+        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, levelOffset);
         return this;
     }
 
     @Override
     public String addFileExtension(String fileName) {
-        return addFileExtension(AsciiDoc.FILE_EXTENSION, fileName);
+        return fileName + MarkupLanguage.ASCIIDOC.getFileNameExtensions().get(0);
     }
 
 }

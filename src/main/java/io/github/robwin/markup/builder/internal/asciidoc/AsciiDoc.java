@@ -25,12 +25,8 @@ import io.github.robwin.markup.builder.internal.Markup;
  * @author Robert Winkler
  */
 public enum AsciiDoc implements Markup {
-    LABELED(":: "),
     TABLE("|==="),
     TABLE_COLUMN_DELIMITER("|"),
-    TABLE_COLUMN_DELIMITER_ESCAPE("\\|"), // AsciiDoctor supports both \| and {vbar}
-    LISTING("----"),
-    HARDBREAKS("[%hardbreaks]"),
     TITLE("="),
     DOCUMENT_TITLE("= "),
     BOLD("*"),
@@ -40,7 +36,6 @@ public enum AsciiDoc implements Markup {
     CROSS_REFERENCE_END(">>"),
     ANCHOR_START("[["),
     ANCHOR_END("]]"),
-    FILE_EXTENSION("adoc"),
     SPACE_ESCAPE("_"),
     LINE_BREAK(" +");
 
