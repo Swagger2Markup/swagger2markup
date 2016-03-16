@@ -794,7 +794,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             String defaultResolver = super.apply(definitionName);
 
             if (defaultResolver != null && config.isSeparatedOperationsEnabled())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File("src/main", defaultResolver).getPath();
+                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File("..", defaultResolver).getPath();
             else
                 return defaultResolver;
         }
