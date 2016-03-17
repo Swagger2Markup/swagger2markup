@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.text.Normalizer;
 import java.util.List;
@@ -469,9 +470,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
      * 2 newLines are needed at the end of file for file to be included without protection.
      */
     @Override
-    public void writeToFileWithoutExtension(Path file, Charset charset) throws IOException {
+    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) throws IOException {
         Files.createDirectories(file.getParent());
-        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset, options)) {
             writer.write(toString());
             writer.write(newLine);
             writer.write(newLine);
@@ -494,7 +495,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public void writeToFile(Path file, Charset charset) throws IOException {
-        writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset);
+    public void writeToFile(Path file, Charset charset, OpenOption... options) throws IOException {
+        writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset, options);
     }
 }

@@ -21,6 +21,7 @@ package io.github.robwin.markup.builder;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -50,8 +51,8 @@ public interface MarkupDocBuilder {
      * Builds a section {@code title} with a custom {@code anchor} for later reference.<br/>
      * Specified {@code anchor} will be normalized anyway.
      *
-     * @param title title
-     * @param level section title level [1, 5]
+     * @param title  title
+     * @param level  section title level [1, 5]
      * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
      * @return this builder
      */
@@ -79,7 +80,7 @@ public interface MarkupDocBuilder {
      * Builds a level 1 section {@code title} with a custom {@code anchor} for later reference.<br/>
      * Specified {@code anchor} will be normalized anyway.
      *
-     * @param title title
+     * @param title  title
      * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
      * @return this builder
      */
@@ -106,7 +107,7 @@ public interface MarkupDocBuilder {
      * Builds a level 2 section {@code title} with a custom {@code anchor} for later reference.<br/>
      * Specified {@code anchor} will be normalized anyway.
      *
-     * @param title title
+     * @param title  title
      * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
      * @return this builder
      */
@@ -133,7 +134,7 @@ public interface MarkupDocBuilder {
      * Builds a level 3 section {@code title} with a custom {@code anchor} for later reference.<br/>
      * Specified {@code anchor} will be normalized anyway.
      *
-     * @param title title
+     * @param title  title
      * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
      * @return this builder
      */
@@ -160,7 +161,7 @@ public interface MarkupDocBuilder {
      * Builds a level 4 section {@code title} with a custom {@code anchor} for later reference.<br/>
      * Specified {@code anchor} will be normalized anyway.
      *
-     * @param title title
+     * @param title  title
      * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
      * @return this builder
      */
@@ -187,7 +188,7 @@ public interface MarkupDocBuilder {
      * Builds a level 5 section {@code title} with a custom {@code anchor} for later reference.<br/>
      * Specified {@code anchor} will be normalized anyway.
      *
-     * @param title title
+     * @param title  title
      * @param anchor custom anchor. If null, auto-generate the anchor from the normalized title.
      * @return this builder
      */
@@ -201,7 +202,7 @@ public interface MarkupDocBuilder {
      * @return this builder
      */
     MarkupDocBuilder sectionTitleWithAnchorLevel5(String title);
-    
+
     /**
      * Builds a regular text line.<br/>
      * This is an alias for {@link #textLine(String, boolean) textLine(text, false)}.
@@ -214,7 +215,7 @@ public interface MarkupDocBuilder {
     /**
      * Builds a regular text line.
      *
-     * @param text text
+     * @param text           text
      * @param forceLineBreak add an explicit line break if true.
      * @return this builder
      */
@@ -240,9 +241,9 @@ public interface MarkupDocBuilder {
     /**
      * Builds a block of {@code text} with specified {@code style}.
      *
-     * @param text text
-     * @param style block style
-     * @param title an optional title for the block. No title if null.
+     * @param text       text
+     * @param style      block style
+     * @param title      an optional title for the block. No title if null.
      * @param admonition an optional admonition for the block. No admonition if null.
      * @return this builder
      */
@@ -252,7 +253,7 @@ public interface MarkupDocBuilder {
      * Builds a block of {@code text} with specified {@code style}.<br/>
      * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle, null, null)}.
      *
-     * @param text text
+     * @param text  text
      * @param style block style
      * @return this builder
      */
@@ -272,7 +273,7 @@ public interface MarkupDocBuilder {
      * Builds a source code block using the specified {@code language}.<br/>
      * Line breaks are respected.
      *
-     * @param text multi-line text
+     * @param text     multi-line text
      * @param language source code language. Simple listing if {@code language} == null.
      * @return this builder
      */
@@ -290,7 +291,7 @@ public interface MarkupDocBuilder {
     /**
      * Builds a bold text line.
      *
-     * @param text text
+     * @param text           text
      * @param forceLineBreak add an explicit line break if true.
      * @return this builder
      */
@@ -316,7 +317,7 @@ public interface MarkupDocBuilder {
     /**
      * Builds an italic text line.
      *
-     * @param text text
+     * @param text           text
      * @param forceLineBreak add an explicit line break if true.
      * @return this builder
      */
@@ -360,7 +361,7 @@ public interface MarkupDocBuilder {
      * Builds a table with column specifiers, using specified cell values.
      *
      * @param columnSpecs list of column specifiers. Ignored if null.
-     * @param cells cell values
+     * @param cells       cell values
      * @return this builder
      */
     MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells);
@@ -371,7 +372,7 @@ public interface MarkupDocBuilder {
      * Limited support : Markdown does not support default text for anchors, and will ignore {@code text}.
      *
      * @param anchor custom anchor
-     * @param text default text to display when a cross-reference does not have text itself. Ignored if null.
+     * @param text   default text to display when a cross-reference does not have text itself. Ignored if null.
      * @return this builder
      */
     MarkupDocBuilder anchor(String anchor, String text);
@@ -391,8 +392,8 @@ public interface MarkupDocBuilder {
      * Specified {@code anchor} is built as-is, without any normalization.
      *
      * @param document document to point to. Reference becomes a simple cross-reference if null.
-     * @param anchor anchor to point to
-     * @param text display text
+     * @param anchor   anchor to point to
+     * @param text     display text
      * @return this builder
      */
     MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text);
@@ -403,7 +404,7 @@ public interface MarkupDocBuilder {
      * Specified {@code anchor} is built as-is, without any normalization.
      *
      * @param anchor anchor to point to
-     * @param text display text
+     * @param text   display text
      * @return this builder
      */
     MarkupDocBuilder crossReferenceRaw(String anchor, String text);
@@ -423,8 +424,8 @@ public interface MarkupDocBuilder {
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param document document to point to. Reference becomes a simple cross-reference if null.
-     * @param anchor anchor to point to
-     * @param text display text
+     * @param anchor   anchor to point to
+     * @param text     display text
      * @return this builder
      */
     MarkupDocBuilder crossReference(String document, String anchor, String text);
@@ -434,7 +435,7 @@ public interface MarkupDocBuilder {
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param anchor anchor to point to
-     * @param text display text
+     * @param text   display text
      * @return this builder
      */
     MarkupDocBuilder crossReference(String anchor, String text);
@@ -468,7 +469,7 @@ public interface MarkupDocBuilder {
      * Import some markup text into this builder.<br/>
      * This is an alias for {@link #importMarkup(Reader, MarkupLanguage, int) importMarkup(markupText, markupLanguage, 0)}.
      *
-     * @param markupText markup reader to read data from
+     * @param markupText     markup reader to read data from
      * @param markupLanguage identify the imported markup language
      * @return this builder
      * @throws IOException if I/O error occurs while reading {@code markupText}
@@ -480,16 +481,16 @@ public interface MarkupDocBuilder {
      * If {@code markupLanguage} is different from current builder language, markupText is converted when supported, or conversion is just ignored.<br/>
      * Currently supported conversions :
      * <li>
-     *     <ul>Markdown -> AsciiDoc</ul>
+     * <ul>Markdown -> AsciiDoc</ul>
      * </li>
      * Newlines are normalized in the process.
      *
-     * @param markupText markup reader to read data from
+     * @param markupText     markup reader to read data from
      * @param markupLanguage identify the imported markup language
-     * @param levelOffset adapt section leveling by adding {@code levelOffset} [-5, 5]
+     * @param levelOffset    adapt section leveling by adding {@code levelOffset} [-5, 5]
      * @return this builder
      * @throws IllegalArgumentException if levelOffset is too high for the imported markup
-     * @throws IOException if I/O error occurs while reading {@code markupText}
+     * @throws IOException              if I/O error occurs while reading {@code markupText}
      */
     MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException;
 
@@ -539,19 +540,21 @@ public interface MarkupDocBuilder {
      * Writes the content of the builder to a file.<br/>
      * An extension will be dynamically added to fileName depending on the markup language.
      *
-     * @param file the generated file without extension
+     * @param file    the generated file without extension
      * @param charset the the charset to use for encoding
+     * @param options the file open options
      * @throws java.io.IOException if the file cannot be written
      */
-    void writeToFile(Path file, Charset charset) throws IOException;
+    void writeToFile(Path file, Charset charset, OpenOption... options) throws IOException;
 
     /**
      * Writes the content of the builder to a file.
      *
-     * @param file the generated file
+     * @param file    the generated file
      * @param charset the the charset to use for encoding
+     * @param options the file open options
      * @throws java.io.IOException if the file cannot be written
      */
-    void writeToFileWithoutExtension(Path file, Charset charset) throws IOException;
+    void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) throws IOException;
 
 }
