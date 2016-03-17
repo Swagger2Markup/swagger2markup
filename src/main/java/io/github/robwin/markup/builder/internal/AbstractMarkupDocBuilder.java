@@ -481,12 +481,16 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         }
     }
 
+    public String replaceNewLines(String content, String replacement) {
+        return content.replaceAll(NEW_LINES, Matcher.quoteReplacement(replacement));
+    }
+
     public String replaceNewLines(String content) {
-        return content.replaceAll(NEW_LINES, newLine);
+        return replaceNewLines(content, newLine);
     }
 
     public String replaceNewLinesWithWhiteSpace(String content) {
-        return content.replaceAll(NEW_LINES, WHITESPACE);
+        return replaceNewLines(content, WHITESPACE);
     }
 
     @Override

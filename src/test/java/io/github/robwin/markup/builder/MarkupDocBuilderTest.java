@@ -106,13 +106,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.adoc", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        Path outputDirectory = Paths.get("build/test/asciidoc");
+        Path outputFile = Paths.get("build/test/asciidoc/test");
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
-        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
 
-        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testAsciiDoc.html");
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc/test.adoc").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testAsciiDoc.html");
     }
 
     @Test
@@ -172,13 +172,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.md", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        Path outputDirectory = Paths.get("build/test/markdown");
+        Path outputFile = Paths.get("build/test/markdown/test");
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
-        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
 
-        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testMarkdown.html");
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown/test.md").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testMarkdown.html");
 
     }
 
@@ -239,13 +239,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.txt", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        Path outputDirectory = Paths.get("build/test/confluenceMarkup");
+        Path outputFile = Paths.get("build/test/confluenceMarkup/test");
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
-        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
 
-        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testConfluenceMarkup.html");
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/test.txt").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testConfluenceMarkup.html");
     }
 
     @Test
@@ -452,4 +452,62 @@ public class MarkupDocBuilderTest {
         Assert.assertEquals("\nh1. Title\n\n", builder.toString());
     }
 
+    @Test
+    public void tableFormatAsciiDoc() throws URISyntaxException, IOException {
+        Path outputFile = Paths.get("build/test/asciidoc/tableFormat.adoc");
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn().withHeader("Header1\nfirst one"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
+        List<List<String>> cells = new ArrayList<>();
+
+        cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
+
+
+        builder = builder.tableWithColumnSpecs(cols, cells);
+        builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+        
+        DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc/tableFormat.adoc").toURI()), outputFile, "tableFormatAsciiDoc.html");
+    }
+
+    @Test
+    public void tableFormatMarkdown() throws URISyntaxException, IOException {
+        Path outputFile = Paths.get("build/test/markdown/tableFormat.md");
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn().withHeader("Header1\nfirst one"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
+        List<List<String>> cells = new ArrayList<>();
+
+        cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
+
+        builder = builder.tableWithColumnSpecs(cols, cells);
+        builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+
+        DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown/tableFormat.md").toURI()), outputFile, "tableFormatMarkdown.html");
+    }
+
+    @Test
+    public void tableFormatConfluenceMarkup() throws URISyntaxException, IOException {
+        Path outputFile = Paths.get("build/test/confluenceMarkup/tableFormat.txt");
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn().withHeader("Header1\nfirst one"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
+        List<List<String>> cells = new ArrayList<>();
+
+        cells.add(Arrays.asList("Row 1 [Title|Page#Anchor] | Column 1", "Row 1 [Title1|Page#Anchor][Title2|Page#Anchor] [Title3|Page#Anchor] | Column [Title|Page#Anchor] 2", "Row 1 [Ti\\|t\\]\\[le|Page#Anchor] | Column 3"));
+        cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
+
+        builder = builder.tableWithColumnSpecs(cols, cells);
+        builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+
+        DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/tableFormat.txt").toURI()), outputFile, "tableFormatConfluenceMarkup.html");
+    }
 }

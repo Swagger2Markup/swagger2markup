@@ -32,6 +32,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
@@ -211,7 +212,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         if (columnSpecs != null && !columnSpecs.isEmpty()) {
             documentBuilder.append("||");
             for (MarkupTableColumn column : columnSpecs) {
-                documentBuilder.append(escapeCellContent(column.header)).append("||");
+                documentBuilder.append(formatCellContent(defaultString(column.header))).append("||");
             }
             documentBuilder.append(newLine);
         }
@@ -224,22 +225,21 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
                     if (columnSpecs != null && columnSpecs.size() > cellIndex && columnSpecs.get(cellIndex).headerColumn)
                         documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
 
-                    String cell = cellIterator.next();
-                    String cellContent = escapeCellContent(cell);
-                    documentBuilder.append(cellContent).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
+                    documentBuilder.append(formatCellContent(cellIterator.next())).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 }
                 documentBuilder.append(newLine);
             }
         }
+        documentBuilder.append(newLine);
         return this;
     }
 
-    private String escapeCellContent(String content) {
-        if (StringUtils.isBlank(content)) {
+    private String formatCellContent(String cell) {
+        cell = replaceNewLines(cell.trim(), ConfluenceMarkup.LINE_BREAK.toString());
+        if (StringUtils.isBlank(cell)) {
             return " ";
         }
-        return content.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString())
-                .replace(newLine, ConfluenceMarkup.LINE_BREAK.toString());
+        return cell.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString());
     }
 
     private String normalizeAnchor(String anchor) {
