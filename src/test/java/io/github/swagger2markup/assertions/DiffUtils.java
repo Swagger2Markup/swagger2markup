@@ -32,7 +32,7 @@ public class DiffUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DiffUtils.class);
 
-    public static void assertThatAllFilesAreEqual(Path actualDirectory, Path expectedDirectory, String reportName) {
+    public static void assertThatAllFilesAreEqual(Path expectedDirectory, Path actualDirectory, String reportName) {
         Path reportPath = Paths.get("build/diff-report/", reportName);
         try {
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(actualDirectory)) {
@@ -45,5 +45,11 @@ public class DiffUtils {
         } catch (IOException e) {
             throw new RuntimeException("Failed to assert that all files are equal", e);
         }
+    }
+
+    public static void assertThatFileIsEqual(Path expectedFile, Path actualFile, String reportName) {
+        Path reportPath = Paths.get("build/diff-report/", reportName);
+        LOGGER.info("Diffing file {} with {}", actualFile, expectedFile);
+        DiffAssertions.assertThat(actualFile).isEqualTo(expectedFile, reportPath);
     }
 }
