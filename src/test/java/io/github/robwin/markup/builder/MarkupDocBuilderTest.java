@@ -503,6 +503,7 @@ public class MarkupDocBuilderTest {
         List<List<String>> cells = new ArrayList<>();
 
         cells.add(Arrays.asList("Row 1 [Title|Page#Anchor] | Column 1", "Row 1 [Title1|Page#Anchor][Title2|Page#Anchor] [Title3|Page#Anchor] | Column [Title|Page#Anchor] 2", "Row 1 [Ti\\|t\\]\\[le|Page#Anchor] | Column 3"));
+        cells.add(Arrays.asList("[Title|Page#Anchor]Row 1 | Column 1[Title|Page#Anchor]", "|[Title1|Page#Anchor]Row1 Column2|[Title1|Page#Anchor]", "|Row 1 Column 3|"));
         cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
 
         builder = builder.tableWithColumnSpecs(cols, cells);
@@ -510,4 +511,5 @@ public class MarkupDocBuilderTest {
 
         DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/tableFormat.txt").toURI()), outputFile, "tableFormatConfluenceMarkup.html");
     }
+    
 }

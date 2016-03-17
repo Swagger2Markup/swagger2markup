@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -39,6 +40,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("^h([0-9])\\.\\s+(.*)$");
     private static final String TITLE_FORMAT = "h%d. %s";
+    private static final Pattern ESCAPE_CELL_PIPE_PATTERN = Pattern.compile("((\\[.*?(?<!\\\\)\\])|(.))");
 
     /**
      * Associate macro name to block style.<br/>
@@ -239,9 +241,24 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         if (StringUtils.isBlank(cell)) {
             return " ";
         }
-        return cell.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString());
+        return escapeCellPipes(cell);
     }
 
+    private String escapeCellPipes(String cell) {
+        Matcher m = ESCAPE_CELL_PIPE_PATTERN.matcher(cell);
+
+        StringBuffer res = new StringBuffer();
+        while (m.find()) {
+            String repl = m.group(1);
+            if (repl.equals(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString()))
+                repl = "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString();
+            m.appendReplacement(res, Matcher.quoteReplacement(repl));
+        }
+        m.appendTail(res);
+        
+        return res.toString();
+    }
+    
     private String normalizeAnchor(String anchor) {
         return normalizeAnchor(ConfluenceMarkup.SPACE_ESCAPE, anchor);
     }

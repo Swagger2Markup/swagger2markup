@@ -403,7 +403,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                     if (titleLevel + levelOffset < 0)
                         throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
                     else
-                        titleMatcher.appendReplacement(leveledText, String.format("%s %s", StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset), title));
+                        titleMatcher.appendReplacement(leveledText, Matcher.quoteReplacement(String.format("%s %s", StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset), title)));
                 }
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
@@ -436,7 +436,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                     if (titleLevel + levelOffset < 0)
                         throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
                     else
-                        titleMatcher.appendReplacement(leveledText, String.format(titleFormat, (startFrom0 ? 0 : 1) + titleLevel + levelOffset, title));
+                        titleMatcher.appendReplacement(leveledText, Matcher.quoteReplacement(String.format(titleFormat, (startFrom0 ? 0 : 1) + titleLevel + levelOffset, title)));
                 }
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
