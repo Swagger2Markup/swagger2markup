@@ -183,7 +183,7 @@ public class Swagger2MarkupConfigBuilder  {
      */
     public Swagger2MarkupConfigBuilder withSwaggerMarkupLanguage(MarkupLanguage swaggerMarkupLanguage) {
         Validate.notNull(swaggerMarkupLanguage, "%s must not be null", "swaggerMarkupLanguage");
-        config.markupLanguage = swaggerMarkupLanguage;
+        config.swaggerMarkupLanguage = swaggerMarkupLanguage;
         return this;
     }
 
