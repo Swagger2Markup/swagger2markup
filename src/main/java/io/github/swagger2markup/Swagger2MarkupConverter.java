@@ -36,6 +36,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 
 
 /**
@@ -121,61 +122,73 @@ public class Swagger2MarkupConverter {
     }
 
     /**
-     * Builds the document with the given markup language and stores
-     * the files in the given folder.
+     * Builds the documents and stores the files in the given {@code outputDirectory}.
      *
-     * @param outputPath the output directory path
+     * @param outputDirectory the output directory path
      * @throws IOException if the files cannot be written
      */
-    public void intoFolder(Path outputPath) throws IOException {
-        Validate.notNull(outputPath, "outputPath must not be null");
+    public void toFolder(Path outputDirectory) throws IOException {
+        Validate.notNull(outputDirectory, "outputDirectory must not be null");
 
         applySwaggerExtensions();
-        buildDocuments(outputPath);
+        
+        new OverviewDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
+        new DefinitionsDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
+        new SecurityDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getSecurityDocument()), StandardCharsets.UTF_8);
     }
 
     /**
-     * Builds the document with the given markup language and returns it as a String
+     * Builds the document and stores it in the given {@code outputFile}.<br/>
+     * An extension identifying the markup language will be automatically added to file name.
      *
-     * @return a the document as a String
-     * @throws java.io.IOException if files can not be read
+     * @param outputFile the output file
+     * @throws IOException if the files cannot be written
      */
-    public String asString() throws IOException {
+    public void toFile(Path outputFile) throws IOException {
+        Validate.notNull(outputFile, "outputFile must not be null");
+
+        new OverviewDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new DefinitionsDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new SecurityDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+    }
+
+    /**
+     * Builds the document and stores it in the given {@code outputFile}.
+     *
+     * @param outputFile the output file
+     * @throws IOException if the files cannot be written
+     */
+    public void toFileWithoutExtension(Path outputFile) throws IOException {
+        Validate.notNull(outputFile, "outputFile must not be null");
+
+        new OverviewDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new DefinitionsDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new SecurityDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+    }
+
+    /**
+     * Builds the document returns it as a String.
+     *
+     * @return the document as a String
+     */
+    public String toString() {
         applySwaggerExtensions();
-        return buildDocuments();
-    }
-
-    private void applySwaggerExtensions() {
-        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getSwaggerModelExtensions()) {
-            swaggerModelExtension.apply(context.getSwagger());
-        }
-    }
-
-    /**
-     * Builds all documents and writes them to a directory
-     *
-     * @param outputPath the directory path where the generated file should be stored
-     * @throws IOException if a file cannot be written
-     */
-    private void buildDocuments(Path outputPath) throws IOException {
-        new OverviewDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
-        new PathsDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
-        new DefinitionsDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
-        new SecurityDocumentBuilder(context, outputPath).build().writeToFile(outputPath.resolve(context.config.getSecurityDocument()), StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Returns all documents as a String
-     *
-     * @return a the document as a String
-     */
-    private String buildDocuments() {
+        
         StringBuilder sb = new StringBuilder();
         sb.append(new OverviewDocumentBuilder(context, null).build().toString());
         sb.append(new PathsDocumentBuilder(context, null).build().toString());
         sb.append(new DefinitionsDocumentBuilder(context, null).build().toString());
         sb.append(new SecurityDocumentBuilder(context, null).build().toString());
         return sb.toString();
+    }
+
+    private void applySwaggerExtensions() {
+        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getSwaggerModelExtensions()) {
+            swaggerModelExtension.apply(context.getSwagger());
+        }
     }
 
     public static class Builder {

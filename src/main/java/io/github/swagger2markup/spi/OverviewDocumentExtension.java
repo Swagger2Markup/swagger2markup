@@ -16,7 +16,7 @@
 
 package io.github.swagger2markup.spi;
 
-import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 
 /**
  * OverviewDocumentExtension extension point can be used to extend the overview document content.

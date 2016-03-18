@@ -55,7 +55,7 @@ public class AsciidocConverterTest {
 
         //When
         String asciiDocAsString = Swagger2MarkupConverter.from(file).build()
-                .asString();
+                .toString();
         //Then
         assertThat(asciiDocAsString).isNotEmpty();
     }
@@ -73,14 +73,14 @@ public class AsciidocConverterTest {
                 .build();
 
         Swagger2MarkupConverter.from(file).withConfig(config).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/default").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
     @Test
@@ -95,14 +95,14 @@ public class AsciidocConverterTest {
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/default").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversion.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
     @Test
@@ -119,13 +119,13 @@ public class AsciidocConverterTest {
         Swagger2MarkupConverter.from(swaggerJsonString)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/examples").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithExamples.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithExamples.html");
     }
 
     @Test
@@ -143,13 +143,13 @@ public class AsciidocConverterTest {
         Swagger2MarkupConverter.from(swaggerJsonString)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/generated_examples").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocConversionWithGeneratedExamples.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithGeneratedExamples.html");
     }
 
     @Test
@@ -166,13 +166,13 @@ public class AsciidocConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/inline_schema").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocWithInlineSchema.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocWithInlineSchema.html");
     }
 
     @Test
@@ -188,13 +188,13 @@ public class AsciidocConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/group_by_tags").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2AsciiDocGroupedByTags.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocGroupedByTags.html");
     }
 
     @Test
@@ -212,7 +212,7 @@ public class AsciidocConverterTest {
             Swagger2MarkupConverter.from(file)
                     .withConfig(config)
                     .build()
-                    .intoFolder(outputDirectory);
+                    .toFolder(outputDirectory);
             // If NullPointerException was not thrown, test would fail the specified message
             failBecauseExceptionWasNotThrown(NullPointerException.class);
         } catch (Exception e) {
@@ -234,7 +234,7 @@ public class AsciidocConverterTest {
 
         Swagger2MarkupConverter.from(file)
                 .withConfig(config).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -250,7 +250,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConverter.from(file).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -269,7 +269,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConverter.from(file).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -292,7 +292,7 @@ public class AsciidocConverterTest {
                 .withSeparatedDefinitions()
                 .build();
         Swagger2MarkupConverter.from(file).withConfig(config).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -317,7 +317,7 @@ public class AsciidocConverterTest {
                 .withSeparatedOperations()
                 .build();
         Swagger2MarkupConverter.from(file).withConfig(config).build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -343,7 +343,7 @@ public class AsciidocConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
@@ -364,7 +364,7 @@ public class AsciidocConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc")), Charset.forName("UTF-8")))

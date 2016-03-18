@@ -24,7 +24,8 @@ import java.util.Locale;
 public enum Language {
     EN(new Locale("en")),
     RU(new Locale("ru")),
-    FR(new Locale("fr"));
+    FR(new Locale("fr")),
+    DE(new Locale("de"));
 
     private final Locale lang;
 

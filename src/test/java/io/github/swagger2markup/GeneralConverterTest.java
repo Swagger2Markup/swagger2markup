@@ -15,72 +15,37 @@
  */
 package io.github.swagger2markup;
 
+import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GeneralConverterTest {
 
-    /*
     @Test
-    public void testConfigDefaultPaths() throws URISyntaxException {
+    public void testOutputFile() throws IOException, URISyntaxException {
         //Given
-        Path file = Paths.get(GeneralConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
+        Path outputFile = Paths.get("build/test/asciidoc/outputFile.adoc");
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withDefinitionDescriptions()
-                .withOperationDescriptions()
+                .withGeneratedExamples()
                 .build();
 
-        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file)
+        Swagger2MarkupConverter.from(swaggerJsonString)
                 .withConfig(config)
-                .build();
+                .build()
+                .toFileWithoutExtension(outputFile);
 
         //Then
-        URI baseUri = IOUtils.uriParent(converter.getContext().getSwaggerLocation());
-        assertThat(converter.getContext().getConfig().getDefinitionDescriptionsUri()).isEqualTo(baseUri);
-        assertThat(converter.getContext().getConfig().getOperationDescriptionsUri()).isEqualTo(baseUri);
+        Path expectedFile = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/toFile/outputFile.adoc").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputFile, "testOutputFile.html");
     }
-    */
-
-    @Test
-    public void testConfigDefaultPathsWithUri() throws MalformedURLException {
-        //Given
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withDefinitionDescriptions()
-                .withOperationDescriptions()
-                .build();
-
-        Swagger2MarkupConverter converterBuilder = Swagger2MarkupConverter.from(URI.create("http://petstore.swagger.io/v2/swagger.json").toURL())
-                .withConfig(config)
-                .build();
-
-        //Then
-        assertThat(converterBuilder.getContext().getConfig().getDefinitionDescriptionsUri()).isNull();
-        assertThat(converterBuilder.getContext().getConfig().getOperationDescriptionsUri()).isNull();
-    }
-
-    /*
-    @Test
-    public void testDefaultPathsWithoutFile() {
-        //Given
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withDefinitionDescriptions()
-                .build();
-
-        //Then
-        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(new Swagger())
-                .withConfig(config)
-                .build();
-        assertThat(converter.getContext().getConfig().isDefinitionDescriptionsEnabled()).isFalse();
-    }
-    */
+    
 }

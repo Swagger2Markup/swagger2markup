@@ -16,7 +16,7 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.base.Function;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;

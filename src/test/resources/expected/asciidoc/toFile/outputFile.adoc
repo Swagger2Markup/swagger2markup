@@ -1,0 +1,1520 @@
+= Swagger Petstore
+
+
+[[_overview]]
+== Overview
+This is a sample server Petstore server.
+
+http://swagger.io[Learn about Swagger] or join the IRC channel `#swagger` on irc.freenode.net.
+
+For this sample, you can use the api key `special-key` to test the authorization filters
+
+
+=== Version information
+Version : 1.0.0
+
+=== Contact information
+Contact : apiteam@swagger.io
+
+=== License information
+License : Apache 2.0
+License URL : http://www.apache.org/licenses/LICENSE-2.0.html
+Terms of service : http://helloreverb.com/terms/
+
+=== URI scheme
+Host : petstore.swagger.io
+BasePath : /v2
+Schemes : HTTP
+
+=== Tags
+
+* pet : Pet resource
+* store : Store resource
+* user : User resource
+
+
+
+
+[[_paths]]
+== Paths
+
+[[_addpet]]
+=== Add a new pet to the store
+----
+POST /pets
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Pet object that needs to be added to the store|false|<<_pet,Pet>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|405|Invalid input|No Content
+|===
+
+
+==== Consumes
+
+* application/json
+* application/xml
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "category" : {
+    "id" : 0,
+    "name" : "string"
+  },
+  "name" : "doggie",
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string"
+}
+----
+
+
+[[_updatepet]]
+=== Update an existing pet
+----
+PUT /pets
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Pet object that needs to be added to the store|false|<<_pet,Pet>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Pet not found|No Content
+|===
+
+
+===== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|405|Validation exception|No Content
+|===
+
+
+==== Consumes
+
+* application/json
+* application/xml
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "category" : {
+    "id" : 0,
+    "name" : "string"
+  },
+  "name" : "doggie",
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string"
+}
+----
+
+
+[[_findpetsbystatus]]
+=== Finds Pets by status
+----
+GET /pets/findByStatus
+----
+
+
+==== Description
+Multiple status values can be provided with comma seperated strings
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Query|status|Status values that need to be considered for filter|false|multi string array|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_pet,Pet>> array
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid status value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/findByStatus"
+----
+
+
+==== Request query
+----
+{
+  "status" : "string"
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+"array"
+----
+
+
+[[_findpetsbytags]]
+=== Finds Pets by tags
+----
+GET /pets/findByTags
+----
+
+
+==== Description
+Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Query|tags|Tags to filter by|false|multi string array|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_pet,Pet>> array
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid tag value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/findByTags"
+----
+
+
+==== Request query
+----
+{
+  "tags" : "string"
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+"array"
+----
+
+
+[[_updatepetwithform]]
+=== Updates a pet in the store with form data
+----
+POST /pets/{petId}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|petId|ID of pet that needs to be updated|true|string|
+|FormData|name|Updated name of the pet|true|string|
+|FormData|status|Updated status of the pet|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 405
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|405|Invalid input|No Content
+|===
+
+
+==== Consumes
+
+* application/x-www-form-urlencoded
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/string"
+----
+
+
+==== Request formData
+----
+"string"
+----
+
+
+[[_getpetbyid]]
+=== Find pet by ID
+----
+GET /pets/{petId}
+----
+
+
+==== Description
+Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error conditions
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|petId|ID of pet that needs to be fetched|true|integer(int64)|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_pet,Pet>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Pet not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|apiKey|<<_api_key,api_key>>|
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/0"
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 0,
+  "category" : {
+    "id" : 0,
+    "name" : "string"
+  },
+  "name" : "doggie",
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string"
+}
+----
+
+
+[[_deletepet]]
+=== Deletes a pet
+----
+DELETE /pets/{petId}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Header|api_key||true|string|
+|Path|petId|Pet id to delete|true|integer(int64)|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid pet value|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^1h,.^1h,.^6"]
+|===
+|Type|Name|Scopes
+|oauth2|<<_petstore_auth,petstore_auth>>|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/pets/0"
+----
+
+
+==== Request header
+----
+"string"
+----
+
+
+[[_placeorder]]
+=== Place an order for a pet
+----
+POST /stores/order
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|order placed for purchasing the pet|false|<<_order,Order>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_order,Order>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid Order|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/stores/order"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "petId" : 0,
+  "quantity" : 0,
+  "shipDate" : "string",
+  "status" : "string",
+  "complete" : true
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 0,
+  "petId" : 0,
+  "quantity" : 0,
+  "shipDate" : "string",
+  "status" : "string",
+  "complete" : true
+}
+----
+
+
+[[_getorderbyid]]
+=== Find purchase order by ID
+----
+GET /stores/order/{orderId}
+----
+
+
+==== Description
+For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values will generated exceptions
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|orderId|ID of pet that needs to be fetched|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_order,Order>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Order not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/stores/order/string"
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 0,
+  "petId" : 0,
+  "quantity" : 0,
+  "shipDate" : "string",
+  "status" : "string",
+  "complete" : true
+}
+----
+
+
+[[_deleteorder]]
+=== Delete purchase order by ID
+----
+DELETE /stores/order/{orderId}
+----
+
+
+==== Description
+For valid response try integer IDs with value &lt; 1000. Anything above 1000 or nonintegers will generate API errors
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|orderId|ID of the order that needs to be deleted|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid ID supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|Order not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* store
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/stores/order/string"
+----
+
+
+[[_createuser]]
+=== Create user
+----
+POST /users
+----
+
+
+==== Description
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Created user object|false|<<_user,User>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0
+}
+----
+
+
+[[_createuserswitharrayinput]]
+=== Creates list of users with given input array
+----
+POST /users/createWithArray
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|List of user object|false|<<_user,User>> array|
+|===
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/createWithArray"
+----
+
+
+==== Request body
+----
+[ {
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0
+} ]
+----
+
+
+[[_createuserswithlistinput]]
+=== Creates list of users with given input array
+----
+POST /users/createWithList
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|List of user object|false|<<_user,User>> array|
+|===
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/createWithList"
+----
+
+
+==== Request body
+----
+[ {
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0
+} ]
+----
+
+
+[[_loginuser]]
+=== Logs user into the system
+----
+GET /users/login
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Query|password|The password for login in clear text|false|string|
+|Query|username|The user name for login|false|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|string
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid username/password supplied|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/login"
+----
+
+
+==== Request query
+----
+{
+  "password" : "string",
+  "username" : "string"
+}
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+"string"
+----
+
+
+[[_logoutuser]]
+=== Logs out current logged in user session
+----
+GET /users/logout
+----
+
+
+==== Responses
+
+===== HTTP Code default
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|default|successful operation|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/logout"
+----
+
+
+[[_getuserbyname]]
+=== Get user by user name
+----
+GET /users/{username}
+----
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|The name that needs to be fetched. Use user1 for testing.|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|successful operation|<<_user,User>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1h,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer|
+|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer|
+|X-Rate-Limit-Reset|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid username supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/string"
+----
+
+
+==== Example HTTP response
+
+==== Response 200
+----
+{
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0
+}
+----
+
+
+[[_updateuser]]
+=== Updated user
+----
+PUT /users/{username}
+----
+
+
+==== Description
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|name that need to be deleted|true|string|
+|Body|body|Updated user object|false|<<_user,User>>|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid user supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/string"
+----
+
+
+==== Request body
+----
+{
+  "id" : 0,
+  "username" : "string",
+  "firstName" : "string",
+  "lastName" : "string",
+  "email" : "string",
+  "password" : "string",
+  "phone" : "string",
+  "userStatus" : 0
+}
+----
+
+
+[[_deleteuser]]
+=== Delete user
+----
+DELETE /users/{username}
+----
+
+
+==== Description
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Path|username|The name that needs to be deleted|true|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 400
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|400|Invalid username supplied|No Content
+|===
+
+
+===== HTTP Code 404
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|404|User not found|No Content
+|===
+
+
+==== Produces
+
+* application/json
+* application/xml
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+==== Request path
+----
+"/users/string"
+----
+
+
+
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|id||false|integer(int64)||0
+|name||false|string||"string"
+|===
+
+
+[[_order]]
+=== Order
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|complete||false|boolean||true
+|id||false|integer(int64)||0
+|petId||false|integer(int64)||0
+|quantity||false|integer(int32)||0
+|shipDate||false|string(date-time)||"string"
+|status|Order Status|false|enum (Ordered, Cancelled)||"string"
+|===
+
+
+[[_pet]]
+=== Pet
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|category||false|<<_category,Category>>||"<<_category>>"
+|id||false|integer(int64)||0
+|name||true|string||"doggie"
+|photoUrls||true|string array||[ "string" ]
+|status|pet status in the store,|false|enum (Dead, Alive)||"string"
+|tags||false|<<_tag,Tag>> array||[ "<<_tag>>" ]
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|id||false|integer(int64)||0
+|name||false|string||"string"
+|===
+
+
+[[_user]]
+=== User
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|email||false|string||"string"
+|firstName||false|string||"string"
+|id||false|integer(int64)||0
+|lastName||false|string||"string"
+|password||false|string||"string"
+|phone||false|string||"string"
+|userStatus|User Status|false|integer(int32)||0
+|username||false|string||"string"
+|===
+
+
+
+
+[[_securityscheme]]
+== Security
+
+=== api_key
+Type : apiKey
+Name : api_key
+In : HEADER
+
+=== petstore_auth
+Type : oauth2
+Flow : implicit
+Token URL : http://petstore.swagger.io/api/oauth/dialog
+
+[options="header", cols="1,6"]
+|===
+|Name|Description
+|write_pets|modify pets in your account
+|read_pets|read your pets
+|===
+
+
+

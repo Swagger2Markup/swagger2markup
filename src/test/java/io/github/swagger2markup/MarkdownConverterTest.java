@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import org.apache.commons.io.FileUtils;
@@ -71,14 +71,14 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/default").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testSwagger2MarkdownConversion.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2MarkdownConversion.html");
     }
 
     @Test
@@ -96,7 +96,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -118,7 +118,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -146,7 +146,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         // Then
         String[] files = outputDirectory.toFile().list();

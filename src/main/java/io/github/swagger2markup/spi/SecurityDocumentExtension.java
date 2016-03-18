@@ -17,7 +17,7 @@
 package io.github.swagger2markup.spi;
 
 import com.google.common.base.Optional;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.lang3.Validate;
 
