@@ -38,7 +38,7 @@ public class MarkupDocument {
     }
 
     /**
-     * Writes the content of the builder to a file.<br/>
+     * Writes the content of the builder to a file.<br>
      * An extension identifying the markup language will be automatically added to file name.
      *
      * @param file    the generated file
