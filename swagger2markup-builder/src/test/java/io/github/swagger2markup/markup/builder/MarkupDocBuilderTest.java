@@ -82,8 +82,8 @@ public class MarkupDocBuilderTest {
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .paragraph("\rLine1\nLine2\r\n", false)
                 .paragraph("\rLine1\nLine2\r\n", true)
-                .listingBlock("Source code listing")
-                .listingBlock("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
+                .listing("Source code listing")
+                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
                 .block("Example", MarkupBlockStyle.EXAMPLE)
                 .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
                 .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
@@ -165,8 +165,8 @@ public class MarkupDocBuilderTest {
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .paragraph("\rLine1\nLine2\r\n", false)
                 .paragraph("\rLine1\nLine2\r\n", true)
-                .listingBlock("Source code listing")
-                .listingBlock("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
+                .listing("Source code listing")
+                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)", "java")
                 .block("Example", MarkupBlockStyle.EXAMPLE)
                 .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
                 .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
@@ -236,8 +236,8 @@ public class MarkupDocBuilderTest {
                 .paragraph("Paragraph with long text bla bla bla bla bla")
                 .paragraph("\rLine1\nLine2\r\n", false)
                 .paragraph("\rLine1\nLine2\r\n", true)
-                .listingBlock("Source code listing")
-                .listingBlock("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP)", "java")
+                .listing("Source code listing")
+                .listing("MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP)", "java")
                 .block("Example", MarkupBlockStyle.EXAMPLE)
                 .block("Example", MarkupBlockStyle.EXAMPLE, "Example", null)
                 .block("Example", MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.IMPORTANT)
@@ -491,7 +491,7 @@ public class MarkupDocBuilderTest {
 
         builder = builder.tableWithColumnSpecs(cols, cells);
         builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
-        
+
         DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc/tableFormat.adoc").toURI()), outputFile, "tableFormatAsciiDoc.html");
     }
 
@@ -534,5 +534,5 @@ public class MarkupDocBuilderTest {
 
         DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/tableFormat.txt").toURI()), outputFile, "tableFormatConfluenceMarkup.html");
     }
-    
+
 }
