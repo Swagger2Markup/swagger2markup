@@ -24,6 +24,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -33,6 +34,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -104,13 +106,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.adoc", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        Path outputDirectory = Paths.get("build/test/asciidoc");
+        Path outputFile = Paths.get("build/test/asciidoc/test");
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
-        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
 
-        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testAsciiDoc.html");
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc/test.adoc").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testAsciiDoc.html");
     }
 
     @Test
@@ -170,13 +172,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.md", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        Path outputDirectory = Paths.get("build/test/markdown");
+        Path outputFile = Paths.get("build/test/markdown/test");
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
-        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
 
-        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testMarkdown.html");
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown/test.md").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testMarkdown.html");
 
     }
 
@@ -237,13 +239,13 @@ public class MarkupDocBuilderTest {
                 .crossReference("./document.txt", "anchor", "text").newLine(true)
                 .crossReference("  \u0240 µ&|ù This .:/-_  ").newLine(true);
 
-        Path outputDirectory = Paths.get("build/test/confluenceMarkup");
+        Path outputFile = Paths.get("build/test/confluenceMarkup/test");
 
-        builder.writeToFileWithoutExtension(builder.addFileExtension(outputDirectory.resolve("test")), StandardCharsets.UTF_8);
-        builder.writeToFile(outputDirectory.resolve("test"), StandardCharsets.UTF_8);
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
 
-        Path expectedFilesDirectory = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(outputDirectory, expectedFilesDirectory, "testConfluenceMarkup.html");
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/test.txt").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testConfluenceMarkup.html");
     }
 
     @Test
@@ -312,4 +314,202 @@ public class MarkupDocBuilderTest {
         Assert.assertEquals("Long text " + lineSeparator + " bla bla " + lineSeparator + " bla " + lineSeparator + " bla" + lineSeparator + lineSeparator, builder.toString());
     }
 
+    private void assertImportMarkup(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) {
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(markupLanguage);
+        try {
+            builder.importMarkup(new StringReader(text), markupLanguage, levelOffset);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Assert.assertEquals(expected, builder.toString());
+    }
+
+    private void assertImportMarkupException(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        try {
+            assertImportMarkup(expected, text, markupLanguage, levelOffset);
+            fail("IllegalArgumentException expected");
+        } catch (IllegalArgumentException e) {
+            Assert.assertEquals(expected, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testImportMarkupAsciiDoc() throws IOException {
+        assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, 4);
+        assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.ASCIIDOC, 6);
+        assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, -4);
+        assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.ASCIIDOC, -6);
+
+        assertImportMarkup("\n= title\nline 1\nline 2\n\n", "=   title\r\nline 1\r\nline 2", MarkupLanguage.ASCIIDOC, 0);
+
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.ASCIIDOC, 4);
+
+        assertImportMarkup("\n= title\nline 1\nline 2\n= title 2\nline 3\n\n", "= title\nline 1\nline 2\n= title 2\nline 3", MarkupLanguage.ASCIIDOC, 0);
+        assertImportMarkup("\n===== title\nline 1\nline 2\n\n", "= title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, 4);
+        assertImportMarkup("\n= title\nline 1\nline 2\n\n", "===== title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, -4);
+
+        assertImportMarkupException("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "== title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, 5);
+        assertImportMarkupException("Specified levelOffset (-1) set title 'title' level (0) < 0", "= title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, -1);
+        assertImportMarkupException("Specified levelOffset (-3) set title 'title' level (1) < 0", "== title\nline 1\nline 2", MarkupLanguage.ASCIIDOC, -3);
+    }
+
+    @Test
+    public void testImportMarkupMarkdown() throws IOException {
+        assertImportMarkup("", "", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("", "", MarkupLanguage.MARKDOWN, 4);
+        assertImportMarkup("", "", MarkupLanguage.MARKDOWN, -4);
+        assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.MARKDOWN, 6);
+        assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.MARKDOWN, -6);
+
+        assertImportMarkup("\n# title\nline 1\nline 2\n\n", "#   title\r\nline 1\r\nline 2", MarkupLanguage.MARKDOWN, 0);
+
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.MARKDOWN, 4);
+
+        assertImportMarkup("\n# title\nline 1\nline 2\n# title 2\nline 3\n\n", "# title\nline 1\nline 2\n# title 2\nline 3", MarkupLanguage.MARKDOWN, 0);
+        assertImportMarkup("\n##### title\nline 1\nline 2\n\n", "# title\nline 1\nline 2", MarkupLanguage.MARKDOWN, 4);
+        assertImportMarkup("\n# title\nline 1\nline 2\n\n", "##### title\nline 1\nline 2", MarkupLanguage.MARKDOWN, -4);
+
+        assertImportMarkupException("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "## title\nline 1\nline 2", MarkupLanguage.MARKDOWN, 5);
+        assertImportMarkupException("Specified levelOffset (-1) set title 'title' level (0) < 0", "# title\nline 1\nline 2", MarkupLanguage.MARKDOWN, -1);
+        assertImportMarkupException("Specified levelOffset (-3) set title 'title' level (1) < 0", "## title\nline 1\nline 2", MarkupLanguage.MARKDOWN, -3);
+    }
+
+    @Test
+    public void testImportMarkupConfluenceMarkup() throws IOException {
+        assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+        assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, -4);
+        assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.CONFLUENCE_MARKUP, 6);
+        assertImportMarkupException("Specified levelOffset (-6) < min levelOffset (-5)", "", MarkupLanguage.CONFLUENCE_MARKUP, -6);
+
+        assertImportMarkup("\nh1. title\nline 1\nline 2\n\n", "h1.   title\r\nline 1\r\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("\nline 1\nline 2\n\n", "line 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+
+        assertImportMarkup("\nh1. title\nline 1\nline 2\nh1. title 2\nline 3\n\n", "h1. title\nline 1\nline 2\nh1. title 2\nline 3", MarkupLanguage.CONFLUENCE_MARKUP, 0);
+        assertImportMarkup("\nh5. title\nline 1\nline 2\n\n", "h1. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 4);
+        assertImportMarkup("\nh1. title\nline 1\nline 2\n\n", "h5. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, -4);
+
+        assertImportMarkupException("Specified levelOffset (5) set title 'title' level (1) > max title level (5)", "h2. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, 5);
+        assertImportMarkupException("Specified levelOffset (-1) set title 'title' level (0) < 0", "h1. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, -1);
+        assertImportMarkupException("Specified levelOffset (-3) set title 'title' level (1) < 0", "h2. title\nline 1\nline 2", MarkupLanguage.CONFLUENCE_MARKUP, -3);
+    }
+
+    @Test
+    public void importMarkupConversion() throws IOException {
+        // ASCIIDOC -> ASCIIDOC
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // ASCIIDOC -> MARKDOWN
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
+        // Assert.assertEquals("\n# Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // ASCIIDOC -> CONFLUENCE_MARKUP
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
+        // Assert.assertEquals("\nh1. Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // MARKDOWN -> ASCIIDOC
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
+        Assert.assertEquals("\n= Title\n\n", builder.toString());
+
+        // MARKDOWN -> MARKDOWN
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
+        Assert.assertEquals("\n# Title\n\n", builder.toString());
+
+        // MARKDOWN -> CONFLUENCE_MARKUP
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
+        // Assert.assertEquals("\nh1. Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\n# Title\n\n", builder.toString());
+
+        // CONFLUENCE_MARKUP -> ASCIIDOC
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
+        // Assert.assertEquals("\n= Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\nh1. Title\n\n", builder.toString());
+
+        // CONFLUENCE_MARKUP -> MARKDOWN
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
+        // Assert.assertEquals("\n# Title\n\n", builder.toString()); // Unsupported
+        Assert.assertEquals("\nh1. Title\n\n", builder.toString());
+
+        // CONFLUENCE_MARKUP -> CONFLUENCE_MARKUP
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
+        Assert.assertEquals("\nh1. Title\n\n", builder.toString());
+    }
+
+    @Test
+    public void tableFormatAsciiDoc() throws URISyntaxException, IOException {
+        Path outputFile = Paths.get("build/test/asciidoc/tableFormat.adoc");
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn().withHeader("Header1\nfirst one"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
+        List<List<String>> cells = new ArrayList<>();
+
+        cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
+
+
+        builder = builder.tableWithColumnSpecs(cols, cells);
+        builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+        
+        DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc/tableFormat.adoc").toURI()), outputFile, "tableFormatAsciiDoc.html");
+    }
+
+    @Test
+    public void tableFormatMarkdown() throws URISyntaxException, IOException {
+        Path outputFile = Paths.get("build/test/markdown/tableFormat.md");
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn().withHeader("Header1\nfirst one"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
+        List<List<String>> cells = new ArrayList<>();
+
+        cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
+
+        builder = builder.tableWithColumnSpecs(cols, cells);
+        builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+
+        DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown/tableFormat.md").toURI()), outputFile, "tableFormatMarkdown.html");
+    }
+
+    @Test
+    public void tableFormatConfluenceMarkup() throws URISyntaxException, IOException {
+        Path outputFile = Paths.get("build/test/confluenceMarkup/tableFormat.txt");
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+
+        List<MarkupTableColumn> cols = Arrays.asList(
+                new MarkupTableColumn().withHeader("Header1\nfirst one"),
+                new MarkupTableColumn().withWidthRatio(2),
+                new MarkupTableColumn().withHeader("Header3").withWidthRatio(1).withHeaderColumn(true));
+        List<List<String>> cells = new ArrayList<>();
+
+        cells.add(Arrays.asList("Row 1 [Title|Page#Anchor] | Column 1", "Row 1 [Title1|Page#Anchor][Title2|Page#Anchor] [Title3|Page#Anchor] | Column [Title|Page#Anchor] 2", "Row 1 [Ti\\|t\\]\\[le|Page#Anchor] | Column 3"));
+        cells.add(Arrays.asList("[Title|Page#Anchor]Row 1 | Column 1[Title|Page#Anchor]", "|[Title1|Page#Anchor]Row1 Column2|[Title1|Page#Anchor]", "|Row 1 Column 3|"));
+        cells.add(Arrays.asList("\nRow 2 \\| Column \r\n1\r", "Row 2 || Column 2", "Row 2 | | Column 3"));
+
+        builder = builder.tableWithColumnSpecs(cols, cells);
+        builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+
+        DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/tableFormat.txt").toURI()), outputFile, "tableFormatConfluenceMarkup.html");
+    }
+    
 }

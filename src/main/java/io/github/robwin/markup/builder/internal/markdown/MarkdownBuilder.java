@@ -60,6 +60,10 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         super(newLine);
     }
 
+    protected MarkupLanguage getMarkupLanguage() {
+        return MarkupLanguage.MARKDOWN;
+    }
+
     @Override
     public MarkupDocBuilder copy(boolean copyBuffer) {
         MarkdownBuilder builder = new MarkdownBuilder(newLine);
@@ -160,7 +164,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         return crossReferenceRaw(document, normalizeAnchor(anchor), text);
     }
 
-    private String escapeTableCell(String cell) {
+    private String formatTableCell(String cell) {
+        cell = replaceNewLines(cell.trim(), "<br/>");
         return cell.replace(Markdown.TABLE_COLUMN_DELIMITER.toString(), "\\" + Markdown.TABLE_COLUMN_DELIMITER.toString());
     }
 
@@ -171,7 +176,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         newLine();
         Collection<String> headerList = CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
             public String transform(final MarkupTableColumn header) {
-                return escapeTableCell(replaceNewLinesWithWhiteSpace(defaultString(header.header)));
+                return formatTableCell(defaultString(header.header));
             }
         });
         documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
@@ -186,7 +191,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         for (List<String> row : cells) {
             Collection<String> cellList = CollectionUtils.collect(row, new Transformer<String, String>() {
                 public String transform(final String cell) {
-                    return escapeTableCell(replaceNewLines(cell));
+                    return formatTableCell(cell);
                 }
             });
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(cellList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
@@ -203,8 +208,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle1(TITLE_PATTERN, Markdown.TITLE, markupText, levelOffset);
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        importMarkupStyle1(TITLE_PATTERN, Markdown.TITLE, markupText, markupLanguage, levelOffset);
         return this;
     }
 

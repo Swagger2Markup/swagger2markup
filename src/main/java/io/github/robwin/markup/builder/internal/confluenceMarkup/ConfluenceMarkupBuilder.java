@@ -30,14 +30,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     private static final Pattern TITLE_PATTERN = Pattern.compile("^h([0-9])\\.\\s+(.*)$");
     private static final String TITLE_FORMAT = "h%d. %s";
+    private static final Pattern ESCAPE_CELL_PIPE_PATTERN = Pattern.compile("((\\[.*?(?<!\\\\)\\])|(.))");
 
     /**
      * Associate macro name to block style.<br/>
@@ -67,6 +70,10 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     public ConfluenceMarkupBuilder(String newLine) {
         super(newLine);
+    }
+
+    protected MarkupLanguage getMarkupLanguage() {
+        return MarkupLanguage.CONFLUENCE_MARKUP;
     }
 
     @Override
@@ -207,7 +214,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         if (columnSpecs != null && !columnSpecs.isEmpty()) {
             documentBuilder.append("||");
             for (MarkupTableColumn column : columnSpecs) {
-                documentBuilder.append(escapeCellContent(column.header)).append("||");
+                documentBuilder.append(formatCellContent(defaultString(column.header))).append("||");
             }
             documentBuilder.append(newLine);
         }
@@ -220,24 +227,38 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
                     if (columnSpecs != null && columnSpecs.size() > cellIndex && columnSpecs.get(cellIndex).headerColumn)
                         documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
 
-                    String cell = cellIterator.next();
-                    String cellContent = escapeCellContent(cell);
-                    documentBuilder.append(cellContent).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
+                    documentBuilder.append(formatCellContent(cellIterator.next())).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
                 }
                 documentBuilder.append(newLine);
             }
         }
+        documentBuilder.append(newLine);
         return this;
     }
 
-    private String escapeCellContent(String content) {
-        if (StringUtils.isBlank(content)) {
+    private String formatCellContent(String cell) {
+        cell = replaceNewLines(cell.trim(), ConfluenceMarkup.LINE_BREAK.toString());
+        if (StringUtils.isBlank(cell)) {
             return " ";
         }
-        return content.replace(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString(), "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString())
-                .replace(newLine, ConfluenceMarkup.LINE_BREAK.toString());
+        return escapeCellPipes(cell);
     }
 
+    private String escapeCellPipes(String cell) {
+        Matcher m = ESCAPE_CELL_PIPE_PATTERN.matcher(cell);
+
+        StringBuffer res = new StringBuffer();
+        while (m.find()) {
+            String repl = m.group(1);
+            if (repl.equals(ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString()))
+                repl = "\\" + ConfluenceMarkup.TABLE_COLUMN_DELIMITER.toString();
+            m.appendReplacement(res, Matcher.quoteReplacement(repl));
+        }
+        m.appendTail(res);
+        
+        return res.toString();
+    }
+    
     private String normalizeAnchor(String anchor) {
         return normalizeAnchor(ConfluenceMarkup.SPACE_ESCAPE, anchor);
     }
@@ -276,8 +297,8 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle2(TITLE_PATTERN, TITLE_FORMAT, false, markupText, levelOffset);
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        importMarkupStyle2(TITLE_PATTERN, TITLE_FORMAT, false, markupText, markupLanguage, levelOffset);
         return this;
     }
 

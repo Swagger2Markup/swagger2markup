@@ -20,6 +20,8 @@ package io.github.robwin.markup.builder.internal;
 
 import io.github.robwin.markup.builder.MarkupBlockStyle;
 import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.robwin.markup.builder.MarkupLanguage;
+import nl.jworks.markdown_to_asciidoc.Converter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.text.Normalizer;
 import java.util.List;
@@ -67,10 +70,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         this(System.getProperty("line.separator"));
     }
 
-
     public AbstractMarkupDocBuilder(String newLine) {
         this.newLine = newLine;
     }
+
+    protected abstract MarkupLanguage getMarkupLanguage();
 
     @Override
     public MarkupDocBuilder withAnchorPrefix(String prefix) {
@@ -363,12 +367,25 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText) throws IOException {
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage) throws IOException {
         Validate.notNull(markupText, "markupText must not be null");
-        return importMarkup(markupText, 0);
+        Validate.notNull(markupLanguage, "markupLanguage must not be null");
+        return importMarkup(markupText, markupLanguage, 0);
     }
 
-    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, int levelOffset) throws IOException {
+    protected String convert(String markupText, MarkupLanguage markupLanguage) {
+        if (markupLanguage == getMarkupLanguage())
+            return markupText;
+        else {
+            if (markupLanguage == MarkupLanguage.MARKDOWN && getMarkupLanguage() == MarkupLanguage.ASCIIDOC) {
+                return Converter.convertMarkdownToAsciiDoc(markupText) + newLine;
+            } else {
+                return markupText;
+            }
+        }
+    }
+
+    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
         Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
@@ -387,19 +404,21 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                     if (titleLevel + levelOffset < 0)
                         throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
                     else
-                        titleMatcher.appendReplacement(leveledText, String.format("%s %s", StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset), title));
+                        titleMatcher.appendReplacement(leveledText, Matcher.quoteReplacement(String.format("%s %s", StringUtils.repeat(titlePrefix.toString(), 1 + titleLevel + levelOffset), title)));
                 }
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
             }
         }
 
-        documentBuilder.append(newLine);
-        documentBuilder.append(leveledText.toString());
-        documentBuilder.append(newLine);
+        if (!StringUtils.isBlank(leveledText)) {
+            documentBuilder.append(newLine);
+            documentBuilder.append(convert(leveledText.toString(), markupLanguage));
+            documentBuilder.append(newLine);
+        }
     }
 
-    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, int levelOffset) throws IOException {
+    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
         Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
@@ -418,16 +437,18 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                     if (titleLevel + levelOffset < 0)
                         throw new IllegalArgumentException(String.format("Specified levelOffset (%d) set title '%s' level (%d) < 0", levelOffset, title, titleLevel));
                     else
-                        titleMatcher.appendReplacement(leveledText, String.format(titleFormat, (startFrom0 ? 0 : 1) + titleLevel + levelOffset, title));
+                        titleMatcher.appendReplacement(leveledText, Matcher.quoteReplacement(String.format(titleFormat, (startFrom0 ? 0 : 1) + titleLevel + levelOffset, title)));
                 }
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
             }
         }
 
-        documentBuilder.append(newLine);
-        documentBuilder.append(leveledText.toString());
-        documentBuilder.append(newLine);
+        if (!StringUtils.isBlank(leveledText)) {
+            documentBuilder.append(newLine);
+            documentBuilder.append(convert(leveledText.toString(), markupLanguage));
+            documentBuilder.append(newLine);
+        }
     }
 
     @Override
@@ -449,9 +470,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
      * 2 newLines are needed at the end of file for file to be included without protection.
      */
     @Override
-    public void writeToFileWithoutExtension(Path file, Charset charset) throws IOException {
+    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) throws IOException {
         Files.createDirectories(file.getParent());
-        try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
+        try (BufferedWriter writer = Files.newBufferedWriter(file, charset, options)) {
             writer.write(toString());
             writer.write(newLine);
             writer.write(newLine);
@@ -461,16 +482,20 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         }
     }
 
+    public String replaceNewLines(String content, String replacement) {
+        return content.replaceAll(NEW_LINES, Matcher.quoteReplacement(replacement));
+    }
+
     public String replaceNewLines(String content) {
-        return content.replaceAll(NEW_LINES, newLine);
+        return replaceNewLines(content, newLine);
     }
 
     public String replaceNewLinesWithWhiteSpace(String content) {
-        return content.replaceAll(NEW_LINES, WHITESPACE);
+        return replaceNewLines(content, WHITESPACE);
     }
 
     @Override
-    public void writeToFile(Path file, Charset charset) throws IOException {
-        writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset);
+    public void writeToFile(Path file, Charset charset, OpenOption... options) throws IOException {
+        writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset, options);
     }
 }

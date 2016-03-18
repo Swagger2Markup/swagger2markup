@@ -55,6 +55,10 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         super(newLine);
     }
 
+    protected MarkupLanguage getMarkupLanguage() {
+        return MarkupLanguage.ASCIIDOC;
+    }
+
     @Override
     public MarkupDocBuilder copy(boolean copyBuffer) {
         AsciiDocBuilder builder = new AsciiDocBuilder(newLine);
@@ -75,12 +79,6 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         sectionTitleWithAnchorLevel(AsciiDoc.TITLE, level, title, anchor);
         return this;
-    }
-
-    @Override
-    public MarkupDocBuilder paragraph(String text) {
-        documentBuilder.append("[%hardbreaks]").append(newLine);
-        return super.paragraph(text);
     }
 
     @Override
@@ -175,7 +173,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         return crossReferenceRaw(normalizeDocument(document), normalizeAnchor(anchor), text);
     }
 
-    private String escapeTableCell(String cell) {
+    private String formatTableCell(String cell) {
+        cell = replaceNewLines(cell.trim());
         return cell.replace(AsciiDoc.TABLE_COLUMN_DELIMITER.toString(), "\\" + AsciiDoc.TABLE_COLUMN_DELIMITER.toString());
     }
 
@@ -206,7 +205,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (hasHeader) {
             Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
                 public String transform(final MarkupTableColumn header) {
-                    return escapeTableCell(replaceNewLinesWithWhiteSpace(defaultString(header.header)));
+                    return formatTableCell(defaultString(header.header));
                 }
             });
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(headerList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
@@ -215,7 +214,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         for (List<String> row : cells) {
             Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
                 public String transform(final String cell) {
-                    return escapeTableCell(replaceNewLines(defaultString(cell)));
+                    return formatTableCell(defaultString(cell));
                 }
             });
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(cellList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
@@ -232,8 +231,8 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, int levelOffset) throws IOException {
-        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, levelOffset);
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+        importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, markupLanguage, levelOffset);
         return this;
     }
 
