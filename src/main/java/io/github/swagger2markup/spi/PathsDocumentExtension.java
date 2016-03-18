@@ -99,7 +99,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
             default:
                 throw new RuntimeException(String.format("Unknown position '%s'", context.position));
         }
-        if (globalContext.getConfig().getOperationsGroupedBy() == GroupBy.TAGS) {
+        if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
             levelOffset++;
         }
         return levelOffset;

@@ -74,7 +74,7 @@ public interface Swagger2MarkupConfig {
     /**
      * Specifies if the operations should be grouped by tags or stay as-is.
      */
-    GroupBy getOperationsGroupedBy();
+    GroupBy getPathsGroupedBy();
 
     /**
      * Specifies labels language of output files.

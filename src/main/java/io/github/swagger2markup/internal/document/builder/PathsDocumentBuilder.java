@@ -159,7 +159,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildsPathsSection(Map<String, Path> paths) {
         Set<PathOperation> pathOperations = toPathOperationsSet(paths);
         if (CollectionUtils.isNotEmpty(pathOperations)) {
-            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+            if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 for (PathOperation operation : pathOperations) {
                     buildOperation(operation);
                 }
@@ -186,7 +186,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * Builds the path title depending on the operationsGroupedBy configuration setting.
      */
     private void buildPathsTitle() {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             buildPathsTitle(PATHS);
         } else {
             buildPathsTitle(RESOURCES);
@@ -355,7 +355,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder to use
      */
     private void buildOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         } else {
             docBuilder.sectionTitleWithAnchorLevel3(title, anchor);
@@ -369,7 +369,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder to use
      */
     private void buildSectionTitle(String title, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleLevel3(title);
         } else {
             docBuilder.sectionTitleLevel4(title);
@@ -383,7 +383,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder to use
      */
     private void buildResponseTitle(String title, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleLevel4(title);
         } else {
             docBuilder.sectionTitleLevel5(title);
@@ -587,7 +587,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildTagsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 buildSectionTitle(TAGS, docBuilder);

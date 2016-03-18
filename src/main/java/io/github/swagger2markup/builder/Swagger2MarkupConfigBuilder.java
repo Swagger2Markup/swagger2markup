@@ -114,7 +114,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.definitionDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("definitionDescriptionsEnabled");
         config.separatedDefinitionsEnabled = swagger2MarkupProperties.getRequiredBoolean("separatedDefinitionsEnabled");
         config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean("separatedOperationsEnabled");
-        config.operationsGroupedBy = swagger2MarkupProperties.getGroupBy("operationsGroupedBy");
+        config.pathsGroupedBy = swagger2MarkupProperties.getGroupBy("pathsGroupedBy");
         config.outputLanguage = swagger2MarkupProperties.getLanguage("outputLanguage");
         config.inlineSchemaDepthLevel = swagger2MarkupProperties.getRequiredInt("inlineSchemaDepthLevel");
         config.interDocumentCrossReferencesEnabled = swagger2MarkupProperties.getRequiredBoolean("interDocumentCrossReferencesEnabled");
@@ -290,14 +290,14 @@ public class Swagger2MarkupConfigBuilder  {
 
 
     /**
-     * Specifies if the operations should be grouped by tags or stay as-is.
+     * Specifies if the paths should be grouped by tags or stay as-is.
      *
      * @param pathsGroupedBy the GroupBy enum
      * @return this builder
      */
     public Swagger2MarkupConfigBuilder withPathsGroupedBy(GroupBy pathsGroupedBy) {
         Validate.notNull(pathsGroupedBy, "%s must not be null", "pathsGroupedBy");
-        config.operationsGroupedBy = pathsGroupedBy;
+        config.pathsGroupedBy = pathsGroupedBy;
         return this;
     }
 
@@ -564,7 +564,7 @@ public class Swagger2MarkupConfigBuilder  {
         private URI definitionDescriptionsUri;
         private boolean separatedDefinitionsEnabled;
         private boolean separatedOperationsEnabled;
-        private GroupBy operationsGroupedBy;
+        private GroupBy pathsGroupedBy;
         private Language outputLanguage;
         private int inlineSchemaDepthLevel;
         private OrderBy tagOrderBy;
@@ -640,8 +640,8 @@ public class Swagger2MarkupConfigBuilder  {
         }
 
         @Override
-        public GroupBy getOperationsGroupedBy() {
-            return operationsGroupedBy;
+        public GroupBy getPathsGroupedBy() {
+            return pathsGroupedBy;
         }
 
         @Override

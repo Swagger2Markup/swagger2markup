@@ -60,7 +60,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.PARAMETER_IN_NATURAL_ORDERING.compound(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING));
         assertThat(config.getPathsDocument()).isEqualTo("paths");
-        assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.AS_IS);
+        assertThat(config.getPathsGroupedBy()).isEqualTo(GroupBy.AS_IS);
         assertThat(config.getPropertyOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.NATURAL);
@@ -106,7 +106,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getParameterOrdering()).isNull();
         assertThat(config.getPathsDocument()).isEqualTo("pathsTest");
-        assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.TAGS);
+        assertThat(config.getPathsGroupedBy()).isEqualTo(GroupBy.TAGS);
         assertThat(config.getPropertyOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getPropertyOrdering()).isNull();
         assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.AS_IS);
