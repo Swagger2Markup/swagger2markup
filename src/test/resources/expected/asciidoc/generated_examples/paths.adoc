@@ -57,13 +57,13 @@ POST /pets
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets"
 ----
 
 
-==== Request body
+===== Request body
 ----
 {
   "id" : 0,
@@ -88,7 +88,7 @@ POST /pets
 
 ==== Example HTTP response
 
-==== Response 405
+===== Response 405
 ----
 {
   "application/json" : {
@@ -175,13 +175,13 @@ PUT /pets
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets"
 ----
 
 
-==== Request body
+===== Request body
 ----
 {
   "id" : 0,
@@ -266,13 +266,13 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets/findByStatus"
 ----
 
 
-==== Request query
+===== Request query
 ----
 {
   "status" : "string"
@@ -282,7 +282,7 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 "array"
 ----
@@ -350,13 +350,13 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets/findByTags"
 ----
 
 
-==== Request query
+===== Request query
 ----
 {
   "tags" : "string"
@@ -366,7 +366,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 "array"
 ----
@@ -428,13 +428,13 @@ POST /pets/{petId}
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets/string"
 ----
 
 
-==== Request formData
+===== Request formData
 ----
 "string"
 ----
@@ -512,7 +512,7 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets/0"
 ----
@@ -520,7 +520,7 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 {
   "id" : 0,
@@ -593,13 +593,13 @@ DELETE /pets/{petId}
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/pets/0"
 ----
 
 
-==== Request header
+===== Request header
 ----
 "string"
 ----
@@ -654,13 +654,13 @@ POST /stores/order
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/stores/order"
 ----
 
 
-==== Request body
+===== Request body
 ----
 {
   "id" : 99,
@@ -675,7 +675,7 @@ POST /stores/order
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 {
   "id" : 99,
@@ -750,7 +750,7 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/stores/order/string"
 ----
@@ -758,7 +758,7 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 {
   "id" : 99,
@@ -824,7 +824,7 @@ For valid response try integer IDs with value &lt; 1000. Anything above 1000 or 
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/stores/order/string"
 ----
@@ -874,13 +874,13 @@ This can only be done by the logged in user.
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users"
 ----
 
 
-==== Request body
+===== Request body
 ----
 {
   "id" : 0,
@@ -936,13 +936,13 @@ POST /users/createWithArray
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/createWithArray"
 ----
 
 
-==== Request body
+===== Request body
 ----
 [ {
   "id" : 0,
@@ -998,13 +998,13 @@ POST /users/createWithList
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/createWithList"
 ----
 
 
-==== Request body
+===== Request body
 ----
 [ {
   "id" : 0,
@@ -1070,13 +1070,13 @@ GET /users/login
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/login"
 ----
 
 
-==== Request query
+===== Request query
 ----
 {
   "password" : "string",
@@ -1087,7 +1087,7 @@ GET /users/login
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 "string"
 ----
@@ -1124,7 +1124,7 @@ GET /users/logout
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/logout"
 ----
@@ -1188,7 +1188,7 @@ GET /users/{username}
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/string"
 ----
@@ -1196,7 +1196,7 @@ GET /users/{username}
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 {
   "id" : 0,
@@ -1266,13 +1266,13 @@ This can only be done by the logged in user.
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/string"
 ----
 
 
-==== Request body
+===== Request body
 ----
 {
   "id" : 0,
@@ -1341,7 +1341,7 @@ This can only be done by the logged in user.
 
 ==== Example HTTP request
 
-==== Request path
+===== Request path
 ----
 "/users/string"
 ----

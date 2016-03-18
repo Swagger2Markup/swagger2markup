@@ -57,7 +57,7 @@ POST /pets
 
 ==== Example HTTP response
 
-==== Response 405
+===== Response 405
 ----
 {
   "application/json" : {
@@ -483,7 +483,7 @@ POST /stores/order
 
 ==== Example HTTP request
 
-==== Request body
+===== Request body
 ----
 {
   "id" : 99,
@@ -498,7 +498,7 @@ POST /stores/order
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 {
   "id" : 99,
@@ -573,7 +573,7 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ==== Example HTTP response
 
-==== Response 200
+===== Response 200
 ----
 {
   "id" : 99,

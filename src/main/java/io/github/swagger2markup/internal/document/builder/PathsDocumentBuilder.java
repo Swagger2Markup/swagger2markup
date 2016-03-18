@@ -377,6 +377,20 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
+     * Adds a example title to the document.
+     *
+     * @param title      the section title
+     * @param docBuilder the MarkupDocBuilder to use
+     */
+    private void buildExampleTitle(String title, MarkupDocBuilder docBuilder) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
+            docBuilder.sectionTitleLevel4(title);
+        } else {
+            docBuilder.sectionTitleLevel5(title);
+        }
+    }
+
+    /**
      * Adds a response section title to the document.
      *
      * @param title      the response title
@@ -616,7 +630,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         if (exampleMap.size() > 0) {
             buildSectionTitle(operationSectionTitle, docBuilder);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
-                buildSectionTitle(sectionTile + " " + entry.getKey(), docBuilder);
+                buildExampleTitle(sectionTile + " " + entry.getKey(), docBuilder);
                 docBuilder.listing(Json.pretty(entry.getValue()));
             }
         }
