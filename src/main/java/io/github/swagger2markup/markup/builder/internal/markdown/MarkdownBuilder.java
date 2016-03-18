@@ -16,11 +16,11 @@
  *
  *
  */
-package io.github.robwin.markup.builder.internal.markdown;
+package io.github.swagger2markup.markup.builder.internal.markdown;
 
-import io.github.robwin.markup.builder.*;
-import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
-import io.github.robwin.markup.builder.internal.Markup;
+import io.github.swagger2markup.markup.builder.*;
+import io.github.swagger2markup.markup.builder.internal.AbstractMarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.internal.Markup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;

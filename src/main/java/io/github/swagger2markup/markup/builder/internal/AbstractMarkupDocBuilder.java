@@ -16,11 +16,11 @@
  *
  *
  */
-package io.github.robwin.markup.builder.internal;
+package io.github.swagger2markup.markup.builder.internal;
 
-import io.github.robwin.markup.builder.MarkupBlockStyle;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import nl.jworks.markdown_to_asciidoc.Converter;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang3.StringUtils;

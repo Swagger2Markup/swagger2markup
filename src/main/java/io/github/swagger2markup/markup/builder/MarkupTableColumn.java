@@ -1,4 +1,4 @@
-package io.github.robwin.markup.builder;
+package io.github.swagger2markup.markup.builder;
 
 import java.util.HashMap;
 import java.util.Map;

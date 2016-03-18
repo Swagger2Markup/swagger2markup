@@ -16,7 +16,7 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.swagger2markup.markup.builder;
 
 import java.io.IOException;
 import java.io.Reader;

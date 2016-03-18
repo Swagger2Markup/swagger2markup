@@ -16,11 +16,11 @@
  *
  *
  */
-package io.github.robwin.markup.builder.internal.confluenceMarkup;
+package io.github.swagger2markup.markup.builder.internal.confluenceMarkup;
 
-import io.github.robwin.markup.builder.*;
-import io.github.robwin.markup.builder.internal.AbstractMarkupDocBuilder;
-import io.github.robwin.markup.builder.internal.Markup;
+import io.github.swagger2markup.markup.builder.*;
+import io.github.swagger2markup.markup.builder.internal.AbstractMarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.internal.Markup;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 

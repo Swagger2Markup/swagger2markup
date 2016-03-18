@@ -16,7 +16,7 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.swagger2markup.markup.builder;
 
 public enum LineSeparator {
     /**

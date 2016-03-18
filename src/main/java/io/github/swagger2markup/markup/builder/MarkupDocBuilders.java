@@ -16,11 +16,11 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.swagger2markup.markup.builder;
 
-import io.github.robwin.markup.builder.internal.asciidoc.AsciiDocBuilder;
-import io.github.robwin.markup.builder.internal.confluenceMarkup.ConfluenceMarkupBuilder;
-import io.github.robwin.markup.builder.internal.markdown.MarkdownBuilder;
+import io.github.swagger2markup.markup.builder.internal.asciidoc.AsciiDocBuilder;
+import io.github.swagger2markup.markup.builder.internal.confluenceMarkup.ConfluenceMarkupBuilder;
+import io.github.swagger2markup.markup.builder.internal.markdown.MarkdownBuilder;
 
 /**
  * @author Robert Winkler

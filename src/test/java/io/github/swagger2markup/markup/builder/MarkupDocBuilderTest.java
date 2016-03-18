@@ -16,9 +16,9 @@
  *
  *
  */
-package io.github.robwin.markup.builder;
+package io.github.swagger2markup.markup.builder;
 
-import io.github.robwin.markup.builder.assertions.DiffUtils;
+import io.github.swagger2markup.markup.builder.assertions.DiffUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

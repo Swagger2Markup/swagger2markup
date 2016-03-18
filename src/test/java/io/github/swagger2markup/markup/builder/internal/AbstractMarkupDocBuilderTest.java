@@ -1,11 +1,11 @@
-package io.github.robwin.markup.builder.internal;
+package io.github.swagger2markup.markup.builder.internal;
 
-import io.github.robwin.markup.builder.LineSeparator;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilders;
-import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.markup.builder.internal.asciidoc.AsciiDoc;
-import io.github.robwin.markup.builder.internal.markdown.Markdown;
+import io.github.swagger2markup.markup.builder.LineSeparator;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.internal.asciidoc.AsciiDoc;
+import io.github.swagger2markup.markup.builder.internal.markdown.Markdown;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Assert;
 import org.junit.Before;

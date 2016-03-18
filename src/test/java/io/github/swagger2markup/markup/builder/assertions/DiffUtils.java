@@ -16,7 +16,7 @@
  *
  *
  */
-package io.github.robwin.markup.builder.assertions;
+package io.github.swagger2markup.markup.builder.assertions;
 
 import io.github.robwin.diff.DiffAssertions;
 import org.slf4j.Logger;

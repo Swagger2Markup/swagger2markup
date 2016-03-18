@@ -16,30 +16,11 @@
  *
  *
  */
-
-package io.github.robwin.markup.builder;
-
-import java.util.Arrays;
-import java.util.List;
+package io.github.swagger2markup.markup.builder.internal;
 
 /**
  * @author Robert Winkler
  */
-public enum MarkupLanguage {
-    ASCIIDOC(".adoc,.asciidoc"),
-    MARKDOWN(".md,.markdown"),
-    CONFLUENCE_MARKUP(".txt");
-
-    private final String fileNameExtensions;
-
-    /**
-     * @param fileNameExtensions file name suffix
-     */
-    private MarkupLanguage(final String fileNameExtensions) {
-        this.fileNameExtensions = fileNameExtensions;
-    }
-
-    public List<String> getFileNameExtensions() {
-        return Arrays.asList(fileNameExtensions.split(","));
-    }
+public interface Markup {
+    String toString();
 }

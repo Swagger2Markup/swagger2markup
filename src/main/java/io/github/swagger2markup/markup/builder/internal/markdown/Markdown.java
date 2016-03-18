@@ -16,9 +16,9 @@
  *
  *
  */
-package io.github.robwin.markup.builder.internal.markdown;
+package io.github.swagger2markup.markup.builder.internal.markdown;
 
-import io.github.robwin.markup.builder.internal.Markup;
+import io.github.swagger2markup.markup.builder.internal.Markup;
 
 /**
  * @author Robert Winkler

@@ -16,10 +16,10 @@
  *
  *
  */
-package io.github.robwin.markup.builder.internal.confluenceMarkup;
+package io.github.swagger2markup.markup.builder.internal.confluenceMarkup;
 
 
-import io.github.robwin.markup.builder.internal.Markup;
+import io.github.swagger2markup.markup.builder.internal.Markup;
 
 /**
  * @author Robert Winkler
