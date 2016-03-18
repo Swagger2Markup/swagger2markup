@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.github.robwin:markup-document-builder:0.1.6-SNAPSHOT'
+    compile 'io.github.swagger2markup:markup-document-builder:1.0.0-SNAPSHOT'
     compile 'io.swagger:swagger-compat-spec-parser:1.0.17'
     compile 'commons-configuration:commons-configuration:1.10'
     compile 'commons-collections:commons-collections:3.2.2'

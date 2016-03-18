@@ -15,7 +15,7 @@
  */
 package io.github.swagger2markup.internal.document;
 
-import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

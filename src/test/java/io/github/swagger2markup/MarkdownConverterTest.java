@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import org.apache.commons.io.FileUtils;

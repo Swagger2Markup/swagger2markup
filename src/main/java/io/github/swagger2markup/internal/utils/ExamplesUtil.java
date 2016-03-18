@@ -16,7 +16,7 @@
 
 package io.github.swagger2markup.internal.utils;
 
-import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.*;
 import io.swagger.models.parameters.*;

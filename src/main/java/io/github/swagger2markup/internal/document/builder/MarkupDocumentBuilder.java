@@ -15,10 +15,10 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
-import io.github.robwin.markup.builder.MarkupDocBuilder;
-import io.github.robwin.markup.builder.MarkupDocBuilders;
-import io.github.robwin.markup.builder.MarkupLanguage;
-import io.github.robwin.markup.builder.MarkupTableColumn;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;

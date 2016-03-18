@@ -17,7 +17,7 @@ package io.github.swagger2markup.internal.document.builder;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
-import io.github.robwin.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.ObjectType;

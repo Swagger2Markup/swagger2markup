@@ -16,7 +16,7 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Language;
 import io.github.swagger2markup.OrderBy;

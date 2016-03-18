@@ -1,8 +1,8 @@
 
 package io.github.swagger2markup;
 
-import io.github.robwin.markup.builder.LineSeparator;
-import io.github.robwin.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.LineSeparator;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.builder.Swagger2MarkupProperties;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.parameters.Parameter;
@@ -32,7 +32,7 @@ public interface Swagger2MarkupConfig {
 
     /**
      * Specifies the markup language used in Swagger descriptions.<br/>
-     * By default, {@link io.github.robwin.markup.builder.MarkupLanguage#MARKDOWN} is assumed.
+     * By default, {@link io.github.swagger2markup.markup.builder.MarkupLanguage#MARKDOWN} is assumed.
      */
     MarkupLanguage getSwaggerMarkupLanguage();
 

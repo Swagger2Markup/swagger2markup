@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.document.builder;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import io.github.robwin.markup.builder.*;
+import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;
