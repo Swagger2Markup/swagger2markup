@@ -127,7 +127,7 @@ public class Swagger2MarkupConverter {
      * @param outputDirectory the output directory path
      * @throws IOException if the files cannot be written
      */
-    public void intoFolder(Path outputDirectory) throws IOException {
+    public void toFolder(Path outputDirectory) throws IOException {
         Validate.notNull(outputDirectory, "outputDirectory must not be null");
 
         applySwaggerExtensions();
@@ -173,9 +173,8 @@ public class Swagger2MarkupConverter {
      * Builds the document returns it as a String.
      *
      * @return the document as a String
-     * @throws java.io.IOException if files can not be read
      */
-    public String asString() throws IOException {
+    public String toString() {
         applySwaggerExtensions();
         
         StringBuilder sb = new StringBuilder();

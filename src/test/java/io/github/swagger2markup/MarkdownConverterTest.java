@@ -71,7 +71,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -96,7 +96,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -118,7 +118,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -146,7 +146,7 @@ public class MarkdownConverterTest {
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
                 .build()
-                .intoFolder(outputDirectory);
+                .toFolder(outputDirectory);
 
         // Then
         String[] files = outputDirectory.toFile().list();
