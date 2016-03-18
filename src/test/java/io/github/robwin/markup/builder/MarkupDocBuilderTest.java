@@ -315,7 +315,7 @@ public class MarkupDocBuilderTest {
     }
 
     private void assertImportMarkup(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) {
-        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(markupLanguage);
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(markupLanguage, LineSeparator.UNIX);
         try {
             builder.importMarkup(new StringReader(text), markupLanguage, levelOffset);
         } catch (IOException e) {
@@ -402,52 +402,52 @@ public class MarkupDocBuilderTest {
     @Test
     public void importMarkupConversion() throws IOException {
         // ASCIIDOC -> ASCIIDOC
-        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
         Assert.assertEquals("\n= Title\n\n", builder.toString());
 
         // ASCIIDOC -> MARKDOWN
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
         // Assert.assertEquals("\n# Title\n\n", builder.toString()); // Unsupported
         Assert.assertEquals("\n= Title\n\n", builder.toString());
 
         // ASCIIDOC -> CONFLUENCE_MARKUP
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);
         // Assert.assertEquals("\nh1. Title\n\n", builder.toString()); // Unsupported
         Assert.assertEquals("\n= Title\n\n", builder.toString());
 
         // MARKDOWN -> ASCIIDOC
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
         Assert.assertEquals("\n= Title\n\n", builder.toString());
 
         // MARKDOWN -> MARKDOWN
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
         Assert.assertEquals("\n# Title\n\n", builder.toString());
 
         // MARKDOWN -> CONFLUENCE_MARKUP
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("# Title"), MarkupLanguage.MARKDOWN);
         // Assert.assertEquals("\nh1. Title\n\n", builder.toString()); // Unsupported
         Assert.assertEquals("\n# Title\n\n", builder.toString());
 
         // CONFLUENCE_MARKUP -> ASCIIDOC
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
         // Assert.assertEquals("\n= Title\n\n", builder.toString()); // Unsupported
         Assert.assertEquals("\nh1. Title\n\n", builder.toString());
 
         // CONFLUENCE_MARKUP -> MARKDOWN
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
         // Assert.assertEquals("\n# Title\n\n", builder.toString()); // Unsupported
         Assert.assertEquals("\nh1. Title\n\n", builder.toString());
 
         // CONFLUENCE_MARKUP -> CONFLUENCE_MARKUP
-        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP);
+        builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.CONFLUENCE_MARKUP, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("h1. Title"), MarkupLanguage.CONFLUENCE_MARKUP);
         Assert.assertEquals("\nh1. Title\n\n", builder.toString());
     }
