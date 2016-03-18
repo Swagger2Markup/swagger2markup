@@ -107,6 +107,21 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             documentBuilder.append(newLine);
         }
         documentBuilder.append(newLine);
+        
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
+        Validate.notBlank(text, "text must not be null");
+        
+        text = text.trim();
+        if (hardbreaks)
+            text = replaceNewLines(text, ConfluenceMarkup.LINE_BREAK + newLine);
+        else
+            text = replaceNewLines(text);
+        documentBuilder.append(text).append(newLine).append(newLine);
+        
         return this;
     }
 
@@ -255,10 +270,10 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             m.appendReplacement(res, Matcher.quoteReplacement(repl));
         }
         m.appendTail(res);
-        
+
         return res.toString();
     }
-    
+
     private String normalizeAnchor(String anchor) {
         return normalizeAnchor(ConfluenceMarkup.SPACE_ESCAPE, anchor);
     }

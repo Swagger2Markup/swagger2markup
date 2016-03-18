@@ -231,13 +231,22 @@ public interface MarkupDocBuilder {
 
     /**
      * Builds a text paragraph.<br/>
-     * Explicit line break is enabled for the whole paragraph.
+     *
+     * @param text multi-line text
+     * @param hardbreaks force hardbreaks on all lines            
+     * @return this builder
+     */
+    MarkupDocBuilder paragraph(String text, boolean hardbreaks);
+
+    /**
+     * Builds a text paragraph.<br/>
+     * This is an alias for {@link #paragraph(String, boolean) paragraph(text, false)}.
      *
      * @param text multi-line text
      * @return this builder
      */
     MarkupDocBuilder paragraph(String text);
-
+    
     /**
      * Builds a block of {@code text} with specified {@code style}.
      *

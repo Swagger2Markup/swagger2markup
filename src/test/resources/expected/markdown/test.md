@@ -37,6 +37,12 @@
 ###### Section with anchor Level 5a
 Paragraph with long text bla bla bla bla bla
 
+Line1
+Line2
+
+Line1  
+Line2
+
 ```
 Source code listing
 ```

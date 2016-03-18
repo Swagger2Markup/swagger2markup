@@ -23,6 +23,7 @@ import io.github.swagger2markup.markup.builder.internal.AbstractMarkupDocBuilder
 import io.github.swagger2markup.markup.builder.internal.Markup;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
+import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,11 +48,11 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         put(MarkupBlockStyle.SIDEBAR, "****");
     }};
 
-    public AsciiDocBuilder(){
+    public AsciiDocBuilder() {
         super();
     }
 
-    public AsciiDocBuilder(String newLine){
+    public AsciiDocBuilder(String newLine) {
         super(newLine);
     }
 
@@ -78,6 +79,16 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         sectionTitleWithAnchorLevel(AsciiDoc.TITLE, level, title, anchor);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
+        Validate.notBlank(text, "text must not be null");
+        if (hardbreaks)
+            documentBuilder.append("[%hardbreaks]").append(newLine);
+        text = text.trim();
+        documentBuilder.append(replaceNewLines(text)).append(newLine).append(newLine);
         return this;
     }
 
@@ -203,7 +214,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append("[options=\"").append(join(options, ",")).append("\", cols=\"").append(join(cols, ",")).append("\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         if (hasHeader) {
-            Collection<String> headerList =  CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
+            Collection<String> headerList = CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
                 public String transform(final MarkupTableColumn header) {
                     return formatTableCell(defaultString(header.header));
                 }
@@ -212,7 +223,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
         }
         for (List<String> row : cells) {
-            Collection<String> cellList =  CollectionUtils.collect(row, new Transformer<String, String>() {
+            Collection<String> cellList = CollectionUtils.collect(row, new Transformer<String, String>() {
                 public String transform(final String cell) {
                     return formatTableCell(defaultString(cell));
                 }
