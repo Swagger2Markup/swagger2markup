@@ -1,0 +1,51 @@
+== Usage guide
+
+=== Convert a local Swagger specification
+
+The main entry point for Swagger2Markup is the ``Swagger2MarkupConverter`` class. This class provides static factory methods to create a `Swagger2MarkupConverter.Builder`.
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=localSwaggerSpec]
+----
+
+1.  Create a ``Swagger2MarkupConverter.Builder`` by specifying the Path to the local file 
+2.  Build an instance of the ``Swagger2MarkupConverter``
+3.  Invoke ``toFolder`` by specifying the output directory
+
+
+=== Convert a remote Swagger specification
+
+You can also convert a remote Swagger file which must be accessible via HTTP.
+
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=remoteSwaggerSpec]
+----
+
+1.  Create a ``Swagger2MarkupConverter.Builder`` by specifying the URL to the remote file
+2.  Build an instance of the ``Swagger2MarkupConverter``
+3.  Invoke ``toFolder`` by specifying the output directory
+
+
+=== Convert into one file
+
+
+By default the ``Swagger2MarkupConverter`` creates four files: __overview.adoc__, __paths.adoc__ , __security.adoc__ and __definitions.adoc__. But you can also convert the Swagger specification into only one file.
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoOneFile]
+----
+
+
+=== Convert to a String
+
+You can convert the Swagger specification into aString.
+
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoString]
+----

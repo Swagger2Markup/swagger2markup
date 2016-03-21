@@ -1,10 +1,10 @@
 == Getting started
 
-The project is published in JCenter and Maven Central. The artifacts can be viewed accessed at the following locations:
+Swagger2Markup is a standard .jar file. To start using it, you need to add the library to your project’s classpath. Swagger2Markup is published in JCenter and Maven Central. The artifacts can be viewed accessed at the following locations:
 
-*   Releases: https://jcenter.bintray.com/io/github/robwin/swagger2markup/
+*   Releases: https://jcenter.bintray.com/io/github/swagger2markup/swagger2markup/
 
-*   Snapshots: https://oss.jfrog.org/simple/oss-snapshot-local/io/github/robwin/swagger2markup/
+*   Snapshots: https://oss.jfrog.org/simple/oss-snapshot-local/io/github/swagger2markup/swagger2markup/
         
 If you use Gradle or Maven, you can include Swagger2Markup as follows.
 
@@ -17,7 +17,7 @@ repositories {
     jCenter()
 }
 
-compile "io.github.robwin:swagger2markup:{project-version}"
+compile "io.github.swagger2markup:swagger2markup:{project-version}"
 ----
 
 ==== Snapshot
@@ -30,6 +30,8 @@ repositories {
 ----
 
 === Maven
+==== Release
+
 [source,xml, subs="specialcharacters,attributes"]
 ----
 <repositories>
@@ -44,7 +46,7 @@ repositories {
 </repositories>
 
 <dependency>
-    <groupId>io.github.robwin</groupId>
+    <groupId>io.github.swagger2markup</groupId>
     <artifactId>swagger2markup</artifactId>
     <version>{project-version}</version>
 </dependency>
@@ -61,5 +63,13 @@ repositories {
       <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
     </repository>
 </repositories>
+----
+
+=== SBT
+==== Release
+
+[source, subs="specialcharacters,attributes"]
+----
+libraryDependencies += "io.github.swagger2markup" % "swagger2markup" % "{project-version}"
 ----
 

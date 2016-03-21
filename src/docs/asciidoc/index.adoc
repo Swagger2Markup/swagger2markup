@@ -22,5 +22,7 @@ include::maven_plugin.adoc[]
 
 include::extension_spi.adoc[]
 
+include::contributing.adoc[]
+
 include::license.adoc[]
 
