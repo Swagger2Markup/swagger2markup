@@ -110,7 +110,7 @@ Configuration parameters may be loaded from the following sources using Apache C
 include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromCommonsConfiguration]
 ----
 
-1. Create a Commons `Configuraton` object. Different configuration sources can be mixed using a ` CombinedConfigurationBuilder` or a `CombinedConfiguration`. 
+1. Create a Commons `Configuraton` object. Different configuration sources can be mixed using a `CombinedConfigurationBuilder` or a `CombinedConfiguration`. 
 2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
 
 === Available Swagger2Markup properties
@@ -154,7 +154,7 @@ The following tables list all available Swagger2Markup properties:
 |swagger2markup.securityDocument| The file name of the security document | Any String | security
 |===
 
-=== Enable the generation of separated files
+==== Configure the generation of separated files
 
 [options="header"]
 |===
