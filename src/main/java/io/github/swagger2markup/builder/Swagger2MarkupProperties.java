@@ -34,6 +34,44 @@ import java.util.Properties;
 
 public class Swagger2MarkupProperties {
 
+    /**
+     * Prefix for Swagger2Markup properties
+     */
+    public static final String PROPERTIES_PREFIX = "swagger2markup";
+
+    public static final String MARKUP_LANGUAGE = PROPERTIES_PREFIX + ".markupLanguage";
+    public static final String SWAGGER_MARKUP_LANGUAGE = PROPERTIES_PREFIX + ".swaggerMarkupLanguage";
+    public static final String GENERATED_EXAMPLES_ENABLED = PROPERTIES_PREFIX + ".generatedExamplesEnabled";
+    public static final String OPERATION_DESCRIPTIONS_ENABLED = PROPERTIES_PREFIX + ".operationDescriptionsEnabled";
+    public static final String DEFINITION_DESCRIPTIONS_ENABLED = PROPERTIES_PREFIX + ".definitionDescriptionsEnabled";
+    public static final String SEPARATED_DEFINITIONS_ENABLED = PROPERTIES_PREFIX + ".separatedDefinitionsEnabled";
+    public static final String SEPARATED_OPERATIONS_ENABLED = PROPERTIES_PREFIX + ".separatedOperationsEnabled";
+    public static final String PATHS_GROUPED_BY = PROPERTIES_PREFIX + ".pathsGroupedBy";
+    public static final String OUTPUT_LANGUAGE = PROPERTIES_PREFIX + ".outputLanguage";
+    public static final String INLINE_SCHEMA_DEPTH_LEVEL = PROPERTIES_PREFIX + ".inlineSchemaDepthLevel";
+    public static final String INTER_DOCUMENT_CROSS_REFERENCES_ENABLED = PROPERTIES_PREFIX + ".interDocumentCrossReferencesEnabled";
+    public static final String INTER_DOCUMENT_CROSS_REFERENCES_PREFIX = PROPERTIES_PREFIX + ".interDocumentCrossReferencesPrefix";
+    public static final String FLAT_BODY_ENABLED = PROPERTIES_PREFIX + ".flatBodyEnabled";
+    public static final String ANCHOR_PREFIX = PROPERTIES_PREFIX + ".anchorPrefix";
+    public static final String OVERVIEW_DOCUMENT = PROPERTIES_PREFIX + ".overviewDocument";
+    public static final String PATHS_DOCUMENT = PROPERTIES_PREFIX + ".pathsDocument";
+    public static final String DEFINITIONS_DOCUMENT = PROPERTIES_PREFIX + ".definitionsDocument";
+    public static final String SECURITY_DOCUMENT = PROPERTIES_PREFIX + ".securityDocument";
+    public static final String SEPARATED_OPERATIONS_FOLDER = PROPERTIES_PREFIX + ".separatedOperationsFolder";
+    public static final String SEPARATED_DEFINITIONS_FOLDER = PROPERTIES_PREFIX + ".separatedDefinitionsFolder";
+    public static final String TAG_ORDER_BY = PROPERTIES_PREFIX + ".tagOrderBy";
+    public static final String OPERATION_ORDER_BY = PROPERTIES_PREFIX + ".operationOrderBy";
+    public static final String DEFINITION_ORDER_BY = PROPERTIES_PREFIX + ".definitionOrderBy";
+    public static final String PARAMETER_ORDER_BY = PROPERTIES_PREFIX + ".parameterOrderBy";
+    public static final String PROPERTY_ORDER_BY = PROPERTIES_PREFIX + ".propertyOrderBy";
+    public static final String RESPONSE_ORDER_BY = PROPERTIES_PREFIX + ".responseOrderBy";
+    public static final String LINE_SEPARATOR = PROPERTIES_PREFIX + ".lineSeparator";
+
+    /**
+     * Prefix for Swagger2Markup extension properties
+     */
+    public static final String EXTENSION_PREFIX = "extensions";
+
     private final Configuration configuration;
 
     public Swagger2MarkupProperties(Properties properties) {

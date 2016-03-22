@@ -34,13 +34,14 @@ public class Swagger2MarkupConfigBuilderTest {
 
     @Test
     public void testConfigOfDefaults() {
-        Map<String, String> extensionsProperties = new HashMap<>();
-        extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
-        extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
-        extensionsProperties.put("swagger2markup.uniqueId1.customProperty1", "123");
-        extensionsProperties.put("swagger2markup.uniqueId1.customProperty2", "123");
+        Map<String, String> configMap = new HashMap<>();
+        configMap.put(Swagger2MarkupProperties.MARKUP_LANGUAGE, MarkupLanguage.MARKDOWN.toString());
+        configMap.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
+        configMap.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
+        configMap.put("swagger2markup.uniqueId1.customProperty1", "123");
+        configMap.put("swagger2markup.uniqueId1.customProperty2", "123");
 
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(extensionsProperties)
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap)
                 .build();
 
         assertThat(config.getAnchorPrefix()).isNull();
@@ -52,7 +53,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isGeneratedExamplesEnabled()).isFalse();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
-        assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
+        assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
         assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getOperationOrdering()).isNotNull();
         assertThat(config.getOutputLanguage()).isEqualTo(Language.EN);

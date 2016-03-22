@@ -16,16 +16,6 @@ import java.util.Comparator;
 public interface Swagger2MarkupConfig {
 
     /**
-     * Prefix for Swagger2Markup properties
-     */
-    String PROPERTIES_PREFIX = "swagger2markup";
-
-    /**
-     * Prefix for Swagger2Markup extension properties
-     */
-    String EXTENSION_PREFIX = "extensions";
-
-    /**
      * Specifies the markup language which should be used to generate the files.
      */
     MarkupLanguage getMarkupLanguage();

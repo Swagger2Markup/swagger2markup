@@ -8,6 +8,8 @@ Swagger2Markup is a standard .jar file. To start using it, you need to add the l
         
 If you use Gradle or Maven, you can include Swagger2Markup as follows.
 
+WARNING: The *groupId* has been changed from *io.github.robwin* to *io.github.swagger2markup*
+
 === Gradle
 
 ==== Release

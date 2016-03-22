@@ -1,6 +1,10 @@
 == Usage guide
 
-=== Convert a local Swagger specification
+Swagger2Markup converts a Swagger JSON or YAML specification into either **AsciiDoc**, **GitHub Flavored Markdown** or **Atlassian Confluence Wiki** documents. By default the Swagger2Markup converts a Swagger specification into four AsciiDoc files: __overview.adoc__, __paths.adoc__ , __security.adoc__ and __definitions.adoc__. But you can also convert a Swagger specification into only one file or a String.
+
+=== Conversion of a Swagger specification
+
+==== Convert a local file
 
 The main entry point for Swagger2Markup is the ``Swagger2MarkupConverter`` class. This class provides static factory methods to create a `Swagger2MarkupConverter.Builder`.
 
@@ -14,9 +18,9 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=lo
 3.  Invoke ``toFolder`` by specifying the output directory
 
 
-=== Convert a remote Swagger specification
+==== Convert a remote file
 
-You can also convert a remote Swagger file which must be accessible via HTTP.
+You can convert a remote Swagger specification which must be accessible via HTTP.
 
 
 [source,java,indent=0]
@@ -29,10 +33,10 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=re
 3.  Invoke ``toFolder`` by specifying the output directory
 
 
-=== Convert into one file
+==== Convert into a file
 
 
-By default the ``Swagger2MarkupConverter`` creates four files: __overview.adoc__, __paths.adoc__ , __security.adoc__ and __definitions.adoc__. But you can also convert the Swagger specification into only one file.
+You can convert the Swagger specification into a file.
 
 [source,java,indent=0]
 ----
@@ -40,12 +44,135 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=co
 ----
 
 
-=== Convert to a String
+==== Convert to a String
 
-You can convert the Swagger specification into aString.
+You can convert the Swagger specification to a String.
 
 
 [source,java,indent=0]
 ----
 include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoString]
 ----
+
+=== Configuration of the Swagger2MarkupConverter
+
+==== Configuration using the Builder
+
+You can configure the Swagger2MarkupConverter by using the `Swagger2MarkupConfigBuilder` to build a custom `Swagger2MarkupConfig`.
+
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigBuilder]
+----
+
+1. Create a `Swagger2MarkupConfigBuilder` using the default constructor.
+2. Customize the output `MarkupLanguage`
+3. Customize the output `Language`
+4. Customize additional properties
+5. Build an instance of the `Swagger2MarkupConfig`
+6. Use the custom Swagger2MarkupConfig
+
+You can also create a `Swagger2MarkupConfig` from a Properties file, a `Map` or a Apache Commons Configuration.
+
+==== Configuration from a Properties file
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromProperties]
+----
+1. Load a `Properties` file from the classpath or local filesystem.
+2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
+
+==== Configuration from a Map
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromMap]
+----
+
+1. Create a `Map` and configure the `Swagger2MarkupProperties`.
+2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
+
+
+==== Configuration from a Apache Commons Configuration
+
+Configuration parameters may be loaded from the following sources using Apache Commons Configuration:
+
+*   Properties files
+*   XML documents
+*   Property list files (plist)
+*   JDBC Datasource
+*   Servlet parameters
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromCommonsConfiguration]
+----
+
+1. Create a Commons `Configuraton` object. Different configuration sources can be mixed using a ` CombinedConfigurationBuilder` or a `CombinedConfiguration`. 
+2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
+
+=== Available Swagger2Markup properties
+
+The following tables list all available Swagger2Markup properties:
+
+[options="header"]
+|===
+|Name | Description |  Possible Values | Default
+|swagger2markup.markupLanguage| Asd | ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP | ASCIIDOC
+|swagger2markup.swaggerMarkupLanguage| Asd | ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP | MARKDOWN
+|swagger2markup.pathsGroupedBy| Group the path operations | AS_IS, TAGS | AS_IS
+|swagger2markup.outputLanguage| The output language | EN, DE, FR, RU | EN
+|swagger2markup.lineSeparator| The line separator which should be used | UNIX, WINDOWS, MAC | System default
+|swagger2markup.generatedExamplesEnabled| Generate HTTP request and response examples | true, false | false
+|swagger2markup.inlineSchemaDepthLevel| The depth for inline schemas | Any Integer | 0
+|swagger2markup.flatBodyEnabled| Render a flat request body | true, false | false
+|===
+
+==== Configure the order of Swagger objects
+
+[options="header"]
+|===
+|Name | Description |  Possible Values | Default
+|swagger2markup.tagOrderBy| The order of global tags | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.operationOrderBy| The order of path operations | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.definitionOrderBy| The order of definitons | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.parameterOrderBy| The order of operation parameters | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.propertyOrderBy | The order of definition properties | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.responseOrderBy| The order of responses | AS_IS, NATURAL, CUSTOM | NATURAL
+|===
+
+==== Configure the document file names
+
+[options="header"]
+|===
+|Name | Description |  Possible Values | Default
+|swagger2markup.overviewDocument| The file name of the overview document | Any String | overview
+|swagger2markup.pathsDocument| The file name of the paths document | Any String | paths
+|swagger2markup.definitionsDocument| The file name of the definitions document | Any String | definitions
+|swagger2markup.securityDocument| The file name of the security document | Any String | security
+|===
+
+=== Enable the generation of separated files
+
+[options="header"]
+|===
+|Name | Description |  Possible Values | Default
+|swagger2markup.separatedDefinitionsEnabled| Create a file for each definition | true, false | false
+|swagger2markup.separatedOperationsEnabled| Create a file for each path operation | true, false | false
+|swagger2markup.separatedOperationsFolder| The target folder path for definition files| Any valid path | operations
+|swagger2markup.separatedDefinitionsFolder| The target folder path operation files | Any valid path | definitions
+|===
+
+
+==== Configure interdocument cross references
+
+[options="header"]
+|===
+|Name | Description |  Possible Values | Default
+|swagger2markup.interDocumentCrossReferencesEnabled| Enable inter document cross references | true, false | false
+|swagger2markup.interDocumentCrossReferencesPrefix| A custom prefix for cross references | Any String | 
+|swagger2markup.anchorPrefix| Configure a custom anchor prefix | Any String | 
+|===
+

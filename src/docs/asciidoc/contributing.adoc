@@ -1,9 +1,5 @@
 == Contributing
 
-=== Community contributions
-
-Pull requests are welcome.
-
 === Questions
 You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter].
 
