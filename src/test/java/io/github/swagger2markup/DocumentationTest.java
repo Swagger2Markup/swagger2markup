@@ -20,7 +20,9 @@ import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
 import io.github.swagger2markup.builder.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -144,7 +146,18 @@ public class DocumentationTest {
         // end::swagger2MarkupExtensionRegistryBuilder[]
     }
 
+    public void swagger2MarkupConfigFromCommonsConfiguration() throws IOException, ConfigurationException {
+        Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
 
+        // tag::swagger2MarkupConfigFromCommonsConfiguration[]
+        Configuration configuration = new PropertiesConfiguration("config.properties"); //<1>
 
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configuration) //<2>
+                .build();
 
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFile)
+                .withConfig(config)
+                .build();
+        // end::swagger2MarkupConfigFromCommonsConfiguration[]
+    }
 }

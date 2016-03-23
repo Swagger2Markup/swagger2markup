@@ -42,7 +42,7 @@ To register your extension manually, you have to use the `Swagger2MarkupExtensio
 ----
 include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupExtensionRegistryBuilder]
 ----
-1. Create a ``Swagger2MarkupExtensionRegistryBuilder`` using the default constructor.
+1. Create a ``Swagger2MarkupExtensionRegistryBuilder`` using the default constructor
 2. Register your custom extension
 3. Build an instance of `Swagger2MarkupExtensionRegistry`
 4. Use the custom Swagger2MarkupExtensionRegistry
