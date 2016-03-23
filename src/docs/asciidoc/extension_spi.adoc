@@ -1,4 +1,4 @@
-== Swagger2Markup Extension SPI
+== Extension SPI
 
 Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension points are available. Each extension point is an abstract class which must be implemented.
 

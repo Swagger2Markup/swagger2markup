@@ -16,11 +16,13 @@ include::getting_started.adoc[]
 
 include::usage_guide.adoc[]
 
+include::extension_spi.adoc[]
+
 include::gradle_plugin.adoc[]
 
 include::maven_plugin.adoc[]
 
-include::extension_spi.adoc[]
+include::command_line_interface.adoc[]
 
 include::contributing.adoc[]
 
