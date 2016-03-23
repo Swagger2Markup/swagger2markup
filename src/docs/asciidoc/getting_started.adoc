@@ -1,6 +1,6 @@
 == Getting started
 
-Swagger2Markup is a standard .jar file. To start using it, you need to add the library to your project’s classpath. Swagger2Markup is published in JCenter and Maven Central. The artifacts can be viewed accessed at the following locations:
+Swagger2Markup is a standard .jar file. To start using it, you need to add the library to your project’s classpath. Swagger2Markup is published in JCenter and Maven Central. The artifacts can be viewed at the following locations:
 
 *   Releases: https://jcenter.bintray.com/io/github/swagger2markup/swagger2markup/
 

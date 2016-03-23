@@ -1,0 +1,60 @@
+== Swagger2Markup Extension SPI
+
+Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension points are available. Each extension point is an abstract class which must be implemented.
+
+[options="header"]
+.Swagger2Markup Extensions points
+|====
+| Name | Class | Description
+| ``OverviewDocumentExtension`` | io.github.swagger2markup.spi.OverviewDocumentExtension | Can be used to extend the content of the Overview document
+| ``PathsDocumentExtension`` | io.github.swagger2markup.spi.PathsDocumentExtension | Can be used to extend the content of the Paths document
+| ``SecurityDocumentExtension`` | io.github.swagger2markup.spi.SecurityDocumentExtension | Can be used to extend the content of the Security document
+| ``DefinitionsDocumentExtension`` | io.github.swagger2markup.spi.DefinitionsDocumentExtension | Can be used to extend the content of the Definitions document
+| ``SwaggerModelExtension`` | io.github.swagger2markup.spi.SwaggerModelExtension | Can be used to modify the Swagger model before it is converted
+|====
+
+=== Creation of an extension
+
+To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension point, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`.
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/builder/MyExtension.java[tags=MyExtension]
+----
+
+=== Registration of an extension 
+
+Swagger2Markup extensions must be registered in the `Swagger2MarkupExtensionRegistry`. The default `Swagger2MarkupExtensionRegistry` of Swagger2Markup uses the `java.util.ServiceLoader` to load and register Swagger2Markup extensions automatically.
+
+==== Automatic registration
+
+To register your extension automatically, the following steps are required:
+
+* Create a file called `META-INF/services/io.github.swagger2markup.spi.DefinitionsDocumentExtension` which contains your extensions’s full qualified name, e.g. `io.myname.MyExtension`.
+
+*  When a `.jar` file containing your extension is added to the classpath of Swagger2Markup, the extensions will be automatically registered.
+
+==== Manual registration
+
+To register your extension manually, you have to use the `Swagger2MarkupExtensionRegistryBuilder`.
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupExtensionRegistryBuilder]
+----
+1. Create a ``Swagger2MarkupExtensionRegistryBuilder`` using the default constructor.
+2. Register your custom extension
+3. Build an instance of `Swagger2MarkupExtensionRegistry`
+4. Use the custom Swagger2MarkupExtensionRegistry
+
+=== Available extensions points
+
+==== OverviewDocumentExtension
+
+==== PathsDocumentExtension
+
+==== SecurityDocumentExtension
+
+==== DefinitionsDocumentExtension
+
+==== SwaggerModelExtension

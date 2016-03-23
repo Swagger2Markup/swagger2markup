@@ -1,4 +1,4 @@
-= Swagger2Markup User Guide
+= Swagger2Markup Documentation
 Robert Winkler
 :toc: left
 :toclevels: 3
