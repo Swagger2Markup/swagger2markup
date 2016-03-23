@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.3">
 <meta name="author" content="Robert Winkler">
-<title>Swagger2Markup User Guide</title>
+<title>Swagger2Markup Documentation</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -512,11 +512,11 @@ table.CodeRay td.code>pre{padding:0}
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
-<h1>Swagger2Markup User Guide</h1>
+<h1>Swagger2Markup Documentation</h1>
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">2016-03-22</span>
+<span id="revdate">2016-03-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -524,7 +524,6 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_introduction">1. Introduction</a>
 <ul class="sectlevel2">
 <li><a href="#_asciidoc">1.1. AsciiDoc</a></li>
-<li><a href="#_html_example">1.2. HTML Example</a></li>
 </ul>
 </li>
 <li><a href="#_getting_started">2. Getting started</a>
@@ -548,42 +547,54 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </li>
-<li><a href="#_usage_guide">3. Usage guide</a>
+<li><a href="#_usage_of_swagger2markup">3. Usage of Swagger2Markup</a>
 <ul class="sectlevel2">
-<li><a href="#_conversion_of_a_swagger_specification">3.1. Conversion of a Swagger specification</a>
-<ul class="sectlevel3">
-<li><a href="#_convert_a_local_file">3.1.1. Convert a local file</a></li>
-<li><a href="#_convert_a_remote_file">3.1.2. Convert a remote file</a></li>
-<li><a href="#_convert_into_a_file">3.1.3. Convert into a file</a></li>
-<li><a href="#_convert_to_a_string">3.1.4. Convert to a String</a></li>
+<li><a href="#_conversion_of_a_local_swagger_file">3.1. Conversion of a local Swagger file</a></li>
+<li><a href="#_conversion_of_a_remote_swagger_file">3.2. Conversion of  a remote Swagger file</a></li>
+<li><a href="#_conversion_into_a_file">3.3. Conversion into a file</a></li>
+<li><a href="#_conversion_to_a_string">3.4. Conversion to a String</a></li>
 </ul>
 </li>
-<li><a href="#_configuration_of_the_swagger2markupconverter">3.2. Configuration of the Swagger2MarkupConverter</a>
-<ul class="sectlevel3">
-<li><a href="#_configuration_using_the_builder">3.2.1. Configuration using the Builder</a></li>
-<li><a href="#_configuration_from_a_properties_file">3.2.2. Configuration from a Properties file</a></li>
-<li><a href="#_configuration_from_a_map">3.2.3. Configuration from a Map</a></li>
-<li><a href="#_configuration_from_a_apache_commons_configuration">3.2.4. Configuration from a Apache Commons Configuration</a></li>
-</ul>
-</li>
-<li><a href="#_available_swagger2markup_properties">3.3. Available Swagger2Markup properties</a>
-<ul class="sectlevel3">
-<li><a href="#_configure_the_order_of_swagger_objects">3.3.1. Configure the order of Swagger objects</a></li>
-<li><a href="#_configure_the_document_file_names">3.3.2. Configure the document file names</a></li>
-<li><a href="#_configure_the_generation_of_separated_files">3.3.3. Configure the generation of separated files</a></li>
-<li><a href="#_configure_interdocument_cross_references">3.3.4. Configure interdocument cross references</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_contributing">4. Contributing</a>
+<li><a href="#_configuration_of_swagger2markup">4. Configuration of Swagger2Markup</a>
 <ul class="sectlevel2">
-<li><a href="#_questions">4.1. Questions</a></li>
-<li><a href="#_bugs">4.2. Bugs</a></li>
-<li><a href="#_enhancements">4.3. Enhancements</a></li>
+<li><a href="#_configuration_using_the_builder">4.1. Configuration using the Builder</a></li>
+<li><a href="#_configuration_from_a_properties_file">4.2. Configuration from a Properties file</a></li>
+<li><a href="#_configuration_from_a_map">4.3. Configuration from a Map</a></li>
+<li><a href="#_configuration_from_a_apache_commons_configuration">4.4. Configuration from a Apache Commons Configuration</a></li>
+<li><a href="#_available_swagger2markup_properties">4.5. Available Swagger2Markup properties</a></li>
 </ul>
 </li>
-<li><a href="#_license">5. License</a></li>
+<li><a href="#_extension_spi">5. Extension SPI</a>
+<ul class="sectlevel2">
+<li><a href="#_creation_of_an_extension">5.1. Creation of an extension</a></li>
+<li><a href="#_registration_of_an_extension">5.2. Registration of an extension</a>
+<ul class="sectlevel3">
+<li><a href="#_automatic_registration">5.2.1. Automatic registration</a></li>
+<li><a href="#_manual_registration">5.2.2. Manual registration</a></li>
+</ul>
+</li>
+<li><a href="#_available_extensions_points">5.3. Available extensions points</a>
+<ul class="sectlevel3">
+<li><a href="#_overviewdocumentextension">5.3.1. OverviewDocumentExtension</a></li>
+<li><a href="#_pathsdocumentextension">5.3.2. PathsDocumentExtension</a></li>
+<li><a href="#_securitydocumentextension">5.3.3. SecurityDocumentExtension</a></li>
+<li><a href="#_definitionsdocumentextension">5.3.4. DefinitionsDocumentExtension</a></li>
+<li><a href="#_swaggermodelextension">5.3.5. SwaggerModelExtension</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#_gradle_plugin">6. Gradle Plugin</a></li>
+<li><a href="#_maven_plugin">7. Maven Plugin</a></li>
+<li><a href="#_command_line_interface">8. Command Line Interface</a></li>
+<li><a href="#_contributing">9. Contributing</a>
+<ul class="sectlevel2">
+<li><a href="#_questions">9.1. Questions</a></li>
+<li><a href="#_bugs">9.2. Bugs</a></li>
+<li><a href="#_enhancements">9.3. Enhancements</a></li>
+</ul>
+</li>
+<li><a href="#_license">10. License</a></li>
 </ul>
 </div>
 </div>
@@ -607,7 +618,7 @@ The Swagger Specification has been donated to to the <a href="https://openapis.o
 </table>
 </div>
 <div class="paragraph">
-<p>Swagger2Markup converts a Swagger JSON or YAML specification into either <strong>AsciiDoc</strong>, <strong>GitHub Flavored Markdown</strong> or <strong>Atlassian Confluence Wiki</strong> documents which can be combined with hand-written Markup documentation. The Swagger source file can be located locally or remotely via HTTP. Internally Swagger2Markup uses the the <em>official</em> <a href="https://github.com/swagger-api/swagger-parser">swagger-parser</a> and my <a href="https://github.com/Swagger2Markup/markup-document-builder">markup-document-builder</a>.</p>
+<p>Swagger2Markup converts a Swagger JSON or YAML specification into either <strong>AsciiDoc</strong>, <strong>GitHub Flavored Markdown</strong> or <strong>Atlassian Confluence Wiki</strong> documents which can be combined with hand-written Markup documentation. The Swagger source file can be located locally or remotely via HTTP. Internally Swagger2Markup uses the <em>official</em> <a href="https://github.com/swagger-api/swagger-parser">swagger-parser</a> and <a href="https://github.com/Swagger2Markup/markup-document-builder">markup-document-builder</a>.</p>
 </div>
 <div class="paragraph">
 <p>You can use Swagger2Markup to convert your contract-first Swagger YAML file into Markup. As an alternative, you can choose the code-first approach and use Swagger2Markup together with <a href="https://github.com/swagger-api/swagger-core/wiki/Swagger-Core-JAX-RS-Project-Setup-1.5.X">Swagger JAX-RS</a>, <a href="https://github.com/springfox/springfox">Springfox</a> or <a href="https://github.com/spring-projects/spring-restdocs">spring-restdocs</a>. If you are are Gradle or Maven user, you can also use the <a href="https://github.com/Swagger2Markup/swagger2markup-gradle-plugin">Swagger2Markup Gradle Plugin</a> or <a href="https://github.com/redowl/swagger2markup-maven-plugin">Swagger2markup Maven Plugin</a>.</p>
@@ -627,23 +638,22 @@ The project requires at least JDK 7.
 <div class="sect2">
 <h3 id="_asciidoc"><a class="anchor" href="#_asciidoc"></a>1.1. AsciiDoc</h3>
 <div class="paragraph">
-<p><a href="http://asciidoctor.org/docs/asciidoc-writers-guide/">AsciiDoc</a> is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to<strong>HTML</strong>, <strong>PDF</strong> and <strong>EPUB</strong>. AsciiDoc is much better suited for describing public APIs than <strong>JavaDoc</strong> or <strong>Annotations</strong>.</p>
+<p><a href="http://asciidoctor.org/docs/asciidoc-writers-guide/">AsciiDoc</a> is preferable to Markdown as it has more features. AsciiDoc is a text document format for writing documentation, articles, books, ebooks, slideshows, web pages and blogs. AsciiDoc files can be converted to <strong>HTML</strong>, <strong>PDF</strong> and <strong>EPUB</strong>. AsciiDoc is much better suited for describing public APIs than <strong>JavaDoc</strong> or <strong>Annotations</strong>.</p>
 </div>
 <div class="paragraph">
 <p>You can generate your HTML5, PDF and EPUB documentation via <a href="https://github.com/asciidoctor/asciidoctorj">asciidoctorj</a> or even better via the <a href="https://github.com/asciidoctor/asciidoctor-gradle-plugin">asciidoctor-gradle-plugin</a> or <a href="https://github.com/asciidoctor/asciidoctor-maven-plugin">asciidoctor-maven-plugin</a>.</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_html_example"><a class="anchor" href="#_html_example"></a>1.2. HTML Example</h3>
 <div class="imageblock">
 <div class="content">
 <img src="images/Swagger2Markup.PNG" alt="Swagger2Markup">
 </div>
+<div class="title">Figure 1. HTML example using AsciiDoctor - path section</div>
 </div>
 <div class="imageblock">
 <div class="content">
 <img src="images/Swagger2Markup_definitions.PNG" alt="Swagger2Markup definitions">
 </div>
+<div class="title">Figure 2. HTML example using AsciiDoctor - definition section</div>
 </div>
 </div>
 </div>
@@ -652,7 +662,7 @@ The project requires at least JDK 7.
 <h2 id="_getting_started"><a class="anchor" href="#_getting_started"></a>2. Getting started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Swagger2Markup is a standard .jar file. To start using it, you need to add the library to your project’s classpath. Swagger2Markup is published in JCenter and Maven Central. The artifacts can be viewed accessed at the following locations:</p>
+<p>Swagger2Markup is a standard .jar file. To start using it, you need to add the library to your project’s classpath. Swagger2Markup is published in JCenter and Maven Central. The artifacts can be viewed at the following locations:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -758,17 +768,15 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT"</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage_guide"><a class="anchor" href="#_usage_guide"></a>3. Usage guide</h2>
+<h2 id="_usage_of_swagger2markup"><a class="anchor" href="#_usage_of_swagger2markup"></a>3. Usage of Swagger2Markup</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Swagger2Markup converts a Swagger JSON or YAML specification into either <strong>AsciiDoc</strong>, <strong>GitHub Flavored Markdown</strong> or <strong>Atlassian Confluence Wiki</strong> documents. By default the Swagger2Markup converts a Swagger specification into four AsciiDoc files: <em>overview.adoc</em>, <em>paths.adoc</em> , <em>security.adoc</em> and <em>definitions.adoc</em>. But you can also convert a Swagger specification into only one file or a String.</p>
 </div>
 <div class="sect2">
-<h3 id="_conversion_of_a_swagger_specification"><a class="anchor" href="#_conversion_of_a_swagger_specification"></a>3.1. Conversion of a Swagger specification</h3>
-<div class="sect3">
-<h4 id="_convert_a_local_file"><a class="anchor" href="#_convert_a_local_file"></a>3.1.1. Convert a local file</h4>
+<h3 id="_conversion_of_a_local_swagger_file"><a class="anchor" href="#_conversion_of_a_local_swagger_file"></a>3.1. Conversion of a local Swagger file</h3>
 <div class="paragraph">
-<p>The main entry point for Swagger2Markup is the <code>Swagger2MarkupConverter</code> class. This class provides static factory methods to create a <code>Swagger2MarkupConverter.Builder</code>.</p>
+<p>The entry point of the Swagger2Markup API is the <code>Swagger2MarkupConverter</code> class. This class provides static factory methods to create a <code>Swagger2MarkupConverter.Builder</code>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -794,8 +802,8 @@ Swagger2MarkupConverter.from(localSwaggerFile) <i class="conum" data-value="1"><
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_convert_a_remote_file"><a class="anchor" href="#_convert_a_remote_file"></a>3.1.2. Convert a remote file</h4>
+<div class="sect2">
+<h3 id="_conversion_of_a_remote_swagger_file"><a class="anchor" href="#_conversion_of_a_remote_swagger_file"></a>3.2. Conversion of  a remote Swagger file</h3>
 <div class="paragraph">
 <p>You can convert a remote Swagger specification which must be accessible via HTTP.</p>
 </div>
@@ -823,8 +831,8 @@ Swagger2MarkupConverter.from(remoteSwaggerFile) <i class="conum" data-value="1">
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_convert_into_a_file"><a class="anchor" href="#_convert_into_a_file"></a>3.1.3. Convert into a file</h4>
+<div class="sect2">
+<h3 id="_conversion_into_a_file"><a class="anchor" href="#_conversion_into_a_file"></a>3.3. Conversion into a file</h3>
 <div class="paragraph">
 <p>You can convert the Swagger specification into a file.</p>
 </div>
@@ -839,8 +847,8 @@ Swagger2MarkupConverter.from(localSwaggerFile)
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_convert_to_a_string"><a class="anchor" href="#_convert_to_a_string"></a>3.1.4. Convert to a String</h4>
+<div class="sect2">
+<h3 id="_conversion_to_a_string"><a class="anchor" href="#_conversion_to_a_string"></a>3.4. Conversion to a String</h3>
 <div class="paragraph">
 <p>You can convert the Swagger specification to a String.</p>
 </div>
@@ -855,12 +863,33 @@ Swagger2MarkupConverter.from(localSwaggerFile)
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_configuration_of_the_swagger2markupconverter"><a class="anchor" href="#_configuration_of_the_swagger2markupconverter"></a>3.2. Configuration of the Swagger2MarkupConverter</h3>
-<div class="sect3">
-<h4 id="_configuration_using_the_builder"><a class="anchor" href="#_configuration_using_the_builder"></a>3.2.1. Configuration using the Builder</h4>
+</div>
+<div class="sect1">
+<h2 id="_configuration_of_swagger2markup"><a class="anchor" href="#_configuration_of_swagger2markup"></a>4. Configuration of Swagger2Markup</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>You can configure the Swagger2MarkupConverter by using the <code>Swagger2MarkupConfigBuilder</code> to build a custom <code>Swagger2MarkupConfig</code>.</p>
+<p>Swagger2Markup provides several options to configure the Swagger2MarkupConverter:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Using a fluent API</p>
+</li>
+<li>
+<p>Using a properties file</p>
+</li>
+<li>
+<p>Using a Java Map</p>
+</li>
+<li>
+<p>Using Apache Commons Configuration</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_configuration_using_the_builder"><a class="anchor" href="#_configuration_using_the_builder"></a>4.1. Configuration using the Builder</h3>
+<div class="paragraph">
+<p>You can configure the Swagger2MarkupConverter by using the <code>Swagger2MarkupConfigBuilder</code> to build a custom <code>Swagger2MarkupConfig</code>. The <code>Swagger2MarkupConfigBuilder</code> can be used to define Swagger2Markup properties with a fluent API.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -881,13 +910,13 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <p>Create a <code>Swagger2MarkupConfigBuilder</code> using the default constructor.</p>
 </li>
 <li>
-<p>Customize the output <code>MarkupLanguage</code></p>
+<p>Configure the output <code>MarkupLanguage</code></p>
 </li>
 <li>
-<p>Customize the output <code>Language</code></p>
+<p>Configure the output <code>Language</code></p>
 </li>
 <li>
-<p>Customize additional properties</p>
+<p>Configure additional Swagger2Markup properties</p>
 </li>
 <li>
 <p>Build an instance of the <code>Swagger2MarkupConfig</code></p>
@@ -901,8 +930,8 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <p>You can also create a <code>Swagger2MarkupConfig</code> from a Properties file, a <code>Map</code> or a Apache Commons Configuration.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configuration_from_a_properties_file"><a class="anchor" href="#_configuration_from_a_properties_file"></a>3.2.2. Configuration from a Properties file</h4>
+<div class="sect2">
+<h3 id="_configuration_from_a_properties_file"><a class="anchor" href="#_configuration_from_a_properties_file"></a>4.2. Configuration from a Properties file</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Properties</span> properties = <span class="keyword">new</span> <span class="predefined-type">Properties</span>();
@@ -927,8 +956,8 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configuration_from_a_map"><a class="anchor" href="#_configuration_from_a_map"></a>3.2.3. Configuration from a Map</h4>
+<div class="sect2">
+<h3 id="_configuration_from_a_map"><a class="anchor" href="#_configuration_from_a_map"></a>4.3. Configuration from a Map</h3>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; configMap = <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;&gt;(); <i class="conum" data-value="1"></i><b>(1)</b>
@@ -955,8 +984,8 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </ol>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configuration_from_a_apache_commons_configuration"><a class="anchor" href="#_configuration_from_a_apache_commons_configuration"></a>3.2.4. Configuration from a Apache Commons Configuration</h4>
+<div class="sect2">
+<h3 id="_configuration_from_a_apache_commons_configuration"><a class="anchor" href="#_configuration_from_a_apache_commons_configuration"></a>4.4. Configuration from a Apache Commons Configuration</h3>
 <div class="paragraph">
 <p>Configuration parameters may be loaded from the following sources using Apache Commons Configuration:</p>
 </div>
@@ -1002,13 +1031,29 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </ol>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_available_swagger2markup_properties"><a class="anchor" href="#_available_swagger2markup_properties"></a>3.3. Available Swagger2Markup properties</h3>
+<h3 id="_available_swagger2markup_properties"><a class="anchor" href="#_available_swagger2markup_properties"></a>4.5. Available Swagger2Markup properties</h3>
+<div class="paragraph">
+<p>Swagger2Markup properties are considered in the following order:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Java System properties</p>
+</li>
+<li>
+<p>Custom properties</p>
+</li>
+<li>
+<p>Default properties (included in Swagger2Markup)</p>
+</li>
+</ol>
+</div>
 <div class="paragraph">
 <p>The following tables list all available Swagger2Markup properties:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 1. Mostly used properties</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1026,57 +1071,44 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.markupLanguage</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Asd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the markup language which should be used to generate the files.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ASCIIDOC</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.swaggerMarkupLanguage</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Asd</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the markup language used in Swagger descriptions.</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">MARKDOWN</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.pathsGroupedBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Group the path operations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies how the paths should be grouped</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, TAGS</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.outputLanguage</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The output language</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the language of the labels</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EN, DE, FR, RU</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">EN</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.lineSeparator</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The line separator which should be used</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the line separator which should be used</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">UNIX, WINDOWS, MAC</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">System default</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">System-dependent</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.generatedExamplesEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Generate HTTP request and response examples</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.inlineSchemaDepthLevel</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The depth for inline schemas</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.flatBodyEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Render a flat request body</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies if HTTP request and response examples should be generated</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 </tbody>
 </table>
-<div class="sect3">
-<h4 id="_configure_the_order_of_swagger_objects"><a class="anchor" href="#_configure_the_order_of_swagger_objects"></a>3.3.1. Configure the order of Swagger objects</h4>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 2. Properties which configure the order of Swagger Objects</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1094,46 +1126,44 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.tagOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The order of global tags</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of global tags</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.operationOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The order of path operations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of path operations</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.definitionOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The order of definitons</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of definitons</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.parameterOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The order of operation parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of operation parameters</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.propertyOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The order of definition properties</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of definition properties</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.responseOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The order of responses</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the  order of responses</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_configure_the_document_file_names"><a class="anchor" href="#_configure_the_document_file_names"></a>3.3.2. Configure the document file names</h4>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 3. Properties which configure document file names</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1151,34 +1181,32 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.overviewDocument</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file name of the overview document</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the overview document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">overview</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.pathsDocument</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file name of the paths document</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the paths document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">paths</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.definitionsDocument</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file name of the definitions document</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the definitions document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">definitions</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.securityDocument</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file name of the security document</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the security document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">security</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_configure_the_generation_of_separated_files"><a class="anchor" href="#_configure_the_generation_of_separated_files"></a>3.3.3. Configure the generation of separated files</h4>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 4. Properties which configure the generation of separate files</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1196,34 +1224,32 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.separatedDefinitionsEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create a file for each definition</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In addition to the Definitions file, also create separate definition files for each model definition</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.separatedOperationsEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Create a file for each path operation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">In addition to the Paths file, also create separate operation files for each operation</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.separatedOperationsFolder</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The target folder path for definition files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the target folder path for definition files</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any valid path</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">operations</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.separatedDefinitionsFolder</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The target folder path operation files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the target folder path for operation files</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any valid path</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">definitions</p></td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="sect3">
-<h4 id="_configure_interdocument_cross_references"><a class="anchor" href="#_configure_interdocument_cross_references"></a>3.3.4. Configure interdocument cross references</h4>
 <table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 5. Properties which configure interdocument cross references</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1241,45 +1267,248 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.interDocumentCrossReferencesEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Enable inter document cross references</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable use of inter-document cross-references when needed</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.interDocumentCrossReferencesPrefix</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A custom prefix for cross references</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a prefix for all inter-document cross-references</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.anchorPrefix</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Configure a custom anchor prefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optionally prefix all anchors for uniqueness</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 6. Properties which configure inline schema rendering</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Possible Values</th>
+<th class="tableblock halign-left valign-top">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.inlineSchemaDepthLevel</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies maximum depth level for inline object schema displaying</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any Integer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.flatBodyEnabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optionally isolate the body parameter, if any, from other parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_extension_spi"><a class="anchor" href="#_extension_spi"></a>5. Extension SPI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension points are available. Each extension point is an abstract class which must be implemented.</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 7. Swagger2Markup Extensions points</caption>
+<colgroup>
+<col style="width: 33%;">
+<col style="width: 33%;">
+<col style="width: 33%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Class</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OverviewDocumentExtension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.github.swagger2markup.spi.OverviewDocumentExtension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can be used to extend the content of the Overview document</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PathsDocumentExtension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.github.swagger2markup.spi.PathsDocumentExtension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can be used to extend the content of the Paths document</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SecurityDocumentExtension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.github.swagger2markup.spi.SecurityDocumentExtension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can be used to extend the content of the Security document</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DefinitionsDocumentExtension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.github.swagger2markup.spi.DefinitionsDocumentExtension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can be used to extend the content of the Definitions document</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SwaggerModelExtension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">io.github.swagger2markup.spi.SwaggerModelExtension</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Can be used to modify the Swagger model before it is converted</p></td>
+</tr>
+</tbody>
+</table>
+<div class="sect2">
+<h3 id="_creation_of_an_extension"><a class="anchor" href="#_creation_of_an_extension"></a>5.1. Creation of an extension</h3>
+<div class="paragraph">
+<p>To create a custom extension, you have to create a class (e.g. <code>io.myname.MyExtension</code>) which extends an extension point, e.g. <code>io.github.swagger2markup.spi.DefinitionsDocumentExtension</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MyExtension</span> <span class="directive">extends</span> DefinitionsDocumentExtension {
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> init(Swagger2MarkupConverter.Context globalContext) {
+        <span class="comment">// init is executed once</span>
+    }
+
+    <span class="annotation">@Override</span>
+    <span class="directive">public</span> <span class="type">void</span> apply(<span class="predefined-type">Context</span> context) {
+        MarkupDocBuilder markupBuilder = context.getMarkupDocBuilder();
+        <span class="predefined-type">Position</span> position = context.getPosition();
+        <span class="predefined-type">String</span> definitionName = context.getDefinitionName().get();
+        Model definitionModel = context.getModel().get();
+
+        <span class="comment">// apply is executed per definition</span>
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_registration_of_an_extension"><a class="anchor" href="#_registration_of_an_extension"></a>5.2. Registration of an extension</h3>
+<div class="paragraph">
+<p>Swagger2Markup extensions must be registered in the <code>Swagger2MarkupExtensionRegistry</code>. The default <code>Swagger2MarkupExtensionRegistry</code> of Swagger2Markup uses the <code>java.util.ServiceLoader</code> to load and register Swagger2Markup extensions automatically.</p>
+</div>
+<div class="sect3">
+<h4 id="_automatic_registration"><a class="anchor" href="#_automatic_registration"></a>5.2.1. Automatic registration</h4>
+<div class="paragraph">
+<p>To register your extension automatically, the following steps are required:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create a file called <code>META-INF/services/io.github.swagger2markup.spi.DefinitionsDocumentExtension</code> which contains your extensions’s full qualified name, e.g. <code>io.myname.MyExtension</code>.</p>
+</li>
+<li>
+<p>When a <code>.jar</code> file containing your extension is added to the classpath of Swagger2Markup, the extensions will be automatically registered.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_manual_registration"><a class="anchor" href="#_manual_registration"></a>5.2.2. Manual registration</h4>
+<div class="paragraph">
+<p>To register your extension manually, you have to use the <code>Swagger2MarkupExtensionRegistryBuilder</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">Swagger2MarkupExtensionRegistry registry = <span class="keyword">new</span> Swagger2MarkupExtensionRegistryBuilder() <i class="conum" data-value="1"></i><b>(1)</b>
+        .withDefinitionsDocumentExtension(<span class="keyword">new</span> MyExtension()) <i class="conum" data-value="2"></i><b>(2)</b>
+        .build(); <i class="conum" data-value="3"></i><b>(3)</b>
+
+Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFile)
+        .withExtensionRegistry(registry) <i class="conum" data-value="4"></i><b>(4)</b>
+        .build();</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Create a <code>Swagger2MarkupExtensionRegistryBuilder</code> using the default constructor</p>
+</li>
+<li>
+<p>Register your custom extension</p>
+</li>
+<li>
+<p>Build an instance of <code>Swagger2MarkupExtensionRegistry</code></p>
+</li>
+<li>
+<p>Use the custom Swagger2MarkupExtensionRegistry</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_available_extensions_points"><a class="anchor" href="#_available_extensions_points"></a>5.3. Available extensions points</h3>
+<div class="sect3">
+<h4 id="_overviewdocumentextension"><a class="anchor" href="#_overviewdocumentextension"></a>5.3.1. OverviewDocumentExtension</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_pathsdocumentextension"><a class="anchor" href="#_pathsdocumentextension"></a>5.3.2. PathsDocumentExtension</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_securitydocumentextension"><a class="anchor" href="#_securitydocumentextension"></a>5.3.3. SecurityDocumentExtension</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_definitionsdocumentextension"><a class="anchor" href="#_definitionsdocumentextension"></a>5.3.4. DefinitionsDocumentExtension</h4>
+
+</div>
+<div class="sect3">
+<h4 id="_swaggermodelextension"><a class="anchor" href="#_swaggermodelextension"></a>5.3.5. SwaggerModelExtension</h4>
+
+</div>
+</div>
+</div>
 </div>
 <div class="sect1">
-<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>4. Contributing</h2>
+<h2 id="_gradle_plugin"><a class="anchor" href="#_gradle_plugin"></a>6. Gradle Plugin</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_maven_plugin"><a class="anchor" href="#_maven_plugin"></a>7. Maven Plugin</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_command_line_interface"><a class="anchor" href="#_command_line_interface"></a>8. Command Line Interface</h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>9. Contributing</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_questions"><a class="anchor" href="#_questions"></a>4.1. Questions</h3>
+<h3 id="_questions"><a class="anchor" href="#_questions"></a>9.1. Questions</h3>
 <div class="paragraph">
 <p>You can ask questions about Swagger2Markup in <a href="https://gitter.im/Swagger2Markup/swagger2markup">Gitter</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>4.2. Bugs</h3>
+<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>9.2. Bugs</h3>
 <div class="paragraph">
 <p>If you believe you have found a bug, please take a moment to search the existing issues. If no one else has reported the problem, please open a new issue that describes the problem in detail and, ideally, includes a test that reproduces it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>4.3. Enhancements</h3>
+<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>9.3. Enhancements</h3>
 <div class="paragraph">
 <p>If you’d like an enhancement to be made to Swagger2Markup, pull requests are most welcome. The source code is on GitHub. You may want to search the existing issues and pull requests to see if the enhancement is already being worked on. You may also want to open a new issue to discuss a possible enhancement before work on it begins.</p>
 </div>
@@ -1287,7 +1516,7 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license"><a class="anchor" href="#_license"></a>5. License</h2>
+<h2 id="_license"><a class="anchor" href="#_license"></a>10. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Copyright 2016 Robert Winkler</p>
@@ -1309,7 +1538,7 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-03-21 16:03:00 MEZ
+Last updated 2016-03-23 14:48:30 MEZ
 </div>
 </div>
 </body>
