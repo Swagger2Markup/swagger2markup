@@ -259,7 +259,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void shouldReplaceNewLinesWithSystemNewLine() throws IOException {
+    public void shouldReplaceNewLinesWithSystemNewLine() {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
         builder.paragraph("Long text \n bla bla \r bla \r\n bla");
         Assert.assertEquals("Long text " + newLine + " bla bla " + newLine + " bla " + newLine + " bla" + newLine + newLine, builder.toString());
@@ -290,7 +290,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void shouldReplaceTitleNewLinesWithWhiteSpace() throws IOException {
+    public void shouldReplaceTitleNewLinesWithWhiteSpace() {
         String whitespace = " ";
 
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC);
@@ -307,7 +307,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void shouldUseProvidedLineSeparator() throws IOException {
+    public void shouldUseProvidedLineSeparator() {
         String lineSeparator = LineSeparator.UNIX.toString();
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN, LineSeparator.UNIX);
         builder.paragraph("Long text \n bla bla \r bla \r\n bla");
@@ -316,15 +316,13 @@ public class MarkupDocBuilderTest {
 
     private void assertImportMarkup(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(markupLanguage, LineSeparator.UNIX);
-        try {
-            builder.importMarkup(new StringReader(text), markupLanguage, levelOffset);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
+        builder.importMarkup(new StringReader(text), markupLanguage, levelOffset);
+
         Assert.assertEquals(expected, builder.toString());
     }
 
-    private void assertImportMarkupException(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+    private void assertImportMarkupException(String expected, String text, MarkupLanguage markupLanguage, int levelOffset) {
         try {
             assertImportMarkup(expected, text, markupLanguage, levelOffset);
             fail("IllegalArgumentException expected");
@@ -334,7 +332,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void testImportMarkupAsciiDoc() throws IOException {
+    public void testImportMarkupAsciiDoc() {
         assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, 0);
         assertImportMarkup("", "", MarkupLanguage.ASCIIDOC, 4);
         assertImportMarkupException("Specified levelOffset (6) > max levelOffset (5)", "", MarkupLanguage.ASCIIDOC, 6);
@@ -356,7 +354,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void testImportMarkupMarkdown() throws IOException {
+    public void testImportMarkupMarkdown() {
         assertImportMarkup("", "", MarkupLanguage.MARKDOWN, 0);
         assertImportMarkup("", "", MarkupLanguage.MARKDOWN, 4);
         assertImportMarkup("", "", MarkupLanguage.MARKDOWN, -4);
@@ -378,7 +376,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void testImportMarkupConfluenceMarkup() throws IOException {
+    public void testImportMarkupConfluenceMarkup() {
         assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, 0);
         assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, 4);
         assertImportMarkup("", "", MarkupLanguage.CONFLUENCE_MARKUP, -4);
@@ -400,7 +398,7 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
-    public void importMarkupConversion() throws IOException {
+    public void importMarkupConversion() {
         // ASCIIDOC -> ASCIIDOC
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.ASCIIDOC, LineSeparator.UNIX);
         builder.importMarkup(new StringReader("= Title"), MarkupLanguage.ASCIIDOC);

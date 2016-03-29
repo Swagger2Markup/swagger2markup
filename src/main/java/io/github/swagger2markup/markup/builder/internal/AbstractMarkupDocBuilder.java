@@ -367,7 +367,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage) throws IOException {
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage){
         Validate.notNull(markupText, "markupText must not be null");
         Validate.notNull(markupLanguage, "markupLanguage must not be null");
         return importMarkup(markupText, markupLanguage, 0);
@@ -385,7 +385,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         }
     }
 
-    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+    protected void importMarkupStyle1(Pattern titlePattern, Markup titlePrefix, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) {
         Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
@@ -409,6 +409,8 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to import Markup", e);
         }
 
         if (!StringUtils.isBlank(leveledText)) {
@@ -418,7 +420,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         }
     }
 
-    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+    protected void importMarkupStyle2(Pattern titlePattern, String titleFormat, boolean startFrom0, Reader markupText, MarkupLanguage markupLanguage, int levelOffset) {
         Validate.isTrue(levelOffset <= MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) > max levelOffset (%d)", levelOffset, MAX_TITLE_LEVEL));
         Validate.isTrue(levelOffset >= -MAX_TITLE_LEVEL, String.format("Specified levelOffset (%d) < min levelOffset (%d)", levelOffset, -MAX_TITLE_LEVEL));
 
@@ -442,6 +444,8 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
                 titleMatcher.appendTail(leveledText);
                 leveledText.append(newLine);
             }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to import Markup", e);
         }
 
         if (!StringUtils.isBlank(leveledText)) {
@@ -470,12 +474,18 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
      * 2 newLines are needed at the end of file for file to be included without protection.
      */
     @Override
-    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) throws IOException {
-        Files.createDirectories(file.getParent());
+    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) {
+        try {
+            Files.createDirectories(file.getParent());
+        } catch (IOException e) {
+            throw new RuntimeException("Failed create directory", e);
+        }
         try (BufferedWriter writer = Files.newBufferedWriter(file, charset, options)) {
             writer.write(toString());
             writer.write(newLine);
             writer.write(newLine);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write file", e);
         }
         if (logger.isInfoEnabled()) {
             logger.info("Markup document written to: {}", file);
@@ -495,7 +505,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public void writeToFile(Path file, Charset charset, OpenOption... options) throws IOException {
+    public void writeToFile(Path file, Charset charset, OpenOption... options) {
         writeToFileWithoutExtension(file.resolveSibling(addFileExtension(file.getFileName().toString())), charset, options);
     }
 }

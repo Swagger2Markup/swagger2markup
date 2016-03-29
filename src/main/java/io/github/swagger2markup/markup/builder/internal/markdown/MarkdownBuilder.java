@@ -208,7 +208,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) {
         importMarkupStyle1(TITLE_PATTERN, Markdown.TITLE, markupText, markupLanguage, levelOffset);
         return this;
     }

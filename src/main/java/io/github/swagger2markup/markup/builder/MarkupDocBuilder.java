@@ -18,7 +18,6 @@
  */
 package io.github.swagger2markup.markup.builder;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
@@ -472,9 +471,8 @@ public interface MarkupDocBuilder {
      * @param markupText     markup reader to read data from
      * @param markupLanguage identify the imported markup language
      * @return this builder
-     * @throws IOException if I/O error occurs while reading {@code markupText}
      */
-    MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage) throws IOException;
+    MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage);
 
     /**
      * Import some markup text into this builder.<br/>
@@ -490,9 +488,8 @@ public interface MarkupDocBuilder {
      * @param levelOffset    adapt section leveling by adding {@code levelOffset} [-5, 5]
      * @return this builder
      * @throws IllegalArgumentException if levelOffset is too high for the imported markup
-     * @throws IOException              if I/O error occurs while reading {@code markupText}
      */
-    MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException;
+    MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset);
 
     /**
      * Returns a string representation of the document.
@@ -543,9 +540,8 @@ public interface MarkupDocBuilder {
      * @param file    the generated file without extension
      * @param charset the the charset to use for encoding
      * @param options the file open options
-     * @throws java.io.IOException if the file cannot be written
      */
-    void writeToFile(Path file, Charset charset, OpenOption... options) throws IOException;
+    void writeToFile(Path file, Charset charset, OpenOption... options);
 
     /**
      * Writes the content of the builder to a file.
@@ -553,8 +549,7 @@ public interface MarkupDocBuilder {
      * @param file    the generated file
      * @param charset the the charset to use for encoding
      * @param options the file open options
-     * @throws java.io.IOException if the file cannot be written
      */
-    void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) throws IOException;
+    void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options);
 
 }

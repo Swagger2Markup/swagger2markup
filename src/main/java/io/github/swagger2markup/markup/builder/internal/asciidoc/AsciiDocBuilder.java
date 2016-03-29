@@ -25,7 +25,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.Transformer;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -231,7 +230,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) {
         importMarkupStyle1(TITLE_PATTERN, AsciiDoc.TITLE, markupText, markupLanguage, levelOffset);
         return this;
     }

@@ -24,7 +24,6 @@ import io.github.swagger2markup.markup.builder.internal.Markup;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.util.HashMap;
 import java.util.List;
@@ -297,7 +296,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) throws IOException {
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage, int levelOffset) {
         importMarkupStyle2(TITLE_PATTERN, TITLE_FORMAT, false, markupText, markupLanguage, levelOffset);
         return this;
     }
