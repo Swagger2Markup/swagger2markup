@@ -37,6 +37,12 @@ h6. Section with anchor Level 5a {anchor:level-5a}
 h6. Section with anchor Level 5a
 Paragraph with long text bla bla bla bla bla
 
+Line1
+Line2
+
+Line1\\ 
+Line2
+
 {code}
 Source code listing
 {code}
@@ -88,10 +94,10 @@ Passthrough
 h2. Section Level 1b
 
 h3. Section Level 2b
-text line b \\ 
-*Bold text line b* \\ 
-_Italic text line b_ \\ 
-*bold*_italic_regular \\ 
+text line b\\ 
+*Bold text line b*\\ 
+_Italic text line b_\\ 
+*bold*_italic_regular\\ 
 
 * Entry1
 * Entry2
@@ -100,9 +106,9 @@ _Italic text line b_ \\
 {anchor:anchor}
 {anchor:simple_anchor}
 {anchor:8be261a9de7ce958fe46548a62609aeb}
-[text|./document.txt#anchor] \\ 
-[#  ɀ µ&|ù This .:/-_  ] \\ 
-[text|./document.txt#anchor] \\ 
-[#8be261a9de7ce958fe46548a62609aeb] \\ 
+[text|./document.txt#anchor]\\ 
+[#  ɀ µ&|ù This .:/-_  ]\\ 
+[text|./document.txt#anchor]\\ 
+[#8be261a9de7ce958fe46548a62609aeb]\\ 
 
 

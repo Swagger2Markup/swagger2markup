@@ -87,6 +87,20 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
+        Validate.notBlank(text, "text must not be null");
+
+        text = text.trim();
+        if (hardbreaks)
+            text = replaceNewLines(text, Markdown.LINE_BREAK + newLine);
+        else
+            text = replaceNewLines(text);
+        documentBuilder.append(text).append(newLine).append(newLine);
+
+        return this;
+    }
+    
+    @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
         if (admonition != null)
             documentBuilder.append(StringUtils.capitalize(admonition.name().toLowerCase()));
