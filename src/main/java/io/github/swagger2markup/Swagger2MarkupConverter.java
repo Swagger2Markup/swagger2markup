@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup;
 
-import com.google.common.annotations.VisibleForTesting;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
 import io.github.swagger2markup.internal.document.builder.DefinitionsDocumentBuilder;
@@ -46,8 +45,11 @@ public class Swagger2MarkupConverter {
 
     private Context context;
 
-    public Swagger2MarkupConverter(Context globalContext) {
+    private Swagger2MarkupExtensionRegistry extensionRegistry;
+
+    public Swagger2MarkupConverter(Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry) {
         this.context = globalContext;
+        this.extensionRegistry = extensionRegistry;
     }
 
     /**
@@ -55,7 +57,6 @@ public class Swagger2MarkupConverter {
      *
      * @return the global Context
      */
-    @VisibleForTesting
     Context getContext(){
         return context;
     }
@@ -98,9 +99,8 @@ public class Swagger2MarkupConverter {
      *
      * @param swaggerString the Swagger YAML or JSON String.
      * @return a Swagger2MarkupConverter
-     * @throws java.io.IOException if String can not be parsed
      */
-    public static Builder from(String swaggerString) throws IOException {
+    public static Builder from(String swaggerString) {
         Validate.notEmpty(swaggerString, "swaggerString must not be null");
         return from(new StringReader(swaggerString));
     }
@@ -110,11 +110,15 @@ public class Swagger2MarkupConverter {
      *
      * @param swaggerReader the Swagger YAML or JSON reader.
      * @return a Swagger2MarkupConverter
-     * @throws java.io.IOException if source can not be parsed
      */
-    public static Builder from(Reader swaggerReader) throws IOException {
+    public static Builder from(Reader swaggerReader) {
         Validate.notNull(swaggerReader, "swaggerReader must not be null");
-        Swagger swagger = new SwaggerParser().parse(IOUtils.toString(swaggerReader));
+        Swagger swagger;
+        try {
+            swagger = new SwaggerParser().parse(IOUtils.toString(swaggerReader));
+        } catch (IOException e) {
+            throw new RuntimeException("Swagger source can not be parsed", e);
+        }
         if (swagger == null)
             throw new IllegalArgumentException("Swagger source is in a wrong format");
 
@@ -125,17 +129,16 @@ public class Swagger2MarkupConverter {
      * Builds the documents and stores the files in the given {@code outputDirectory}.
      *
      * @param outputDirectory the output directory path
-     * @throws IOException if the files cannot be written
      */
-    public void toFolder(Path outputDirectory) throws IOException {
+    public void toFolder(Path outputDirectory){
         Validate.notNull(outputDirectory, "outputDirectory must not be null");
 
         applySwaggerExtensions();
         
-        new OverviewDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
-        new PathsDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
-        new DefinitionsDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
-        new SecurityDocumentBuilder(context, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getSecurityDocument()), StandardCharsets.UTF_8);
+        new OverviewDocumentBuilder(context, extensionRegistry, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, extensionRegistry, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
+        new DefinitionsDocumentBuilder(context, extensionRegistry, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
+        new SecurityDocumentBuilder(context, extensionRegistry, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getSecurityDocument()), StandardCharsets.UTF_8);
     }
 
     /**
@@ -143,30 +146,28 @@ public class Swagger2MarkupConverter {
      * An extension identifying the markup language will be automatically added to file name.
      *
      * @param outputFile the output file
-     * @throws IOException if the files cannot be written
      */
-    public void toFile(Path outputFile) throws IOException {
+    public void toFile(Path outputFile) {
         Validate.notNull(outputFile, "outputFile must not be null");
 
-        new OverviewDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8);
-        new PathsDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
-        new DefinitionsDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
-        new SecurityDocumentBuilder(context, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new OverviewDocumentBuilder(context,extensionRegistry,  null).build().writeToFile(outputFile, StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, extensionRegistry, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new DefinitionsDocumentBuilder(context, extensionRegistry, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new SecurityDocumentBuilder(context, extensionRegistry, null).build().writeToFile(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
     }
 
     /**
      * Builds the document and stores it in the given {@code outputFile}.
      *
      * @param outputFile the output file
-     * @throws IOException if the files cannot be written
      */
-    public void toFileWithoutExtension(Path outputFile) throws IOException {
+    public void toFileWithoutExtension(Path outputFile){
         Validate.notNull(outputFile, "outputFile must not be null");
 
-        new OverviewDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
-        new PathsDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
-        new DefinitionsDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
-        new SecurityDocumentBuilder(context, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new OverviewDocumentBuilder(context, extensionRegistry, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
+        new PathsDocumentBuilder(context, extensionRegistry, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new DefinitionsDocumentBuilder(context, extensionRegistry, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        new SecurityDocumentBuilder(context, extensionRegistry, null).build().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8, StandardOpenOption.APPEND);
     }
 
     /**
@@ -178,15 +179,15 @@ public class Swagger2MarkupConverter {
         applySwaggerExtensions();
         
         StringBuilder sb = new StringBuilder();
-        sb.append(new OverviewDocumentBuilder(context, null).build().toString());
-        sb.append(new PathsDocumentBuilder(context, null).build().toString());
-        sb.append(new DefinitionsDocumentBuilder(context, null).build().toString());
-        sb.append(new SecurityDocumentBuilder(context, null).build().toString());
+        sb.append(new OverviewDocumentBuilder(context,extensionRegistry,  null).build().toString());
+        sb.append(new PathsDocumentBuilder(context, extensionRegistry, null).build().toString());
+        sb.append(new DefinitionsDocumentBuilder(context, extensionRegistry, null).build().toString());
+        sb.append(new SecurityDocumentBuilder(context, extensionRegistry, null).build().toString());
         return sb.toString();
     }
 
     private void applySwaggerExtensions() {
-        for (SwaggerModelExtension swaggerModelExtension : context.extensionRegistry.getSwaggerModelExtensions()) {
+        for (SwaggerModelExtension swaggerModelExtension : extensionRegistry.getSwaggerModelExtensions()) {
             swaggerModelExtension.apply(context.getSwagger());
         }
     }
@@ -252,7 +253,7 @@ public class Swagger2MarkupConverter {
         }
 
         public Builder withExtensionRegistry(Swagger2MarkupExtensionRegistry registry) {
-            Validate.notNull(config, "registry must not be null");
+            Validate.notNull(registry, "registry must not be null");
             this.extensionRegistry = registry;
             return this;
         }
@@ -264,11 +265,11 @@ public class Swagger2MarkupConverter {
             if (extensionRegistry == null)
                 extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
 
-            Context context = new Context(config, extensionRegistry, swagger, swaggerLocation);
+            Context context = new Context(config, swagger, swaggerLocation);
 
             initExtensions(context);
 
-            return new Swagger2MarkupConverter(context);
+            return new Swagger2MarkupConverter(context, extensionRegistry);
         }
 
         private void initExtensions(Context context) {
@@ -291,23 +292,17 @@ public class Swagger2MarkupConverter {
 
     public static class Context {
         private Swagger2MarkupConfig config;
-        private Swagger2MarkupExtensionRegistry extensionRegistry;
         private Swagger swagger;
         private URI swaggerLocation;
 
-        Context(Swagger2MarkupConfig config, Swagger2MarkupExtensionRegistry extensionRegistry, Swagger swagger, URI swaggerLocation) {
+        Context(Swagger2MarkupConfig config, Swagger swagger, URI swaggerLocation) {
             this.config = config;
-            this.extensionRegistry = extensionRegistry;
             this.swagger = swagger;
             this.swaggerLocation = swaggerLocation;
         }
 
         public Swagger2MarkupConfig getConfig() {
             return config;
-        }
-
-        public Swagger2MarkupExtensionRegistry getExtensionRegistry() {
-            return extensionRegistry;
         }
 
         public Swagger getSwagger() {

@@ -16,6 +16,7 @@
 package io.github.swagger2markup.internal.document.builder;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.spi.OverviewDocumentExtension;
 import io.swagger.models.*;
@@ -49,8 +50,8 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private final String BASE_PATH;
     private final String SCHEMES;
 
-    public OverviewDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath){
-        super(context, outputPath);
+    public OverviewDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath){
+        super(context, extensionRegistry, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         OVERVIEW = labels.getString("overview");
@@ -192,7 +193,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyOverviewDocumentExtension(Context context) {
-        for (OverviewDocumentExtension extension : globalContext.getExtensionRegistry().getOverviewDocumentExtensions()) {
+        for (OverviewDocumentExtension extension : extensionRegistry.getOverviewDocumentExtensions()) {
             extension.apply(context);
         }
     }

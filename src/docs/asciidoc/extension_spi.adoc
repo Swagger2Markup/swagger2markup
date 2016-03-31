@@ -51,6 +51,12 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 ==== OverviewDocumentExtension
 
+The OverviewDocumentExtension allows to extend the overview document at three positions:
+
+* DOCUMENT_BEFORE: Before the 
+* DOCUMENT_START:
+* DOCUMENT_BEFORE:
+
 ==== PathsDocumentExtension
 
 ==== SecurityDocumentExtension

@@ -16,18 +16,20 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
-import io.github.swagger2markup.markup.builder.LineSeparator;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Language;
 import io.github.swagger2markup.OrderBy;
 import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.markup.builder.LineSeparator;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
-import org.apache.commons.configuration.*;
+import org.apache.commons.configuration2.*;
+import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
+import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -37,10 +39,9 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
-import static io.github.swagger2markup.builder.Swagger2MarkupProperties.EXTENSION_PREFIX;
-import static io.github.swagger2markup.builder.Swagger2MarkupProperties.PROPERTIES_PREFIX;
 import static io.github.swagger2markup.builder.Swagger2MarkupProperties.*;
 
 public class Swagger2MarkupConfigBuilder  {
@@ -99,8 +100,13 @@ public class Swagger2MarkupConfigBuilder  {
         CompositeConfiguration compositeConfiguration = new CompositeConfiguration();
         compositeConfiguration.addConfiguration(new SystemConfiguration());
         compositeConfiguration.addConfiguration(configuration);
+
+        FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
+                new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
+                        .configure(new Parameters().fileBased().setFileName(PROPERTIES_DEFAULT));
+
         try {
-            compositeConfiguration.addConfiguration(new PropertiesConfiguration(PROPERTIES_DEFAULT));
+            compositeConfiguration.addConfiguration(builder.getConfiguration());
         } catch (ConfigurationException e) {
             throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
         }

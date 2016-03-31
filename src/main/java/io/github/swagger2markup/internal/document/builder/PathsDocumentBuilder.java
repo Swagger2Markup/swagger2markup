@@ -18,6 +18,7 @@ package io.github.swagger2markup.internal.document.builder;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
@@ -87,8 +88,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private static final String DESCRIPTION_FILE_NAME = "description";
 
 
-    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
-        super(globalContext, outputPath);
+    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry,  java.nio.file.Path outputPath) {
+        super(globalContext, extensionRegistry, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
@@ -227,7 +228,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyPathsDocumentExtension(Context context) {
-        for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getPathsDocumentExtensions()) {
+        for (PathsDocumentExtension extension : extensionRegistry.getPathsDocumentExtensions()) {
             extension.apply(context);
         }
     }
@@ -255,14 +256,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy(false);
             buildOperation(operation, pathDocBuilder);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
-
-            try {
-                pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to write operation file: %s", operationFile), e);
-                }
-            }
+             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced: {}", operationFile);
             }

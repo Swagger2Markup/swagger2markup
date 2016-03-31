@@ -15,21 +15,21 @@
  */
 package io.github.swagger2markup.builder;
 
-import com.google.common.base.Optional;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Language;
 import io.github.swagger2markup.OrderBy;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.apache.commons.collections4.IteratorUtils;
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationConverter;
-import org.apache.commons.configuration.MapConfiguration;
+import org.apache.commons.configuration2.Configuration;
+import org.apache.commons.configuration2.ConfigurationConverter;
+import org.apache.commons.configuration2.MapConfiguration;
 
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 public class Swagger2MarkupProperties {
@@ -91,7 +91,7 @@ public class Swagger2MarkupProperties {
      * @param key the property name to resolve
      */
     public Optional<String> getString(String key){
-        return Optional.fromNullable(configuration.getString(key));
+        return Optional.ofNullable(configuration.getString(key));
     }
 
     /**
@@ -119,7 +119,7 @@ public class Swagger2MarkupProperties {
      * @param key the property name to resolve
      */
     public Optional<Integer> getInteger(String key){
-        return Optional.fromNullable(configuration.getInteger(key, null));
+        return Optional.ofNullable(configuration.getInteger(key, null));
     }
 
     /**
@@ -168,7 +168,7 @@ public class Swagger2MarkupProperties {
         if(property.isPresent()){
             return Optional.of(URI.create(property.get()));
         }else{
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
@@ -196,7 +196,7 @@ public class Swagger2MarkupProperties {
         if(property.isPresent()){
             return Optional.of(Paths.get(property.get()));
         }else{
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 
@@ -223,7 +223,7 @@ public class Swagger2MarkupProperties {
         if(property.isPresent()){
             return Optional.of(MarkupLanguage.valueOf(property.get()));
         }else{
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

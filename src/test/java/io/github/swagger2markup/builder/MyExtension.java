@@ -19,13 +19,20 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.swagger.models.Model;
+import io.swagger.models.Swagger;
 
 // tag::MyExtension[]
 public class MyExtension extends DefinitionsDocumentExtension {
 
+    private static final String EXTENSION_ID = "myExtension";
+    private String extensionProperty;
+
     @Override
     public void init(Swagger2MarkupConverter.Context globalContext) {
         // init is executed once
+        Swagger2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties();
+        extensionProperty = extensionProperties.getRequiredString(EXTENSION_ID + ".propertyName");
+        Swagger model = globalContext.getSwagger();
     }
 
     @Override
