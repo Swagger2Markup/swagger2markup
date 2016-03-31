@@ -142,7 +142,7 @@ public class Swagger2MarkupConverter {
     }
 
     /**
-     * Builds the document and stores it in the given {@code outputFile}.<br/>
+     * Builds the document and stores it in the given {@code outputFile}.<br>
      * An extension identifying the markup language will be automatically added to file name.
      *
      * @param outputFile the output file
