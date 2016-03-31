@@ -47,7 +47,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleLevel(int level, String title);
 
     /**
-     * Builds a section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Builds a section {@code title} with a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param title  title
@@ -58,7 +58,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor);
 
     /**
-     * Builds a section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * Builds a section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br>
      * This is an alias for {@link #sectionTitleWithAnchorLevel(int, String, String) sectionTitleWithAnchorLevel(level, title, null)}.
      *
      * @param title title
@@ -76,7 +76,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleLevel1(String title);
 
     /**
-     * Builds a level 1 section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Builds a level 1 section {@code title} with a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param title  title
@@ -86,7 +86,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel1(String title, String anchor);
 
     /**
-     * Builds a level 1 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * Builds a level 1 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br>
      * This is an alias for {@link #sectionTitleWithAnchorLevel1(String, String) sectionTitleWithAnchorLevel1(title, null)}.
      *
      * @param title title
@@ -103,7 +103,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleLevel2(String title);
 
     /**
-     * Builds a level 2 section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Builds a level 2 section {@code title} with a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param title  title
@@ -113,7 +113,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel2(String title, String anchor);
 
     /**
-     * Builds a level 2 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * Builds a level 2 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br>
      * This is an alias for {@link #sectionTitleWithAnchorLevel2(String, String) sectionTitleWithAnchorLevel2(title, null)}.
      *
      * @param title title
@@ -130,7 +130,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleLevel3(String title);
 
     /**
-     * Builds a level 3 section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Builds a level 3 section {@code title} with a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param title  title
@@ -140,7 +140,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel3(String title, String anchor);
 
     /**
-     * Builds a level 3 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * Builds a level 3 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br>
      * This is an alias for {@link #sectionTitleWithAnchorLevel3(String, String) sectionTitleWithAnchorLevel3(title, null)}.
      *
      * @param title title
@@ -157,7 +157,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleLevel4(String title);
 
     /**
-     * Builds a level 4 section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Builds a level 4 section {@code title} with a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param title  title
@@ -167,7 +167,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel4(String title, String anchor);
 
     /**
-     * Builds a level 4 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * Builds a level 4 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br>
      * This is an alias for {@link #sectionTitleWithAnchorLevel4(String, String) sectionTitleWithAnchorLevel4(title, null)}.
      *
      * @param title title
@@ -184,7 +184,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleLevel5(String title);
 
     /**
-     * Builds a level 5 section {@code title} with a custom {@code anchor} for later reference.<br/>
+     * Builds a level 5 section {@code title} with a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param title  title
@@ -194,7 +194,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel5(String title, String anchor);
 
     /**
-     * Builds a level 5 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br/>
+     * Builds a level 5 section {@code title} with an auto-generated anchor from the normalized title, for later reference.<br>
      * This is an alias for {@link #sectionTitleWithAnchorLevel5(String, String) sectionTitleWithAnchorLevel5(title, null)}.
      *
      * @param title title
@@ -203,7 +203,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder sectionTitleWithAnchorLevel5(String title);
 
     /**
-     * Builds a regular text line.<br/>
+     * Builds a regular text line.<br>
      * This is an alias for {@link #textLine(String, boolean) textLine(text, false)}.
      *
      * @param text text
@@ -229,7 +229,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder text(String text);
 
     /**
-     * Builds a text paragraph.<br/>
+     * Builds a text paragraph.<br>
      *
      * @param text multi-line text
      * @param hardbreaks force hardbreaks on all lines            
@@ -238,7 +238,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder paragraph(String text, boolean hardbreaks);
 
     /**
-     * Builds a text paragraph.<br/>
+     * Builds a text paragraph.<br>
      * This is an alias for {@link #paragraph(String, boolean) paragraph(text, false)}.
      *
      * @param text multi-line text
@@ -258,7 +258,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder block(String text, MarkupBlockStyle style, String title, MarkupAdmonition admonition);
 
     /**
-     * Builds a block of {@code text} with specified {@code style}.<br/>
+     * Builds a block of {@code text} with specified {@code style}.<br>
      * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle, null, null)}.
      *
      * @param text  text
@@ -268,7 +268,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder block(String text, MarkupBlockStyle style);
 
     /**
-     * Builds a listing text block.<br/>
+     * Builds a listing text block.<br>
      * This is an alias for {@link #listing(String, String) listing(String, null)}.
      * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle.LISTING, null, null)}.
      *
@@ -278,7 +278,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder listing(String text);
 
     /**
-     * Builds a source code block using the specified {@code language}.<br/>
+     * Builds a source code block using the specified {@code language}.<br>
      * Line breaks are respected.
      *
      * @param text     multi-line text
@@ -288,7 +288,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder listing(String text, String language);
 
     /**
-     * Builds a bold text line.<br/>
+     * Builds a bold text line.<br>
      * This is an alias for {@link #boldTextLine(String, boolean) boldTextLine(text, false)}.
      *
      * @param text text
@@ -314,7 +314,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder boldText(String text);
 
     /**
-     * Builds an italic text line.<br/>
+     * Builds an italic text line.<br>
      * This is an alias for {@link #italicTextLine(String, boolean) italicTextLine(text, false)}.
      *
      * @param text text
@@ -356,8 +356,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder unorderedListItem(String item);
 
     /**
-     * Builds a table without column specifiers, using specified cell values.<br/>
-     * This is an alias for {@link #tableWithColumnSpecs(List, List) tableWithColumnSpecs(null, cells)}.<br/>
+     * Builds a table without column specifiers, using specified cell values.<br>
+     * This is an alias for {@link #tableWithColumnSpecs(List, List) tableWithColumnSpecs(null, cells)}.<br>
      * Limited support : Markdown does not support table without headers.
      *
      * @param cells cell values
@@ -375,8 +375,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells);
 
     /**
-     * Builds a custom {@code anchor} for later reference.<br/>
-     * Specified {@code anchor} will be normalized anyway.<br/>
+     * Builds a custom {@code anchor} for later reference.<br>
+     * Specified {@code anchor} will be normalized anyway.<br>
      * Limited support : Markdown does not support default text for anchors, and will ignore {@code text}.
      *
      * @param anchor custom anchor
@@ -386,7 +386,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder anchor(String anchor, String text);
 
     /**
-     * Builds a custom {@code anchor} for later reference.<br/>
+     * Builds a custom {@code anchor} for later reference.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param anchor custom anchor
@@ -395,8 +395,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder anchor(String anchor);
 
     /**
-     * Builds an inter-document cross-reference to {@code document}#{@code anchor} with specified {@code text}.<br/>
-     * This is the "raw anchor" version. Use the preferred method {@link #crossReference(String, String, String)} instead.<br/>
+     * Builds an inter-document cross-reference to {@code document}#{@code anchor} with specified {@code text}.<br>
+     * This is the "raw anchor" version. Use the preferred method {@link #crossReference(String, String, String)} instead.<br>
      * Specified {@code anchor} is built as-is, without any normalization.
      *
      * @param document document to point to. Reference becomes a simple cross-reference if null.
@@ -407,8 +407,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReferenceRaw(String document, String anchor, String text);
 
     /**
-     * Builds an cross-reference to local document {@code anchor} with specified {@code text}.<br/>
-     * This is the "raw anchor" version. Use the preferred method {@link #crossReference(String, String)} instead.<br/>
+     * Builds an cross-reference to local document {@code anchor} with specified {@code text}.<br>
+     * This is the "raw anchor" version. Use the preferred method {@link #crossReference(String, String)} instead.<br>
      * Specified {@code anchor} is built as-is, without any normalization.
      *
      * @param anchor anchor to point to
@@ -418,8 +418,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReferenceRaw(String anchor, String text);
 
     /**
-     * Builds an cross-reference to local document {@code anchor}.<br/>
-     * This is the "raw anchor" version. Use the preferred method {@link #crossReference(String)} instead.<br/>
+     * Builds an cross-reference to local document {@code anchor}.<br>
+     * This is the "raw anchor" version. Use the preferred method {@link #crossReference(String)} instead.<br>
      * Specified {@code anchor} is built as-is, without any normalization.
      *
      * @param anchor anchor to point to
@@ -428,7 +428,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReferenceRaw(String anchor);
 
     /**
-     * Builds an inter-document cross-reference to {@code document}#{@code anchor} with specified {@code text}.<br/>
+     * Builds an inter-document cross-reference to {@code document}#{@code anchor} with specified {@code text}.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param document document to point to. Reference becomes a simple cross-reference if null.
@@ -439,7 +439,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReference(String document, String anchor, String text);
 
     /**
-     * Builds an cross-reference to local document {@code anchor} with specified {@code text}.<br/>
+     * Builds an cross-reference to local document {@code anchor} with specified {@code text}.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param anchor anchor to point to
@@ -449,7 +449,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReference(String anchor, String text);
 
     /**
-     * Builds an cross-reference to local document {@code anchor}.<br/>
+     * Builds an cross-reference to local document {@code anchor}.<br>
      * Specified {@code anchor} will be normalized anyway.
      *
      * @param anchor anchor to point to
@@ -458,7 +458,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder crossReference(String anchor);
 
     /**
-     * Builds a newline using {@code System.getProperty("line.separator")}.<br/>
+     * Builds a newline using {@code System.getProperty("line.separator")}.<br>
      * This is an alias for {@link #newLine(boolean) newLine(false)}.
      *
      * @return this builder
@@ -474,7 +474,7 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder newLine(boolean forceLineBreak);
 
     /**
-     * Import some markup text into this builder.<br/>
+     * Import some markup text into this builder.<br>
      * This is an alias for {@link #importMarkup(Reader, MarkupLanguage, int) importMarkup(markupText, markupLanguage, 0)}.
      *
      * @param markupText     markup reader to read data from
@@ -484,8 +484,8 @@ public interface MarkupDocBuilder {
     MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage);
 
     /**
-     * Import some markup text into this builder.<br/>
-     * If {@code markupLanguage} is different from current builder language, markupText is converted when supported, or conversion is just ignored.<br/>
+     * Import some markup text into this builder.<br>
+     * If {@code markupLanguage} is different from current builder language, markupText is converted when supported, or conversion is just ignored.<br>
      * Currently supported conversions :
      * <li>
      * <ul>Markdown -> AsciiDoc</ul>
@@ -543,7 +543,7 @@ public interface MarkupDocBuilder {
     Path addFileExtension(Path file);
 
     /**
-     * Writes the content of the builder to a file.<br/>
+     * Writes the content of the builder to a file.<br>
      * An extension will be dynamically added to fileName depending on the markup language.
      *
      * @param file    the generated file without extension

@@ -48,7 +48,7 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Set column as an header column.<br/>
+     * Set column as an header column.<br>
      * Limited support : Markdown does not support header column and will ignore it.
      *
      * @param headerColumn configuration value
@@ -60,7 +60,7 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Set column width ratio for this column.<br/>
+     * Set column width ratio for this column.<br>
      * Limited support : Markdown does not support column width specifiers and will ignore {@code widthRatio}.
      *
      * @param widthRatio width ratio integer value [0-100]. Accept relative width specifiers (e.g.: 1, 2, 3, .. with sum of width ratios for all columns != 100).
@@ -72,7 +72,7 @@ public class MarkupTableColumn {
     }
 
     /**
-     * Overrides all other specifiers for the specified {@code language} with this language-dependent {@code specifiers} string.<br/>
+     * Overrides all other specifiers for the specified {@code language} with this language-dependent {@code specifiers} string.<br>
      * This method should be used as a last resort.
      *
      * @param language apply the {@code specifiers} to this language only

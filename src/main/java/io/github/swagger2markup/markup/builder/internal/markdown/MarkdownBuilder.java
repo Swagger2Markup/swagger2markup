@@ -179,7 +179,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     private String formatTableCell(String cell) {
-        cell = replaceNewLines(cell.trim(), "<br/>");
+        cell = replaceNewLines(cell.trim(), "<br>");
         return cell.replace(Markdown.TABLE_COLUMN_DELIMITER.toString(), "\\" + Markdown.TABLE_COLUMN_DELIMITER.toString());
     }
 

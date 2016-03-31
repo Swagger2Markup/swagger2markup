@@ -42,8 +42,8 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     private static final Pattern ESCAPE_CELL_PIPE_PATTERN = Pattern.compile("((\\[.*?(?<!\\\\)\\])|(.))");
 
     /**
-     * Associate macro name to block style.<br/>
-     * ending ':' means the macro supports title attribute.<br/>
+     * Associate macro name to block style.<br>
+     * ending ':' means the macro supports title attribute.<br>
      * '>ADMONITION_BLOCK' means value should refer to {@link #ADMONITION_BLOCK_STYLE}.
      */
     private static final Map<MarkupBlockStyle, String> BLOCK_STYLE = new HashMap<MarkupBlockStyle, String>() {{
