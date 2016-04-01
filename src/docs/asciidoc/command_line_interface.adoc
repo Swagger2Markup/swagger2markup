@@ -4,7 +4,7 @@ Swagger2Markup provides a Command line interface (CLI). The CLI is published in 
 
 *   Releases: https://jcenter.bintray.com/io/github/swagger2markup/swagger2markup-cli/
 
-*   Snapshots: https://oss.jfrog.org/simple/oss-snapshot-local/io/github/swagger2markup-cli/
+*   Snapshots: https://oss.jfrog.org/artifactory/oss-snapshot-local/io/github/swagger2markup/swagger2markup-cli/
 
 NOTE: The CLI requires at least JDK 8.
 
