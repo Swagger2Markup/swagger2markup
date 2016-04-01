@@ -158,41 +158,57 @@ public interface Swagger2MarkupConfig {
 
     /**
      * Overview document name (without extension).
+     *
+     * @return the overview document name (without extension)
      */
     String getOverviewDocument();
 
     /**
      * Paths document name (without extension).
+     *
+     * @return the paths document name (without extension)
      */
     String getPathsDocument();
 
     /**
      * Definitions document name (without extension).
+     *
+     * @return the definitions document name (without extension)
      */
     String getDefinitionsDocument();
 
     /**
      * Security document name (without extension).
+     *
+     * @return the security document name (without extension)
      */
     String getSecurityDocument();
 
     /**
      * Separated operations sub-folder name.
+     *
+     * @return the operations sub-folder name
      */
     String getSeparatedOperationsFolder();
 
     /**
      * Separated definitions sub-folder name.
+     *
+     * @return the definitions sub-folder name
      */
     String getSeparatedDefinitionsFolder();
 
     /**
      * Specifies the line separator which should be used.
+     *
+     * @return the line separator
      */
     LineSeparator getLineSeparator();
 
     /**
      * Returns properties for extensions.
+     *
+     * @return the extension properties
      */
     Swagger2MarkupProperties getExtensionsProperties();
 }
