@@ -25,6 +25,7 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOCUMENT_BEFORE,
+        DOCUMENT_AFTER,
         DOCUMENT_BEGIN,
         DOCUMENT_END
     }
@@ -60,6 +61,9 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
+            case DOCUMENT_AFTER:
+                levelOffset = 0;
+                break;
             case DOCUMENT_BEGIN:
             case DOCUMENT_END:
                 levelOffset = 1;
