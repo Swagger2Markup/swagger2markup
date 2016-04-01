@@ -21,18 +21,16 @@ package io.github.swagger2markup.markup.builder.internal.markdown;
 import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.markup.builder.internal.AbstractMarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.internal.Markup;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -185,29 +183,22 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
-        Validate.notEmpty(columnSpecs);
-
+        Validate.notEmpty(cells, "cells must not be null");
         newLine();
-        Collection<String> headerList = CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
-            public String transform(final MarkupTableColumn header) {
-                return formatTableCell(defaultString(header.header));
-            }
-        });
-        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
+        if (columnSpecs != null && !columnSpecs.isEmpty()) {
+            Collection<String> headerList = columnSpecs.stream().map(header -> formatTableCell(defaultString(header.header))).collect(Collectors.toList());
+            documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(headerList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
 
-        documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
-        for (MarkupTableColumn col : columnSpecs) {
-            documentBuilder.append(StringUtils.repeat(Markdown.TABLE_ROW.toString(), 3));
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
+            columnSpecs.forEach(col -> {
+                documentBuilder.append(StringUtils.repeat(Markdown.TABLE_ROW.toString(), 3));
+                documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER);
+            });
+            documentBuilder.append(newLine);
         }
-        documentBuilder.append(newLine);
 
         for (List<String> row : cells) {
-            Collection<String> cellList = CollectionUtils.collect(row, new Transformer<String, String>() {
-                public String transform(final String cell) {
-                    return formatTableCell(cell);
-                }
-            });
+            Collection<String> cellList = row.stream().map(cell -> formatTableCell(defaultString(cell))).collect(Collectors.toList());
             documentBuilder.append(Markdown.TABLE_COLUMN_DELIMITER).append(join(cellList, Markdown.TABLE_COLUMN_DELIMITER.toString())).append(Markdown.TABLE_COLUMN_DELIMITER).append(newLine);
         }
         newLine();

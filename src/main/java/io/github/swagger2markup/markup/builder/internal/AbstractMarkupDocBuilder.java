@@ -455,6 +455,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder table(List<List<String>> cells) {
+        Validate.notEmpty(cells, "cells must not be null");
         return tableWithColumnSpecs(null, cells);
     }
 

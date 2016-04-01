@@ -27,7 +27,8 @@ public class MarkupTableColumn {
     /**
      * Header and specifiers constructor.
      *
-     * @param header header name
+     * @param header header
+     * @param headerColumn set column as an header column.
      * @param widthRatio width ratio
      */
     public MarkupTableColumn(String header, boolean headerColumn, Integer widthRatio) {

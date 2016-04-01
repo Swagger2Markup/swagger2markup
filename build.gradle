@@ -26,6 +26,7 @@ tasks.withType(JavaCompile) {
     options.deprecation = true
     options.encoding = 'UTF-8'
     options.compilerArgs << "-Xlint:unchecked"
+    options.compilerArgs << "-Xdoclint:none"
 }
 
 repositories {
@@ -35,7 +36,7 @@ repositories {
 
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.18'
-    compile 'org.apache.commons:commons-collections4:4.1'
+    //compile 'org.apache.commons:commons-collections4:4.1'
     compile 'org.apache.commons:commons-lang3:3.4'
     compile "commons-io:commons-io:2.4"
     compile "commons-codec:commons-codec:1.10"

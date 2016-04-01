@@ -487,9 +487,9 @@ public interface MarkupDocBuilder {
      * Import some markup text into this builder.<br>
      * If {@code markupLanguage} is different from current builder language, markupText is converted when supported, or conversion is just ignored.<br>
      * Currently supported conversions :
-     * <li>
-     * <ul>Markdown -> AsciiDoc</ul>
-     * </li>
+     * <ul>
+     *     <li> Markdown -&gt; AsciiDoc </li>
+     * </ul>
      * Newlines are normalized in the process.
      *
      * @param markupText     markup reader to read data from

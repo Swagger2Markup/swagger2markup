@@ -21,14 +21,13 @@ package io.github.swagger2markup.markup.builder.internal.asciidoc;
 import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.markup.builder.internal.AbstractMarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.internal.Markup;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.Transformer;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.io.Reader;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.*;
 
@@ -190,11 +189,11 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
-
+        Validate.notEmpty(cells, "cells must not be null");
         Boolean hasHeader = false;
         List<String> options = new ArrayList<>();
         List<String> cols = new ArrayList<>();
-        if (CollectionUtils.isNotEmpty(columnSpecs)) {
+        if (columnSpecs != null && !columnSpecs.isEmpty()) {
             for (MarkupTableColumn col : columnSpecs) {
                 if (!hasHeader && isNotBlank(col.header)) {
                     options.add("header");
@@ -213,20 +212,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         documentBuilder.append("[options=\"").append(join(options, ",")).append("\", cols=\"").append(join(cols, ",")).append("\"]").append(newLine);
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);
         if (hasHeader) {
-            Collection<String> headerList = CollectionUtils.collect(columnSpecs, new Transformer<MarkupTableColumn, String>() {
-                public String transform(final MarkupTableColumn header) {
-                    return formatTableCell(defaultString(header.header));
-                }
-            });
+            Collection<String> headerList = columnSpecs.stream().map(header -> formatTableCell(defaultString(header.header))).collect(Collectors.toList());
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(headerList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
 
         }
         for (List<String> row : cells) {
-            Collection<String> cellList = CollectionUtils.collect(row, new Transformer<String, String>() {
-                public String transform(final String cell) {
-                    return formatTableCell(defaultString(cell));
-                }
-            });
+            Collection<String> cellList = row.stream().map(cell -> formatTableCell(defaultString(cell))).collect(Collectors.toList());
             documentBuilder.append(AsciiDoc.TABLE_COLUMN_DELIMITER).append(join(cellList, AsciiDoc.TABLE_COLUMN_DELIMITER.toString())).append(newLine);
         }
         documentBuilder.append(AsciiDoc.TABLE).append(newLine);

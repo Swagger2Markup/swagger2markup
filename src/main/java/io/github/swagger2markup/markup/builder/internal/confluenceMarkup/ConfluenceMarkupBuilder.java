@@ -224,6 +224,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder tableWithColumnSpecs(List<MarkupTableColumn> columnSpecs, List<List<String>> cells) {
+        Validate.notEmpty(cells, "cells must not be null");
         documentBuilder.append(newLine);
         if (columnSpecs != null && !columnSpecs.isEmpty()) {
             documentBuilder.append("||");
@@ -232,19 +233,17 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             }
             documentBuilder.append(newLine);
         }
-        if (cells != null) {
-            for (List<String> row : cells) {
-                documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
-                ListIterator<String> cellIterator = row.listIterator();
-                while (cellIterator.hasNext()) {
-                    int cellIndex = cellIterator.nextIndex();
-                    if (columnSpecs != null && columnSpecs.size() > cellIndex && columnSpecs.get(cellIndex).headerColumn)
-                        documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
+        for (List<String> row : cells) {
+            documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
+            ListIterator<String> cellIterator = row.listIterator();
+            while (cellIterator.hasNext()) {
+                int cellIndex = cellIterator.nextIndex();
+                if (columnSpecs != null && columnSpecs.size() > cellIndex && columnSpecs.get(cellIndex).headerColumn)
+                    documentBuilder.append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
 
-                    documentBuilder.append(formatCellContent(cellIterator.next())).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
-                }
-                documentBuilder.append(newLine);
+                documentBuilder.append(formatCellContent(cellIterator.next())).append(ConfluenceMarkup.TABLE_COLUMN_DELIMITER);
             }
+            documentBuilder.append(newLine);
         }
         documentBuilder.append(newLine);
         return this;
