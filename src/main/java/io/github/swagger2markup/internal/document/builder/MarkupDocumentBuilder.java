@@ -15,6 +15,7 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
@@ -65,12 +66,14 @@ public abstract class MarkupDocumentBuilder {
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected Swagger2MarkupConverter.Context globalContext;
+    protected Swagger2MarkupExtensionRegistry extensionRegistry;
     protected Swagger2MarkupConfig config;
     protected MarkupDocBuilder markupDocBuilder;
     protected Path outputPath;
 
-    MarkupDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Path outputPath) {
+    MarkupDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         this.globalContext = globalContext;
+        this.extensionRegistry = extensionRegistry;
         this.config = globalContext.getConfig();
         this.outputPath = outputPath;
 
@@ -162,11 +165,7 @@ public abstract class MarkupDocumentBuilder {
      * @return converted markup text
      */
     protected String swaggerMarkupDescription(String markupText) {
-        try {
-            return markupDocBuilder.copy(false).importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return markupDocBuilder.copy(false).importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
     }
 
     protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {

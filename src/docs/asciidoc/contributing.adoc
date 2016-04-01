@@ -1,0 +1,10 @@
+== Contributing
+
+=== Questions
+You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter].
+
+=== Bugs
+If you believe you have found a bug, please take a moment to search the existing issues. If no one else has reported the problem, please open a new issue that describes the problem in detail and, ideally, includes a test that reproduces it.
+
+=== Enhancements
+If you’d like an enhancement to be made to Swagger2Markup, pull requests are most welcome. The source code is on GitHub. You may want to search the existing issues and pull requests to see if the enhancement is already being worked on. You may also want to open a new issue to discuss a possible enhancement before work on it begins.

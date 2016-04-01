@@ -18,6 +18,7 @@ package io.github.swagger2markup.internal.document.builder;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
@@ -87,8 +88,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private static final String DESCRIPTION_FILE_NAME = "description";
 
 
-    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, java.nio.file.Path outputPath) {
-        super(globalContext, outputPath);
+    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry,  java.nio.file.Path outputPath) {
+        super(globalContext, extensionRegistry, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
@@ -159,7 +160,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildsPathsSection(Map<String, Path> paths) {
         Set<PathOperation> pathOperations = toPathOperationsSet(paths);
         if (CollectionUtils.isNotEmpty(pathOperations)) {
-            if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+            if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 for (PathOperation operation : pathOperations) {
                     buildOperation(operation);
                 }
@@ -186,7 +187,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * Builds the path title depending on the operationsGroupedBy configuration setting.
      */
     private void buildPathsTitle() {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             buildPathsTitle(PATHS);
         } else {
             buildPathsTitle(RESOURCES);
@@ -227,7 +228,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyPathsDocumentExtension(Context context) {
-        for (PathsDocumentExtension extension : globalContext.getExtensionRegistry().getPathsDocumentExtensions()) {
+        for (PathsDocumentExtension extension : extensionRegistry.getPathsDocumentExtensions()) {
             extension.apply(context);
         }
     }
@@ -255,14 +256,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy(false);
             buildOperation(operation, pathDocBuilder);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
-
-            try {
-                pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to write operation file: %s", operationFile), e);
-                }
-            }
+             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced: {}", operationFile);
             }
@@ -355,7 +349,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder to use
      */
     private void buildOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         } else {
             docBuilder.sectionTitleWithAnchorLevel3(title, anchor);
@@ -369,10 +363,24 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder to use
      */
     private void buildSectionTitle(String title, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleLevel3(title);
         } else {
             docBuilder.sectionTitleLevel4(title);
+        }
+    }
+
+    /**
+     * Adds a example title to the document.
+     *
+     * @param title      the section title
+     * @param docBuilder the MarkupDocBuilder to use
+     */
+    private void buildExampleTitle(String title, MarkupDocBuilder docBuilder) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
+            docBuilder.sectionTitleLevel4(title);
+        } else {
+            docBuilder.sectionTitleLevel5(title);
         }
     }
 
@@ -383,7 +391,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder to use
      */
     private void buildResponseTitle(String title, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             docBuilder.sectionTitleLevel4(title);
         } else {
             docBuilder.sectionTitleLevel5(title);
@@ -587,7 +595,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildTagsSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (config.getOperationsGroupedBy() == GroupBy.AS_IS) {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 buildSectionTitle(TAGS, docBuilder);
@@ -616,7 +624,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         if (exampleMap.size() > 0) {
             buildSectionTitle(operationSectionTitle, docBuilder);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
-                buildSectionTitle(sectionTile + " " + entry.getKey(), docBuilder);
+                buildExampleTitle(sectionTile + " " + entry.getKey(), docBuilder);
                 docBuilder.listing(Json.pretty(entry.getValue()));
             }
         }

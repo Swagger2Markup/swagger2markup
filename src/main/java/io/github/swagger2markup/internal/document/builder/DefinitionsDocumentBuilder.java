@@ -17,6 +17,7 @@ package io.github.swagger2markup.internal.document.builder;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.document.MarkupDocument;
@@ -58,8 +59,8 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private static final String DESCRIPTION_FILE_NAME = "description";
 
-    public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath) {
-        super(context, outputPath);
+    public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
+        super(context, extensionRegistry, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
@@ -132,7 +133,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyDefinitionsDocumentExtension(Context context) {
-        for (DefinitionsDocumentExtension extension : globalContext.getExtensionRegistry().getDefinitionsDocumentExtensions()) {
+        for (DefinitionsDocumentExtension extension : extensionRegistry.getDefinitionsDocumentExtensions()) {
             extension.apply(context);
         }
     }
@@ -163,13 +164,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy(false);
             buildDefinition(definitions, definitionName, model, defDocBuilder);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
-            try {
-                defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn(String.format("Failed to write definition file: %s", definitionFile), e);
-                }
-            }
+            defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate definition file produced: {}", definitionFile);
             }

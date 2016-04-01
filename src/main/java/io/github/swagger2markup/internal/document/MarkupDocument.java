@@ -17,7 +17,6 @@ package io.github.swagger2markup.internal.document;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -38,15 +37,14 @@ public class MarkupDocument {
     }
 
     /**
-     * Writes the content of the builder to a file.<br/>
+     * Writes the content of the builder to a file.<br>
      * An extension identifying the markup language will be automatically added to file name.
      *
      * @param file    the generated file
      * @param charset the the charset to use for encoding
      * @param options the file open options
-     * @throws IOException if the file cannot be written
      */
-    public void writeToFile(Path file, Charset charset, OpenOption... options) throws IOException {
+    public void writeToFile(Path file, Charset charset, OpenOption... options) {
         markupDocBuilder.writeToFile(file, charset, options);
     }
 
@@ -56,9 +54,8 @@ public class MarkupDocument {
      * @param file    the generated file
      * @param charset the the charset to use for encoding
      * @param options the file open options
-     * @throws IOException if the file cannot be written
      */
-    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) throws IOException {
+    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) {
         markupDocBuilder.writeToFileWithoutExtension(file, charset, options);
     }
 }

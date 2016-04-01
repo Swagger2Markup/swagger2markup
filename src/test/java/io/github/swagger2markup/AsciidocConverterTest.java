@@ -69,10 +69,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .build();
-
-        Swagger2MarkupConverter.from(file).withConfig(config).build()
+        Swagger2MarkupConverter.from(file).build()
                 .toFolder(outputDirectory);
 
         //Then
@@ -91,10 +88,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .build();
-
-        Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build()
+        Swagger2MarkupConverter.from(swaggerJsonString).build()
                 .toFolder(outputDirectory);
 
         //Then
@@ -113,11 +107,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .build();
-
         Swagger2MarkupConverter.from(swaggerJsonString)
-                .withConfig(config)
                 .build()
                 .toFolder(outputDirectory);
 

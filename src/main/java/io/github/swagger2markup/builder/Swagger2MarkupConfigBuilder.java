@@ -16,18 +16,19 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
-import io.github.swagger2markup.markup.builder.LineSeparator;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Language;
 import io.github.swagger2markup.OrderBy;
 import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.markup.builder.LineSeparator;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
-import org.apache.commons.configuration.*;
+import org.apache.commons.configuration2.*;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -37,10 +38,10 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
-import static io.github.swagger2markup.Swagger2MarkupConfig.EXTENSION_PREFIX;
-import static io.github.swagger2markup.Swagger2MarkupConfig.PROPERTIES_PREFIX;
+import static io.github.swagger2markup.builder.Swagger2MarkupProperties.*;
 
 public class Swagger2MarkupConfigBuilder  {
 
@@ -98,50 +99,65 @@ public class Swagger2MarkupConfigBuilder  {
         CompositeConfiguration compositeConfiguration = new CompositeConfiguration();
         compositeConfiguration.addConfiguration(new SystemConfiguration());
         compositeConfiguration.addConfiguration(configuration);
-        try {
-            compositeConfiguration.addConfiguration(new PropertiesConfiguration(PROPERTIES_DEFAULT));
-        } catch (ConfigurationException e) {
-            throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
-        }
+        compositeConfiguration.addConfiguration(getDefaultConfiguration());
 
-        Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
-        Swagger2MarkupProperties swagger2MarkupProperties = new Swagger2MarkupProperties(swagger2markupConfiguration);
+        Swagger2MarkupProperties swagger2MarkupProperties = new Swagger2MarkupProperties(compositeConfiguration);
 
-        config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage("markupLanguage");
-        config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage("swaggerMarkupLanguage");
-        config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean("generatedExamplesEnabled");
-        config.operationDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("operationDescriptionsEnabled");
-        config.definitionDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean("definitionDescriptionsEnabled");
-        config.separatedDefinitionsEnabled = swagger2MarkupProperties.getRequiredBoolean("separatedDefinitionsEnabled");
-        config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean("separatedOperationsEnabled");
-        config.operationsGroupedBy = swagger2MarkupProperties.getGroupBy("operationsGroupedBy");
-        config.outputLanguage = swagger2MarkupProperties.getLanguage("outputLanguage");
-        config.inlineSchemaDepthLevel = swagger2MarkupProperties.getRequiredInt("inlineSchemaDepthLevel");
-        config.interDocumentCrossReferencesEnabled = swagger2MarkupProperties.getRequiredBoolean("interDocumentCrossReferencesEnabled");
-        config.interDocumentCrossReferencesPrefix = swagger2MarkupProperties.getString("interDocumentCrossReferencesPrefix", null);
-        config.flatBodyEnabled = swagger2MarkupProperties.getRequiredBoolean("flatBodyEnabled");
-        config.anchorPrefix = swagger2MarkupProperties.getString("anchorPrefix", null);
-        config.overviewDocument = swagger2MarkupProperties.getRequiredString("overviewDocument");
-        config.pathsDocument = swagger2MarkupProperties.getRequiredString("pathsDocument");
-        config.definitionsDocument = swagger2MarkupProperties.getRequiredString("definitionsDocument");
-        config.securityDocument = swagger2MarkupProperties.getRequiredString("securityDocument");
-        config.separatedOperationsFolder = swagger2MarkupProperties.getRequiredString("separatedOperationsFolder");
-        config.separatedDefinitionsFolder = swagger2MarkupProperties.getRequiredString("separatedDefinitionsFolder");
-        config.tagOrderBy = swagger2MarkupProperties.getOrderBy("tagOrderBy");
-        config.operationOrderBy = swagger2MarkupProperties.getOrderBy("operationOrderBy");
-        config.definitionOrderBy = swagger2MarkupProperties.getOrderBy("definitionOrderBy");
-        config.parameterOrderBy = swagger2MarkupProperties.getOrderBy("parameterOrderBy");
-        config.propertyOrderBy = swagger2MarkupProperties.getOrderBy("propertyOrderBy");
-        config.responseOrderBy = swagger2MarkupProperties.getOrderBy("responseOrderBy");
-        Optional<String> lineSeparator = swagger2MarkupProperties.getString("lineSeparator");
+        config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
+        config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
+        config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
+        config.operationDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean(OPERATION_DESCRIPTIONS_ENABLED);
+        config.definitionDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean(DEFINITION_DESCRIPTIONS_ENABLED);
+        config.separatedDefinitionsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_DEFINITIONS_ENABLED);
+        config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_OPERATIONS_ENABLED);
+        config.pathsGroupedBy = swagger2MarkupProperties.getGroupBy(PATHS_GROUPED_BY);
+        config.outputLanguage = swagger2MarkupProperties.getLanguage(OUTPUT_LANGUAGE);
+        config.inlineSchemaDepthLevel = swagger2MarkupProperties.getRequiredInt(INLINE_SCHEMA_DEPTH_LEVEL);
+        config.interDocumentCrossReferencesEnabled = swagger2MarkupProperties.getRequiredBoolean(INTER_DOCUMENT_CROSS_REFERENCES_ENABLED);
+        config.interDocumentCrossReferencesPrefix = swagger2MarkupProperties.getString(INTER_DOCUMENT_CROSS_REFERENCES_PREFIX, null);
+        config.flatBodyEnabled = swagger2MarkupProperties.getRequiredBoolean(FLAT_BODY_ENABLED);
+        config.anchorPrefix = swagger2MarkupProperties.getString(ANCHOR_PREFIX, null);
+        config.overviewDocument = swagger2MarkupProperties.getRequiredString(OVERVIEW_DOCUMENT);
+        config.pathsDocument = swagger2MarkupProperties.getRequiredString(PATHS_DOCUMENT);
+        config.definitionsDocument = swagger2MarkupProperties.getRequiredString(DEFINITIONS_DOCUMENT);
+        config.securityDocument = swagger2MarkupProperties.getRequiredString(SECURITY_DOCUMENT);
+        config.separatedOperationsFolder = swagger2MarkupProperties.getRequiredString(SEPARATED_OPERATIONS_FOLDER);
+        config.separatedDefinitionsFolder = swagger2MarkupProperties.getRequiredString(SEPARATED_DEFINITIONS_FOLDER);
+        config.tagOrderBy = swagger2MarkupProperties.getOrderBy(TAG_ORDER_BY);
+        config.operationOrderBy = swagger2MarkupProperties.getOrderBy(OPERATION_ORDER_BY);
+        config.definitionOrderBy = swagger2MarkupProperties.getOrderBy(DEFINITION_ORDER_BY);
+        config.parameterOrderBy = swagger2MarkupProperties.getOrderBy(PARAMETER_ORDER_BY);
+        config.propertyOrderBy = swagger2MarkupProperties.getOrderBy(PROPERTY_ORDER_BY);
+        config.responseOrderBy = swagger2MarkupProperties.getOrderBy(RESPONSE_ORDER_BY);
+        Optional<String> lineSeparator = swagger2MarkupProperties.getString(LINE_SEPARATOR);
         if(lineSeparator.isPresent() && StringUtils.isNoneBlank(lineSeparator.get())){
             config.lineSeparator = LineSeparator.valueOf(lineSeparator.get());
         }
 
+        Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
         config.extensionsProperties = new Swagger2MarkupProperties(extensionsConfiguration);
     }
 
+    /**
+     * Loads the default properties from the classpath.
+     *
+     * @return the default properties
+     */
+    private Configuration getDefaultConfiguration() {
+        Configurations configs = new Configurations();
+        try {
+            return configs.properties(PROPERTIES_DEFAULT);
+        } catch (ConfigurationException e) {
+            throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
+        }
+    }
+
+    /**
+     * Builds the Swagger2MarkupConfig.
+     *
+     * @return the Swagger2MarkupConfig
+     */
     public Swagger2MarkupConfig build() {
         buildNaturalOrdering();
 
@@ -290,14 +306,14 @@ public class Swagger2MarkupConfigBuilder  {
 
 
     /**
-     * Specifies if the operations should be grouped by tags or stay as-is.
+     * Specifies if the paths should be grouped by tags or stay as-is.
      *
      * @param pathsGroupedBy the GroupBy enum
      * @return this builder
      */
     public Swagger2MarkupConfigBuilder withPathsGroupedBy(GroupBy pathsGroupedBy) {
         Validate.notNull(pathsGroupedBy, "%s must not be null", "pathsGroupedBy");
-        config.operationsGroupedBy = pathsGroupedBy;
+        config.pathsGroupedBy = pathsGroupedBy;
         return this;
     }
 
@@ -564,7 +580,7 @@ public class Swagger2MarkupConfigBuilder  {
         private URI definitionDescriptionsUri;
         private boolean separatedDefinitionsEnabled;
         private boolean separatedOperationsEnabled;
-        private GroupBy operationsGroupedBy;
+        private GroupBy pathsGroupedBy;
         private Language outputLanguage;
         private int inlineSchemaDepthLevel;
         private OrderBy tagOrderBy;
@@ -640,8 +656,8 @@ public class Swagger2MarkupConfigBuilder  {
         }
 
         @Override
-        public GroupBy getOperationsGroupedBy() {
-            return operationsGroupedBy;
+        public GroupBy getPathsGroupedBy() {
+            return pathsGroupedBy;
         }
 
         @Override

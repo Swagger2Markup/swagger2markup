@@ -34,13 +34,14 @@ public class Swagger2MarkupConfigBuilderTest {
 
     @Test
     public void testConfigOfDefaults() {
-        Map<String, String> extensionsProperties = new HashMap<>();
-        extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
-        extensionsProperties.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
-        extensionsProperties.put("swagger2markup.uniqueId1.customProperty1", "123");
-        extensionsProperties.put("swagger2markup.uniqueId1.customProperty2", "123");
+        Map<String, String> configMap = new HashMap<>();
+        configMap.put(Swagger2MarkupProperties.MARKUP_LANGUAGE, MarkupLanguage.MARKDOWN.toString());
+        configMap.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
+        configMap.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
+        configMap.put("swagger2markup.uniqueId1.customProperty1", "123");
+        configMap.put("swagger2markup.uniqueId1.customProperty2", "123");
 
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(extensionsProperties)
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap)
                 .build();
 
         assertThat(config.getAnchorPrefix()).isNull();
@@ -52,7 +53,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isGeneratedExamplesEnabled()).isFalse();
         assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
-        assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.ASCIIDOC);
+        assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
         assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getOperationOrdering()).isNotNull();
         assertThat(config.getOutputLanguage()).isEqualTo(Language.EN);
@@ -60,7 +61,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.PARAMETER_IN_NATURAL_ORDERING.compound(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING));
         assertThat(config.getPathsDocument()).isEqualTo("paths");
-        assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.AS_IS);
+        assertThat(config.getPathsGroupedBy()).isEqualTo(GroupBy.AS_IS);
         assertThat(config.getPropertyOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.NATURAL);
@@ -106,7 +107,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getParameterOrdering()).isNull();
         assertThat(config.getPathsDocument()).isEqualTo("pathsTest");
-        assertThat(config.getOperationsGroupedBy()).isEqualTo(GroupBy.TAGS);
+        assertThat(config.getPathsGroupedBy()).isEqualTo(GroupBy.TAGS);
         assertThat(config.getPropertyOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getPropertyOrdering()).isNull();
         assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.AS_IS);

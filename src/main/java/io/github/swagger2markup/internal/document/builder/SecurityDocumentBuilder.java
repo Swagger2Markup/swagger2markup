@@ -15,6 +15,7 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
@@ -47,8 +48,8 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     private final String AUTHORIZATION_URL;
     private final String TOKEN_URL;
 
-    public SecurityDocumentBuilder(Swagger2MarkupConverter.Context context, Path outputPath) {
-        super(context, outputPath);
+    public SecurityDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
+        super(context, extensionRegistry, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         SECURITY = labels.getString("security");
@@ -131,7 +132,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applySecurityDocumentExtension(Context context) {
-        for (SecurityDocumentExtension extension : globalContext.getExtensionRegistry().getSecurityDocumentExtensions()) {
+        for (SecurityDocumentExtension extension : extensionRegistry.getSecurityDocumentExtensions()) {
             extension.apply(context);
         }
     }
