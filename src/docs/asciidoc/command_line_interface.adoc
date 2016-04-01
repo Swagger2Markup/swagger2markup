@@ -1,1 +1,74 @@
 == Command Line Interface
+
+Swagger2Markup provides a Command line interface (CLI). The CLI is published in JCenter and Maven Central. The artifacts can be viewed at the following locations:
+
+*   Releases: https://jcenter.bintray.com/io/github/swagger2markup/swagger2markup-cli/
+
+*   Snapshots: https://oss.jfrog.org/simple/oss-snapshot-local/io/github/swagger2markup-cli/
+
+NOTE: The CLI requires at least JDK 8.
+
+=== Usage
+
+==== Help
+
+You can show the Help:
+
+[source,groovy, subs="attributes"]
+----
+java -jar swagger2markup-cli-{project-version}.jar help convert
+----
+
+Output: 
+----
+NAME
+        swagger2markup convert - Converts a Swagger JSON or YAML file into
+        Markup documents.
+
+SYNOPSIS
+        swagger2markup convert [(-c <configFile> | --configFile <configFile>)]
+                [(-h | --help)] (-i <inputFile> | --inputFile <inputFile>)
+                (-o <outputPath> | --outputPath <outputPath>)
+
+OPTIONS
+        -c <configFile>, --configFile <configFile>
+            Config file
+
+        -h, --help
+            Display help information
+
+        -i <inputFile>, --inputFile <inputFile>
+            Input file
+
+        -o <outputPath>, --outputPath <outputPath>
+            Output path
+----
+
+==== Conversion
+
+You can convert a Swagger file as follows:
+
+[source,groovy, subs="attributes"]
+----
+java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp
+----
+
+It generates the Markup documents into the `/tmp` folder.
+
+==== Configuration
+
+Create a `config.properties` file to customize some of the <<Swagger2Markup properties>>. For Example: 
+
+.config.properties
+----
+swagger2markup.markupLanguage=MARKDOWN
+swagger2markup.outputLanguage=DE
+----
+
+Invoke the CLI as follows:
+
+[source,groovy, subs="attributes"]
+----
+java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties
+----
+

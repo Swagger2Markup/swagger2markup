@@ -117,7 +117,7 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 1. Create an Apache Commons `Configuraton` object using the proper ConfigurationBuilder.
 2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
 
-=== Available Swagger2Markup properties
+=== Swagger2Markup properties
 
 Swagger2Markup properties are considered in the following order:
 
