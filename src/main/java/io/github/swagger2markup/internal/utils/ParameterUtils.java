@@ -16,7 +16,6 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.base.Function;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -94,10 +93,9 @@ public final class ParameterUtils {
      * Generate a default example value for parameter.
      *
      * @param parameter parameter
-     * @param markupDocBuilder doc builder
      * @return a generated example for the parameter
      */
-    public static Object generateExample(AbstractSerializableParameter parameter, MarkupDocBuilder markupDocBuilder) {
+    public static Object generateExample(AbstractSerializableParameter parameter) {
         switch (parameter.getType()) {
             case "integer":
                 return 0;

@@ -126,7 +126,7 @@ public class ExamplesUtil {
                             }
                         }
                         if (abstractSerializableParameterExample == null) {
-                            abstractSerializableParameterExample = ParameterUtils.generateExample((AbstractSerializableParameter)parameter, markupDocBuilder);
+                            abstractSerializableParameterExample = ParameterUtils.generateExample((AbstractSerializableParameter)parameter);
                         }
                     }
                     if (parameter instanceof PathParameter) {
