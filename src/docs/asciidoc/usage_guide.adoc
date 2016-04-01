@@ -55,6 +55,7 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=co
 
 Swagger2Markup provides several options to configure the Swagger2MarkupConverter:
 
+* Using system properties
 * Using a fluent API
 * Using a properties file
 * Using a Java Map

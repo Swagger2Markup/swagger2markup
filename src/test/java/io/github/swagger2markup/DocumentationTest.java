@@ -21,9 +21,7 @@ import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
 import io.github.swagger2markup.builder.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.apache.commons.configuration2.Configuration;
-import org.apache.commons.configuration2.PropertiesConfiguration;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.IOException;
@@ -152,10 +150,8 @@ public class DocumentationTest {
         Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
 
         // tag::swagger2MarkupConfigFromCommonsConfiguration[]
-        Configuration configuration =
-                new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
-                        .configure(new Parameters().fileBased().setFileName("config.properties"))
-                .getConfiguration(); //<1>
+        Configurations configs = new Configurations();
+        Configuration configuration = configs.properties("config.properties"); //<1>
 
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configuration) //<2>
                 .build();

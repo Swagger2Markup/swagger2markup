@@ -53,9 +53,12 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 The OverviewDocumentExtension allows to extend the overview document at three positions:
 
-* DOCUMENT_BEFORE: Before the 
-* DOCUMENT_START:
-* DOCUMENT_BEFORE:
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+
+.Overview document extension positions 
+image::images/overview_extension_points.PNG[]
 
 ==== PathsDocumentExtension
 

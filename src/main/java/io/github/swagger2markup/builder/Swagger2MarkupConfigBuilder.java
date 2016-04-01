@@ -27,8 +27,7 @@ import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
 import org.apache.commons.configuration2.*;
-import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
-import org.apache.commons.configuration2.builder.fluent.Parameters;
+import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -100,16 +99,7 @@ public class Swagger2MarkupConfigBuilder  {
         CompositeConfiguration compositeConfiguration = new CompositeConfiguration();
         compositeConfiguration.addConfiguration(new SystemConfiguration());
         compositeConfiguration.addConfiguration(configuration);
-
-        FileBasedConfigurationBuilder<PropertiesConfiguration> builder =
-                new FileBasedConfigurationBuilder<>(PropertiesConfiguration.class)
-                        .configure(new Parameters().fileBased().setFileName(PROPERTIES_DEFAULT));
-
-        try {
-            compositeConfiguration.addConfiguration(builder.getConfiguration());
-        } catch (ConfigurationException e) {
-            throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
-        }
+        compositeConfiguration.addConfiguration(getDefaultConfiguration());
 
         Swagger2MarkupProperties swagger2MarkupProperties = new Swagger2MarkupProperties(compositeConfiguration);
 
@@ -149,6 +139,25 @@ public class Swagger2MarkupConfigBuilder  {
         config.extensionsProperties = new Swagger2MarkupProperties(extensionsConfiguration);
     }
 
+    /**
+     * Loads the default properties from the classpath.
+     *
+     * @return the default properties
+     */
+    private Configuration getDefaultConfiguration() {
+        Configurations configs = new Configurations();
+        try {
+            return configs.properties(PROPERTIES_DEFAULT);
+        } catch (ConfigurationException e) {
+            throw new RuntimeException(String.format("Can't load default properties '%s'", PROPERTIES_DEFAULT), e);
+        }
+    }
+
+    /**
+     * Builds the Swagger2MarkupConfig.
+     *
+     * @return the Swagger2MarkupConfig
+     */
     public Swagger2MarkupConfig build() {
         buildNaturalOrdering();
 
