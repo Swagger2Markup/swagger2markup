@@ -15,7 +15,10 @@ Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2
 
 === Creation of an extension
 
-To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension point, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`.
+To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension point, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`. Every extension point provides to methods which must be implemented: 
+
+* `init`: This method is invoked once
+* `apply`: This method is invoked multiple times depending on the type of the extension point.
 
 [source,java,indent=0]
 ----
@@ -47,7 +50,7 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 3. Build an instance of `Swagger2MarkupExtensionRegistry`
 4. Use the custom Swagger2MarkupExtensionRegistry
 
-=== Available extensions points
+=== Extensions points
 
 ==== OverviewDocumentExtension
 
