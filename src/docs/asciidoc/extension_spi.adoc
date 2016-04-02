@@ -64,13 +64,29 @@ image::images/overview_extension_points.PNG[]
 
 The PathsDocumentExtension allows to extend the paths document at five positions: 
 
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+* OPERATION_BEGIN: 
+* OPERATION_END:
+
 ==== SecurityDocumentExtension
 
 The SecurityDocumentExtension allows to extend the security document at five positions: 
 
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+
 ==== DefinitionsDocumentExtension
 
 The DefinitionsDocumentExtension allows to extend the definitions document at five positions: 
+
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+* DEFINITION_BEGIN: 
+* DEFINITION_END:
 
 
 ==== SwaggerModelExtension
