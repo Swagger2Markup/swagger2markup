@@ -62,8 +62,17 @@ image::images/overview_extension_points.PNG[]
 
 ==== PathsDocumentExtension
 
+The PathsDocumentExtension allows to extend the paths document at five positions: 
+
 ==== SecurityDocumentExtension
+
+The SecurityDocumentExtension allows to extend the security document at five positions: 
 
 ==== DefinitionsDocumentExtension
 
+The DefinitionsDocumentExtension allows to extend the definitions document at five positions: 
+
+
 ==== SwaggerModelExtension
+
+The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup.
