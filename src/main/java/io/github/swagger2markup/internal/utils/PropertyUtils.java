@@ -115,7 +115,7 @@ public final class PropertyUtils {
         Validate.notNull(property, "property must not be null");
         Object examplesValue = null;
         if (property.getExample() != null) {
-            examplesValue = convertExample(property.getExample(), property.getType());
+            examplesValue = property.getExample();
         } else if (property instanceof MapProperty) {
             Property additionalProperty = ((MapProperty) property).getAdditionalProperties();
             if (additionalProperty.getExample() != null) {
