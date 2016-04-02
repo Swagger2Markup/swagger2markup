@@ -97,3 +97,12 @@ The DefinitionsDocumentExtension allows to extend the definitions document at fi
 ==== SwaggerModelExtension
 
 The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup.
+
+=== Provided Extensions
+
+Swagger2Markup provides some extensions which can be used out-of-the-box.
+
+1. An extension which allows to dynamically import Markup from files.
+2. An extension which allows to import example Curl, HTTP request and response snippets from Spring Rest Docs.
+3. An extension which allows to import JSON or XML Schema files.
+
