@@ -41,6 +41,6 @@ public class ArrayType extends Type {
         String collectionFormat = "";
         if (this.collectionFormat != null)
             collectionFormat = this.collectionFormat + " ";
-        return collectionFormat + ofType.displaySchema(docBuilder) + " array";
+        return String.format("%s%s array", collectionFormat, ofType.displaySchema(docBuilder));
     }
 }

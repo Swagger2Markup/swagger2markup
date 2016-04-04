@@ -16,10 +16,7 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.base.Function;
-import io.github.swagger2markup.internal.type.ArrayType;
-import io.github.swagger2markup.internal.type.ObjectType;
-import io.github.swagger2markup.internal.type.RefType;
-import io.github.swagger2markup.internal.type.Type;
+import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.ModelImpl;
@@ -38,7 +35,11 @@ public final class ModelUtils {
     public static Type getType(Model model, Function<String, String> definitionDocumentResolver) {
         Validate.notNull(model, "model must not be null!");
         if (model instanceof ModelImpl) {
-            return new ObjectType(null, model.getProperties());
+            ModelImpl modelImpl = (ModelImpl) model;
+            if (modelImpl.getAdditionalProperties() != null)
+                return new MapType(null, PropertyUtils.getType(modelImpl.getAdditionalProperties(), definitionDocumentResolver));
+            else
+                return new ObjectType(null, model.getProperties());
         } else if (model instanceof RefModel) {
             String simpleRef = ((RefModel) model).getSimpleRef();
             return new RefType(definitionDocumentResolver.apply(simpleRef), simpleRef);

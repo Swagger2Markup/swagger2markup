@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.base.Function;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections4.CollectionUtils;
@@ -49,6 +49,10 @@ public final class PropertyUtils {
             ArrayProperty arrayProperty = (ArrayProperty) property;
             Property items = arrayProperty.getItems();
             type = new ArrayType(null, getType(items, definitionDocumentResolver));
+        } else if (property instanceof MapProperty) {
+            MapProperty mapProperty = (MapProperty) property;
+            Property additionalProperties = mapProperty.getAdditionalProperties();
+            type = new MapType(null, getType(additionalProperties, definitionDocumentResolver));
         } else if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
             List<String> enums = stringProperty.getEnum();

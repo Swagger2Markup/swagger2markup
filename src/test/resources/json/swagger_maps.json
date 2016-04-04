@@ -1,0 +1,183 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Description",
+    "version": "Developer build",
+    "title": "Title",
+    "contact": {
+      "name": "(Contact name)"
+    },
+    "license": {}
+  },
+  "host": "localhost:8080",
+  "basePath": "/engine",
+  "tags": [
+    {
+      "name": "metrics-mvc-endpoint",
+      "description": "Metrics Mvc Endpoint"
+    },
+    {
+      "name": "endpoint-mvc-adapter",
+      "description": "Endpoint Mvc Adapter"
+    },
+    {
+      "name": "health-mvc-endpoint",
+      "description": "Health Mvc Endpoint"
+    },
+    {
+      "name": "environment-mvc-endpoint",
+      "description": "Environment Mvc Endpoint"
+    }
+  ],
+  "paths": {
+    "/mappings": {
+      "post": {
+        "tags": [
+          "Spring Boot Actuator"
+        ],
+        "summary": "Create Path Mappings",
+        "description": "Returns a collated list of all `@RequestMapping` paths.",
+        "operationId": "createMappings",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Mappings",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/MappingInfo"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "$ref": "#/definitions/MappingInfo"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/metrics": {
+      "post": {
+        "tags": [
+          "Spring Boot Actuator"
+        ],
+        "summary": "Create Metrics",
+        "description": "Returns metrics information for the application.",
+        "operationId": "createMetrics",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Metrics",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stringMetrics": {
+      "post": {
+        "tags": [
+          "Spring Boot Actuator"
+        ],
+        "summary": "Create string Metrics",
+        "description": "Returns string metrics information for the application.",
+        "operationId": "createStringMetrics",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "String metrics",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "MappingInfo": {
+      "type": "object",
+      "properties": {
+        "tags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "bean": {
+          "type": "string",
+          "description": "Unique name of the bean which handles the given mapping."
+        },
+        "method": {
+          "type": "string",
+          "description": "The signature of the method which processes requests to the given mapping."
+        },
+        "type": {
+          "type": "string",
+          "description": "The class which processes requests to the given mapping."
+        }
+      },
+      "description": "Information about a given HTTP mapping."
+    }
+  }
+}
