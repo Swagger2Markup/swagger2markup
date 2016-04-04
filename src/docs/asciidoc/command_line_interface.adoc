@@ -38,10 +38,11 @@ OPTIONS
             Display help information
 
         -i <inputFile>, --inputFile <inputFile>
-            Input file
+            Input file. Can either be a URL or a file.
 
         -o <outputPath>, --outputPath <outputPath>
-            Output path
+            Output path. Can either be a directory or a file.
+
 ----
 
 ==== Conversion into a folder
