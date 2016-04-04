@@ -7,11 +7,11 @@ Service API
 
 
 === Version information
-Version : 2.18
+Version : 2.18 +
 
 === URI scheme
-Host : service.host.com
-Schemes : HTTPS
+Host : service.host.com +
+Schemes : HTTPS +
 
 === Consumes
 

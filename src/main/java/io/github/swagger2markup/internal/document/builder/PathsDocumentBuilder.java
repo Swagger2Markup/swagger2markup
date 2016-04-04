@@ -524,15 +524,15 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         }
 
                         MarkupDocBuilder typeInfos = docBuilder.copy(false);
-                        typeInfos.italicText(REQUIRED_COLUMN).textLine(": " + parameter.getRequired());
-                        typeInfos.italicText(NAME_COLUMN).textLine(": " + parameter.getName());
+                        typeInfos.italicText(REQUIRED_COLUMN).textLine(" : " + parameter.getRequired());
+                        typeInfos.italicText(NAME_COLUMN).textLine(" : " + parameter.getName());
                         if (!(type instanceof ObjectType)) {
-                            typeInfos.italicText(TYPE_COLUMN).textLine(": " + type.displaySchema(docBuilder));
+                            typeInfos.italicText(TYPE_COLUMN).textLine(" : " + type.displaySchema(docBuilder));
+                        }
 
-                            docBuilder.paragraph(typeInfos.toString());
-                        } else {
-                            docBuilder.paragraph(typeInfos.toString());
+                        docBuilder.paragraph(typeInfos.toString(), true);
 
+                        if (type instanceof ObjectType) {
                             localDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }

@@ -20,7 +20,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.ObjectType;
-import io.github.swagger2markup.internal.type.RefType;
+import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
@@ -30,6 +30,7 @@ import io.swagger.models.properties.Property;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
@@ -52,8 +53,14 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
 
+    /* Discriminator is only displayed for inheriting definitions */
+    private static final boolean ALWAYS_DISPLAY_DISCRIMINATOR = false;
+    
     private static final String DEFINITIONS_ANCHOR = "definitions";
     private final String DEFINITIONS;
+    private final String DISCRIMINATOR_COLUMN;
+    private final String POLYMORPHISM_COLUMN;
+    private final Map<ObjectTypePolymorphism.Nature, String> POLYMORPHISM_NATURE;
     private final String TYPE_COLUMN;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private static final String DESCRIPTION_FILE_NAME = "description";
@@ -63,6 +70,12 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
+        POLYMORPHISM_COLUMN = labels.getString("polymorphism.column");
+        DISCRIMINATOR_COLUMN = labels.getString("polymorphism.discriminator");
+        POLYMORPHISM_NATURE = new HashMap<ObjectTypePolymorphism.Nature, String>() {{
+            put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getString("polymorphism.nature.COMPOSITION"));
+            put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getString("polymorphism.nature.INHERITANCE"));
+        }};
         TYPE_COLUMN = labels.getString("type_column");
 
         if (config.isDefinitionDescriptionsEnabled()) {
@@ -255,13 +268,36 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private List<ObjectType> typeSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
-        Type modelType = ModelUtils.getType(model, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromDefinition());
+        Type modelType = ModelUtils.resolveRefType(ModelUtils.getType(model, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromDefinition()));
+        
+        if (modelType instanceof ObjectType) {
+            ObjectType objectType = (ObjectType) modelType;
+            MarkupDocBuilder typeInfos = docBuilder.copy(false);
+            switch (objectType.getPolymorphism().getNature()) {
+                case COMPOSITION:
+                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(" : " + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    break;
+                case INHERITANCE:
+                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(" : " + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(" : " + objectType.getPolymorphism().getDiscriminator());
+                    break;
+                case NONE:
+                    if (ALWAYS_DISPLAY_DISCRIMINATOR) {
+                        if (StringUtils.isNotBlank(objectType.getPolymorphism().getDiscriminator()))
+                            typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(" : " + objectType.getPolymorphism().getDiscriminator());
+                    }
 
-        if (modelType instanceof ObjectType || modelType instanceof RefType) {
-            localDefinitions.addAll(buildPropertiesTable(ModelUtils.getTypeProperties(modelType), definitionName, 1, new PropertyDescriptor(modelType), new DefinitionDocumentResolverFromDefinition(), docBuilder));
+                default: break;
+            }
+            
+            String typeInfosString = typeInfos.toString();
+            if (StringUtils.isNotBlank(typeInfosString))
+                docBuilder.paragraph(typeInfosString, true);
+
+            localDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, 1, new PropertyDescriptor(modelType), new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = docBuilder.copy(false);
-            typeInfos.italicText(TYPE_COLUMN).textLine(": " + modelType.displaySchema(docBuilder));
+            typeInfos.italicText(TYPE_COLUMN).textLine(" : " + modelType.displaySchema(docBuilder));
 
             docBuilder.paragraph(typeInfos.toString());
         }

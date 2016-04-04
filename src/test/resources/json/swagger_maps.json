@@ -152,6 +152,48 @@
           }
         }
       }
+    },
+    "/integerMetrics": {
+      "post": {
+        "tags": [
+          "Spring Boot Actuator"
+        ],
+        "summary": "Create integer Metrics",
+        "description": "Returns integer metrics information for the application.",
+        "operationId": "createIntegerMetrics",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "String metrics",
+            "required": false,
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {

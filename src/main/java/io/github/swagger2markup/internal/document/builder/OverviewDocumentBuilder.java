@@ -106,7 +106,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private void buildVersionInfoSection(String version) {
         if(isNotBlank(version)){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
-            this.markupDocBuilder.textLine(VERSION + COLON + version);
+            this.markupDocBuilder.textLine(VERSION + COLON + version, true);
         }
     }
 
@@ -114,10 +114,10 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
             if(isNotBlank(contact.getName())){
-                this.markupDocBuilder.textLine(CONTACT_NAME + COLON + contact.getName());
+                this.markupDocBuilder.textLine(CONTACT_NAME + COLON + contact.getName(), true);
             }
             if(isNotBlank(contact.getEmail())){
-                this.markupDocBuilder.textLine(CONTACT_EMAIL + COLON + contact.getEmail());
+                this.markupDocBuilder.textLine(CONTACT_EMAIL + COLON + contact.getEmail(), true);
             }
         }
     }
@@ -126,14 +126,14 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
             if (isNotBlank(license.getName())) {
-                this.markupDocBuilder.textLine(LICENSE + COLON + license.getName());
+                this.markupDocBuilder.textLine(LICENSE + COLON + license.getName(), true);
             }
             if (isNotBlank(license.getUrl())) {
-                this.markupDocBuilder.textLine(LICENSE_URL + COLON + license.getUrl());
+                this.markupDocBuilder.textLine(LICENSE_URL + COLON + license.getUrl(), true);
             }
         }
         if(isNotBlank(termOfService)){
-            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + COLON + termOfService);
+            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + COLON + termOfService, true);
         }
     }
 
@@ -141,17 +141,17 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
             if (isNotBlank(swagger.getHost())) {
-                this.markupDocBuilder.textLine(HOST + COLON + swagger.getHost());
+                this.markupDocBuilder.textLine(HOST + COLON + swagger.getHost(), true);
             }
             if (isNotBlank(swagger.getBasePath())) {
-                this.markupDocBuilder.textLine(BASE_PATH + COLON + swagger.getBasePath());
+                this.markupDocBuilder.textLine(BASE_PATH + COLON + swagger.getBasePath(), true);
             }
             if (isNotEmpty(swagger.getSchemes())) {
                 List<String> schemes = new ArrayList<>();
                 for (Scheme scheme : swagger.getSchemes()) {
                     schemes.add(scheme.toString());
                 }
-                this.markupDocBuilder.textLine(SCHEMES + COLON + join(schemes, ", "));
+                this.markupDocBuilder.textLine(SCHEMES + COLON + join(schemes, ", "), true);
             }
         }
     }
