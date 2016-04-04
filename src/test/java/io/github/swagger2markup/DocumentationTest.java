@@ -18,7 +18,6 @@ package io.github.swagger2markup;
 import io.github.swagger2markup.builder.MyExtension;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
-import io.github.swagger2markup.builder.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;

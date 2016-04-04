@@ -16,6 +16,7 @@
 package io.github.swagger2markup.builder;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.swagger.models.Model;

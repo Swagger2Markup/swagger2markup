@@ -17,7 +17,6 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.markup.builder.LineSeparator;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.builder.Swagger2MarkupProperties;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.parameters.Parameter;
 

@@ -16,11 +16,8 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
+import io.github.swagger2markup.*;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.GroupBy;
-import io.github.swagger2markup.Language;
-import io.github.swagger2markup.OrderBy;
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import org.junit.Test;
 
 import java.io.IOException;

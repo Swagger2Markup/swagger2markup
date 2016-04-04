@@ -13,11 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.builder;
+package io.github.swagger2markup;
 
-import io.github.swagger2markup.GroupBy;
-import io.github.swagger2markup.Language;
-import io.github.swagger2markup.OrderBy;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.configuration2.Configuration;
