@@ -24,14 +24,16 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 public class RefType extends Type {
 
     private String document;
+    private Type refType;
 
-    public RefType(String document, String name) {
-        super(name);
+    public RefType(String document, String name, String uniqueName, Type refType) {
+        super(name, uniqueName);
         this.document = document;
+        this.refType = refType;
     }
 
-    public RefType(Type type) {
-        super(type.name, type.uniqueName);
+    public RefType(Type refType) {
+        this(null, refType.name, refType.uniqueName, refType);
     }
 
     @Override
@@ -45,5 +47,13 @@ public class RefType extends Type {
 
     public void setDocument(String document) {
         this.document = document;
+    }
+
+    public Type getRefType() {
+        return refType;
+    }
+
+    public void setRefType(Type refType) {
+        this.refType = refType;
     }
 }

@@ -327,7 +327,7 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled).
+     * Specifies maximum depth level for inline object schema displaying (0 = no inline schemas).
      *
      * @param inlineSchemaDepthLevel number of recursion levels for inline schemasEnabled display
      * @return this builder

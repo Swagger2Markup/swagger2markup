@@ -44,7 +44,7 @@ public final class PropertyUtils {
             if (refProperty.getRefFormat() == RefFormat.RELATIVE)
                 type = new ObjectType(null, null); // FIXME : Workaround for https://github.com/swagger-api/swagger-parser/issues/177
             else
-                type = new RefType(definitionDocumentResolver.apply(refProperty.getSimpleRef()), refProperty.getSimpleRef());
+                type = new RefType(definitionDocumentResolver.apply(refProperty.getSimpleRef()), refProperty.getSimpleRef(), refProperty.getSimpleRef(), null /* FIXME, not used for now */);
         } else if (property instanceof ArrayProperty) {
             ArrayProperty arrayProperty = (ArrayProperty) property;
             Property items = arrayProperty.getItems();

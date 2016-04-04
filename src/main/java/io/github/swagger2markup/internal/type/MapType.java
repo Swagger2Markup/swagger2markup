@@ -35,4 +35,16 @@ public class MapType extends Type {
     public String displaySchema(MarkupDocBuilder docBuilder) {
         return String.format("<%s,%s> map", keyType.displaySchema(docBuilder), valueType.displaySchema(docBuilder));
     }
+
+    public Type getKeyType() {
+        return keyType;
+    }
+
+    public Type getValueType() {
+        return valueType;
+    }
+
+    public void setValueType(Type valueType) {
+        this.valueType = valueType;
+    }
 }

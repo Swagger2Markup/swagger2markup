@@ -15,19 +15,19 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.PropertyUtils;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
@@ -103,9 +103,9 @@ public abstract class MarkupDocumentBuilder {
     public abstract MarkupDocument build() throws IOException;
 
     /**
-     * Build a generic property table for any ObjectType
+     * Build a generic property table
      *
-     * @param type                       to display
+     * @param properties                 properties to display
      * @param uniquePrefix               unique prefix to prepend to inline object names to enforce unicity
      * @param depth                      current inline schema object depth
      * @param propertyDescriptor         property descriptor to apply to properties
@@ -113,7 +113,7 @@ public abstract class MarkupDocumentBuilder {
      * @param docBuilder                 the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    protected List<ObjectType> buildPropertiesTable(ObjectType type, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
@@ -123,10 +123,10 @@ public abstract class MarkupDocumentBuilder {
                 new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(EXAMPLE_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
-        if (MapUtils.isNotEmpty(type.getProperties())) {
-            Set<String> propertyNames = toKeySet(type.getProperties(), config.getPropertyOrdering());
+        if (MapUtils.isNotEmpty(properties)) {
+            Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
             for (String propertyName : propertyNames) {
-                Property property = type.getProperties().get(propertyName);
+                Property property = properties.get(propertyName);
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
                 if (depth > 0 && propertyType instanceof ObjectType) {
                     if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
@@ -134,7 +134,7 @@ public abstract class MarkupDocumentBuilder {
                         propertyType.setUniqueName(uniquePrefix + " " + propertyName);
                         localDefinitions.add((ObjectType) propertyType);
 
-                        propertyType = new RefType(propertyType);
+                        propertyType = new RefType((ObjectType) propertyType);
                     }
                 }
 

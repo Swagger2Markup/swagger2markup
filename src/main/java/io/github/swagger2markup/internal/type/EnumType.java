@@ -38,4 +38,12 @@ public class EnumType extends Type {
     public String displaySchema(MarkupDocBuilder docBuilder) {
         return String.format("enum (%s)", join(values, ", "));
     }
+
+    public List<String> getValues() {
+        return values;
+    }
+
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
 }

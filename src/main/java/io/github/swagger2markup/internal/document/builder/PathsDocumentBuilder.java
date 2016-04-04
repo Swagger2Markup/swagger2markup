@@ -18,10 +18,9 @@ package io.github.swagger2markup.internal.document.builder;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
-import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
@@ -30,6 +29,7 @@ import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.internal.utils.ParameterUtils;
 import io.github.swagger2markup.internal.utils.PropertyUtils;
 import io.github.swagger2markup.internal.utils.TagUtils;
+import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.*;
@@ -470,7 +470,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             for (Parameter parameter : parameters) {
                 if (filterParameter(parameter)) {
-                    Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
+                    Type type = ParameterUtils.getType(parameter,  globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
 
                     if (config.getInlineSchemaDepthLevel() > 0 && type instanceof ObjectType) {
                         if (MapUtils.isNotEmpty(((ObjectType) type).getProperties())) {
@@ -479,7 +479,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                             type.setName(localTypeName);
                             type.setUniqueName(operation.getId() + " " + localTypeName);
                             localDefinitions.add((ObjectType) type);
-                            type = new RefType(type);
+                            type = new RefType((ObjectType) type);
                         }
                     }
                     String parameterType = WordUtils.capitalize(parameter.getIn());
@@ -516,14 +516,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
                     if (StringUtils.equals(parameter.getIn(), "body")) {
-                        Type type = ParameterUtils.getType(parameter, new DefinitionDocumentResolverFromOperation());
+                        Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
 
                         buildSectionTitle(BODY_PARAMETER, docBuilder);
                         if (isNotBlank(parameter.getDescription())) {
                             buildDescriptionParagraph(parameter.getDescription(), docBuilder);
                         }
 
-                        MarkupDocBuilder typeInfos = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator());
+                        MarkupDocBuilder typeInfos = docBuilder.copy(false);
                         typeInfos.italicText(REQUIRED_COLUMN).textLine(": " + parameter.getRequired());
                         typeInfos.italicText(NAME_COLUMN).textLine(": " + parameter.getName());
                         if (!(type instanceof ObjectType)) {
@@ -533,7 +533,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         } else {
                             docBuilder.paragraph(typeInfos.toString());
 
-                            localDefinitions.addAll(buildPropertiesTable((ObjectType) type, operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            localDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
@@ -721,7 +721,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                             type.setName(localTypeName);
                             type.setUniqueName(operation.getId() + " " + localTypeName);
                             localDefinitions.add((ObjectType) type);
-                            type = new RefType(type);
+                            type = new RefType((ObjectType) type);
                         }
                     }
                     cells.add(Arrays.asList(responseName, swaggerMarkupDescription(response.getDescription()), type.displaySchema(markupDocBuilder)));
@@ -781,7 +781,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition, uniquePrefix, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }
