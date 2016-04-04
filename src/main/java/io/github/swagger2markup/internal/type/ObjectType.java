@@ -18,7 +18,6 @@ package io.github.swagger2markup.internal.type;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.Property;
-import org.apache.commons.collections4.MapUtils;
 
 import java.util.Map;
 
@@ -36,10 +35,7 @@ public class ObjectType extends Type {
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        if (MapUtils.isEmpty(properties))
-            return "empty object";
-        else
-            return "object";
+        return "object";
     }
 
     public Map<String, Property> getProperties() {

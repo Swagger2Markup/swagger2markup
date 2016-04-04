@@ -49,7 +49,7 @@ Test description
 |category||false|<<_category,Category>>||"<<_category>>"
 |id||false|integer(int64)||0
 |name||true|string||"doggie"
-|nicknames||false|object||{
+|nicknames||false|<string,string> map||{
   "string" : "string"
 }
 |photoUrls||true|string array||[ "string" ]

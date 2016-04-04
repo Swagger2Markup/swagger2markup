@@ -1,0 +1,20 @@
+
+[[_definitions]]
+== Definitions
+
+[[_mappinginfo]]
+=== MappingInfo
+Information about a given HTTP mapping.
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|bean|Unique name of the bean which handles the given mapping.|false|string||
+|method|The signature of the method which processes requests to the given mapping.|false|string||
+|tags||false|<string,string> map||
+|type|The class which processes requests to the given mapping.|false|string||
+|===
+
+
+

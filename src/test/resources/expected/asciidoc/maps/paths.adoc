@@ -1,0 +1,143 @@
+
+[[_paths]]
+== Paths
+
+[[_createmappings]]
+=== Create Path Mappings
+----
+POST /mappings
+----
+
+
+==== Description
+Returns a collated list of all `@RequestMapping` paths.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Mappings|false|<string,<<_mappinginfo,MappingInfo>>> map|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<string,<<_mappinginfo,MappingInfo>>> map
+|===
+
+
+==== Consumes
+
+* application/json
+
+
+==== Produces
+
+* */*
+
+
+==== Tags
+
+* Spring Boot Actuator
+
+
+[[_createmetrics]]
+=== Create Metrics
+----
+POST /metrics
+----
+
+
+==== Description
+Returns metrics information for the application.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|Metrics|false|<string,object> map|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<string,object> map
+|===
+
+
+==== Consumes
+
+* application/json
+
+
+==== Produces
+
+* */*
+
+
+==== Tags
+
+* Spring Boot Actuator
+
+
+[[_createstringmetrics]]
+=== Create string Metrics
+----
+POST /stringMetrics
+----
+
+
+==== Description
+Returns string metrics information for the application.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|String metrics|false|<string,string> map|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<string,string> map
+|===
+
+
+==== Consumes
+
+* application/json
+
+
+==== Produces
+
+* */*
+
+
+==== Tags
+
+* Spring Boot Actuator
+
+
+
