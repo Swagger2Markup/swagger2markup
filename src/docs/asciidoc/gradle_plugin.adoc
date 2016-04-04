@@ -1,2 +1,34 @@
 == Gradle Plugin
 
+=== Usage guide
+
+Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central. Add the following snippet to your Gradle build file:
+
+[source,java]
+[source,groovy, subs="attributes"]
+----
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:{project-version}'
+    }
+}
+
+apply plugin: 'io.github.swagger2markup'
+----
+
+The plugin adds a new task named ``convertSwagger2markup``. You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
+
+[source,java]
+----
+convertSwagger2markup {
+    config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.ASCIIDOC.toString(),
+              (Swagger2MarkupProperties.PATHS_GROUPED_BY) : GroupBy.TAGS.toString()]
+}
+----
+
+
+

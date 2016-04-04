@@ -1,4 +1,4 @@
-== Usage of Swagger2Markup
+== Usage guide
 
 Swagger2Markup converts a Swagger JSON or YAML specification into either **AsciiDoc**, **GitHub Flavored Markdown** or **Atlassian Confluence Wiki** documents. By default the Swagger2Markup converts a Swagger specification into four AsciiDoc files: __overview.adoc__, __paths.adoc__ , __security.adoc__ and __definitions.adoc__. But you can also convert a Swagger specification into only one file or a String.
 
