@@ -79,6 +79,10 @@
         {
           "type": "object",
           "properties": {
+            "name": {
+              "type": "string",
+              "description": "conflicting property with inheriting model (issue #44)"
+            },
             "huntingSkill": {
               "type": "string",
               "description": "The measured skill for hunting",
@@ -98,7 +102,7 @@
       ]
     },
     "Dog": {
-      "description": "A representation of a dog with a conflicting discriminator",
+      "description": "A representation of a dog with an alternative discriminator",
       "allOf": [
         {
           "$ref": "#/definitions/Pet"

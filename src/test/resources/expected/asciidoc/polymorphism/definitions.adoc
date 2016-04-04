@@ -32,7 +32,7 @@ _Discriminator_ : petType
 |===
 |Name|Description|Required|Schema|Default|Example
 |huntingSkill|The measured skill for hunting|true|enum (clueless, lazy, adventurous, aggressive)|lazy|
-|name||true|string||
+|name|conflicting property with inheriting model (issue #44)|false|string||
 |petType||true|string||
 |===
 
@@ -51,7 +51,7 @@ Collection parent type without discriminator
 
 [[_dog]]
 === Dog
-A representation of a dog with a conflicting discriminator
+A representation of a dog with an alternative discriminator
 
 [%hardbreaks]
 _Polymorphism_ : Inheritance
