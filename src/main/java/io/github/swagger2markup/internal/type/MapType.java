@@ -23,6 +23,7 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
  */
 public class MapType extends Type {
 
+    protected Type keyType = new BasicType("string");
     protected Type valueType;
     
     public MapType(String name, Type valueType) {
@@ -32,6 +33,6 @@ public class MapType extends Type {
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        return String.format("<%s,%s> map", new BasicType("string").displaySchema(docBuilder), valueType.displaySchema(docBuilder));
+        return String.format("<%s,%s> map", keyType.displaySchema(docBuilder), valueType.displaySchema(docBuilder));
     }
 }
