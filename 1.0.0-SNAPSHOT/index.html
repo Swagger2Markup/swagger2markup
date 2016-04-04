@@ -516,7 +516,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">2016-04-01</span>
+<span id="revdate">2016-04-04</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -574,7 +574,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_manual_registration">6.2.2. Manual registration</a></li>
 </ul>
 </li>
-<li><a href="#_available_extensions_points">6.3. Available extensions points</a>
+<li><a href="#_extensions_points">6.3. Extensions points</a>
 <ul class="sectlevel3">
 <li><a href="#_overviewdocumentextension">6.3.1. OverviewDocumentExtension</a></li>
 <li><a href="#_pathsdocumentextension">6.3.2. PathsDocumentExtension</a></li>
@@ -583,6 +583,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_swaggermodelextension">6.3.5. SwaggerModelExtension</a></li>
 </ul>
 </li>
+<li><a href="#_provided_extensions">6.4. Provided Extensions</a></li>
 </ul>
 </li>
 <li><a href="#_gradle_plugin">7. Gradle Plugin</a></li>
@@ -591,9 +592,12 @@ table.CodeRay td.code>pre{padding:0}
 <ul class="sectlevel2">
 <li><a href="#_usage">9.1. Usage</a>
 <ul class="sectlevel3">
-<li><a href="#_help">9.1.1. Help</a></li>
-<li><a href="#_conversion">9.1.2. Conversion</a></li>
-<li><a href="#_configuration">9.1.3. Configuration</a></li>
+<li><a href="#_show_help">9.1.1. Show help</a></li>
+<li><a href="#_conversion_into_a_folder">9.1.2. Conversion into a folder</a></li>
+<li><a href="#_conversion_into_a_file_2">9.1.3. Conversion into a file</a></li>
+<li><a href="#_conversion_into_a_folder_2">9.1.4. Conversion into a folder</a></li>
+<li><a href="#_conversion_of_a_remote_swagger_file_2">9.1.5. Conversion of  a remote Swagger file</a></li>
+<li><a href="#_configuration_from_a_properties_file_2">9.1.6. Configuration from a properties file</a></li>
 </ul>
 </li>
 </ul>
@@ -1393,7 +1397,17 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="sect2">
 <h3 id="_creation_of_an_extension"><a class="anchor" href="#_creation_of_an_extension"></a>6.1. Creation of an extension</h3>
 <div class="paragraph">
-<p>To create a custom extension, you have to create a class (e.g. <code>io.myname.MyExtension</code>) which extends an extension point, e.g. <code>io.github.swagger2markup.spi.DefinitionsDocumentExtension</code>.</p>
+<p>To create a custom extension, you have to create a class (e.g. <code>io.myname.MyExtension</code>) which extends an extension point, e.g. <code>io.github.swagger2markup.spi.DefinitionsDocumentExtension</code>. Every extension point provides to methods which must be implemented:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>init</code>: This method is invoked once</p>
+</li>
+<li>
+<p><code>apply</code>: This method is invoked multiple times depending on the type of the extension point.</p>
+</li>
+</ul>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1479,7 +1493,7 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </div>
 </div>
 <div class="sect2">
-<h3 id="_available_extensions_points"><a class="anchor" href="#_available_extensions_points"></a>6.3. Available extensions points</h3>
+<h3 id="_extensions_points"><a class="anchor" href="#_extensions_points"></a>6.3. Extensions points</h3>
 <div class="sect3">
 <h4 id="_overviewdocumentextension"><a class="anchor" href="#_overviewdocumentextension"></a>6.3.1. OverviewDocumentExtension</h4>
 <div class="paragraph">
@@ -1498,7 +1512,7 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </li>
 </ul>
 </div>
-<div class="imageblock">
+<div class="imageblock thumb">
 <div class="content">
 <img src="images/overview_extension_points.PNG" alt="overview extension points">
 </div>
@@ -1507,19 +1521,103 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </div>
 <div class="sect3">
 <h4 id="_pathsdocumentextension"><a class="anchor" href="#_pathsdocumentextension"></a>6.3.2. PathsDocumentExtension</h4>
-
+<div class="paragraph">
+<p>The PathsDocumentExtension allows to extend the paths document at five positions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DOCUMENT_BEFORE: Before the section title</p>
+</li>
+<li>
+<p>DOCUMENT_START: After the section title and before the description</p>
+</li>
+<li>
+<p>DOCUMENT_BEFORE: At the end of the document</p>
+</li>
+<li>
+<p>OPERATION_BEGIN: At the beginning of a path operation section</p>
+</li>
+<li>
+<p>OPERATION_END: At the end of a path operation section</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_securitydocumentextension"><a class="anchor" href="#_securitydocumentextension"></a>6.3.3. SecurityDocumentExtension</h4>
-
+<div class="paragraph">
+<p>The SecurityDocumentExtension allows to extend the security document at five positions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DOCUMENT_BEFORE: Before the section title</p>
+</li>
+<li>
+<p>DOCUMENT_START: After the section title and before the description</p>
+</li>
+<li>
+<p>DOCUMENT_BEFORE: At the end of the document</p>
+</li>
+<li>
+<p>DEFINITION_BEGIN: At the beginning of a security scheme definition section</p>
+</li>
+<li>
+<p>DEFINITION_END: At the end of a security scheme definition section</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_definitionsdocumentextension"><a class="anchor" href="#_definitionsdocumentextension"></a>6.3.4. DefinitionsDocumentExtension</h4>
-
+<div class="paragraph">
+<p>The DefinitionsDocumentExtension allows to extend the definitions document at five positions:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>DOCUMENT_BEFORE: Before the section title</p>
+</li>
+<li>
+<p>DOCUMENT_START: After the section title and before the description</p>
+</li>
+<li>
+<p>DOCUMENT_BEFORE: At the end of the document</p>
+</li>
+<li>
+<p>DEFINITION_BEGIN: At the beginning of a model definition sectiin</p>
+</li>
+<li>
+<p>DEFINITION_END: At the end of a model definition section</p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect3">
 <h4 id="_swaggermodelextension"><a class="anchor" href="#_swaggermodelextension"></a>6.3.5. SwaggerModelExtension</h4>
-
+<div class="paragraph">
+<p>The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_provided_extensions"><a class="anchor" href="#_provided_extensions"></a>6.4. Provided Extensions</h3>
+<div class="paragraph">
+<p>Swagger2Markup provides some extensions which can be used out-of-the-box.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>An extension which allows to dynamically import Markup from files.</p>
+</li>
+<li>
+<p>An extension which allows to import example Curl, HTTP request and response snippets from Spring Rest Docs.</p>
+</li>
+<li>
+<p>An extension which allows to import JSON or XML Schema files.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -1567,9 +1665,9 @@ The CLI requires at least JDK 8.
 <div class="sect2">
 <h3 id="_usage"><a class="anchor" href="#_usage"></a>9.1. Usage</h3>
 <div class="sect3">
-<h4 id="_help"><a class="anchor" href="#_help"></a>9.1.1. Help</h4>
+<h4 id="_show_help"><a class="anchor" href="#_show_help"></a>9.1.1. Show help</h4>
 <div class="paragraph">
-<p>You can show the Help:</p>
+<p>You can show the help:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1606,9 +1704,9 @@ OPTIONS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_conversion"><a class="anchor" href="#_conversion"></a>9.1.2. Conversion</h4>
+<h4 id="_conversion_into_a_folder"><a class="anchor" href="#_conversion_into_a_folder"></a>9.1.2. Conversion into a folder</h4>
 <div class="paragraph">
-<p>You can convert a Swagger file as follows:</p>
+<p>You can convert a Swagger file into a folder as follows:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1620,7 +1718,46 @@ OPTIONS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration"><a class="anchor" href="#_configuration"></a>9.1.3. Configuration</h4>
+<h4 id="_conversion_into_a_file_2"><a class="anchor" href="#_conversion_into_a_file_2"></a>9.1.3. Conversion into a file</h4>
+<div class="paragraph">
+<p>You can convert a local Swagger file into a file as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp/swagger.adoc</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It generates the Markup documents into the file <code>/tmp/swagger.adoc</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_conversion_into_a_folder_2"><a class="anchor" href="#_conversion_into_a_folder_2"></a>9.1.4. Conversion into a folder</h4>
+<div class="paragraph">
+<p>You can convert a local Swagger file into a folder as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It generates the Markup documents into the file <code>/tmp/swagger.adoc</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_conversion_of_a_remote_swagger_file_2"><a class="anchor" href="#_conversion_of_a_remote_swagger_file_2"></a>9.1.5. Conversion of  a remote Swagger file</h4>
+<div class="paragraph">
+<p>You can convert a remote Swagger specification which must be accessible via HTTP.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -o /tmp</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_configuration_from_a_properties_file_2"><a class="anchor" href="#_configuration_from_a_properties_file_2"></a>9.1.6. Configuration from a properties file</h4>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
