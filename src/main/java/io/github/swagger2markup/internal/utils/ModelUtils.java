@@ -28,6 +28,11 @@ import java.util.Map;
 
 public final class ModelUtils {
 
+    /**
+     * Retrieves the specified {@code type} properties if any, and recursively follows RefType
+     * @param type retrieve properties from type
+     * @return dereferenced type properties, or null if type has no properties
+     */
     public static Map<String, Property> getTypeProperties(Type type) {
         Map<String, Property> properties = null;
         
@@ -37,7 +42,7 @@ public final class ModelUtils {
             properties = getTypeProperties(((RefType) type).getRefType());
         }
         
-        if (properties != null)
+        if (properties != null && !org.apache.commons.collections4.MapUtils.isEmpty(properties))
             return ImmutableMap.copyOf(properties);
         else
             return null;
