@@ -2,6 +2,52 @@
 [[_paths]]
 == Paths
 
+[[_createintegermetrics]]
+=== Create integer Metrics
+----
+POST /integerMetrics
+----
+
+
+==== Description
+Returns integer metrics information for the application.
+
+
+==== Parameters
+
+[options="header", cols=".^1h,.^1h,.^6,.^1,.^1,.^1"]
+|===
+|Type|Name|Description|Required|Schema|Default
+|Body|body|String metrics|false|<string,integer(int32)> map|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<string,string> map
+|===
+
+
+==== Consumes
+
+* application/json
+
+
+==== Produces
+
+* */*
+
+
+==== Tags
+
+* Spring Boot Actuator
+
+
 [[_createmappings]]
 === Create Path Mappings
 ----
