@@ -56,9 +56,12 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 The OverviewDocumentExtension allows to extend the overview document at three positions:
 
-* DOCUMENT_BEFORE: Before the section title
-* DOCUMENT_START: After the section title and before the description
-* DOCUMENT_BEFORE: At the end of the document
+* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
+* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
+* DOCUMENT_END: At the end of the document (title level offset = 1)
+* DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
+
+NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 .Overview document extension positions 
 [.thumb]
@@ -68,32 +71,40 @@ image::images/overview_extension_points.PNG[]
 
 The PathsDocumentExtension allows to extend the paths document at five positions: 
 
-* DOCUMENT_BEFORE: Before the section title
-* DOCUMENT_START: After the section title and before the description
-* DOCUMENT_BEFORE: At the end of the document
-* OPERATION_BEGIN: At the beginning of a path operation section
-* OPERATION_END: At the end of a path operation section
+* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
+* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
+* OPERATION_BEGIN: At the beginning of a path operation section (title level offset = 2)
+* OPERATION_END: At the end of a path operation section (title level offset = 2)
+* DOCUMENT_END: At the end of the document (title level offset = 1)
+* DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
+
+NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== SecurityDocumentExtension
 
 The SecurityDocumentExtension allows to extend the security document at five positions: 
 
-* DOCUMENT_BEFORE: Before the section title
-* DOCUMENT_START: After the section title and before the description
-* DOCUMENT_BEFORE: At the end of the document
-* DEFINITION_BEGIN: At the beginning of a security scheme definition section
-* DEFINITION_END: At the end of a security scheme definition section
+* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
+* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
+* DEFINITION_BEGIN: At the beginning of a security scheme definition section (title level offset = 2)
+* DEFINITION_END: At the end of a security scheme definition section (title level offset = 2)
+* DOCUMENT_END: At the end of the document (title level offset = 1)
+* DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
+
+NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== DefinitionsDocumentExtension
 
 The DefinitionsDocumentExtension allows to extend the definitions document at five positions: 
 
-* DOCUMENT_BEFORE: Before the section title
-* DOCUMENT_START: After the section title and before the description
-* DOCUMENT_BEFORE: At the end of the document
-* DEFINITION_BEGIN: At the beginning of a model definition sectiin
-* DEFINITION_END: At the end of a model definition section
+* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
+* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
+* DEFINITION_BEGIN: At the beginning of a model definition section (title level offset = 2)
+* DEFINITION_END: At the end of a model definition section (title level offset = 2)
+* DOCUMENT_END: At the end of the document (title level offset = 1)
+* DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
+NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== SwaggerModelExtension
 
