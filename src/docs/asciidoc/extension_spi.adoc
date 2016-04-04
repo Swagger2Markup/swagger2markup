@@ -15,7 +15,10 @@ Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2
 
 === Creation of an extension
 
-To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension point, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`.
+To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension point, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`. Every extension point provides to methods which must be implemented: 
+
+* `init`: This method is invoked once
+* `apply`: This method is invoked multiple times depending on the type of the extension point.
 
 [source,java,indent=0]
 ----
@@ -47,7 +50,7 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 3. Build an instance of `Swagger2MarkupExtensionRegistry`
 4. Use the custom Swagger2MarkupExtensionRegistry
 
-=== Available extensions points
+=== Extensions points
 
 ==== OverviewDocumentExtension
 
@@ -62,8 +65,44 @@ image::images/overview_extension_points.PNG[]
 
 ==== PathsDocumentExtension
 
+The PathsDocumentExtension allows to extend the paths document at five positions: 
+
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+* OPERATION_BEGIN: At the beginning of a path operation section
+* OPERATION_END: At the end of a path operation section
+
 ==== SecurityDocumentExtension
+
+The SecurityDocumentExtension allows to extend the security document at five positions: 
+
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+* DEFINITION_BEGIN: At the beginning of a security scheme definition section
+* DEFINITION_END: At the end of a security scheme definition section
 
 ==== DefinitionsDocumentExtension
 
+The DefinitionsDocumentExtension allows to extend the definitions document at five positions: 
+
+* DOCUMENT_BEFORE: Before the section title
+* DOCUMENT_START: After the section title and before the description
+* DOCUMENT_BEFORE: At the end of the document
+* DEFINITION_BEGIN: At the beginning of a model definition sectiin
+* DEFINITION_END: At the end of a model definition section
+
+
 ==== SwaggerModelExtension
+
+The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup.
+
+=== Provided Extensions
+
+Swagger2Markup provides some extensions which can be used out-of-the-box.
+
+1. An extension which allows to dynamically import Markup from files.
+2. An extension which allows to import example Curl, HTTP request and response snippets from Spring Rest Docs.
+3. An extension which allows to import JSON or XML Schema files.
+

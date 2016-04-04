@@ -17,8 +17,8 @@
 package io.github.swagger2markup.spi;
 
 import com.google.common.base.Optional;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import org.apache.commons.lang3.Validate;
 
@@ -29,6 +29,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOCUMENT_BEFORE,
+        DOCUMENT_AFTER,
         DOCUMENT_BEGIN,
         DOCUMENT_END,
         OPERATION_BEGIN,
@@ -88,6 +89,9 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
+            case DOCUMENT_AFTER:
+                levelOffset = 0;
+                break;
             case DOCUMENT_BEGIN:
             case DOCUMENT_END:
                 levelOffset = 1;
