@@ -18,29 +18,20 @@ package io.github.swagger2markup.internal.type;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 /**
- * Base type abstraction (string, integer, ...)
+ * Array type abstraction
  */
-public class BasicType extends Type {
+public class MapType extends Type {
 
-    protected String format;
-
-    public BasicType(String name) {
-        this(name, null);
-    }
-
-    public BasicType(String name, String format) {
-        super(name);
-        this.format = format;
+    protected Type valueType;
+    
+    public MapType(String name, Type valueType) {
+        super(name == null ? "map" : name);
+        this.valueType = valueType;
     }
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        if (isNotBlank(this.format))
-            return String.format("%s(%s)", this.name, this.format);
-        else
-            return this.name;
+        return String.format("<%s,%s> map", new BasicType("string").displaySchema(docBuilder), valueType.displaySchema(docBuilder));
     }
 }
