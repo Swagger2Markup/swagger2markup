@@ -31,8 +31,8 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 convertSwagger2markup {
     swaggerInput file("src/docs/asciidoc")
     markupOutputFile file("${buildDir}/asciidoc")
-    config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.ASCIIDOC.toString(),
-              (Swagger2MarkupProperties.PATHS_GROUPED_BY) : GroupBy.TAGS.toString()]
+    config = ['swagger2markup.markupLanguage' : 'ASCCIDOC',
+              'swagger2markup.pathsGroupedBy' : 'TAGS']
 }
 
 ----

@@ -1,1 +1,51 @@
 == Maven Plugin
+
+=== Usage guide
+
+Swagger2Markup provides a Maven plugin. The Maven plugin is published in JCenter and Maven Central. Add the following snippet to your Maven POM file:
+
+[source,xml, subs="specialcharacters,attributes"]
+----
+<plugins>
+  <plugin>
+    <groupId>io.github.swagger2markup</groupId>
+    <artifactId>swagger2markup-maven-plugin</artifactId>
+    <version>{project-version}</version>
+  </plugin>
+</plugins>
+----
+
+The plugin adds a new task goal `swagger2markup:convertSwagger2markup`. You can run the goal as follows:
+
+`mvn swagger2markup:convertSwagger2markup` 
+
+You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
+
+[source,java]
+----
+<plugins>
+  <plugin>
+    <groupId>io.github.swagger2markup</groupId>
+    <artifactId>swagger2markup-maven-plugin</artifactId>
+    <version>{project-version}</version>
+    <configuration>
+      <input>${project.basedir}/src/docs/swagger</input>
+      <output>${project.build.directory}/asciidoc</output>
+      <config>
+        <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+      </config>
+    </configuration>
+  </plugin>
+</plugins>
+----
+
+
+[options="header"]
+.Gradle Plugin properties
+|====
+| Name | Description | Type |  Example | Default
+| input | The URL, directory or file path to the Swagger specification | String | `src/docs/swagger_petstore.yaml` (file) or `"src/docs/swagger` (directory) | ``${project.basedir}/src/docs/swagger`` 
+| output | The directory or file (without extension) where the output should be stored. | String | `/tmp/asciidoc` or `/tmp/asciidoc/swagger` | ``${project.build.directory}/asciidoc`` 
+| config | The Swagger2Markup properties to configure the converter | Map |  | | 
+|====
+

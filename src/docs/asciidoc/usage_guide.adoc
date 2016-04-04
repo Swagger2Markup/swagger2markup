@@ -119,13 +119,14 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 === Swagger2Markup properties
 
-Swagger2Markup properties are considered in the following order:
+The properties of Swagger2Markup are defined in the class `io.github.swagger2markup.Swagger2MarkupProperties`.
+The properties are considered in the following order:
 
 1. Java System properties
 2. Custom properties
 3. Default properties (included in Swagger2Markup)
 
-The following tables list all available Swagger2Markup properties:
+The following tables list all available properties of Swagger2Markup:
 
 [options="header"]
 .Mostly used properties
