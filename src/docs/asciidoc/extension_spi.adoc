@@ -61,6 +61,7 @@ The OverviewDocumentExtension allows to extend the overview document at three po
 * DOCUMENT_BEFORE: At the end of the document
 
 .Overview document extension positions 
+[.thumb]
 image::images/overview_extension_points.PNG[]
 
 ==== PathsDocumentExtension

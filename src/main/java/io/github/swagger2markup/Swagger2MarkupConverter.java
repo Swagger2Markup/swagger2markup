@@ -30,11 +30,13 @@ import org.apache.commons.lang3.Validate;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 
@@ -59,6 +61,33 @@ public class Swagger2MarkupConverter {
      */
     Context getContext(){
         return context;
+    }
+
+    /**
+     * Creates a Swagger2MarkupConverter.Builder from a URI.
+     *
+     * @param swaggerUri the URI
+     * @return a Swagger2MarkupConverter
+     */
+    public static Builder from(URI swaggerUri) {
+        String scheme = swaggerUri.getScheme();
+        if(scheme != null){
+            if(swaggerUri.getScheme().startsWith("http")){
+                try {
+                    return from(swaggerUri.normalize().toURL());
+                } catch (MalformedURLException e) {
+                    throw new RuntimeException("Failed to convert URI into URL", e);
+                }
+            }else if(swaggerUri.getScheme().startsWith("file")){
+                return from(Paths.get(swaggerUri).normalize());
+            }
+            else{
+                return from(Paths.get(swaggerUri.getPath()).normalize().toAbsolutePath());
+            }
+        }
+        else{
+            return from(Paths.get(swaggerUri.getPath()).normalize().toAbsolutePath());
+        }
     }
 
     /**
@@ -132,8 +161,6 @@ public class Swagger2MarkupConverter {
      */
     public void toFolder(Path outputDirectory){
         Validate.notNull(outputDirectory, "outputDirectory must not be null");
-
-        applySwaggerExtensions();
         
         new OverviewDocumentBuilder(context, extensionRegistry, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
         new PathsDocumentBuilder(context, extensionRegistry, outputDirectory).build().writeToFile(outputDirectory.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
@@ -176,20 +203,13 @@ public class Swagger2MarkupConverter {
      * @return the document as a String
      */
     public String toString() {
-        applySwaggerExtensions();
-        
+
         StringBuilder sb = new StringBuilder();
         sb.append(new OverviewDocumentBuilder(context,extensionRegistry,  null).build().toString());
         sb.append(new PathsDocumentBuilder(context, extensionRegistry, null).build().toString());
         sb.append(new DefinitionsDocumentBuilder(context, extensionRegistry, null).build().toString());
         sb.append(new SecurityDocumentBuilder(context, extensionRegistry, null).build().toString());
         return sb.toString();
-    }
-
-    private void applySwaggerExtensions() {
-        for (SwaggerModelExtension swaggerModelExtension : extensionRegistry.getSwaggerModelExtensions()) {
-            swaggerModelExtension.apply(context.getSwagger());
-        }
     }
 
     public static class Builder {
@@ -269,6 +289,8 @@ public class Swagger2MarkupConverter {
 
             initExtensions(context);
 
+            applySwaggerExtensions(context);
+
             return new Swagger2MarkupConverter(context, extensionRegistry);
         }
 
@@ -287,6 +309,12 @@ public class Swagger2MarkupConverter {
 
             for (SecurityDocumentExtension extension : extensionRegistry.getSecurityDocumentExtensions())
                 extension.setGlobalContext(context);
+        }
+
+        private void applySwaggerExtensions(Context context) {
+            for (SwaggerModelExtension swaggerModelExtension : extensionRegistry.getSwaggerModelExtensions()) {
+                swaggerModelExtension.apply(context.getSwagger());
+            }
         }
     }
 

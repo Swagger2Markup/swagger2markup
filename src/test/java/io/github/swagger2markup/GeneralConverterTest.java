@@ -17,15 +17,32 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class GeneralConverterTest {
+
+    private static final String[] EXPECTED_FILES = new String[]{"definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"};
+    private List<String> expectedFiles;
+
+    @Before
+    public void setUp(){
+        expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
+    }
 
     @Test
     public void testOutputFile() throws IOException, URISyntaxException {
@@ -46,6 +63,66 @@ public class GeneralConverterTest {
         //Then
         Path expectedFile = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/toFile/outputFile.adoc").toURI());
         DiffUtils.assertThatFileIsEqual(expectedFile, outputFile, "testOutputFile.html");
+    }
+
+    @Test
+    public void testFromHttpURI() throws IOException, URISyntaxException {
+        //Given
+        Path outputDirectory = Paths.get("build/test/asciidoc/fromUri");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConverter.from(URI.create("http://petstore.swagger.io/v2/swagger.json")).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+    }
+
+    @Test
+    public void testFromFileURI() throws IOException, URISyntaxException {
+        //Given
+        Path outputDirectory = Paths.get("build/test/asciidoc/fileUri");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConverter.from(GeneralConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI()).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+    }
+
+    @Test
+    public void testFromPathURI() throws IOException, URISyntaxException {
+        //Given
+        Path outputDirectory = Paths.get("build/test/asciidoc/pathUri");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConverter.from(URI.create("src/test/resources/yaml/swagger_petstore.yaml")).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+    }
+
+    @Test
+    public void testFromURL() throws IOException, URISyntaxException {
+        //Given
+        Path outputDirectory = Paths.get("build/test/asciidoc/fromUrl");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConverter.from(new URL("http://petstore.swagger.io/v2/swagger.json")).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
     }
     
 }
