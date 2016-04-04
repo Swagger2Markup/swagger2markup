@@ -547,7 +547,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </li>
-<li><a href="#_usage_of_swagger2markup">3. Usage of Swagger2Markup</a>
+<li><a href="#_usage_guide">3. Usage guide</a>
 <ul class="sectlevel2">
 <li><a href="#_conversion_of_a_local_swagger_file">3.1. Conversion of a local Swagger file</a></li>
 <li><a href="#_conversion_of_a_remote_swagger_file">3.2. Conversion of  a remote Swagger file</a></li>
@@ -586,18 +586,21 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_provided_extensions">6.4. Provided Extensions</a></li>
 </ul>
 </li>
-<li><a href="#_gradle_plugin">7. Gradle Plugin</a></li>
+<li><a href="#_gradle_plugin">7. Gradle Plugin</a>
+<ul class="sectlevel2">
+<li><a href="#_usage_guide_2">7.1. Usage guide</a></li>
+</ul>
+</li>
 <li><a href="#_maven_plugin">8. Maven Plugin</a></li>
 <li><a href="#_command_line_interface">9. Command Line Interface</a>
 <ul class="sectlevel2">
-<li><a href="#_usage">9.1. Usage</a>
+<li><a href="#_usage_guide_3">9.1. Usage guide</a>
 <ul class="sectlevel3">
 <li><a href="#_show_help">9.1.1. Show help</a></li>
 <li><a href="#_conversion_into_a_folder">9.1.2. Conversion into a folder</a></li>
 <li><a href="#_conversion_into_a_file_2">9.1.3. Conversion into a file</a></li>
-<li><a href="#_conversion_into_a_folder_2">9.1.4. Conversion into a folder</a></li>
-<li><a href="#_conversion_of_a_remote_swagger_file_2">9.1.5. Conversion of  a remote Swagger file</a></li>
-<li><a href="#_configuration_from_a_properties_file_2">9.1.6. Configuration from a properties file</a></li>
+<li><a href="#_conversion_of_a_remote_swagger_file_2">9.1.4. Conversion of  a remote Swagger file</a></li>
+<li><a href="#_configuration_from_a_properties_file_2">9.1.5. Configuration from a properties file</a></li>
 </ul>
 </li>
 </ul>
@@ -783,7 +786,7 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT"</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage_of_swagger2markup"><a class="anchor" href="#_usage_of_swagger2markup"></a>3. Usage of Swagger2Markup</h2>
+<h2 id="_usage_guide"><a class="anchor" href="#_usage_guide"></a>3. Usage guide</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Swagger2Markup converts a Swagger JSON or YAML specification into either <strong>AsciiDoc</strong>, <strong>GitHub Flavored Markdown</strong> or <strong>Atlassian Confluence Wiki</strong> documents. By default the Swagger2Markup converts a Swagger specification into four AsciiDoc files: <em>overview.adoc</em>, <em>paths.adoc</em> , <em>security.adoc</em> and <em>definitions.adoc</em>. But you can also convert a Swagger specification into only one file or a String.</p>
@@ -1502,15 +1505,30 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title</p>
+<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_START: After the section title and before the description</p>
+<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
 </li>
 <li>
-<p>DOCUMENT_BEFORE: At the end of the document</p>
+<p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
+</li>
+<li>
+<p>DOCUMENT_AFTER: At the very end of the document (title level offset = 0)</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+extension content titles must always start from level <strong>1</strong>. The title level will be adapted depending on position.
+</td>
+</tr>
+</table>
 </div>
 <div class="imageblock thumb">
 <div class="content">
@@ -1527,21 +1545,36 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title</p>
+<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_START: After the section title and before the description</p>
+<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
 </li>
 <li>
-<p>DOCUMENT_BEFORE: At the end of the document</p>
+<p>OPERATION_BEGIN: At the beginning of a path operation section (title level offset = 2)</p>
 </li>
 <li>
-<p>OPERATION_BEGIN: At the beginning of a path operation section</p>
+<p>OPERATION_END: At the end of a path operation section (title level offset = 2)</p>
 </li>
 <li>
-<p>OPERATION_END: At the end of a path operation section</p>
+<p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
+</li>
+<li>
+<p>DOCUMENT_AFTER: At the very end of the document (title level offset = 0)</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+extension content titles must always start from level <strong>1</strong>. The title level will be adapted depending on position.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1552,21 +1585,36 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title</p>
+<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_START: After the section title and before the description</p>
+<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
 </li>
 <li>
-<p>DOCUMENT_BEFORE: At the end of the document</p>
+<p>DEFINITION_BEGIN: At the beginning of a security scheme definition section (title level offset = 2)</p>
 </li>
 <li>
-<p>DEFINITION_BEGIN: At the beginning of a security scheme definition section</p>
+<p>DEFINITION_END: At the end of a security scheme definition section (title level offset = 2)</p>
 </li>
 <li>
-<p>DEFINITION_END: At the end of a security scheme definition section</p>
+<p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
+</li>
+<li>
+<p>DOCUMENT_AFTER: At the very end of the document (title level offset = 0)</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+extension content titles must always start from level <strong>1</strong>. The title level will be adapted depending on position.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1577,21 +1625,36 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title</p>
+<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_START: After the section title and before the description</p>
+<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
 </li>
 <li>
-<p>DOCUMENT_BEFORE: At the end of the document</p>
+<p>DEFINITION_BEGIN: At the beginning of a model definition section (title level offset = 2)</p>
 </li>
 <li>
-<p>DEFINITION_BEGIN: At the beginning of a model definition sectiin</p>
+<p>DEFINITION_END: At the end of a model definition section (title level offset = 2)</p>
 </li>
 <li>
-<p>DEFINITION_END: At the end of a model definition section</p>
+<p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
+</li>
+<li>
+<p>DOCUMENT_AFTER: At the very end of the document (title level offset = 0)</p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+extension content titles must always start from level <strong>1</strong>. The title level will be adapted depending on position.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect3">
@@ -1625,7 +1688,38 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="sect1">
 <h2 id="_gradle_plugin"><a class="anchor" href="#_gradle_plugin"></a>7. Gradle Plugin</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_usage_guide_2"><a class="anchor" href="#_usage_guide_2"></a>7.1. Usage guide</h3>
+<div class="paragraph">
+<p>Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central. Add the following snippet to your Gradle build file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="groovy">buildscript {
+    repositories {
+        jcenter()
+    }
 
+    dependencies {
+        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:1.0.0-SNAPSHOT'
+    }
+}
+
+apply plugin: 'io.github.swagger2markup'</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The plugin adds a new task named <code>convertSwagger2markup</code>. You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">convertSwagger2markup {
+    config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.ASCIIDOC.toString(),
+              (Swagger2MarkupProperties.PATHS_GROUPED_BY) : GroupBy.TAGS.toString()]
+}</code></pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1663,7 +1757,7 @@ The CLI requires at least JDK 8.
 </table>
 </div>
 <div class="sect2">
-<h3 id="_usage"><a class="anchor" href="#_usage"></a>9.1. Usage</h3>
+<h3 id="_usage_guide_3"><a class="anchor" href="#_usage_guide_3"></a>9.1. Usage guide</h3>
 <div class="sect3">
 <h4 id="_show_help"><a class="anchor" href="#_show_help"></a>9.1.1. Show help</h4>
 <div class="paragraph">
@@ -1732,21 +1826,7 @@ OPTIONS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_conversion_into_a_folder_2"><a class="anchor" href="#_conversion_into_a_folder_2"></a>9.1.4. Conversion into a folder</h4>
-<div class="paragraph">
-<p>You can convert a local Swagger file into a folder as follows:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>It generates the Markup documents into the file <code>/tmp/swagger.adoc</code>.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_conversion_of_a_remote_swagger_file_2"><a class="anchor" href="#_conversion_of_a_remote_swagger_file_2"></a>9.1.5. Conversion of  a remote Swagger file</h4>
+<h4 id="_conversion_of_a_remote_swagger_file_2"><a class="anchor" href="#_conversion_of_a_remote_swagger_file_2"></a>9.1.4. Conversion of  a remote Swagger file</h4>
 <div class="paragraph">
 <p>You can convert a remote Swagger specification which must be accessible via HTTP.</p>
 </div>
@@ -1757,7 +1837,7 @@ OPTIONS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration_from_a_properties_file_2"><a class="anchor" href="#_configuration_from_a_properties_file_2"></a>9.1.6. Configuration from a properties file</h4>
+<h4 id="_configuration_from_a_properties_file_2"><a class="anchor" href="#_configuration_from_a_properties_file_2"></a>9.1.5. Configuration from a properties file</h4>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
