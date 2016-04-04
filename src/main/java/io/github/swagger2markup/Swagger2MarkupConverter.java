@@ -35,6 +35,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -155,7 +156,7 @@ public class Swagger2MarkupConverter {
     }
 
     /**
-     * Builds the documents and stores the files in the given {@code outputDirectory}.
+     * Converts the Swagger specification into the given {@code outputDirectory}.
      *
      * @param outputDirectory the output directory path
      */
@@ -169,7 +170,22 @@ public class Swagger2MarkupConverter {
     }
 
     /**
-     * Builds the document and stores it in the given {@code outputFile}.<br>
+     * Converts the Swagger specification into the {@code outputPath} which can be either a directory or a file path.
+     * Internally the method invokes either {@code toFolder} or {@code toFile}.
+     *
+     * @param outputPath the output path
+     */
+    public void toPath(Path outputPath) {
+        Validate.notNull(outputPath, "outputPath must not be null");
+        if (Files.isDirectory(outputPath)) {
+            toFolder(outputPath);
+        } else {
+            toFile(outputPath);
+        }
+    }
+
+    /**
+     * Converts the Swagger specification the given {@code outputFile}.<br>
      * An extension identifying the markup language will be automatically added to file name.
      *
      * @param outputFile the output file
@@ -184,7 +200,7 @@ public class Swagger2MarkupConverter {
     }
 
     /**
-     * Builds the document and stores it in the given {@code outputFile}.
+     * Converts the Swagger specification the given {@code outputFile}.
      *
      * @param outputFile the output file
      */
