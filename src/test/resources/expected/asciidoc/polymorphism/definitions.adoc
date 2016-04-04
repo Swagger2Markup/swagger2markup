@@ -1,0 +1,100 @@
+
+[[_definitions]]
+== Definitions
+
+[[_array]]
+=== Array
+An array
+
+[%hardbreaks]
+_Polymorphism_ : Inheritance
+_Discriminator_ : collType
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|collType|collection type discriminator|true|string||
+|name||false|string||
+|===
+
+
+[[_cat]]
+=== Cat
+A representation of a cat
+
+[%hardbreaks]
+_Polymorphism_ : Inheritance
+_Discriminator_ : petType
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|huntingSkill|The measured skill for hunting|true|enum (clueless, lazy, adventurous, aggressive)|lazy|
+|name||true|string||
+|petType||true|string||
+|===
+
+
+[[_collection]]
+=== Collection
+Collection parent type without discriminator
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|name||false|string||
+|===
+
+
+[[_dog]]
+=== Dog
+A representation of a dog with a conflicting discriminator
+
+[%hardbreaks]
+_Polymorphism_ : Inheritance
+_Discriminator_ : dogType
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|dogType||true|string||
+|name||true|string||
+|packSize|the size of the pack the dog is from|true|integer(int32)|0|
+|petType||true|string||
+|===
+
+
+[[_map]]
+=== Map
+A map without discriminator
+
+[%hardbreaks]
+_Polymorphism_ : Composition
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|collType|collection type discriminator|true|string||
+|name||false|string||
+|===
+
+
+[[_pet]]
+=== Pet
+Pet parent type with discriminator
+
+
+[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+|===
+|Name|Description|Required|Schema|Default|Example
+|name||true|string||
+|petType||true|string||
+|===
+
+
+

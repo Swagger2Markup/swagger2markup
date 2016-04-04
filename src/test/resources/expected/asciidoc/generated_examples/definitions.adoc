@@ -72,6 +72,9 @@ Test description
 
 [[_user]]
 === User
+[%hardbreaks]
+_Polymorphism_ : Composition
+
 
 [options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
 |===

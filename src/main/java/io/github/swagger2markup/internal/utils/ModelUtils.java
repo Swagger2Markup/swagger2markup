@@ -29,23 +29,18 @@ import java.util.Map;
 public final class ModelUtils {
 
     /**
-     * Retrieves the specified {@code type} properties if any, and recursively follows RefType
-     * @param type retrieve properties from type
-     * @return dereferenced type properties, or null if type has no properties
+     * Recursively resolve referenced type if {@code type} is of type RefType
+     * @param type type to resolve
+     * @return referenced type
      */
-    public static Map<String, Property> getTypeProperties(Type type) {
-        Map<String, Property> properties = null;
-        
-        if (type instanceof ObjectType) {
-            properties = ((ObjectType) type).getProperties();
-        } else if (type instanceof RefType) {
-            properties = getTypeProperties(((RefType) type).getRefType());
-        }
-        
-        if (properties != null && !org.apache.commons.collections4.MapUtils.isEmpty(properties))
-            return ImmutableMap.copyOf(properties);
-        else
+    public static Type resolveRefType(Type type) {
+        if (type == null)
             return null;
+
+        if (type instanceof RefType)
+            return resolveRefType(((RefType) type).getRefType());
+        else
+            return type;
     }
 
     /**
@@ -64,31 +59,49 @@ public final class ModelUtils {
                 return new MapType(null, PropertyUtils.getType(modelImpl.getAdditionalProperties(), definitionDocumentResolver));
             else if (modelImpl.getEnum() != null)
                 return new EnumType(null, modelImpl.getEnum());
-            else if (modelImpl.getProperties() != null)
-                return new ObjectType(null, model.getProperties());
-            else
+            else if (modelImpl.getProperties() != null) {
+                ObjectType objectType = new ObjectType(null, model.getProperties());
+
+                objectType.getPolymorphism().setDiscriminator(modelImpl.getDiscriminator());
+
+                return objectType;
+            } else
                 return new BasicType(((ModelImpl) model).getType());
         } else if (model instanceof ComposedModel) {
             ComposedModel composedModel = (ComposedModel) model;
             Map<String, Property> allProperties = new HashMap<>();
-            if (composedModel.getAllOf() != null) {
-                for (Model innerModel : composedModel.getAllOf()) {
-                    Type innerModelType = getType(innerModel, definitions, definitionDocumentResolver);
-                    Map<String, Property> innerModelProperties = getTypeProperties(innerModelType);
+            ObjectTypePolymorphism polymorphism = new ObjectTypePolymorphism(ObjectTypePolymorphism.Nature.NONE, null);
 
-                    if (innerModelProperties != null)
-                        allProperties.putAll(innerModelProperties);
+            if (composedModel.getAllOf() != null) {
+                polymorphism.setNature(ObjectTypePolymorphism.Nature.COMPOSITION);
+
+                for (Model innerModel : composedModel.getAllOf()) {
+                    Type innerModelType = resolveRefType(getType(innerModel, definitions, definitionDocumentResolver));
+
+                    if (innerModelType instanceof ObjectType) {
+
+                        String innerModelDiscriminator = ((ObjectType) innerModelType).getPolymorphism().getDiscriminator();
+                        if (innerModelDiscriminator != null) {
+                            polymorphism.setNature(ObjectTypePolymorphism.Nature.INHERITANCE);
+                            polymorphism.setDiscriminator(innerModelDiscriminator);
+                        }
+
+                        Map<String, Property> innerModelProperties = ((ObjectType) innerModelType).getProperties();
+                        if (innerModelProperties != null)
+                            allProperties.putAll(ImmutableMap.copyOf(innerModelProperties));
+                    }
                 }
             }
-            return new ObjectType(null, allProperties);
+            
+            return new ObjectType(null, polymorphism, allProperties);
         } else if (model instanceof RefModel) {
             RefModel refModel = (RefModel) model;
             String refName = refModel.getRefFormat().equals(RefFormat.INTERNAL) ? refModel.getSimpleRef() : refModel.getReference();
-            
+
             Type refType = new ObjectType(refName, null);
             if (definitions.containsKey(refName))
                 refType = getType(definitions.get(refName), definitions, definitionDocumentResolver);
-            
+
             return new RefType(definitionDocumentResolver.apply(refName), refName, refName, refType);
         } else if (model instanceof ArrayModel) {
             ArrayModel arrayModel = ((ArrayModel) model);

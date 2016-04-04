@@ -6,14 +6,14 @@
 === EnumString
 Enum string
 
-_Type_: enum (ADDED, REMOVED, CHANGED)
+_Type_ : enum (ADDED, REMOVED, CHANGED)
 
 
 [[_simplestring]]
 === SimpleString
 Simple string
 
-_Type_: string
+_Type_ : string
 
 
 

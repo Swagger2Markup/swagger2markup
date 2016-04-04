@@ -1,0 +1,69 @@
+
+[[_paths]]
+== Paths
+
+[[_getcolls]]
+=== Get collections
+----
+GET /collections
+----
+
+
+==== Description
+Get collections
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<_collection,Collection>>
+|===
+
+
+==== Consumes
+
+* application/json
+
+
+==== Produces
+
+* */*
+
+
+[[_getpets]]
+=== Get Pets
+----
+GET /pets
+----
+
+
+==== Description
+Get pets
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1h,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|200|OK|<<_pet,Pet>>
+|===
+
+
+==== Consumes
+
+* application/json
+
+
+==== Produces
+
+* */*
+
+
+

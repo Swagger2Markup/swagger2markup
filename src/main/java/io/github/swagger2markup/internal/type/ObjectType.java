@@ -25,17 +25,31 @@ import java.util.Map;
  * Complex object abstraction
  */
 public class ObjectType extends Type {
-
+    
     protected Map<String, Property> properties;
+    protected ObjectTypePolymorphism polymorphism;
+
+    public ObjectType(String name, ObjectTypePolymorphism polymorphism, Map<String, Property> properties) {
+        super(name == null ? "object" : name);
+        this.polymorphism = polymorphism;
+        this.properties = properties;
+    }
 
     public ObjectType(String name, Map<String, Property> properties) {
-        super(name == null ? "object" : name);
-        this.properties = properties;
+        this(name, new ObjectTypePolymorphism(ObjectTypePolymorphism.Nature.NONE, null), properties);
     }
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
         return "object";
+    }
+
+    public ObjectTypePolymorphism getPolymorphism() {
+        return polymorphism;
+    }
+
+    public void setPolymorphism(ObjectTypePolymorphism polymorphism) {
+        this.polymorphism = polymorphism;
     }
 
     public Map<String, Property> getProperties() {
