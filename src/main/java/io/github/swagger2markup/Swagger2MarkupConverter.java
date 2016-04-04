@@ -178,7 +178,8 @@ public class Swagger2MarkupConverter {
 
     /**
      * Converts the Swagger specification into the {@code outputPath} which can be either a directory (e.g /tmp) or a file without extension (e.g /tmp/swagger).
-     * Internally the method invokes either {@code toFolder} or {@code toFile}.
+     * Internally the method invokes either {@code toFolder} or {@code toFile}. If the {@code outputPath} is a directory, the directory must exist.
+     * Otherwise it cannot be determined if the {@code outputPath} is a directory or not.
      *
      * @param outputPath the output path
      */
