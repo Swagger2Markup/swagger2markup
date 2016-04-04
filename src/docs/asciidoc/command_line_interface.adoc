@@ -57,7 +57,7 @@ It generates the Markup documents into the `/tmp` folder.
 
 ==== Conversion into a file
 
-You can convert a Swagger file into a file as follows:
+You can convert a local Swagger file into a file as follows:
 
 [source, subs="attributes"]
 ----
@@ -65,6 +65,26 @@ java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_pets
 ----
 
 It generates the Markup documents into the file `/tmp/swagger.adoc`.
+
+==== Conversion into a folder
+
+You can convert a local Swagger file into a folder as follows:
+
+[source, subs="attributes"]
+----
+java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp
+----
+
+It generates the Markup documents into the file `/tmp/swagger.adoc`.
+
+==== Conversion of  a remote Swagger file
+
+You can convert a remote Swagger specification which must be accessible via HTTP.
+
+[source, subs="attributes"]
+----
+java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -o /tmp
+----
 
 ==== Configuration from a properties file
 
