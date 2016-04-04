@@ -1,0 +1,85 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Description",
+    "version": "Developer build",
+    "title": "Title"
+  },
+  "host": "localhost:8080",
+  "paths": {
+    "/state": {
+      "post": {
+        "summary": "Create state",
+        "description": "Return state",
+        "operationId": "createState",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "oldState",
+            "description": "Old State as raw string",
+            "type": "string",
+            "enum": [
+              "ADDED",
+              "REMOVED",
+              "CHANGED"
+            ]
+          },
+          {
+            "in": "body",
+            "name": "StateModel",
+            "description": "State as enum in object",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "string",
+                  "enum": [
+                    "ADDED",
+                    "REMOVED",
+                    "CHANGED"
+                  ],
+                  "description": "State value"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "description": "State response as raw string",
+              "type": "string",
+              "enum": [
+                "ADDED",
+                "REMOVED",
+                "CHANGED"
+              ]
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SimpleString": {
+      "type": "string",
+      "description": "Simple string"
+    },
+    "EnumString": {
+      "type": "string",
+      "enum": [
+        "ADDED",
+        "REMOVED",
+        "CHANGED"
+      ],
+      "description": "Enum string"
+    }
+  }
+}

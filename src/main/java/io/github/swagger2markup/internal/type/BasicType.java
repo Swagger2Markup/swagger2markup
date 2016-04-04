@@ -43,4 +43,12 @@ public class BasicType extends Type {
         else
             return this.name;
     }
+
+    public String getFormat() {
+        return format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
+    }
 }

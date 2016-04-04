@@ -26,6 +26,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -39,14 +40,14 @@ public final class ParameterUtils {
      * @param definitionDocumentResolver the defintion document resolver
      * @return the type of the parameter, or otherwise null
      */
-    public static Type getType(Parameter parameter, Function<String, String> definitionDocumentResolver){
+    public static Type getType(Parameter parameter, Map<String, Model> definitions, Function<String, String> definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
         if(parameter instanceof BodyParameter){
             BodyParameter bodyParameter = (BodyParameter)parameter;
             Model model = bodyParameter.getSchema();
             if(model != null){
-                type = ModelUtils.getType(model, definitionDocumentResolver);
+                type = ModelUtils.getType(model, definitions, definitionDocumentResolver);
             }else{
                 type = new BasicType("string");
             }
@@ -67,8 +68,9 @@ public final class ParameterUtils {
             }
         }
         else if(parameter instanceof RefParameter){
-            String simpleRef = ((RefParameter)parameter).getSimpleRef();
-            type = new RefType(definitionDocumentResolver.apply(simpleRef), simpleRef);
+            String refName = ((RefParameter)parameter).getSimpleRef();
+            
+            type = new RefType(definitionDocumentResolver.apply(refName), refName, refName, new ObjectType(refName, null /* FIXME, not used for now */));
         }
         return type;
     }

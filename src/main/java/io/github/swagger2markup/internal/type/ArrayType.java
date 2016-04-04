@@ -43,4 +43,20 @@ public class ArrayType extends Type {
             collectionFormat = this.collectionFormat + " ";
         return String.format("%s%s array", collectionFormat, ofType.displaySchema(docBuilder));
     }
+
+    public String getCollectionFormat() {
+        return collectionFormat;
+    }
+
+    public void setCollectionFormat(String collectionFormat) {
+        this.collectionFormat = collectionFormat;
+    }
+
+    public Type getOfType() {
+        return ofType;
+    }
+
+    public void setOfType(Type ofType) {
+        this.ofType = ofType;
+    }
 }
