@@ -20,15 +20,34 @@ buildscript {
 apply plugin: 'io.github.swagger2markup'
 ----
 
-The plugin adds a new task named ``convertSwagger2markup``. You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
+The plugin adds a new task named ``convertSwagger2markup``. You can run the task as follows:
 
-[source,java]
+`gradlew convertSwagger2markup` 
+
+You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
+
+[source,groovy]
 ----
 convertSwagger2markup {
+    swaggerInput file("src/docs/asciidoc")
+    markupOutputFile file("${buildDir}/asciidoc")
     config = [(Swagger2MarkupProperties.MARKUP_LANGUAGE) : MarkupLanguage.ASCIIDOC.toString(),
               (Swagger2MarkupProperties.PATHS_GROUPED_BY) : GroupBy.TAGS.toString()]
 }
+
 ----
+
+[options="header"]
+.Gradle Plugin properties
+|====
+| Name | Description | Type |  Example | Default
+| swaggerInput | The directory or file path to the Swagger specification | File | `file("src/docs/swagger_petstore.yaml")` (file) or `file("src/docs/swagger")` (directory) | ``file("src/docs/swagger")`` 
+| markupOutputDir | The directory where the output should be stored. | String | `new File("/tmp/asciidoc")` | ``file("$buildDir/asciidoc")`` 
+| markupOutputFile | The file (without extensions) where the output should be stored. | String |  ``file("$buildDir/asciidoc/swagger")`` | 
+| config | The Swagger2Markup properties to configure the converter | Map |  ['swagger2markup.markupLanguage' : 'ASCCIDOC'] |
+|====
+
+
 
 
 
