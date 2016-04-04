@@ -10,9 +10,9 @@ NOTE: The CLI requires at least JDK 8.
 
 === Usage
 
-==== Help
+==== Show help
 
-You can show the Help:
+You can show the help:
 
 [source, subs="attributes"]
 ----
@@ -44,9 +44,9 @@ OPTIONS
             Output path
 ----
 
-==== Conversion
+==== Conversion into a folder
 
-You can convert a Swagger file as follows:
+You can convert a Swagger file into a folder as follows:
 
 [source, subs="attributes"]
 ----
@@ -55,7 +55,18 @@ java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_pets
 
 It generates the Markup documents into the `/tmp` folder.
 
-==== Configuration
+==== Conversion into a file
+
+You can convert a Swagger file into a file as follows:
+
+[source, subs="attributes"]
+----
+java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp/swagger.adoc
+----
+
+It generates the Markup documents into the file `/tmp/swagger.adoc`.
+
+==== Configuration from a properties file
 
 Create a `config.properties` file to customize the <<Swagger2Markup properties>>. For Example: 
 
