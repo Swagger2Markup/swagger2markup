@@ -18,9 +18,12 @@ package io.github.swagger2markup.builder;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
+
+import java.io.StringReader;
 
 // tag::MyExtension[]
 public class MyExtension extends DefinitionsDocumentExtension {
@@ -31,17 +34,23 @@ public class MyExtension extends DefinitionsDocumentExtension {
     @Override
     public void init(Swagger2MarkupConverter.Context globalContext) {
         // init is executed once
-        Swagger2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties();
+        Swagger2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties(); //<1>
         extensionProperty = extensionProperties.getRequiredString(EXTENSION_ID + ".propertyName");
         Swagger model = globalContext.getSwagger();
     }
 
     @Override
     public void apply(Context context) {
-        MarkupDocBuilder markupBuilder = context.getMarkupDocBuilder();
-        Position position = context.getPosition();
+        MarkupDocBuilder markupBuilder = context.getMarkupDocBuilder(); //<2>
+        Position position = context.getPosition(); //<3>
         String definitionName = context.getDefinitionName().get();
         Model definitionModel = context.getModel().get();
+
+        if(position.equals(Position.DEFINITION_END)) {
+            markupBuilder.sectionTitleLevel4(definitionName) //<4>
+                    .paragraph(definitionModel.getDescription())
+                    .importMarkup(new StringReader("*Markup*"), MarkupLanguage.ASCIIDOC);
+        }
 
         // apply is executed per definition
     }
