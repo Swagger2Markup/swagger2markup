@@ -38,7 +38,7 @@ public class DiffUtils {
             try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(expectedDirectory)) {
                 for (Path expectedFile : directoryStream) {
                     Path actualFile = actualDirectory.resolve(expectedFile.getFileName());
-                    LOGGER.info("Diffing file {} with {}", actualFile, expectedFile);
+                    LOGGER.info("Diffing file '{}' with '{}'", actualFile, expectedFile);
                     DiffAssertions.assertThat(actualFile).isEqualTo(expectedFile, reportPath);
                 }
             }
@@ -49,7 +49,7 @@ public class DiffUtils {
 
     public static void assertThatFileIsEqual(Path expectedFile, Path actualFile, String reportName) {
         Path reportPath = Paths.get("build/diff-report/", reportName);
-        LOGGER.info("Diffing file {} with {}", actualFile, expectedFile);
+        LOGGER.info("Diffing file '{}' with '{}'", actualFile, expectedFile);
         DiffAssertions.assertThat(actualFile).isEqualTo(expectedFile, reportPath);
     }
 }

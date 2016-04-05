@@ -245,7 +245,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
              pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
-                logger.info("Separate operation file produced : {}", operationFile);
+                logger.info("Separate operation file produced : '{}'", operationFile);
             }
 
             buildOperationRef(operation, this.markupDocBuilder);
@@ -255,7 +255,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         }
 
         if (logger.isInfoEnabled()) {
-            logger.info("Operation processed : {} (normalized id = '{}')", operation, normalizeName(operation.getId()));
+            logger.info("Operation processed : '{}' (normalized id = '{}')", operation, normalizeName(operation.getId()));
         }
     }
 
