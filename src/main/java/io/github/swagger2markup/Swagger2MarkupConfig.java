@@ -20,7 +20,6 @@ import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.parameters.Parameter;
 
-import java.net.URI;
 import java.util.Comparator;
 
 /**
@@ -43,26 +42,6 @@ public interface Swagger2MarkupConfig {
      * Include generated examples into the documents.
      */
     boolean isGeneratedExamplesEnabled();
-
-    /**
-     * Include hand-written descriptions into the Paths document.
-     */
-    boolean isOperationDescriptionsEnabled();
-
-    /**
-     * Hand-written operation descriptions URI.
-     */
-    URI getOperationDescriptionsUri();
-
-    /**
-     * Include hand-written descriptions into the Definitions document.
-     */
-    boolean isDefinitionDescriptionsEnabled();
-
-    /**
-     * Hand-written definition descriptions URI.
-     */
-    URI getDefinitionDescriptionsUri();
 
     /**
      * In addition to the Definitions file, also create separate definition files for each model definition.

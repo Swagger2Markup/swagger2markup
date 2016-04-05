@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
-import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
@@ -103,8 +102,6 @@ public class Swagger2MarkupConfigBuilder  {
         config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
         config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
         config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
-        config.operationDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean(OPERATION_DESCRIPTIONS_ENABLED);
-        config.definitionDescriptionsEnabled = swagger2MarkupProperties.getRequiredBoolean(DEFINITION_DESCRIPTIONS_ENABLED);
         config.separatedDefinitionsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_DEFINITIONS_ENABLED);
         config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_OPERATIONS_ENABLED);
         config.pathsGroupedBy = swagger2MarkupProperties.getGroupBy(PATHS_GROUPED_BY);
@@ -207,76 +204,6 @@ public class Swagger2MarkupConfigBuilder  {
      */
     public Swagger2MarkupConfigBuilder withGeneratedExamples() {
         config.generatedExamplesEnabled = true;
-        return this;
-    }
-
-    /**
-     * Include hand-written descriptions into the Paths document.
-     *
-     * @param operationDescriptionsUri the URI to the folder where the description documents reside.
-     * @return this builder
-     */
-    public Swagger2MarkupConfigBuilder withOperationDescriptions(URI operationDescriptionsUri) {
-        Validate.notNull(operationDescriptionsUri, "%s must not be null", "operationDescriptionsUri");
-        config.operationDescriptionsEnabled = true;
-        config.operationDescriptionsUri = operationDescriptionsUri;
-        return this;
-    }
-
-    /**
-     * Include hand-written descriptions into the Paths document.
-     *
-     * @param operationDescriptionsPath the path to the folder where the description documents reside.
-     * @return this builder
-     */
-    public Swagger2MarkupConfigBuilder withOperationDescriptions(Path operationDescriptionsPath) {
-        Validate.notNull(operationDescriptionsPath, "%s must not be null", "operationDescriptionsPath");
-        return withOperationDescriptions(operationDescriptionsPath.toUri());
-    }
-
-    /**
-     * Include hand-written descriptions into the Paths document.<br>
-     * Use default URI.
-     *
-     * @return this builder
-     */
-    public Swagger2MarkupConfigBuilder withOperationDescriptions() {
-        config.operationDescriptionsEnabled = true;
-        return this;
-    }
-
-    /**
-     * Include hand-written descriptions into the Definitions document.
-     *
-     * @param definitionDescriptionsUri the URI to the folder where the description documents reside.
-     * @return this builder
-     */
-    public Swagger2MarkupConfigBuilder withDefinitionDescriptions(URI definitionDescriptionsUri) {
-        Validate.notNull(definitionDescriptionsUri, "%s must not be null", "definitionDescriptionsUri");
-        config.definitionDescriptionsEnabled = true;
-        config.definitionDescriptionsUri = definitionDescriptionsUri;
-        return this;
-    }
-
-    /**
-     * Include hand-written descriptions into the Definitions document.
-     *
-     * @param definitionDescriptionsPath the path to the folder where the description documents reside.
-     * @return this builder
-     */
-    public Swagger2MarkupConfigBuilder withDefinitionDescriptions(Path definitionDescriptionsPath) {
-        Validate.notNull(definitionDescriptionsPath, "%s must not be null", "definitionDescriptionsPath");
-        return withDefinitionDescriptions(definitionDescriptionsPath.toUri());
-    }
-
-    /**
-     * Include hand-written descriptions into the Definitions document.<br>
-     * Use default URI.
-     *
-     * @return this builder
-     */
-    public Swagger2MarkupConfigBuilder withDefinitionDescriptions() {
-        config.definitionDescriptionsEnabled = true;
         return this;
     }
 
@@ -620,26 +547,6 @@ public class Swagger2MarkupConfigBuilder  {
         @Override
         public boolean isGeneratedExamplesEnabled() {
             return generatedExamplesEnabled;
-        }
-
-        @Override
-        public boolean isOperationDescriptionsEnabled() {
-            return operationDescriptionsEnabled;
-        }
-
-        @Override
-        public URI getOperationDescriptionsUri() {
-            return operationDescriptionsUri;
-        }
-
-        @Override
-        public boolean isDefinitionDescriptionsEnabled() {
-            return definitionDescriptionsEnabled;
-        }
-
-        @Override
-        public URI getDefinitionDescriptionsUri() {
-            return definitionDescriptionsUri;
         }
 
         @Override

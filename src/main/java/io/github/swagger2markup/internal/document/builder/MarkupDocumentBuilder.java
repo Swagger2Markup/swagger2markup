@@ -108,12 +108,11 @@ public abstract class MarkupDocumentBuilder {
      * @param properties                 properties to display
      * @param uniquePrefix               unique prefix to prepend to inline object names to enforce unicity
      * @param depth                      current inline schema object depth
-     * @param propertyDescriptor         property descriptor to apply to properties
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      * @param docBuilder                 the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, int depth, PropertyDescriptor propertyDescriptor, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, int depth, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
@@ -134,7 +133,7 @@ public abstract class MarkupDocumentBuilder {
                         propertyType.setUniqueName(uniquePrefix + " " + propertyName);
                         localDefinitions.add((ObjectType) propertyType);
 
-                        propertyType = new RefType((ObjectType) propertyType);
+                        propertyType = new RefType(propertyType);
                     }
                 }
 
@@ -142,7 +141,7 @@ public abstract class MarkupDocumentBuilder {
 
                 List<String> content = Arrays.asList(
                         propertyName,
-                        swaggerMarkupDescription(propertyDescriptor.getDescription(property, propertyName)),
+                        swaggerMarkupDescription(defaultString(property.getDescription())),
                         Boolean.toString(property.getRequired()),
                         propertyType.displaySchema(docBuilder),
                         PropertyUtils.getDefaultValue(property),
@@ -171,21 +170,6 @@ public abstract class MarkupDocumentBuilder {
     protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {
         if (isNotBlank(description)) {
             docBuilder.paragraph(swaggerMarkupDescription(description));
-        }
-    }
-
-    /**
-     * A functor to return descriptions for a given property
-     */
-    class PropertyDescriptor {
-        protected Type type;
-
-        public PropertyDescriptor(Type type) {
-            this.type = type;
-        }
-
-        public String getDescription(Property property, String propertyName) {
-            return defaultString(property.getDescription());
         }
     }
 

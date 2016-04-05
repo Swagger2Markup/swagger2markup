@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
-import com.google.common.base.Optional;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
@@ -26,17 +25,12 @@ import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.swagger.models.Model;
-import io.swagger.models.properties.Property;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
@@ -78,15 +72,6 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         }};
         TYPE_COLUMN = labels.getString("type_column");
 
-        if (config.isDefinitionDescriptionsEnabled()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Include hand-written definition descriptions is enabled.");
-            }
-        } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Include hand-written definition descriptions is disabled.");
-            }
-        }
         if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
@@ -207,7 +192,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildDefinition(String definitionName, Model model, MarkupDocBuilder docBuilder) {
         buildDefinitionTitle(definitionName, definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
-        buildDescriptionParagraph(definitionName, model, docBuilder);
+        buildDescriptionParagraph(model, docBuilder);
         inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
     }
@@ -232,31 +217,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
     }
-
-    /**
-     * Override Property description functor for definitions.
-     * This implementation handles optional handwritten descriptions.
-     */
-    private class DefinitionPropertyDescriptor extends PropertyDescriptor {
-
-        public DefinitionPropertyDescriptor(Type type) {
-            super(type);
-        }
-
-        @Override
-        public String getDescription(Property property, String propertyName) {
-            if (config.isDefinitionDescriptionsEnabled()) {
-                Optional<String> description = handWrittenDefinitionDescription(new File(normalizeName(type.getName()), normalizeName(propertyName)).toString(), DESCRIPTION_FILE_NAME);
-                if (description.isPresent()) {
-                    return description.get();
-                } else {
-                    return defaultString(property.getDescription());
-                }
-            } else {
-                return defaultString(property.getDescription());
-            }
-        }
-    }
+    
 
     /**
      * Builds the type informations of a definition
@@ -294,7 +255,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             if (StringUtils.isNotBlank(typeInfosString))
                 docBuilder.paragraph(typeInfosString, true);
 
-            localDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, 1, new PropertyDescriptor(modelType), new DefinitionDocumentResolverFromDefinition(), docBuilder));
+            localDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, 1, new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = docBuilder.copy(false);
             typeInfos.italicText(TYPE_COLUMN).textLine(" : " + modelType.displaySchema(docBuilder));
@@ -305,17 +266,8 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         return localDefinitions;
     }
     
-    private void buildDescriptionParagraph(String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        if (config.isDefinitionDescriptionsEnabled()) {
-            Optional<String> description = handWrittenDefinitionDescription(normalizeName(definitionName), DESCRIPTION_FILE_NAME);
-            if (description.isPresent()) {
-                buildDescriptionParagraph(description.get(), docBuilder);
-            } else {
-                modelDescription(model, docBuilder);
-            }
-        } else {
-            modelDescription(model, docBuilder);
-        }
+    private void buildDescriptionParagraph(Model model, MarkupDocBuilder docBuilder) {
+        modelDescription(model, docBuilder);
     }
 
     private void modelDescription(Model model, MarkupDocBuilder docBuilder) {
@@ -323,33 +275,6 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         if (isNotBlank(description)) {
             buildDescriptionParagraph(description, docBuilder);
         }
-    }
-
-    /**
-     * Reads a hand-written description
-     *
-     * @param descriptionFolder   the name of the folder where the description file resides
-     * @param descriptionFileName the name of the description file
-     * @return the content of the file
-     */
-    private Optional<String> handWrittenDefinitionDescription(String descriptionFolder, String descriptionFileName) {
-        for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
-            URI contentUri = config.getDefinitionDescriptionsUri().resolve(descriptionFolder).resolve(descriptionFileName + fileNameExtension);
-
-            try (Reader reader = io.github.swagger2markup.utils.IOUtils.uriReader(contentUri)) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Definition description content processed {}", contentUri);
-                }
-
-                return Optional.of(IOUtils.toString(reader).trim());
-            } catch (IOException e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Failed to read Operation description content {} > {}", contentUri, e.getMessage());
-                }
-            }
-        }
-
-        return Optional.absent();
     }
 
     /**
@@ -378,7 +303,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionPropertyDescriptor(definition), new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }

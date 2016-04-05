@@ -39,15 +39,11 @@ import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -115,15 +111,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Include examples is disabled.");
-            }
-        }
-        if (config.isOperationDescriptionsEnabled()) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Include hand-written operation descriptions is enabled.");
-            }
-        } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Include hand-written operation descriptions is disabled.");
             }
         }
 
@@ -411,19 +398,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the docbuilder do use for output
      */
     private void buildDescriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        if (config.isOperationDescriptionsEnabled()) {
-            Optional<String> description = handWrittenOperationDescription(normalizeName(operation.getId()), DESCRIPTION_FILE_NAME);
-            if (!description.isPresent())
-                description = handWrittenOperationDescription(normalizeName(operation.getTitle()), DESCRIPTION_FILE_NAME);
-
-            if (description.isPresent()) {
-                operationDescription(description.get(), docBuilder);
-            } else {
-                operationDescription(operation.getOperation().getDescription(), docBuilder);
-            }
-        } else {
-            operationDescription(operation.getOperation().getDescription(), docBuilder);
-        }
+        operationDescription(operation.getOperation().getDescription(), docBuilder);
     }
 
     private void operationDescription(String description, MarkupDocBuilder docBuilder) {
@@ -479,7 +454,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                             type.setName(localTypeName);
                             type.setUniqueName(operation.getId() + " " + localTypeName);
                             localDefinitions.add((ObjectType) type);
-                            type = new RefType((ObjectType) type);
+                            type = new RefType(type);
                         }
                     }
                     String parameterType = WordUtils.capitalize(parameter.getIn());
@@ -487,7 +462,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     List<String> content = Arrays.asList(
                             parameterType,
                             parameter.getName(),
-                            swaggerMarkupDescription(parameterDescription(operation, parameter)),
+                            swaggerMarkupDescription(defaultString(parameter.getDescription())),
                             Boolean.toString(parameter.getRequired()),
                             type.displaySchema(markupDocBuilder),
                             ParameterUtils.getDefaultValue(parameter));
@@ -533,7 +508,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         docBuilder.paragraph(typeInfos.toString(), true);
 
                         if (type instanceof ObjectType) {
-                            localDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new PropertyDescriptor(type), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            localDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
@@ -541,40 +516,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         }
 
         return localDefinitions;
-    }
-
-    /**
-     * Retrieves the description of a parameter, or otherwise an empty String.
-     * If hand-written descriptions exist, it tries to load the description from a file.
-     * If the file cannot be read, the description of the parameter is returned.
-     * Operation folder search order :
-     * - normalizeOperationFileName(operation.operationId)
-     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
-     * - then, normalizeOperationFileName(operation.summary)
-     *
-     * @param operation the Swagger Operation
-     * @param parameter the Swagger Parameter
-     * @return the description of a parameter.
-     */
-    private String parameterDescription(final PathOperation operation, Parameter parameter) {
-        if (config.isOperationDescriptionsEnabled()) {
-            final String parameterName = parameter.getName();
-            if (isNotBlank(parameterName)) {
-                Optional<String> description = handWrittenOperationDescription(new File(normalizeName(operation.getId()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
-                if (!description.isPresent())
-                    description = handWrittenOperationDescription(new File(normalizeName(operation.getTitle()), parameterName).getPath(), DESCRIPTION_FILE_NAME);
-
-                if (description.isPresent()) {
-                    return description.get();
-                } else {
-                    return defaultString(parameter.getDescription());
-                }
-            } else {
-                return defaultString(parameter.getDescription());
-            }
-        } else {
-            return defaultString(parameter.getDescription());
-        }
     }
 
     private void buildConsumesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
@@ -674,32 +615,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         }
     }
 
-    /**
-     * Reads a hand-written description
-     *
-     * @param descriptionFolder   the name of the folder where the description file resides
-     * @param descriptionFileName the name of the description file
-     * @return the content of the file
-     */
-    private Optional<String> handWrittenOperationDescription(String descriptionFolder, String descriptionFileName) {
-        for (String fileNameExtension : config.getMarkupLanguage().getFileNameExtensions()) {
-            URI contentUri = config.getOperationDescriptionsUri().resolve(descriptionFolder).resolve(descriptionFileName + fileNameExtension);
-
-            try (Reader reader = io.github.swagger2markup.utils.IOUtils.uriReader(contentUri)) {
-                if (logger.isInfoEnabled()) {
-                    logger.info("Operation description content processed {}", contentUri);
-                }
-
-                return Optional.of(IOUtils.toString(reader).trim());
-            } catch (IOException e) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Failed to read Operation description content {} > {}", contentUri, e.getMessage());
-                }
-            }
-        }
-        return Optional.absent();
-    }
-
     private List<ObjectType> buildResponsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
         List<ObjectType> localDefinitions = new ArrayList<>();
@@ -733,7 +648,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                             type.setName(localTypeName);
                             type.setUniqueName(operation.getId() + " " + localTypeName);
                             localDefinitions.add((ObjectType) type);
-                            type = new RefType((ObjectType) type);
+                            type = new RefType(type);
                         }
                     }
                     cells.add(Arrays.asList(responseName, swaggerMarkupDescription(response.getDescription()), type.displaySchema(markupDocBuilder)));
@@ -751,7 +666,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         Property property = header.getValue();
                         Type propertyType = PropertyUtils.getType(property, null);
                         responseHeaderCells.add(Arrays.asList(header.getKey(),
-                                swaggerMarkupDescription(property.getDescription()),
+                                swaggerMarkupDescription(defaultString(property.getDescription())),
                                 propertyType.displaySchema(markupDocBuilder),
                                 PropertyUtils.getDefaultValue(property)));
                     }
@@ -793,7 +708,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new PropertyDescriptor(definition), new DefinitionDocumentResolverFromOperation(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionDocumentResolverFromOperation(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
             }
