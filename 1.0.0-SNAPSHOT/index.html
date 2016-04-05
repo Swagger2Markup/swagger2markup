@@ -2423,6 +2423,37 @@ This transformation pipeline can be done with Gradle or Maven in the build phase
 </div>
 </div>
 <div class="paragraph">
+<p>Spring&#8217;s MVC Test framework can also be used to make a request to a Springfox Swagger endpoint during an unit test. A custom ResultHandler <code>Swagger2MarkupResultHandler</code> can be used to write the Swagger JSON response into a directory. The custom ResultHandler is part of <code>springfox-staticdocs</code>. That way you also verify that your Swagger endpoint is working.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@WebAppConfiguration</span>
+<span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
+<span class="annotation">@ContextConfiguration</span>(classes = Application.class, loader = SpringApplicationContextLoader.class)
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
+
+    <span class="annotation">@Autowired</span>
+    <span class="directive">private</span> WebApplicationContext context;
+
+    <span class="directive">private</span> MockMvc mockMvc;
+
+    <span class="annotation">@Before</span>
+    <span class="directive">public</span> <span class="type">void</span> setUp() {
+        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context).build();
+    }
+
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> convertSwaggerToAsciiDoc() <span class="directive">throws</span> <span class="exception">Exception</span> {
+        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler
+                    .outputDirectory(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>).build())
+                .andExpect(status().isOk());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
 <p>The quickest way to get started is to look at the demo project <a href="https://github.com/Swagger2Markup/spring-swagger2markup-demo">spring-swagger2markup-demo</a>. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under <a href="http://localhost:9080/docs/index.html" class="bare">http://localhost:9080/docs/index.html</a> and <a href="http://localhost:9080/docs/index.pdf" class="bare">http://localhost:9080/docs/index.pdf</a>.</p>
 </div>
 <div class="sect2">
