@@ -211,27 +211,6 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testSwagger2AsciiDocConversionWithDefinitionDescriptions() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withDefinitionDescriptions(Paths.get("src/test/resources/docs/asciidoc/definitions"))
-                .build();
-
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config).build()
-                .toFolder(outputDirectory);
-
-        //Then
-        String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(expectedFiles);
-    }
-
-    @Test
     public void testSwagger2AsciiDocConversionDoesNotContainUriScheme() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_should_not_contain_uri_scheme.yaml").toURI());

@@ -114,7 +114,7 @@ Configuration parameters may be loaded from the following sources using Apache C
 include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromCommonsConfiguration]
 ----
 
-1. Create an Apache Commons `Configuraton` object using the proper ConfigurationBuilder.
+1. Create an Apache Commons `Configuration` object using the proper ConfigurationBuilder.
 2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
 
 === Swagger2Markup properties
@@ -136,7 +136,7 @@ The following tables list all available properties of Swagger2Markup:
 |swagger2markup.swaggerMarkupLanguage| Specifies the markup language used in Swagger descriptions. | ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP | MARKDOWN
 |swagger2markup.pathsGroupedBy| Specifies how the paths should be grouped | AS_IS, TAGS | AS_IS
 |swagger2markup.outputLanguage| Specifies the language of the labels | EN, DE, FR, RU | EN
-|swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | System-dependent
+|swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | <System-dependent>
 |swagger2markup.generatedExamplesEnabled| Specifies if HTTP request and response examples should be generated | true, false | false
 |===
 
@@ -146,7 +146,7 @@ The following tables list all available properties of Swagger2Markup:
 |Name | Description |  Possible Values | Default
 |swagger2markup.tagOrderBy| Specifies the order of global tags | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.operationOrderBy| Specifies the order of path operations | AS_IS, NATURAL, CUSTOM | NATURAL
-|swagger2markup.definitionOrderBy| Specifies the order of definitons | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.definitionOrderBy| Specifies the order of definitions | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.parameterOrderBy| Specifies the order of operation parameters | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.propertyOrderBy | Specifies the order of definition properties | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.responseOrderBy| Specifies the  order of responses | AS_IS, NATURAL, CUSTOM | NATURAL
@@ -156,10 +156,10 @@ The following tables list all available properties of Swagger2Markup:
 .Properties which configure document file names
 |===
 |Name | Description |  Possible Values | Default
-|swagger2markup.overviewDocument| Specifies the file name of the overview document | Any String | overview
-|swagger2markup.pathsDocument| Specifies the file name of the paths document | Any String | paths
-|swagger2markup.definitionsDocument| Specifies the file name of the definitions document | Any String | definitions
-|swagger2markup.securityDocument| Specifies the file name of the security document | Any String | security
+|swagger2markup.overviewDocument| Specifies the file name of the overview document | Any String | "overview"
+|swagger2markup.pathsDocument| Specifies the file name of the paths document | Any String | "paths"
+|swagger2markup.definitionsDocument| Specifies the file name of the definitions document | Any String | "definitions"
+|swagger2markup.securityDocument| Specifies the file name of the security document | Any String | "security"
 |===
 
 [options="header"]
@@ -168,16 +168,16 @@ The following tables list all available properties of Swagger2Markup:
 |Name | Description |  Possible Values | Default
 |swagger2markup.separatedDefinitionsEnabled| In addition to the Definitions file, also create separate definition files for each model definition | true, false | false
 |swagger2markup.separatedOperationsEnabled| In addition to the Paths file, also create separate operation files for each operation | true, false | false
-|swagger2markup.separatedOperationsFolder| Specifies the target folder path for definition files| Any valid path | operations
-|swagger2markup.separatedDefinitionsFolder| Specifies the target folder path for operation files | Any valid path | definitions
+|swagger2markup.separatedOperationsFolder| Specifies the target folder path for definition files| Any valid folder name | "operations"
+|swagger2markup.separatedDefinitionsFolder| Specifies the target folder path for operation files | Any valid folder name | "definitions"
 |===
 
 [options="header"]
-.Properties which configure interdocument cross references
+.Properties which configure inter-document cross references
 |===
 |Name | Description |  Possible Values | Default
 |swagger2markup.interDocumentCrossReferencesEnabled| Enable use of inter-document cross-references when needed | true, false | false
-|swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references | Any String | 
+|swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references for advanced usage | Any String | 
 |swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness | Any String | 
 |===
 

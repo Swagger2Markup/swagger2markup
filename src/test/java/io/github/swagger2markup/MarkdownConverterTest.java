@@ -19,9 +19,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -79,28 +79,6 @@ public class MarkdownConverterTest {
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/default").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2MarkdownConversion.html");
-    }
-
-    @Test
-    public void testSwagger2MarkdownConversionWithDescriptions() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withDefinitionDescriptions(Paths.get("src/test/resources/docs/markdown/definitions"))
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        //Then
-        String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(expectedFiles);
     }
 
     @Test
