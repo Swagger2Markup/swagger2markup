@@ -27,6 +27,36 @@ public class Swagger2MarkupTest {
 }
 ----
 
+Spring's MVC Test framework can also be used to make a request to a Springfox Swagger endpoint during an unit test. A custom ResultHandler ``Swagger2MarkupResultHandler`` can be used to write the Swagger JSON response into a directory. The custom ResultHandler is part of ``springfox-staticdocs``. That way you also verify that your Swagger endpoint is working.
+
+[source,java]
+----
+@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = Application.class, loader = SpringApplicationContextLoader.class)
+public class Swagger2MarkupTest {
+
+    @Autowired
+    private WebApplicationContext context;
+
+    private MockMvc mockMvc;
+
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
+    }
+
+    @Test
+    public void convertSwaggerToAsciiDoc() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(Swagger2MarkupResultHandler
+                    .outputDirectory("src/docs/asciidoc/generated").build())
+                .andExpect(status().isOk());
+    }
+}
+----
+
 The quickest way to get started is to look at the demo project https://github.com/Swagger2Markup/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 
 === Full example
