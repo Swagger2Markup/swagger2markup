@@ -22,6 +22,7 @@ import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilde
 import io.github.swagger2markup.internal.document.builder.PathsDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.SecurityDocumentBuilder;
 import io.github.swagger2markup.spi.*;
+import io.github.swagger2markup.utils.URIUtils;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import org.apache.commons.io.IOUtils;
@@ -71,23 +72,20 @@ public class Swagger2MarkupConverter {
      * @return a Swagger2MarkupConverter
      */
     public static Builder from(URI swaggerUri) {
+        Validate.notNull(swaggerUri, "swaggerUri must not be null");
         String scheme = swaggerUri.getScheme();
-        if(scheme != null){
-            if(swaggerUri.getScheme().startsWith("http")){
-                try {
-                    return from(swaggerUri.normalize().toURL());
-                } catch (MalformedURLException e) {
-                    throw new RuntimeException("Failed to convert URI into URL", e);
-                }
-            }else if(swaggerUri.getScheme().startsWith("file")){
-                return from(Paths.get(swaggerUri).normalize());
+        if(scheme != null && swaggerUri.getScheme().startsWith("http")){
+            try {
+                return from(swaggerUri.toURL());
             }
-            else{
-                return from(Paths.get(swaggerUri.getPath()).normalize().toAbsolutePath());
+            catch (MalformedURLException e) {
+                throw new RuntimeException("Failed to convert URI to URL", e);
             }
+        } else if(scheme != null && swaggerUri.getScheme().startsWith("file")){
+            return from(Paths.get(swaggerUri));
         }
-        else{
-            return from(Paths.get(swaggerUri.getPath()).normalize().toAbsolutePath());
+        else {
+            return from(URIUtils.convertUriWithoutSchemeToFileScheme(swaggerUri));
         }
     }
 
