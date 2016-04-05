@@ -2411,7 +2411,7 @@ swagger2markup.outputLanguage=DE</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
-<span class="annotation">@SpringApplicationConfiguration</span>(classes = Application.class)
+<span class="annotation">@SpringApplicationConfiguration</span>(classes = {Application.class, SwaggerConfig.class})
 <span class="annotation">@WebIntegrationTest</span>
 <span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
 
@@ -2431,7 +2431,7 @@ swagger2markup.outputLanguage=DE</pre>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@WebAppConfiguration</span>
 <span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
-<span class="annotation">@ContextConfiguration</span>(classes = Application.class, loader = SpringApplicationContextLoader.class)
+<span class="annotation">@SpringApplicationConfiguration</span>(classes = {Application.class, SwaggerConfig.class})
 <span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
 
     <span class="annotation">@Autowired</span>
