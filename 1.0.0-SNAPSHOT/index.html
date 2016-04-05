@@ -1059,7 +1059,7 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Create an Apache Commons <code>Configuraton</code> object using the proper ConfigurationBuilder.</p>
+<p>Create an Apache Commons <code>Configuration</code> object using the proper ConfigurationBuilder.</p>
 </li>
 <li>
 <p>Create a <code>Swagger2MarkupConfigBuilder</code> using the proper constructor.</p>
@@ -1134,7 +1134,7 @@ The properties are considered in the following order:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.lineSeparator</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the line separator which should be used</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">UNIX, WINDOWS, MAC</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">System-dependent</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">&lt;System-dependent&gt;</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.generatedExamplesEnabled</p></td>
@@ -1175,7 +1175,7 @@ The properties are considered in the following order:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.definitionOrderBy</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of definitons</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the order of definitions</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, NATURAL, CUSTOM</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">NATURAL</p></td>
 </tr>
@@ -1220,25 +1220,25 @@ The properties are considered in the following order:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.overviewDocument</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the overview document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">overview</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"overview"</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.pathsDocument</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the paths document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">paths</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"paths"</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.definitionsDocument</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the definitions document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">definitions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"definitions"</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.securityDocument</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the file name of the security document</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">security</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"security"</p></td>
 </tr>
 </tbody>
 </table>
@@ -1274,19 +1274,19 @@ The properties are considered in the following order:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.separatedOperationsFolder</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the target folder path for definition files</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any valid path</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">operations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any valid folder name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"operations"</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.separatedDefinitionsFolder</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the target folder path for operation files</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any valid path</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">definitions</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any valid folder name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">"definitions"</p></td>
 </tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 5. Properties which configure interdocument cross references</caption>
+<caption class="title">Table 5. Properties which configure inter-document cross references</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1310,7 +1310,7 @@ The properties are considered in the following order:</p>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.interDocumentCrossReferencesPrefix</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a prefix for all inter-document cross-references</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a prefix for all inter-document cross-references for advanced usage</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
@@ -1450,7 +1450,7 @@ The properties are considered in the following order:</p>
         Model definitionModel = context.getModel().get();
 
         <span class="keyword">if</span>(position.equals(<span class="predefined-type">Position</span>.DEFINITION_END)) {
-            markupBuilder.sectionTitleLevel4(definitionName) <i class="conum" data-value="4"></i><b>(4)</b>
+            markupBuilder.sectionTitleLevel1(definitionName) <i class="conum" data-value="4"></i><b>(4)</b>
                     .paragraph(definitionModel.getDescription())
                     .importMarkup(<span class="keyword">new</span> <span class="predefined-type">StringReader</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">*Markup*</span><span class="delimiter">&quot;</span></span>), MarkupLanguage.ASCIIDOC);
         }
@@ -1697,7 +1697,7 @@ extension content titles must always start from level <strong>1</strong>. The ti
 <div class="sect3">
 <h4 id="_swaggermodelextension"><a class="anchor" href="#_swaggermodelextension"></a>6.3.5. SwaggerModelExtension</h4>
 <div class="paragraph">
-<p>The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup.</p>
+<p>The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup. For example, you could use this extension to delete Paths from the Swagger model which should not be rendered.</p>
 </div>
 </div>
 </div>
@@ -1853,7 +1853,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="paragraph">
-<p>The extension searches for <a href="https://github.com/spring-projects/spring-restdocs">Spring RestDocs</a> snippet files in a configurable path to append the snippets at the end of a path operation section. The Schema files must conform to the naming convention:</p>
+<p>The extension searches for <a href="https://github.com/spring-projects/spring-restdocs">Spring RestDocs</a> snippet files in a configurable path to append the snippets at the end of a path operation section. The files must conform to the naming convention:</p>
 </div>
 <div class="ulist">
 <ul>
