@@ -16,6 +16,7 @@
 package io.github.swagger2markup;
 
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.utils.URIUtils;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.ConfigurationConverter;
@@ -179,7 +180,7 @@ public class Swagger2MarkupProperties {
     public Optional<URI> getURI(String key){
         Optional<String> property = getString(key);
         if(property.isPresent()){
-            return Optional.of(URI.create(property.get()));
+            return Optional.of(URIUtils.create(property.get()));
         }else{
             return Optional.empty();
         }
@@ -194,7 +195,7 @@ public class Swagger2MarkupProperties {
     public URI getRequiredURI(String key){
         Optional<String> property = getString(key);
         if(property.isPresent()){
-            return URI.create(property.get());
+            return URIUtils.create(property.get());
         }else{
             throw new IllegalStateException(String.format("required key [%s] not found", key));
         }
