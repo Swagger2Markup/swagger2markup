@@ -4,9 +4,9 @@
 
 [[_getcolls]]
 === Get collections
-----
+....
 GET /collections
-----
+....
 
 
 ==== Description
@@ -26,19 +26,19 @@ Get collections
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 [[_getpets]]
 === Get Pets
-----
+....
 GET /pets
-----
+....
 
 
 ==== Description
@@ -58,12 +58,12 @@ Get pets
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 

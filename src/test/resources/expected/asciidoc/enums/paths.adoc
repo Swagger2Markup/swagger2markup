@@ -4,9 +4,9 @@
 
 [[_createstate]]
 === Create state
-----
+....
 POST /state
-----
+....
 
 
 ==== Description
@@ -45,12 +45,12 @@ Return state
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 

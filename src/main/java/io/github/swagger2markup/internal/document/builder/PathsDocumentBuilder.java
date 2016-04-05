@@ -337,7 +337,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildOperationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
         buildOperationTitle(operation.getTitle(), operation.getId(), docBuilder);
         if (operation.getTitle().equals(operation.getOperation().getSummary())) {
-            docBuilder.block(operation.getMethod() + " " + operation.getPath(), MarkupBlockStyle.SIDEBAR);
+            docBuilder.block(operation.getMethod() + " " + operation.getPath(), MarkupBlockStyle.LITERAL);
         }
     }
 
@@ -581,7 +581,13 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         List<String> consumes = operation.getOperation().getConsumes();
         if (CollectionUtils.isNotEmpty(consumes)) {
             buildSectionTitle(CONSUMES, docBuilder);
-            docBuilder.unorderedList(consumes);
+            docBuilder.newLine();
+            for (String consume : consumes) {
+                MarkupDocBuilder contentType = docBuilder.copy(false);
+                contentType.literalText(consume);
+                docBuilder.unorderedListItem(contentType.toString());
+            }
+            docBuilder.newLine();
         }
 
     }
@@ -590,7 +596,13 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         List<String> produces = operation.getOperation().getProduces();
         if (CollectionUtils.isNotEmpty(produces)) {
             buildSectionTitle(PRODUCES, docBuilder);
-            docBuilder.unorderedList(produces);
+            docBuilder.newLine();
+            for (String produce : produces) {
+                MarkupDocBuilder contentType = docBuilder.copy(false);
+                contentType.literalText(produce);
+                docBuilder.unorderedListItem(contentType.toString());
+            }
+            docBuilder.newLine();
         }
     }
 

@@ -8,9 +8,9 @@ Pet resource
 
 [[_addpet]]
 ==== Add a new pet to the store
-----
+....
 POST /pets
-----
+....
 
 
 ===== Parameters
@@ -35,14 +35,14 @@ POST /pets
 
 ===== Consumes
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -56,9 +56,9 @@ POST /pets
 
 [[_updatepet]]
 ==== Update an existing pet
-----
+....
 PUT /pets
-----
+....
 
 
 ===== Parameters
@@ -101,14 +101,14 @@ PUT /pets
 
 ===== Consumes
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -122,9 +122,9 @@ PUT /pets
 
 [[_findpetsbystatus]]
 ==== Finds Pets by status
-----
+....
 GET /pets/findByStatus
-----
+....
 
 
 ===== Description
@@ -172,8 +172,8 @@ Multiple status values can be provided with comma seperated strings
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -187,9 +187,9 @@ Multiple status values can be provided with comma seperated strings
 
 [[_findpetsbytags]]
 ==== Finds Pets by tags
-----
+....
 GET /pets/findByTags
-----
+....
 
 
 ===== Description
@@ -237,8 +237,8 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -252,9 +252,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 [[_updatepetwithform]]
 ==== Updates a pet in the store with form data
-----
+....
 POST /pets/{petId}
-----
+....
 
 
 ===== Parameters
@@ -281,13 +281,13 @@ POST /pets/{petId}
 
 ===== Consumes
 
-* application/x-www-form-urlencoded
+* `application/x-www-form-urlencoded`
 
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -301,9 +301,9 @@ POST /pets/{petId}
 
 [[_getpetbyid]]
 ==== Find pet by ID
-----
+....
 GET /pets/{petId}
-----
+....
 
 
 ===== Description
@@ -360,8 +360,8 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -376,9 +376,9 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 [[_deletepet]]
 ==== Deletes a pet
-----
+....
 DELETE /pets/{petId}
-----
+....
 
 
 ===== Parameters
@@ -404,8 +404,8 @@ DELETE /pets/{petId}
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ===== Security
@@ -423,9 +423,9 @@ Store resource
 
 [[_placeorder]]
 ==== Place an order for a pet
-----
+....
 POST /stores/order
-----
+....
 
 
 ===== Parameters
@@ -469,15 +469,15 @@ POST /stores/order
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_getorderbyid]]
 ==== Find purchase order by ID
-----
+....
 GET /stores/order/{orderId}
-----
+....
 
 
 ===== Description
@@ -534,15 +534,15 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_deleteorder]]
 ==== Delete purchase order by ID
-----
+....
 DELETE /stores/order/{orderId}
-----
+....
 
 
 ===== Description
@@ -580,8 +580,8 @@ For valid response try integer IDs with value &lt; 1000. Anything above 1000 or 
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 === User
@@ -590,9 +590,9 @@ User resource
 
 [[_createuser]]
 ==== Create user
-----
+....
 POST /users
-----
+....
 
 
 ===== Description
@@ -621,15 +621,15 @@ This can only be done by the logged in user.
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_createuserswitharrayinput]]
 ==== Creates list of users with given input array
-----
+....
 POST /users/createWithArray
-----
+....
 
 
 ===== Parameters
@@ -654,15 +654,15 @@ POST /users/createWithArray
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_createuserswithlistinput]]
 ==== Creates list of users with given input array
-----
+....
 POST /users/createWithList
-----
+....
 
 
 ===== Parameters
@@ -687,15 +687,15 @@ POST /users/createWithList
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_loginuser]]
 ==== Logs user into the system
-----
+....
 GET /users/login
-----
+....
 
 
 ===== Parameters
@@ -740,15 +740,15 @@ GET /users/login
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_logoutuser]]
 ==== Logs out current logged in user session
-----
+....
 GET /users/logout
-----
+....
 
 
 ===== Responses
@@ -764,15 +764,15 @@ GET /users/logout
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_getuserbyname]]
 ==== Get user by user name
-----
+....
 GET /users/{username}
-----
+....
 
 
 ===== Parameters
@@ -825,15 +825,15 @@ GET /users/{username}
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_updateuser]]
 ==== Updated user
-----
+....
 PUT /users/{username}
-----
+....
 
 
 ===== Description
@@ -872,15 +872,15 @@ This can only be done by the logged in user.
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 [[_deleteuser]]
 ==== Delete user
-----
+....
 DELETE /users/{username}
-----
+....
 
 
 ===== Description
@@ -918,8 +918,8 @@ This can only be done by the logged in user.
 
 ===== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 

@@ -4,9 +4,9 @@
 
 [[_createintegermetrics]]
 === Create integer Metrics
-----
+....
 POST /integerMetrics
-----
+....
 
 
 ==== Description
@@ -35,12 +35,12 @@ Returns integer metrics information for the application.
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 ==== Tags
@@ -50,9 +50,9 @@ Returns integer metrics information for the application.
 
 [[_createmappings]]
 === Create Path Mappings
-----
+....
 POST /mappings
-----
+....
 
 
 ==== Description
@@ -81,12 +81,12 @@ Returns a collated list of all `@RequestMapping` paths.
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 ==== Tags
@@ -96,9 +96,9 @@ Returns a collated list of all `@RequestMapping` paths.
 
 [[_createmetrics]]
 === Create Metrics
-----
+....
 POST /metrics
-----
+....
 
 
 ==== Description
@@ -127,12 +127,12 @@ Returns metrics information for the application.
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 ==== Tags
@@ -142,9 +142,9 @@ Returns metrics information for the application.
 
 [[_createstringmetrics]]
 === Create string Metrics
-----
+....
 POST /stringMetrics
-----
+....
 
 
 ==== Description
@@ -173,12 +173,12 @@ Returns string metrics information for the application.
 
 ==== Consumes
 
-* application/json
+* `application/json`
 
 
 ==== Produces
 
-* */*
+* `*/*`
 
 
 ==== Tags
