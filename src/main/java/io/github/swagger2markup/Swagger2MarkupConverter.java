@@ -119,7 +119,7 @@ public class Swagger2MarkupConverter {
                 throw new IllegalArgumentException("swaggerPath must not be a hidden file");
             }
         } catch (IOException e) {
-            throw new RuntimeException("Failed to check if swaggerPath is a hidden file");
+            throw new RuntimeException("Failed to check if swaggerPath is a hidden file", e);
         }
         return new Builder(swaggerPath);
     }
