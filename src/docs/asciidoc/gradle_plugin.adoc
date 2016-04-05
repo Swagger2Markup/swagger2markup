@@ -1,8 +1,12 @@
 == Gradle Plugin
 
+Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central. 
+
+NOTE: The Gradle Plugin requires at least JDK 8.
+
 === Usage guide
 
-Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central. Add the following snippet to your Gradle build file:
+Add the following snippet to your Gradle build file:
 
 [source,java]
 [source,groovy, subs="attributes"]
@@ -24,6 +28,8 @@ The plugin adds a new task named ``convertSwagger2markup``. You can run the task
 
 `gradlew convertSwagger2markup` 
 
+=== Configuration
+
 You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
 
 [source,groovy]
@@ -41,8 +47,15 @@ convertSwagger2markup {
 .Gradle Plugin properties
 |====
 | Name | Description | Type |  Example
-| input | The URL or file path to the Swagger specification | String | `file("src/docs/swagger/swagger_petstore.yaml")` or `http://petstore.swagger.io/v2/swagger.json
+| input | The URL or file path to the Swagger specification | String | `file("src/docs/swagger/swagger_petstore.yaml")` or `http://petstore.swagger.io/v2/swagger.json` 
 | outputDir | The directory where the output should be stored. | File | `file("${buildDir}/asciidoc")` 
 | outputFile | The file path (without extension) where the output should be stored. | File | `file("${buildDir}/asciidoc/swagger")` 
 | config | The Swagger2Markup properties to configure the converter | Map |  | 
 |====
+
+=== Example
+
+You can copy the template project from GitHub to get started.
+
+https://github.com/Swagger2Markup/swagger2markup-gradle-project-template
+

@@ -1,8 +1,12 @@
 == Maven Plugin
 
+Swagger2Markup provides a Maven plugin. The Maven plugin is published in JCenter and Maven Central.
+
+NOTE: The Maven Plugin requires at least JDK 8.
+
 === Usage guide
 
-Swagger2Markup provides a Maven plugin. The Maven plugin is published in JCenter and Maven Central. Add the following snippet to your Maven POM file:
+Add the following snippet to your Maven POM file:
 
 [source,xml, subs="specialcharacters,attributes"]
 ----
@@ -19,9 +23,11 @@ The plugin adds a new task goal `swagger2markup:convertSwagger2markup`. You can 
 
 `mvn swagger2markup:convertSwagger2markup` 
 
+=== Configuration
+
 You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
 
-[source,java]
+[source,xml]
 ----
 <plugins>
   <plugin>
@@ -44,9 +50,17 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 .Maven Plugin properties
 |====
 | Name | Description | Type |  Example
-| input | The URL file path to the Swagger specification | String | `${project.basedir}/src/docs/swagger/swagger_petstore.yaml`  or `http://petstore.swagger.io/v2/swagger.json`
+| input | The URL or file path to the Swagger specification | String | `${project.basedir}/src/docs/swagger/swagger_petstore.yaml`  or `http://petstore.swagger.io/v2/swagger.json`
 | outputDir | The directory where the output should be stored. | File | `${project.build.directory}/asciidoc` 
 | outputFile | The file path (without extension) where the output should be stored. | File | `${project.build.directory}/asciidoc/swagger` 
 | config | The Swagger2Markup properties to configure the converter | Map |  | 
 |====
+
+=== Example
+
+You can copy the template project from GitHub to get started.
+
+https://github.com/Swagger2Markup/swagger2markup-maven-project-template
+
+
 
