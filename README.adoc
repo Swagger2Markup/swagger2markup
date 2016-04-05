@@ -28,6 +28,7 @@ image::src/docs/asciidoc/images/Swagger2Markup_definitions.PNG[]
 
 == Reference documentation
 - http://swagger2markup.readme.io/[Reference Documentation]
+- http://swagger2markup.github.io/swagger2markup/1.0.0-SNAPSHOT/[1.0.0-SNAPSHOT Documentation]
 - https://github.com/Swagger2Markup/swagger2markup/blob/master/RELEASENOTES.adoc[Release notes]
 - https://github.com/Swagger2Markup/spring-swagger2markup-demo[Demo using Swagger2Markup, Spring Boot, Springfox and spring-restdocs]
 
