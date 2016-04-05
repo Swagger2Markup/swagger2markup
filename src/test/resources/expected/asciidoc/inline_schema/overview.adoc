@@ -7,20 +7,24 @@ Service API
 
 
 === Version information
-Version : 2.18 +
+[%hardbreaks]
+_Version_ : 2.18
+
 
 === URI scheme
-Host : service.host.com +
-Schemes : HTTPS +
+[%hardbreaks]
+_Host_ : service.host.com
+_Schemes_ : HTTPS
+
 
 === Consumes
 
-* application/json
+* `application/json`
 
 
 === Produces
 
-* application/json
+* `application/json`
 
 
 
