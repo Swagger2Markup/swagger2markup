@@ -589,11 +589,15 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_gradle_plugin">7. Gradle Plugin</a>
 <ul class="sectlevel2">
 <li><a href="#_usage_guide_2">7.1. Usage guide</a></li>
+<li><a href="#_configuration">7.2. Configuration</a></li>
+<li><a href="#_example">7.3. Example</a></li>
 </ul>
 </li>
 <li><a href="#_maven_plugin">8. Maven Plugin</a>
 <ul class="sectlevel2">
 <li><a href="#_usage_guide_3">8.1. Usage guide</a></li>
+<li><a href="#_configuration_2">8.2. Configuration</a></li>
+<li><a href="#_example_2">8.3. Example</a></li>
 </ul>
 </li>
 <li><a href="#_command_line_interface">9. Command Line Interface</a>
@@ -604,7 +608,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_conversion_into_a_folder">9.1.2. Conversion into a folder</a></li>
 <li><a href="#_conversion_into_a_file_2">9.1.3. Conversion into a file</a></li>
 <li><a href="#_conversion_of_a_remote_swagger_file_2">9.1.4. Conversion of  a remote Swagger file</a></li>
-<li><a href="#_configuration_from_a_properties_file_2">9.1.5. Configuration from a properties file</a></li>
+<li><a href="#_configuration_3">9.1.5. Configuration</a></li>
 </ul>
 </li>
 </ul>
@@ -1693,10 +1697,25 @@ extension content titles must always start from level <strong>1</strong>. The ti
 <div class="sect1">
 <h2 id="_gradle_plugin"><a class="anchor" href="#_gradle_plugin"></a>7. Gradle Plugin</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Gradle Plugin requires at least JDK 8.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
 <h3 id="_usage_guide_2"><a class="anchor" href="#_usage_guide_2"></a>7.1. Usage guide</h3>
 <div class="paragraph">
-<p>Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central. Add the following snippet to your Gradle build file:</p>
+<p>Add the following snippet to your Gradle build file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1719,6 +1738,9 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <div class="paragraph">
 <p><code>gradlew convertSwagger2markup</code></p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_configuration"><a class="anchor" href="#_configuration"></a>7.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
@@ -1753,7 +1775,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL or file path to the Swagger specification</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger/swagger_petstore.yaml")</code> or `http://petstore.swagger.io/v2/swagger.json</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger/swagger_petstore.yaml")</code> or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">outputDir</p></td>
@@ -1776,15 +1798,39 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </tbody>
 </table>
 </div>
+<div class="sect2">
+<h3 id="_example"><a class="anchor" href="#_example"></a>7.3. Example</h3>
+<div class="paragraph">
+<p>You can copy the template project from GitHub to get started.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/Swagger2Markup/swagger2markup-gradle-project-template" class="bare">https://github.com/Swagger2Markup/swagger2markup-gradle-project-template</a></p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_maven_plugin"><a class="anchor" href="#_maven_plugin"></a>8. Maven Plugin</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Swagger2Markup provides a Maven plugin. The Maven plugin is published in JCenter and Maven Central.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The Maven Plugin requires at least JDK 8.
+</td>
+</tr>
+</table>
+</div>
 <div class="sect2">
 <h3 id="_usage_guide_3"><a class="anchor" href="#_usage_guide_3"></a>8.1. Usage guide</h3>
 <div class="paragraph">
-<p>Swagger2Markup provides a Maven plugin. The Maven plugin is published in JCenter and Maven Central. Add the following snippet to your Maven POM file:</p>
+<p>Add the following snippet to your Maven POM file:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1803,25 +1849,28 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <div class="paragraph">
 <p><code>mvn swagger2markup:convertSwagger2markup</code></p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_configuration_2"><a class="anchor" href="#_configuration_2"></a>8.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">&lt;plugins&gt;
-  &lt;plugin&gt;
-    &lt;groupId&gt;io.github.swagger2markup&lt;/groupId&gt;
-    &lt;artifactId&gt;swagger2markup-maven-plugin&lt;/artifactId&gt;
-    &lt;version&gt;{project-version}&lt;/version&gt;
-    &lt;configuration&gt;
-      &lt;input&gt;<span class="error">$</span>{project.basedir}/src/docs/swagger/swagger_petstore.yaml&lt;/input&gt;
-      &lt;outputDir&gt;<span class="error">$</span>{project.build.directory}/asciidoc&lt;/output&gt;
-      &lt;config&gt;
-        &lt;swagger2markup.markupLanguage&gt;ASCIIDOC&lt;/swagger2markup.markupLanguage&gt;
-      &lt;/config&gt;
-    &lt;/configuration&gt;
-  &lt;/plugin&gt;
-&lt;/plugins&gt;</code></pre>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;plugins&gt;</span>
+  <span class="tag">&lt;plugin&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>swagger2markup-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>{project-version}<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;configuration&gt;</span>
+      <span class="tag">&lt;input&gt;</span>${project.basedir}/src/docs/swagger/swagger_petstore.yaml<span class="tag">&lt;/input&gt;</span>
+      <span class="tag">&lt;outputDir&gt;</span>${project.build.directory}/asciidoc<span class="tag">&lt;/output&gt;</span>
+      <span class="tag">&lt;config&gt;</span>
+        <span class="tag">&lt;swagger2markup.markupLanguage&gt;</span>ASCIIDOC<span class="tag">&lt;/swagger2markup.markupLanguage&gt;</span>
+      <span class="tag">&lt;/config&gt;</span>
+    <span class="tag">&lt;/configuration&gt;</span>
+  <span class="tag">&lt;/plugin&gt;</span>
+<span class="tag">&lt;/plugins&gt;</span></code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -1843,7 +1892,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The URL file path to the Swagger specification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The URL or file path to the Swagger specification</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</code>  or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
 </tr>
@@ -1867,6 +1916,15 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="sect2">
+<h3 id="_example_2"><a class="anchor" href="#_example_2"></a>8.3. Example</h3>
+<div class="paragraph">
+<p>You can copy the template project from GitHub to get started.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://github.com/Swagger2Markup/swagger2markup-maven-project-template" class="bare">https://github.com/Swagger2Markup/swagger2markup-maven-project-template</a></p>
+</div>
 </div>
 </div>
 </div>
@@ -1996,7 +2054,7 @@ The input file must not have a file extension
 </div>
 </div>
 <div class="sect3">
-<h4 id="_configuration_from_a_properties_file_2"><a class="anchor" href="#_configuration_from_a_properties_file_2"></a>9.1.5. Configuration from a properties file</h4>
+<h4 id="_configuration_3"><a class="anchor" href="#_configuration_3"></a>9.1.5. Configuration</h4>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
