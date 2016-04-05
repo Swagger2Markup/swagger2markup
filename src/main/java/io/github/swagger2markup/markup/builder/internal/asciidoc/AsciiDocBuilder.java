@@ -106,6 +106,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder literalText(String text) {
+        boldText(AsciiDoc.LITERAL, text);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder boldText(String text) {
         boldText(AsciiDoc.BOLD, text);
         return this;
@@ -130,7 +136,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder listing(String text, String language) {
+    public MarkupDocBuilder listingBlock(String text, String language) {
         if (language != null)
             documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
         block(text, MarkupBlockStyle.LISTING);

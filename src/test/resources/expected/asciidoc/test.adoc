@@ -106,9 +106,10 @@ Passthrough
 == Section Level 1b
 
 === Section Level 2b
-text line b +
-*Bold text line b* +
-_Italic text line b_ +
+text line +
+`Literal text line` +
+*Bold text line* +
+_Italic text line_ +
 *bold*_italic_regular +
 
 * Entry1

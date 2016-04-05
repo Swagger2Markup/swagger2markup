@@ -266,17 +266,7 @@ public interface MarkupDocBuilder {
      * @return this builder
      */
     MarkupDocBuilder block(String text, MarkupBlockStyle style);
-
-    /**
-     * Builds a listing text block.<br>
-     * This is an alias for {@link #listing(String, String) listing(String, null)}.
-     * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle.LISTING, null, null)}.
-     *
-     * @param text multi-line text
-     * @return this builder
-     */
-    MarkupDocBuilder listing(String text);
-
+    
     /**
      * Builds a source code block using the specified {@code language}.<br>
      * Line breaks are respected.
@@ -285,8 +275,44 @@ public interface MarkupDocBuilder {
      * @param language source code language. Simple listing if {@code language} == null.
      * @return this builder
      */
-    MarkupDocBuilder listing(String text, String language);
+    MarkupDocBuilder listingBlock(String text, String language);
 
+
+    /**
+     * Builds a listing text block.<br>
+     * This is an alias for {@link #listingBlock(String, String) listingBlock(String, null)}.
+     *
+     * @param text multi-line text
+     * @return this builder
+     */
+    MarkupDocBuilder listingBlock(String text);
+
+    /**
+     * Builds a literal text line.<br>
+     * This is an alias for {@link #literalTextLine(String, boolean) literalTextLine(text, false)}.
+     *
+     * @param text text
+     * @return this builder
+     */
+    MarkupDocBuilder literalTextLine(String text);
+
+    /**
+     * Builds a literal text line.
+     *
+     * @param text           text
+     * @param forceLineBreak add an explicit line break if true.
+     * @return this builder
+     */
+    MarkupDocBuilder literalTextLine(String text, boolean forceLineBreak);
+
+    /**
+     * Builds a literal text.
+     *
+     * @param text text
+     * @return this builder
+     */
+    MarkupDocBuilder literalText(String text);
+    
     /**
      * Builds a bold text line.<br>
      * This is an alias for {@link #boldTextLine(String, boolean) boldTextLine(text, false)}.

@@ -119,13 +119,19 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder listing(String text, String language) {
+    public MarkupDocBuilder listingBlock(String text, String language) {
         if (language != null)
             text = language + " :" + newLine + text;
         block(text, MarkupBlockStyle.LISTING);
         return this;
     }
 
+    @Override
+    public MarkupDocBuilder literalText(String text) {
+        boldText(Markdown.LITERAL, text);
+        return this;
+    }
+    
     @Override
     public MarkupDocBuilder boldText(String text) {
         boldText(Markdown.BOLD, text);

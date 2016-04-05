@@ -86,9 +86,10 @@ Passthrough
 ## Section Level 1b
 
 ### Section Level 2b
-text line b  
-**Bold text line b**  
-*Italic text line b*  
+text line  
+`Literal text line`  
+**Bold text line**  
+*Italic text line*  
 **bold***italic*regular  
 
 * Entry1

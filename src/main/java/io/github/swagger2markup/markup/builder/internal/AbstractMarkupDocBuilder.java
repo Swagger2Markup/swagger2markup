@@ -206,7 +206,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         documentBuilder.append(replaceNewLines(text));
         return this;
     }
-
+    
     @Override
     public MarkupDocBuilder paragraph(String text) {
         return paragraph(text, false);
@@ -219,9 +219,9 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder listing(String text) {
+    public MarkupDocBuilder listingBlock(String text) {
         Validate.notBlank(text, "text must not be null");
-        return listing(replaceNewLines(text), null);
+        return listingBlock(replaceNewLines(text), null);
     }
 
     protected void delimitedBlockText(Markup begin, String text, Markup end) {
@@ -249,6 +249,23 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     protected void delimitedTextWithoutLineBreaks(Markup markup, String text) {
         delimitedTextWithoutLineBreaks(markup, text, markup);
+    }
+
+    protected void literalText(Markup markup, String text) {
+        delimitedTextWithoutLineBreaks(markup, text);
+    }
+
+    @Override
+    public MarkupDocBuilder literalTextLine(String text, boolean forceLineBreak) {
+        Validate.notBlank(text, "text must not be null");
+        literalText(replaceNewLines(text));
+        newLine(forceLineBreak);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder literalTextLine(String text) {
+        return literalTextLine(text, LINE_BREAK_DEFAULT);
     }
 
     protected void boldText(Markup markup, String text) {
@@ -304,7 +321,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return anchor(anchor, null);
     }
 
-    /**
+    /*
      * Generic normalization algorithm for all markups (less common denominator character set).
      * Key points :
      * - Anchor is normalized (Normalized.Form.NFD)

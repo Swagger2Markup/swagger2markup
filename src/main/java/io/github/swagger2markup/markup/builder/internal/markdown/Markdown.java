@@ -29,6 +29,7 @@ public enum Markdown implements Markup {
     LISTING("```"),
     TITLE("#"),
     DOCUMENT_TITLE("# "),
+    LITERAL("`"),
     BOLD("**"),
     ITALIC("*"),
     LIST_ENTRY("* "),

@@ -106,21 +106,21 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             documentBuilder.append(newLine);
         }
         documentBuilder.append(newLine);
-        
+
         return this;
     }
 
     @Override
     public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
         Validate.notBlank(text, "text must not be null");
-        
+
         text = text.trim();
         if (hardbreaks)
             text = replaceNewLines(text, ConfluenceMarkup.LINE_BREAK + newLine);
         else
             text = replaceNewLines(text);
         documentBuilder.append(text).append(newLine).append(newLine);
-        
+
         return this;
     }
 
@@ -177,7 +177,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder listing(String text, final String language) {
+    public MarkupDocBuilder listingBlock(String text, final String language) {
         Markup blockMarkup = new Markup() {
             @Override
             public String toString() {
@@ -195,6 +195,12 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         } else {
             delimitedBlockText(blockMarkup, text);
         }
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder literalText(String text) {
+        boldText(ConfluenceMarkup.LITERAL, text);
         return this;
     }
 
