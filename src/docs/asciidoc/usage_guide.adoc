@@ -114,7 +114,7 @@ Configuration parameters may be loaded from the following sources using Apache C
 include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromCommonsConfiguration]
 ----
 
-1. Create an Apache Commons `Configuraton` object using the proper ConfigurationBuilder.
+1. Create an Apache Commons `Configuration` object using the proper ConfigurationBuilder.
 2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
 
 === Swagger2Markup properties
@@ -146,7 +146,7 @@ The following tables list all available properties of Swagger2Markup:
 |Name | Description |  Possible Values | Default
 |swagger2markup.tagOrderBy| Specifies the order of global tags | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.operationOrderBy| Specifies the order of path operations | AS_IS, NATURAL, CUSTOM | NATURAL
-|swagger2markup.definitionOrderBy| Specifies the order of definitons | AS_IS, NATURAL, CUSTOM | NATURAL
+|swagger2markup.definitionOrderBy| Specifies the order of definitions | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.parameterOrderBy| Specifies the order of operation parameters | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.propertyOrderBy | Specifies the order of definition properties | AS_IS, NATURAL, CUSTOM | NATURAL
 |swagger2markup.responseOrderBy| Specifies the  order of responses | AS_IS, NATURAL, CUSTOM | NATURAL
@@ -173,11 +173,11 @@ The following tables list all available properties of Swagger2Markup:
 |===
 
 [options="header"]
-.Properties which configure interdocument cross references
+.Properties which configure inter-document cross references
 |===
 |Name | Description |  Possible Values | Default
 |swagger2markup.interDocumentCrossReferencesEnabled| Enable use of inter-document cross-references when needed | true, false | false
-|swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references | Any String | 
+|swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references for advanced usage | Any String | 
 |swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness | Any String | 
 |===
 
