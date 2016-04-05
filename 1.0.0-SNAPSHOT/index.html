@@ -619,14 +619,19 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </li>
-<li><a href="#_contributing">10. Contributing</a>
+<li><a href="#_spring_boot_demo">10. Spring Boot Demo</a>
 <ul class="sectlevel2">
-<li><a href="#_questions">10.1. Questions</a></li>
-<li><a href="#_bugs">10.2. Bugs</a></li>
-<li><a href="#_enhancements">10.3. Enhancements</a></li>
+<li><a href="#_full_example">10.1. Full example</a></li>
 </ul>
 </li>
-<li><a href="#_license">11. License</a></li>
+<li><a href="#_contributing">11. Contributing</a>
+<ul class="sectlevel2">
+<li><a href="#_questions">11.1. Questions</a></li>
+<li><a href="#_bugs">11.2. Bugs</a></li>
+<li><a href="#_enhancements">11.3. Enhancements</a></li>
+</ul>
+</li>
+<li><a href="#_license">12. License</a></li>
 </ul>
 </div>
 </div>
@@ -1841,6 +1846,9 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 </div>
 <div class="sect3">
 <h4 id="_spring_restdocs_extension"><a class="anchor" href="#_spring_restdocs_extension"></a>6.4.2. Spring RestDocs extension</h4>
+<div class="paragraph">
+<p>Swagger2Markup can be used together with <a href="https://github.com/spring-projects/spring-restdocs">spring-restdocs</a>. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated Markup documents. See spring-restdocs how to configure it.</p>
+</div>
 <div class="sect4">
 <h5 id="_usage_guide_3"><a class="anchor" href="#_usage_guide_3"></a>Usage guide</h5>
 <div class="listingblock">
@@ -1885,7 +1893,24 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="paragraph">
-<p>Example: <code>/snippets/addPet/http-request.adoc</code>.</p>
+<p>The following Unit Test uses Spring RestDocs to tests the <code>/pets</code> endoint and writes the example files into the <code>build/snippets</code> folder. Have a look at the <a href="#_spring_boot_demo">Spring Boot Demo</a> for a full example using <a href="https://github.com/spring-projects/spring-boot">Spring Boot</a>, <a href="https://github.com/springfox/springfox">Springfox</a> and Spring RestDocs.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Rule</span>
+<span class="directive">public</span> <span class="directive">final</span> RestDocumentation restDocumentation = <span class="keyword">new</span> RestDocumentation(<span class="string"><span class="delimiter">&quot;</span><span class="content">build/snippets</span><span class="delimiter">&quot;</span></span>);
+
+<span class="annotation">@Test</span>
+<span class="directive">public</span> <span class="type">void</span> addAPetToTheStore() <span class="directive">throws</span> <span class="exception">Exception</span> {
+  <span class="local-variable">this</span>.mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/pets/</span><span class="delimiter">&quot;</span></span>).content(createPet())
+    .contentType(MediaType.APPLICATION_JSON))
+    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">addPet</span><span class="delimiter">&quot;</span></span>, preprocessResponse(prettyPrint())))
+    .andExpect(status().isOk());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Example: <code>build/snippets/addPet/http-request.adoc</code>.</p>
 </div>
 </div>
 <div class="sect4">
@@ -2353,22 +2378,54 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>10. Contributing</h2>
+<h2 id="_spring_boot_demo"><a class="anchor" href="#_spring_boot_demo"></a>10. Spring Boot Demo</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The quickest way to get started is to look at the demo project <a href="https://github.com/Swagger2Markup/spring-swagger2markup-demo">spring-swagger2markup-demo</a>. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under <a href="http://localhost:9080/docs/index.html" class="bare">http://localhost:9080/docs/index.html</a> and <a href="http://localhost:9080/docs/index.pdf" class="bare">http://localhost:9080/docs/index.pdf</a>.</p>
+</div>
+<div class="sect2">
+<h3 id="_full_example"><a class="anchor" href="#_full_example"></a>10.1. Full example</h3>
+<div class="paragraph">
+<p>If you want to start the Spring Boot application, please run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java">gradlew clean build</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>java -jar build/libs/spring-swagger2markup-demo-{project-version}.jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you only want to generate the HTML and PDF documentation, please run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>gradlew clean asciidoctor</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>11. Contributing</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_questions"><a class="anchor" href="#_questions"></a>10.1. Questions</h3>
+<h3 id="_questions"><a class="anchor" href="#_questions"></a>11.1. Questions</h3>
 <div class="paragraph">
 <p>You can ask questions about Swagger2Markup in <a href="https://gitter.im/Swagger2Markup/swagger2markup">Gitter</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>10.2. Bugs</h3>
+<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>11.2. Bugs</h3>
 <div class="paragraph">
 <p>If you believe you have found a bug, please take a moment to search the existing issues. If no one else has reported the problem, please open a new issue that describes the problem in detail and, ideally, includes a test that reproduces it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>10.3. Enhancements</h3>
+<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>11.3. Enhancements</h3>
 <div class="paragraph">
 <p>If you’d like an enhancement to be made to Swagger2Markup, pull requests are most welcome. The source code is on GitHub. You may want to search the existing issues and pull requests to see if the enhancement is already being worked on. You may also want to open a new issue to discuss a possible enhancement before work on it begins.</p>
 </div>
@@ -2376,7 +2433,7 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license"><a class="anchor" href="#_license"></a>11. License</h2>
+<h2 id="_license"><a class="anchor" href="#_license"></a>12. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Copyright 2016 Robert Winkler</p>
@@ -2398,7 +2455,7 @@ swagger2markup.outputLanguage=DE</pre>
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-03-23 15:48:30 MEZ
+Last updated 2016-04-05 15:27:18 MESZ
 </div>
 </div>
 </body>
