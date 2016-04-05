@@ -112,7 +112,7 @@ NOTE: extension content titles must always start from level *1*. The title level
 
 ==== SwaggerModelExtension
 
-The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup.
+The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup. For example, you could use this extension to delete Paths from the Swagger model which should not be rendered.
 
 === Provided Extensions
 
@@ -123,7 +123,7 @@ Swagger2Markup provides some extensions which can be used out-of-the-box. You ju
 |====
 | Name | Description
 | <<Dynamic file import extension>> | Allows to dynamically import Markup from files.
-| <<Spring RestDocs extension>> | Allows to import example Curl, HTTP request and response snippets from Spring Rest Docs.
+| <<Spring RestDocs extension>> | Allows to import Curl, HTTP request and response snippets from https://github.com/spring-projects/spring-restdocs[Spring Rest Docs].
 | <<Schema file import extension>> | Allows to import JSON or XML Schema files.
 |====
 
@@ -167,10 +167,10 @@ The extension adds the following properties to Swagger2Markup which must be conf
 .Extension properties
 |====
 | Name | Description | Example
-| `swagger2markup.extensions.dynamicOverview.contentPath`  | The path to the files which should be imported into the Overview document | `src/test/resources/docs/asciidoc/overview` 
-| `swagger2markup.extensions.dynamicDefinitions.contentPath`  | The path to the files which should be imported into the Definitions document | `src/test/resources/docs/asciidoc/definitions` 
-| `swagger2markup.extensions.dynamicPaths.contentPath`  | The path to the files which should be imported into the Paths document | `src/test/resources/docs/asciidoc/paths` 
-| `swagger2markup.extensions.dynamicSecurity.contentPath`  | TThe path to the files which should be imported into the Security document | `src/test/resources/docs/asciidoc/security` 
+| `swagger2markup.extensions.dynamicOverview.contentPath`  | The path to the files which should be imported | `src/test/resources/docs/asciidoc/overview` 
+| `swagger2markup.extensions.dynamicDefinitions.contentPath`  | The path to the files which should be imported | `src/test/resources/docs/asciidoc/definitions` 
+| `swagger2markup.extensions.dynamicPaths.contentPath`  | The path to the files which should be imported | `src/test/resources/docs/asciidoc/paths` 
+| `swagger2markup.extensions.dynamicSecurity.contentPath`  | TThe path to the files which should be imported | `src/test/resources/docs/asciidoc/security` 
 |====
 
 ==== Spring RestDocs extension
@@ -186,11 +186,11 @@ repositories {
 compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:{project-version}"
 ----
 
-The extension searches for Spring RestDocs snippet files in a configurable path to append the snippets at the end of a path operation section. The snippet files must be called: 
+The extension searches for https://github.com/spring-projects/spring-restdocs[Spring RestDocs] snippet files in a configurable path to append the snippets at the end of a path operation section. The files must conform to the naming convention: 
 
-* http-request.<markup.ext>`
-* http-response.<markup.ext>`
-* curl-request.<markup.ext>`
+* `http-request.<markup.ext>`
+* `http-response.<markup.ext>`
+* `curl-request.<markup.ext>`
 
 The files must be stored in a folder which matches the Swagger operationId.
 

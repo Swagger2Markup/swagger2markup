@@ -47,7 +47,7 @@ public class MyExtension extends DefinitionsDocumentExtension {
         Model definitionModel = context.getModel().get();
 
         if(position.equals(Position.DEFINITION_END)) {
-            markupBuilder.sectionTitleLevel4(definitionName) //<4>
+            markupBuilder.sectionTitleLevel1(definitionName) //<4>
                     .paragraph(definitionModel.getDescription())
                     .importMarkup(new StringReader("*Markup*"), MarkupLanguage.ASCIIDOC);
         }
