@@ -108,12 +108,6 @@ public class Swagger2MarkupConverter {
      */
     public static Builder from(Path swaggerPath) {
         Validate.notNull(swaggerPath, "swaggerPath must not be null");
-        if(Files.notExists(swaggerPath)){
-            throw new IllegalArgumentException(String.format("swaggerPath does not exist: %s", swaggerPath));
-        }
-        if(Files.isReadable(swaggerPath)){
-            throw new IllegalArgumentException(String.format("swaggerPath must be readable: %s", swaggerPath));
-        }
         try {
             if(Files.isHidden(swaggerPath)){
                 throw new IllegalArgumentException("swaggerPath must not be a hidden file");
