@@ -337,7 +337,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildOperationTitle(PathOperation operation, MarkupDocBuilder docBuilder) {
         buildOperationTitle(operation.getTitle(), operation.getId(), docBuilder);
         if (operation.getTitle().equals(operation.getOperation().getSummary())) {
-            docBuilder.listing(operation.getMethod() + " " + operation.getPath());
+            docBuilder.block(operation.getMethod() + " " + operation.getPath(), MarkupBlockStyle.SIDEBAR);
         }
     }
 
@@ -625,7 +625,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             buildSectionTitle(operationSectionTitle, docBuilder);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
                 buildExampleTitle(sectionTile + " " + entry.getKey(), docBuilder);
-                docBuilder.listing(Json.pretty(entry.getValue()));
+                docBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
             }
         }
     }
