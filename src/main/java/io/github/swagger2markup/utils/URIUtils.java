@@ -27,7 +27,7 @@ public class URIUtils {
      * @return URI parent
      */
     public static URI uriParent(URI uri) {
-        return uri.getPath().endsWith("/") ? uri.resolve("src/main") : uri.resolve(".");
+        return uri.getPath().endsWith("/") ? uri.resolve("..") : uri.resolve(".");
     }
 
     /**
