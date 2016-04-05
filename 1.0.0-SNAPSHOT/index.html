@@ -619,7 +619,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 </ul>
 </li>
-<li><a href="#_spring_boot_demo">10. Spring Boot Demo</a>
+<li><a href="#_spring_boot_and_springfox">10. Spring Boot and Springfox</a>
 <ul class="sectlevel2">
 <li><a href="#_full_example">10.1. Full example</a></li>
 </ul>
@@ -1893,7 +1893,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="paragraph">
-<p>The following Unit Test uses Spring RestDocs to tests the <code>/pets</code> endoint and writes the example files into the <code>build/snippets</code> folder. Have a look at the <a href="#_spring_boot_demo">Spring Boot Demo</a> for a full example using <a href="https://github.com/spring-projects/spring-boot">Spring Boot</a>, <a href="https://github.com/springfox/springfox">Springfox</a> and Spring RestDocs.</p>
+<p>The following Unit Test uses Spring RestDocs to tests the <code>/pets</code> endoint and writes the example files into the <code>build/snippets</code> folder. Have a look at the <a href="#_spring_boot_and_springfox">Spring Boot and Springfox</a> chapter for a full example using <a href="https://github.com/spring-projects/spring-boot">Spring Boot</a>, <a href="https://github.com/springfox/springfox">Springfox</a> and Spring RestDocs.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -2378,8 +2378,50 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_spring_boot_demo"><a class="anchor" href="#_spring_boot_demo"></a>10. Spring Boot Demo</h2>
+<h2 id="_spring_boot_and_springfox"><a class="anchor" href="#_spring_boot_and_springfox"></a>10. Spring Boot and Springfox</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>If you use Spring Boot and Springfox or Swagger JAX-RS, you can do the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>generate an up-to-date Swagger JSON file during an integration</p>
+</li>
+<li>
+<p>convert the Swagger JSON file into AsciiDoc</p>
+</li>
+<li>
+<p>add hand-written AsciiDoc documentation</p>
+</li>
+<li>
+<p>convert AsciiDoc into HTML and PDF</p>
+</li>
+<li>
+<p>copy the HTML and PDF artifacts into an executable Spring Boot Jar file and serve it as static content<br>
+This transformation pipeline can be done with Gradle or Maven in the build phase. That way there is no runtime overhead and there are no additional runtime libraries required.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Swagger2MarkupConverter can be used to make a request to a remote Swagger endpoint during an integration test. The Swagger2MarkupConverter allows to write the generated documents into any folder. In this this example it is <code>src/docs/asciidoc/generated</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
+<span class="annotation">@SpringApplicationConfiguration</span>(classes = Application.class)
+<span class="annotation">@WebIntegrationTest</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
+
+    <span class="annotation">@Test</span>
+    <span class="directive">public</span> <span class="type">void</span> convertRemoteSwaggerToAsciiDoc() {
+        <span class="comment">// Remote Swagger source</span>
+        Swagger2MarkupConverter.from(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/v2/api-docs</span><span class="delimiter">&quot;</span></span>).build()
+            .toFolder(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>);
+    }
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The quickest way to get started is to look at the demo project <a href="https://github.com/Swagger2Markup/spring-swagger2markup-demo">spring-swagger2markup-demo</a>. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under <a href="http://localhost:9080/docs/index.html" class="bare">http://localhost:9080/docs/index.html</a> and <a href="http://localhost:9080/docs/index.pdf" class="bare">http://localhost:9080/docs/index.pdf</a>.</p>
 </div>
