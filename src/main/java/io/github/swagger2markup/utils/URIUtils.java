@@ -42,4 +42,38 @@ public class URIUtils {
         }
         return uri;
     }
+
+    /**
+     * Creates a URI from a String representation of a URI or a Path.
+     *
+     * @param input String representation of a URI or a Path.
+     * @return the URI
+     */
+    public static URI create(String input){
+        if(isFile(input) || isURL(input)){
+            return URI.create(input);
+        }else{
+            return Paths.get(input).toUri();
+        }
+    }
+
+    /**
+     * Check if the input is a String representation of a file URI.
+     *
+     * @param input the String
+     * @return true if the input is a String representation of a file URI.
+     */
+    private static boolean isFile(String input) {
+        return input.toLowerCase().startsWith("file");
+    }
+
+    /**
+     * Check if the input is a String representation of a URL.
+     *
+     * @param input the String
+     * @return true if the input is a String representation of a URL.
+     */
+    private static boolean isURL(String input) {
+        return input.toLowerCase().startsWith("http");
+    }
 }
