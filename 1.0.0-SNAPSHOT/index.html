@@ -516,7 +516,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">2016-04-04</span>
+<span id="revdate">2016-04-05</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1725,9 +1725,9 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">convertSwagger2markup {
-    swaggerInput file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc</span><span class="delimiter">&quot;</span></span>)
-    markupOutputFile file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>buildDir<span class="inline-delimiter">}</span></span><span class="content">/asciidoc</span><span class="delimiter">&quot;</span></span>)
-    config = [<span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.markupLanguage</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">ASCCIDOC</span><span class="delimiter">'</span></span>,
+    input file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/swagger/swagger_petstore.yaml</span><span class="delimiter">&quot;</span></span>)
+    outputDir file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>buildDir<span class="inline-delimiter">}</span></span><span class="content">/asciidoc</span><span class="delimiter">&quot;</span></span>)
+    config = [<span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.markupLanguage</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">ASCIIDOC</span><span class="delimiter">'</span></span>,
               <span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.pathsGroupedBy</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">TAGS</span><span class="delimiter">'</span></span>]
 }</code></pre>
 </div>
@@ -1735,11 +1735,10 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 8. Gradle Plugin properties</caption>
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
 </colgroup>
 <thead>
 <tr>
@@ -1747,36 +1746,31 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <th class="tableblock halign-left valign-top">Description</th>
 <th class="tableblock halign-left valign-top">Type</th>
 <th class="tableblock halign-left valign-top">Example</th>
-<th class="tableblock halign-left valign-top">Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swaggerInput</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The directory or file path to the Swagger specification</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">File</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger_petstore.yaml")</code> (file) or <code>file("src/docs/swagger")</code> (directory)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger")</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The URL or file path to the Swagger specification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger/swagger_petstore.yaml")</code> or `http://petstore.swagger.io/v2/swagger.json</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">markupOutputDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">outputDir</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The directory where the output should be stored.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>new File("/tmp/asciidoc")</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("$buildDir/asciidoc")</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("${buildDir}/asciidoc")</code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">markupOutputFile</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The file (without extensions) where the output should be stored.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("$buildDir/asciidoc/swagger")</code></p></td>
-<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">outputFile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The file path (without extension) where the output should be stored.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("${buildDir}/asciidoc/swagger")</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">config</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Swagger2Markup properties to configure the converter</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Map</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">['swagger2markup.markupLanguage' : 'ASCCIDOC']</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -1820,8 +1814,8 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
     &lt;artifactId&gt;swagger2markup-maven-plugin&lt;/artifactId&gt;
     &lt;version&gt;{project-version}&lt;/version&gt;
     &lt;configuration&gt;
-      &lt;input&gt;<span class="error">$</span>{project.basedir}/src/docs/swagger&lt;/input&gt;
-      &lt;output&gt;<span class="error">$</span>{project.build.directory}/asciidoc&lt;/output&gt;
+      &lt;input&gt;<span class="error">$</span>{project.basedir}/src/docs/swagger/swagger_petstore.yaml&lt;/input&gt;
+      &lt;outputDir&gt;<span class="error">$</span>{project.build.directory}/asciidoc&lt;/output&gt;
       &lt;config&gt;
         &lt;swagger2markup.markupLanguage&gt;ASCIIDOC&lt;/swagger2markup.markupLanguage&gt;
       &lt;/config&gt;
@@ -1831,13 +1825,12 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 9. Gradle Plugin properties</caption>
+<caption class="title">Table 9. Maven Plugin properties</caption>
 <colgroup>
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
-<col style="width: 20%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
 </colgroup>
 <thead>
 <tr>
@@ -1845,29 +1838,31 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <th class="tableblock halign-left valign-top">Description</th>
 <th class="tableblock halign-left valign-top">Type</th>
 <th class="tableblock halign-left valign-top">Example</th>
-<th class="tableblock halign-left valign-top">Default</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The URL, directory or file path to the Swagger specification</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The URL file path to the Swagger specification</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/docs/swagger_petstore.yaml</code> (file) or <code>"src/docs/swagger</code> (directory)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>${project.basedir}/src/docs/swagger</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</code>  or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">output</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The directory or file (without extension) where the output should be stored.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>/tmp/asciidoc</code> or <code>/tmp/asciidoc/swagger</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">outputDir</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where the output should be stored.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>${project.build.directory}/asciidoc</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">outputFile</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The file path (without extension) where the output should be stored.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>${project.build.directory}/asciidoc/swagger</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">config</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The Swagger2Markup properties to configure the converter</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Map</p></td>
-<td class="tableblock halign-left valign-top"></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
@@ -1925,22 +1920,27 @@ The CLI requires at least JDK 8.
         Markup documents.
 
 SYNOPSIS
-        swagger2markup convert [(-c &lt;configFile&gt; | --configFile &lt;configFile&gt;)]
-                [(-h | --help)] (-i &lt;inputFile&gt; | --inputFile &lt;inputFile&gt;)
-                (-o &lt;outputPath&gt; | --outputPath &lt;outputPath&gt;)
+        swagger2markup convert [(-c &lt;configFile&gt; | --config &lt;configFile&gt;)]
+                [(-d &lt;outputDir&gt; | --outputDir &lt;outputDir&gt;)]
+                [(-f &lt;outputFile&gt; | --outputFile &lt;outputFile&gt;)]
+                (-i &lt;swaggerInput&gt; | --swaggerInput &lt;swaggerInput&gt;)
 
 OPTIONS
-        -c &lt;configFile&gt;, --configFile &lt;configFile&gt;
-            Config file
+        -c &lt;configFile&gt;, --config &lt;configFile&gt;
+            Config file.
+
+        -d &lt;outputDir&gt;, --outputDir &lt;outputDir&gt;
+            Output directory. Converts the Swagger specification into multiple
+            files.
+
+        -f &lt;outputFile&gt;, --outputFile &lt;outputFile&gt;
+            Output file. Converts the Swagger specification into one file.
 
         -h, --help
             Display help information
 
-        -i &lt;inputFile&gt;, --inputFile &lt;inputFile&gt;
-            Input file. Can either be a URL or a file.
-
-        -o &lt;outputPath&gt;, --outputPath &lt;outputPath&gt;
-            Output path. Can either be a directory or a file.</pre>
+        -i &lt;swaggerInput&gt;, --swaggerInput &lt;swaggerInput&gt;
+            Swagger input. Can either be a URL or a file path.</pre>
 </div>
 </div>
 </div>
@@ -1951,11 +1951,11 @@ OPTIONS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>It generates the Markup documents into the <code>/tmp</code> folder.</p>
+<p>It generates the Markup documents into the <code>/tmp/asiidoc</code> folder.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1965,7 +1965,7 @@ OPTIONS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp/swagger</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1981,7 +1981,7 @@ The input file must not have a file extension
 </table>
 </div>
 <div class="paragraph">
-<p>It generates the Markup documents into the file <code>/tmp/swagger.adoc</code>.</p>
+<p>It generates the Markup documents into the file <code>/tmp/asiidoc/swagger.adoc</code>.</p>
 </div>
 </div>
 <div class="sect3">
@@ -1991,7 +1991,7 @@ The input file must not have a file extension
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -o /tmp</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp</code></pre>
 </div>
 </div>
 </div>
