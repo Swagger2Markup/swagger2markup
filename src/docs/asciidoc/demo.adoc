@@ -1,0 +1,23 @@
+== Spring Boot Demo
+
+The quickest way to get started is to look at the demo project https://github.com/Swagger2Markup/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
+
+=== Full example
+
+If you want to start the Spring Boot application, please run:
+
+[source, java, subs="attributes"]
+----
+gradlew clean build
+----
+
+----
+java -jar build/libs/spring-swagger2markup-demo-{project-version}.jar
+----
+
+If you only want to generate the HTML and PDF documentation, please run:
+
+----
+gradlew clean asciidoctor
+----
+

@@ -65,11 +65,11 @@ The OverviewDocumentExtension allows to extend the overview document at three po
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
-NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
+NOTE: Extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 .Overview document extension positions 
 [.thumb]
-image::images/overview_extension_points.PNG[]
+image::images/overview_extension_points.png[]
 
 ==== PathsDocumentExtension
 
@@ -82,7 +82,7 @@ The PathsDocumentExtension allows to extend the paths document at five positions
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
-NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
+NOTE: Extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== SecurityDocumentExtension
 
@@ -95,7 +95,7 @@ The SecurityDocumentExtension allows to extend the security document at five pos
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
-NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
+NOTE: Extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== DefinitionsDocumentExtension
 
@@ -108,7 +108,7 @@ The DefinitionsDocumentExtension allows to extend the definitions document at fi
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
-NOTE: extension content titles must always start from level *1*. The title level will be adapted depending on position.
+NOTE: Extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== SwaggerModelExtension
 
@@ -175,6 +175,8 @@ The extension adds the following properties to Swagger2Markup which must be conf
 
 ==== Spring RestDocs extension
 
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated Markup documents. See spring-restdocs how to configure it. 
+
 ===== Usage guide
 
 [source,groovy, subs="attributes"]
@@ -206,7 +208,23 @@ paths:
       ...
 ----
 
-Example: `/snippets/addPet/http-request.adoc`.
+The following Unit Test uses Spring RestDocs to tests the `/pets` endoint and writes the example files into the ``build/snippets`` folder. Have a look at the <<Spring Boot Demo>> for a full example using https://github.com/spring-projects/spring-boot[Spring Boot], https://github.com/springfox/springfox[Springfox] and Spring RestDocs.
+
+[source,java]
+----
+@Rule
+public final RestDocumentation restDocumentation = new RestDocumentation("build/snippets");
+
+@Test
+public void addAPetToTheStore() throws Exception {
+  this.mockMvc.perform(post("/pets/").content(createPet())
+    .contentType(MediaType.APPLICATION_JSON))
+    .andDo(document("addPet", preprocessResponse(prettyPrint())))
+    .andExpect(status().isOk());
+}
+----
+
+Example: `build/snippets/addPet/http-request.adoc`.
 
 ===== Configuration
 
