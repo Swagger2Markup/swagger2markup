@@ -4,9 +4,9 @@
 
 [[_addpet]]
 === Add a new pet to the store
-----
+....
 POST /pets
-----
+....
 
 
 ==== Parameters
@@ -31,14 +31,14 @@ POST /pets
 
 ==== Consumes
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -58,6 +58,7 @@ POST /pets
 ==== Example HTTP response
 
 ===== Response 405
+[source,json]
 ----
 {
   "application/json" : {
@@ -73,9 +74,9 @@ POST /pets
 
 [[_updatepet]]
 === Update an existing pet
-----
+....
 PUT /pets
-----
+....
 
 
 ==== Parameters
@@ -118,14 +119,14 @@ PUT /pets
 
 ==== Consumes
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -144,9 +145,9 @@ PUT /pets
 
 [[_findpetsbystatus]]
 === Finds Pets by status
-----
+....
 GET /pets/findByStatus
-----
+....
 
 
 ==== Description
@@ -184,8 +185,8 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -204,9 +205,9 @@ Multiple status values can be provided with comma seperated strings
 
 [[_findpetsbytags]]
 === Finds Pets by tags
-----
+....
 GET /pets/findByTags
-----
+....
 
 
 ==== Description
@@ -244,8 +245,8 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -264,9 +265,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 [[_updatepetwithform]]
 === Updates a pet in the store with form data
-----
+....
 POST /pets/{petId}
-----
+....
 
 
 ==== Parameters
@@ -293,13 +294,13 @@ POST /pets/{petId}
 
 ==== Consumes
 
-* application/x-www-form-urlencoded
+* `application/x-www-form-urlencoded`
 
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -318,9 +319,9 @@ POST /pets/{petId}
 
 [[_getpetbyid]]
 === Find pet by ID
-----
+....
 GET /pets/{petId}
-----
+....
 
 
 ==== Description
@@ -367,8 +368,8 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -388,9 +389,9 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 [[_deletepet]]
 === Deletes a pet
-----
+....
 DELETE /pets/{petId}
-----
+....
 
 
 ==== Parameters
@@ -416,8 +417,8 @@ DELETE /pets/{petId}
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -436,9 +437,9 @@ DELETE /pets/{petId}
 
 [[_placeorder]]
 === Place an order for a pet
-----
+....
 POST /stores/order
-----
+....
 
 
 ==== Parameters
@@ -472,8 +473,8 @@ POST /stores/order
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -484,6 +485,7 @@ POST /stores/order
 ==== Example HTTP request
 
 ===== Request body
+[source,json]
 ----
 {
   "id" : 99,
@@ -499,6 +501,7 @@ POST /stores/order
 ==== Example HTTP response
 
 ===== Response 200
+[source,json]
 ----
 {
   "id" : 99,
@@ -513,9 +516,9 @@ POST /stores/order
 
 [[_getorderbyid]]
 === Find purchase order by ID
-----
+....
 GET /stores/order/{orderId}
-----
+....
 
 
 ==== Description
@@ -562,8 +565,8 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -574,6 +577,7 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 ==== Example HTTP response
 
 ===== Response 200
+[source,json]
 ----
 {
   "id" : 99,
@@ -588,9 +592,9 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 [[_deleteorder]]
 === Delete purchase order by ID
-----
+....
 DELETE /stores/order/{orderId}
-----
+....
 
 
 ==== Description
@@ -628,8 +632,8 @@ For valid response try integer IDs with value &lt; 1000. Anything above 1000 or 
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -639,9 +643,9 @@ For valid response try integer IDs with value &lt; 1000. Anything above 1000 or 
 
 [[_createuser]]
 === Create user
-----
+....
 POST /users
-----
+....
 
 
 ==== Description
@@ -670,8 +674,8 @@ This can only be done by the logged in user.
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -681,9 +685,9 @@ This can only be done by the logged in user.
 
 [[_createuserswitharrayinput]]
 === Creates list of users with given input array
-----
+....
 POST /users/createWithArray
-----
+....
 
 
 ==== Parameters
@@ -708,8 +712,8 @@ POST /users/createWithArray
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -719,9 +723,9 @@ POST /users/createWithArray
 
 [[_createuserswithlistinput]]
 === Creates list of users with given input array
-----
+....
 POST /users/createWithList
-----
+....
 
 
 ==== Parameters
@@ -746,8 +750,8 @@ POST /users/createWithList
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -757,9 +761,9 @@ POST /users/createWithList
 
 [[_loginuser]]
 === Logs user into the system
-----
+....
 GET /users/login
-----
+....
 
 
 ==== Parameters
@@ -794,8 +798,8 @@ GET /users/login
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -805,9 +809,9 @@ GET /users/login
 
 [[_logoutuser]]
 === Logs out current logged in user session
-----
+....
 GET /users/logout
-----
+....
 
 
 ==== Responses
@@ -823,8 +827,8 @@ GET /users/logout
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -834,9 +838,9 @@ GET /users/logout
 
 [[_getuserbyname]]
 === Get user by user name
-----
+....
 GET /users/{username}
-----
+....
 
 
 ==== Parameters
@@ -879,8 +883,8 @@ GET /users/{username}
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -890,9 +894,9 @@ GET /users/{username}
 
 [[_updateuser]]
 === Updated user
-----
+....
 PUT /users/{username}
-----
+....
 
 
 ==== Description
@@ -931,8 +935,8 @@ This can only be done by the logged in user.
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags
@@ -942,9 +946,9 @@ This can only be done by the logged in user.
 
 [[_deleteuser]]
 === Delete user
-----
+....
 DELETE /users/{username}
-----
+....
 
 
 ==== Description
@@ -982,8 +986,8 @@ This can only be done by the logged in user.
 
 ==== Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 ==== Tags

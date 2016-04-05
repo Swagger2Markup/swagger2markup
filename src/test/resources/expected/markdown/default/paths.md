@@ -27,14 +27,14 @@ POST /pets
 
 #### Consumes
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -88,14 +88,14 @@ PUT /pets
 
 #### Consumes
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -154,8 +154,8 @@ Multiple status values can be provided with comma seperated strings
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -214,8 +214,8 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -257,13 +257,13 @@ POST /pets/{petId}
 
 #### Consumes
 
-* application/x-www-form-urlencoded
+* `application/x-www-form-urlencoded`
 
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -329,8 +329,8 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -372,8 +372,8 @@ DELETE /pets/{petId}
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -428,8 +428,8 @@ POST /stores/order
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -488,8 +488,8 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -533,8 +533,8 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -571,8 +571,8 @@ This can only be done by the logged in user.
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -605,8 +605,8 @@ POST /users/createWithArray
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -639,8 +639,8 @@ POST /users/createWithList
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -689,8 +689,8 @@ GET /users/login
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -716,8 +716,8 @@ GET /users/logout
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -772,8 +772,8 @@ GET /users/{username}
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -818,8 +818,8 @@ This can only be done by the logged in user.
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
@@ -863,8 +863,8 @@ This can only be done by the logged in user.
 
 #### Produces
 
-* application/json
-* application/xml
+* `application/json`
+* `application/xml`
 
 
 #### Tags
