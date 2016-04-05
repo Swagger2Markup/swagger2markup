@@ -109,11 +109,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
                 if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
                     buildDefinition(definitionName, model);
                     if (logger.isInfoEnabled()) {
-                        logger.info("Definition processed: {}", definitionName);
+                        logger.info("Definition processed : {}", definitionName);
                     }
                 } else {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("Definition was ignored: {}", definitionName);
+                        logger.debug("Definition was ignored : {}", definitionName);
                     }
                 }
             }
@@ -162,7 +162,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
-                logger.info("Separate definition file produced: {}", definitionFile);
+                logger.info("Separate definition file produced : {}", definitionFile);
             }
 
             definitionRef(definitionName, this.markupDocBuilder);
