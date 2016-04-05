@@ -29,8 +29,8 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
     <artifactId>swagger2markup-maven-plugin</artifactId>
     <version>{project-version}</version>
     <configuration>
-      <input>${project.basedir}/src/docs/swagger</input>
-      <output>${project.build.directory}/asciidoc</output>
+      <input>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</input>
+      <outputDir>${project.build.directory}/asciidoc</output>
       <config>
         <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
       </config>
@@ -41,11 +41,12 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 
 
 [options="header"]
-.Gradle Plugin properties
+.Maven Plugin properties
 |====
-| Name | Description | Type |  Example | Default
-| input | The URL, directory or file path to the Swagger specification | String | `src/docs/swagger_petstore.yaml` (file) or `"src/docs/swagger` (directory) | ``${project.basedir}/src/docs/swagger`` 
-| output | The directory or file (without extension) where the output should be stored. | String | `/tmp/asciidoc` or `/tmp/asciidoc/swagger` | ``${project.build.directory}/asciidoc`` 
-| config | The Swagger2Markup properties to configure the converter | Map |  | | 
+| Name | Description | Type |  Example
+| input | The URL file path to the Swagger specification | String | `${project.basedir}/src/docs/swagger/swagger_petstore.yaml`  or `http://petstore.swagger.io/v2/swagger.json`
+| outputDir | The directory where the output should be stored. | File | `${project.build.directory}/asciidoc` 
+| outputFile | The file path (without extension) where the output should be stored. | File | `${project.build.directory}/asciidoc/swagger` 
+| config | The Swagger2Markup properties to configure the converter | Map |  | 
 |====
 

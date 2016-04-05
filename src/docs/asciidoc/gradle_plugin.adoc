@@ -29,9 +29,9 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 [source,groovy]
 ----
 convertSwagger2markup {
-    swaggerInput file("src/docs/asciidoc")
-    markupOutputFile file("${buildDir}/asciidoc")
-    config = ['swagger2markup.markupLanguage' : 'ASCCIDOC',
+    input file("src/docs/swagger/swagger_petstore.yaml")
+    outputDir file("${buildDir}/asciidoc")
+    config = ['swagger2markup.markupLanguage' : 'ASCIIDOC',
               'swagger2markup.pathsGroupedBy' : 'TAGS']
 }
 
@@ -40,14 +40,9 @@ convertSwagger2markup {
 [options="header"]
 .Gradle Plugin properties
 |====
-| Name | Description | Type |  Example | Default
-| swaggerInput | The directory or file path to the Swagger specification | File | `file("src/docs/swagger_petstore.yaml")` (file) or `file("src/docs/swagger")` (directory) | ``file("src/docs/swagger")`` 
-| markupOutputDir | The directory where the output should be stored. | String | `new File("/tmp/asciidoc")` | ``file("$buildDir/asciidoc")`` 
-| markupOutputFile | The file (without extensions) where the output should be stored. | String |  ``file("$buildDir/asciidoc/swagger")`` | 
-| config | The Swagger2Markup properties to configure the converter | Map |  ['swagger2markup.markupLanguage' : 'ASCCIDOC'] |
+| Name | Description | Type |  Example
+| input | The URL or file path to the Swagger specification | String | `file("src/docs/swagger/swagger_petstore.yaml")` or `http://petstore.swagger.io/v2/swagger.json
+| outputDir | The directory where the output should be stored. | File | `file("${buildDir}/asciidoc")` 
+| outputFile | The file path (without extension) where the output should be stored. | File | `file("${buildDir}/asciidoc/swagger")` 
+| config | The Swagger2Markup properties to configure the converter | Map |  | 
 |====
-
-
-
-
-
