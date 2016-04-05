@@ -1,4 +1,31 @@
-== Spring Boot Demo
+== Spring Boot and Springfox
+
+If you use Spring Boot and Springfox or Swagger JAX-RS, you can do the following:
+
+*   generate an up-to-date Swagger JSON file during an integration
+*   convert the Swagger JSON file into AsciiDoc
+*   add hand-written AsciiDoc documentation
+*   convert AsciiDoc into HTML and PDF
+*   copy the HTML and PDF artifacts into an executable Spring Boot Jar file and serve it as static content
+This transformation pipeline can be done with Gradle or Maven in the build phase. That way there is no runtime overhead and there are no additional runtime libraries required.
+
+The Swagger2MarkupConverter can be used to make a request to a remote Swagger endpoint during an integration test. The Swagger2MarkupConverter allows to write the generated documents into any folder. In this this example it is ``src/docs/asciidoc/generated``.
+
+[source,java]
+----
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = Application.class)
+@WebIntegrationTest
+public class Swagger2MarkupTest {
+
+    @Test
+    public void convertRemoteSwaggerToAsciiDoc() {
+        // Remote Swagger source
+        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
+            .toFolder("src/docs/asciidoc/generated");
+    }
+}
+----
 
 The quickest way to get started is to look at the demo project https://github.com/Swagger2Markup/spring-swagger2markup-demo[spring-swagger2markup-demo]. The demo shows how to generate static docs (HTML5 and PDF) with the Swagger2Markup Gradle Plugin and serve them as static content in a Spring Boot App under http://localhost:9080/docs/index.html and http://localhost:9080/docs/index.pdf.
 

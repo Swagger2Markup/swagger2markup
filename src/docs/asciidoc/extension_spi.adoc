@@ -208,7 +208,7 @@ paths:
       ...
 ----
 
-The following Unit Test uses Spring RestDocs to tests the `/pets` endoint and writes the example files into the ``build/snippets`` folder. Have a look at the <<Spring Boot Demo>> for a full example using https://github.com/spring-projects/spring-boot[Spring Boot], https://github.com/springfox/springfox[Springfox] and Spring RestDocs.
+The following Unit Test uses Spring RestDocs to tests the `/pets` endoint and writes the example files into the ``build/snippets`` folder. Have a look at the <<Spring Boot and Springfox>> chapter for a full example using https://github.com/spring-projects/spring-boot[Spring Boot], https://github.com/springfox/springfox[Springfox] and Spring RestDocs.
 
 [source,java]
 ----
