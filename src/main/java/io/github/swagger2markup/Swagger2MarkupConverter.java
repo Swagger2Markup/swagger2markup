@@ -111,7 +111,7 @@ public class Swagger2MarkupConverter {
         if(Files.notExists(swaggerPath)){
             throw new IllegalArgumentException(String.format("swaggerPath does not exist: %s", swaggerPath));
         }
-        if(Files.notExists(swaggerPath)){
+        if(Files.isReadable(swaggerPath)){
             throw new IllegalArgumentException(String.format("swaggerPath must be readable: %s", swaggerPath));
         }
         try {
