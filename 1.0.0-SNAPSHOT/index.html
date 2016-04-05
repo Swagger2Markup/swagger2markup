@@ -2386,7 +2386,7 @@ swagger2markup.outputLanguage=DE</pre>
 <div class="ulist">
 <ul>
 <li>
-<p>generate an up-to-date Swagger JSON file during an integration test</p>
+<p>generate an up-to-date Swagger JSON file during an unit or integration test</p>
 </li>
 <li>
 <p>convert the Swagger JSON file into AsciiDoc</p>
@@ -2398,10 +2398,12 @@ swagger2markup.outputLanguage=DE</pre>
 <p>convert AsciiDoc into HTML and PDF</p>
 </li>
 <li>
-<p>copy the HTML and PDF artifacts into an executable Spring Boot Jar file and serve it as static content<br>
-This transformation pipeline can be done with Gradle or Maven in the build phase. That way there is no runtime overhead and there are no additional runtime libraries required.</p>
+<p>copy the HTML and PDF artifacts into an executable Spring Boot Jar file and serve it as static content</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>This transformation pipeline can be done with Gradle or Maven in the build phase. That way there is no runtime overhead and there are no additional runtime libraries required.</p>
 </div>
 <div class="paragraph">
 <p>The Swagger2MarkupConverter can be used to make a request to a remote Swagger endpoint during an integration test. The Swagger2MarkupConverter allows to write the generated documents into any folder. In this this example it is <code>src/docs/asciidoc/generated</code>.</p>
