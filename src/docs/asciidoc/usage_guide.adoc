@@ -136,7 +136,7 @@ The following tables list all available properties of Swagger2Markup:
 |swagger2markup.swaggerMarkupLanguage| Specifies the markup language used in Swagger descriptions. | ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP | MARKDOWN
 |swagger2markup.pathsGroupedBy| Specifies how the paths should be grouped | AS_IS, TAGS | AS_IS
 |swagger2markup.outputLanguage| Specifies the language of the labels | EN, DE, FR, RU | EN
-|swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | System-dependent
+|swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | <System-dependent>
 |swagger2markup.generatedExamplesEnabled| Specifies if HTTP request and response examples should be generated | true, false | false
 |===
 
@@ -156,10 +156,10 @@ The following tables list all available properties of Swagger2Markup:
 .Properties which configure document file names
 |===
 |Name | Description |  Possible Values | Default
-|swagger2markup.overviewDocument| Specifies the file name of the overview document | Any String | overview
-|swagger2markup.pathsDocument| Specifies the file name of the paths document | Any String | paths
-|swagger2markup.definitionsDocument| Specifies the file name of the definitions document | Any String | definitions
-|swagger2markup.securityDocument| Specifies the file name of the security document | Any String | security
+|swagger2markup.overviewDocument| Specifies the file name of the overview document | Any String | "overview"
+|swagger2markup.pathsDocument| Specifies the file name of the paths document | Any String | "paths"
+|swagger2markup.definitionsDocument| Specifies the file name of the definitions document | Any String | "definitions"
+|swagger2markup.securityDocument| Specifies the file name of the security document | Any String | "security"
 |===
 
 [options="header"]
@@ -168,8 +168,8 @@ The following tables list all available properties of Swagger2Markup:
 |Name | Description |  Possible Values | Default
 |swagger2markup.separatedDefinitionsEnabled| In addition to the Definitions file, also create separate definition files for each model definition | true, false | false
 |swagger2markup.separatedOperationsEnabled| In addition to the Paths file, also create separate operation files for each operation | true, false | false
-|swagger2markup.separatedOperationsFolder| Specifies the target folder path for definition files| Any valid path | operations
-|swagger2markup.separatedDefinitionsFolder| Specifies the target folder path for operation files | Any valid path | definitions
+|swagger2markup.separatedOperationsFolder| Specifies the target folder path for definition files| Any valid folder name | "operations"
+|swagger2markup.separatedDefinitionsFolder| Specifies the target folder path for operation files | Any valid folder name | "definitions"
 |===
 
 [options="header"]
