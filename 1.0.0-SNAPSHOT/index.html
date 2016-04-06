@@ -613,9 +613,9 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_conversion_into_a_folder">7.1.2. Conversion into a folder</a></li>
 <li><a href="#_conversion_into_a_file_2">7.1.3. Conversion into a file</a></li>
 <li><a href="#_conversion_of_a_remote_swagger_file_2">7.1.4. Conversion of  a remote Swagger file</a></li>
-<li><a href="#_configuration_7">7.1.5. Configuration</a></li>
 </ul>
 </li>
+<li><a href="#_configuration_7">7.2. Configuration</a></li>
 </ul>
 </li>
 <li><a href="#_spring_boot_and_springfox">8. Spring Boot and Springfox</a>
@@ -2340,8 +2340,9 @@ The input file must not have a file extension
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_configuration_7"><a class="anchor" href="#_configuration_7"></a>7.1.5. Configuration</h4>
+</div>
+<div class="sect2">
+<h3 id="_configuration_7"><a class="anchor" href="#_configuration_7"></a>7.2. Configuration</h3>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
@@ -2358,7 +2359,6 @@ swagger2markup.outputLanguage=DE</pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties</code></pre>
-</div>
 </div>
 </div>
 </div>
