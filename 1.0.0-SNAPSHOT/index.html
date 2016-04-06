@@ -2063,7 +2063,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">convertSwagger2markup {
-    swaggerInput file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/swagger/swagger_petstore.yaml</span><span class="delimiter">&quot;</span></span>)
+    swaggerInput file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/swagger/swagger_petstore.yaml</span><span class="delimiter">&quot;</span></span>).getAbsolutePath()
     outputDir file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>buildDir<span class="inline-delimiter">}</span></span><span class="content">/asciidoc</span><span class="delimiter">&quot;</span></span>)
     config = [<span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.markupLanguage</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">ASCIIDOC</span><span class="delimiter">'</span></span>,
               <span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.pathsGroupedBy</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">TAGS</span><span class="delimiter">'</span></span>]
@@ -2091,7 +2091,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swaggerInput</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL or file path to the Swagger specification</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger/swagger_petstore.yaml")</code> or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger/swagger_petstore.yaml").getAbsolutePath()</code> or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">outputDir</p></td>
