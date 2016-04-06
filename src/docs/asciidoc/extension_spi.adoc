@@ -58,7 +58,7 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 ==== OverviewDocumentExtension
 
-The OverviewDocumentExtension allows to extend the overview document at three positions:
+The OverviewDocumentExtension allows to extend the overview document at four positions:
 
 * DOCUMENT_BEFORE: Before the section title (title level offset = 0)
 * DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
@@ -73,7 +73,7 @@ image::images/overview_extension_points.png[]
 
 ==== PathsDocumentExtension
 
-The PathsDocumentExtension allows to extend the paths document at five positions: 
+The PathsDocumentExtension allows to extend the paths document at six positions: 
 
 * DOCUMENT_BEFORE: Before the section title (title level offset = 0)
 * DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
@@ -86,7 +86,7 @@ NOTE: Extension content titles must always start from level *1*. The title level
 
 ==== SecurityDocumentExtension
 
-The SecurityDocumentExtension allows to extend the security document at five positions: 
+The SecurityDocumentExtension allows to extend the security document at six positions: 
 
 * DOCUMENT_BEFORE: Before the section title (title level offset = 0)
 * DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
@@ -99,7 +99,7 @@ NOTE: Extension content titles must always start from level *1*. The title level
 
 ==== DefinitionsDocumentExtension
 
-The DefinitionsDocumentExtension allows to extend the definitions document at five positions: 
+The DefinitionsDocumentExtension allows to extend the definitions document at six positions: 
 
 * DOCUMENT_BEFORE: Before the section title (title level offset = 0)
 * DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
@@ -113,6 +113,15 @@ NOTE: Extension content titles must always start from level *1*. The title level
 ==== SwaggerModelExtension
 
 The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup. For example, you could use this extension to delete Paths from the Swagger model which should not be rendered.
+
+Example: 
+
+[source,java,indent=0]
+----
+include::../../test/java/io/github/swagger2markup/builder/MySwaggerModelExtension.java[tags=MySwaggerModelExtension]
+----
+1. You can change any Swagger model property
+2. You could even remove elements from the Swagger model
 
 === Provided Extensions
 

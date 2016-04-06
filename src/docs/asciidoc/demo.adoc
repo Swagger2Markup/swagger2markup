@@ -22,8 +22,8 @@ public class Swagger2MarkupTest {
     @Test
     public void convertRemoteSwaggerToAsciiDoc() {
         // Remote Swagger source
-        Swagger2MarkupConverter.from("http://localhost:8080/v2/api-docs").build()
-            .toFolder("src/docs/asciidoc/generated");
+        Swagger2MarkupConverter.from(new URL("http://localhost:8080/v2/api-docs")).build()
+            .toFolder(Paths.get("src/docs/asciidoc/generated"));
     }
 }
 ----

@@ -16,15 +16,21 @@
 package io.github.swagger2markup.builder;
 
 import io.github.swagger2markup.spi.SwaggerModelExtension;
+import io.swagger.models.Path;
 import io.swagger.models.Swagger;
 
+import java.util.Map;
+
+// tag::MySwaggerModelExtension[]
 public class MySwaggerModelExtension extends SwaggerModelExtension {
 
-    public MySwaggerModelExtension() {
-        super();
-    }
-
     public void apply(Swagger swagger) {
-        swagger.setHost("host.domain.tld");
+        swagger.setHost("newHostName"); //<1>
+        swagger.basePath("newBasePath");
+
+        Map<String, Path> paths = swagger.getPaths(); //<2>
+        paths.remove("/remove");
+        swagger.setPaths(paths);
     }
 }
+// end::MySwaggerModelExtension[]
