@@ -129,8 +129,7 @@ public abstract class MarkupDocumentBuilder {
                 new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
                 new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                new MarkupTableColumn(EXAMPLE_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+                new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
             for (String propertyName : propertyNames) {
@@ -159,12 +158,21 @@ public abstract class MarkupDocumentBuilder {
                     propertyNameContent.italicText(FLAGS_READ_ONLY.toLowerCase());
                 }
                 
+                MarkupDocBuilder descriptionContent = markupDocBuilder.copy(false);
+                String description = swaggerMarkupDescription(defaultString(property.getDescription()));
+                if (isNotBlank(description))
+                    descriptionContent.text(description);
+                if (example != null) {
+                    if (isNotBlank(description))
+                        descriptionContent.newLine(true);
+                    descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(example));
+                }
+                
                 List<String> content = Arrays.asList(
                         propertyNameContent.toString(),
-                        swaggerMarkupDescription(defaultString(property.getDescription())),
+                        descriptionContent.toString(),
                         propertyType.displaySchema(docBuilder),
-                        PropertyUtils.getDefaultValue(property),
-                        example != null ? Json.pretty(example) : ""
+                        PropertyUtils.getDefaultValue(property)
                 );
                 cells.add(content);
             }

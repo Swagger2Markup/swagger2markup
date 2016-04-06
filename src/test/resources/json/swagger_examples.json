@@ -913,6 +913,28 @@
         "status": "PENDING",
         "complete": true
       }
+    },
+    "ComplexObject": {
+      "properties": {
+        "subObject": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "int64",
+              "example": 88
+            },
+            "value": {
+              "type": "string",
+              "example": "a value !"
+            }
+          },
+          "example": {
+            "id": 99,
+            "value" : "an example value !"
+          } 
+        }
+      }
     }
   }
 }

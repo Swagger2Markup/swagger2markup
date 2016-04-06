@@ -7,17 +7,17 @@
 Information about a given HTTP mapping.
 
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*bean* +
-_optional_|Unique name of the bean which handles the given mapping.|string||
+_optional_|Unique name of the bean which handles the given mapping.|string|
 |*method* +
-_optional_|The signature of the method which processes requests to the given mapping.|string||
+_optional_|The signature of the method which processes requests to the given mapping.|string|
 |*tags* +
-_optional_||<string,string> map||
+_optional_||<string,string> map|
 |*type* +
-_optional_|The class which processes requests to the given mapping.|string||
+_optional_|The class which processes requests to the given mapping.|string|
 |===
 
 

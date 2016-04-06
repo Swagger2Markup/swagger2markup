@@ -29,27 +29,27 @@ _optional_|Launch something new|<<_launchcommand_post_launchcommandrequest,Launc
 [[_launchcommand_post_launchcommandrequest]]
 *LaunchCommandRequest*
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*Command* +
-_required_|Dummy description|<<_launchcommand_post_command,Command>>||
+_required_|Dummy description|<<_launchcommand_post_command,Command>>|
 |*Location* +
-_optional_|Dummy description|<<_location,Location>>||
+_optional_|Dummy description|<<_location,Location>>|
 |*Options* +
-_optional_|Dummy description|string||
+_optional_|Dummy description|string|
 |===
 
 [[_launchcommand_post_command]]
 *Command*
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*args* +
-_optional_|Command arguments|string||
+_optional_|Command arguments|string|
 |*path* +
-_optional_|Command path|string||
+_optional_|Command path|string|
 |===
 
 
@@ -85,13 +85,13 @@ _optional_|Command path|string||
 [[_launchcommand_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*Location* +
-_optional_|<description>|<<_location,Location>>||
+_optional_|<description>|<<_location,Location>>|
 |*ReservationId* +
-_optional_|<description>|string||
+_optional_|<description>|string|
 |===
 
 

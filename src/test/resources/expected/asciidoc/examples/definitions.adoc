@@ -5,45 +5,69 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||123
+_optional_|*Example* : `123`|integer(int64)|
 |*name* +
-_optional_||string||"Canines"
+_optional_|*Example* : `"Canines"`|string|
+|===
+
+
+[[_complexobject]]
+=== ComplexObject
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*subObject* +
+_optional_||<<_complexobject_subobject,subObject>>|
+|===
+
+[[_complexobject_subobject]]
+*subObject*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_|*Example* : `88`|integer(int64)|
+|*value* +
+_optional_|*Example* : `"a value !"`|string|
 |===
 
 
 [[_identified]]
 === Identified
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||
+_optional_||integer(int64)|
 |===
 
 
 [[_order]]
 === Order
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*complete* +
-_optional_||boolean||
+_optional_||boolean|
 |*id* +
-_optional_||integer(int64)||77
+_optional_|*Example* : `77`|integer(int64)|
 |*petId* +
-_optional_||integer(int64)||
+_optional_||integer(int64)|
 |*quantity* +
-_optional_||integer(int32)||
+_optional_||integer(int32)|
 |*shipDate* +
-_optional_||string(date-time)||
+_optional_||string(date-time)|
 |*status* +
-_optional_|Order Status|string||"DONE"
+_optional_|Order Status +
+*Example* : `"DONE"`|string|
 |===
 
 
@@ -52,38 +76,38 @@ _optional_|Order Status|string||"DONE"
 Test description
 
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*category* +
-_optional_||<<_category,Category>>||
+_optional_||<<_category,Category>>|
 |*id* +
-_optional_||integer(int64)||
+_optional_||integer(int64)|
 |*name* +
-_required_||string||"doggie"
+_required_|*Example* : `"doggie"`|string|
 |*nicknames* +
-_optional_||<string,string> map||
+_optional_||<string,string> map|
 |*photoUrls* +
-_required_||string array||
+_required_||string array|
 |*status* +
-_optional_|pet status in the store|string||
+_optional_|pet status in the store|string|
 |*tags* +
-_optional_||<<_tag,Tag>> array||
+_optional_||<<_tag,Tag>> array|
 |*weight* +
-_optional_|the weight of the pet|number||
+_optional_|the weight of the pet|number|
 |===
 
 
 [[_tag]]
 === Tag
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||
+_optional_||integer(int64)|
 |*name* +
-_optional_||string||
+_optional_||string|
 |===
 
 
@@ -93,27 +117,27 @@ _optional_||string||
 _Polymorphism_ : Composition
 
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*email* +
-_optional_||string||
+_optional_||string|
 |*firstName* +
-_optional_||string||
+_optional_||string|
 |*id* +
-_optional_||integer(int64)||
+_optional_||integer(int64)|
 |*lastName* +
-_optional_||string||
+_optional_||string|
 |*password* +
-_optional_||string||
+_optional_||string|
 |*phone* +
-_optional_||string||
+_optional_||string|
 |*pictures* +
-_optional_||string(byte) array||
+_optional_||string(byte) array|
 |*userStatus* +
-_optional_|User Status|integer(int32)||
+_optional_|User Status|integer(int32)|
 |*username* +
-_optional_||string||
+_optional_||string|
 |===
 
 

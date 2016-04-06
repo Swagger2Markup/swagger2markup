@@ -5,45 +5,69 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||123
+_optional_|*Example* : `123`|integer(int64)|
 |*name* +
-_optional_||string||"Canines"
+_optional_|*Example* : `"Canines"`|string|
+|===
+
+
+[[_complexobject]]
+=== ComplexObject
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*subObject* +
+_optional_|*Example* : `"object"`|<<_complexobject_subobject,subObject>>|
+|===
+
+[[_complexobject_subobject]]
+*subObject*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_|*Example* : `88`|integer(int64)|
+|*value* +
+_optional_|*Example* : `"a value !"`|string|
 |===
 
 
 [[_identified]]
 === Identified
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |===
 
 
 [[_order]]
 === Order
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*complete* +
-_optional_||boolean||true
+_optional_|*Example* : `true`|boolean|
 |*id* +
-_optional_||integer(int64)||77
+_optional_|*Example* : `77`|integer(int64)|
 |*petId* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*quantity* +
-_optional_||integer(int32)||0
+_optional_|*Example* : `0`|integer(int32)|
 |*shipDate* +
-_optional_||string(date-time)||"string"
+_optional_|*Example* : `"string"`|string(date-time)|
 |*status* +
-_optional_|Order Status|string||"DONE"
+_optional_|Order Status +
+*Example* : `"DONE"`|string|
 |===
 
 
@@ -52,40 +76,42 @@ _optional_|Order Status|string||"DONE"
 Test description
 
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*category* +
-_optional_||<<_category,Category>>||"<<_category>>"
+_optional_|*Example* : `"<<_category>>"`|<<_category,Category>>|
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*name* +
-_required_||string||"doggie"
+_required_|*Example* : `"doggie"`|string|
 |*nicknames* +
-_optional_||<string,string> map||{
+_optional_|*Example* : `{
   "string" : "string"
-}
+}`|<string,string> map|
 |*photoUrls* +
-_required_||string array||[ "string" ]
+_required_|*Example* : `[ "string" ]`|string array|
 |*status* +
-_optional_|pet status in the store|string||"string"
+_optional_|pet status in the store +
+*Example* : `"string"`|string|
 |*tags* +
-_optional_||<<_tag,Tag>> array||[ "<<_tag>>" ]
+_optional_|*Example* : `[ "<<_tag>>" ]`|<<_tag,Tag>> array|
 |*weight* +
-_optional_|the weight of the pet|number||0.0
+_optional_|the weight of the pet +
+*Example* : `0.0`|number|
 |===
 
 
 [[_tag]]
 === Tag
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*name* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |===
 
 
@@ -95,27 +121,28 @@ _optional_||string||"string"
 _Polymorphism_ : Composition
 
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*email* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*firstName* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*lastName* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*password* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*phone* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*pictures* +
-_optional_||string(byte) array||[ "string" ]
+_optional_|*Example* : `[ "string" ]`|string(byte) array|
 |*userStatus* +
-_optional_|User Status|integer(int32)||0
+_optional_|User Status +
+*Example* : `0`|integer(int32)|
 |*username* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |===
 
 

@@ -1495,93 +1495,96 @@ _required_|The name that needs to be deleted|string|
 [[_category]]
 === Category
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*name* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |===
 
 
 [[_order]]
 === Order
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*complete* +
-_optional_||boolean||true
+_optional_|*Example* : `true`|boolean|
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*petId* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*quantity* +
-_optional_||integer(int32)||0
+_optional_|*Example* : `0`|integer(int32)|
 |*shipDate* +
-_optional_||string(date-time)||"string"
+_optional_|*Example* : `"string"`|string(date-time)|
 |*status* +
-_optional_|Order Status|enum (Ordered, Cancelled)||"string"
+_optional_|Order Status +
+*Example* : `"string"`|enum (Ordered, Cancelled)|
 |===
 
 
 [[_pet]]
 === Pet
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*category* +
-_optional_||<<_category,Category>>||"<<_category>>"
+_optional_|*Example* : `"<<_category>>"`|<<_category,Category>>|
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*name* +
-_required_||string||"doggie"
+_required_|*Example* : `"doggie"`|string|
 |*photoUrls* +
-_required_||string array||[ "string" ]
+_required_|*Example* : `[ "string" ]`|string array|
 |*status* +
-_optional_|pet status in the store,|enum (Dead, Alive)||"string"
+_optional_|pet status in the store, +
+*Example* : `"string"`|enum (Dead, Alive)|
 |*tags* +
-_optional_||<<_tag,Tag>> array||[ "<<_tag>>" ]
+_optional_|*Example* : `[ "<<_tag>>" ]`|<<_tag,Tag>> array|
 |===
 
 
 [[_tag]]
 === Tag
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*name* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |===
 
 
 [[_user]]
 === User
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*email* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*firstName* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*id* +
-_optional_||integer(int64)||0
+_optional_|*Example* : `0`|integer(int64)|
 |*lastName* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*password* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*phone* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |*userStatus* +
-_optional_|User Status|integer(int32)||0
+_optional_|User Status +
+*Example* : `0`|integer(int32)|
 |*username* +
-_optional_||string||"string"
+_optional_|*Example* : `"string"`|string|
 |===
 
 

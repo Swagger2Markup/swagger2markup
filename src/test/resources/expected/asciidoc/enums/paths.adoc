@@ -27,11 +27,11 @@ _optional_|State as enum in object|<<_createstate_statemodel,StateModel>>|
 [[_createstate_statemodel]]
 *StateModel*
 
-[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1"]
 |===
-|Name|Description|Schema|Default|Example
+|Name|Description|Schema|Default
 |*value* +
-_optional_|State value|enum (ADDED, REMOVED, CHANGED)||
+_optional_|State value|enum (ADDED, REMOVED, CHANGED)|
 |===
 
 
