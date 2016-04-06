@@ -18,6 +18,7 @@ package io.github.swagger2markup.internal.document.builder;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.OverviewDocumentExtension;
 import io.swagger.models.*;
 
@@ -106,53 +107,67 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private void buildVersionInfoSection(String version) {
         if(isNotBlank(version)){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
-            this.markupDocBuilder.textLine(VERSION + COLON + version, true);
+
+            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
+            paragraph.italicText(VERSION).textLine(COLON + version);
+            this.markupDocBuilder.paragraph(paragraph.toString(), true);
         }
     }
 
     private void buildContactInfoSection(Contact contact) {
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
+            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
             if(isNotBlank(contact.getName())){
-                this.markupDocBuilder.textLine(CONTACT_NAME + COLON + contact.getName(), true);
+                paragraph.italicText(CONTACT_NAME).textLine(COLON + contact.getName());
             }
             if(isNotBlank(contact.getEmail())){
-                this.markupDocBuilder.textLine(CONTACT_EMAIL + COLON + contact.getEmail(), true);
+                paragraph.italicText(CONTACT_EMAIL).textLine(COLON + contact.getEmail());
             }
+            this.markupDocBuilder.paragraph(paragraph.toString(), true);
         }
     }
 
     private void buildLicenseInfoSection(License license, String termOfService) {
-        if(license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) {
+        if (
+                (license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) ||
+                        (isNotBlank(termOfService))
+                ) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
+            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
             if (isNotBlank(license.getName())) {
-                this.markupDocBuilder.textLine(LICENSE + COLON + license.getName(), true);
+                paragraph.italicText(LICENSE).textLine(COLON + license.getName());
             }
             if (isNotBlank(license.getUrl())) {
-                this.markupDocBuilder.textLine(LICENSE_URL + COLON + license.getUrl(), true);
+                paragraph.italicText(LICENSE_URL).textLine(COLON + license.getUrl());
             }
-        }
-        if(isNotBlank(termOfService)){
-            this.markupDocBuilder.textLine(TERMS_OF_SERVICE + COLON + termOfService, true);
+            if(isNotBlank(termOfService)){
+                paragraph.italicText(TERMS_OF_SERVICE).textLine(COLON + termOfService);
+            }
+
+            this.markupDocBuilder.paragraph(paragraph.toString(), true);
         }
     }
 
     private void buildUriSchemeSection(Swagger swagger) {
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
+            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
             if (isNotBlank(swagger.getHost())) {
-                this.markupDocBuilder.textLine(HOST + COLON + swagger.getHost(), true);
+                paragraph.italicText(HOST).textLine(COLON + swagger.getHost());
             }
             if (isNotBlank(swagger.getBasePath())) {
-                this.markupDocBuilder.textLine(BASE_PATH + COLON + swagger.getBasePath(), true);
+                paragraph.italicText(BASE_PATH).textLine(COLON + swagger.getBasePath());
             }
             if (isNotEmpty(swagger.getSchemes())) {
                 List<String> schemes = new ArrayList<>();
                 for (Scheme scheme : swagger.getSchemes()) {
                     schemes.add(scheme.toString());
                 }
-                this.markupDocBuilder.textLine(SCHEMES + COLON + join(schemes, ", "), true);
+                paragraph.italicText(SCHEMES).textLine(COLON + join(schemes, ", "));
             }
+            this.markupDocBuilder.paragraph(paragraph.toString(), true);
+
         }
     }
 
@@ -164,7 +179,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                 String name = tag.getName();
                 String description = tag.getDescription();
                 if(isNoneBlank(description)){
-                    tagsList.add(name + COLON +   description);
+                    tagsList.add(name + COLON + description);
                 }else{
                     tagsList.add(name);
                 }
@@ -176,14 +191,26 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private void buildConsumesSection(List<String> consumes) {
         if (isNotEmpty(consumes)) {
             this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
-            this.markupDocBuilder.unorderedList(consumes);
+            this.markupDocBuilder.newLine();
+            for (String consume : consumes) {
+                MarkupDocBuilder contentType = this.markupDocBuilder.copy(false);
+                contentType.literalText(consume);
+                this.markupDocBuilder.unorderedListItem(contentType.toString());
+            }
+            this.markupDocBuilder.newLine();
         }
     }
 
-    private void buildProducesSection(List<String> consumes) {
-        if (isNotEmpty(consumes)) {
+    private void buildProducesSection(List<String> produces) {
+        if (isNotEmpty(produces)) {
             this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
-            this.markupDocBuilder.unorderedList(consumes);
+            this.markupDocBuilder.newLine();
+            for (String consume : produces) {
+                MarkupDocBuilder contentType = this.markupDocBuilder.copy(false);
+                contentType.literalText(consume);
+                this.markupDocBuilder.unorderedListItem(contentType.toString());
+            }
+            this.markupDocBuilder.newLine();
         }
     }
 

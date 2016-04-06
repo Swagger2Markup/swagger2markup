@@ -7,14 +7,20 @@ Description
 
 
 === Version information
-Version : Developer build +
+[%hardbreaks]
+_Version_ : Developer build
+
 
 === Contact information
-Contact : (Contact name) +
+[%hardbreaks]
+_Contact_ : (Contact name)
+
 
 === URI scheme
-Host : localhost:8080 +
-BasePath : /engine +
+[%hardbreaks]
+_Host_ : localhost:8080
+_BasePath_ : /engine
+
 
 === Tags
 

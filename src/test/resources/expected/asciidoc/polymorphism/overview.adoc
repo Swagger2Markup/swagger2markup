@@ -7,9 +7,13 @@ Description
 
 
 === Version information
-Version : Developer build +
+[%hardbreaks]
+_Version_ : Developer build
+
 
 === URI scheme
-Host : localhost:8080 +
+[%hardbreaks]
+_Host_ : localhost:8080
+
 
 

@@ -11,20 +11,28 @@ For this sample, you can use the api key `special-key` to test the authorization
 
 
 === Version information
-Version : 1.0.0 +
+[%hardbreaks]
+_Version_ : 1.0.0
+
 
 === Contact information
-Contact : apiteam@swagger.io +
+[%hardbreaks]
+_Contact_ : apiteam@swagger.io
+
 
 === License information
-License : Apache 2.0 +
-License URL : http://www.apache.org/licenses/LICENSE-2.0.html +
-Terms of service : http://helloreverb.com/terms/ +
+[%hardbreaks]
+_License_ : Apache 2.0
+_License URL_ : http://www.apache.org/licenses/LICENSE-2.0.html
+_Terms of service_ : http://helloreverb.com/terms/
+
 
 === URI scheme
-Host : petstore.swagger.io +
-BasePath : /v2 +
-Schemes : HTTP +
+[%hardbreaks]
+_Host_ : petstore.swagger.io
+_BasePath_ : /v2
+_Schemes_ : HTTP
+
 
 === Tags
 
