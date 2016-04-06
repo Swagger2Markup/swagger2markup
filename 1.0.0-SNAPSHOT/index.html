@@ -2034,7 +2034,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="groovy">convertSwagger2markup {
-    input file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/swagger/swagger_petstore.yaml</span><span class="delimiter">&quot;</span></span>)
+    swaggerInput file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/swagger/swagger_petstore.yaml</span><span class="delimiter">&quot;</span></span>)
     outputDir file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>buildDir<span class="inline-delimiter">}</span></span><span class="content">/asciidoc</span><span class="delimiter">&quot;</span></span>)
     config = [<span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.markupLanguage</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">ASCIIDOC</span><span class="delimiter">'</span></span>,
               <span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.pathsGroupedBy</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">TAGS</span><span class="delimiter">'</span></span>]
@@ -2059,7 +2059,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swaggerInput</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL or file path to the Swagger specification</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>file("src/docs/swagger/swagger_petstore.yaml")</code> or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
@@ -2150,7 +2150,7 @@ The Maven Plugin requires at least JDK 8.
     <span class="tag">&lt;artifactId&gt;</span>swagger2markup-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>{project-version}<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;configuration&gt;</span>
-      <span class="tag">&lt;input&gt;</span>${project.basedir}/src/docs/swagger/swagger_petstore.yaml<span class="tag">&lt;/input&gt;</span>
+      <span class="tag">&lt;swaggerInput&gt;</span>${project.basedir}/src/docs/swagger/swagger_petstore.yaml<span class="tag">&lt;/input&gt;</span>
       <span class="tag">&lt;outputDir&gt;</span>${project.build.directory}/asciidoc<span class="tag">&lt;/output&gt;</span>
       <span class="tag">&lt;config&gt;</span>
         <span class="tag">&lt;swagger2markup.markupLanguage&gt;</span>ASCIIDOC<span class="tag">&lt;/swagger2markup.markupLanguage&gt;</span>
@@ -2178,7 +2178,7 @@ The Maven Plugin requires at least JDK 8.
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">input</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swaggerInput</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The URL or file path to the Swagger specification</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">String</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</code>  or <code><a href="http://petstore.swagger.io/v2/swagger.json" class="bare">http://petstore.swagger.io/v2/swagger.json</a></code></p></td>
