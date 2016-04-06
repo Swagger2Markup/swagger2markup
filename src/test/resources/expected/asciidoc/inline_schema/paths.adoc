@@ -201,10 +201,10 @@ _optional_||<<_mixedparameters_post_mytable,myTable>> array|
 |===
 |Name|Description|Schema|Default
 |*myDict* +
-_optional_||<string,<<_mixedparameters_post_mydict,myDict>>> map|
+_optional_||<string,<<_mixedparameters_post_mytable_mydict,myDict>>> map|
 |===
 
-[[_mixedparameters_post_mydict]]
+[[_mixedparameters_post_mytable_mydict]]
 *myDict*
 
 [options="header", cols=".^1,.^6,.^1,.^1"]

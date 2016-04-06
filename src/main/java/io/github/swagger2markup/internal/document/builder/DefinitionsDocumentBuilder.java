@@ -241,16 +241,16 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             MarkupDocBuilder typeInfos = docBuilder.copy(false);
             switch (objectType.getPolymorphism().getNature()) {
                 case COMPOSITION:
-                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(" : " + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
                     break;
                 case INHERITANCE:
-                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(" : " + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
-                    typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(" : " + objectType.getPolymorphism().getDiscriminator());
+                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     break;
                 case NONE:
                     if (ALWAYS_DISPLAY_DISCRIMINATOR) {
                         if (StringUtils.isNotBlank(objectType.getPolymorphism().getDiscriminator()))
-                            typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(" : " + objectType.getPolymorphism().getDiscriminator());
+                            typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     }
 
                 default: break;
@@ -260,10 +260,10 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             if (StringUtils.isNotBlank(typeInfosString))
                 docBuilder.paragraph(typeInfosString, true);
 
-            localDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, 1, new DefinitionDocumentResolverFromDefinition(), docBuilder));
+            localDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = docBuilder.copy(false);
-            typeInfos.italicText(TYPE_COLUMN).textLine(" : " + modelType.displaySchema(docBuilder));
+            typeInfos.italicText(TYPE_COLUMN).textLine(COLON + modelType.displaySchema(docBuilder));
 
             docBuilder.paragraph(typeInfos.toString());
         }
