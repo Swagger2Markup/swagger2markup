@@ -1,24 +1,24 @@
 == Extension SPI
 
-Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension points are available. Each extension point is an abstract class which must be implemented.
+Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension are available. An extension is an abstract class which must be implemented.
 
 [options="header"]
-.Swagger2Markup extensions points
+.Swagger2Markup extensions
 |====
 | Name | Class | Description
-| ``OverviewDocumentExtension`` | io.github.swagger2markup.spi.OverviewDocumentExtension | Can be used to extend the content of the Overview document
-| ``PathsDocumentExtension`` | io.github.swagger2markup.spi.PathsDocumentExtension | Can be used to extend the content of the Paths document
-| ``SecurityDocumentExtension`` | io.github.swagger2markup.spi.SecurityDocumentExtension | Can be used to extend the content of the Security document
-| ``DefinitionsDocumentExtension`` | io.github.swagger2markup.spi.DefinitionsDocumentExtension | Can be used to extend the content of the Definitions document
-| ``SwaggerModelExtension`` | io.github.swagger2markup.spi.SwaggerModelExtension | Can be used to modify the Swagger model before it is converted
+| <<OverviewDocumentExtension>> | io.github.swagger2markup.spi.OverviewDocumentExtension | Can be used to extend the content of the Overview document
+| <<PathsDocumentExtension>> | io.github.swagger2markup.spi.PathsDocumentExtension | Can be used to extend the content of the Paths document
+| <<SecurityDocumentExtension>> | io.github.swagger2markup.spi.SecurityDocumentExtension | Can be used to extend the content of the Security document
+| <<DefinitionsDocumentExtension>> | io.github.swagger2markup.spi.DefinitionsDocumentExtension | Can be used to extend the content of the Definitions document
+| <<SwaggerModelExtension>> | io.github.swagger2markup.spi.SwaggerModelExtension | Can be used to modify the Swagger model before it is converted
 |====
 
 === Creation of an extension
 
-To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension point, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`. Every extension point provides to methods which must be implemented: 
+To create a custom extension, you have to create a class (e.g. `io.myname.MyExtension`) which extends an extension, e.g. `io.github.swagger2markup.spi.DefinitionsDocumentExtension`. Every extension point provides two methods which must be implemented: 
 
-* `init`: This method is invoked once
-* `apply`: This method is invoked multiple times depending on the type of the extension point.
+* `init`: This method is invoked once and can be used to initialize the extension.
+* `apply`: This method is invoked multiple times depending on the type of the extension. The `Position` can be retrieved from the `Context` and can be used to extend the document at specific extension points.
 
 [source,java,indent=0]
 ----

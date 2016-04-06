@@ -67,11 +67,5 @@ repositories {
 </repositories>
 ----
 
-=== SBT
-==== Release
 
-[source, subs="specialcharacters,attributes"]
-----
-libraryDependencies += "io.github.swagger2markup" % "swagger2markup" % "{project-version}"
-----
 
