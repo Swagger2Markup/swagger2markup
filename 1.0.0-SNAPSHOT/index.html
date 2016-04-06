@@ -1691,6 +1691,34 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <div class="paragraph">
 <p>The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup. For example, you could use this extension to delete Paths from the Swagger model which should not be rendered.</p>
 </div>
+<div class="paragraph">
+<p>Example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MySwaggerModelExtension</span> <span class="directive">extends</span> SwaggerModelExtension {
+
+    <span class="directive">public</span> <span class="type">void</span> apply(Swagger swagger) {
+        swagger.setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">newHostName</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
+        swagger.basePath(<span class="string"><span class="delimiter">&quot;</span><span class="content">newBasePath</span><span class="delimiter">&quot;</span></span>);
+
+        <span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, Path&gt; paths = swagger.getPaths(); <i class="conum" data-value="2"></i><b>(2)</b>
+        paths.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">/remove</span><span class="delimiter">&quot;</span></span>);
+        swagger.setPaths(paths);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>You can change any Swagger model property</p>
+</li>
+<li>
+<p>You could even remove elements from the Swagger model</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 <div class="sect2">
