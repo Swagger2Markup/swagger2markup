@@ -110,7 +110,7 @@ public abstract class MarkupDocumentBuilder {
     public abstract MarkupDocument build() throws IOException;
 
     /**
-     * Returns a RefType to a new inlined type named with {@code name} and {@uniqueName}.<br/>
+     * Returns a RefType to a new inlined type named with {@code name} and {@code uniqueName}.<br/>
      * The returned RefType point to the new inlined type which is added to the {@code localDefinitions} collection.<br>
      * The function is recursive and support collections (ArrayType and MapType).<br>
      * The function is transparent : {@code type} is returned as-is if type is not inlinable.<br> 
