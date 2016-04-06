@@ -2426,8 +2426,8 @@ swagger2markup.outputLanguage=DE</pre>
     <span class="annotation">@Test</span>
     <span class="directive">public</span> <span class="type">void</span> convertRemoteSwaggerToAsciiDoc() {
         <span class="comment">// Remote Swagger source</span>
-        Swagger2MarkupConverter.from(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/v2/api-docs</span><span class="delimiter">&quot;</span></span>).build()
-            .toFolder(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>);
+        Swagger2MarkupConverter.from(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/v2/api-docs</span><span class="delimiter">&quot;</span></span>)).build()
+            .toFolder(Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>));
     }
 }</code></pre>
 </div>
