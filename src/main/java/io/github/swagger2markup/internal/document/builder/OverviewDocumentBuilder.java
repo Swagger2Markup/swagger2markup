@@ -136,10 +136,10 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                 ) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
             MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
-            if (isNotBlank(license.getName())) {
+            if (license != null && isNotBlank(license.getName())) {
                 paragraph.italicText(LICENSE).textLine(COLON + license.getName());
             }
-            if (isNotBlank(license.getUrl())) {
+            if (license != null && isNotBlank(license.getUrl())) {
                 paragraph.italicText(LICENSE_URL).textLine(COLON + license.getUrl());
             }
             if(isNotBlank(termOfService)){

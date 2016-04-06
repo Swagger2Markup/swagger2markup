@@ -40,6 +40,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String SECURITY_ANCHOR = "securityScheme";
+    private static final String COLON = " : ";
     private final String SECURITY;
     private final String TYPE;
     private final String NAME;
@@ -102,20 +103,26 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private void buildSecurityScheme(SecuritySchemeDefinition securityScheme) {
         String type = securityScheme.getType();
-        markupDocBuilder.textLine(TYPE + " : " + type);
+        MarkupDocBuilder paragraph = markupDocBuilder.copy(false);
+        
+        paragraph.italicText(TYPE).textLine(COLON + type);
+        
         if (securityScheme instanceof ApiKeyAuthDefinition) {
-            markupDocBuilder.textLine(NAME + " : " + ((ApiKeyAuthDefinition) securityScheme).getName());
-            markupDocBuilder.textLine(IN + " : " + ((ApiKeyAuthDefinition) securityScheme).getIn());
+            paragraph.italicText(NAME).textLine(COLON + ((ApiKeyAuthDefinition) securityScheme).getName());
+            paragraph.italicText(IN).textLine(COLON + ((ApiKeyAuthDefinition) securityScheme).getIn());
+            
+            markupDocBuilder.paragraph(paragraph.toString(), true);
         } else if (securityScheme instanceof OAuth2Definition) {
             OAuth2Definition oauth2Scheme = (OAuth2Definition) securityScheme;
             String flow = oauth2Scheme.getFlow();
-            markupDocBuilder.textLine(FLOW + " : " + flow);
+            paragraph.italicText(FLOW).textLine(COLON + flow);
             if (isNotBlank(oauth2Scheme.getAuthorizationUrl())) {
-                markupDocBuilder.textLine(AUTHORIZATION_URL + " : " + oauth2Scheme.getAuthorizationUrl());
+                paragraph.italicText(AUTHORIZATION_URL).textLine(COLON + oauth2Scheme.getAuthorizationUrl());
             }
             if (isNotBlank(oauth2Scheme.getTokenUrl())) {
-                markupDocBuilder.textLine(TOKEN_URL + " : " + oauth2Scheme.getTokenUrl());
+                paragraph.italicText(TOKEN_URL).textLine(COLON + oauth2Scheme.getTokenUrl());
             }
+            
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1),
                     new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6));
@@ -123,7 +130,11 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
                 List<String> content = Arrays.asList(scope.getKey(), scope.getValue());
                 cells.add(content);
             }
+            
+            markupDocBuilder.paragraph(paragraph.toString(), true);
             markupDocBuilder.tableWithColumnSpecs(cols, cells);
+        } else {
+            markupDocBuilder.paragraph(paragraph.toString(), true);
         }
     }
 
