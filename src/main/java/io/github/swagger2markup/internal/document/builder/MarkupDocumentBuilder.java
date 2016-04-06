@@ -19,10 +19,7 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
-import io.github.swagger2markup.internal.type.ObjectType;
-import io.github.swagger2markup.internal.type.RefType;
-import io.github.swagger2markup.internal.type.Type;
+import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.PropertyUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
@@ -113,6 +110,51 @@ public abstract class MarkupDocumentBuilder {
     public abstract MarkupDocument build() throws IOException;
 
     /**
+     * Returns a RefType to a new inlined type named with {@code name} and {@uniqueName}.<br/>
+     * The returned RefType point to the new inlined type which is added to the {@code localDefinitions} collection.<br>
+     * The function is recursive and support collections (ArrayType and MapType).<br>
+     * The function is transparent : {@code type} is returned as-is if type is not inlinable.<br> 
+     * 
+     * @param type type to inline
+     * @param name name of the created inline ObjectType
+     * @param uniqueName unique name of the created inline ObjectType
+     * @param localDefinitions a non null collection of inlined ObjectType
+     * @return the type referencing the newly created inline ObjectType. Can be a RefType, an ArrayType or a MapType
+     */
+    protected Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> localDefinitions) {
+        if (type instanceof ObjectType) {
+            return createInlineObjectType(type, name, uniqueName, localDefinitions);
+        } else if (type instanceof ArrayType) {
+            ArrayType arrayType = (ArrayType)type;
+            arrayType.setOfType(createInlineType(arrayType.getOfType(), name, uniqueName, localDefinitions));
+
+            return arrayType;
+        } else if (type instanceof MapType) {
+            MapType mapType = (MapType)type;
+            if (mapType.getValueType() instanceof ObjectType)
+                mapType.setValueType(createInlineType(mapType.getValueType(), name, uniqueName, localDefinitions));
+
+            return mapType;
+        } else {
+            return type;
+        }
+    }
+
+    protected Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> localDefinitions) {
+        if (type instanceof ObjectType) {
+            ObjectType objectType = (ObjectType)type;
+            if (MapUtils.isNotEmpty(objectType.getProperties())) {
+                objectType.setName(name);
+                objectType.setUniqueName(uniqueName);
+                localDefinitions.add(objectType);
+                return new RefType(objectType);
+            } else
+                return type;
+        } else
+            return type;
+    }
+
+    /**
      * Build a generic property table
      *
      * @param properties                 properties to display
@@ -135,14 +177,9 @@ public abstract class MarkupDocumentBuilder {
             for (String propertyName : propertyNames) {
                 Property property = properties.get(propertyName);
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
-                if (depth > 0 && propertyType instanceof ObjectType) {
-                    if (MapUtils.isNotEmpty(((ObjectType) propertyType).getProperties())) {
-                        propertyType.setName(propertyName);
-                        propertyType.setUniqueName(uniquePrefix + " " + propertyName);
-                        localDefinitions.add((ObjectType) propertyType);
 
-                        propertyType = new RefType(propertyType);
-                    }
+                if (depth > 0) {
+                    propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, localDefinitions);
                 }
 
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);

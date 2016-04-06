@@ -113,7 +113,19 @@ Returns metrics information for the application.
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|Metrics|<string,object> map|
+_optional_|Metrics|<string,<<_createmetrics_body,body>>> map|
+|===
+
+[[_createmetrics_body]]
+*body*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*p1* +
+_optional_||string|
+|*p2* +
+_optional_||string|
 |===
 
 
@@ -124,7 +136,19 @@ _optional_|Metrics|<string,object> map|
 [options="header", cols=".^1,.^3,.^1"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<string,object> map
+|*200*|OK|<string,<<_createmetrics_response_200,Response 200>>> map
+|===
+
+[[_createmetrics_response_200]]
+*Response 200*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*p1* +
+_optional_||string|
+|*p2* +
+_optional_||string|
 |===
 
 

@@ -57,7 +57,19 @@ _optional_|Description p2|<<_inlinedepthschema_p2,p2>>|
 |*p2-1* +
 _optional_|Description p2-1|string|
 |*p2-2* +
-_optional_|Description p2-2|object|
+_optional_|Description p2-2|<<_inlinedepthschema_p2-2,p2-2>>|
+|===
+
+[[_inlinedepthschema_p2-2]]
+*p2-2*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*p2-2-1* +
+_optional_|Description p2-2-1|string|
+|*p2-2-2* +
+_optional_|Description p2-2-2|boolean|
 |===
 
 

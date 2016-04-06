@@ -47,28 +47,29 @@ public class ExamplesUtil {
     public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, Operation operation, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
         Map<String, Object> examples = new LinkedHashMap<>();
         Map<String, Response> responses = operation.getResponses();
-        for (Map.Entry<String, Response> responseEntry : responses.entrySet()) {
-            Response response = responseEntry.getValue();
-            Object example = response.getExamples();
-            if (example == null) {
-                Property schema = response.getSchema();
-                if (schema != null) {
-                    example = schema.getExample();
+        if (responses != null)
+            for (Map.Entry<String, Response> responseEntry : responses.entrySet()) {
+                Response response = responseEntry.getValue();
+                Object example = response.getExamples();
+                if (example == null) {
+                    Property schema = response.getSchema();
+                    if (schema != null) {
+                        example = schema.getExample();
 
-                    if (example == null && schema instanceof RefProperty) {
-                        String simpleRef = ((RefProperty) schema).getSimpleRef();
-                        example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, markupDocBuilder);
-                    }
-                    if (example == null && generateMissingExamples) {
-                        example = PropertyUtils.generateExample(schema, markupDocBuilder);
+                        if (example == null && schema instanceof RefProperty) {
+                            String simpleRef = ((RefProperty) schema).getSimpleRef();
+                            example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, markupDocBuilder);
+                        }
+                        if (example == null && generateMissingExamples) {
+                            example = PropertyUtils.generateExample(schema, markupDocBuilder);
+                        }
                     }
                 }
+
+                if (example != null)
+                    examples.put(responseEntry.getKey(), example);
+
             }
-
-            if (example != null)
-                examples.put(responseEntry.getKey(), example);
-
-        }
 
         return examples;
     }

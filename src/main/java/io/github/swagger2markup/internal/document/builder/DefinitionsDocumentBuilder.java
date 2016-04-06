@@ -231,6 +231,10 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private List<ObjectType> typeSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
         List<ObjectType> localDefinitions = new ArrayList<>();
         Type modelType = ModelUtils.resolveRefType(ModelUtils.getType(model, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromDefinition()));
+
+        if (!(modelType instanceof ObjectType)) {
+            modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", localDefinitions);
+        }
         
         if (modelType instanceof ObjectType) {
             ObjectType objectType = (ObjectType) modelType;
@@ -306,7 +310,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
                 List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), uniquePrefix, depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), depth - 1, docBuilder);
             }
         }
     }

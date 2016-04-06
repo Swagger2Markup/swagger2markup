@@ -11,6 +11,60 @@ consumes:
 produces:
   - application/json
 paths:
+  /CollectionParameters:
+    post:
+      summary: Recursive collection parameter
+      description: Dummy description
+      tags:
+        - All
+      parameters:
+        - name: Version
+          description: The API version
+          in: body
+          schema:
+            description: Options k/v pairs list
+            type: array
+            items:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: option key
+                  value:
+                    type: string
+                    description: option value
+                                  
+  /MixedParameters:
+    post:
+      summary: Mixed multi-level objects and collection parameter
+      description: Dummy description
+      tags:
+        - All
+      parameters:
+        - name: Version
+          description: The API version
+          in: body
+          schema:
+            description: mixed collections and objects
+            type: object
+            properties:
+              myTable:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    myDict:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          k:
+                            type: string
+                          v:
+                            type: string
+                                                        
   /LaunchCommand:
     post:
       summary: LaunchCommand
@@ -48,14 +102,21 @@ paths:
                     description: Command arguments
                     type: string
               Options:
-                description: Dummy description
+                description: Options k/v pairs
                 type: array
                 items:
-                  type: string
-                type: string
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      description: option key
+                    value:
+                      type: string
+                      description: option value
               Location:
                 description: Dummy description
                 $ref: '#/definitions/Location'
+                
       responses:
         200:
           description: Result
@@ -68,6 +129,19 @@ paths:
               Location:
                 description: <description>
                 $ref: '#/definitions/Location'
+              Options:
+                description: Options k/v pairs
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      description: option key
+                    value:
+                      type: string
+                      description: option value
+
           headers:
             X-Rate-Limit-Limit:
               description: The number of allowed requests in the current period
@@ -109,6 +183,41 @@ definitions:
         description: Place
         type: string
 
+  RecursiveCollectionSchema:
+    description: Options k/v pairs list
+    type: array
+    items:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          key:
+            type: string
+            description: option key
+          value:
+            type: string
+            description: option value
+
+  MixedSchema:
+    description: mixed collections and objects
+    type: object
+    properties:
+      myTable:
+        type: array
+        items:
+          type: object
+          properties:
+            myDict:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  k:
+                    type: string
+                  v:
+                    type: string
+
+
   InlineDepthSchema:
     type: object
     properties:
@@ -131,8 +240,22 @@ definitions:
                 properties:
                   p2-2-1:
                     description: Description p2-2-1
-                    type: string
+                    type: object
+                    properties:
+                      p2-2-1-1:
+                        description: Description p2-2-1-1
+                        type: string
+                      p2-2-1-2:
+                        description: Description p2-2-1-2
+                        type: boolean
                   p2-2-2:
                     description: Description p2-2-2
-                    type: boolean
+                    type: object
+                    properties:
+                      p2-2-2-1:
+                        description: Description p2-2-2-1
+                        type: string
+                      p2-2-2-2:
+                        description: Description p2-2-2-2
+                        type: boolean
 

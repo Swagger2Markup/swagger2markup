@@ -151,7 +151,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withInlineSchemaDepthLevel(1)
+                .withInlineSchemaDepthLevel(10)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -163,6 +163,30 @@ public class AsciidocConverterTest {
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/inline_schema").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocWithInlineSchema.html");
+    }
+
+    @Test
+    public void testSwagger2AsciiDocWithInlineSchemaAndFlatBody() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/inline_schema_flat_body");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withInlineSchemaDepthLevel(10)
+                .withFlatBody()
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/inline_schema_flat_body").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocWithInlineSchemaAndFlatBody.html");
     }
 
     @Test
@@ -349,6 +373,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withInlineSchemaDepthLevel(5)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

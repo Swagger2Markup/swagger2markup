@@ -94,7 +94,11 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                  "p1": { "type": "string" },
+                  "p2": { "type": "string" }
+                }                 
               }
             }
           }
@@ -105,7 +109,11 @@
             "schema": {
               "type": "object",
               "additionalProperties": {
-                "type": "object"
+                "type": "object",
+                "properties": {
+                  "p1": { "type": "string" },
+                  "p2": { "type": "string" }
+                }
               }
             }
           }
