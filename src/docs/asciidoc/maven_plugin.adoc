@@ -10,13 +10,31 @@ Add the following snippet to your Maven POM file:
 
 [source,xml, subs="specialcharacters,attributes"]
 ----
-<plugins>
-  <plugin>
-    <groupId>io.github.swagger2markup</groupId>
-    <artifactId>swagger2markup-maven-plugin</artifactId>
-    <version>{project-version}</version>
-  </plugin>
-</plugins>
+<pluginRepositories>
+    <pluginRepository>
+        <id>jcenter-snapshots</id>
+        <name>jcenter</name>
+        <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+    </pluginRepository>
+    <pluginRepository>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+        <id>jcenter-releases</id>
+        <name>jcenter</name>
+        <url>http://jcenter.bintray.com</url>
+    </pluginRepository>
+</pluginRepositories>
+
+<build>
+    <plugins>
+      <plugin>
+        <groupId>io.github.swagger2markup</groupId>
+        <artifactId>swagger2markup-maven-plugin</artifactId>
+        <version>{project-version}</version>
+      </plugin>
+    </plugins>
+</build>
 ----
 
 The plugin adds a new task goal `swagger2markup:convertSwagger2markup`. You can run the goal as follows:
@@ -29,20 +47,22 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 
 [source,xml]
 ----
-<plugins>
-  <plugin>
-    <groupId>io.github.swagger2markup</groupId>
-    <artifactId>swagger2markup-maven-plugin</artifactId>
-    <version>{project-version}</version>
-    <configuration>
-      <input>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</input>
-      <outputDir>${project.build.directory}/asciidoc</output>
-      <config>
-        <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
-      </config>
-    </configuration>
-  </plugin>
-</plugins>
+<build>
+    <plugins>
+      <plugin>
+        <groupId>io.github.swagger2markup</groupId>
+        <artifactId>swagger2markup-maven-plugin</artifactId>
+        <version>{project-version}</version>
+        <configuration>
+          <swaggerInput>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</input>
+          <outputDir>${project.build.directory}/asciidoc</output>
+          <config>
+            <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+          </config>
+        </configuration>
+      </plugin>
+    </plugins>
+</build>
 ----
 
 
@@ -50,7 +70,7 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 .Maven Plugin properties
 |====
 | Name | Description | Type |  Example
-| input | The URL or file path to the Swagger specification | String | `${project.basedir}/src/docs/swagger/swagger_petstore.yaml`  or `http://petstore.swagger.io/v2/swagger.json`
+| swaggerInput | The URL or file path to the Swagger specification | String | `${project.basedir}/src/docs/swagger/swagger_petstore.yaml`  or `http://petstore.swagger.io/v2/swagger.json`
 | outputDir | The directory where the output should be stored. | File | `${project.build.directory}/asciidoc` 
 | outputFile | The file path (without extension) where the output should be stored. | File | `${project.build.directory}/asciidoc/swagger` 
 | config | The Swagger2Markup properties to configure the converter | Map |  | 

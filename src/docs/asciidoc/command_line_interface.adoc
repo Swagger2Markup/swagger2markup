@@ -84,7 +84,7 @@ You can convert a remote Swagger specification which must be accessible via HTTP
 java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp
 ----
 
-==== Configuration
+=== Configuration
 
 Create a `config.properties` file to customize the <<Swagger2Markup properties>>. For Example: 
 
