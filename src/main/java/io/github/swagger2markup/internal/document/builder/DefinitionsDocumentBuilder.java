@@ -97,6 +97,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildDefinitionsSection();
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }

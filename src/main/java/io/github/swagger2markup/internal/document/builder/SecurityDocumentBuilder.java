@@ -15,11 +15,11 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
-import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
@@ -75,6 +75,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildSecuritySchemeDefinitionsSection(definitions);
             applySecurityDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }
@@ -91,7 +92,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
             buildDescriptionParagraph(definition.getDescription(), this.markupDocBuilder);
             buildSecurityScheme(definition);
-            applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
+            applySecurityDocumentExtension(new Context(Position.DEFINITION_END, markupDocBuilder, definitionName, definition));
         }
     }
 

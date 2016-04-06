@@ -140,6 +140,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildsPathsSection(paths);
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
     }

@@ -93,6 +93,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         buildConsumesSection(swagger.getConsumes());
         buildProducesSection(swagger.getProduces());
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         return new MarkupDocument(markupDocBuilder);
     }
 
