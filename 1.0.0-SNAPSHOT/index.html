@@ -2122,21 +2122,21 @@ The Maven Plugin requires at least JDK 8.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
+<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;pluginRepositories&gt;</span>
+    <span class="tag">&lt;pluginRepository&gt;</span>
         <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
         <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
         <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
+    <span class="tag">&lt;/pluginRepository&gt;</span>
+    <span class="tag">&lt;pluginRepository&gt;</span>
         <span class="tag">&lt;snapshots&gt;</span>
             <span class="tag">&lt;enabled&gt;</span>false<span class="tag">&lt;/enabled&gt;</span>
         <span class="tag">&lt;/snapshots&gt;</span>
         <span class="tag">&lt;id&gt;</span>jcenter-releases<span class="tag">&lt;/id&gt;</span>
         <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
         <span class="tag">&lt;url&gt;</span>http://jcenter.bintray.com<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span>
+    <span class="tag">&lt;/pluginRepository&gt;</span>
+<span class="tag">&lt;/pluginRepositories&gt;</span>
 
 <span class="tag">&lt;build&gt;</span>
     <span class="tag">&lt;plugins&gt;</span>
