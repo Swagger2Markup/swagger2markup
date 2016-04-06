@@ -1,0 +1,30 @@
+= API
+
+
+[[_overview]]
+== Overview
+Service API
+
+
+=== Version information
+[%hardbreaks]
+_Version_ : 2.18
+
+
+=== URI scheme
+[%hardbreaks]
+_Host_ : service.host.com
+_Schemes_ : HTTPS
+
+
+=== Consumes
+
+* `application/json`
+
+
+=== Produces
+
+* `application/json`
+
+
+

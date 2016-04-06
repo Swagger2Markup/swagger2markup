@@ -1,0 +1,224 @@
+
+[[_paths]]
+== Paths
+
+[[_collectionparameters_post]]
+=== Recursive collection parameter
+....
+POST /CollectionParameters
+....
+
+
+==== Description
+Dummy description
+
+
+==== Body parameter
+The API version
+
+[%hardbreaks]
+_Name_ : Version
+_Flags_ : optional
+_Type_ : <string,<<_collectionparameters_post_version,Version>>> map array
+
+[[_collectionparameters_post_version]]
+*Version*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*key* +
+_optional_|option key|string|
+|*value* +
+_optional_|option value|string|
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_launchcommand_post]]
+=== LaunchCommand
+....
+POST /LaunchCommand
+....
+
+
+==== Description
+Dummy description
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^1,.^6,.^1,.^1"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*Option* +
+_optional_|An optional option|string|
+|*Query*|*Version* +
+_optional_|The API version|string|
+|===
+
+
+==== Body parameter
+Launch something new
+
+[%hardbreaks]
+_Name_ : LaunchCommandRequest
+_Flags_ : optional
+
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*Command* +
+_required_|Dummy description|<<_launchcommand_post_command,Command>>|
+|*Location* +
+_optional_|Dummy description|<<_location,Location>>|
+|*Options* +
+_optional_|Options k/v pairs|<<_launchcommand_post_options,Options>> array|
+|===
+
+[[_launchcommand_post_command]]
+*Command*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*args* +
+_optional_|Command arguments|string|
+|*path* +
+_optional_|Command path|string|
+|===
+
+[[_launchcommand_post_options]]
+*Options*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*key* +
+_optional_|option key|string|
+|*value* +
+_optional_|option value|string|
+|===
+
+
+==== Responses
+
+===== HTTP Code 200
+
+[options="header", cols=".^1,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|*200*|Result|<<_launchcommand_post_response_200,Response 200>>
+|===
+
+*Headers*
+
+[options="header", cols=".^1,.^3,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*X-Rate-Limit-Limit*|The number of allowed requests in the current period|integer|
+|*X-Rate-Limit-Remaining*|The number of remaining requests in the current period|integer|
+|*X-Rate-Limit-Reset*|The number of seconds left in the current period|integer|
+|===
+
+
+===== HTTP Code 400
+
+[options="header", cols=".^1,.^3,.^1"]
+|===
+|HTTP Code|Description|Schema
+|*400*|Error|<<_error,Error>>
+|===
+
+[[_launchcommand_post_response_200]]
+*Response 200*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*Location* +
+_optional_|<description>|<<_location,Location>>|
+|*Options* +
+_optional_|Options k/v pairs|<<_launchcommand_post_options,Options>> array|
+|*ReservationId* +
+_optional_|<description>|string|
+|===
+
+[[_launchcommand_post_options]]
+*Options*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*key* +
+_optional_|option key|string|
+|*value* +
+_optional_|option value|string|
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_mixedparameters_post]]
+=== Mixed multi-level objects and collection parameter
+....
+POST /MixedParameters
+....
+
+
+==== Description
+Dummy description
+
+
+==== Body parameter
+The API version
+
+[%hardbreaks]
+_Name_ : Version
+_Flags_ : optional
+
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*myTable* +
+_optional_||<<_mixedparameters_post_mytable,myTable>> array|
+|===
+
+[[_mixedparameters_post_mytable]]
+*myTable*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*myDict* +
+_optional_||<string,<<_mixedparameters_post_mydict,myDict>>> map|
+|===
+
+[[_mixedparameters_post_mydict]]
+*myDict*
+
+[options="header", cols=".^1,.^6,.^1,.^1"]
+|===
+|Name|Description|Schema|Default
+|*k* +
+_optional_||string|
+|*v* +
+_optional_||string|
+|===
+
+
+==== Tags
+
+* All
+
+
+
