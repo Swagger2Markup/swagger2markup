@@ -3,14 +3,16 @@
 ## Security
 
 ### api_key
-Type : apiKey
-Name : api_key
-In : HEADER
+*Type* : apiKey  
+*Name* : api_key  
+*In* : HEADER
+
 
 ### petstore_auth
-Type : oauth2
-Flow : implicit
-Token URL : http://petstore.swagger.io/api/oauth/dialog
+*Type* : oauth2  
+*Flow* : implicit  
+*Token URL* : http://petstore.swagger.io/api/oauth/dialog
+
 
 |Name|Description|
 |---|---|

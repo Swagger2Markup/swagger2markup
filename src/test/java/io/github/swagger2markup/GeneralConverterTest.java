@@ -48,7 +48,7 @@ public class GeneralConverterTest {
     public void testToFileWithoutExtension() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
-        Path outputFile = Paths.get("build/test/asciidoc/outputFile.adoc");
+        Path outputFile = Paths.get("build/test/asciidoc/toFile/outputFile.adoc");
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()

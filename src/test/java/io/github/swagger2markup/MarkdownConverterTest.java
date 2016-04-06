@@ -35,10 +35,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.fail;
@@ -144,6 +141,7 @@ public class MarkdownConverterTest {
     /**
      * Given a markdown document to search, this checks to see if the specified tables
      * have all of the expected fields listed.
+     * Match is a "search", and not an "equals" match.
      *
      * @param doc           markdown document file to inspect
      * @param fieldsByTable map of table name (header) to field names expected
@@ -179,7 +177,13 @@ public class MarkdownConverterTest {
                     final Set<String> fieldsLeft = fieldsLeftByTable.get(inTable);
                     // Mark the field as found and if this table has no more fields to find,
                     //  remove it from the "fieldsLeftByTable" map to mark the table as done
-                    if (fieldsLeft.remove(fieldName) && fieldsLeft.isEmpty()) {
+                    Iterator<String> fieldIt = fieldsLeft.iterator();
+                    while (fieldIt.hasNext()) {
+                        String fieldLeft = fieldIt.next();
+                        if (fieldName.contains(fieldLeft))
+                            fieldIt.remove();
+                    }
+                    if (fieldsLeft.isEmpty()) {
                         fieldsLeftByTable.remove(inTable);
                     }
                 }

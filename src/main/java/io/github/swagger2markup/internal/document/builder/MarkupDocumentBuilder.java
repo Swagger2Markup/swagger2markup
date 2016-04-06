@@ -32,6 +32,7 @@ import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +51,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public abstract class MarkupDocumentBuilder {
 
+    protected static final String COLON = " : ";
+
     protected final String DEFAULT_COLUMN;
     protected final String EXAMPLE_COLUMN;
-    protected final String REQUIRED_COLUMN;
     protected final String SCHEMA_COLUMN;
     protected final String NAME_COLUMN;
     protected final String DESCRIPTION_COLUMN;
@@ -62,6 +64,11 @@ public abstract class MarkupDocumentBuilder {
     protected final String CONSUMES;
     protected final String TAGS;
     protected final String NO_CONTENT;
+    protected final String FLAGS_COLUMN;
+    protected final String FLAGS_REQUIRED;
+    protected final String FLAGS_OPTIONAL;
+    protected final String FLAGS_READ_ONLY;
+    
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -82,7 +89,10 @@ public abstract class MarkupDocumentBuilder {
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
         EXAMPLE_COLUMN = labels.getString("example_column");
-        REQUIRED_COLUMN = labels.getString("required_column");
+        FLAGS_COLUMN = labels.getString("flags.column");
+        FLAGS_REQUIRED = labels.getString("flags.required");
+        FLAGS_OPTIONAL = labels.getString("flags.optional");
+        FLAGS_READ_ONLY = labels.getString("flags.read_only");
         SCHEMA_COLUMN = labels.getString("schema_column");
         NAME_COLUMN = labels.getString("name_column");
         DESCRIPTION_COLUMN = labels.getString("description_column");
@@ -116,9 +126,8 @@ public abstract class MarkupDocumentBuilder {
         List<ObjectType> localDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
-                new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(true).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1h"),
+                new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
-                new MarkupTableColumn(REQUIRED_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                 new MarkupTableColumn(EXAMPLE_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
@@ -139,10 +148,20 @@ public abstract class MarkupDocumentBuilder {
 
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
 
+                MarkupDocBuilder propertyNameContent = markupDocBuilder.copy(false);
+                propertyNameContent.boldTextLine(propertyName, true);
+                if (BooleanUtils.isTrue(property.getRequired()))
+                    propertyNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
+                else
+                    propertyNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
+                if (BooleanUtils.isTrue(property.getReadOnly())) {
+                    propertyNameContent.newLine(true);
+                    propertyNameContent.italicText(FLAGS_READ_ONLY.toLowerCase());
+                }
+                
                 List<String> content = Arrays.asList(
-                        propertyName,
+                        propertyNameContent.toString(),
                         swaggerMarkupDescription(defaultString(property.getDescription())),
-                        Boolean.toString(property.getRequired()),
                         propertyType.displaySchema(docBuilder),
                         PropertyUtils.getDefaultValue(property),
                         example != null ? Json.pretty(example) : ""
@@ -155,6 +174,18 @@ public abstract class MarkupDocumentBuilder {
         }
 
         return localDefinitions;
+    }
+
+    protected String boldText(String text) {
+        return this.markupDocBuilder.copy(false).boldText(text).toString();
+    }
+
+    protected String italicText(String text) {
+        return this.markupDocBuilder.copy(false).italicText(text).toString();
+    }
+
+    protected String literalText(String text) {
+        return this.markupDocBuilder.copy(false).literalText(text).toString();
     }
 
     /**

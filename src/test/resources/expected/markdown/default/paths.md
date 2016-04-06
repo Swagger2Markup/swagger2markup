@@ -11,9 +11,9 @@ POST /pets
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Body|body|Pet object that needs to be added to the store|false|[Pet](#pet)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)||
 
 
 #### Responses
@@ -22,7 +22,7 @@ POST /pets
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|405|Invalid input|No Content|
+|**405**|Invalid input|No Content|
 
 
 #### Consumes
@@ -46,7 +46,7 @@ POST /pets
 
 |Type|Name|Scopes|
 |---|---|---|
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="updatepet"></a>
@@ -58,9 +58,9 @@ PUT /pets
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Body|body|Pet object that needs to be added to the store|false|[Pet](#pet)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)||
 
 
 #### Responses
@@ -69,21 +69,21 @@ PUT /pets
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid ID supplied|No Content|
+|**400**|Invalid ID supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|Pet not found|No Content|
+|**404**|Pet not found|No Content|
 
 
 ##### HTTP Code 405
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|405|Validation exception|No Content|
+|**405**|Validation exception|No Content|
 
 
 #### Consumes
@@ -107,7 +107,7 @@ PUT /pets
 
 |Type|Name|Scopes|
 |---|---|---|
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="findpetsbystatus"></a>
@@ -123,9 +123,9 @@ Multiple status values can be provided with comma seperated strings
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Query|status|Status values that need to be considered for filter|false|multi string array||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|multi string array||
 
 
 #### Responses
@@ -134,22 +134,22 @@ Multiple status values can be provided with comma seperated strings
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|[Pet](#pet) array|
+|**200**|successful operation|[Pet](#pet) array|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid status value|No Content|
+|**400**|Invalid status value|No Content|
 
 
 #### Produces
@@ -167,7 +167,7 @@ Multiple status values can be provided with comma seperated strings
 
 |Type|Name|Scopes|
 |---|---|---|
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="findpetsbytags"></a>
@@ -183,9 +183,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Query|tags|Tags to filter by|false|multi string array||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Query**|**tags**  <br>*optional*|Tags to filter by|multi string array||
 
 
 #### Responses
@@ -194,22 +194,22 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|[Pet](#pet) array|
+|**200**|successful operation|[Pet](#pet) array|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid tag value|No Content|
+|**400**|Invalid tag value|No Content|
 
 
 #### Produces
@@ -227,7 +227,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |Type|Name|Scopes|
 |---|---|---|
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="updatepetwithform"></a>
@@ -239,11 +239,11 @@ POST /pets/{petId}
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|petId|ID of pet that needs to be updated|true|string||
-|FormData|name|Updated name of the pet|true|string||
-|FormData|status|Updated status of the pet|true|string||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**petId**  <br>*required*|ID of pet that needs to be updated|string||
+|**FormData**|**name**  <br>*required*|Updated name of the pet|string||
+|**FormData**|**status**  <br>*required*|Updated status of the pet|string||
 
 
 #### Responses
@@ -252,7 +252,7 @@ POST /pets/{petId}
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|405|Invalid input|No Content|
+|**405**|Invalid input|No Content|
 
 
 #### Consumes
@@ -275,7 +275,7 @@ POST /pets/{petId}
 
 |Type|Name|Scopes|
 |---|---|---|
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="getpetbyid"></a>
@@ -291,9 +291,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|petId|ID of pet that needs to be fetched|true|integer(int64)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer(int64)||
 
 
 #### Responses
@@ -302,29 +302,29 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|[Pet](#pet)|
+|**200**|successful operation|[Pet](#pet)|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid ID supplied|No Content|
+|**400**|Invalid ID supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|Pet not found|No Content|
+|**404**|Pet not found|No Content|
 
 
 #### Produces
@@ -342,8 +342,8 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |Type|Name|Scopes|
 |---|---|---|
-|apiKey|[api_key](#api_key)||
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**apiKey**|**[api_key](#api_key)**||
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="deletepet"></a>
@@ -355,10 +355,10 @@ DELETE /pets/{petId}
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Header|api_key||true|string||
-|Path|petId|Pet id to delete|true|integer(int64)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Header**|**api_key**  <br>*required*||string||
+|**Path**|**petId**  <br>*required*|Pet id to delete|integer(int64)||
 
 
 #### Responses
@@ -367,7 +367,7 @@ DELETE /pets/{petId}
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid pet value|No Content|
+|**400**|Invalid pet value|No Content|
 
 
 #### Produces
@@ -385,7 +385,7 @@ DELETE /pets/{petId}
 
 |Type|Name|Scopes|
 |---|---|---|
-|oauth2|[petstore_auth](#petstore_auth)|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="placeorder"></a>
@@ -397,9 +397,9 @@ POST /stores/order
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Body|body|order placed for purchasing the pet|false|[Order](#order)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Body**|**body**  <br>*optional*|order placed for purchasing the pet|[Order](#order)||
 
 
 #### Responses
@@ -408,22 +408,22 @@ POST /stores/order
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|[Order](#order)|
+|**200**|successful operation|[Order](#order)|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid Order|No Content|
+|**400**|Invalid Order|No Content|
 
 
 #### Produces
@@ -450,9 +450,9 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|orderId|ID of pet that needs to be fetched|true|string||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**orderId**  <br>*required*|ID of pet that needs to be fetched|string||
 
 
 #### Responses
@@ -461,29 +461,29 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|[Order](#order)|
+|**200**|successful operation|[Order](#order)|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid ID supplied|No Content|
+|**400**|Invalid ID supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|Order not found|No Content|
+|**404**|Order not found|No Content|
 
 
 #### Produces
@@ -510,9 +510,9 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|orderId|ID of the order that needs to be deleted|true|string||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**orderId**  <br>*required*|ID of the order that needs to be deleted|string||
 
 
 #### Responses
@@ -521,14 +521,14 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid ID supplied|No Content|
+|**400**|Invalid ID supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|Order not found|No Content|
+|**404**|Order not found|No Content|
 
 
 #### Produces
@@ -555,9 +555,9 @@ This can only be done by the logged in user.
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Body|body|Created user object|false|[User](#user)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Body**|**body**  <br>*optional*|Created user object|[User](#user)||
 
 
 #### Responses
@@ -566,7 +566,7 @@ This can only be done by the logged in user.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|default|successful operation|No Content|
+|**default**|successful operation|No Content|
 
 
 #### Produces
@@ -589,9 +589,9 @@ POST /users/createWithArray
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Body|body|List of user object|false|[User](#user) array||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Body**|**body**  <br>*optional*|List of user object|[User](#user) array||
 
 
 #### Responses
@@ -600,7 +600,7 @@ POST /users/createWithArray
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|default|successful operation|No Content|
+|**default**|successful operation|No Content|
 
 
 #### Produces
@@ -623,9 +623,9 @@ POST /users/createWithList
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Body|body|List of user object|false|[User](#user) array||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Body**|**body**  <br>*optional*|List of user object|[User](#user) array||
 
 
 #### Responses
@@ -634,7 +634,7 @@ POST /users/createWithList
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|default|successful operation|No Content|
+|**default**|successful operation|No Content|
 
 
 #### Produces
@@ -657,10 +657,10 @@ GET /users/login
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Query|password|The password for login in clear text|false|string||
-|Query|username|The user name for login|false|string||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Query**|**password**  <br>*optional*|The password for login in clear text|string||
+|**Query**|**username**  <br>*optional*|The user name for login|string||
 
 
 #### Responses
@@ -669,22 +669,22 @@ GET /users/login
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|string|
+|**200**|successful operation|string|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid username/password supplied|No Content|
+|**400**|Invalid username/password supplied|No Content|
 
 
 #### Produces
@@ -711,7 +711,7 @@ GET /users/logout
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|default|successful operation|No Content|
+|**default**|successful operation|No Content|
 
 
 #### Produces
@@ -734,9 +734,9 @@ GET /users/{username}
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|username|The name that needs to be fetched. Use user1 for testing.|true|string||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**username**  <br>*required*|The name that needs to be fetched. Use user1 for testing.|string||
 
 
 #### Responses
@@ -745,29 +745,29 @@ GET /users/{username}
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|200|successful operation|[User](#user)|
+|**200**|successful operation|[User](#user)|
 
 **Headers**
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|X-Rate-Limit-Limit|The number of allowed requests in the current period|integer||
-|X-Rate-Limit-Remaining|The number of remaining requests in the current period|integer||
-|X-Rate-Limit-Reset|The number of seconds left in the current period|integer||
+|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
+|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
+|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
 
 
 ##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid username supplied|No Content|
+|**400**|Invalid username supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|User not found|No Content|
+|**404**|User not found|No Content|
 
 
 #### Produces
@@ -794,10 +794,10 @@ This can only be done by the logged in user.
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|username|name that need to be deleted|true|string||
-|Body|body|Updated user object|false|[User](#user)||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**username**  <br>*required*|name that need to be deleted|string||
+|**Body**|**body**  <br>*optional*|Updated user object|[User](#user)||
 
 
 #### Responses
@@ -806,14 +806,14 @@ This can only be done by the logged in user.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid user supplied|No Content|
+|**400**|Invalid user supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|User not found|No Content|
+|**404**|User not found|No Content|
 
 
 #### Produces
@@ -840,9 +840,9 @@ This can only be done by the logged in user.
 
 #### Parameters
 
-|Type|Name|Description|Required|Schema|Default|
-|---|---|---|---|---|---|
-|Path|username|The name that needs to be deleted|true|string||
+|Type|Name|Description|Schema|Default|
+|---|---|---|---|---|
+|**Path**|**username**  <br>*required*|The name that needs to be deleted|string||
 
 
 #### Responses
@@ -851,14 +851,14 @@ This can only be done by the logged in user.
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|400|Invalid username supplied|No Content|
+|**400**|Invalid username supplied|No Content|
 
 
 ##### HTTP Code 404
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|404|User not found|No Content|
+|**404**|User not found|No Content|
 
 
 #### Produces

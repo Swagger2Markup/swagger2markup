@@ -35,7 +35,6 @@ import static org.apache.commons.lang3.StringUtils.*;
 public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String OVERVIEW_ANCHOR = "overview";
-    private static final String COLON = " : ";
     private final String OVERVIEW;
     private final String CURRENT_VERSION;
     private final String VERSION;
@@ -194,9 +193,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
             this.markupDocBuilder.sectionTitleLevel2(CONSUMES);
             this.markupDocBuilder.newLine();
             for (String consume : consumes) {
-                MarkupDocBuilder contentType = this.markupDocBuilder.copy(false);
-                contentType.literalText(consume);
-                this.markupDocBuilder.unorderedListItem(contentType.toString());
+                this.markupDocBuilder.unorderedListItem(literalText(consume));
             }
             this.markupDocBuilder.newLine();
         }
@@ -206,10 +203,8 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if (isNotEmpty(produces)) {
             this.markupDocBuilder.sectionTitleLevel2(PRODUCES);
             this.markupDocBuilder.newLine();
-            for (String consume : produces) {
-                MarkupDocBuilder contentType = this.markupDocBuilder.copy(false);
-                contentType.literalText(consume);
-                this.markupDocBuilder.unorderedListItem(contentType.toString());
+            for (String produce : produces) {
+                this.markupDocBuilder.unorderedListItem(literalText(produce));
             }
             this.markupDocBuilder.newLine();
         }

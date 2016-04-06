@@ -5,36 +5,45 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|id||false|integer(int64)||123
-|name||false|string||"Canines"
+|Name|Description|Schema|Default|Example
+|*id* +
+_optional_||integer(int64)||123
+|*name* +
+_optional_||string||"Canines"
 |===
 
 
 [[_identified]]
 === Identified
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|id||false|integer(int64)||
+|Name|Description|Schema|Default|Example
+|*id* +
+_optional_||integer(int64)||
 |===
 
 
 [[_order]]
 === Order
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|complete||false|boolean||
-|id||false|integer(int64)||77
-|petId||false|integer(int64)||
-|quantity||false|integer(int32)||
-|shipDate||false|string(date-time)||
-|status|Order Status|false|string||"DONE"
+|Name|Description|Schema|Default|Example
+|*complete* +
+_optional_||boolean||
+|*id* +
+_optional_||integer(int64)||77
+|*petId* +
+_optional_||integer(int64)||
+|*quantity* +
+_optional_||integer(int32)||
+|*shipDate* +
+_optional_||string(date-time)||
+|*status* +
+_optional_|Order Status|string||"DONE"
 |===
 
 
@@ -43,28 +52,38 @@
 Test description
 
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|category||false|<<_category,Category>>||
-|id||false|integer(int64)||
-|name||true|string||"doggie"
-|nicknames||false|<string,string> map||
-|photoUrls||true|string array||
-|status|pet status in the store|false|string||
-|tags||false|<<_tag,Tag>> array||
-|weight|the weight of the pet|false|number||
+|Name|Description|Schema|Default|Example
+|*category* +
+_optional_||<<_category,Category>>||
+|*id* +
+_optional_||integer(int64)||
+|*name* +
+_required_||string||"doggie"
+|*nicknames* +
+_optional_||<string,string> map||
+|*photoUrls* +
+_required_||string array||
+|*status* +
+_optional_|pet status in the store|string||
+|*tags* +
+_optional_||<<_tag,Tag>> array||
+|*weight* +
+_optional_|the weight of the pet|number||
 |===
 
 
 [[_tag]]
 === Tag
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|id||false|integer(int64)||
-|name||false|string||
+|Name|Description|Schema|Default|Example
+|*id* +
+_optional_||integer(int64)||
+|*name* +
+_optional_||string||
 |===
 
 
@@ -74,18 +93,27 @@ Test description
 _Polymorphism_ : Composition
 
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|email||false|string||
-|firstName||false|string||
-|id||false|integer(int64)||
-|lastName||false|string||
-|password||false|string||
-|phone||false|string||
-|pictures||false|string(byte) array||
-|userStatus|User Status|false|integer(int32)||
-|username||false|string||
+|Name|Description|Schema|Default|Example
+|*email* +
+_optional_||string||
+|*firstName* +
+_optional_||string||
+|*id* +
+_optional_||integer(int64)||
+|*lastName* +
+_optional_||string||
+|*password* +
+_optional_||string||
+|*phone* +
+_optional_||string||
+|*pictures* +
+_optional_||string(byte) array||
+|*userStatus* +
+_optional_|User Status|integer(int32)||
+|*username* +
+_optional_||string||
 |===
 
 

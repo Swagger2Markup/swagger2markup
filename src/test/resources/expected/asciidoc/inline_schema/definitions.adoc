@@ -5,61 +5,70 @@
 [[_error]]
 === Error
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|error-code|Error code|false|integer||
-|message|Error message|false|string||
+|Name|Description|Schema|Default|Example
+|*error-code* +
+_optional_|Error code|integer||
+|*message* +
+_optional_|Error message|string||
 |===
 
 
 [[_externallocation]]
 === ExternalLocation
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|Place|Place|false|string||
+|Name|Description|Schema|Default|Example
+|*Place* +
+_optional_|Place|string||
 |===
 
 
 [[_inlinedepthschema]]
 === InlineDepthSchema
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|Loop||false|<<_inlinedepthschema_loop,Loop>>||
+|Name|Description|Schema|Default|Example
+|*Loop* +
+_optional_||<<_inlinedepthschema_loop,Loop>>||
 |===
 
 [[_inlinedepthschema_loop]]
 *Loop*
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|p1|Description p1|false|string||
-|p2|Description p2|false|<<_inlinedepthschema_p2,p2>>||
+|Name|Description|Schema|Default|Example
+|*p1* +
+_optional_|Description p1|string||
+|*p2* +
+_optional_|Description p2|<<_inlinedepthschema_p2,p2>>||
 |===
 
 [[_inlinedepthschema_p2]]
 *p2*
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|p2-1|Description p2-1|false|string||
-|p2-2|Description p2-2|false|object||
+|Name|Description|Schema|Default|Example
+|*p2-1* +
+_optional_|Description p2-1|string||
+|*p2-2* +
+_optional_|Description p2-2|object||
 |===
 
 
 [[_location]]
 === Location
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^1,.^6,.^1,.^1,.^1"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|Place|Place|false|string||
+|Name|Description|Schema|Default|Example
+|*Place* +
+_optional_|Place|string||
 |===
 
 

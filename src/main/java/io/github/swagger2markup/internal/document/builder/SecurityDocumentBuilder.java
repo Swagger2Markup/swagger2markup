@@ -40,7 +40,6 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String SECURITY_ANCHOR = "securityScheme";
-    private static final String COLON = " : ";
     private final String SECURITY;
     private final String TYPE;
     private final String NAME;
