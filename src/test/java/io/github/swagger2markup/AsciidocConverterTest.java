@@ -81,6 +81,29 @@ public class AsciidocConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/idxref");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withInterDocumentCrossReferences()
+                .build();
+        
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/idxref").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithInterDocumentCrossReferences.html");
+    }
+
+    @Test
     public void testSwagger2AsciiDocConversionFromString() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
@@ -434,4 +457,6 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/polymorphism").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithPolymorphism.html");
     }
+    
+    
 }

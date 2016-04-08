@@ -609,7 +609,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         type = securityDefinitions.get(securityKey).getType();
                     }
                     
-                    List<String> content = Arrays.asList(boldText(type), boldText(docBuilder.copy(false).crossReference(securityKey, securityKey).toString()),
+                    List<String> content = Arrays.asList(boldText(type), boldText(docBuilder.copy(false).crossReference(securityDocumentResolver(), securityKey, securityKey).toString()),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }
@@ -618,6 +618,17 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         }
     }
 
+    /**
+     * Resolve Security document for use in cross-references.
+     * @return document or null if cross-reference is not inter-document
+     */
+    private String securityDocumentResolver() {
+        if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
+            return null;
+        else
+            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());
+    }
+    
     private List<ObjectType> buildResponsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
         List<ObjectType> inlineDefinitions = new ArrayList<>();

@@ -1,0 +1,98 @@
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+
+[[_order]]
+=== Order
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*complete* +
+_optional_||boolean|
+|*id* +
+_optional_||integer(int64)|
+|*petId* +
+_optional_||integer(int64)|
+|*quantity* +
+_optional_||integer(int32)|
+|*shipDate* +
+_optional_||string(date-time)|
+|*status* +
+_optional_|Order Status|enum (Ordered, Cancelled)|
+|===
+
+
+[[_pet]]
+=== Pet
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*category* +
+_optional_||<<definitions.adoc#_category,Category>>|
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_required_|*Example* : `"doggie"`|string|
+|*photoUrls* +
+_required_||<string> array|
+|*status* +
+_optional_|pet status in the store,|enum (Dead, Alive)|
+|*tags* +
+_optional_||< <<definitions.adoc#_tag,Tag>>> array|
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+
+[[_user]]
+=== User
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*email* +
+_optional_||string|
+|*firstName* +
+_optional_||string|
+|*id* +
+_optional_||integer(int64)|
+|*lastName* +
+_optional_||string|
+|*password* +
+_optional_||string|
+|*phone* +
+_optional_||string|
+|*userStatus* +
+_optional_|User Status|integer(int32)|
+|*username* +
+_optional_||string|
+|===
+
+
+

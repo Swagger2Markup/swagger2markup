@@ -1,47 +1,3 @@
-= Swagger Petstore
-
-
-[[_overview]]
-== Overview
-This is a sample server Petstore server.
-
-http://swagger.io[Learn about Swagger] or join the IRC channel `#swagger` on irc.freenode.net.
-
-For this sample, you can use the api key `special-key` to test the authorization filters
-
-
-=== Version information
-[%hardbreaks]
-_Version_ : 1.0.0
-
-
-=== Contact information
-[%hardbreaks]
-_Contact_ : apiteam@swagger.io
-
-
-=== License information
-[%hardbreaks]
-_License_ : Apache 2.0
-_License URL_ : http://www.apache.org/licenses/LICENSE-2.0.html
-_Terms of service_ : http://helloreverb.com/terms/
-
-
-=== URI scheme
-[%hardbreaks]
-_Host_ : petstore.swagger.io
-_BasePath_ : /v2
-_Schemes_ : HTTP
-
-
-=== Tags
-
-* pet : Pet resource
-* store : Store resource
-* user : User resource
-
-
-
 
 [[_paths]]
 == Paths
@@ -59,7 +15,7 @@ POST /pets
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|Pet object that needs to be added to the store|<<_pet,Pet>>|
+_optional_|Pet object that needs to be added to the store|<<definitions.adoc#_pet,Pet>>|
 |===
 
 
@@ -96,37 +52,8 @@ _optional_|Pet object that needs to be added to the store|<<_pet,Pet>>|
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "category" : {
-    "id" : 0,
-    "name" : "string"
-  },
-  "name" : "doggie",
-  "photoUrls" : [ "string" ],
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
-  "status" : "string"
-}
-----
 
 
 [[_updatepet]]
@@ -142,7 +69,7 @@ PUT /pets
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|Pet object that needs to be added to the store|<<_pet,Pet>>|
+_optional_|Pet object that needs to be added to the store|<<definitions.adoc#_pet,Pet>>|
 |===
 
 
@@ -197,37 +124,8 @@ _optional_|Pet object that needs to be added to the store|<<_pet,Pet>>|
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "category" : {
-    "id" : 0,
-    "name" : "string"
-  },
-  "name" : "doggie",
-  "photoUrls" : [ "string" ],
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
-  "status" : "string"
-}
-----
 
 
 [[_findpetsbystatus]]
@@ -258,7 +156,7 @@ _optional_|Status values that need to be considered for filter|<string> array(mu
 [options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|< <<_pet,Pet>>> array
+|*200*|successful operation|< <<definitions.adoc#_pet,Pet>>> array
 |===
 
 *Headers*
@@ -297,35 +195,8 @@ _optional_|Status values that need to be considered for filter|<string> array(mu
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/findByStatus"
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "status" : "string"
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-"array"
-----
 
 
 [[_findpetsbytags]]
@@ -356,7 +227,7 @@ _optional_|Tags to filter by|<string> array(multi)|
 [options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|< <<_pet,Pet>>> array
+|*200*|successful operation|< <<definitions.adoc#_pet,Pet>>> array
 |===
 
 *Headers*
@@ -395,35 +266,8 @@ _optional_|Tags to filter by|<string> array(multi)|
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/findByTags"
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "tags" : "string"
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-"array"
-----
 
 
 [[_updatepetwithform]]
@@ -479,24 +323,8 @@ _required_|Updated status of the pet|string|
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/string"
-----
-
-
-===== Request formData
-[source,json]
-----
-"string"
-----
 
 
 [[_getpetbyid]]
@@ -527,7 +355,7 @@ _required_|ID of pet that needs to be fetched|integer(int64)|
 [options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|<<_pet,Pet>>
+|*200*|successful operation|<<definitions.adoc#_pet,Pet>>
 |===
 
 *Headers*
@@ -575,40 +403,9 @@ _required_|ID of pet that needs to be fetched|integer(int64)|
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*apiKey*|*<<_api_key,api_key>>*|
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*apiKey*|*<<security.adoc#_api_key,api_key>>*|
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/0"
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "category" : {
-    "id" : 0,
-    "name" : "string"
-  },
-  "name" : "doggie",
-  "photoUrls" : [ "string" ],
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
-  "status" : "string"
-}
-----
 
 
 [[_deletepet]]
@@ -657,24 +454,8 @@ _required_|Pet id to delete|integer(int64)|
 [options="header", cols=".^1,.^1,.^3"]
 |===
 |Type|Name|Scopes
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|*oauth2*|*<<security.adoc#_petstore_auth,petstore_auth>>*|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/0"
-----
-
-
-===== Request header
-[source,json]
-----
-"string"
-----
 
 
 [[_placeorder]]
@@ -690,7 +471,7 @@ POST /stores/order
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|order placed for purchasing the pet|<<_order,Order>>|
+_optional_|order placed for purchasing the pet|<<definitions.adoc#_order,Order>>|
 |===
 
 
@@ -701,7 +482,7 @@ _optional_|order placed for purchasing the pet|<<_order,Order>>|
 [options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|<<_order,Order>>
+|*200*|successful operation|<<definitions.adoc#_order,Order>>
 |===
 
 *Headers*
@@ -735,45 +516,6 @@ _optional_|order placed for purchasing the pet|<<_order,Order>>|
 * store
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/stores/order"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "petId" : 0,
-  "quantity" : 0,
-  "shipDate" : "string",
-  "status" : "string",
-  "complete" : true
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "petId" : 0,
-  "quantity" : 0,
-  "shipDate" : "string",
-  "status" : "string",
-  "complete" : true
-}
-----
-
-
 [[_getorderbyid]]
 === Find purchase order by ID
 ....
@@ -802,7 +544,7 @@ _required_|ID of pet that needs to be fetched|string|
 [options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|<<_order,Order>>
+|*200*|successful operation|<<definitions.adoc#_order,Order>>
 |===
 
 *Headers*
@@ -843,31 +585,6 @@ _required_|ID of pet that needs to be fetched|string|
 ==== Tags
 
 * store
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/stores/order/string"
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "petId" : 0,
-  "quantity" : 0,
-  "shipDate" : "string",
-  "status" : "string",
-  "complete" : true
-}
-----
 
 
 [[_deleteorder]]
@@ -922,15 +639,6 @@ _required_|ID of the order that needs to be deleted|string|
 * store
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/stores/order/string"
-----
-
-
 [[_createuser]]
 === Create user
 ....
@@ -948,7 +656,7 @@ This can only be done by the logged in user.
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|Created user object|<<_user,User>>|
+_optional_|Created user object|<<definitions.adoc#_user,User>>|
 |===
 
 
@@ -972,31 +680,6 @@ _optional_|Created user object|<<_user,User>>|
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-}
-----
 
 
 [[_createuserswitharrayinput]]
@@ -1012,7 +695,7 @@ POST /users/createWithArray
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|List of user object|< <<_user,User>>> array|
+_optional_|List of user object|< <<definitions.adoc#_user,User>>> array|
 |===
 
 
@@ -1036,31 +719,6 @@ _optional_|List of user object|< <<_user,User>>> array|
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/createWithArray"
-----
-
-
-===== Request body
-[source,json]
-----
-[ {
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-} ]
-----
 
 
 [[_createuserswithlistinput]]
@@ -1076,7 +734,7 @@ POST /users/createWithList
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|List of user object|< <<_user,User>>> array|
+_optional_|List of user object|< <<definitions.adoc#_user,User>>> array|
 |===
 
 
@@ -1100,31 +758,6 @@ _optional_|List of user object|< <<_user,User>>> array|
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/createWithList"
-----
-
-
-===== Request body
-[source,json]
-----
-[ {
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-} ]
-----
 
 
 [[_loginuser]]
@@ -1187,34 +820,6 @@ _optional_|The user name for login|string|
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/login"
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "password" : "string",
-  "username" : "string"
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-"string"
-----
-
-
 [[_logoutuser]]
 === Logs out current logged in user session
 ....
@@ -1244,15 +849,6 @@ GET /users/logout
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/logout"
-----
-
-
 [[_getuserbyname]]
 === Get user by user name
 ....
@@ -1277,7 +873,7 @@ _required_|The name that needs to be fetched. Use user1 for testing.|string|
 [options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|<<_user,User>>
+|*200*|successful operation|<<definitions.adoc#_user,User>>
 |===
 
 *Headers*
@@ -1320,33 +916,6 @@ _required_|The name that needs to be fetched. Use user1 for testing.|string|
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/string"
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-}
-----
-
-
 [[_updateuser]]
 === Updated user
 ....
@@ -1366,7 +935,7 @@ This can only be done by the logged in user.
 |*Path*|*username* +
 _required_|name that need to be deleted|string|
 |*Body*|*body* +
-_optional_|Updated user object|<<_user,User>>|
+_optional_|Updated user object|<<definitions.adoc#_user,User>>|
 |===
 
 
@@ -1399,31 +968,6 @@ _optional_|Updated user object|<<_user,User>>|
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/string"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-}
-----
 
 
 [[_deleteuser]]
@@ -1476,145 +1020,6 @@ _required_|The name that needs to be deleted|string|
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/string"
-----
-
-
-
-
-[[_definitions]]
-== Definitions
-
-[[_category]]
-=== Category
-
-[options="header", cols=".^1,.^4,.^2,.^1"]
-|===
-|Name|Description|Schema|Default
-|*id* +
-_optional_|*Example* : `0`|integer(int64)|
-|*name* +
-_optional_|*Example* : `"string"`|string|
-|===
-
-
-[[_order]]
-=== Order
-
-[options="header", cols=".^1,.^4,.^2,.^1"]
-|===
-|Name|Description|Schema|Default
-|*complete* +
-_optional_|*Example* : `true`|boolean|
-|*id* +
-_optional_|*Example* : `0`|integer(int64)|
-|*petId* +
-_optional_|*Example* : `0`|integer(int64)|
-|*quantity* +
-_optional_|*Example* : `0`|integer(int32)|
-|*shipDate* +
-_optional_|*Example* : `"string"`|string(date-time)|
-|*status* +
-_optional_|Order Status +
-*Example* : `"string"`|enum (Ordered, Cancelled)|
-|===
-
-
-[[_pet]]
-=== Pet
-
-[options="header", cols=".^1,.^4,.^2,.^1"]
-|===
-|Name|Description|Schema|Default
-|*category* +
-_optional_|*Example* : `"<<_category>>"`|<<_category,Category>>|
-|*id* +
-_optional_|*Example* : `0`|integer(int64)|
-|*name* +
-_required_|*Example* : `"doggie"`|string|
-|*photoUrls* +
-_required_|*Example* : `[ "string" ]`|<string> array|
-|*status* +
-_optional_|pet status in the store, +
-*Example* : `"string"`|enum (Dead, Alive)|
-|*tags* +
-_optional_|*Example* : `[ "<<_tag>>" ]`|< <<_tag,Tag>>> array|
-|===
-
-
-[[_tag]]
-=== Tag
-
-[options="header", cols=".^1,.^4,.^2,.^1"]
-|===
-|Name|Description|Schema|Default
-|*id* +
-_optional_|*Example* : `0`|integer(int64)|
-|*name* +
-_optional_|*Example* : `"string"`|string|
-|===
-
-
-[[_user]]
-=== User
-
-[options="header", cols=".^1,.^4,.^2,.^1"]
-|===
-|Name|Description|Schema|Default
-|*email* +
-_optional_|*Example* : `"string"`|string|
-|*firstName* +
-_optional_|*Example* : `"string"`|string|
-|*id* +
-_optional_|*Example* : `0`|integer(int64)|
-|*lastName* +
-_optional_|*Example* : `"string"`|string|
-|*password* +
-_optional_|*Example* : `"string"`|string|
-|*phone* +
-_optional_|*Example* : `"string"`|string|
-|*userStatus* +
-_optional_|User Status +
-*Example* : `0`|integer(int32)|
-|*username* +
-_optional_|*Example* : `"string"`|string|
-|===
-
-
-
-
-[[_securityscheme]]
-== Security
-
-[[_api_key]]
-=== api_key
-[%hardbreaks]
-_Type_ : apiKey
-_Name_ : api_key
-_In_ : HEADER
-
-
-[[_petstore_auth]]
-=== petstore_auth
-[%hardbreaks]
-_Type_ : oauth2
-_Flow_ : implicit
-_Token URL_ : http://petstore.swagger.io/api/oauth/dialog
-
-
-[options="header", cols="1,6"]
-|===
-|Name|Description
-|write_pets|modify pets in your account
-|read_pets|read your pets
-|===
 
 
 

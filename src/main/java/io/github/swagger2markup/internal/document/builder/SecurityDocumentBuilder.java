@@ -97,7 +97,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private MarkupDocBuilder buildSecuritySchemeDefinitionTitle(String definitionName) {
-        return markupDocBuilder.sectionTitleLevel2(definitionName);
+        return markupDocBuilder.sectionTitleWithAnchorLevel2(definitionName);
     }
 
     private void buildSecurityScheme(SecuritySchemeDefinition securityScheme) {
