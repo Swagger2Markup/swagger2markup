@@ -5,36 +5,31 @@ h2. Section Level 1a
 
 h2. Section with anchor Level 1a {anchor:level-1a}
 
-
-h2. Section with anchor Level 1a
+h2. Section with anchor Level 1a {anchor:section_with_anchor_level_1a}
 
 h3. Section Level 2a
 
 h3. Section with anchor Level 2a {anchor:level-2a}
 
-
-h3. Section with anchor Level 2a
+h3. Section with anchor Level 2a {anchor:section_with_anchor_level_2a}
 
 h4. Section Level 3a
 
 h4. Section with anchor Level 3a {anchor:level-3a}
 
-
-h4. Section with anchor Level 3a
+h4. Section with anchor Level 3a {anchor:section_with_anchor_level_3a}
 
 h5. Section Level 4a
 
 h5. Section with anchor Level 4a {anchor:level-4a}
 
-
-h5. Section with anchor Level 4a
+h5. Section with anchor Level 4a {anchor:section_with_anchor_level_4a}
 
 h6. Section Level 5a
 
 h6. Section with anchor Level 5a {anchor:level-5a}
 
-
-h6. Section with anchor Level 5a
+h6. Section with anchor Level 5a {anchor:section_with_anchor_level_5a}
 Paragraph with long text bla bla bla bla bla
 
 Line1

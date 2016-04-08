@@ -79,6 +79,12 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder sectionTitleLevel(int level, String title) {
+        sectionTitleLevel(Markdown.TITLE, level, title);
+        return this;
+    }
+    
+    @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         sectionTitleWithAnchorLevel(Markdown.TITLE, level, title, anchor);
         return this;
@@ -86,7 +92,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
 
         text = text.trim();
         if (hardbreaks)

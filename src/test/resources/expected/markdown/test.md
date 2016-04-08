@@ -6,6 +6,7 @@
 <a name="level-1a"></a>
 ## Section with anchor Level 1a
 
+<a name="section-with-anchor-level-1a"></a>
 ## Section with anchor Level 1a
 
 ### Section Level 2a
@@ -13,6 +14,7 @@
 <a name="level-2a"></a>
 ### Section with anchor Level 2a
 
+<a name="section-with-anchor-level-2a"></a>
 ### Section with anchor Level 2a
 
 #### Section Level 3a
@@ -20,6 +22,7 @@
 <a name="level-3a"></a>
 #### Section with anchor Level 3a
 
+<a name="section-with-anchor-level-3a"></a>
 #### Section with anchor Level 3a
 
 ##### Section Level 4a
@@ -27,6 +30,7 @@
 <a name="level-4a"></a>
 ##### Section with anchor Level 4a
 
+<a name="section-with-anchor-level-4a"></a>
 ##### Section with anchor Level 4a
 
 ###### Section Level 5a
@@ -34,6 +38,7 @@
 <a name="level-5a"></a>
 ###### Section with anchor Level 5a
 
+<a name="section-with-anchor-level-5a"></a>
 ###### Section with anchor Level 5a
 Paragraph with long text bla bla bla bla bla
 

@@ -75,6 +75,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder sectionTitleLevel(int level, String title) {
+        sectionTitleLevel(AsciiDoc.TITLE, level, title);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         sectionTitleWithAnchorLevel(AsciiDoc.TITLE, level, title, anchor);
         return this;
@@ -82,7 +88,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
         if (hardbreaks)
             documentBuilder.append("[%hardbreaks]").append(newLine);
         text = text.trim();
