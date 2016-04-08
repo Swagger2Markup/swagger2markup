@@ -177,8 +177,11 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (document != null)
             documentBuilder.append(document).append("#");
         documentBuilder.append(anchor);
-        if (text != null)
+        if (text != null) {
             documentBuilder.append(",").append(text);
+            if (text.endsWith(">"))
+                documentBuilder.append(" ");
+        }
         documentBuilder.append(AsciiDoc.CROSS_REFERENCE_END);
         return this;
     }
