@@ -30,7 +30,7 @@ public class EnumType extends Type {
     protected List<String> values;
 
     public EnumType(String name, List<String> values) {
-        super(name == null ? "enum" : name);
+        super(name);
         this.values = values;
     }
 

@@ -56,27 +56,29 @@ public final class ModelUtils {
             ModelImpl modelImpl = (ModelImpl) model;
 
             if (modelImpl.getAdditionalProperties() != null)
-                return new MapType(null, PropertyUtils.getType(modelImpl.getAdditionalProperties(), definitionDocumentResolver));
+                return new MapType(modelImpl.getTitle(), PropertyUtils.getType(modelImpl.getAdditionalProperties(), definitionDocumentResolver));
             else if (modelImpl.getEnum() != null)
-                return new EnumType(null, modelImpl.getEnum());
+                return new EnumType(modelImpl.getTitle(), modelImpl.getEnum());
             else if (modelImpl.getProperties() != null) {
-                ObjectType objectType = new ObjectType(null, model.getProperties());
+                ObjectType objectType = new ObjectType(modelImpl.getTitle(), model.getProperties());
 
                 objectType.getPolymorphism().setDiscriminator(modelImpl.getDiscriminator());
 
                 return objectType;
             } else
-                return new BasicType(((ModelImpl) model).getType());
+                return new BasicType(modelImpl.getType(), modelImpl.getTitle());
         } else if (model instanceof ComposedModel) {
             ComposedModel composedModel = (ComposedModel) model;
             Map<String, Property> allProperties = new HashMap<>();
             ObjectTypePolymorphism polymorphism = new ObjectTypePolymorphism(ObjectTypePolymorphism.Nature.NONE, null);
+            String name = model.getTitle();
 
             if (composedModel.getAllOf() != null) {
                 polymorphism.setNature(ObjectTypePolymorphism.Nature.COMPOSITION);
 
                 for (Model innerModel : composedModel.getAllOf()) {
                     Type innerModelType = resolveRefType(getType(innerModel, definitions, definitionDocumentResolver));
+                    name = innerModelType.getName();
 
                     if (innerModelType instanceof ObjectType) {
 
@@ -93,16 +95,19 @@ public final class ModelUtils {
                 }
             }
             
-            return new ObjectType(null, polymorphism, allProperties);
+            return new ObjectType(name, polymorphism, allProperties);
         } else if (model instanceof RefModel) {
             RefModel refModel = (RefModel) model;
             String refName = refModel.getRefFormat().equals(RefFormat.INTERNAL) ? refModel.getSimpleRef() : refModel.getReference();
 
             Type refType = new ObjectType(refName, null);
-            if (definitions.containsKey(refName))
+            if (definitions.containsKey(refName)) {
                 refType = getType(definitions.get(refName), definitions, definitionDocumentResolver);
+                refType.setName(refName);
+                refType.setUniqueName(refName);
+            }
 
-            return new RefType(definitionDocumentResolver.apply(refName), refName, refName, refType);
+            return new RefType(definitionDocumentResolver.apply(refName), refType);
         } else if (model instanceof ArrayModel) {
             ArrayModel arrayModel = ((ArrayModel) model);
 

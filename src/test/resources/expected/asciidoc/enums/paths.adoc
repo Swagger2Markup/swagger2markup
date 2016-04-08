@@ -15,7 +15,7 @@ Return state
 
 ==== Parameters
 
-[options="header", cols=".^1,.^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^1,.^4,.^2,.^1"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*oldState* +
@@ -27,7 +27,7 @@ _optional_|State as enum in object|<<_createstate_statemodel,StateModel>>|
 [[_createstate_statemodel]]
 *StateModel*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*value* +
@@ -39,7 +39,7 @@ _optional_|State value|enum (ADDED, REMOVED, CHANGED)|
 
 ===== HTTP Code 200
 
-[options="header", cols=".^1,.^3,.^1"]
+[options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|enum (ADDED, REMOVED, CHANGED)

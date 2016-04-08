@@ -423,7 +423,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (config.getParameterOrdering() != null)
             Collections.sort(parameters, config.getParameterOrdering());
-        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<ObjectType> inlineDefinitions = new ArrayList<>();
 
         boolean displayParameters = false;
         if (CollectionUtils.isNotEmpty(parameters)) {
@@ -440,15 +440,15 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                     new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
                     new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
             for (Parameter parameter : parameters) {
                 if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter,  globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
 
                     if (config.getInlineSchemaDepthLevel() > 0) {
-                        type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), localDefinitions);
+                        type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                     }
                     String parameterType = WordUtils.capitalize(parameter.getIn());
 
@@ -472,7 +472,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             docBuilder.tableWithColumnSpecs(cols, cells);
         }
 
-        return localDefinitions;
+        return inlineDefinitions;
     }
 
     /**
@@ -483,7 +483,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @return a list of inlined types.
      */
     private List<ObjectType> buildBodyParameterSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<ObjectType> inlineDefinitions = new ArrayList<>();
 
         if (config.isFlatBodyEnabled()) {
             List<Parameter> parameters = operation.getOperation().getParameters();
@@ -494,7 +494,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                         if (!(type instanceof ObjectType)) {
                             if (config.getInlineSchemaDepthLevel() > 0) {
-                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), localDefinitions);
+                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                             }
                         }
 
@@ -514,14 +514,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         docBuilder.paragraph(typeInfos.toString(), true);
 
                         if (type instanceof ObjectType) {
-                            localDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
             }
         }
 
-        return localDefinitions;
+        return inlineDefinitions;
     }
 
     private void buildConsumesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
@@ -600,7 +600,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                     new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"));
+                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"));
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
@@ -620,20 +620,20 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
     private List<ObjectType> buildResponsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
-        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<ObjectType> inlineDefinitions = new ArrayList<>();
 
         if (MapUtils.isNotEmpty(responses)) {
             buildSectionTitle(RESPONSES, docBuilder);
 
             List<MarkupTableColumn> responseCols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
 
             List<MarkupTableColumn> responseHeaderCols = Arrays.asList(
                     new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
                     new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
 
             Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
@@ -646,7 +646,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
 
                     if (config.getInlineSchemaDepthLevel() > 0) {
-                        type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, localDefinitions);
+                        type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, inlineDefinitions);
                     }
 
                     cells.add(Arrays.asList(boldText(responseName), swaggerMarkupDescription(response.getDescription()), type.displaySchema(markupDocBuilder)));
@@ -672,7 +672,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 }
             }
         }
-        return localDefinitions;
+        return inlineDefinitions;
     }
 
 

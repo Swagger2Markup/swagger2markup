@@ -125,7 +125,7 @@ Multiple status values can be provided with comma seperated strings
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|multi string array||
+|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|<string> array(multi)||
 
 
 #### Responses
@@ -134,7 +134,7 @@ Multiple status values can be provided with comma seperated strings
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Pet](#pet) array|
+|**200**|successful operation|<[Pet](#pet)> array|
 
 **Headers**
 
@@ -185,7 +185,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Query**|**tags**  <br>*optional*|Tags to filter by|multi string array||
+|**Query**|**tags**  <br>*optional*|Tags to filter by|<string> array(multi)||
 
 
 #### Responses
@@ -194,7 +194,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Pet](#pet) array|
+|**200**|successful operation|<[Pet](#pet)> array|
 
 **Headers**
 
@@ -591,7 +591,7 @@ POST /users/createWithArray
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|[User](#user) array||
+|**Body**|**body**  <br>*optional*|List of user object|<[User](#user)> array||
 
 
 #### Responses
@@ -625,7 +625,7 @@ POST /users/createWithList
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|[User](#user) array||
+|**Body**|**body**  <br>*optional*|List of user object|<[User](#user)> array||
 
 
 #### Responses

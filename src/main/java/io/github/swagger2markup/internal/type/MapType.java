@@ -23,17 +23,22 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
  */
 public class MapType extends Type {
 
-    protected Type keyType = new BasicType("string");
+    protected Type keyType = new BasicType("string", null);
     protected Type valueType;
     
     public MapType(String name, Type valueType) {
-        super(name == null ? "map" : name);
+        super(name);
         this.valueType = valueType;
     }
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        return String.format("<%s,%s> map", keyType.displaySchema(docBuilder), valueType.displaySchema(docBuilder));
+        String keyTypeDisplay = keyType.displaySchema(docBuilder);
+        // protect against starting < stacks
+        if (keyTypeDisplay.startsWith("<"))
+            keyTypeDisplay = " " + keyTypeDisplay;
+
+        return String.format("<%s,%s> map", keyTypeDisplay, valueType.displaySchema(docBuilder));
     }
 
     public Type getKeyType() {

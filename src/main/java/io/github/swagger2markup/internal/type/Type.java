@@ -17,7 +17,6 @@
 package io.github.swagger2markup.internal.type;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import org.apache.commons.lang3.Validate;
 
 /**
  * Type abstraction for display purpose
@@ -28,8 +27,6 @@ public abstract class Type {
     protected String uniqueName;
 
     public Type(String name, String uniqueName) {
-        Validate.notBlank(name);
-
         this.name = name;
         this.uniqueName = uniqueName;
     }
