@@ -7,12 +7,7 @@ after_success:
 - ./gradlew jacocoTestReport coveralls
 - ./gradlew artifactoryPublish -PbintrayUsername="${BINTRAY_USER}" -PbintrayApiKey="${BINTRAY_KEY}"
 notifications:
-  webhooks:
-    urls:
-    - https://webhooks.gitter.im/e/9c620e84679284b7d621
-    on_success: change
-    on_failure: always
-    on_start: false
+  slack: swagger2markup:Zz5kz0SnvtG6aVvZUM8yMkER
 env:
   global:
   - secure: "SPKolgUdjIa/uJ+7/B/GPFlsa8IZg7NuZdFA8zROTaqew/xu+oX7qVGImseeBpPIEPJb02ac6hr7Y3/zvv0GJxIPtIbyDzVh73ImQUhT1ttLYGJfITAWqAPFF7RNNMtuOl3S2DLZ5OMJddkcFp00pa9nyI82Gk47B8GsaGIntAI="

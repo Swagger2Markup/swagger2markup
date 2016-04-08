@@ -36,7 +36,7 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
 [source,groovy]
 ----
 convertSwagger2markup {
-    swaggerInput file("src/docs/swagger/swagger_petstore.yaml")
+    swaggerInput file("src/docs/swagger/swagger_petstore.yaml").getAbsolutePath()
     outputDir file("${buildDir}/asciidoc")
     config = ['swagger2markup.markupLanguage' : 'ASCIIDOC',
               'swagger2markup.pathsGroupedBy' : 'TAGS']
@@ -48,7 +48,7 @@ convertSwagger2markup {
 .Gradle Plugin properties
 |====
 | Name | Description | Type |  Example
-| swaggerInput | The URL or file path to the Swagger specification | String | `file("src/docs/swagger/swagger_petstore.yaml")` or `http://petstore.swagger.io/v2/swagger.json` 
+| swaggerInput | The URL or file path to the Swagger specification | String | `file("src/docs/swagger/swagger_petstore.yaml").getAbsolutePath()` or `http://petstore.swagger.io/v2/swagger.json` 
 | outputDir | The directory where the output should be stored. | File | `file("${buildDir}/asciidoc")` 
 | outputFile | The file path (without extension) where the output should be stored. | File | `file("${buildDir}/asciidoc/swagger")` 
 | config | The Swagger2Markup properties to configure the converter | Map |  | 
