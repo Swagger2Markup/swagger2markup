@@ -97,6 +97,84 @@ _optional_|Description p2-2-2-2|boolean|
 |===
 
 
+[[_inlinepet]]
+=== InlinePet
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*category* +
+_optional_||<<_inlinepet_category,category>>|
+|*id* +
+_required_||integer(int64)|
+|*tags* +
+_optional_||< <<_inlinepet_tags,tags>>> array|
+|===
+
+[[_inlinepet_category]]
+*category*
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+[[_inlinepet_tags]]
+*tags*
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+
+[[_inlinetitlepet]]
+=== InlineTitlePet
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*category* +
+_optional_||<<_categorymodel,CategoryModel>>|
+|*id* +
+_required_||integer(int64)|
+|*tags* +
+_optional_||< <<_tagmodel,TagModel>>> array|
+|===
+
+[[_categorymodel]]
+*CategoryModel*
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+[[_tagmodel]]
+*TagModel*
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+
 [[_location]]
 === Location
 
