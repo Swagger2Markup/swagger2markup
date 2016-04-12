@@ -19,7 +19,7 @@ Returns integer metrics information for the application.
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|String metrics|<string,integer(int32)> map|
+_optional_|String metrics|< string, integer(int32) > map|
 |===
 
 
@@ -28,7 +28,7 @@ _optional_|String metrics|<string,integer(int32)> map|
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<string,string> map
+|*200*|OK|< string, string > map
 |===
 
 
@@ -64,7 +64,7 @@ Returns a collated list of all `@RequestMapping` paths.
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|Mappings|<string,<<_mappinginfo,MappingInfo>>> map|
+_optional_|Mappings|< string, <<_mappinginfo,MappingInfo>> > map|
 |===
 
 
@@ -73,7 +73,7 @@ _optional_|Mappings|<string,<<_mappinginfo,MappingInfo>>> map|
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<string,<<_mappinginfo,MappingInfo>>> map
+|*200*|OK|< string, <<_mappinginfo,MappingInfo>> > map
 |===
 
 
@@ -109,7 +109,7 @@ Returns metrics information for the application.
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|Metrics|<string,<<_createmetrics_body,body>>> map|
+_optional_|Metrics|< string, <<_createmetrics_body,body>> > map|
 |===
 
 [[_createmetrics_body]]
@@ -130,7 +130,7 @@ _optional_||string|
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<string,<<_createmetrics_response_200,Response 200>>> map
+|*200*|OK|< string, <<_createmetrics_response_200,Response 200>> > map
 |===
 
 [[_createmetrics_response_200]]
@@ -178,7 +178,7 @@ Returns string metrics information for the application.
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|String metrics|<string,string> map|
+_optional_|String metrics|< string, string > map|
 |===
 
 
@@ -187,7 +187,7 @@ _optional_|String metrics|<string,string> map|
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<string,string> map
+|*200*|OK|< string, string > map
 |===
 
 

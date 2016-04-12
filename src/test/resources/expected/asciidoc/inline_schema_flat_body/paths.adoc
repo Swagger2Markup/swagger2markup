@@ -19,7 +19,7 @@ The API version
 [%hardbreaks]
 _Name_ : Version
 _Flags_ : optional
-_Type_ : < <string,<<_collectionparameters_post_version,Version>>> map> array
+_Type_ : < < string, <<_collectionparameters_post_version,Version>> > map > array
 
 [[_collectionparameters_post_version]]
 *Version*
@@ -39,7 +39,7 @@ _optional_|option value|string|
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Result|< <string,<<_collectionparameters_post_response_200,Response 200>>> map> array
+|*200*|Result|< < string, <<_collectionparameters_post_response_200,Response 200>> > map > array
 |===
 
 [[_collectionparameters_post_response_200]]
@@ -99,7 +99,7 @@ _required_|Dummy description|<<_launchcommand_post_command,Command>>|
 |*Location* +
 _optional_|Dummy description|<<_location,Location>>|
 |*Options* +
-_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>>> array|
+_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array|
 |===
 
 [[_launchcommand_post_command]]
@@ -149,7 +149,7 @@ _optional_|option value|string|
 |*Location* +
 _optional_|<description>|<<_location,Location>>|
 |*Options* +
-_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>>> array|
+_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array|
 |*ReservationId* +
 _optional_|<description>|string|
 |===
@@ -195,7 +195,7 @@ _Flags_ : optional
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||< <<_mixedparameters_post_mytable,myTable>>> array|
+_optional_||< <<_mixedparameters_post_mytable,myTable>> > array|
 |===
 
 [[_mixedparameters_post_mytable]]
@@ -205,7 +205,7 @@ _optional_||< <<_mixedparameters_post_mytable,myTable>>> array|
 |===
 |Name|Description|Schema|Default
 |*myDict* +
-_optional_||<string,<<_mixedparameters_post_mydict,myDict>>> map|
+_optional_||< string, <<_mixedparameters_post_mydict,myDict>> > map|
 |===
 
 [[_mixedparameters_post_mydict]]
@@ -236,7 +236,7 @@ _optional_||string|
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||< <<_mixedparameters_post_mytable,myTable>>> array|
+_optional_||< <<_mixedparameters_post_mytable,myTable>> > array|
 |===
 
 [[_mixedparameters_post_mytable]]
@@ -246,7 +246,7 @@ _optional_||< <<_mixedparameters_post_mytable,myTable>>> array|
 |===
 |Name|Description|Schema|Default
 |*myDict* +
-_optional_||<string,<<_mixedparameters_post_mytable_mydict,myDict>>> map|
+_optional_||< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map|
 |===
 
 [[_mixedparameters_post_mytable_mydict]]
@@ -290,7 +290,7 @@ _Flags_ : optional
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>>> array|
+_optional_||< <<_tablecontent,TableContent>> > array|
 |===
 
 [[_tablecontent]]
@@ -300,7 +300,7 @@ _optional_||< <<_tablecontent,TableContent>>> array|
 |===
 |Name|Description|Schema|Default
 |*myDict* +
-_optional_||<string,<<_kvpair,KVPair>>> map|
+_optional_||< string, <<_kvpair,KVPair>> > map|
 |===
 
 [[_kvpair]]
@@ -331,7 +331,7 @@ _optional_||string|
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>>> array|
+_optional_||< <<_tablecontent,TableContent>> > array|
 |===
 
 [[_tablecontent]]
@@ -341,7 +341,7 @@ _optional_||< <<_tablecontent,TableContent>>> array|
 |===
 |Name|Description|Schema|Default
 |*myDict* +
-_optional_||<string,<<_kvpair,KVPair>>> map|
+_optional_||< string, <<_kvpair,KVPair>> > map|
 |===
 
 [[_kvpair]]

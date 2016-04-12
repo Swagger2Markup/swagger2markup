@@ -41,14 +41,10 @@ public class ArrayType extends Type {
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
         String ofTypeDisplay = ofType.displaySchema(docBuilder);
-        // protect against starting < stacks
-        if (ofTypeDisplay.startsWith("<"))
-            ofTypeDisplay = " " + ofTypeDisplay;
-        
         if (isNotBlank(this.collectionFormat))
-            return String.format("<%s> array(%s)", ofTypeDisplay, collectionFormat);
+            return String.format("< %s > array(%s)", ofTypeDisplay, collectionFormat);
         else
-            return String.format("<%s> array", ofTypeDisplay);
+            return String.format("< %s > array", ofTypeDisplay);
     }
 
     public String getCollectionFormat() {

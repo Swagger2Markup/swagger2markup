@@ -74,13 +74,13 @@ _optional_||integer(int64)|
 |*name* +
 _required_|*Example* : `"doggie"`|string|
 |*nicknames* +
-_optional_||<string,string> map|
+_optional_||< string, string > map|
 |*photoUrls* +
-_required_||<string> array|
+_required_||< string > array|
 |*status* +
 _optional_|pet status in the store|string|
 |*tags* +
-_optional_||< <<_tag,Tag>>> array|
+_optional_||< <<_tag,Tag>> > array|
 |*weight* +
 _optional_|the weight of the pet|number|
 |===
@@ -121,7 +121,7 @@ _optional_||string|
 |*phone* +
 _optional_||string|
 |*pictures* +
-_optional_||<string(byte)> array|
+_optional_||< string(byte) > array|
 |*userStatus* +
 _optional_|User Status|integer(int32)|
 |*username* +

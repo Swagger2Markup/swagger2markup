@@ -142,7 +142,7 @@ Multiple status values can be provided with comma seperated strings
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*status* +
-_optional_|Status values that need to be considered for filter|<string> array(multi)|
+_optional_|Status values that need to be considered for filter|< string > array(multi)|
 |===
 
 
@@ -151,7 +151,7 @@ _optional_|Status values that need to be considered for filter|<string> array(mu
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|< <<_pet,Pet>>> array
+|*200*|successful operation|< <<_pet,Pet>> > array
 |*400*|Invalid status value|No Content
 |===
 
@@ -193,7 +193,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*tags* +
-_optional_|Tags to filter by|<string> array(multi)|
+_optional_|Tags to filter by|< string > array(multi)|
 |===
 
 
@@ -202,7 +202,7 @@ _optional_|Tags to filter by|<string> array(multi)|
 [options="header", cols=".^1,.^15,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation|< <<_pet,Pet>>> array
+|*200*|successful operation|< <<_pet,Pet>> > array
 |*400*|Invalid tag value|No Content
 |===
 
@@ -608,7 +608,7 @@ POST /users/createWithArray
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|List of user object|< <<_user,User>>> array|
+_optional_|List of user object|< <<_user,User>> > array|
 |===
 
 
@@ -645,7 +645,7 @@ POST /users/createWithList
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
-_optional_|List of user object|< <<_user,User>>> array|
+_optional_|List of user object|< <<_user,User>> > array|
 |===
 
 

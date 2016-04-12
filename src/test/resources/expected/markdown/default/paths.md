@@ -109,14 +109,14 @@ Multiple status values can be provided with comma seperated strings
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|<string> array(multi)||
+|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|< string > array(multi)||
 
 
 #### Responses
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|<[Pet](#pet)> array|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|< [Pet](#pet) > array|
 |**400**|Invalid status value|No Content|
 
 
@@ -153,14 +153,14 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Query**|**tags**  <br>*optional*|Tags to filter by|<string> array(multi)||
+|**Query**|**tags**  <br>*optional*|Tags to filter by|< string > array(multi)||
 
 
 #### Responses
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|<[Pet](#pet)> array|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|< [Pet](#pet) > array|
 |**400**|Invalid tag value|No Content|
 
 
@@ -469,7 +469,7 @@ POST /users/createWithArray
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|<[User](#user)> array||
+|**Body**|**body**  <br>*optional*|List of user object|< [User](#user) > array||
 
 
 #### Responses
@@ -501,7 +501,7 @@ POST /users/createWithList
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|<[User](#user)> array||
+|**Body**|**body**  <br>*optional*|List of user object|< [User](#user) > array||
 
 
 #### Responses

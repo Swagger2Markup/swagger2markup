@@ -49,11 +49,11 @@ _optional_||integer(int64)|
 |*name* +
 _required_|*Example* : `"doggie"`|string|
 |*photoUrls* +
-_required_||<string> array|
+_required_||< string > array|
 |*status* +
 _optional_|pet status in the store,|enum (Dead, Alive)|
 |*tags* +
-_optional_||< <<definitions.adoc#_tag,Tag>>> array|
+_optional_||< <<definitions.adoc#_tag,Tag>> > array|
 |===
 
 

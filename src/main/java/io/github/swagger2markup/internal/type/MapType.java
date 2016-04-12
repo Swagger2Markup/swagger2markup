@@ -34,11 +34,7 @@ public class MapType extends Type {
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
         String keyTypeDisplay = keyType.displaySchema(docBuilder);
-        // protect against starting < stacks
-        if (keyTypeDisplay.startsWith("<"))
-            keyTypeDisplay = " " + keyTypeDisplay;
-
-        return String.format("<%s,%s> map", keyTypeDisplay, valueType.displaySchema(docBuilder));
+        return String.format("< %s, %s > map", keyTypeDisplay, valueType.displaySchema(docBuilder));
     }
 
     public Type getKeyType() {

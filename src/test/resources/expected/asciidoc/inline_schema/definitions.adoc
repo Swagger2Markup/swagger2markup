@@ -108,7 +108,7 @@ _optional_||<<_inlinepet_category,category>>|
 |*id* +
 _required_||integer(int64)|
 |*tags* +
-_optional_||< <<_inlinepet_tags,tags>>> array|
+_optional_||< <<_inlinepet_tags,tags>> > array|
 |===
 
 [[_inlinepet_category]]
@@ -147,7 +147,7 @@ _optional_||<<_categorymodel,CategoryModel>>|
 |*id* +
 _required_||integer(int64)|
 |*tags* +
-_optional_||< <<_tagmodel,TagModel>>> array|
+_optional_||< <<_tagmodel,TagModel>> > array|
 |===
 
 [[_categorymodel]]
@@ -195,7 +195,7 @@ mixed collections and objects
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||< <<_mixedschema_mytable,myTable>>> array|
+_optional_||< <<_mixedschema_mytable,myTable>> > array|
 |===
 
 [[_mixedschema_mytable]]
@@ -205,7 +205,7 @@ _optional_||< <<_mixedschema_mytable,myTable>>> array|
 |===
 |Name|Description|Schema|Default
 |*myDict* +
-_optional_||<string,<<_mixedschema_mydict,myDict>>> map|
+_optional_||< string, <<_mixedschema_mydict,myDict>> > map|
 |===
 
 [[_mixedschema_mydict]]
@@ -225,7 +225,7 @@ _optional_||string|
 === RecursiveCollectionSchema
 Options k/v pairs list
 
-_Type_ : < <string,<<_recursivecollectionschema_inline,RecursiveCollectionSchema>>> map> array
+_Type_ : < < string, <<_recursivecollectionschema_inline,RecursiveCollectionSchema>> > map > array
 
 [[_recursivecollectionschema_inline]]
 *RecursiveCollectionSchema*
@@ -249,7 +249,7 @@ mixed collections and objects
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>>> array|
+_optional_||< <<_tablecontent,TableContent>> > array|
 |===
 
 [[_tablecontent]]
@@ -261,7 +261,7 @@ _optional_||< <<_tablecontent,TableContent>>> array|
 |*emptyObject* +
 _optional_||object|
 |*myDict* +
-_optional_||<string,<<_kvpair,KVPair>>> map|
+_optional_||< string, <<_kvpair,KVPair>> > map|
 |===
 
 [[_kvpair]]
