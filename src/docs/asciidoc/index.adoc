@@ -16,7 +16,7 @@ include::getting_started.adoc[]
 
 include::usage_guide.adoc[]
 
-include::advanced_usage[]
+include::advanced_usage.adoc[]
 
 include::extension_spi.adoc[]
 
