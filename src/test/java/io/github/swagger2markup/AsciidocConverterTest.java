@@ -221,6 +221,7 @@ public class AsciidocConverterTest {
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withPathsGroupedBy(GroupBy.TAGS)
+                .withInlineSchemaDepthLevel(10)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

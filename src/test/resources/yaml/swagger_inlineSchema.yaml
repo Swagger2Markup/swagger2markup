@@ -387,3 +387,58 @@ definitions:
                         description: Description p2-2-2-2
                         type: boolean
 
+  InlinePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+
+  InlineTitlePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        title: CategoryModel
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          title: TagModel
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string

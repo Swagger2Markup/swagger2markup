@@ -17,4 +17,72 @@ using field names which is not always the best choice.
 The Swagger document supports JSON Schema `title` items in inline schemas.
 It's recommended to use them in inline schemas so that they'll be used primarily to field names and this will lead to a better naming.
 
+.Inline schema without title items
+[source,yaml]
+----
+  InlinePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+----
 
+.Inline schema without title items result 
+image::images/untitledSwagger.png[]
+
+.Inline schema without title items
+[source,yaml]
+----
+  InlineTitlePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        title: CategoryModel
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          title: TagModel
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+----
+
+.Inline schema with title items result
+image::images/titledSwagger.png[]
