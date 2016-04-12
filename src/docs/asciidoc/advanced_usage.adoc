@@ -3,7 +3,7 @@
 === Swagger operationId
 
 Swagger specification supports unique name for each operation using the `operationId` field.
-It is recommended to set an operationId for each operation, so that a lot of actions *does not depend on operation `summary` which can change anytime*.
+It is recommended to set an operationId for each operation, so that a lot of actions *does not depend on operation `summary` which can change at anytime*.
 When provided, this `operationId` value will be used primarily to operation `summary + HTTP method` when :
   
   * generating separated operation files : file name
@@ -12,14 +12,13 @@ When provided, this `operationId` value will be used primarily to operation `sum
   
 === Swagger schema title
 
-Swagger2Markup displays inline schemas by decomposing them (when schema is complex). In this process, some intermediate references are generated
-using field names which is not always the best choice.
+Swagger2Markup displays inline schemas by decomposing them (when schema is complex). In this process, some intermediate references are generated using field names which is not always the best choice.
 The Swagger document supports JSON Schema `title` items in inline schemas.
 It's recommended to use them in inline schemas so that they'll be used primarily to field names and this will lead to a better naming.
 
 .Inline schema without title items
 ====
-[source,yaml]
+[source,yaml,subs="quotes"]
 ----
   InlinePet:
     type: object
