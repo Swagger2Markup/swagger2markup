@@ -6,7 +6,7 @@ before_install:
 after_success:
 - ./gradlew jacocoTestReport coveralls
 - ./gradlew artifactoryPublish -PbintrayUsername="${BINTRAY_USER}" -PbintrayApiKey="${BINTRAY_KEY}"
-- ./gradlew publishGhPages -PgithubUser="${GITHUB_USER}" -PgithubPassword="${GITHUB_PASSWORD}"
+- ./gradlew publishGhPages -PgithubUser="${GITHUB_USER}" -PgithubPassword="${GITHUB_PASSWORD}" --stacktrace
 notifications:
   slack: swagger2markup:Zz5kz0SnvtG6aVvZUM8yMkER
 env:
