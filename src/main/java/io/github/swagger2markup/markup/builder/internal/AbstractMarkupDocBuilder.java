@@ -191,7 +191,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder textLine(String text, boolean forceLineBreak) {
-        Validate.notBlank(text, "text must not be blank");
+        Validate.notNull(text, "text must not be null");
         text(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
@@ -205,7 +205,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder text(String text) {
-        Validate.notBlank(text, "text must not be blank");
+        Validate.notNull(text, "text must not be null");
         documentBuilder.append(replaceNewLines(text));
         return this;
     }
