@@ -516,7 +516,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">2016-04-06</span>
+<span id="revdate">2016-04-12</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -564,73 +564,79 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_logging">3.3. Logging</a></li>
 </ul>
 </li>
-<li><a href="#_extension_spi">4. Extension SPI</a>
+<li><a href="#_advanced_usage">4. Advanced usage</a>
 <ul class="sectlevel2">
-<li><a href="#_creation_of_an_extension">4.1. Creation of an extension</a></li>
-<li><a href="#_registration_of_an_extension">4.2. Registration of an extension</a>
+<li><a href="#_swagger_operationid">4.1. Swagger operationId</a></li>
+<li><a href="#_swagger_schema_title">4.2. Swagger schema title</a></li>
+</ul>
+</li>
+<li><a href="#_extension_spi">5. Extension SPI</a>
+<ul class="sectlevel2">
+<li><a href="#_creation_of_an_extension">5.1. Creation of an extension</a></li>
+<li><a href="#_registration_of_an_extension">5.2. Registration of an extension</a>
 <ul class="sectlevel3">
-<li><a href="#_automatic_registration">4.2.1. Automatic registration</a></li>
-<li><a href="#_manual_registration">4.2.2. Manual registration</a></li>
+<li><a href="#_automatic_registration">5.2.1. Automatic registration</a></li>
+<li><a href="#_manual_registration">5.2.2. Manual registration</a></li>
 </ul>
 </li>
-<li><a href="#_extensions_points">4.3. Extensions points</a>
+<li><a href="#_extensions_points">5.3. Extensions points</a>
 <ul class="sectlevel3">
-<li><a href="#_overviewdocumentextension">4.3.1. OverviewDocumentExtension</a></li>
-<li><a href="#_pathsdocumentextension">4.3.2. PathsDocumentExtension</a></li>
-<li><a href="#_securitydocumentextension">4.3.3. SecurityDocumentExtension</a></li>
-<li><a href="#_definitionsdocumentextension">4.3.4. DefinitionsDocumentExtension</a></li>
-<li><a href="#_swaggermodelextension">4.3.5. SwaggerModelExtension</a></li>
+<li><a href="#_overviewdocumentextension">5.3.1. OverviewDocumentExtension</a></li>
+<li><a href="#_pathsdocumentextension">5.3.2. PathsDocumentExtension</a></li>
+<li><a href="#_securitydocumentextension">5.3.3. SecurityDocumentExtension</a></li>
+<li><a href="#_definitionsdocumentextension">5.3.4. DefinitionsDocumentExtension</a></li>
+<li><a href="#_swaggermodelextension">5.3.5. SwaggerModelExtension</a></li>
 </ul>
 </li>
-<li><a href="#_provided_extensions">4.4. Provided Extensions</a>
+<li><a href="#_provided_extensions">5.4. Provided Extensions</a>
 <ul class="sectlevel3">
-<li><a href="#_dynamic_file_import_extension">4.4.1. Dynamic file import extension</a></li>
-<li><a href="#_spring_restdocs_extension">4.4.2. Spring RestDocs extension</a></li>
-<li><a href="#_schema_file_import_extension">4.4.3. Schema file import extension</a></li>
+<li><a href="#_dynamic_file_import_extension">5.4.1. Dynamic file import extension</a></li>
+<li><a href="#_spring_restdocs_extension">5.4.2. Spring RestDocs extension</a></li>
+<li><a href="#_schema_file_import_extension">5.4.3. Schema file import extension</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#_gradle_plugin">5. Gradle Plugin</a>
+<li><a href="#_gradle_plugin">6. Gradle Plugin</a>
 <ul class="sectlevel2">
-<li><a href="#_usage_guide_5">5.1. Usage guide</a></li>
-<li><a href="#_configuration_5">5.2. Configuration</a></li>
-<li><a href="#_example">5.3. Example</a></li>
+<li><a href="#_usage_guide_5">6.1. Usage guide</a></li>
+<li><a href="#_configuration_5">6.2. Configuration</a></li>
+<li><a href="#_example">6.3. Example</a></li>
 </ul>
 </li>
-<li><a href="#_maven_plugin">6. Maven Plugin</a>
+<li><a href="#_maven_plugin">7. Maven Plugin</a>
 <ul class="sectlevel2">
-<li><a href="#_usage_guide_6">6.1. Usage guide</a></li>
-<li><a href="#_configuration_6">6.2. Configuration</a></li>
-<li><a href="#_example_2">6.3. Example</a></li>
+<li><a href="#_usage_guide_6">7.1. Usage guide</a></li>
+<li><a href="#_configuration_6">7.2. Configuration</a></li>
+<li><a href="#_example_2">7.3. Example</a></li>
 </ul>
 </li>
-<li><a href="#_command_line_interface">7. Command Line Interface</a>
+<li><a href="#_command_line_interface">8. Command Line Interface</a>
 <ul class="sectlevel2">
-<li><a href="#_usage_guide_7">7.1. Usage guide</a>
+<li><a href="#_usage_guide_7">8.1. Usage guide</a>
 <ul class="sectlevel3">
-<li><a href="#_show_help">7.1.1. Show help</a></li>
-<li><a href="#_conversion_into_a_folder">7.1.2. Conversion into a folder</a></li>
-<li><a href="#_conversion_into_a_file_2">7.1.3. Conversion into a file</a></li>
-<li><a href="#_conversion_of_a_remote_swagger_file_2">7.1.4. Conversion of  a remote Swagger file</a></li>
+<li><a href="#_show_help">8.1.1. Show help</a></li>
+<li><a href="#_conversion_into_a_folder">8.1.2. Conversion into a folder</a></li>
+<li><a href="#_conversion_into_a_file_2">8.1.3. Conversion into a file</a></li>
+<li><a href="#_conversion_of_a_remote_swagger_file_2">8.1.4. Conversion of  a remote Swagger file</a></li>
 </ul>
 </li>
-<li><a href="#_configuration_7">7.2. Configuration</a></li>
+<li><a href="#_configuration_7">8.2. Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_spring_boot_and_springfox">8. Spring Boot and Springfox</a>
+<li><a href="#_spring_boot_and_springfox">9. Spring Boot and Springfox</a>
 <ul class="sectlevel2">
-<li><a href="#_demo">8.1. Demo</a></li>
+<li><a href="#_demo">9.1. Demo</a></li>
 </ul>
 </li>
-<li><a href="#_contributing">9. Contributing</a>
+<li><a href="#_contributing">10. Contributing</a>
 <ul class="sectlevel2">
-<li><a href="#_questions">9.1. Questions</a></li>
-<li><a href="#_bugs">9.2. Bugs</a></li>
-<li><a href="#_enhancements">9.3. Enhancements</a></li>
+<li><a href="#_questions">10.1. Questions</a></li>
+<li><a href="#_bugs">10.2. Bugs</a></li>
+<li><a href="#_enhancements">10.3. Enhancements</a></li>
 </ul>
 </li>
-<li><a href="#_license">10. License</a></li>
+<li><a href="#_license">11. License</a></li>
 </ul>
 </div>
 </div>
@@ -1357,7 +1363,124 @@ The properties are considered in the following order:</p>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_extension_spi"><a class="anchor" href="#_extension_spi"></a>4. Extension SPI</h2>
+<h2 id="_advanced_usage"><a class="anchor" href="#_advanced_usage"></a>4. Advanced usage</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_swagger_operationid"><a class="anchor" href="#_swagger_operationid"></a>4.1. Swagger operationId</h3>
+<div class="paragraph">
+<p>Swagger specification supports unique name for each operation using the <code>operationId</code> field.<br>
+It is recommended to set an operationId for each operation, so that a lot of actions <strong>does not depend on operation <code>summary</code> which can change anytime</strong>.<br>
+When provided, this <code>operationId</code> value will be used primarily to operation <code>summary + HTTP method</code> when :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>generating separated operation files : file name</p>
+</li>
+<li>
+<p>generating unique Markup anchors for operations and all sub-items.</p>
+</li>
+<li>
+<p>searching for extra content for operations : operation folder name for plugins (Hand-written descriptions, Dynamic content, etc&#8230;&#8203;)</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_swagger_schema_title"><a class="anchor" href="#_swagger_schema_title"></a>4.2. Swagger schema title</h3>
+<div class="paragraph">
+<p>Swagger2Markup displays inline schemas by decomposing them (when schema is complex). In this process, some intermediate references are generated<br>
+using field names which is not always the best choice.<br>
+The Swagger document supports JSON Schema <code>title</code> items in inline schemas.<br>
+It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be used primarily to field names and this will lead to a better naming.</p>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. Inline schema without title items</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">InlinePet</span>:
+    <span class="key">type</span>: <span class="string"><span class="content">object</span></span>
+    <span class="key">required</span>:
+      - <span class="string"><span class="content">id</span></span>
+    <span class="key">properties</span>:
+      <span class="key">id</span>:
+        <span class="key">type</span>: <span class="string"><span class="content">integer</span></span>
+        <span class="key">format</span>: <span class="string"><span class="content">int64</span></span>
+      <span class="key">category</span>:
+        <span class="key">type</span>: <span class="string"><span class="content">object</span></span>
+        <span class="key">properties</span>:
+          <span class="key">id</span>:
+            <span class="key">type</span>: <span class="string"><span class="content">integer</span></span>
+            <span class="key">format</span>: <span class="string"><span class="content">int64</span></span>
+          <span class="key">name</span>:
+            <span class="key">type</span>: <span class="string"><span class="content">string</span></span>
+      <span class="key">tags</span>:
+        <span class="key">type</span>: <span class="string"><span class="content">array</span></span>
+        <span class="key">items</span>:
+          <span class="key">type</span>: <span class="string"><span class="content">object</span></span>
+          <span class="key">properties</span>:
+            <span class="key">id</span>:
+              <span class="key">type</span>: <span class="string"><span class="content">integer</span></span>
+              <span class="key">format</span>: <span class="string"><span class="content">int64</span></span>
+            <span class="key">name</span>:
+              <span class="key">type</span>: <span class="string"><span class="content">string</span></span></code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/untitledSwagger.png" alt="untitledSwagger">
+</div>
+</div>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 2. Inline schema with title items</div>
+<div class="content">
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="yaml">  InlineTitlePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        <strong>title: CategoryModel</strong>
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          <strong>title: TagModel</strong>
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="images/titledSwagger.png" alt="titledSwagger">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_extension_spi"><a class="anchor" href="#_extension_spi"></a>5. Extension SPI</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension are available. An extension is an abstract class which must be implemented.</p>
@@ -1405,7 +1528,7 @@ The properties are considered in the following order:</p>
 </tbody>
 </table>
 <div class="sect2">
-<h3 id="_creation_of_an_extension"><a class="anchor" href="#_creation_of_an_extension"></a>4.1. Creation of an extension</h3>
+<h3 id="_creation_of_an_extension"><a class="anchor" href="#_creation_of_an_extension"></a>5.1. Creation of an extension</h3>
 <div class="paragraph">
 <p>To create a custom extension, you have to create a class (e.g. <code>io.myname.MyExtension</code>) which extends an extension, e.g. <code>io.github.swagger2markup.spi.DefinitionsDocumentExtension</code>. Every extension point provides two methods which must be implemented:</p>
 </div>
@@ -1470,12 +1593,12 @@ The properties are considered in the following order:</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_registration_of_an_extension"><a class="anchor" href="#_registration_of_an_extension"></a>4.2. Registration of an extension</h3>
+<h3 id="_registration_of_an_extension"><a class="anchor" href="#_registration_of_an_extension"></a>5.2. Registration of an extension</h3>
 <div class="paragraph">
 <p>Swagger2Markup extensions must be registered in the <code>Swagger2MarkupExtensionRegistry</code>. The default <code>Swagger2MarkupExtensionRegistry</code> of Swagger2Markup uses the <code>java.util.ServiceLoader</code> to load and register Swagger2Markup extensions automatically.</p>
 </div>
 <div class="sect3">
-<h4 id="_automatic_registration"><a class="anchor" href="#_automatic_registration"></a>4.2.1. Automatic registration</h4>
+<h4 id="_automatic_registration"><a class="anchor" href="#_automatic_registration"></a>5.2.1. Automatic registration</h4>
 <div class="paragraph">
 <p>To register your extension automatically, the following steps are required:</p>
 </div>
@@ -1491,7 +1614,7 @@ The properties are considered in the following order:</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_manual_registration"><a class="anchor" href="#_manual_registration"></a>4.2.2. Manual registration</h4>
+<h4 id="_manual_registration"><a class="anchor" href="#_manual_registration"></a>5.2.2. Manual registration</h4>
 <div class="paragraph">
 <p>To register your extension manually, you have to use the <code>Swagger2MarkupExtensionRegistryBuilder</code>.</p>
 </div>
@@ -1525,9 +1648,9 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </div>
 </div>
 <div class="sect2">
-<h3 id="_extensions_points"><a class="anchor" href="#_extensions_points"></a>4.3. Extensions points</h3>
+<h3 id="_extensions_points"><a class="anchor" href="#_extensions_points"></a>5.3. Extensions points</h3>
 <div class="sect3">
-<h4 id="_overviewdocumentextension"><a class="anchor" href="#_overviewdocumentextension"></a>4.3.1. OverviewDocumentExtension</h4>
+<h4 id="_overviewdocumentextension"><a class="anchor" href="#_overviewdocumentextension"></a>5.3.1. OverviewDocumentExtension</h4>
 <div class="paragraph">
 <p>The OverviewDocumentExtension allows to extend the overview document at four positions:</p>
 </div>
@@ -1567,7 +1690,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 </div>
 <div class="sect3">
-<h4 id="_pathsdocumentextension"><a class="anchor" href="#_pathsdocumentextension"></a>4.3.2. PathsDocumentExtension</h4>
+<h4 id="_pathsdocumentextension"><a class="anchor" href="#_pathsdocumentextension"></a>5.3.2. PathsDocumentExtension</h4>
 <div class="paragraph">
 <p>The PathsDocumentExtension allows to extend the paths document at six positions:</p>
 </div>
@@ -1607,7 +1730,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 </div>
 <div class="sect3">
-<h4 id="_securitydocumentextension"><a class="anchor" href="#_securitydocumentextension"></a>4.3.3. SecurityDocumentExtension</h4>
+<h4 id="_securitydocumentextension"><a class="anchor" href="#_securitydocumentextension"></a>5.3.3. SecurityDocumentExtension</h4>
 <div class="paragraph">
 <p>The SecurityDocumentExtension allows to extend the security document at six positions:</p>
 </div>
@@ -1647,7 +1770,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 </div>
 <div class="sect3">
-<h4 id="_definitionsdocumentextension"><a class="anchor" href="#_definitionsdocumentextension"></a>4.3.4. DefinitionsDocumentExtension</h4>
+<h4 id="_definitionsdocumentextension"><a class="anchor" href="#_definitionsdocumentextension"></a>5.3.4. DefinitionsDocumentExtension</h4>
 <div class="paragraph">
 <p>The DefinitionsDocumentExtension allows to extend the definitions document at six positions:</p>
 </div>
@@ -1687,7 +1810,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 </div>
 <div class="sect3">
-<h4 id="_swaggermodelextension"><a class="anchor" href="#_swaggermodelextension"></a>4.3.5. SwaggerModelExtension</h4>
+<h4 id="_swaggermodelextension"><a class="anchor" href="#_swaggermodelextension"></a>5.3.5. SwaggerModelExtension</h4>
 <div class="paragraph">
 <p>The SwaggerModelExtension allows to modify the Swagger model before it is processed by Swagger2Markup. For example, you could use this extension to delete Paths from the Swagger model which should not be rendered.</p>
 </div>
@@ -1722,7 +1845,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 </div>
 <div class="sect2">
-<h3 id="_provided_extensions"><a class="anchor" href="#_provided_extensions"></a>4.4. Provided Extensions</h3>
+<h3 id="_provided_extensions"><a class="anchor" href="#_provided_extensions"></a>5.4. Provided Extensions</h3>
 <div class="paragraph">
 <p>Swagger2Markup provides some extensions which can be used out-of-the-box. You just have to add the extension to your classpath.</p>
 </div>
@@ -1754,7 +1877,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_dynamic_file_import_extension"><a class="anchor" href="#_dynamic_file_import_extension"></a>4.4.1. Dynamic file import extension</h4>
+<h4 id="_dynamic_file_import_extension"><a class="anchor" href="#_dynamic_file_import_extension"></a>5.4.1. Dynamic file import extension</h4>
 <div class="sect4">
 <h5 id="_usage_guide_2"><a class="anchor" href="#_usage_guide_2"></a>Usage guide</h5>
 <div class="listingblock">
@@ -1860,7 +1983,7 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 </div>
 </div>
 <div class="sect3">
-<h4 id="_spring_restdocs_extension"><a class="anchor" href="#_spring_restdocs_extension"></a>4.4.2. Spring RestDocs extension</h4>
+<h4 id="_spring_restdocs_extension"><a class="anchor" href="#_spring_restdocs_extension"></a>5.4.2. Spring RestDocs extension</h4>
 <div class="paragraph">
 <p>Swagger2Markup can be used together with <a href="https://github.com/spring-projects/spring-restdocs">spring-restdocs</a>. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated Markup documents. See spring-restdocs how to configure it.</p>
 </div>
@@ -1958,7 +2081,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_schema_file_import_extension"><a class="anchor" href="#_schema_file_import_extension"></a>4.4.3. Schema file import extension</h4>
+<h4 id="_schema_file_import_extension"><a class="anchor" href="#_schema_file_import_extension"></a>5.4.3. Schema file import extension</h4>
 <div class="sect4">
 <h5 id="_usage_guide_4"><a class="anchor" href="#_usage_guide_4"></a>Usage guide</h5>
 <div class="listingblock">
@@ -2010,7 +2133,7 @@ compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:1.0.0-SNAPSH
 </div>
 </div>
 <div class="sect1">
-<h2 id="_gradle_plugin"><a class="anchor" href="#_gradle_plugin"></a>5. Gradle Plugin</h2>
+<h2 id="_gradle_plugin"><a class="anchor" href="#_gradle_plugin"></a>6. Gradle Plugin</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Swagger2Markup provides a Gradle plugin. The Gradle plugin is published in JCenter and Maven Central.</p>
@@ -2028,7 +2151,7 @@ The Gradle Plugin requires at least JDK 8.
 </table>
 </div>
 <div class="sect2">
-<h3 id="_usage_guide_5"><a class="anchor" href="#_usage_guide_5"></a>5.1. Usage guide</h3>
+<h3 id="_usage_guide_5"><a class="anchor" href="#_usage_guide_5"></a>6.1. Usage guide</h3>
 <div class="paragraph">
 <p>Add the following snippet to your Gradle build file:</p>
 </div>
@@ -2056,7 +2179,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_5"><a class="anchor" href="#_configuration_5"></a>5.2. Configuration</h3>
+<h3 id="_configuration_5"><a class="anchor" href="#_configuration_5"></a>6.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
@@ -2115,7 +2238,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </table>
 </div>
 <div class="sect2">
-<h3 id="_example"><a class="anchor" href="#_example"></a>5.3. Example</h3>
+<h3 id="_example"><a class="anchor" href="#_example"></a>6.3. Example</h3>
 <div class="paragraph">
 <p>You can copy the template project from GitHub to get started.</p>
 </div>
@@ -2126,7 +2249,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_maven_plugin"><a class="anchor" href="#_maven_plugin"></a>6. Maven Plugin</h2>
+<h2 id="_maven_plugin"><a class="anchor" href="#_maven_plugin"></a>7. Maven Plugin</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Swagger2Markup provides a Maven plugin. The Maven plugin is published in JCenter and Maven Central.</p>
@@ -2144,7 +2267,7 @@ The Maven Plugin requires at least JDK 8.
 </table>
 </div>
 <div class="sect2">
-<h3 id="_usage_guide_6"><a class="anchor" href="#_usage_guide_6"></a>6.1. Usage guide</h3>
+<h3 id="_usage_guide_6"><a class="anchor" href="#_usage_guide_6"></a>7.1. Usage guide</h3>
 <div class="paragraph">
 <p>Add the following snippet to your Maven POM file:</p>
 </div>
@@ -2185,7 +2308,7 @@ The Maven Plugin requires at least JDK 8.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_6"><a class="anchor" href="#_configuration_6"></a>6.2. Configuration</h3>
+<h3 id="_configuration_6"><a class="anchor" href="#_configuration_6"></a>7.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
@@ -2254,7 +2377,7 @@ The Maven Plugin requires at least JDK 8.
 </table>
 </div>
 <div class="sect2">
-<h3 id="_example_2"><a class="anchor" href="#_example_2"></a>6.3. Example</h3>
+<h3 id="_example_2"><a class="anchor" href="#_example_2"></a>7.3. Example</h3>
 <div class="paragraph">
 <p>You can copy the template project from GitHub to get started.</p>
 </div>
@@ -2265,7 +2388,7 @@ The Maven Plugin requires at least JDK 8.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_command_line_interface"><a class="anchor" href="#_command_line_interface"></a>7. Command Line Interface</h2>
+<h2 id="_command_line_interface"><a class="anchor" href="#_command_line_interface"></a>8. Command Line Interface</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Swagger2Markup provides a Command line interface (CLI). The CLI is published in JCenter and Maven Central. The artifacts can be viewed at the following locations:</p>
@@ -2293,9 +2416,9 @@ The CLI requires at least JDK 8.
 </table>
 </div>
 <div class="sect2">
-<h3 id="_usage_guide_7"><a class="anchor" href="#_usage_guide_7"></a>7.1. Usage guide</h3>
+<h3 id="_usage_guide_7"><a class="anchor" href="#_usage_guide_7"></a>8.1. Usage guide</h3>
 <div class="sect3">
-<h4 id="_show_help"><a class="anchor" href="#_show_help"></a>7.1.1. Show help</h4>
+<h4 id="_show_help"><a class="anchor" href="#_show_help"></a>8.1.1. Show help</h4>
 <div class="paragraph">
 <p>You can show the help:</p>
 </div>
@@ -2339,7 +2462,7 @@ OPTIONS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_conversion_into_a_folder"><a class="anchor" href="#_conversion_into_a_folder"></a>7.1.2. Conversion into a folder</h4>
+<h4 id="_conversion_into_a_folder"><a class="anchor" href="#_conversion_into_a_folder"></a>8.1.2. Conversion into a folder</h4>
 <div class="paragraph">
 <p>You can convert a Swagger file into a folder as follows:</p>
 </div>
@@ -2353,7 +2476,7 @@ OPTIONS
 </div>
 </div>
 <div class="sect3">
-<h4 id="_conversion_into_a_file_2"><a class="anchor" href="#_conversion_into_a_file_2"></a>7.1.3. Conversion into a file</h4>
+<h4 id="_conversion_into_a_file_2"><a class="anchor" href="#_conversion_into_a_file_2"></a>8.1.3. Conversion into a file</h4>
 <div class="paragraph">
 <p>You can convert a local Swagger file into a file as follows:</p>
 </div>
@@ -2379,7 +2502,7 @@ The input file must not have a file extension
 </div>
 </div>
 <div class="sect3">
-<h4 id="_conversion_of_a_remote_swagger_file_2"><a class="anchor" href="#_conversion_of_a_remote_swagger_file_2"></a>7.1.4. Conversion of  a remote Swagger file</h4>
+<h4 id="_conversion_of_a_remote_swagger_file_2"><a class="anchor" href="#_conversion_of_a_remote_swagger_file_2"></a>8.1.4. Conversion of  a remote Swagger file</h4>
 <div class="paragraph">
 <p>You can convert a remote Swagger specification which must be accessible via HTTP.</p>
 </div>
@@ -2391,7 +2514,7 @@ The input file must not have a file extension
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_7"><a class="anchor" href="#_configuration_7"></a>7.2. Configuration</h3>
+<h3 id="_configuration_7"><a class="anchor" href="#_configuration_7"></a>8.2. Configuration</h3>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
@@ -2414,7 +2537,7 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_spring_boot_and_springfox"><a class="anchor" href="#_spring_boot_and_springfox"></a>8. Spring Boot and Springfox</h2>
+<h2 id="_spring_boot_and_springfox"><a class="anchor" href="#_spring_boot_and_springfox"></a>9. Spring Boot and Springfox</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you use Spring Boot and Springfox or Swagger JAX-RS, you can do the following:</p>
@@ -2493,7 +2616,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 </div>
 <div class="sect2">
-<h3 id="_demo"><a class="anchor" href="#_demo"></a>8.1. Demo</h3>
+<h3 id="_demo"><a class="anchor" href="#_demo"></a>9.1. Demo</h3>
 <div class="paragraph">
 <p>The quickest way to get started is to look at the demo project <a href="https://github.com/Swagger2Markup/spring-swagger2markup-demo">spring-swagger2markup-demo</a>. The demo shows how to generate static docs (HTML5 and PDF) by using the Swagger2Markup Gradle Plugin and serve the generated documentation as static content in a Spring Boot App under <a href="http://localhost:9080/docs/index.html" class="bare">http://localhost:9080/docs/index.html</a> and <a href="http://localhost:9080/docs/index.pdf" class="bare">http://localhost:9080/docs/index.pdf</a>.</p>
 </div>
@@ -2522,22 +2645,22 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 </div>
 <div class="sect1">
-<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>9. Contributing</h2>
+<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>10. Contributing</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_questions"><a class="anchor" href="#_questions"></a>9.1. Questions</h3>
+<h3 id="_questions"><a class="anchor" href="#_questions"></a>10.1. Questions</h3>
 <div class="paragraph">
 <p>You can ask questions about Swagger2Markup in <a href="https://gitter.im/Swagger2Markup/swagger2markup">Gitter</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>9.2. Bugs</h3>
+<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>10.2. Bugs</h3>
 <div class="paragraph">
 <p>If you believe you have found a bug, please take a moment to search the existing issues. If no one else has reported the problem, please open a new issue that describes the problem in detail and, ideally, includes a test that reproduces it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>9.3. Enhancements</h3>
+<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>10.3. Enhancements</h3>
 <div class="paragraph">
 <p>If you’d like an enhancement to be made to Swagger2Markup, pull requests are most welcome. The source code is on GitHub. You may want to search the existing issues and pull requests to see if the enhancement is already being worked on. You may also want to open a new issue to discuss a possible enhancement before work on it begins.</p>
 </div>
@@ -2545,7 +2668,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license"><a class="anchor" href="#_license"></a>10. License</h2>
+<h2 id="_license"><a class="anchor" href="#_license"></a>11. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Copyright 2016 Robert Winkler</p>
@@ -2567,7 +2690,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-04-05 15:27:18 MESZ
+Last updated 2016-04-12 15:56:57 MESZ
 </div>
 </div>
 </body>
