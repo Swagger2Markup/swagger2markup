@@ -34,7 +34,7 @@ _Discriminator_ : petType
 |===
 |Name|Description|Schema|Default
 |*huntingSkill* +
-_required_|The measured skill for hunting|enum (clueless, lazy, adventurous, aggressive)|lazy
+_required_|The measured skill for hunting|enum (clueless, lazy, adventurous, aggressive)|`"lazy"`
 |*name* +
 _optional_|conflicting property with inheriting model (issue #44)|string|
 |*petType* +
@@ -72,7 +72,7 @@ _required_||string|
 |*name* +
 _required_||string|
 |*packSize* +
-_required_|the size of the pack the dog is from|integer(int32)|0
+_required_|the size of the pack the dog is from|integer(int32)|`0`
 |*petType* +
 _required_||string|
 |===

@@ -198,7 +198,7 @@ public abstract class MarkupDocumentBuilder {
                 }
                 
                 MarkupDocBuilder descriptionContent = markupDocBuilder.copy(false);
-                String description = swaggerMarkupDescription(defaultString(property.getDescription()));
+                String description = defaultString(swaggerMarkupDescription(property.getDescription()));
                 if (isNotBlank(description))
                     descriptionContent.text(description);
                 if (example != null) {
@@ -206,12 +206,13 @@ public abstract class MarkupDocumentBuilder {
                         descriptionContent.newLine(true);
                     descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(example));
                 }
+                Object defaultValue = PropertyUtils.getDefaultValue(property);
                 
                 List<String> content = Arrays.asList(
                         propertyNameContent.toString(),
                         descriptionContent.toString(),
                         propertyType.displaySchema(docBuilder),
-                        PropertyUtils.getDefaultValue(property)
+                        defaultValue != null ? literalText(Json.pretty(defaultValue)) : ""
                 );
                 cells.add(content);
             }
@@ -239,10 +240,12 @@ public abstract class MarkupDocumentBuilder {
      * Returns converted markup text from Swagger.
      *
      * @param markupText text to convert, or null
-     * @return converted markup text, or empty string
+     * @return converted markup text, or null if {@code markupText} == null
      */
     protected String swaggerMarkupDescription(String markupText) {
-        return markupDocBuilder.copy(false).importMarkup(new StringReader(defaultString(markupText)), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
+        if (markupText == null)
+            return null;
+        return markupDocBuilder.copy(false).importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
     }
 
     protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {

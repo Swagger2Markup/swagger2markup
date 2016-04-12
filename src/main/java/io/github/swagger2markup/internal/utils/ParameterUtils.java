@@ -28,8 +28,6 @@ import org.apache.commons.lang3.Validate;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-
 
 public final class ParameterUtils {
 
@@ -80,20 +78,20 @@ public final class ParameterUtils {
     }
 
     /**
-     * Retrieves the default value of a parameter, or otherwise an empty String
+     * Retrieves the default value of a parameter, or otherwise returns null
      *
      * @param parameter the parameter
-     * @return the default value of the parameter, or otherwise an empty String
+     * @return the default value of the parameter, or otherwise null
      */
-    public static String getDefaultValue(Parameter parameter){
+    public static Object getDefaultValue(Parameter parameter){
         Validate.notNull(parameter, "parameter must not be null!");
-        String defaultValue = "";
+        Object defaultValue = null;
         
         if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             defaultValue = serializableParameter.getDefaultValue();
         }
-        return defaultString(defaultValue);
+        return defaultValue;
     }
 
     /**

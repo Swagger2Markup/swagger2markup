@@ -445,12 +445,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     else
                         parameterNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
                     
+                    Object defaultValue = ParameterUtils.getDefaultValue(parameter);
+                    
                     List<String> content = Arrays.asList(
                             boldText(parameterType),
                             parameterNameContent.toString(),
-                            swaggerMarkupDescription(defaultString(parameter.getDescription())),
+                            defaultString(swaggerMarkupDescription(parameter.getDescription())),
                             type.displaySchema(markupDocBuilder),
-                            ParameterUtils.getDefaultValue(parameter));
+                            defaultValue != null ? literalText(Json.pretty(defaultValue)) : "");
                     cells.add(content);
                 }
             }
@@ -646,7 +648,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                 MarkupDocBuilder descriptionBuilder = docBuilder.copy(false);
 
-                descriptionBuilder.text(swaggerMarkupDescription(response.getDescription()));
+                descriptionBuilder.text(defaultString(swaggerMarkupDescription(response.getDescription())));
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
@@ -655,23 +657,24 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         descriptionBuilder.newLine(true);
                         Property headerProperty = header.getValue();
                         Type propertyType = PropertyUtils.getType(headerProperty, null);
-                        String headerDescription = swaggerMarkupDescription(headerProperty.getDescription());
-                        String defaultValue = PropertyUtils.getDefaultValue(headerProperty);
+                        String headerDescription = defaultString(swaggerMarkupDescription(headerProperty.getDescription()));
+                        Object defaultValue = PropertyUtils.getDefaultValue(headerProperty);
 
                         descriptionBuilder
                                 .literalText(header.getKey())
                                 .text(String.format(" (%s)", propertyType.displaySchema(markupDocBuilder)));
 
-                        if (isNotBlank(headerDescription) || isNotBlank(defaultValue))
+                        if (isNotBlank(headerDescription) || defaultValue != null) {
                             descriptionBuilder.text(COLON);
-                        
-                        if (isNotBlank(headerDescription) && !headerDescription.endsWith("."))
-                            headerDescription += ".";
-                        
-                        descriptionBuilder.text(headerDescription);
-                        
-                        if (isNotBlank(defaultValue)) {
-                            descriptionBuilder.text(" ").boldText(DEFAULT_COLUMN).text(COLON).text(defaultValue);
+
+                            if (isNotBlank(headerDescription) && !headerDescription.endsWith("."))
+                                headerDescription += ".";
+                            
+                            descriptionBuilder.text(headerDescription);
+
+                            if (defaultValue != null) {
+                                descriptionBuilder.text(" ").boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(defaultValue));
+                            }
                         }
                     }
                 }

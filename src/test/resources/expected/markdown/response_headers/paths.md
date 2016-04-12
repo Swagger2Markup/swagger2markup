@@ -24,9 +24,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. **Default** : 20  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +<br>This is an important value !.  <br>`X-Rate-Limit-Reset` (boolean) :  **Default** : false|[Pet](#pet)|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. **Default** : `"20"`  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +<br>This is an important value !.  <br>`X-Rate-Limit-Reset` (boolean) :  **Default** : `false`|[Pet](#pet)|
 |**400**|Invalid ID supplied|No Content|
-|**404**|Page not found (override)  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. **Default** : 20  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +<br>This is an important value !.  <br>`X-Rate-Limit-Reset` (boolean) :  **Default** : false  <br>`Nothing` (integer)  <br>`DottedDescription` (string) : This description is terminated with a dot. **Default** : 20|No Content|
+|**404**|Page not found (override)  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. **Default** : `"20"`  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +<br>This is an important value !.  <br>`X-Rate-Limit-Reset` (boolean) :  **Default** : `false`  <br>`Nothing` (integer)  <br>`DottedDescription` (string) : This description is terminated with a dot. **Default** : `"20"`|No Content|
 
 
 #### Produces

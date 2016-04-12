@@ -972,9 +972,9 @@ GET /users/login
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*password* +
-_optional_|The password for login in clear text|string|testPassword
+_optional_|The password for login in clear text|string|`"testPassword"`
 |*Query*|*username* +
-_optional_|The user name for login|string|testUser
+_optional_|The user name for login|string|`"testUser"`
 |===
 
 
@@ -1076,7 +1076,7 @@ GET /users/{username}
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*username* +
-_required_|The name that needs to be fetched. Use user1 for testing.|string|testUser
+_required_|The name that needs to be fetched. Use user1 for testing.|string|`"testUser"`
 |===
 
 
