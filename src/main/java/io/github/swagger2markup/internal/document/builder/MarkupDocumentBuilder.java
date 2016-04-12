@@ -170,10 +170,10 @@ public abstract class MarkupDocumentBuilder {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
-                new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
-                new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+                new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(11).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^11"),
+                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
             for (String propertyName : propertyNames) {

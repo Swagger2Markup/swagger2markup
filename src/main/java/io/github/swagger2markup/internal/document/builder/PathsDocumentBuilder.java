@@ -439,10 +439,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
-                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(10).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^10"),
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
             for (Parameter parameter : parameters) {
                 if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter,  globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
@@ -598,9 +598,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"));
+                    new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(4).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(13).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^13"));
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
@@ -638,14 +638,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
             List<MarkupTableColumn> responseCols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(15).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^15"),
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
 
             List<MarkupTableColumn> responseHeaderCols = Arrays.asList(
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
-                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
+                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(11).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^11"),
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
 
             Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
             for (String responseName : responseNames) {

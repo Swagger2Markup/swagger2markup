@@ -19,6 +19,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
@@ -123,8 +124,9 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             }
             
             List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6));
+            List<MarkupTableColumn> cols = Arrays.asList(
+                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(17).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^17"));
             for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
                 List<String> content = Arrays.asList(scope.getKey(), scope.getValue());
                 cells.add(content);
