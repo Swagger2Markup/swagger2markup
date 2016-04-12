@@ -1,0 +1,20 @@
+== Advanced usage
+
+=== Swagger operationId
+
+Swagger specification supports unique name for each operation using the `operationId` field.
+It is recommended to set an operationId for each operation, so that a lot of actions *does not depend on operation `summary` which can change anytime*.
+When provided, this `operationId` value will be used primarily to operation `summary + HTTP method` when :
+  
+  * generating separated operation files : file name
+  * generating unique Markup anchors for operations and all sub-items.
+  * searching for extra content for operations : operation folder name for plugins (Hand-written descriptions, Dynamic content, etc...)
+  
+=== Swagger schema title
+
+Swagger2Markup displays inline schemas by decomposing them (when schema is complex). In this process, some intermediate references are generated
+using field names which is not always the best choice.
+The Swagger document supports JSON Schema `title` items in inline schemas.
+It's recommended to use them in inline schemas so that they'll be used primarily to field names and this will lead to a better naming.
+
+
