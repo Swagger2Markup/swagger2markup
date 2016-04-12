@@ -229,11 +229,11 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @return a list of inlined types.
      */
     private List<ObjectType> typeSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<ObjectType> inlineDefinitions = new ArrayList<>();
         Type modelType = ModelUtils.resolveRefType(ModelUtils.getType(model, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromDefinition()));
 
         if (!(modelType instanceof ObjectType)) {
-            modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", localDefinitions);
+            modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", inlineDefinitions);
         }
         
         if (modelType instanceof ObjectType) {
@@ -260,7 +260,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             if (StringUtils.isNotBlank(typeInfosString))
                 docBuilder.paragraph(typeInfosString, true);
 
-            localDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromDefinition(), docBuilder));
+            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = docBuilder.copy(false);
             typeInfos.italicText(TYPE_COLUMN).textLine(COLON + modelType.displaySchema(docBuilder));
@@ -268,7 +268,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             docBuilder.paragraph(typeInfos.toString());
         }
 
-        return localDefinitions;
+        return inlineDefinitions;
     }
     
     private void buildDescriptionParagraph(Model model, MarkupDocBuilder docBuilder) {

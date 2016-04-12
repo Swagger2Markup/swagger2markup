@@ -13,7 +13,7 @@ POST /pets
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)||
+|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](definitions.md#pet)||
 
 
 #### Responses
@@ -46,7 +46,7 @@ POST /pets
 
 |Type|Name|Scopes|
 |---|---|---|
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="updatepet"></a>
@@ -60,7 +60,7 @@ PUT /pets
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)||
+|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](definitions.md#pet)||
 
 
 #### Responses
@@ -107,7 +107,7 @@ PUT /pets
 
 |Type|Name|Scopes|
 |---|---|---|
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="findpetsbystatus"></a>
@@ -134,7 +134,7 @@ Multiple status values can be provided with comma seperated strings
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|<[Pet](#pet)> array|
+|**200**|successful operation|<[Pet](definitions.md#pet)> array|
 
 **Headers**
 
@@ -167,7 +167,7 @@ Multiple status values can be provided with comma seperated strings
 
 |Type|Name|Scopes|
 |---|---|---|
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="findpetsbytags"></a>
@@ -194,7 +194,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|<[Pet](#pet)> array|
+|**200**|successful operation|<[Pet](definitions.md#pet)> array|
 
 **Headers**
 
@@ -227,7 +227,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 |Type|Name|Scopes|
 |---|---|---|
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="updatepetwithform"></a>
@@ -275,7 +275,7 @@ POST /pets/{petId}
 
 |Type|Name|Scopes|
 |---|---|---|
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="getpetbyid"></a>
@@ -302,7 +302,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Pet](#pet)|
+|**200**|successful operation|[Pet](definitions.md#pet)|
 
 **Headers**
 
@@ -342,8 +342,8 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |Type|Name|Scopes|
 |---|---|---|
-|**apiKey**|**[api_key](#api_key)**||
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**apiKey**|**[api_key](security.md#api_key)**||
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="deletepet"></a>
@@ -385,7 +385,7 @@ DELETE /pets/{petId}
 
 |Type|Name|Scopes|
 |---|---|---|
-|**oauth2**|**[petstore_auth](#petstore_auth)**|write_pets,read_pets|
+|**oauth2**|**[petstore_auth](security.md#petstore_auth)**|write_pets,read_pets|
 
 
 <a name="placeorder"></a>
@@ -399,7 +399,7 @@ POST /stores/order
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|order placed for purchasing the pet|[Order](#order)||
+|**Body**|**body**  <br>*optional*|order placed for purchasing the pet|[Order](definitions.md#order)||
 
 
 #### Responses
@@ -408,7 +408,7 @@ POST /stores/order
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Order](#order)|
+|**200**|successful operation|[Order](definitions.md#order)|
 
 **Headers**
 
@@ -461,7 +461,7 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Order](#order)|
+|**200**|successful operation|[Order](definitions.md#order)|
 
 **Headers**
 
@@ -557,7 +557,7 @@ This can only be done by the logged in user.
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|Created user object|[User](#user)||
+|**Body**|**body**  <br>*optional*|Created user object|[User](definitions.md#user)||
 
 
 #### Responses
@@ -591,7 +591,7 @@ POST /users/createWithArray
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|<[User](#user)> array||
+|**Body**|**body**  <br>*optional*|List of user object|<[User](definitions.md#user)> array||
 
 
 #### Responses
@@ -625,7 +625,7 @@ POST /users/createWithList
 
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|<[User](#user)> array||
+|**Body**|**body**  <br>*optional*|List of user object|<[User](definitions.md#user)> array||
 
 
 #### Responses
@@ -745,7 +745,7 @@ GET /users/{username}
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[User](#user)|
+|**200**|successful operation|[User](definitions.md#user)|
 
 **Headers**
 
@@ -797,7 +797,7 @@ This can only be done by the logged in user.
 |Type|Name|Description|Schema|Default|
 |---|---|---|---|---|
 |**Path**|**username**  <br>*required*|name that need to be deleted|string||
-|**Body**|**body**  <br>*optional*|Updated user object|[User](#user)||
+|**Body**|**body**  <br>*optional*|Updated user object|[User](definitions.md#user)||
 
 
 #### Responses

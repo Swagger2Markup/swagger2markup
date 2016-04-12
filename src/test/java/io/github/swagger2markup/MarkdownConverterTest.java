@@ -79,6 +79,30 @@ public class MarkdownConverterTest {
     }
 
     @Test
+    public void testSwagger2MarkdownConversionWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/idxref");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .withInterDocumentCrossReferences()
+                .build();
+
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/idxref").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2MarkdownConversionWithInterDocumentCrossReferences.html");
+    }
+    
+    @Test
     public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());

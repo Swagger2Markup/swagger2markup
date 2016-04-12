@@ -35,7 +35,24 @@ paths:
                   value:
                     type: string
                     description: option value
-                                  
+      responses:
+        200:
+          description: Result
+          schema:
+            description: Options k/v pairs list
+            type: array
+            items:
+              type: object
+              additionalProperties:
+                type: object
+                properties:
+                  key:
+                    type: string
+                    description: option key
+                  value:
+                    type: string
+                    description: option value
+                                 
   /MixedParameters:
     post:
       summary: Mixed multi-level objects and collection parameter
@@ -48,7 +65,7 @@ paths:
           in: body
           schema:
             description: mixed collections and objects
-            type: object
+            type: object         
             properties:
               myTable:
                 type: array
@@ -64,6 +81,89 @@ paths:
                             type: string
                           v:
                             type: string
+      responses:
+        200:
+          description: Result
+          schema:
+            description: mixed collections and objects
+            type: object         
+            properties:
+              myTable:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    myDict:
+                      type: object
+                      additionalProperties:
+                        type: object
+                        properties:
+                          k:
+                            type: string
+                          v:
+                            type: string
+
+                                     
+  /TitledParameters:
+    post:
+      summary: Titled, mixed multi-level objects and collection parameter
+      description: Dummy description
+      tags:
+        - All
+      parameters:
+        - name: Version
+          description: The API version
+          in: body
+          schema:
+            description: mixed collections and objects
+            type: object
+            title: Request
+            properties:
+              myTable:
+                type: array
+                title: Table
+                items:
+                  type: object
+                  title: TableContent
+                  properties:
+                    myDict:
+                      type: object
+                      title: Dict
+                      additionalProperties:
+                        type: object
+                        title: KVPair
+                        properties:
+                          k:
+                            type: string
+                          v:
+                            type: string
+      responses:
+        200:
+          description: Result
+          schema:
+            description: mixed collections and objects
+            type: object
+            title: Result
+            properties:
+              myTable:
+                type: array
+                title: Table
+                items:
+                  type: object
+                  title: TableContent
+                  properties:
+                    myDict:
+                      type: object
+                      title: Dict
+                      additionalProperties:
+                        type: object
+                        title: KVPair
+                        properties:
+                          k:
+                            type: string
+                          v:
+                            type: string
+                                            
                                                         
   /LaunchCommand:
     post:
@@ -218,6 +318,34 @@ definitions:
                     type: string
 
 
+  TitledSchema:
+    description: mixed collections and objects
+    type: object
+    title: Request
+    properties:
+      myTable:
+        type: array
+        title: Table
+        items:
+          type: object
+          title: TableContent
+          properties:
+            emptyObject:
+              type: object
+              title: EmptyObject        
+
+            myDict:
+              type: object
+              title: Dict
+              additionalProperties:
+                type: object
+                title: KVPair
+                properties:
+                  k:
+                    type: string
+                  v:
+                    type: string
+
   InlineDepthSchema:
     type: object
     properties:
@@ -259,3 +387,58 @@ definitions:
                         description: Description p2-2-2-2
                         type: boolean
 
+  InlinePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string
+
+  InlineTitlePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        title: CategoryModel
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          title: TagModel
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string

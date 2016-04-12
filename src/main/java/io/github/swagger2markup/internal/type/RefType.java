@@ -26,19 +26,19 @@ public class RefType extends Type {
     private String document;
     private Type refType;
 
-    public RefType(String document, String name, String uniqueName, Type refType) {
-        super(name, uniqueName);
+    public RefType(String document, Type refType) {
+        super(null);
         this.document = document;
         this.refType = refType;
     }
 
     public RefType(Type refType) {
-        this(null, refType.name, refType.uniqueName, refType);
+        this(null, refType);
     }
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        return docBuilder.copy(false).crossReference(getDocument(), getUniqueName(), getName()).toString();
+        return docBuilder.copy(false).crossReference(getDocument(), refType.getUniqueName(), refType.getName()).toString();
     }
 
     public String getDocument() {

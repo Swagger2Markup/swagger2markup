@@ -16,6 +16,8 @@ include::getting_started.adoc[]
 
 include::usage_guide.adoc[]
 
+include::advanced_usage[]
+
 include::extension_spi.adoc[]
 
 include::gradle_plugin.adoc[]

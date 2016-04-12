@@ -42,32 +42,32 @@ public final class PropertyUtils {
         if (property instanceof RefProperty) {
             RefProperty refProperty = (RefProperty) property;
             if (refProperty.getRefFormat() == RefFormat.RELATIVE)
-                type = new ObjectType(null, null); // FIXME : Workaround for https://github.com/swagger-api/swagger-parser/issues/177
+                type = new ObjectType(refProperty.getTitle(), null); // FIXME : Workaround for https://github.com/swagger-api/swagger-parser/issues/177
             else
-                type = new RefType(definitionDocumentResolver.apply(refProperty.getSimpleRef()), refProperty.getSimpleRef(), refProperty.getSimpleRef(), null /* FIXME, not used for now */);
+                type = new RefType(definitionDocumentResolver.apply(refProperty.getSimpleRef()), new ObjectType(refProperty.getSimpleRef(), null /* FIXME, not used for now */));
         } else if (property instanceof ArrayProperty) {
             ArrayProperty arrayProperty = (ArrayProperty) property;
             Property items = arrayProperty.getItems();
-            type = new ArrayType(null, getType(items, definitionDocumentResolver));
+            type = new ArrayType(arrayProperty.getTitle(), getType(items, definitionDocumentResolver));
         } else if (property instanceof MapProperty) {
             MapProperty mapProperty = (MapProperty) property;
             Property additionalProperties = mapProperty.getAdditionalProperties();
-            type = new MapType(null, getType(additionalProperties, definitionDocumentResolver));
+            type = new MapType(mapProperty.getTitle(), getType(additionalProperties, definitionDocumentResolver));
         } else if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
             List<String> enums = stringProperty.getEnum();
             if (CollectionUtils.isNotEmpty(enums)) {
-                type = new EnumType(null, enums);
+                type = new EnumType(stringProperty.getTitle(), enums);
             } else {
-                type = new BasicType(property.getType());
+                type = new BasicType(stringProperty.getType(), stringProperty.getTitle());
             }
         } else if (property instanceof ObjectProperty) {
-            type = new ObjectType(null, ((ObjectProperty) property).getProperties());
+            type = new ObjectType(property.getTitle(), ((ObjectProperty) property).getProperties());
         } else {
             if (isNotBlank(property.getFormat())) {
-                type = new BasicType(property.getType(), property.getFormat());
+                type = new BasicType(property.getType(), property.getTitle(), property.getFormat());
             } else {
-                type = new BasicType(property.getType());
+                type = new BasicType(property.getType(), property.getTitle());
             }
         }
         return type;

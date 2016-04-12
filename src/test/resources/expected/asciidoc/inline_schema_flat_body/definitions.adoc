@@ -5,7 +5,7 @@
 [[_error]]
 === Error
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*error-code* +
@@ -18,7 +18,7 @@ _optional_|Error message|string|
 [[_externallocation]]
 === ExternalLocation
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*Place* +
@@ -29,7 +29,7 @@ _optional_|Place|string|
 [[_inlinedepthschema]]
 === InlineDepthSchema
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*Loop* +
@@ -39,7 +39,7 @@ _optional_||<<_inlinedepthschema_loop,Loop>>|
 [[_inlinedepthschema_loop]]
 *Loop*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p1* +
@@ -51,7 +51,7 @@ _optional_|Description p2|<<_inlinedepthschema_p2,p2>>|
 [[_inlinedepthschema_p2]]
 *p2*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p2-1* +
@@ -63,7 +63,7 @@ _optional_|Description p2-2|<<_inlinedepthschema_p2_p2-2,p2-2>>|
 [[_inlinedepthschema_p2_p2-2]]
 *p2-2*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p2-2-1* +
@@ -75,7 +75,7 @@ _optional_|Description p2-2-2|<<_inlinedepthschema_p2_p2-2_p2-2-2,p2-2-2>>|
 [[_inlinedepthschema_p2_p2-2_p2-2-1]]
 *p2-2-1*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p2-2-1-1* +
@@ -87,7 +87,7 @@ _optional_|Description p2-2-1-2|boolean|
 [[_inlinedepthschema_p2_p2-2_p2-2-2]]
 *p2-2-2*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p2-2-2-1* +
@@ -100,7 +100,7 @@ _optional_|Description p2-2-2-2|boolean|
 [[_location]]
 === Location
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*Place* +
@@ -113,17 +113,17 @@ _optional_|Place|string|
 mixed collections and objects
 
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*myTable* +
-_optional_||<<_mixedschema_mytable,myTable>> array|
+_optional_||< <<_mixedschema_mytable,myTable>>> array|
 |===
 
 [[_mixedschema_mytable]]
 *myTable*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*myDict* +
@@ -133,7 +133,7 @@ _optional_||<string,<<_mixedschema_mydict,myDict>>> map|
 [[_mixedschema_mydict]]
 *myDict*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*k* +
@@ -147,18 +147,55 @@ _optional_||string|
 === RecursiveCollectionSchema
 Options k/v pairs list
 
-_Type_ : <string,<<_recursivecollectionschema_inline,RecursiveCollectionSchema>>> map array
+_Type_ : < <string,<<_recursivecollectionschema_inline,RecursiveCollectionSchema>>> map> array
 
 [[_recursivecollectionschema_inline]]
 *RecursiveCollectionSchema*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*key* +
 _optional_|option key|string|
 |*value* +
 _optional_|option value|string|
+|===
+
+
+[[_titledschema]]
+=== TitledSchema
+mixed collections and objects
+
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*myTable* +
+_optional_||< <<_tablecontent,TableContent>>> array|
+|===
+
+[[_tablecontent]]
+*TableContent*
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*emptyObject* +
+_optional_||object|
+|*myDict* +
+_optional_||<string,<<_kvpair,KVPair>>> map|
+|===
+
+[[_kvpair]]
+*KVPair*
+
+[options="header", cols=".^1,.^4,.^2,.^1"]
+|===
+|Name|Description|Schema|Default
+|*k* +
+_optional_||string|
+|*v* +
+_optional_||string|
 |===
 
 

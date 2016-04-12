@@ -17,6 +17,7 @@
 package io.github.swagger2markup.internal.type;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import org.apache.commons.lang3.Validate;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -25,23 +26,37 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class BasicType extends Type {
 
+    /**
+     * Basic type
+     */
+    protected String type;
     protected String format;
 
-    public BasicType(String name) {
-        this(name, null);
+    public BasicType(String type, String name) {
+        this(type, name, null);
     }
 
-    public BasicType(String name, String format) {
+    public BasicType(String type, String name, String format) {
         super(name);
+        Validate.notBlank(type);
+        this.type = type;
         this.format = format;
     }
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
         if (isNotBlank(this.format))
-            return String.format("%s(%s)", this.name, this.format);
+            return String.format("%s(%s)", this.type, this.format);
         else
-            return this.name;
+            return this.type;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getFormat() {

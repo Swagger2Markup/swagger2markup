@@ -15,7 +15,7 @@ Returns integer metrics information for the application.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^1,.^4,.^2,.^1"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -27,7 +27,7 @@ _optional_|String metrics|<string,integer(int32)> map|
 
 ===== HTTP Code 200
 
-[options="header", cols=".^1,.^3,.^1"]
+[options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<string,string> map
@@ -62,7 +62,7 @@ Returns a collated list of all `@RequestMapping` paths.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^1,.^4,.^2,.^1"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -74,7 +74,7 @@ _optional_|Mappings|<string,<<_mappinginfo,MappingInfo>>> map|
 
 ===== HTTP Code 200
 
-[options="header", cols=".^1,.^3,.^1"]
+[options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<string,<<_mappinginfo,MappingInfo>>> map
@@ -109,7 +109,7 @@ Returns metrics information for the application.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^1,.^4,.^2,.^1"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -119,7 +119,7 @@ _optional_|Metrics|<string,<<_createmetrics_body,body>>> map|
 [[_createmetrics_body]]
 *body*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p1* +
@@ -133,7 +133,7 @@ _optional_||string|
 
 ===== HTTP Code 200
 
-[options="header", cols=".^1,.^3,.^1"]
+[options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<string,<<_createmetrics_response_200,Response 200>>> map
@@ -142,7 +142,7 @@ _optional_||string|
 [[_createmetrics_response_200]]
 *Response 200*
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*p1* +
@@ -180,7 +180,7 @@ Returns string metrics information for the application.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^1,.^4,.^2,.^1"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -192,7 +192,7 @@ _optional_|String metrics|<string,string> map|
 
 ===== HTTP Code 200
 
-[options="header", cols=".^1,.^3,.^1"]
+[options="header", cols=".^1,.^4,.^2"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<string,string> map

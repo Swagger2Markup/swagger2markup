@@ -43,13 +43,15 @@ public final class ParameterUtils {
     public static Type getType(Parameter parameter, Map<String, Model> definitions, Function<String, String> definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
+        
         if(parameter instanceof BodyParameter){
             BodyParameter bodyParameter = (BodyParameter)parameter;
             Model model = bodyParameter.getSchema();
+            
             if(model != null){
                 type = ModelUtils.getType(model, definitions, definitionDocumentResolver);
             }else{
-                type = new BasicType("string");
+                type = new BasicType("string", null);
             }
 
         }
@@ -57,20 +59,22 @@ public final class ParameterUtils {
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             @SuppressWarnings("unchecked")
             List<String> enums = serializableParameter.getEnum();
+            
             if(CollectionUtils.isNotEmpty(enums)){
                 type = new EnumType(null, enums);
             }else{
-                type = new BasicType(serializableParameter.getType(), serializableParameter.getFormat());
+                type = new BasicType(serializableParameter.getType(), null, serializableParameter.getFormat());
             }
-            if(type.getName().equals("array")){
+            if(serializableParameter.getType().equals("array")){
                 String collectionFormat = serializableParameter.getCollectionFormat();
+                
                 type = new ArrayType(null, PropertyUtils.getType(serializableParameter.getItems(), definitionDocumentResolver), collectionFormat);
             }
         }
         else if(parameter instanceof RefParameter){
             String refName = ((RefParameter)parameter).getSimpleRef();
             
-            type = new RefType(definitionDocumentResolver.apply(refName), refName, refName, new ObjectType(refName, null /* FIXME, not used for now */));
+            type = new RefType(definitionDocumentResolver.apply(refName), new ObjectType(refName, null /* FIXME, not used for now */));
         }
         return type;
     }
@@ -84,6 +88,7 @@ public final class ParameterUtils {
     public static String getDefaultValue(Parameter parameter){
         Validate.notNull(parameter, "parameter must not be null!");
         String defaultValue = "";
+        
         if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             defaultValue = serializableParameter.getDefaultValue();

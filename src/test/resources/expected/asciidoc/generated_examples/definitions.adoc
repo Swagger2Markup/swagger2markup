@@ -5,7 +5,7 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -18,7 +18,7 @@ _optional_|*Example* : `"Canines"`|string|
 [[_complexobject]]
 === ComplexObject
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*subObject* +
@@ -29,7 +29,7 @@ _optional_|*Example* : `"object"`|object|
 [[_identified]]
 === Identified
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -40,7 +40,7 @@ _optional_|*Example* : `0`|integer(int64)|
 [[_order]]
 === Order
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*complete* +
@@ -64,7 +64,7 @@ _optional_|Order Status +
 Test description
 
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*category* +
@@ -78,12 +78,12 @@ _optional_|*Example* : `{
   "string" : "string"
 }`|<string,string> map|
 |*photoUrls* +
-_required_|*Example* : `[ "string" ]`|string array|
+_required_|*Example* : `[ "string" ]`|<string> array|
 |*status* +
 _optional_|pet status in the store +
 *Example* : `"string"`|string|
 |*tags* +
-_optional_|*Example* : `[ "<<_tag>>" ]`|<<_tag,Tag>> array|
+_optional_|*Example* : `[ "<<_tag>>" ]`|< <<_tag,Tag>>> array|
 |*weight* +
 _optional_|the weight of the pet +
 *Example* : `0.0`|number|
@@ -93,7 +93,7 @@ _optional_|the weight of the pet +
 [[_tag]]
 === Tag
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -109,7 +109,7 @@ _optional_|*Example* : `"string"`|string|
 _Polymorphism_ : Composition
 
 
-[options="header", cols=".^1,.^6,.^1,.^1"]
+[options="header", cols=".^1,.^4,.^2,.^1"]
 |===
 |Name|Description|Schema|Default
 |*email* +
@@ -125,7 +125,7 @@ _optional_|*Example* : `"string"`|string|
 |*phone* +
 _optional_|*Example* : `"string"`|string|
 |*pictures* +
-_optional_|*Example* : `[ "string" ]`|string(byte) array|
+_optional_|*Example* : `[ "string" ]`|<string(byte)> array|
 |*userStatus* +
 _optional_|User Status +
 *Example* : `0`|integer(int32)|

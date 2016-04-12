@@ -111,28 +111,28 @@ public abstract class MarkupDocumentBuilder {
 
     /**
      * Returns a RefType to a new inlined type named with {@code name} and {@code uniqueName}.<br>
-     * The returned RefType point to the new inlined type which is added to the {@code localDefinitions} collection.<br>
+     * The returned RefType point to the new inlined type which is added to the {@code inlineDefinitions} collection.<br>
      * The function is recursive and support collections (ArrayType and MapType).<br>
      * The function is transparent : {@code type} is returned as-is if type is not inlinable.<br> 
      * 
      * @param type type to inline
      * @param name name of the created inline ObjectType
      * @param uniqueName unique name of the created inline ObjectType
-     * @param localDefinitions a non null collection of inlined ObjectType
+     * @param inlineDefinitions a non null collection of inline ObjectType
      * @return the type referencing the newly created inline ObjectType. Can be a RefType, an ArrayType or a MapType
      */
-    protected Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> localDefinitions) {
+    protected Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
         if (type instanceof ObjectType) {
-            return createInlineObjectType(type, name, uniqueName, localDefinitions);
+            return createInlineObjectType(type, name, uniqueName, inlineDefinitions);
         } else if (type instanceof ArrayType) {
             ArrayType arrayType = (ArrayType)type;
-            arrayType.setOfType(createInlineType(arrayType.getOfType(), name, uniqueName, localDefinitions));
+            arrayType.setOfType(createInlineType(arrayType.getOfType(), name, uniqueName, inlineDefinitions));
 
             return arrayType;
         } else if (type instanceof MapType) {
             MapType mapType = (MapType)type;
             if (mapType.getValueType() instanceof ObjectType)
-                mapType.setValueType(createInlineType(mapType.getValueType(), name, uniqueName, localDefinitions));
+                mapType.setValueType(createInlineType(mapType.getValueType(), name, uniqueName, inlineDefinitions));
 
             return mapType;
         } else {
@@ -140,13 +140,15 @@ public abstract class MarkupDocumentBuilder {
         }
     }
 
-    protected Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> localDefinitions) {
+    protected Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType)type;
             if (MapUtils.isNotEmpty(objectType.getProperties())) {
-                objectType.setName(name);
-                objectType.setUniqueName(uniqueName);
-                localDefinitions.add(objectType);
+                if (objectType.getName() == null) {
+                    objectType.setName(name);
+                    objectType.setUniqueName(uniqueName);
+                }
+                inlineDefinitions.add(objectType);
                 return new RefType(objectType);
             } else
                 return type;
@@ -165,12 +167,12 @@ public abstract class MarkupDocumentBuilder {
      * @return a list of inline schemas referenced by some properties, for later display
      */
     protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, int depth, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
-        List<ObjectType> localDefinitions = new ArrayList<>();
+        List<ObjectType> inlineDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
                 new MarkupTableColumn(NAME_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(6).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^6"),
-                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
+                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
                 new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(1).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
@@ -179,7 +181,7 @@ public abstract class MarkupDocumentBuilder {
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
 
                 if (depth > 0) {
-                    propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, localDefinitions);
+                    propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
                 }
 
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
@@ -218,7 +220,7 @@ public abstract class MarkupDocumentBuilder {
             docBuilder.textLine(NO_CONTENT);
         }
 
-        return localDefinitions;
+        return inlineDefinitions;
     }
 
     protected String boldText(String text) {

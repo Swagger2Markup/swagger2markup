@@ -29,12 +29,12 @@
 
 |Name|Description|Schema|Default|
 |---|---|---|---|
-|**category**  <br>*optional*||[Category](#category)||
+|**category**  <br>*optional*||[Category](definitions.md#category)||
 |**id**  <br>*optional*||integer(int64)||
 |**name**  <br>*required*|**Example** : `"doggie"`|string||
 |**photoUrls**  <br>*required*||<string> array||
 |**status**  <br>*optional*|pet status in the store,|enum (Dead, Alive)||
-|**tags**  <br>*optional*||<[Tag](#tag)> array||
+|**tags**  <br>*optional*||<[Tag](definitions.md#tag)> array||
 
 
 <a name="tag"></a>

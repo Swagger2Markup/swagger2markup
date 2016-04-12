@@ -18,6 +18,8 @@ package io.github.swagger2markup.internal.type;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 /**
  * Array type abstraction
  */
@@ -31,17 +33,22 @@ public class ArrayType extends Type {
     }
 
     public ArrayType(String name, Type ofType, String collectionFormat) {
-        super(name == null ? "array" : name);
+        super(name);
         this.collectionFormat = collectionFormat;
         this.ofType = ofType;
     }
 
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
-        String collectionFormat = "";
-        if (this.collectionFormat != null)
-            collectionFormat = this.collectionFormat + " ";
-        return String.format("%s%s array", collectionFormat, ofType.displaySchema(docBuilder));
+        String ofTypeDisplay = ofType.displaySchema(docBuilder);
+        // protect against starting < stacks
+        if (ofTypeDisplay.startsWith("<"))
+            ofTypeDisplay = " " + ofTypeDisplay;
+        
+        if (isNotBlank(this.collectionFormat))
+            return String.format("<%s> array(%s)", ofTypeDisplay, collectionFormat);
+        else
+            return String.format("<%s> array", ofTypeDisplay);
     }
 
     public String getCollectionFormat() {
