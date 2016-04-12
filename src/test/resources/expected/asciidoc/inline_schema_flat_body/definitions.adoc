@@ -5,7 +5,7 @@
 [[_error]]
 === Error
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*error-code* +
@@ -18,7 +18,7 @@ _optional_|Error message|string|
 [[_externallocation]]
 === ExternalLocation
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*Place* +
@@ -29,7 +29,7 @@ _optional_|Place|string|
 [[_inlinedepthschema]]
 === InlineDepthSchema
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*Loop* +
@@ -39,7 +39,7 @@ _optional_||<<_inlinedepthschema_loop,Loop>>|
 [[_inlinedepthschema_loop]]
 *Loop*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*p1* +
@@ -51,7 +51,7 @@ _optional_|Description p2|<<_inlinedepthschema_p2,p2>>|
 [[_inlinedepthschema_p2]]
 *p2*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*p2-1* +
@@ -63,7 +63,7 @@ _optional_|Description p2-2|<<_inlinedepthschema_p2_p2-2,p2-2>>|
 [[_inlinedepthschema_p2_p2-2]]
 *p2-2*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*p2-2-1* +
@@ -75,7 +75,7 @@ _optional_|Description p2-2-2|<<_inlinedepthschema_p2_p2-2_p2-2-2,p2-2-2>>|
 [[_inlinedepthschema_p2_p2-2_p2-2-1]]
 *p2-2-1*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*p2-2-1-1* +
@@ -87,7 +87,7 @@ _optional_|Description p2-2-1-2|boolean|
 [[_inlinedepthschema_p2_p2-2_p2-2-2]]
 *p2-2-2*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*p2-2-2-1* +
@@ -100,7 +100,7 @@ _optional_|Description p2-2-2-2|boolean|
 [[_inlinepet]]
 === InlinePet
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*category* +
@@ -114,7 +114,7 @@ _optional_||< <<_inlinepet_tags,tags>>> array|
 [[_inlinepet_category]]
 *category*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -126,7 +126,7 @@ _optional_||string|
 [[_inlinepet_tags]]
 *tags*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -139,7 +139,7 @@ _optional_||string|
 [[_inlinetitlepet]]
 === InlineTitlePet
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*category* +
@@ -153,7 +153,7 @@ _optional_||< <<_tagmodel,TagModel>>> array|
 [[_categorymodel]]
 *CategoryModel*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -165,7 +165,7 @@ _optional_||string|
 [[_tagmodel]]
 *TagModel*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -178,7 +178,7 @@ _optional_||string|
 [[_location]]
 === Location
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*Place* +
@@ -191,7 +191,7 @@ _optional_|Place|string|
 mixed collections and objects
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*myTable* +
@@ -201,7 +201,7 @@ _optional_||< <<_mixedschema_mytable,myTable>>> array|
 [[_mixedschema_mytable]]
 *myTable*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*myDict* +
@@ -211,7 +211,7 @@ _optional_||<string,<<_mixedschema_mydict,myDict>>> map|
 [[_mixedschema_mydict]]
 *myDict*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*k* +
@@ -230,7 +230,7 @@ _Type_ : < <string,<<_recursivecollectionschema_inline,RecursiveCollectionSchema
 [[_recursivecollectionschema_inline]]
 *RecursiveCollectionSchema*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*key* +
@@ -245,7 +245,7 @@ _optional_|option value|string|
 mixed collections and objects
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*myTable* +
@@ -255,7 +255,7 @@ _optional_||< <<_tablecontent,TableContent>>> array|
 [[_tablecontent]]
 *TableContent*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*emptyObject* +
@@ -267,7 +267,7 @@ _optional_||<string,<<_kvpair,KVPair>>> map|
 [[_kvpair]]
 *KVPair*
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*k* +

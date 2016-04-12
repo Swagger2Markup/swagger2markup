@@ -238,11 +238,11 @@ public abstract class MarkupDocumentBuilder {
     /**
      * Returns converted markup text from Swagger.
      *
-     * @param markupText text to convert
-     * @return converted markup text
+     * @param markupText text to convert, or null
+     * @return converted markup text, or empty string
      */
     protected String swaggerMarkupDescription(String markupText) {
-        return markupDocBuilder.copy(false).importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
+        return markupDocBuilder.copy(false).importMarkup(new StringReader(defaultString(markupText)), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
     }
 
     protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {

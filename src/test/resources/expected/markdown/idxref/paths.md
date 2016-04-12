@@ -18,8 +18,6 @@ POST /pets
 
 #### Responses
 
-##### HTTP Code 405
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**405**|Invalid input|No Content|
@@ -65,24 +63,10 @@ PUT /pets
 
 #### Responses
 
-##### HTTP Code 400
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**400**|Invalid ID supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|Pet not found|No Content|
-
-
-##### HTTP Code 405
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**405**|Validation exception|No Content|
 
 
@@ -130,25 +114,9 @@ Multiple status values can be provided with comma seperated strings
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|<[Pet](definitions.md#pet)> array|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|<[Pet](definitions.md#pet)> array|
 |**400**|Invalid status value|No Content|
 
 
@@ -190,25 +158,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|<[Pet](definitions.md#pet)> array|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|<[Pet](definitions.md#pet)> array|
 |**400**|Invalid tag value|No Content|
 
 
@@ -247,8 +199,6 @@ POST /pets/{petId}
 
 
 #### Responses
-
-##### HTTP Code 405
 
 |HTTP Code|Description|Schema|
 |---|---|---|
@@ -298,32 +248,10 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Pet](definitions.md#pet)|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|[Pet](definitions.md#pet)|
 |**400**|Invalid ID supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|Pet not found|No Content|
 
 
@@ -362,8 +290,6 @@ DELETE /pets/{petId}
 
 
 #### Responses
-
-##### HTTP Code 400
 
 |HTTP Code|Description|Schema|
 |---|---|---|
@@ -404,25 +330,9 @@ POST /stores/order
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Order](definitions.md#order)|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|[Order](definitions.md#order)|
 |**400**|Invalid Order|No Content|
 
 
@@ -457,32 +367,10 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[Order](definitions.md#order)|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|[Order](definitions.md#order)|
 |**400**|Invalid ID supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|Order not found|No Content|
 
 
@@ -517,17 +405,9 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 #### Responses
 
-##### HTTP Code 400
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**400**|Invalid ID supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|Order not found|No Content|
 
 
@@ -562,8 +442,6 @@ This can only be done by the logged in user.
 
 #### Responses
 
-##### HTTP Code default
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**default**|successful operation|No Content|
@@ -596,8 +474,6 @@ POST /users/createWithArray
 
 #### Responses
 
-##### HTTP Code default
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**default**|successful operation|No Content|
@@ -629,8 +505,6 @@ POST /users/createWithList
 
 
 #### Responses
-
-##### HTTP Code default
 
 |HTTP Code|Description|Schema|
 |---|---|---|
@@ -665,25 +539,9 @@ GET /users/login
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|string|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|string|
 |**400**|Invalid username/password supplied|No Content|
 
 
@@ -706,8 +564,6 @@ GET /users/logout
 
 
 #### Responses
-
-##### HTTP Code default
 
 |HTTP Code|Description|Schema|
 |---|---|---|
@@ -741,32 +597,10 @@ GET /users/{username}
 
 #### Responses
 
-##### HTTP Code 200
-
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|successful operation|[User](definitions.md#user)|
-
-**Headers**
-
-|Name|Description|Schema|Default|
-|---|---|---|---|
-|**X-Rate-Limit-Limit**|The number of allowed requests in the current period|integer||
-|**X-Rate-Limit-Remaining**|The number of remaining requests in the current period|integer||
-|**X-Rate-Limit-Reset**|The number of seconds left in the current period|integer||
-
-
-##### HTTP Code 400
-
-|HTTP Code|Description|Schema|
-|---|---|---|
+|**200**|successful operation  <br>**Headers** :   <br>`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period.  <br>`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period.  <br>`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|[User](definitions.md#user)|
 |**400**|Invalid username supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|User not found|No Content|
 
 
@@ -802,17 +636,9 @@ This can only be done by the logged in user.
 
 #### Responses
 
-##### HTTP Code 400
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**400**|Invalid user supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|User not found|No Content|
 
 
@@ -847,17 +673,9 @@ This can only be done by the logged in user.
 
 #### Responses
 
-##### HTTP Code 400
-
 |HTTP Code|Description|Schema|
 |---|---|---|
 |**400**|Invalid username supplied|No Content|
-
-
-##### HTTP Code 404
-
-|HTTP Code|Description|Schema|
-|---|---|---|
 |**404**|User not found|No Content|
 
 

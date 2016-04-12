@@ -2,11 +2,13 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|id||false|integer(int64)||
-|name||false|string||
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
 |===
 
 

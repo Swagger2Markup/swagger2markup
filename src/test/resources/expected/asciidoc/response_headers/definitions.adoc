@@ -1,4 +1,20 @@
 
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^3,.^11,.^4,.^2"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
+|===
+
+
 [[_pet]]
 === Pet
 
@@ -17,6 +33,19 @@ _required_||<string> array|
 _optional_|pet status in the store,|enum (Dead, Alive)|
 |*tags* +
 _optional_||< <<_tag,Tag>>> array|
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^3,.^11,.^4,.^2"]
+|===
+|Name|Description|Schema|Default
+|*id* +
+_optional_||integer(int64)|
+|*name* +
+_optional_||string|
 |===
 
 

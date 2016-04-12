@@ -373,20 +373,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Adds a response section title to the document.
-     *
-     * @param title      the response title
-     * @param docBuilder the MarkupDocBuilder to use
-     */
-    private void buildResponseTitle(String title, MarkupDocBuilder docBuilder) {
-        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-            docBuilder.sectionTitleLevel4(title);
-        } else {
-            docBuilder.sectionTitleLevel5(title);
-        }
-    }
-
-    /**
      * Adds a operation description to the document.
      * If hand-written descriptions exist, it tries to load the description from a file.
      * If the file cannot be read, the description of the operation is returned.
@@ -640,18 +626,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                     new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(15).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^15"),
                     new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
-
-            List<MarkupTableColumn> responseHeaderCols = Arrays.asList(
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(11).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^11"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
-
+            
+            List<List<String>> cells = new ArrayList<>();
+            
             Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
             for (String responseName : responseNames) {
-                List<List<String>> cells = new ArrayList<>();
-                List<List<String>> responseHeaderCells = new ArrayList<>();
                 Response response = responses.get(responseName);
+                
+                String schemaContent = NO_CONTENT;
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
@@ -659,37 +641,49 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     if (config.getInlineSchemaDepthLevel() > 0) {
                         type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, inlineDefinitions);
                     }
-
-                    cells.add(Arrays.asList(boldText(responseName), swaggerMarkupDescription(response.getDescription()), type.displaySchema(markupDocBuilder)));
-                } else {
-                    cells.add(Arrays.asList(boldText(responseName), swaggerMarkupDescription(response.getDescription()), NO_CONTENT));
+                    schemaContent = type.displaySchema(markupDocBuilder);
                 }
 
-                buildResponseTitle(HTTP_CODE_COLUMN + " " + responseName, docBuilder);
-                docBuilder.tableWithColumnSpecs(responseCols, cells);
+                MarkupDocBuilder descriptionBuilder = docBuilder.copy(false);
+
+                descriptionBuilder.text(swaggerMarkupDescription(response.getDescription()));
 
                 Map<String, Property> headers = response.getHeaders();
-                if(MapUtils.isNotEmpty(headers)) {
-                    docBuilder.boldTextLine(HEADERS_COLUMN);
-                    for(Map.Entry<String, Property> header : headers.entrySet()){
-                        Property property = header.getValue();
-                        Type propertyType = PropertyUtils.getType(property, null);
-                        responseHeaderCells.add(Arrays.asList(boldText(header.getKey()),
-                                swaggerMarkupDescription(defaultString(property.getDescription())),
-                                propertyType.displaySchema(markupDocBuilder),
-                                PropertyUtils.getDefaultValue(property)));
+                if (MapUtils.isNotEmpty(headers)) {
+                    descriptionBuilder.newLine(true).boldText(HEADERS_COLUMN).text(COLON);
+                    for (Map.Entry<String, Property> header : headers.entrySet()) {
+                        descriptionBuilder.newLine(true);
+                        Property headerProperty = header.getValue();
+                        Type propertyType = PropertyUtils.getType(headerProperty, null);
+                        String headerDescription = swaggerMarkupDescription(headerProperty.getDescription());
+                        String defaultValue = PropertyUtils.getDefaultValue(headerProperty);
+
+                        descriptionBuilder
+                                .literalText(header.getKey())
+                                .text(String.format(" (%s)", propertyType.displaySchema(markupDocBuilder)));
+
+                        if (isNotBlank(headerDescription) || isNotBlank(defaultValue))
+                            descriptionBuilder.text(COLON);
+                        
+                        if (isNotBlank(headerDescription) && !headerDescription.endsWith("."))
+                            headerDescription += ".";
+                        
+                        descriptionBuilder.text(headerDescription);
+                        
+                        if (isNotBlank(defaultValue)) {
+                            descriptionBuilder.text(" ").boldText(DEFAULT_COLUMN).text(COLON).text(defaultValue);
+                        }
                     }
-                    docBuilder.tableWithColumnSpecs(responseHeaderCols, responseHeaderCells);
                 }
+                
+                cells.add(Arrays.asList(boldText(responseName), descriptionBuilder.toString(), schemaContent));
             }
+
+            docBuilder.tableWithColumnSpecs(responseCols, cells);             
         }
         return inlineDefinitions;
     }
-
-
-
-
-
+    
     /**
      * Builds the title of an inline schema.
      * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.

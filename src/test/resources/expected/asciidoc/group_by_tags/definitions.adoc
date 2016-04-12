@@ -5,7 +5,7 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -18,7 +18,7 @@ _optional_||string|
 [[_order]]
 === Order
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*complete* +
@@ -39,7 +39,7 @@ _optional_|Order Status|enum (Ordered, Cancelled)|
 [[_pet]]
 === Pet
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*category* +
@@ -60,7 +60,7 @@ _optional_||< <<_tag,Tag>>> array|
 [[_tag]]
 === Tag
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*id* +
@@ -73,7 +73,7 @@ _optional_||string|
 [[_user]]
 === User
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*email* +

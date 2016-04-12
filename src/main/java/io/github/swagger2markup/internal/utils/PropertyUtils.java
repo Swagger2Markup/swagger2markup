@@ -79,6 +79,7 @@ public final class PropertyUtils {
      * @param property the property
      * @return the default value of the property, or otherwise an empty String
      */
+    // FIXME : getDefaultValue should return Object, then should be Json.prettyfied and literalized at display, like examples
     public static String getDefaultValue(Property property) {
         Validate.notNull(property, "property must not be null");
         String defaultValue = "";

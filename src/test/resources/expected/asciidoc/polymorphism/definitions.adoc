@@ -11,7 +11,7 @@ _Polymorphism_ : Inheritance
 _Discriminator_ : collType
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*collType* +
@@ -30,7 +30,7 @@ _Polymorphism_ : Inheritance
 _Discriminator_ : petType
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*huntingSkill* +
@@ -47,7 +47,7 @@ _required_||string|
 Collection parent type without discriminator
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*name* +
@@ -64,7 +64,7 @@ _Polymorphism_ : Inheritance
 _Discriminator_ : dogType
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*dogType* +
@@ -86,7 +86,7 @@ A map without discriminator
 _Polymorphism_ : Composition
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*collType* +
@@ -101,7 +101,7 @@ _optional_||string|
 Pet parent type with discriminator
 
 
-[options="header", cols=".^1,.^4,.^2,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
 |Name|Description|Schema|Default
 |*name* +

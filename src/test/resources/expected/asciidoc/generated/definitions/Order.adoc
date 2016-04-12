@@ -2,15 +2,21 @@
 [[_order]]
 === Order
 
-[options="header", cols=".^1h,.^6,.^1,.^1,.^1,.^1"]
+[options="header", cols=".^3,.^11,.^4,.^2"]
 |===
-|Name|Description|Required|Schema|Default|Example
-|complete||false|boolean||
-|id||false|integer(int64)||
-|petId||false|integer(int64)||
-|quantity||false|integer(int32)||
-|shipDate||false|string(date-time)||
-|status|Order Status|false|enum (Ordered, Cancelled)||
+|Name|Description|Schema|Default
+|*complete* +
+_optional_||boolean|
+|*id* +
+_optional_||integer(int64)|
+|*petId* +
+_optional_||integer(int64)|
+|*quantity* +
+_optional_||integer(int32)|
+|*shipDate* +
+_optional_||string(date-time)|
+|*status* +
+_optional_|Order Status|enum (Ordered, Cancelled)|
 |===
 
 

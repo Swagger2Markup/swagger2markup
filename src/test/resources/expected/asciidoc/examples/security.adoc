@@ -18,7 +18,7 @@ _Flow_ : implicit
 _Token URL_ : http://petstore.swagger.wordnik.com/api/oauth/dialog
 
 
-[options="header", cols="1,6"]
+[options="header", cols=".^3,.^17"]
 |===
 |Name|Description
 |write_pets|modify pets in your account
