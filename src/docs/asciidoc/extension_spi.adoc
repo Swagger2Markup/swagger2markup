@@ -67,10 +67,6 @@ The OverviewDocumentExtension allows to extend the overview document at four pos
 
 NOTE: Extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
-.Overview document extension positions 
-[.thumb]
-image::images/overview_extension_points.png[]
-
 ==== PathsDocumentExtension
 
 The PathsDocumentExtension allows to extend the paths document at six positions: 
@@ -159,7 +155,7 @@ Here the list of all document naming conventions, just replace `*` with an arbit
 
 IMPORTANT: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
 
-All documents, relatively to each document contentPath :
+All documents, relatively to each extension contentPath :
 
 * `document-before-*.<markup.ext>`
 * `document-begin-*.<markup.ext>`
@@ -191,6 +187,27 @@ Pet/definition-begin-description.adoc
 ....
 ====
 
+===== Content markup language
+
+The content files markup language can be any https://github.com/Swagger2Markup/markup-document-builder[markup-document-builder] supported language : 
+
+* ASCIIDOC : AsciiDoc. Mandatory content file extension : `adoc`
+
+* MARKDOWN : Github Flavored Markdown. Mandatory content file extension : `md`
+
+* CONFLUENCE_MARKUP : Confluence Wiki markup. Mandatory content file extension : `txt`
+
+By default, the markup language is set to *ASCIIDOC*, whatever the file extension. Set extension <<dynamic_file_extension_configuration,Configuration>> to change content markup language. 
+The content file will be *converted, if needed, to main Swagger2Markup converter markup language* at import.
+
+[IMPORTANT]
+====
+Currently supported conversion are :           
+
+* Markdown -> AsciiDoc
+====
+
+[[dynamic_file_extension_configuration]]
 ===== Configuration
 
 The extension adds the following properties to Swagger2Markup which must be configured:
@@ -198,11 +215,15 @@ The extension adds the following properties to Swagger2Markup which must be conf
 [options="header"]
 .Extension properties
 |====
-| Name | Description | Example
-| `swagger2markup.extensions.dynamicOverview.contentPath`  | The path to the files which should be imported | `src/test/resources/docs/asciidoc/overview` 
-| `swagger2markup.extensions.dynamicDefinitions.contentPath`  | The path to the files which should be imported | `src/test/resources/docs/asciidoc/definitions` 
-| `swagger2markup.extensions.dynamicPaths.contentPath`  | The path to the files which should be imported | `src/test/resources/docs/asciidoc/paths` 
-| `swagger2markup.extensions.dynamicSecurity.contentPath`  | TThe path to the files which should be imported | `src/test/resources/docs/asciidoc/security` 
+| Name | Description | Default | Example
+| `swagger2markup.extensions.dynamicOverview.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/overview`
+| `swagger2markup.extensions.dynamicOverview.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.dynamicDefinitions.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/definitions` 
+| `swagger2markup.extensions.dynamicDefinitions.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.dynamicPaths.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/paths` 
+| `swagger2markup.extensions.dynamicPaths.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.dynamicSecurity.contentPath`  | TThe path to the files which should be imported | - | `src/test/resources/docs/asciidoc/security` 
+| `swagger2markup.extensions.dynamicSecurity.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
 |====
 
 ==== Spring RestDocs extension
