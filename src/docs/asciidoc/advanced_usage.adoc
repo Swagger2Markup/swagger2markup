@@ -1,14 +1,19 @@
 == Advanced usage
 
+[[swagger_operationId]]
 === Swagger operationId
 
-Swagger specification supports unique name for each operation using the `operationId` field.
-It is recommended to set an operationId for each operation, so that a lot of actions *does not depend on operation `summary` which can change at anytime*.
-When provided, this `operationId` value will be used primarily to operation `summary + HTTP method` when :
-  
+Swagger2Markup uniquely identify each operations for multiple purposes :
+
   * generating separated operation files : file name
   * generating unique Markup anchors for operations and all sub-items.
-  * searching for extra content for operations : operation folder name for plugins (Hand-written descriptions, Dynamic content, etc...)
+  * searching for extra content for operations : operation folder name for content plugins (Hand-written descriptions, Dynamic content, etc...)
+  * ...
+
+Swagger specification supports the `operationId` field which create an unique name for each operation.
+When provided, this `operationId` value will be used primarily. Otherwise Swagger2Markup generates an id using `normalize(operation.summary + " " + lowerCase(operation.HTTPmethod))`.
+
+IMPORTANT: It is highly recommended to set an operationId for each operation, so that a lot of actions does not depend on operation `summary` which *can change at anytime*.
   
 === Swagger schema title
 

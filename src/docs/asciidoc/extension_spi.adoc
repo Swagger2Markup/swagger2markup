@@ -149,24 +149,47 @@ repositories {
 compile "io.github.swagger2markup:swagger2markup-import-files-ext:{project-version}"
 ----
 
-The extension searches for markup files in configurable paths to append the markup to the documents. The markup files must conform to a naming convention to be found. The files must start with the position where the document should be extended and end with the markup file extension (e.g `adoc` or `md`). See documentation of <<Extensions points>>.
+The extension searches for markup files in configurable paths to append the markup to the documents at supported positions.
 
-All documents:
+The markup files must conform to a naming convention to be found. The files must start with the position where the document should be extended and end with the markup file extension (e.g `adoc` or `md`).
+
+See documentation of <<Extensions points>>.
+
+Here the list of all document naming conventions, just replace `*` with an arbitrary, meaningful, identifier.
+
+IMPORTANT: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
+
+All documents, relatively to each document contentPath :
 
 * `document-before-*.<markup.ext>`
-* `document-after-*.<markup.ext>`
 * `document-begin-*.<markup.ext>`
 * `document-end-*.<markup.ext>`
+* `document-after-*.<markup.ext>`
 
-Paths document:
+Paths document, relatively to `swagger2markup.extensions.dynamicPaths.contentPath` :
 
-* `operation-begin-*.<markup.ext>`
-* `operation-end-*.<markup.ext>`
+* `<operationId>/operation-begin-*.<markup.ext>`
+* `<operationId>/operation-end-*.<markup.ext>`
 
-Definitions and Security document:
+IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. Otherwise, the value `normalized(operation.summary + " " + lowerCase(operation.HTTPmethod))` will be used. *It is highly recommended to set operationId for operations because it's more stable* : see <<swagger_operationId,Advanced usage - Swagger operationId>>. In all cases, `<operationId>` is case-sensitive.
 
-* `defintion-begin-*.<markup.ext>`
-* `defintion-begin-*.<markup.ext>`
+Definitions and Security document, relatively to `swagger2markup.extensions.dynamicDefinitions.contentPath` :
+
+* `<definitionName>/definition-begin-*.<markup.ext>`
+* `<definitionName>/definition-end-*.<markup.ext>`
+
+IMPORTANT: `<definitionName>` is case-sensitive
+
+.Example of provided content files for petstore Swagger sample
+====
+....
+document-before-intro.adoc
+updatePet/operation-begin-description.adoc
+updatePet/operation-end-example1.adoc
+updatePet/operation-end-example2.adoc
+Pet/definition-begin-description.adoc
+....
+====
 
 ===== Configuration
 
