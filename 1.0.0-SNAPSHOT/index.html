@@ -418,97 +418,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 .show-for-print{display:inherit!important}}
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
-<style>
-/* Stylesheet for CodeRay to match GitHub theme | MIT License | http://foundation.zurb.com */
-/*pre.CodeRay {background-color:#f7f7f8;}*/
-.CodeRay .line-numbers{border-right:1px solid #d8d8d8;padding:0 0.5em 0 .25em}
-.CodeRay span.line-numbers{display:inline-block;margin-right:.5em;color:rgba(0,0,0,.3)}
-.CodeRay .line-numbers strong{color:rgba(0,0,0,.4)}
-table.CodeRay{border-collapse:separate;border-spacing:0;margin-bottom:0;border:0;background:none}
-table.CodeRay td{vertical-align: top;line-height:1.45}
-table.CodeRay td.line-numbers{text-align:right}
-table.CodeRay td.line-numbers>pre{padding:0;color:rgba(0,0,0,.3)}
-table.CodeRay td.code{padding:0 0 0 .5em}
-table.CodeRay td.code>pre{padding:0}
-.CodeRay .debug{color:#fff !important;background:#000080 !important}
-.CodeRay .annotation{color:#007}
-.CodeRay .attribute-name{color:#000080}
-.CodeRay .attribute-value{color:#700}
-.CodeRay .binary{color:#509}
-.CodeRay .comment{color:#998;font-style:italic}
-.CodeRay .char{color:#04d}
-.CodeRay .char .content{color:#04d}
-.CodeRay .char .delimiter{color:#039}
-.CodeRay .class{color:#458;font-weight:bold}
-.CodeRay .complex{color:#a08}
-.CodeRay .constant,.CodeRay .predefined-constant{color:#008080}
-.CodeRay .color{color:#099}
-.CodeRay .class-variable{color:#369}
-.CodeRay .decorator{color:#b0b}
-.CodeRay .definition{color:#099}
-.CodeRay .delimiter{color:#000}
-.CodeRay .doc{color:#970}
-.CodeRay .doctype{color:#34b}
-.CodeRay .doc-string{color:#d42}
-.CodeRay .escape{color:#666}
-.CodeRay .entity{color:#800}
-.CodeRay .error{color:#808}
-.CodeRay .exception{color:inherit}
-.CodeRay .filename{color:#099}
-.CodeRay .function{color:#900;font-weight:bold}
-.CodeRay .global-variable{color:#008080}
-.CodeRay .hex{color:#058}
-.CodeRay .integer,.CodeRay .float{color:#099}
-.CodeRay .include{color:#555}
-.CodeRay .inline{color:#000}
-.CodeRay .inline .inline{background:#ccc}
-.CodeRay .inline .inline .inline{background:#bbb}
-.CodeRay .inline .inline-delimiter{color:#d14}
-.CodeRay .inline-delimiter{color:#d14}
-.CodeRay .important{color:#555;font-weight:bold}
-.CodeRay .interpreted{color:#b2b}
-.CodeRay .instance-variable{color:#008080}
-.CodeRay .label{color:#970}
-.CodeRay .local-variable{color:#963}
-.CodeRay .octal{color:#40e}
-.CodeRay .predefined{color:#369}
-.CodeRay .preprocessor{color:#579}
-.CodeRay .pseudo-class{color:#555}
-.CodeRay .directive{font-weight:bold}
-.CodeRay .type{font-weight:bold}
-.CodeRay .predefined-type{color:inherit}
-.CodeRay .reserved,.CodeRay .keyword {color:#000;font-weight:bold}
-.CodeRay .key{color:#808}
-.CodeRay .key .delimiter{color:#606}
-.CodeRay .key .char{color:#80f}
-.CodeRay .value{color:#088}
-.CodeRay .regexp .delimiter{color:#808}
-.CodeRay .regexp .content{color:#808}
-.CodeRay .regexp .modifier{color:#808}
-.CodeRay .regexp .char{color:#d14}
-.CodeRay .regexp .function{color:#404;font-weight:bold}
-.CodeRay .string{color:#d20}
-.CodeRay .string .string .string{background:#ffd0d0}
-.CodeRay .string .content{color:#d14}
-.CodeRay .string .char{color:#d14}
-.CodeRay .string .delimiter{color:#d14}
-.CodeRay .shell{color:#d14}
-.CodeRay .shell .delimiter{color:#d14}
-.CodeRay .symbol{color:#990073}
-.CodeRay .symbol .content{color:#a60}
-.CodeRay .symbol .delimiter{color:#630}
-.CodeRay .tag{color:#008080}
-.CodeRay .tag-special{color:#d70}
-.CodeRay .variable{color:#036}
-.CodeRay .insert{background:#afa}
-.CodeRay .delete{background:#faa}
-.CodeRay .change{color:#aaf;background:#007}
-.CodeRay .head{color:#f8f;background:#505}
-.CodeRay .insert .insert{color:#080}
-.CodeRay .delete .delete{color:#800}
-.CodeRay .change .change{color:#66f}
-.CodeRay .head .head{color:#f4f}
-</style>
 </head>
 <body class="book toc2 toc-left">
 <div id="header">
@@ -516,7 +425,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">2016-04-12</span>
+<span id="revdate">2016-04-13</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -566,7 +475,7 @@ table.CodeRay td.code>pre{padding:0}
 </li>
 <li><a href="#_advanced_usage">4. Advanced usage</a>
 <ul class="sectlevel2">
-<li><a href="#_swagger_operationid">4.1. Swagger operationId</a></li>
+<li><a href="#swagger_operationId">4.1. Swagger operationId</a></li>
 <li><a href="#_swagger_schema_title">4.2. Swagger schema title</a></li>
 </ul>
 </li>
@@ -600,14 +509,14 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_gradle_plugin">6. Gradle Plugin</a>
 <ul class="sectlevel2">
 <li><a href="#_usage_guide_5">6.1. Usage guide</a></li>
-<li><a href="#_configuration_5">6.2. Configuration</a></li>
+<li><a href="#_configuration_4">6.2. Configuration</a></li>
 <li><a href="#_example">6.3. Example</a></li>
 </ul>
 </li>
 <li><a href="#_maven_plugin">7. Maven Plugin</a>
 <ul class="sectlevel2">
 <li><a href="#_usage_guide_6">7.1. Usage guide</a></li>
-<li><a href="#_configuration_6">7.2. Configuration</a></li>
+<li><a href="#_configuration_5">7.2. Configuration</a></li>
 <li><a href="#_example_2">7.3. Example</a></li>
 </ul>
 </li>
@@ -621,7 +530,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_conversion_of_a_remote_swagger_file_2">8.1.4. Conversion of  a remote Swagger file</a></li>
 </ul>
 </li>
-<li><a href="#_configuration_7">8.2. Configuration</a></li>
+<li><a href="#_configuration_6">8.2. Configuration</a></li>
 </ul>
 </li>
 <li><a href="#_spring_boot_and_springfox">9. Spring Boot and Springfox</a>
@@ -737,7 +646,7 @@ The <strong>groupId</strong> has been changed from <strong>io.github.robwin</str
 <h4 id="_release"><a class="anchor" href="#_release"></a>2.1.1. Release</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
     jCenter()
 }
 
@@ -749,8 +658,8 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT"</code></pre>
 <h4 id="_snapshot"><a class="anchor" href="#_snapshot"></a>2.1.2. Snapshot</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
-   maven { url <span class="string"><span class="delimiter">'</span><span class="content">http://oss.jfrog.org/artifactory/oss-snapshot-local/</span><span class="delimiter">'</span></span> }
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
+   maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }</code></pre>
 </div>
 </div>
@@ -762,22 +671,22 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT"</code></pre>
 <h4 id="_release_2"><a class="anchor" href="#_release_2"></a>2.2.1. Release</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;repositories&gt;</span>
-    <span class="tag">&lt;repository&gt;</span>
-        <span class="tag">&lt;snapshots&gt;</span>
-            <span class="tag">&lt;enabled&gt;</span>false<span class="tag">&lt;/enabled&gt;</span>
-        <span class="tag">&lt;/snapshots&gt;</span>
-        <span class="tag">&lt;id&gt;</span>jcenter-releases<span class="tag">&lt;/id&gt;</span>
-        <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-        <span class="tag">&lt;url&gt;</span>http://jcenter.bintray.com<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/repository&gt;</span>
-<span class="tag">&lt;/repositories&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;repositories&gt;
+    &lt;repository&gt;
+        &lt;snapshots&gt;
+            &lt;enabled&gt;false&lt;/enabled&gt;
+        &lt;/snapshots&gt;
+        &lt;id&gt;jcenter-releases&lt;/id&gt;
+        &lt;name&gt;jcenter&lt;/name&gt;
+        &lt;url&gt;http://jcenter.bintray.com&lt;/url&gt;
+    &lt;/repository&gt;
+&lt;/repositories&gt;
 
-<span class="tag">&lt;dependency&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>swagger2markup<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>1.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
-<span class="tag">&lt;/dependency&gt;</span></code></pre>
+&lt;dependency&gt;
+    &lt;groupId&gt;io.github.swagger2markup&lt;/groupId&gt;
+    &lt;artifactId&gt;swagger2markup&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
 </div>
 </div>
 </div>
@@ -785,11 +694,11 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT"</code></pre>
 <h4 id="_snapshot_2"><a class="anchor" href="#_snapshot_2"></a>2.2.2. Snapshot</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">&lt;repositories&gt;
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">&lt;repositories&gt;
     &lt;repository&gt;
       &lt;id&gt;jcenter-snapshots&lt;/id&gt;
       &lt;name&gt;jcenter&lt;/name&gt;
-      &lt;url&gt;http:<span class="comment">//oss.jfrog.org/artifactory/oss-snapshot-local/&lt;/url&gt;</span>
+      &lt;url&gt;http://oss.jfrog.org/artifactory/oss-snapshot-local/&lt;/url&gt;
     &lt;/repository&gt;
 &lt;/repositories&gt;</code></pre>
 </div>
@@ -813,8 +722,8 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0-SNAPSHOT"</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Path localSwaggerFile = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/swagger.yaml</span><span class="delimiter">&quot;</span></span>);
-Path outputDirectory = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">build/asciidoc</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
+Path outputDirectory = Paths.get("build/asciidoc");
 
 Swagger2MarkupConverter.from(localSwaggerFile) <i class="conum" data-value="1"></i><b>(1)</b>
         .build() <i class="conum" data-value="2"></i><b>(2)</b>
@@ -842,8 +751,8 @@ Swagger2MarkupConverter.from(localSwaggerFile) <i class="conum" data-value="1"><
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">URL</span> remoteSwaggerFile = <span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://petstore.swagger.io/v2/swagger.json</span><span class="delimiter">&quot;</span></span>);
-Path outputDirectory = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">build/asciidoc</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">URL remoteSwaggerFile = new URL("http://petstore.swagger.io/v2/swagger.json");
+Path outputDirectory = Paths.get("build/asciidoc");
 
 Swagger2MarkupConverter.from(remoteSwaggerFile) <i class="conum" data-value="1"></i><b>(1)</b>
         .build() <i class="conum" data-value="2"></i><b>(2)</b>
@@ -871,8 +780,8 @@ Swagger2MarkupConverter.from(remoteSwaggerFile) <i class="conum" data-value="1">
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Path localSwaggerFile = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/swagger.yaml</span><span class="delimiter">&quot;</span></span>);
-Path outputFile = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">build/swagger.adoc</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
+Path outputFile = Paths.get("build/swagger.adoc");
 
 Swagger2MarkupConverter.from(localSwaggerFile)
         .build()
@@ -887,9 +796,9 @@ Swagger2MarkupConverter.from(localSwaggerFile)
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Path localSwaggerFile = Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/path/to/swagger.yaml</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
 
-<span class="predefined-type">String</span> documentation = Swagger2MarkupConverter.from(localSwaggerFile)
+String documentation = Swagger2MarkupConverter.from(localSwaggerFile)
         .build()
         .toString();</code></pre>
 </div>
@@ -927,7 +836,7 @@ Swagger2MarkupConverter.from(localSwaggerFile)
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Swagger2MarkupConfig config = <span class="keyword">new</span> Swagger2MarkupConfigBuilder() <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder() <i class="conum" data-value="1"></i><b>(1)</b>
         .withMarkupLanguage(MarkupLanguage.MARKDOWN) <i class="conum" data-value="2"></i><b>(2)</b>
         .withOutputLanguage(Language.DE) <i class="conum" data-value="3"></i><b>(3)</b>
         .withPathsGroupedBy(GroupBy.TAGS) <i class="conum" data-value="4"></i><b>(4)</b>
@@ -968,10 +877,10 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <h4 id="_configuration_from_a_properties_file"><a class="anchor" href="#_configuration_from_a_properties_file"></a>3.2.2. Configuration from a Properties file</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Properties</span> properties = <span class="keyword">new</span> <span class="predefined-type">Properties</span>();
-properties.load(DocumentationTest.class.getResourceAsStream(<span class="string"><span class="delimiter">&quot;</span><span class="content">/config/config.properties</span><span class="delimiter">&quot;</span></span>)); <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Properties properties = new Properties();
+properties.load(DocumentationTest.class.getResourceAsStream("/config/config.properties")); <i class="conum" data-value="1"></i><b>(1)</b>
 
-Swagger2MarkupConfig config = <span class="keyword">new</span> Swagger2MarkupConfigBuilder(properties) <i class="conum" data-value="2"></i><b>(2)</b>
+Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(properties) <i class="conum" data-value="2"></i><b>(2)</b>
         .build();
 
 Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFile)
@@ -994,12 +903,12 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <h4 id="_configuration_from_a_map"><a class="anchor" href="#_configuration_from_a_map"></a>3.2.3. Configuration from a Map</h4>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, <span class="predefined-type">String</span>&gt; configMap = <span class="keyword">new</span> <span class="predefined-type">HashMap</span>&lt;&gt;(); <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Map&lt;String, String&gt; configMap = new HashMap&lt;&gt;(); <i class="conum" data-value="1"></i><b>(1)</b>
 configMap.put(Swagger2MarkupProperties.MARKUP_LANGUAGE, MarkupLanguage.MARKDOWN.toString());
 configMap.put(Swagger2MarkupProperties.OUTPUT_LANGUAGE, Language.DE.toString());
 configMap.put(Swagger2MarkupProperties.PATHS_GROUPED_BY, GroupBy.TAGS.toString());
 
-Swagger2MarkupConfig config = <span class="keyword">new</span> Swagger2MarkupConfigBuilder(configMap) <i class="conum" data-value="2"></i><b>(2)</b>
+Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap) <i class="conum" data-value="2"></i><b>(2)</b>
         .build();
 
 Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFile)
@@ -1044,10 +953,10 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Configurations configs = <span class="keyword">new</span> Configurations();
-<span class="predefined-type">Configuration</span> configuration = configs.properties(<span class="string"><span class="delimiter">&quot;</span><span class="content">config.properties</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Configurations configs = new Configurations();
+Configuration configuration = configs.properties("config.properties"); <i class="conum" data-value="1"></i><b>(1)</b>
 
-Swagger2MarkupConfig config = <span class="keyword">new</span> Swagger2MarkupConfigBuilder(configuration) <i class="conum" data-value="2"></i><b>(2)</b>
+Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configuration) <i class="conum" data-value="2"></i><b>(2)</b>
         .build();
 
 Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFile)
@@ -1366,11 +1275,9 @@ The properties are considered in the following order:</p>
 <h2 id="_advanced_usage"><a class="anchor" href="#_advanced_usage"></a>4. Advanced usage</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_swagger_operationid"><a class="anchor" href="#_swagger_operationid"></a>4.1. Swagger operationId</h3>
+<h3 id="swagger_operationId"><a class="anchor" href="#swagger_operationId"></a>4.1. Swagger operationId</h3>
 <div class="paragraph">
-<p>Swagger specification supports unique name for each operation using the <code>operationId</code> field.<br>
-It is recommended to set an operationId for each operation, so that a lot of actions <strong>does not depend on operation <code>summary</code> which can change anytime</strong>.<br>
-When provided, this <code>operationId</code> value will be used primarily to operation <code>summary + HTTP method</code> when :</p>
+<p>Swagger2Markup uniquely identify each operations for multiple purposes :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1381,16 +1288,34 @@ When provided, this <code>operationId</code> value will be used primarily to ope
 <p>generating unique Markup anchors for operations and all sub-items.</p>
 </li>
 <li>
-<p>searching for extra content for operations : operation folder name for plugins (Hand-written descriptions, Dynamic content, etc&#8230;&#8203;)</p>
+<p>searching for extra content for operations : operation folder name for content plugins (Hand-written descriptions, Dynamic content, etc&#8230;&#8203;)</p>
+</li>
+<li>
+<p>&#8230;&#8203;</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Swagger specification supports the <code>operationId</code> field which create an unique name for each operation.<br>
+When provided, this <code>operationId</code> value will be used primarily. Otherwise Swagger2Markup generates an id using <code>normalize(operation.summary + " " + lowerCase(operation.HTTPmethod))</code>.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+It is highly recommended to set an operationId for each operation, so that a lot of actions does not depend on operation <code>summary</code> which <strong>can change at anytime</strong>.
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_swagger_schema_title"><a class="anchor" href="#_swagger_schema_title"></a>4.2. Swagger schema title</h3>
 <div class="paragraph">
-<p>Swagger2Markup displays inline schemas by decomposing them (when schema is complex). In this process, some intermediate references are generated<br>
-using field names which is not always the best choice.<br>
+<p>Swagger2Markup displays inline schemas by decomposing them (when schema is complex). In this process, some intermediate references are generated using field names which is not always the best choice.<br>
 The Swagger document supports JSON Schema <code>title</code> items in inline schemas.<br>
 It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be used primarily to field names and this will lead to a better naming.</p>
 </div>
@@ -1399,32 +1324,32 @@ It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be us
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml">  <span class="key">InlinePet</span>:
-    <span class="key">type</span>: <span class="string"><span class="content">object</span></span>
-    <span class="key">required</span>:
-      - <span class="string"><span class="content">id</span></span>
-    <span class="key">properties</span>:
-      <span class="key">id</span>:
-        <span class="key">type</span>: <span class="string"><span class="content">integer</span></span>
-        <span class="key">format</span>: <span class="string"><span class="content">int64</span></span>
-      <span class="key">category</span>:
-        <span class="key">type</span>: <span class="string"><span class="content">object</span></span>
-        <span class="key">properties</span>:
-          <span class="key">id</span>:
-            <span class="key">type</span>: <span class="string"><span class="content">integer</span></span>
-            <span class="key">format</span>: <span class="string"><span class="content">int64</span></span>
-          <span class="key">name</span>:
-            <span class="key">type</span>: <span class="string"><span class="content">string</span></span>
-      <span class="key">tags</span>:
-        <span class="key">type</span>: <span class="string"><span class="content">array</span></span>
-        <span class="key">items</span>:
-          <span class="key">type</span>: <span class="string"><span class="content">object</span></span>
-          <span class="key">properties</span>:
-            <span class="key">id</span>:
-              <span class="key">type</span>: <span class="string"><span class="content">integer</span></span>
-              <span class="key">format</span>: <span class="string"><span class="content">int64</span></span>
-            <span class="key">name</span>:
-              <span class="key">type</span>: <span class="string"><span class="content">string</span></span></code></pre>
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">  InlinePet:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int64
+          name:
+            type: string
+      tags:
+        type: array
+        items:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+            name:
+              type: string</code></pre>
 </div>
 </div>
 <div class="imageblock">
@@ -1439,7 +1364,7 @@ It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be us
 <div class="content">
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="yaml">  InlineTitlePet:
+<pre class="highlightjs highlight"><code class="language-yaml" data-lang="yaml">  InlineTitlePet:
     type: object
     required:
       - id
@@ -1544,33 +1469,33 @@ It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be us
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MyExtension</span> <span class="directive">extends</span> DefinitionsDocumentExtension {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class MyExtension extends DefinitionsDocumentExtension {
 
-    <span class="directive">private</span> <span class="directive">static</span> <span class="directive">final</span> <span class="predefined-type">String</span> EXTENSION_ID = <span class="string"><span class="delimiter">&quot;</span><span class="content">myExtension</span><span class="delimiter">&quot;</span></span>;
-    <span class="directive">private</span> <span class="predefined-type">String</span> extensionProperty;
+    private static final String EXTENSION_ID = "myExtension";
+    private String extensionProperty;
 
-    <span class="annotation">@Override</span>
-    <span class="directive">public</span> <span class="type">void</span> init(Swagger2MarkupConverter.Context globalContext) {
-        <span class="comment">// init is executed once</span>
+    @Override
+    public void init(Swagger2MarkupConverter.Context globalContext) {
+        // init is executed once
         Swagger2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties(); <i class="conum" data-value="1"></i><b>(1)</b>
-        extensionProperty = extensionProperties.getRequiredString(EXTENSION_ID + <span class="string"><span class="delimiter">&quot;</span><span class="content">.propertyName</span><span class="delimiter">&quot;</span></span>);
+        extensionProperty = extensionProperties.getRequiredString(EXTENSION_ID + ".propertyName");
         Swagger model = globalContext.getSwagger();
     }
 
-    <span class="annotation">@Override</span>
-    <span class="directive">public</span> <span class="type">void</span> apply(<span class="predefined-type">Context</span> context) {
+    @Override
+    public void apply(Context context) {
         MarkupDocBuilder markupBuilder = context.getMarkupDocBuilder(); <i class="conum" data-value="2"></i><b>(2)</b>
-        <span class="predefined-type">Position</span> position = context.getPosition(); <i class="conum" data-value="3"></i><b>(3)</b>
-        <span class="predefined-type">String</span> definitionName = context.getDefinitionName().get();
+        Position position = context.getPosition(); <i class="conum" data-value="3"></i><b>(3)</b>
+        String definitionName = context.getDefinitionName().get();
         Model definitionModel = context.getModel().get();
 
-        <span class="keyword">if</span>(position.equals(<span class="predefined-type">Position</span>.DEFINITION_END)) {
+        if(position.equals(Position.DEFINITION_END)) {
             markupBuilder.sectionTitleLevel1(definitionName) <i class="conum" data-value="4"></i><b>(4)</b>
                     .paragraph(definitionModel.getDescription())
-                    .importMarkup(<span class="keyword">new</span> <span class="predefined-type">StringReader</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">*Markup*</span><span class="delimiter">&quot;</span></span>), MarkupLanguage.ASCIIDOC);
+                    .importMarkup(new StringReader("*Markup*"), MarkupLanguage.ASCIIDOC);
         }
 
-        <span class="comment">// apply is executed per definition</span>
+        // apply is executed per definition
     }
 }</code></pre>
 </div>
@@ -1620,8 +1545,8 @@ It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be us
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">Swagger2MarkupExtensionRegistry registry = <span class="keyword">new</span> Swagger2MarkupExtensionRegistryBuilder() <i class="conum" data-value="1"></i><b>(1)</b>
-        .withDefinitionsDocumentExtension(<span class="keyword">new</span> MyExtension()) <i class="conum" data-value="2"></i><b>(2)</b>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">Swagger2MarkupExtensionRegistry registry = new Swagger2MarkupExtensionRegistryBuilder() <i class="conum" data-value="1"></i><b>(1)</b>
+        .withDefinitionsDocumentExtension(new MyExtension()) <i class="conum" data-value="2"></i><b>(2)</b>
         .build(); <i class="conum" data-value="3"></i><b>(3)</b>
 
 Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFile)
@@ -1681,12 +1606,6 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </td>
 </tr>
 </table>
-</div>
-<div class="imageblock thumb">
-<div class="content">
-<img src="images/overview_extension_points.png" alt="overview extension points">
-</div>
-<div class="title">Figure 3. Overview document extension positions</div>
 </div>
 </div>
 <div class="sect3">
@@ -1819,14 +1738,14 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">MySwaggerModelExtension</span> <span class="directive">extends</span> SwaggerModelExtension {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class MySwaggerModelExtension extends SwaggerModelExtension {
 
-    <span class="directive">public</span> <span class="type">void</span> apply(Swagger swagger) {
-        swagger.setHost(<span class="string"><span class="delimiter">&quot;</span><span class="content">newHostName</span><span class="delimiter">&quot;</span></span>); <i class="conum" data-value="1"></i><b>(1)</b>
-        swagger.basePath(<span class="string"><span class="delimiter">&quot;</span><span class="content">newBasePath</span><span class="delimiter">&quot;</span></span>);
+    public void apply(Swagger swagger) {
+        swagger.setHost("newHostName"); <i class="conum" data-value="1"></i><b>(1)</b>
+        swagger.basePath("newBasePath");
 
-        <span class="predefined-type">Map</span>&lt;<span class="predefined-type">String</span>, Path&gt; paths = swagger.getPaths(); <i class="conum" data-value="2"></i><b>(2)</b>
-        paths.remove(<span class="string"><span class="delimiter">&quot;</span><span class="content">/remove</span><span class="delimiter">&quot;</span></span>);
+        Map&lt;String, Path&gt; paths = swagger.getPaths(); <i class="conum" data-value="2"></i><b>(2)</b>
+        paths.remove("/remove");
         swagger.setPaths(paths);
     }
 }</code></pre>
@@ -1882,7 +1801,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <h5 id="_usage_guide_2"><a class="anchor" href="#_usage_guide_2"></a>Usage guide</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
     jCenter()
 }
 
@@ -1890,10 +1809,31 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 </div>
 </div>
 <div class="paragraph">
-<p>The extension searches for markup files in configurable paths to append the markup to the documents. The markup files must conform to a naming convention to be found. The files must start with the position where the document should be extended and end with the markup file extension (e.g <code>adoc</code> or <code>md</code>). See documentation of <a href="#_extensions_points">Extensions points</a>.</p>
+<p>The extension searches for markup files in configurable paths to append the markup to the documents at supported positions.</p>
 </div>
 <div class="paragraph">
-<p>All documents:</p>
+<p>The markup files must conform to a naming convention to be found. The files must start with the position where the document should be extended and end with the markup file extension (e.g <code>adoc</code> or <code>md</code>).</p>
+</div>
+<div class="paragraph">
+<p>See documentation of <a href="#_extensions_points">Extensions points</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here the list of all document naming conventions, just replace <code>*</code> with an arbitrary, meaningful, identifier.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+You can provide multiple contents for the same position, just specify different identifiers in place of <code>*</code> in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>All documents, relatively to each extension contentPath :</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1901,59 +1841,143 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 <p><code>document-before-*.&lt;markup.ext&gt;</code></p>
 </li>
 <li>
-<p><code>document-after-*.&lt;markup.ext&gt;</code></p>
-</li>
-<li>
 <p><code>document-begin-*.&lt;markup.ext&gt;</code></p>
 </li>
 <li>
 <p><code>document-end-*.&lt;markup.ext&gt;</code></p>
 </li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Paths document:</p>
-</div>
-<div class="ulist">
-<ul>
 <li>
-<p><code>operation-begin-*.&lt;markup.ext&gt;</code></p>
-</li>
-<li>
-<p><code>operation-end-*.&lt;markup.ext&gt;</code></p>
+<p><code>document-after-*.&lt;markup.ext&gt;</code></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Definitions and Security document:</p>
+<p>Paths document, relatively to <code>swagger2markup.extensions.dynamicPaths.contentPath</code> :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>defintion-begin-*.&lt;markup.ext&gt;</code></p>
+<p><code>&lt;operationId&gt;/operation-begin-*.&lt;markup.ext&gt;</code></p>
 </li>
 <li>
-<p><code>defintion-begin-*.&lt;markup.ext&gt;</code></p>
+<p><code>&lt;operationId&gt;/operation-end-*.&lt;markup.ext&gt;</code></p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<code>&lt;operationId&gt;</code> value depends on Swagger specification. If you provided an <code>operationId</code> for operations in the Swagger document, the value will be used primarily. Otherwise, the value <code>normalized(operation.summary + " " + lowerCase(operation.HTTPmethod))</code> will be used. <strong>It is highly recommended to set operationId for operations because it&#8217;s more stable</strong> : see <a href="#swagger_operationId">Advanced usage - Swagger operationId</a>. In all cases, <code>&lt;operationId&gt;</code> is case-sensitive.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Definitions and Security document, relatively to <code>swagger2markup.extensions.dynamicDefinitions.contentPath</code> :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;definitionName&gt;/definition-begin-*.&lt;markup.ext&gt;</code></p>
+</li>
+<li>
+<p><code>&lt;definitionName&gt;/definition-end-*.&lt;markup.ext&gt;</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<code>&lt;definitionName&gt;</code> is case-sensitive
+</td>
+</tr>
+</table>
+</div>
+<div class="exampleblock">
+<div class="title">Example 3. Example of provided content files for petstore Swagger sample</div>
+<div class="content">
+<div class="literalblock">
+<div class="content">
+<pre>document-before-intro.adoc
+updatePet/operation-begin-description.adoc
+updatePet/operation-end-example1.adoc
+updatePet/operation-end-example2.adoc
+Pet/definition-begin-description.adoc</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_configuration_2"><a class="anchor" href="#_configuration_2"></a>Configuration</h5>
+<h5 id="_content_markup_language"><a class="anchor" href="#_content_markup_language"></a>Content markup language</h5>
+<div class="paragraph">
+<p>The content files markup language can be any <a href="https://github.com/Swagger2Markup/markup-document-builder">markup-document-builder</a> supported language :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ASCIIDOC : AsciiDoc. Mandatory content file extension : <code>adoc</code></p>
+</li>
+<li>
+<p>MARKDOWN : Github Flavored Markdown. Mandatory content file extension : <code>md</code></p>
+</li>
+<li>
+<p>CONFLUENCE_MARKUP : Confluence Wiki markup. Mandatory content file extension : <code>txt</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>By default, the markup language is set to <strong>ASCIIDOC</strong>, whatever the file extension. Set extension <a href="#dynamic_file_extension_configuration">Configuration</a> to change content markup language.<br>
+The content file will be <strong>converted, if needed, to main Swagger2Markup converter markup language</strong> at import.</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Currently supported conversion are :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Markdown &#8594; AsciiDoc</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect4">
+<h5 id="dynamic_file_extension_configuration"><a class="anchor" href="#dynamic_file_extension_configuration"></a>Configuration</h5>
 <div class="paragraph">
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 9. Extension properties</caption>
 <colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Name</th>
 <th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default</th>
 <th class="tableblock halign-left valign-top">Example</th>
 </tr>
 </thead>
@@ -1961,22 +1985,50 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicOverview.contentPath</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path to the files which should be imported</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/test/resources/docs/asciidoc/overview</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicOverview.markupLanguage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The markup language of the content files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ASCIIDOC</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MARKDOWN</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicDefinitions.contentPath</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path to the files which should be imported</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/test/resources/docs/asciidoc/definitions</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicDefinitions.markupLanguage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The markup language of the content files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ASCIIDOC</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MARKDOWN</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicPaths.contentPath</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path to the files which should be imported</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/test/resources/docs/asciidoc/paths</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicPaths.markupLanguage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The markup language of the content files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ASCIIDOC</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MARKDOWN</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicSecurity.contentPath</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">TThe path to the files which should be imported</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/test/resources/docs/asciidoc/security</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.dynamicSecurity.markupLanguage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The markup language of the content files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ASCIIDOC</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MARKDOWN</code></p></td>
 </tr>
 </tbody>
 </table>
@@ -1991,7 +2043,7 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 <h5 id="_usage_guide_3"><a class="anchor" href="#_usage_guide_3"></a>Usage guide</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
     jCenter()
 }
 
@@ -2022,7 +2074,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>paths:
+<pre class="highlightjs highlight"><code>paths:
   /pets:
     post:
       summary: Add a new pet to the store
@@ -2035,14 +2087,14 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Rule</span>
-<span class="directive">public</span> <span class="directive">final</span> RestDocumentation restDocumentation = <span class="keyword">new</span> RestDocumentation(<span class="string"><span class="delimiter">&quot;</span><span class="content">build/snippets</span><span class="delimiter">&quot;</span></span>);
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@Rule
+public final RestDocumentation restDocumentation = new RestDocumentation("build/snippets");
 
-<span class="annotation">@Test</span>
-<span class="directive">public</span> <span class="type">void</span> addAPetToTheStore() <span class="directive">throws</span> <span class="exception">Exception</span> {
-  <span class="local-variable">this</span>.mockMvc.perform(post(<span class="string"><span class="delimiter">&quot;</span><span class="content">/pets/</span><span class="delimiter">&quot;</span></span>).content(createPet())
+@Test
+public void addAPetToTheStore() throws Exception {
+  this.mockMvc.perform(post("/pets/").content(createPet())
     .contentType(MediaType.APPLICATION_JSON))
-    .andDo(document(<span class="string"><span class="delimiter">&quot;</span><span class="content">addPet</span><span class="delimiter">&quot;</span></span>, preprocessResponse(prettyPrint())))
+    .andDo(document("addPet", preprocessResponse(prettyPrint())))
     .andExpect(status().isOk());
 }</code></pre>
 </div>
@@ -2052,7 +2104,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="sect4">
-<h5 id="_configuration_3"><a class="anchor" href="#_configuration_3"></a>Configuration</h5>
+<h5 id="_configuration_2"><a class="anchor" href="#_configuration_2"></a>Configuration</h5>
 <div class="paragraph">
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
@@ -2086,7 +2138,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 <h5 id="_usage_guide_4"><a class="anchor" href="#_usage_guide_4"></a>Usage guide</h5>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">repositories {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">repositories {
     jCenter()
 }
 
@@ -2101,7 +2153,7 @@ compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:1.0.0-SNAPSH
 </div>
 </div>
 <div class="sect4">
-<h5 id="_configuration_4"><a class="anchor" href="#_configuration_4"></a>Configuration</h5>
+<h5 id="_configuration_3"><a class="anchor" href="#_configuration_3"></a>Configuration</h5>
 <div class="paragraph">
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
@@ -2157,7 +2209,7 @@ The Gradle Plugin requires at least JDK 8.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">buildscript {
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">buildscript {
     repositories {
         jcenter()
         maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
@@ -2179,17 +2231,17 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_5"><a class="anchor" href="#_configuration_5"></a>6.2. Configuration</h3>
+<h3 id="_configuration_4"><a class="anchor" href="#_configuration_4"></a>6.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="groovy">convertSwagger2markup {
-    swaggerInput file(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/swagger/swagger_petstore.yaml</span><span class="delimiter">&quot;</span></span>).getAbsolutePath()
-    outputDir file(<span class="string"><span class="delimiter">&quot;</span><span class="inline"><span class="inline-delimiter">${</span>buildDir<span class="inline-delimiter">}</span></span><span class="content">/asciidoc</span><span class="delimiter">&quot;</span></span>)
-    config = [<span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.markupLanguage</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">ASCIIDOC</span><span class="delimiter">'</span></span>,
-              <span class="string"><span class="delimiter">'</span><span class="content">swagger2markup.pathsGroupedBy</span><span class="delimiter">'</span></span> : <span class="string"><span class="delimiter">'</span><span class="content">TAGS</span><span class="delimiter">'</span></span>]
+<pre class="highlightjs highlight"><code class="language-groovy" data-lang="groovy">convertSwagger2markup {
+    swaggerInput file("src/docs/swagger/swagger_petstore.yaml").getAbsolutePath()
+    outputDir file("${buildDir}/asciidoc")
+    config = ['swagger2markup.markupLanguage' : 'ASCIIDOC',
+              'swagger2markup.pathsGroupedBy' : 'TAGS']
 }</code></pre>
 </div>
 </div>
@@ -2273,31 +2325,31 @@ The Maven Plugin requires at least JDK 8.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;pluginRepositories&gt;</span>
-    <span class="tag">&lt;pluginRepository&gt;</span>
-        <span class="tag">&lt;id&gt;</span>jcenter-snapshots<span class="tag">&lt;/id&gt;</span>
-        <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-        <span class="tag">&lt;url&gt;</span>http://oss.jfrog.org/artifactory/oss-snapshot-local/<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/pluginRepository&gt;</span>
-    <span class="tag">&lt;pluginRepository&gt;</span>
-        <span class="tag">&lt;snapshots&gt;</span>
-            <span class="tag">&lt;enabled&gt;</span>false<span class="tag">&lt;/enabled&gt;</span>
-        <span class="tag">&lt;/snapshots&gt;</span>
-        <span class="tag">&lt;id&gt;</span>jcenter-releases<span class="tag">&lt;/id&gt;</span>
-        <span class="tag">&lt;name&gt;</span>jcenter<span class="tag">&lt;/name&gt;</span>
-        <span class="tag">&lt;url&gt;</span>http://jcenter.bintray.com<span class="tag">&lt;/url&gt;</span>
-    <span class="tag">&lt;/pluginRepository&gt;</span>
-<span class="tag">&lt;/pluginRepositories&gt;</span>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;pluginRepositories&gt;
+    &lt;pluginRepository&gt;
+        &lt;id&gt;jcenter-snapshots&lt;/id&gt;
+        &lt;name&gt;jcenter&lt;/name&gt;
+        &lt;url&gt;http://oss.jfrog.org/artifactory/oss-snapshot-local/&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+    &lt;pluginRepository&gt;
+        &lt;snapshots&gt;
+            &lt;enabled&gt;false&lt;/enabled&gt;
+        &lt;/snapshots&gt;
+        &lt;id&gt;jcenter-releases&lt;/id&gt;
+        &lt;name&gt;jcenter&lt;/name&gt;
+        &lt;url&gt;http://jcenter.bintray.com&lt;/url&gt;
+    &lt;/pluginRepository&gt;
+&lt;/pluginRepositories&gt;
 
-<span class="tag">&lt;build&gt;</span>
-    <span class="tag">&lt;plugins&gt;</span>
-      <span class="tag">&lt;plugin&gt;</span>
-        <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
-        <span class="tag">&lt;artifactId&gt;</span>swagger2markup-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span>1.0.0-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
-      <span class="tag">&lt;/plugin&gt;</span>
-    <span class="tag">&lt;/plugins&gt;</span>
-<span class="tag">&lt;/build&gt;</span></code></pre>
+&lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;io.github.swagger2markup&lt;/groupId&gt;
+        &lt;artifactId&gt;swagger2markup-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2308,28 +2360,28 @@ The Maven Plugin requires at least JDK 8.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_6"><a class="anchor" href="#_configuration_6"></a>7.2. Configuration</h3>
+<h3 id="_configuration_5"><a class="anchor" href="#_configuration_5"></a>7.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="xml"><span class="tag">&lt;build&gt;</span>
-    <span class="tag">&lt;plugins&gt;</span>
-      <span class="tag">&lt;plugin&gt;</span>
-        <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
-        <span class="tag">&lt;artifactId&gt;</span>swagger2markup-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span>{project-version}<span class="tag">&lt;/version&gt;</span>
-        <span class="tag">&lt;configuration&gt;</span>
-          <span class="tag">&lt;swaggerInput&gt;</span>${project.basedir}/src/docs/swagger/swagger_petstore.yaml<span class="tag">&lt;/input&gt;</span>
-          <span class="tag">&lt;outputDir&gt;</span>${project.build.directory}/asciidoc<span class="tag">&lt;/output&gt;</span>
-          <span class="tag">&lt;config&gt;</span>
-            <span class="tag">&lt;swagger2markup.markupLanguage&gt;</span>ASCIIDOC<span class="tag">&lt;/swagger2markup.markupLanguage&gt;</span>
-          <span class="tag">&lt;/config&gt;</span>
-        <span class="tag">&lt;/configuration&gt;</span>
-      <span class="tag">&lt;/plugin&gt;</span>
-    <span class="tag">&lt;/plugins&gt;</span>
-<span class="tag">&lt;/build&gt;</span></code></pre>
+<pre class="highlightjs highlight"><code class="language-xml" data-lang="xml">&lt;build&gt;
+    &lt;plugins&gt;
+      &lt;plugin&gt;
+        &lt;groupId&gt;io.github.swagger2markup&lt;/groupId&gt;
+        &lt;artifactId&gt;swagger2markup-maven-plugin&lt;/artifactId&gt;
+        &lt;version&gt;{project-version}&lt;/version&gt;
+        &lt;configuration&gt;
+          &lt;swaggerInput&gt;${project.basedir}/src/docs/swagger/swagger_petstore.yaml&lt;/input&gt;
+          &lt;outputDir&gt;${project.build.directory}/asciidoc&lt;/output&gt;
+          &lt;config&gt;
+            &lt;swagger2markup.markupLanguage&gt;ASCIIDOC&lt;/swagger2markup.markupLanguage&gt;
+          &lt;/config&gt;
+        &lt;/configuration&gt;
+      &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
@@ -2424,7 +2476,7 @@ The CLI requires at least JDK 8.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar help convert</code></pre>
+<pre class="highlightjs highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar help convert</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2468,7 +2520,7 @@ OPTIONS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc</code></pre>
+<pre class="highlightjs highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2482,7 +2534,7 @@ OPTIONS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger</code></pre>
+<pre class="highlightjs highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -2508,13 +2560,13 @@ The input file must not have a file extension
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp</code></pre>
+<pre class="highlightjs highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp</code></pre>
 </div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_7"><a class="anchor" href="#_configuration_7"></a>8.2. Configuration</h3>
+<h3 id="_configuration_6"><a class="anchor" href="#_configuration_6"></a>8.2. Configuration</h3>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
@@ -2530,7 +2582,7 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties</code></pre>
+<pre class="highlightjs highlight"><code>java -jar swagger2markup-cli-1.0.0-SNAPSHOT.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties</code></pre>
 </div>
 </div>
 </div>
@@ -2569,16 +2621,16 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
-<span class="annotation">@SpringApplicationConfiguration</span>(classes = {Application.class, SwaggerConfig.class})
-<span class="annotation">@WebIntegrationTest</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class, SwaggerConfig.class})
+@WebIntegrationTest
+public class Swagger2MarkupTest {
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> convertRemoteSwaggerToAsciiDoc() {
-        <span class="comment">// Remote Swagger source</span>
-        Swagger2MarkupConverter.from(<span class="keyword">new</span> <span class="predefined-type">URL</span>(<span class="string"><span class="delimiter">&quot;</span><span class="content">http://localhost:8080/v2/api-docs</span><span class="delimiter">&quot;</span></span>)).build()
-            .toFolder(Paths.get(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>));
+    @Test
+    public void convertRemoteSwaggerToAsciiDoc() {
+        // Remote Swagger source
+        Swagger2MarkupConverter.from(new URL("http://localhost:8080/v2/api-docs")).build()
+            .toFolder(Paths.get("src/docs/asciidoc/generated"));
     }
 }</code></pre>
 </div>
@@ -2589,27 +2641,27 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@WebAppConfiguration</span>
-<span class="annotation">@RunWith</span>(SpringJUnit4ClassRunner.class)
-<span class="annotation">@SpringApplicationConfiguration</span>(classes = {Application.class, SwaggerConfig.class})
-<span class="directive">public</span> <span class="type">class</span> <span class="class">Swagger2MarkupTest</span> {
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">@WebAppConfiguration
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = {Application.class, SwaggerConfig.class})
+public class Swagger2MarkupTest {
 
-    <span class="annotation">@Autowired</span>
-    <span class="directive">private</span> WebApplicationContext context;
+    @Autowired
+    private WebApplicationContext context;
 
-    <span class="directive">private</span> MockMvc mockMvc;
+    private MockMvc mockMvc;
 
-    <span class="annotation">@Before</span>
-    <span class="directive">public</span> <span class="type">void</span> setUp() {
-        <span class="local-variable">this</span>.mockMvc = MockMvcBuilders.webAppContextSetup(<span class="local-variable">this</span>.context).build();
+    @Before
+    public void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.context).build();
     }
 
-    <span class="annotation">@Test</span>
-    <span class="directive">public</span> <span class="type">void</span> convertSwaggerToAsciiDoc() <span class="directive">throws</span> <span class="exception">Exception</span> {
-        <span class="local-variable">this</span>.mockMvc.perform(get(<span class="string"><span class="delimiter">&quot;</span><span class="content">/v2/api-docs</span><span class="delimiter">&quot;</span></span>)
+    @Test
+    public void convertSwaggerToAsciiDoc() throws Exception {
+        this.mockMvc.perform(get("/v2/api-docs")
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(Swagger2MarkupResultHandler
-                    .outputDirectory(<span class="string"><span class="delimiter">&quot;</span><span class="content">src/docs/asciidoc/generated</span><span class="delimiter">&quot;</span></span>).build())
+                    .outputDirectory("src/docs/asciidoc/generated").build())
                 .andExpect(status().isOk());
     }
 }</code></pre>
@@ -2625,7 +2677,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java">gradlew clean build</code></pre>
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">gradlew clean build</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -2690,8 +2742,11 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-04-12 15:56:57 MESZ
+Last updated 2016-04-13 14:06:21 MESZ
 </div>
 </div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/styles/github.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.9.1/highlight.min.js"></script>
+<script>hljs.initHighlighting()</script>
 </body>
 </html>
