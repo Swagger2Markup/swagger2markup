@@ -251,7 +251,7 @@ The files must be stored in a folder which matches the Swagger operationId.
 
 Swagger Example:
 
-[source]
+[source,yaml]
 ----
 paths:
   /pets:
