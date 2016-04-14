@@ -125,8 +125,10 @@ The DefinitionsDocumentExtension allows to extend the definitions document at po
 
 * DOCUMENT_BEFORE: Before the document title (title level offset = 0)
 * DOCUMENT_BEGIN: After the document title (title level offset = 1)
+* DEFINITION_BEFORE: Before each definition title (title level offset = 1)
 * DEFINITION_BEGIN: After each definition title (title level offset = 2)
 * DEFINITION_END: At the end of each definition (title level offset = 2)
+* DEFINITION_AFTER: At the very end of each definition (title level offset = 1)
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 

@@ -58,8 +58,10 @@ Paths extensions, relatively to each extension contentPath :
 
 Definitions extensions, relatively to each extension contentPath :
 
+* DEFINITION_BEFORE : `<definitionName>/definition-before-*.<<extension_import_files_markup,<markup.ext> >>`
 * DEFINITION_BEGIN : `<definitionName>/definition-begin-*.<<extension_import_files_markup,<markup.ext> >>`
 * DEFINITION_END : `<definitionName>/definition-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* DEFINITION_AFTER : `<definitionName>/definition-after-*.<<extension_import_files_markup,<markup.ext> >>`
 
 Security extensions, relatively to each extension contentPath :
 

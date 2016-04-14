@@ -190,11 +190,13 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void buildDefinition(String definitionName, Model model, MarkupDocBuilder docBuilder) {
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEFORE, docBuilder, definitionName, model));
         buildDefinitionTitle(definitionName, definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
         buildDescriptionParagraph(model, docBuilder);
         inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_AFTER, docBuilder, definitionName, model));
     }
 
     /**

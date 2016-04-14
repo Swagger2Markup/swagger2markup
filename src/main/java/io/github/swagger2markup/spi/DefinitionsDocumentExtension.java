@@ -28,11 +28,13 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOCUMENT_BEFORE,
-        DOCUMENT_AFTER,
         DOCUMENT_BEGIN,
         DOCUMENT_END,
+        DOCUMENT_AFTER,
+        DEFINITION_BEFORE,
         DEFINITION_BEGIN,
-        DEFINITION_END
+        DEFINITION_END,
+        DEFINITION_AFTER
     }
 
     public static class Context extends ContentContext {
@@ -65,7 +67,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
          */
         public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
             super(docBuilder);
-            Validate.inclusiveBetween(Position.DEFINITION_BEGIN, Position.DEFINITION_END, position);
+            Validate.inclusiveBetween(Position.DEFINITION_BEFORE, Position.DEFINITION_AFTER, position);
             Validate.notNull(definitionName);
             Validate.notNull(model);
             this.position = position;
@@ -105,6 +107,8 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
                 break;
             case DOCUMENT_BEGIN:
             case DOCUMENT_END:
+            case DEFINITION_BEFORE:
+            case DEFINITION_AFTER:
                 levelOffset = 1;
                 break;
             case DEFINITION_BEGIN:
