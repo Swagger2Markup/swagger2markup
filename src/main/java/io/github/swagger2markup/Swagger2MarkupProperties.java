@@ -44,7 +44,7 @@ public class Swagger2MarkupProperties {
     public static final String SEPARATED_OPERATIONS_ENABLED = PROPERTIES_PREFIX + ".separatedOperationsEnabled";
     public static final String PATHS_GROUPED_BY = PROPERTIES_PREFIX + ".pathsGroupedBy";
     public static final String OUTPUT_LANGUAGE = PROPERTIES_PREFIX + ".outputLanguage";
-    public static final String INLINE_SCHEMA_DEPTH_LEVEL = PROPERTIES_PREFIX + ".inlineSchemaDepthLevel";
+    public static final String INLINE_SCHEMA_ENABLED = PROPERTIES_PREFIX + ".inlineSchemaEnabled";
     public static final String INTER_DOCUMENT_CROSS_REFERENCES_ENABLED = PROPERTIES_PREFIX + ".interDocumentCrossReferencesEnabled";
     public static final String INTER_DOCUMENT_CROSS_REFERENCES_PREFIX = PROPERTIES_PREFIX + ".interDocumentCrossReferencesPrefix";
     public static final String FLAT_BODY_ENABLED = PROPERTIES_PREFIX + ".flatBodyEnabled";

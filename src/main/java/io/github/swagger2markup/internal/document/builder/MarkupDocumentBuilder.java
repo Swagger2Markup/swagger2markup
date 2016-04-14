@@ -113,7 +113,7 @@ public abstract class MarkupDocumentBuilder {
      * Returns a RefType to a new inlined type named with {@code name} and {@code uniqueName}.<br>
      * The returned RefType point to the new inlined type which is added to the {@code inlineDefinitions} collection.<br>
      * The function is recursive and support collections (ArrayType and MapType).<br>
-     * The function is transparent : {@code type} is returned as-is if type is not inlinable.<br> 
+     * The function is transparent : {@code type} is returned as-is if type is not inlinable or if !config.isInlineSchemaEnabled().<br> 
      * 
      * @param type type to inline
      * @param name name of the created inline ObjectType
@@ -122,6 +122,9 @@ public abstract class MarkupDocumentBuilder {
      * @return the type referencing the newly created inline ObjectType. Can be a RefType, an ArrayType or a MapType
      */
     protected Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
+        if (!config.isInlineSchemaEnabled())
+            return type;
+        
         if (type instanceof ObjectType) {
             return createInlineObjectType(type, name, uniqueName, inlineDefinitions);
         } else if (type instanceof ArrayType) {
@@ -161,12 +164,11 @@ public abstract class MarkupDocumentBuilder {
      *
      * @param properties                 properties to display
      * @param uniquePrefix               unique prefix to prepend to inline object names to enforce unicity
-     * @param depth                      current inline schema object depth
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      * @param docBuilder                 the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, int depth, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
         List<MarkupTableColumn> cols = Arrays.asList(
@@ -180,10 +182,8 @@ public abstract class MarkupDocumentBuilder {
                 Property property = properties.get(propertyName);
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
 
-                if (depth > 0) {
-                    propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
-                }
-
+                propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
+                
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();

@@ -31,7 +31,6 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
@@ -106,7 +105,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_OPERATIONS_ENABLED);
         config.pathsGroupedBy = swagger2MarkupProperties.getGroupBy(PATHS_GROUPED_BY);
         config.outputLanguage = swagger2MarkupProperties.getLanguage(OUTPUT_LANGUAGE);
-        config.inlineSchemaDepthLevel = swagger2MarkupProperties.getRequiredInt(INLINE_SCHEMA_DEPTH_LEVEL);
+        config.inlineSchemaEnabled = swagger2MarkupProperties.getRequiredBoolean(INLINE_SCHEMA_ENABLED);
         config.interDocumentCrossReferencesEnabled = swagger2MarkupProperties.getRequiredBoolean(INTER_DOCUMENT_CROSS_REFERENCES_ENABLED);
         config.interDocumentCrossReferencesPrefix = swagger2MarkupProperties.getString(INTER_DOCUMENT_CROSS_REFERENCES_PREFIX, null);
         config.flatBodyEnabled = swagger2MarkupProperties.getRequiredBoolean(FLAT_BODY_ENABLED);
@@ -254,14 +253,12 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-     * Specifies maximum depth level for inline object schema displaying (0 = no inline schemas).
+     * Disable inline schema support.
      *
-     * @param inlineSchemaDepthLevel number of recursion levels for inline schemasEnabled display
      * @return this builder
      */
-    public Swagger2MarkupConfigBuilder withInlineSchemaDepthLevel(int inlineSchemaDepthLevel) {
-        Validate.isTrue(inlineSchemaDepthLevel >= 0, "%s must be >= 0", "inlineSchemaDepthLevel");
-        config.inlineSchemaDepthLevel = inlineSchemaDepthLevel;
+    public Swagger2MarkupConfigBuilder withoutInlineSchema() {
+        config.inlineSchemaEnabled = false;
         return this;
     }
 
@@ -498,15 +495,11 @@ public class Swagger2MarkupConfigBuilder  {
         private MarkupLanguage markupLanguage;
         private MarkupLanguage swaggerMarkupLanguage;
         private boolean generatedExamplesEnabled;
-        private boolean operationDescriptionsEnabled;
-        private URI operationDescriptionsUri;
-        private boolean definitionDescriptionsEnabled;
-        private URI definitionDescriptionsUri;
         private boolean separatedDefinitionsEnabled;
         private boolean separatedOperationsEnabled;
         private GroupBy pathsGroupedBy;
         private Language outputLanguage;
-        private int inlineSchemaDepthLevel;
+        private boolean inlineSchemaEnabled;
         private OrderBy tagOrderBy;
         private Comparator<String> tagOrdering;
         private OrderBy operationOrderBy;
@@ -570,8 +563,8 @@ public class Swagger2MarkupConfigBuilder  {
         }
 
         @Override
-        public int getInlineSchemaDepthLevel() {
-            return inlineSchemaDepthLevel;
+        public boolean isInlineSchemaEnabled() {
+            return inlineSchemaEnabled;
         }
 
         @Override

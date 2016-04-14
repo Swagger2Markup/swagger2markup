@@ -272,9 +272,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             buildOperationTitle(operation, docBuilder);
             applyPathsDocumentExtension(new Context(Position.OPERATION_BEGIN, docBuilder, operation));
             buildDescriptionSection(operation, docBuilder);
-            inlineDefinitions(buildParametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
-            inlineDefinitions(buildBodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
-            inlineDefinitions(buildResponsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
+            inlineDefinitions(buildParametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), docBuilder);
+            inlineDefinitions(buildBodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), docBuilder);
+            inlineDefinitions(buildResponsesSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), docBuilder);
             buildConsumesSection(operation, docBuilder);
             buildProducesSection(operation, docBuilder);
             buildTagsSection(operation, docBuilder);
@@ -434,9 +434,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
 
-                    if (config.getInlineSchemaDepthLevel() > 0) {
-                        type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
-                    }
+                    type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
+
                     String parameterType = WordUtils.capitalize(parameter.getIn());
 
                     MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder();
@@ -490,9 +489,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
 
                         if (!(type instanceof ObjectType)) {
-                            if (config.getInlineSchemaDepthLevel() > 0) {
-                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
-                            }
+                            type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                         }
 
                         buildSectionTitle(BODY_PARAMETER, docBuilder);
@@ -511,7 +508,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         docBuilder.paragraph(typeInfos.toString(), true);
 
                         if (type instanceof ObjectType) {
-                            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), new DefinitionDocumentResolverFromOperation(), docBuilder));
                         }
                     }
                 }
@@ -572,11 +569,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         exampleMap(generatedResponseExampleMap, EXAMPLE_RESPONSE, RESPONSE, docBuilder);
     }
 
-    private void exampleMap(Map<String, Object> exampleMap, String operationSectionTitle, String sectionTile, MarkupDocBuilder docBuilder) {
+    private void exampleMap(Map<String, Object> exampleMap, String operationSectionTitle, String sectionTitle, MarkupDocBuilder docBuilder) {
         if (exampleMap.size() > 0) {
             buildSectionTitle(operationSectionTitle, docBuilder);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
-                buildExampleTitle(sectionTile + " " + entry.getKey(), docBuilder);
+                buildExampleTitle(sectionTitle + " " + entry.getKey(), docBuilder);
                 docBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
             }
         }
@@ -662,9 +659,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     Property property = response.getSchema();
                     Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
 
-                    if (config.getInlineSchemaDepthLevel() > 0) {
-                        type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, inlineDefinitions);
-                    }
+                    type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, inlineDefinitions);
+
                     schemaContent = type.displaySchema(markupDocBuilder);
                 }
 
@@ -738,17 +734,16 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param definitions  all inline definitions to display
      * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param depth        current inline schema depth
      * @param docBuilder   the docbuilder do use for output
      */
-    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, MarkupDocBuilder docBuilder) {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionDocumentResolverFromOperation(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, new DefinitionDocumentResolverFromOperation(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
             }
         }
 

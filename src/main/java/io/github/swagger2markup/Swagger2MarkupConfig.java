@@ -64,9 +64,9 @@ public interface Swagger2MarkupConfig {
     Language getOutputLanguage();
 
     /**
-     * Specifies maximum depth level for inline object schema displaying (0 = no inline schemasEnabled).
+     * Specifies if inline schemas are detailed
      */
-    int getInlineSchemaDepthLevel();
+    boolean isInlineSchemaEnabled();
 
     /**
      * Specifies tag ordering.

@@ -194,7 +194,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         buildDefinitionTitle(definitionName, definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
         buildDescriptionParagraph(model, docBuilder);
-        inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
+        inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_AFTER, docBuilder, definitionName, model));
     }
@@ -261,7 +261,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             if (StringUtils.isNotBlank(typeInfosString))
                 docBuilder.paragraph(typeInfosString, true);
 
-            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromDefinition(), docBuilder));
+            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
             typeInfos.italicText(TYPE_COLUMN).textLine(COLON + modelType.displaySchema(docBuilder));
@@ -302,16 +302,15 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param definitions  all inline definitions to display
      * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param depth        current inline schema depth
      * @param docBuilder   the docbuilder do use for output
      */
-    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, MarkupDocBuilder docBuilder) {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
             }
         }
     }

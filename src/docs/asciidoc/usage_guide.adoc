@@ -140,6 +140,8 @@ The following tables list all available properties of Swagger2Markup:
 |swagger2markup.outputLanguage| Specifies the language of the labels | EN, DE, FR, RU | EN
 |swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | <System-dependent>
 |swagger2markup.generatedExamplesEnabled| Specifies if HTTP request and response examples should be generated | true, false | false
+|swagger2markup.flatBodyEnabled| Optionally isolate the body parameter, if any, from other parameters | true, false | false
+|swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness if you want to include generated documents into a global documentation | Any String | 
 |===
 
 [options="header"]
@@ -180,16 +182,13 @@ The following tables list all available properties of Swagger2Markup:
 |Name | Description |  Possible Values | Default
 |swagger2markup.interDocumentCrossReferencesEnabled| Enable use of inter-document cross-references when needed | true, false | false
 |swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references for advanced usage | Any String | 
-|swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness | Any String | 
 |===
 
 [options="header"]
 .Properties which configure inline schema rendering
 |===
 |Name | Description |  Possible Values | Default
-
-|swagger2markup.inlineSchemaDepthLevel| Specifies maximum depth level for inline object schema displaying | Any Integer | 0
-|swagger2markup.flatBodyEnabled| Optionally isolate the body parameter, if any, from other parameters | true, false | false
+|swagger2markup.inlineSchemaEnabled| Enable inline object schema support | true, false | true
 |===
 
 === Logging
