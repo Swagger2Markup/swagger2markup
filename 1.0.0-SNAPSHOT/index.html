@@ -516,7 +516,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.0-SNAPSHOT,</span>
-<span id="revdate">2016-04-13</span>
+<span id="revdate">2016-04-14</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -588,11 +588,12 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_swaggermodelextension">5.3.5. SwaggerModelExtension</a></li>
 </ul>
 </li>
-<li><a href="#_provided_extensions">5.4. Provided Extensions</a>
+<li><a href="#extension_commons_content_markup">5.4. Content markup language</a></li>
+<li><a href="#_provided_extensions">5.5. Provided Extensions</a>
 <ul class="sectlevel3">
-<li><a href="#_dynamic_file_import_extension">5.4.1. Dynamic file import extension</a></li>
-<li><a href="#_spring_restdocs_extension">5.4.2. Spring RestDocs extension</a></li>
-<li><a href="#_schema_file_import_extension">5.4.3. Schema file import extension</a></li>
+<li><a href="#extension_import_files">5.5.1. Dynamic file import extension</a></li>
+<li><a href="#extension_spring_restdocs">5.5.2. Spring RestDocs extension</a></li>
+<li><a href="#extension_import_schemas">5.5.3. Schema file import extension</a></li>
 </ul>
 </li>
 </ul>
@@ -600,14 +601,14 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_gradle_plugin">6. Gradle Plugin</a>
 <ul class="sectlevel2">
 <li><a href="#_usage_guide_5">6.1. Usage guide</a></li>
-<li><a href="#_configuration_4">6.2. Configuration</a></li>
+<li><a href="#_configuration_3">6.2. Configuration</a></li>
 <li><a href="#_example">6.3. Example</a></li>
 </ul>
 </li>
 <li><a href="#_maven_plugin">7. Maven Plugin</a>
 <ul class="sectlevel2">
 <li><a href="#_usage_guide_6">7.1. Usage guide</a></li>
-<li><a href="#_configuration_5">7.2. Configuration</a></li>
+<li><a href="#_configuration_4">7.2. Configuration</a></li>
 <li><a href="#_example_2">7.3. Example</a></li>
 </ul>
 </li>
@@ -621,7 +622,7 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_conversion_of_a_remote_swagger_file_2">8.1.4. Conversion of  a remote Swagger file</a></li>
 </ul>
 </li>
-<li><a href="#_configuration_6">8.2. Configuration</a></li>
+<li><a href="#_configuration_5">8.2. Configuration</a></li>
 </ul>
 </li>
 <li><a href="#_spring_boot_and_springfox">9. Spring Boot and Springfox</a>
@@ -1855,7 +1856,50 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </div>
 </div>
 <div class="sect2">
-<h3 id="_provided_extensions"><a class="anchor" href="#_provided_extensions"></a>5.4. Provided Extensions</h3>
+<h3 id="extension_commons_content_markup"><a class="anchor" href="#extension_commons_content_markup"></a>5.4. Content markup language</h3>
+<div class="paragraph">
+<p>Most content extensions supports to provide content in any markup language which will be <strong>converted, if needed, to configured Swagger2Markup converter markup language</strong> at import.</p>
+</div>
+<div class="paragraph">
+<p>The content files markup language can be any <a href="https://github.com/Swagger2Markup/markup-document-builder">markup-document-builder</a> supported language :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>ASCIIDOC : AsciiDoc. Mandatory content file extension : <code>adoc</code></p>
+</li>
+<li>
+<p>MARKDOWN : Github Flavored Markdown. Mandatory content file extension : <code>md</code></p>
+</li>
+<li>
+<p>CONFLUENCE_MARKUP : Confluence Wiki markup. Mandatory content file extension : <code>txt</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Currently supported conversions are :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Markdown &#8594; AsciiDoc</p>
+</li>
+</ul>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_provided_extensions"><a class="anchor" href="#_provided_extensions"></a>5.5. Provided Extensions</h3>
 <div class="paragraph">
 <p>Swagger2Markup provides some extensions which can be used out-of-the-box. You just have to add the extension to your classpath.</p>
 </div>
@@ -1873,21 +1917,21 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_dynamic_file_import_extension">Dynamic file import extension</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#extension_import_files">Dynamic file import extension</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to dynamically import Markup from files.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_spring_restdocs_extension">Spring RestDocs extension</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#extension_spring_restdocs">Spring RestDocs extension</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to import Curl, HTTP request and response snippets from <a href="https://github.com/spring-projects/spring-restdocs">Spring Rest Docs</a>.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#_schema_file_import_extension">Schema file import extension</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="#extension_import_schemas">Schema file import extension</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Allows to import JSON or XML Schema files.</p></td>
 </tr>
 </tbody>
 </table>
 <div class="sect3">
-<h4 id="_dynamic_file_import_extension"><a class="anchor" href="#_dynamic_file_import_extension"></a>5.4.1. Dynamic file import extension</h4>
+<h4 id="extension_import_files"><a class="anchor" href="#extension_import_files"></a>5.5.1. Dynamic file import extension</h4>
 <div class="sect4">
 <h5 id="_usage_guide_2"><a class="anchor" href="#_usage_guide_2"></a>Usage guide</h5>
 <div class="listingblock">
@@ -1909,7 +1953,7 @@ compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.0.0-SNAPSHOT
 <p>See documentation of <a href="#_extensions_points">Extensions points</a>.</p>
 </div>
 <div class="paragraph">
-<p>Here the list of all document naming conventions, just replace <code>*</code> with an arbitrary, meaningful, identifier.</p>
+<p>Here the list of all document naming conventions for each position. You have to replace <code>*</code> with an arbitrary, meaningful, identifier.</p>
 </div>
 <div class="admonitionblock important">
 <table>
@@ -1924,34 +1968,34 @@ You can provide multiple contents for the same position, just specify different 
 </table>
 </div>
 <div class="paragraph">
-<p>All documents, relatively to each extension contentPath :</p>
+<p>All extensions, relatively to each extension contentPath :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>document-before-*.&lt;markup.ext&gt;</code></p>
+<p>DOCUMENT_BEFORE : <code>document-before-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>document-begin-*.&lt;markup.ext&gt;</code></p>
+<p>DOCUMENT_BEGIN : <code>document-begin-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>document-end-*.&lt;markup.ext&gt;</code></p>
+<p>DOCUMENT_END : <code>document-end-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>document-after-*.&lt;markup.ext&gt;</code></p>
+<p>DOCUMENT_AFTER : <code>document-after-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Paths document, relatively to <code>swagger2markup.extensions.dynamicPaths.contentPath</code> :</p>
+<p>Paths extensions, relatively to each extension contentPath :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>&lt;operationId&gt;/operation-begin-*.&lt;markup.ext&gt;</code></p>
+<p>OPERATION_BEGIN : <code><a href="#swagger_operationId">&lt;operationId&gt;</a>/operation-begin-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>&lt;operationId&gt;/operation-end-*.&lt;markup.ext&gt;</code></p>
+<p>OPERATION_END : <code><a href="#swagger_operationId">&lt;operationId&gt;</a>/operation-end-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 </ul>
 </div>
@@ -1962,21 +2006,21 @@ You can provide multiple contents for the same position, just specify different 
 <i class="fa icon-important" title="Important"></i>
 </td>
 <td class="content">
-<code>&lt;operationId&gt;</code> value depends on Swagger specification. If you provided an <code>operationId</code> for operations in the Swagger document, the value will be used primarily. Otherwise, the value <code>normalized(operation.summary + " " + lowerCase(operation.HTTPmethod))</code> will be used. <strong>It is highly recommended to set operationId for operations because it&#8217;s more stable</strong> : see <a href="#swagger_operationId">Advanced usage - Swagger operationId</a>. In all cases, <code>&lt;operationId&gt;</code> is case-sensitive.
+<code>&lt;operationId&gt;</code> value depends on Swagger specification. If you provided an <code>operationId</code> for operations in the Swagger document, the value will be used primarily. <strong>It is highly recommended to set operationId for operations</strong> : see <a href="#swagger_operationId">Swagger operationId</a>. In all cases, <code>&lt;operationId&gt;</code> is case-sensitive.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Definitions and Security document, relatively to <code>swagger2markup.extensions.dynamicDefinitions.contentPath</code> :</p>
+<p>Definitions and Security extensions, relatively to each extension contentPath :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>&lt;definitionName&gt;/definition-begin-*.&lt;markup.ext&gt;</code></p>
+<p>DEFINITION_BEGIN : <code>&lt;definitionName&gt;/definition-begin-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>&lt;definitionName&gt;/definition-end-*.&lt;markup.ext&gt;</code></p>
+<p>DEFINITION_END : <code>&lt;definitionName&gt;/definition-end-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 </ul>
 </div>
@@ -2008,51 +2052,16 @@ Pet/definition-begin-description.adoc</pre>
 </div>
 </div>
 <div class="sect4">
-<h5 id="_content_markup_language"><a class="anchor" href="#_content_markup_language"></a>Content markup language</h5>
+<h5 id="extension_import_files_markup"><a class="anchor" href="#extension_import_files_markup"></a>Content markup language</h5>
 <div class="paragraph">
-<p>The content files markup language can be any <a href="https://github.com/Swagger2Markup/markup-document-builder">markup-document-builder</a> supported language :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>ASCIIDOC : AsciiDoc. Mandatory content file extension : <code>adoc</code></p>
-</li>
-<li>
-<p>MARKDOWN : Github Flavored Markdown. Mandatory content file extension : <code>md</code></p>
-</li>
-<li>
-<p>CONFLUENCE_MARKUP : Confluence Wiki markup. Mandatory content file extension : <code>txt</code></p>
-</li>
-</ul>
+<p>See <a href="#extension_commons_content_markup">Extensions content markup language</a></p>
 </div>
 <div class="paragraph">
-<p>By default, the markup language is set to <strong>ASCIIDOC</strong>, whatever the file extension. Set extension <a href="#dynamic_file_extension_configuration">Configuration</a> to change content markup language.<br>
-The content file will be <strong>converted, if needed, to main Swagger2Markup converter markup language</strong> at import.</p>
-</div>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Currently supported conversion are :</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Markdown &#8594; AsciiDoc</p>
-</li>
-</ul>
-</div>
-</td>
-</tr>
-</table>
+<p>By default, the markup language is set to <strong>ASCIIDOC</strong>. Set extension <a href="#extension_import_files_configuration">Configuration</a> to change content markup language.</p>
 </div>
 </div>
 <div class="sect4">
-<h5 id="dynamic_file_extension_configuration"><a class="anchor" href="#dynamic_file_extension_configuration"></a>Configuration</h5>
+<h5 id="extension_import_files_configuration"><a class="anchor" href="#extension_import_files_configuration"></a>Configuration</h5>
 <div class="paragraph">
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
@@ -2126,7 +2135,7 @@ The content file will be <strong>converted, if needed, to main Swagger2Markup co
 </div>
 </div>
 <div class="sect3">
-<h4 id="_spring_restdocs_extension"><a class="anchor" href="#_spring_restdocs_extension"></a>5.4.2. Spring RestDocs extension</h4>
+<h4 id="extension_spring_restdocs"><a class="anchor" href="#extension_spring_restdocs"></a>5.5.2. Spring RestDocs extension</h4>
 <div class="paragraph">
 <p>Swagger2Markup can be used together with <a href="https://github.com/spring-projects/spring-restdocs">spring-restdocs</a>. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated Markup documents. See spring-restdocs how to configure it.</p>
 </div>
@@ -2142,35 +2151,44 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="paragraph">
-<p>The extension searches for <a href="https://github.com/spring-projects/spring-restdocs">Spring RestDocs</a> snippet files in a configurable path to append the snippets at the end of a path operation section. The files must conform to the naming convention:</p>
+<p>The extension searches for <a href="https://github.com/spring-projects/spring-restdocs">Spring RestDocs</a> snippet files in a configurable path to append the snippets at the end of a path operation section. By default the following snippets are searched :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>http-request.&lt;markup.ext&gt;</code></p>
+<p><code><a href="#swagger_operationId">&lt;operationId&gt;</a>/http-request.<a href="#extension_spring_restdocs_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>http-response.&lt;markup.ext&gt;</code></p>
+<p><code><a href="#swagger_operationId">&lt;operationId&gt;</a>/http-response.<a href="#extension_spring_restdocs_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
-<p><code>curl-request.&lt;markup.ext&gt;</code></p>
+<p><code><a href="#swagger_operationId">&lt;operationId&gt;</a>/curl-request.<a href="#extension_spring_restdocs_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>The files must be stored in a folder which matches the Swagger operationId.</p>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<code>&lt;operationId&gt;</code> value depends on Swagger specification. If you provided an <code>operationId</code> for operations in the Swagger document, the value will be used primarily. <strong>It is highly recommended to set operationId for operations</strong> : see <a href="#swagger_operationId">Swagger operationId</a>. In all cases, <code>&lt;operationId&gt;</code> is case-sensitive.
+</td>
+</tr>
+</table>
 </div>
 <div class="paragraph">
 <p>Swagger Example:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>paths:
-  /pets:
-    post:
-      summary: Add a new pet to the store
-      operationId: addPet
-      ...</code></pre>
+<pre class="CodeRay highlight"><code data-lang="yaml"><span class="key">paths</span>:
+  <span class="key">/pets</span>:
+    <span class="key">post</span>:
+      <span class="key">summary</span>: <span class="string"><span class="content">Add a new pet to the store</span></span>
+      <span class="key">operationId</span>: <span class="string"><span class="content">addPet</span></span>
+      <span class="error">...</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2195,21 +2213,32 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 </div>
 </div>
 <div class="sect4">
-<h5 id="_configuration_2"><a class="anchor" href="#_configuration_2"></a>Configuration</h5>
+<h5 id="extension_spring_restdocs_markup"><a class="anchor" href="#extension_spring_restdocs_markup"></a>Content markup language</h5>
+<div class="paragraph">
+<p>See <a href="#extension_commons_content_markup">Extensions content markup language</a></p>
+</div>
+<div class="paragraph">
+<p>By default, the markup language is set to <strong>ASCIIDOC</strong>. Set extension <a href="#extension_spring_restdocs_configuration">Configuration</a> to change content markup language.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="extension_spring_restdocs_configuration"><a class="anchor" href="#extension_spring_restdocs_configuration"></a>Configuration</h5>
 <div class="paragraph">
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
 <caption class="title">Table 10. Extension properties</caption>
 <colgroup>
-<col style="width: 33%;">
-<col style="width: 33%;">
-<col style="width: 33%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
 </colgroup>
 <thead>
 <tr>
 <th class="tableblock halign-left valign-top">Name</th>
 <th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Default</th>
 <th class="tableblock halign-left valign-top">Example</th>
 </tr>
 </thead>
@@ -2217,14 +2246,27 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.0.0-SNAPS
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.springRestDocs.snippetBaseUri</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">The path to the Spring RestDocs snippets</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">-</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>src/test/resources/docs/asciidoc/paths</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.springRestDocs.markupLanguage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The markup language of the content files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ASCIIDOC</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MARKDOWN</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>swagger2markup.extensions.springRestDocs.defaultSnippets</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Boolean value. Set to false to disable default snippet files</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_schema_file_import_extension"><a class="anchor" href="#_schema_file_import_extension"></a>5.4.3. Schema file import extension</h4>
+<h4 id="extension_import_schemas"><a class="anchor" href="#extension_import_schemas"></a>5.5.3. Schema file import extension</h4>
 <div class="sect4">
 <h5 id="_usage_guide_4"><a class="anchor" href="#_usage_guide_4"></a>Usage guide</h5>
 <div class="listingblock">
@@ -2244,7 +2286,7 @@ compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:1.0.0-SNAPSH
 </div>
 </div>
 <div class="sect4">
-<h5 id="_configuration_3"><a class="anchor" href="#_configuration_3"></a>Configuration</h5>
+<h5 id="_configuration_2"><a class="anchor" href="#_configuration_2"></a>Configuration</h5>
 <div class="paragraph">
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
@@ -2322,7 +2364,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_4"><a class="anchor" href="#_configuration_4"></a>6.2. Configuration</h3>
+<h3 id="_configuration_3"><a class="anchor" href="#_configuration_3"></a>6.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
@@ -2451,7 +2493,7 @@ The Maven Plugin requires at least JDK 8.
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_5"><a class="anchor" href="#_configuration_5"></a>7.2. Configuration</h3>
+<h3 id="_configuration_4"><a class="anchor" href="#_configuration_4"></a>7.2. Configuration</h3>
 <div class="paragraph">
 <p>You can customize the task by configuring a Map of <a href="#_swagger2markup_properties">Swagger2Markup properties</a>.</p>
 </div>
@@ -2657,7 +2699,7 @@ The input file must not have a file extension
 </div>
 </div>
 <div class="sect2">
-<h3 id="_configuration_6"><a class="anchor" href="#_configuration_6"></a>8.2. Configuration</h3>
+<h3 id="_configuration_5"><a class="anchor" href="#_configuration_5"></a>8.2. Configuration</h3>
 <div class="paragraph">
 <p>Create a <code>config.properties</code> file to customize the <a href="#_swagger2markup_properties">Swagger2Markup properties</a>. For Example:</p>
 </div>
@@ -2833,7 +2875,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-04-13 14:22:57 MESZ
+Last updated 2016-04-14 10:38:30 UTC
 </div>
 </div>
 </body>
