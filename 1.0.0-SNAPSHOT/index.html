@@ -1861,10 +1861,16 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <p>DOCUMENT_BEGIN: After the document title (title level offset = 1)</p>
 </li>
 <li>
+<p>DEFINITION_BEFORE: Before each definition title (title level offset = 1)</p>
+</li>
+<li>
 <p>DEFINITION_BEGIN: After each definition title (title level offset = 2)</p>
 </li>
 <li>
 <p>DEFINITION_END: At the end of each definition (title level offset = 2)</p>
+</li>
+<li>
+<p>DEFINITION_AFTER: At the very end of each definition (title level offset = 1)</p>
 </li>
 <li>
 <p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
@@ -2126,10 +2132,16 @@ You can provide multiple contents for the same position, just specify different 
 <div class="ulist">
 <ul>
 <li>
+<p>DEFINITION_BEFORE : <code>&lt;definitionName&gt;/definition-before-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
+</li>
+<li>
 <p>DEFINITION_BEGIN : <code>&lt;definitionName&gt;/definition-begin-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 <li>
 <p>DEFINITION_END : <code>&lt;definitionName&gt;/definition-end-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
+</li>
+<li>
+<p>DEFINITION_AFTER : <code>&lt;definitionName&gt;/definition-after-*.<a href="#extension_import_files_markup">&lt;markup.ext&gt;</a></code></p>
 </li>
 </ul>
 </div>
@@ -3029,7 +3041,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-04-14 14:41:10 UTC
+Last updated 2016-04-14 14:47:51 UTC
 </div>
 </div>
 </body>
