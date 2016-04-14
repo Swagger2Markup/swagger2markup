@@ -119,75 +119,10 @@ include::../../test/java/io/github/swagger2markup/builder/MySwaggerModelExtensio
 1. You can change any Swagger model property
 2. You could even remove elements from the Swagger model
 
-=== Provided Extensions
+[[extension_commons_content_markup]]
+=== Content markup language
 
-Swagger2Markup provides some extensions which can be used out-of-the-box. You just have to add the extension to your classpath.
-
-[options="header"]
-.Swagger2Markup extensions
-|====
-| Name | Description
-| <<Dynamic file import extension>> | Allows to dynamically import Markup from files.
-| <<Spring RestDocs extension>> | Allows to import Curl, HTTP request and response snippets from https://github.com/spring-projects/spring-restdocs[Spring Rest Docs].
-| <<Schema file import extension>> | Allows to import JSON or XML Schema files.
-|====
-
-==== Dynamic file import extension
-
-===== Usage guide
-
-[source,groovy, subs="attributes"]
-----
-repositories {
-    jCenter()
-}
-
-compile "io.github.swagger2markup:swagger2markup-import-files-ext:{project-version}"
-----
-
-The extension searches for markup files in configurable paths to append the markup to the documents at supported positions.
-
-The markup files must conform to a naming convention to be found. The files must start with the position where the document should be extended and end with the markup file extension (e.g `adoc` or `md`).
-
-See documentation of <<Extensions points>>.
-
-Here the list of all document naming conventions, just replace `*` with an arbitrary, meaningful, identifier.
-
-IMPORTANT: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
-
-All documents, relatively to each extension contentPath :
-
-* `document-before-*.<markup.ext>`
-* `document-begin-*.<markup.ext>`
-* `document-end-*.<markup.ext>`
-* `document-after-*.<markup.ext>`
-
-Paths document, relatively to `swagger2markup.extensions.dynamicPaths.contentPath` :
-
-* `<operationId>/operation-begin-*.<markup.ext>`
-* `<operationId>/operation-end-*.<markup.ext>`
-
-IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. Otherwise, the value `normalized(operation.summary + " " + lowerCase(operation.HTTPmethod))` will be used. *It is highly recommended to set operationId for operations because it's more stable* : see <<swagger_operationId,Advanced usage - Swagger operationId>>. In all cases, `<operationId>` is case-sensitive.
-
-Definitions and Security document, relatively to `swagger2markup.extensions.dynamicDefinitions.contentPath` :
-
-* `<definitionName>/definition-begin-*.<markup.ext>`
-* `<definitionName>/definition-end-*.<markup.ext>`
-
-IMPORTANT: `<definitionName>` is case-sensitive
-
-.Example of provided content files for petstore Swagger sample
-====
-....
-document-before-intro.adoc
-updatePet/operation-begin-description.adoc
-updatePet/operation-end-example1.adoc
-updatePet/operation-end-example2.adoc
-Pet/definition-begin-description.adoc
-....
-====
-
-===== Content markup language
+Most content extensions supports to provide content in any markup language which will be *converted, if needed, to configured Swagger2Markup converter markup language* at import.
 
 The content files markup language can be any https://github.com/Swagger2Markup/markup-document-builder[markup-document-builder] supported language : 
 
@@ -197,126 +132,28 @@ The content files markup language can be any https://github.com/Swagger2Markup/m
 
 * CONFLUENCE_MARKUP : Confluence Wiki markup. Mandatory content file extension : `txt`
 
-By default, the markup language is set to *ASCIIDOC*, whatever the file extension. Set extension <<dynamic_file_extension_configuration,Configuration>> to change content markup language. 
-The content file will be *converted, if needed, to main Swagger2Markup converter markup language* at import.
-
 [IMPORTANT]
 ====
-Currently supported conversion are :           
+Currently supported conversions are :
 
 * Markdown -> AsciiDoc
 ====
 
-[[dynamic_file_extension_configuration]]
-===== Configuration
+=== Provided Extensions
 
-The extension adds the following properties to Swagger2Markup which must be configured:
-
-[options="header"]
-.Extension properties
-|====
-| Name | Description | Default | Example
-| `swagger2markup.extensions.dynamicOverview.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/overview`
-| `swagger2markup.extensions.dynamicOverview.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
-| `swagger2markup.extensions.dynamicDefinitions.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/definitions` 
-| `swagger2markup.extensions.dynamicDefinitions.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
-| `swagger2markup.extensions.dynamicPaths.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/paths` 
-| `swagger2markup.extensions.dynamicPaths.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
-| `swagger2markup.extensions.dynamicSecurity.contentPath`  | TThe path to the files which should be imported | - | `src/test/resources/docs/asciidoc/security` 
-| `swagger2markup.extensions.dynamicSecurity.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
-|====
-
-==== Spring RestDocs extension
-
-Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated Markup documents. See spring-restdocs how to configure it. 
-
-===== Usage guide
-
-[source,groovy, subs="attributes"]
-----
-repositories {
-    jCenter()
-}
-
-compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:{project-version}"
-----
-
-The extension searches for https://github.com/spring-projects/spring-restdocs[Spring RestDocs] snippet files in a configurable path to append the snippets at the end of a path operation section. The files must conform to the naming convention: 
-
-* `http-request.<markup.ext>`
-* `http-response.<markup.ext>`
-* `curl-request.<markup.ext>`
-
-The files must be stored in a folder which matches the Swagger operationId.
-
-Swagger Example:
-
-[source]
-----
-paths:
-  /pets:
-    post:
-      summary: Add a new pet to the store
-      operationId: addPet
-      ...
-----
-
-The following Unit Test uses Spring RestDocs to tests the `/pets` endoint and writes the example files into the ``build/snippets`` folder. Have a look at the <<Spring Boot and Springfox>> chapter for a full example using https://github.com/spring-projects/spring-boot[Spring Boot], https://github.com/springfox/springfox[Springfox] and Spring RestDocs.
-
-[source,java]
-----
-@Rule
-public final RestDocumentation restDocumentation = new RestDocumentation("build/snippets");
-
-@Test
-public void addAPetToTheStore() throws Exception {
-  this.mockMvc.perform(post("/pets/").content(createPet())
-    .contentType(MediaType.APPLICATION_JSON))
-    .andDo(document("addPet", preprocessResponse(prettyPrint())))
-    .andExpect(status().isOk());
-}
-----
-
-Example: `build/snippets/addPet/http-request.adoc`.
-
-===== Configuration
-
-The extension adds the following properties to Swagger2Markup which must be configured:
+Swagger2Markup provides some extensions which can be used out-of-the-box. You just have to add the extension to your classpath.
 
 [options="header"]
-.Extension properties
+.Swagger2Markup extensions
 |====
-| Name | Description | Example
-| `swagger2markup.extensions.springRestDocs.snippetBaseUri`  | The path to the Spring RestDocs snippets | `src/test/resources/docs/asciidoc/paths` 
-|====
-
-==== Schema file import extension
-
-===== Usage guide
-
-[source,groovy, subs="attributes"]
-----
-repositories {
-    jCenter()
-}
-
-compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:{project-version}"
-----
-
-The extension searches for Schema files in a configurable path to append the Schema file content at the end of a definition section. The Schema files must conform to a naming convention to be found. The files must be called `schema.xsd` or `schema.json` and must be stored in a folder which matches the name of a definition. 
-
-Example: `/schemas/Pet/schema.json`.
-
-
-===== Configuration
-
-The extension adds the following properties to Swagger2Markup which must be configured:
-
-[options="header"]
-.Extension properties
-|====
-| Name | Description | Example
-| `swagger2markup.extensions.schema.schemaBaseUri`  | The path to the schema files | `src/test/resources/docs/asciidoc/schemas` 
+| Name | Description
+| <<extension_import_files,Dynamic file import extension>> | Allows to dynamically import Markup from files.
+| <<extension_spring_restdocs,Spring RestDocs extension>> | Allows to import Curl, HTTP request and response snippets from https://github.com/spring-projects/spring-restdocs[Spring Rest Docs].
+| <<extension_import_schemas,Schema file import extension>> | Allows to import JSON or XML Schema files.
 |====
 
+include::extensions/import_files.adoc[leveloffset=+2]
 
+include::extensions/spring_restdocs.adoc[leveloffset=+2]
+
+include::extensions/import_schemas.adoc[leveloffset=+2]

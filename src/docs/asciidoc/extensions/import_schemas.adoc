@@ -1,0 +1,29 @@
+[[extension_import_schemas]]
+== Schema file import extension
+
+=== Usage guide
+
+[source,groovy, subs="attributes"]
+----
+repositories {
+    jCenter()
+}
+
+compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:{project-version}"
+----
+
+The extension searches for Schema files in a configurable path to append the Schema file content at the end of a definition section. The Schema files must conform to a naming convention to be found. The files must be called `schema.xsd` or `schema.json` and must be stored in a folder which matches the name of a definition. 
+
+Example: `/schemas/Pet/schema.json`.
+
+
+=== Configuration
+
+The extension adds the following properties to Swagger2Markup which must be configured:
+
+[options="header"]
+.Extension properties
+|====
+| Name | Description | Example
+| `swagger2markup.extensions.schema.schemaBaseUri`  | The path to the schema files | `src/test/resources/docs/asciidoc/schemas` 
+|====
