@@ -1,0 +1,74 @@
+[[extension_spring_restdocs]]
+== Spring RestDocs extension
+
+Swagger2Markup can be used together with https://github.com/spring-projects/spring-restdocs[spring-restdocs]. Swagger2Markup can include the generated CURL request, HTTP request and HTTP response example snippets from spring-restdocs into the generated Markup documents. See spring-restdocs how to configure it. 
+
+=== Usage guide
+
+[source,groovy,subs="attributes"]
+----
+repositories {
+    jCenter()
+}
+
+compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:{project-version}"
+----
+
+The extension searches for https://github.com/spring-projects/spring-restdocs[Spring RestDocs] snippet files in a configurable path to append the snippets at the end of a path operation section. By default the following snippets are searched : 
+
+* `<<swagger_operationId,<operationId> >>/http-request.<<extension_spring_restdocs_markup,<markup.ext> >>`
+* `<<swagger_operationId,<operationId> >>/http-response.<<extension_spring_restdocs_markup,<markup.ext> >>`
+* `<<swagger_operationId,<operationId> >>/curl-request.<<extension_spring_restdocs_markup,<markup.ext> >>`
+
+IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. *It is highly recommended to set operationId for operations* : see <<swagger_operationId,Swagger operationId>>. In all cases, `<operationId>` is case-sensitive.
+
+Swagger Example:
+
+[source,yaml]
+----
+paths:
+  /pets:
+    post:
+      summary: Add a new pet to the store
+      operationId: addPet
+      ...
+----
+
+The following Unit Test uses Spring RestDocs to tests the `/pets` endoint and writes the example files into the ``build/snippets`` folder. Have a look at the <<Spring Boot and Springfox>> chapter for a full example using https://github.com/spring-projects/spring-boot[Spring Boot], https://github.com/springfox/springfox[Springfox] and Spring RestDocs.
+
+[source,java]
+----
+@Rule
+public final RestDocumentation restDocumentation = new RestDocumentation("build/snippets");
+
+@Test
+public void addAPetToTheStore() throws Exception {
+  this.mockMvc.perform(post("/pets/").content(createPet())
+    .contentType(MediaType.APPLICATION_JSON))
+    .andDo(document("addPet", preprocessResponse(prettyPrint())))
+    .andExpect(status().isOk());
+}
+----
+
+Example: `build/snippets/addPet/http-request.adoc`.
+
+[[extension_spring_restdocs_markup]]
+=== Content markup language
+
+See <<extension_commons_content_markup,Extensions content markup language>>
+
+By default, the markup language is set to *ASCIIDOC*. Set extension <<extension_spring_restdocs_configuration,Configuration>> to change content markup language. 
+
+[[extension_spring_restdocs_configuration]]
+=== Configuration
+
+The extension adds the following properties to Swagger2Markup which must be configured:
+
+[options="header"]
+.Extension properties
+|====
+| Name | Description | Default | Example
+| `swagger2markup.extensions.springRestDocs.snippetBaseUri` | The path to the Spring RestDocs snippets | - | `src/test/resources/docs/asciidoc/paths` 
+| `swagger2markup.extensions.springRestDocs.markupLanguage` | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.springRestDocs.defaultSnippets` | Boolean value. Set to false to disable default snippet files  | `true` | `false`
+|====

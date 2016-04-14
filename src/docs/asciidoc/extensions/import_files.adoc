@@ -1,0 +1,81 @@
+[[extension_import_files]]
+== Dynamic file import extension
+
+=== Usage guide
+
+[source,groovy, subs="attributes"]
+----
+repositories {
+    jCenter()
+}
+
+compile "io.github.swagger2markup:swagger2markup-import-files-ext:{project-version}"
+----
+
+The extension searches for markup files in configurable paths to append the markup to the documents at supported positions.
+
+The markup files must conform to a naming convention to be found. The files must start with the position where the document should be extended and end with the markup file extension (e.g `adoc` or `md`).
+
+See documentation of <<Extensions points>>.
+
+Here the list of all document naming conventions for each position. You have to replace `*` with an arbitrary, meaningful, identifier.
+
+IMPORTANT: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
+
+All extensions, relatively to each extension contentPath :
+
+* DOCUMENT_BEFORE : `document-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* DOCUMENT_BEGIN : `document-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* DOCUMENT_END : `document-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* DOCUMENT_AFTER : `document-after-*.<<extension_import_files_markup,<markup.ext> >>`
+
+Paths extensions, relatively to each extension contentPath :
+
+* OPERATION_BEGIN : `<<swagger_operationId,<operationId> >>/operation-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_END : `<<swagger_operationId,<operationId> >>/operation-end-*.<<extension_import_files_markup,<markup.ext> >>`
+
+IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. *It is highly recommended to set operationId for operations* : see <<swagger_operationId,Swagger operationId>>. In all cases, `<operationId>` is case-sensitive.
+
+Definitions and Security extensions, relatively to each extension contentPath :
+
+* DEFINITION_BEGIN : `<definitionName>/definition-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* DEFINITION_END : `<definitionName>/definition-end-*.<<extension_import_files_markup,<markup.ext> >>`
+
+IMPORTANT: `<definitionName>` is case-sensitive
+
+.Example of provided content files for petstore Swagger sample
+====
+....
+document-before-intro.adoc
+updatePet/operation-begin-description.adoc
+updatePet/operation-end-example1.adoc
+updatePet/operation-end-example2.adoc
+Pet/definition-begin-description.adoc
+....
+====
+
+[[extension_import_files_markup]]
+=== Content markup language
+
+See <<extension_commons_content_markup,Extensions content markup language>>
+
+By default, the markup language is set to *ASCIIDOC*. Set extension <<extension_import_files_configuration,Configuration>> to change content markup language. 
+
+[[extension_import_files_configuration]]
+=== Configuration
+
+The extension adds the following properties to Swagger2Markup which must be configured:
+
+[options="header"]
+.Extension properties
+|====
+| Name | Description | Default | Example
+| `swagger2markup.extensions.dynamicOverview.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/overview`
+| `swagger2markup.extensions.dynamicOverview.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.dynamicDefinitions.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/definitions` 
+| `swagger2markup.extensions.dynamicDefinitions.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.dynamicPaths.contentPath`  | The path to the files which should be imported | - | `src/test/resources/docs/asciidoc/paths` 
+| `swagger2markup.extensions.dynamicPaths.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+| `swagger2markup.extensions.dynamicSecurity.contentPath`  | TThe path to the files which should be imported | - | `src/test/resources/docs/asciidoc/security` 
+| `swagger2markup.extensions.dynamicSecurity.markupLanguage`  | The markup language of the content files | `ASCIIDOC` | `MARKDOWN`
+|====
