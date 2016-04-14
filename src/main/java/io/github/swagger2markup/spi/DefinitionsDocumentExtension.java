@@ -38,12 +38,12 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
     public static class Context extends ContentContext {
         private Position position;
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
         private String definitionName;
 
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
         private Model model;
 

@@ -103,7 +103,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
 
     private void buildSecurityScheme(SecuritySchemeDefinition securityScheme) {
         String type = securityScheme.getType();
-        MarkupDocBuilder paragraph = markupDocBuilder.copy(false);
+        MarkupDocBuilder paragraph = copyMarkupDocBuilder();
         
         paragraph.italicText(TYPE).textLine(COLON + type);
         

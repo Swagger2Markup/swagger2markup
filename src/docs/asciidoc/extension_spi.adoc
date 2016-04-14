@@ -58,10 +58,10 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 ==== OverviewDocumentExtension
 
-The OverviewDocumentExtension allows to extend the overview document at four positions:
+The OverviewDocumentExtension allows to extend the overview document at positions :
 
-* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
-* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
+* DOCUMENT_BEFORE: Before the document title (title level offset = 0)
+* DOCUMENT_BEGIN: After the document title (title level offset = 1)
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
@@ -69,25 +69,49 @@ NOTE: Extension content titles must always start from level *1*. The title level
 
 ==== PathsDocumentExtension
 
-The PathsDocumentExtension allows to extend the paths document at six positions: 
+The PathsDocumentExtension allows to extend the paths document at positions : 
 
-* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
-* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
-* OPERATION_BEGIN: At the beginning of a path operation section (title level offset = 2)
-* OPERATION_END: At the end of a path operation section (title level offset = 2)
+* DOCUMENT_BEFORE: Before the document title (title level offset = 0)
+* DOCUMENT_BEGIN: After the document title (title level offset = 1)
+* OPERATION_BEFORE: Before the operation title (title level offset = 1)
+* OPERATION_BEGIN: After the operation title (title level offset = 2)
+* OPERATION_END: At the end of the operation (title level offset = 2)
+* OPERATION_AFTER: At the very end of the operation (title level offset = 1)
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
+
+Moreover, the PathsDocumentExtension allows to extend operation sections at positions :
+  
+* OPERATION_DESCRIPTION_BEFORE: Before the description section title (title level offset = 2)
+* OPERATION_DESCRIPTION_BEGIN: After the description section title (title level offset = 3)
+* OPERATION_DESCRIPTION_END: At the end of the description section (title level offset = 3)
+* OPERATION_DESCRIPTION_AFTER: At the very end of the description section (title level offset = 2)
+
+* OPERATION_PARAMETERS_BEFORE: Before the parameters section title (title level offset = 2)
+* OPERATION_PARAMETERS_BEGIN: After the parameters section title (title level offset = 3)
+* OPERATION_PARAMETERS_END: At the end of the parameters section (title level offset = 3)
+* OPERATION_PARAMETERS_AFTER: At the very end of the parameters section (title level offset = 2)
+
+* OPERATION_RESPONSES_BEFORE: Before the responses section title (title level offset = 2)
+* OPERATION_RESPONSES_BEGIN: After the responses section title (title level offset = 3)
+* OPERATION_RESPONSES_END: At the end of the responses section (title level offset = 3)
+* OPERATION_RESPONSES_AFTER: At the very end of the responses section (title level offset = 2)
+
+* OPERATION_SECURITY_BEFORE: Before the security section title (title level offset = 2)
+* OPERATION_SECURITY_BEGIN: After the security section title (title level offset = 3)
+* OPERATION_SECURITY_END: At the end of the security section (title level offset = 3)
+* OPERATION_SECURITY_AFTER: At the very end of the security section (title level offset = 2)
 
 NOTE: Extension content titles must always start from level *1*. The title level will be adapted depending on position.
 
 ==== SecurityDocumentExtension
 
-The SecurityDocumentExtension allows to extend the security document at six positions: 
+The SecurityDocumentExtension allows to extend the security document at positions : 
 
-* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
-* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
-* DEFINITION_BEGIN: At the beginning of a security scheme definition section (title level offset = 2)
-* DEFINITION_END: At the end of a security scheme definition section (title level offset = 2)
+* DOCUMENT_BEFORE: Before the document title (title level offset = 0)
+* DOCUMENT_BEGIN: After the document title (title level offset = 1)
+* DEFINITION_BEGIN: After the definition security scheme title (title level offset = 2)
+* DEFINITION_END: At the end of the definition security scheme (title level offset = 2)
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 
@@ -95,12 +119,12 @@ NOTE: Extension content titles must always start from level *1*. The title level
 
 ==== DefinitionsDocumentExtension
 
-The DefinitionsDocumentExtension allows to extend the definitions document at six positions: 
+The DefinitionsDocumentExtension allows to extend the definitions document at positions : 
 
-* DOCUMENT_BEFORE: Before the section title (title level offset = 0)
-* DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)
-* DEFINITION_BEGIN: At the beginning of a model definition section (title level offset = 2)
-* DEFINITION_END: At the end of a model definition section (title level offset = 2)
+* DOCUMENT_BEFORE: Before the document title (title level offset = 0)
+* DOCUMENT_BEGIN: After the document title (title level offset = 1)
+* DEFINITION_BEGIN: After the definition title (title level offset = 2)
+* DEFINITION_END: At the end of the definition (title level offset = 2)
 * DOCUMENT_END: At the end of the document (title level offset = 1)
 * DOCUMENT_AFTER: At the very end of the document (title level offset = 0)
 

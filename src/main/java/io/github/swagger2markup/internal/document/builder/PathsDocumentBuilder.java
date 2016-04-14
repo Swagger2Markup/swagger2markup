@@ -81,10 +81,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private final String UNKNOWN;
 
     private static final String PATHS_ANCHOR = "paths";
-    private static final String DESCRIPTION_FILE_NAME = "description";
 
 
-    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry,  java.nio.file.Path outputPath) {
+    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, java.nio.file.Path outputPath) {
         super(globalContext, extensionRegistry, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
@@ -192,7 +191,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         Set<PathOperation> pathOperations;
         if (config.getOperationOrdering() != null) {
             pathOperations = new TreeSet<>(config.getOperationOrdering());
-        }else{
+        } else {
             pathOperations = new LinkedHashSet<>();
         }
         for (Map.Entry<String, Path> path : paths.entrySet()) {
@@ -241,10 +240,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildOperation(PathOperation operation) {
         if (config.isSeparatedOperationsEnabled()) {
-            MarkupDocBuilder pathDocBuilder = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder();
             buildOperation(operation, pathDocBuilder);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
-             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
+            pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced : '{}'", operationFile);
             }
@@ -268,9 +267,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
-            applyPathsDocumentExtension(new Context(Position.OPERATION_BEGIN, docBuilder, operation));
+            applyPathsDocumentExtension(new Context(Position.OPERATION_BEFORE, docBuilder, operation));
             buildDeprecatedSection(operation, docBuilder);
             buildOperationTitle(operation, docBuilder);
+            applyPathsDocumentExtension(new Context(Position.OPERATION_BEGIN, docBuilder, operation));
             buildDescriptionSection(operation, docBuilder);
             inlineDefinitions(buildParametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
             inlineDefinitions(buildBodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), config.getInlineSchemaDepthLevel(), docBuilder);
@@ -281,6 +281,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             buildSecuritySchemeSection(operation, docBuilder);
             buildExamplesSection(operation, docBuilder);
             applyPathsDocumentExtension(new Context(Position.OPERATION_END, docBuilder, operation));
+            applyPathsDocumentExtension(new Context(Position.OPERATION_AFTER, docBuilder, operation));
         }
     }
 
@@ -295,11 +296,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
             document = null;
         else if (config.isSeparatedOperationsEnabled())
-            document =  defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
+            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
         else
             document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
 
-        buildOperationTitle(docBuilder.copy(false).crossReference(document, operation.getId(), operation.getTitle()).toString(), "ref-" + operation.getId(), docBuilder);
+        buildOperationTitle(copyMarkupDocBuilder().crossReference(document, operation.getId(), operation.getTitle()).toString(), "ref-" + operation.getId(), docBuilder);
     }
 
     /**
@@ -374,25 +375,23 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
     /**
      * Adds a operation description to the document.
-     * If hand-written descriptions exist, it tries to load the description from a file.
-     * If the file cannot be read, the description of the operation is returned.
-     * Operation folder search order :
-     * - normalizeOperationFileName(operation.operationId)
-     * - then, normalizeOperationFileName(operation.method + " " + operation.path)
-     * - then, normalizeOperationFileName(operation.summary)
      *
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
      */
     private void buildDescriptionSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        operationDescription(operation.getOperation().getDescription(), docBuilder);
-    }
+        MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder();
+        applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_BEGIN, descriptionBuilder, operation));
+        buildDescriptionParagraph(operation.getOperation().getDescription(), descriptionBuilder);
+        applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_END, descriptionBuilder, operation));
+        String descriptionContent = descriptionBuilder.toString();
 
-    private void operationDescription(String description, MarkupDocBuilder docBuilder) {
-        if (isNotBlank(description)) {
+        applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_BEFORE, docBuilder, operation));
+        if (isNotBlank(descriptionContent)) {
             buildSectionTitle(DESCRIPTION, docBuilder);
-            buildDescriptionParagraph(description, docBuilder);
+            docBuilder.text(descriptionContent);
         }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_AFTER, docBuilder, operation));
     }
 
     /**
@@ -404,24 +403,26 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private boolean filterParameter(Parameter parameter) {
         return (!config.isFlatBodyEnabled() || !StringUtils.equals(parameter.getIn(), "body"));
     }
-    
+
     private List<ObjectType> buildParametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (config.getParameterOrdering() != null)
             Collections.sort(parameters, config.getParameterOrdering());
         List<ObjectType> inlineDefinitions = new ArrayList<>();
 
-        boolean displayParameters = false;
+        boolean hasParameters = false;
         if (CollectionUtils.isNotEmpty(parameters)) {
             for (Parameter p : parameters) {
                 if (filterParameter(p)) {
-                    displayParameters = true;
+                    hasParameters = true;
                     break;
                 }
             }
         }
 
-        if (displayParameters) {
+        MarkupDocBuilder parametersBuilder = copyMarkupDocBuilder();
+        applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
+        if (hasParameters) {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
@@ -431,22 +432,22 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
             for (Parameter parameter : parameters) {
                 if (filterParameter(parameter)) {
-                    Type type = ParameterUtils.getType(parameter,  globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
+                    Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
 
                     if (config.getInlineSchemaDepthLevel() > 0) {
                         type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                     }
                     String parameterType = WordUtils.capitalize(parameter.getIn());
 
-                    MarkupDocBuilder parameterNameContent = markupDocBuilder.copy(false);
+                    MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder();
                     parameterNameContent.boldTextLine(parameter.getName(), true);
                     if (parameter.getRequired())
                         parameterNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
                     else
                         parameterNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
-                    
+
                     Object defaultValue = ParameterUtils.getDefaultValue(parameter);
-                    
+
                     List<String> content = Arrays.asList(
                             boldText(parameterType),
                             parameterNameContent.toString(),
@@ -456,9 +457,17 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     cells.add(content);
                 }
             }
-            buildSectionTitle(PARAMETERS, docBuilder);
-            docBuilder.tableWithColumnSpecs(cols, cells);
+            parametersBuilder.tableWithColumnSpecs(cols, cells);
         }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_END, parametersBuilder, operation));
+        String parametersContent = parametersBuilder.toString();
+
+        applyPathsDocumentExtension(new Context(Position.OPERATION_PARAMETERS_BEFORE, docBuilder, operation));
+        if (isNotBlank(parametersContent)) {
+            buildSectionTitle(PARAMETERS, docBuilder);
+            docBuilder.text(parametersContent);
+        }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_PARAMETERS_AFTER, docBuilder, operation));
 
         return inlineDefinitions;
     }
@@ -491,10 +500,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                             buildDescriptionParagraph(parameter.getDescription(), docBuilder);
                         }
 
-                        MarkupDocBuilder typeInfos = docBuilder.copy(false);
+                        MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
                         typeInfos.italicText(NAME_COLUMN).textLine(COLON + parameter.getName());
                         typeInfos.italicText(FLAGS_COLUMN).textLine(COLON + (BooleanUtils.isTrue(parameter.getRequired()) ? FLAGS_REQUIRED.toLowerCase() : FLAGS_OPTIONAL.toLowerCase()));
-                        
+
                         if (!(type instanceof ObjectType)) {
                             typeInfos.italicText(TYPE_COLUMN).textLine(COLON + type.displaySchema(docBuilder));
                         }
@@ -572,7 +581,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             }
         }
     }
-    
+
     /**
      * Builds the security section of a Swagger Operation.
      *
@@ -581,8 +590,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildSecuritySchemeSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
+
+        MarkupDocBuilder securityBuilder = copyMarkupDocBuilder();
+        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
         if (CollectionUtils.isNotEmpty(securitySchemes)) {
-            buildSectionTitle(SECURITY, docBuilder);
+
             Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
@@ -596,18 +608,28 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
-                    
-                    List<String> content = Arrays.asList(boldText(type), boldText(docBuilder.copy(false).crossReference(securityDocumentResolver(), securityKey, securityKey).toString()),
+
+                    List<String> content = Arrays.asList(boldText(type), boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver(), securityKey, securityKey).toString()),
                             Joiner.on(",").join(securityEntry.getValue()));
                     cells.add(content);
                 }
             }
-            docBuilder.tableWithColumnSpecs(cols, cells);
+            securityBuilder.tableWithColumnSpecs(cols, cells);
         }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_END, securityBuilder, operation));
+        String securityContent = securityBuilder.toString();
+
+        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEFORE, docBuilder, operation));
+        if (isNotBlank(securityContent)) {
+            buildSectionTitle(SECURITY, docBuilder);
+            docBuilder.text(securityContent);
+        }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_AFTER, docBuilder, operation));
     }
 
     /**
      * Resolve Security document for use in cross-references.
+     *
      * @return document or null if cross-reference is not inter-document
      */
     private String securityDocumentResolver() {
@@ -616,25 +638,25 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         else
             return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());
     }
-    
+
     private List<ObjectType> buildResponsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Map<String, Response> responses = operation.getOperation().getResponses();
         List<ObjectType> inlineDefinitions = new ArrayList<>();
 
+        MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder();
+        applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
-            buildSectionTitle(RESPONSES, docBuilder);
-
             List<MarkupTableColumn> responseCols = Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
                     new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(15).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^15"),
                     new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
-            
+
             List<List<String>> cells = new ArrayList<>();
-            
+
             Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
             for (String responseName : responseNames) {
                 Response response = responses.get(responseName);
-                
+
                 String schemaContent = NO_CONTENT;
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
@@ -646,7 +668,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     schemaContent = type.displaySchema(markupDocBuilder);
                 }
 
-                MarkupDocBuilder descriptionBuilder = docBuilder.copy(false);
+                MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder();
 
                 descriptionBuilder.text(defaultString(swaggerMarkupDescription(response.getDescription())));
 
@@ -669,7 +691,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                             if (isNotBlank(headerDescription) && !headerDescription.endsWith("."))
                                 headerDescription += ".";
-                            
+
                             descriptionBuilder.text(headerDescription);
 
                             if (defaultValue != null) {
@@ -678,15 +700,25 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         }
                     }
                 }
-                
+
                 cells.add(Arrays.asList(boldText(responseName), descriptionBuilder.toString(), schemaContent));
             }
 
-            docBuilder.tableWithColumnSpecs(responseCols, cells);             
+            responsesBuilder.tableWithColumnSpecs(responseCols, cells);
         }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_END, responsesBuilder, operation));
+        String responsesContent = responsesBuilder.toString();
+
+        applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_BEFORE, docBuilder, operation));
+        if (isNotBlank(responsesContent)) {
+            buildSectionTitle(RESPONSES, docBuilder);
+            docBuilder.text(responsesContent);
+        }
+        applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_AFTER, docBuilder, operation));
+
         return inlineDefinitions;
     }
-    
+
     /**
      * Builds the title of an inline schema.
      * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.

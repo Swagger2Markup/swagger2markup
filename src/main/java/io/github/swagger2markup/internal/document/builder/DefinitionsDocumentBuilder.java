@@ -57,7 +57,6 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private final Map<ObjectTypePolymorphism.Nature, String> POLYMORPHISM_NATURE;
     private final String TYPE_COLUMN;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
-    private static final String DESCRIPTION_FILE_NAME = "description";
 
     public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         super(context, extensionRegistry, outputPath);
@@ -158,7 +157,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildDefinition(String definitionName, Model model) {
 
         if (config.isSeparatedDefinitionsEnabled()) {
-            MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder();
             buildDefinition(definitionName, model, defDocBuilder);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
@@ -205,7 +204,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
-        buildDefinitionTitle(docBuilder.copy(false).crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+        buildDefinitionTitle(copyMarkupDocBuilder().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**
@@ -238,7 +237,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         
         if (modelType instanceof ObjectType) {
             ObjectType objectType = (ObjectType) modelType;
-            MarkupDocBuilder typeInfos = docBuilder.copy(false);
+            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
             switch (objectType.getPolymorphism().getNature()) {
                 case COMPOSITION:
                     typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
@@ -262,7 +261,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
 
             inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
-            MarkupDocBuilder typeInfos = docBuilder.copy(false);
+            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
             typeInfos.italicText(TYPE_COLUMN).textLine(COLON + modelType.displaySchema(docBuilder));
 
             docBuilder.paragraph(typeInfos.toString());

@@ -186,7 +186,7 @@ public abstract class MarkupDocumentBuilder {
 
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
 
-                MarkupDocBuilder propertyNameContent = markupDocBuilder.copy(false);
+                MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
                 propertyNameContent.boldTextLine(propertyName, true);
                 if (BooleanUtils.isTrue(property.getRequired()))
                     propertyNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
@@ -197,7 +197,7 @@ public abstract class MarkupDocumentBuilder {
                     propertyNameContent.italicText(FLAGS_READ_ONLY.toLowerCase());
                 }
                 
-                MarkupDocBuilder descriptionContent = markupDocBuilder.copy(false);
+                MarkupDocBuilder descriptionContent = copyMarkupDocBuilder();
                 String description = defaultString(swaggerMarkupDescription(property.getDescription()));
                 if (isNotBlank(description))
                     descriptionContent.text(description);
@@ -224,18 +224,22 @@ public abstract class MarkupDocumentBuilder {
         return inlineDefinitions;
     }
 
+    protected MarkupDocBuilder copyMarkupDocBuilder() {
+        return markupDocBuilder.copy(false);
+    }
+
     protected String boldText(String text) {
-        return this.markupDocBuilder.copy(false).boldText(text).toString();
+        return copyMarkupDocBuilder().boldText(text).toString();
     }
 
     protected String italicText(String text) {
-        return this.markupDocBuilder.copy(false).italicText(text).toString();
+        return copyMarkupDocBuilder().italicText(text).toString();
     }
 
     protected String literalText(String text) {
-        return this.markupDocBuilder.copy(false).literalText(text).toString();
+        return copyMarkupDocBuilder().literalText(text).toString();
     }
-
+    
     /**
      * Returns converted markup text from Swagger.
      *
@@ -245,7 +249,7 @@ public abstract class MarkupDocumentBuilder {
     protected String swaggerMarkupDescription(String markupText) {
         if (markupText == null)
             return null;
-        return markupDocBuilder.copy(false).importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
+        return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
     }
 
     protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {
