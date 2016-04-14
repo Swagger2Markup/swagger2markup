@@ -1669,15 +1669,15 @@ Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(localSwaggerFil
 <div class="sect3">
 <h4 id="_overviewdocumentextension"><a class="anchor" href="#_overviewdocumentextension"></a>5.3.1. OverviewDocumentExtension</h4>
 <div class="paragraph">
-<p>The OverviewDocumentExtension allows to extend the overview document at four positions:</p>
+<p>The OverviewDocumentExtension allows to extend the overview document at positions :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
+<p>DOCUMENT_BEFORE: Before the document title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
+<p>DOCUMENT_BEGIN: After the document title (title level offset = 1)</p>
 </li>
 <li>
 <p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
@@ -1703,27 +1703,88 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <div class="sect3">
 <h4 id="_pathsdocumentextension"><a class="anchor" href="#_pathsdocumentextension"></a>5.3.2. PathsDocumentExtension</h4>
 <div class="paragraph">
-<p>The PathsDocumentExtension allows to extend the paths document at six positions:</p>
+<p>The PathsDocumentExtension allows to extend the paths document at positions :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
+<p>DOCUMENT_BEFORE: Before the document title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
+<p>DOCUMENT_BEGIN: After the document title (title level offset = 1)</p>
 </li>
 <li>
-<p>OPERATION_BEGIN: At the beginning of a path operation section (title level offset = 2)</p>
+<p>OPERATION_BEFORE: Before the operation title (title level offset = 1)</p>
 </li>
 <li>
-<p>OPERATION_END: At the end of a path operation section (title level offset = 2)</p>
+<p>OPERATION_BEGIN: After the operation title (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_END: At the end of the operation (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_AFTER: At the very end of the operation (title level offset = 1)</p>
 </li>
 <li>
 <p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
 </li>
 <li>
 <p>DOCUMENT_AFTER: At the very end of the document (title level offset = 0)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Moreover, the PathsDocumentExtension allows to extend operation sections at positions :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>OPERATION_DESCRIPTION_BEFORE: Before the description section title (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_DESCRIPTION_BEGIN: After the description section title (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_DESCRIPTION_END: At the end of the description section (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_DESCRIPTION_AFTER: At the very end of the description section (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_PARAMETERS_BEFORE: Before the parameters section title (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_PARAMETERS_BEGIN: After the parameters section title (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_PARAMETERS_END: At the end of the parameters section (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_PARAMETERS_AFTER: At the very end of the parameters section (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_RESPONSES_BEFORE: Before the responses section title (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_RESPONSES_BEGIN: After the responses section title (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_RESPONSES_END: At the end of the responses section (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_RESPONSES_AFTER: At the very end of the responses section (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_SECURITY_BEFORE: Before the security section title (title level offset = 2)</p>
+</li>
+<li>
+<p>OPERATION_SECURITY_BEGIN: After the security section title (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_SECURITY_END: At the end of the security section (title level offset = 3)</p>
+</li>
+<li>
+<p>OPERATION_SECURITY_AFTER: At the very end of the security section (title level offset = 2)</p>
 </li>
 </ul>
 </div>
@@ -1743,21 +1804,21 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <div class="sect3">
 <h4 id="_securitydocumentextension"><a class="anchor" href="#_securitydocumentextension"></a>5.3.3. SecurityDocumentExtension</h4>
 <div class="paragraph">
-<p>The SecurityDocumentExtension allows to extend the security document at six positions:</p>
+<p>The SecurityDocumentExtension allows to extend the security document at positions :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
+<p>DOCUMENT_BEFORE: Before the document title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
+<p>DOCUMENT_BEGIN: After the document title (title level offset = 1)</p>
 </li>
 <li>
-<p>DEFINITION_BEGIN: At the beginning of a security scheme definition section (title level offset = 2)</p>
+<p>DEFINITION_BEGIN: After the definition security scheme title (title level offset = 2)</p>
 </li>
 <li>
-<p>DEFINITION_END: At the end of a security scheme definition section (title level offset = 2)</p>
+<p>DEFINITION_END: At the end of the definition security scheme (title level offset = 2)</p>
 </li>
 <li>
 <p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
@@ -1783,21 +1844,21 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <div class="sect3">
 <h4 id="_definitionsdocumentextension"><a class="anchor" href="#_definitionsdocumentextension"></a>5.3.4. DefinitionsDocumentExtension</h4>
 <div class="paragraph">
-<p>The DefinitionsDocumentExtension allows to extend the definitions document at six positions:</p>
+<p>The DefinitionsDocumentExtension allows to extend the definitions document at positions :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>DOCUMENT_BEFORE: Before the section title (title level offset = 0)</p>
+<p>DOCUMENT_BEFORE: Before the document title (title level offset = 0)</p>
 </li>
 <li>
-<p>DOCUMENT_BEGIN: After the section title and before the description (title level offset = 1)</p>
+<p>DOCUMENT_BEGIN: After the document title (title level offset = 1)</p>
 </li>
 <li>
-<p>DEFINITION_BEGIN: At the beginning of a model definition section (title level offset = 2)</p>
+<p>DEFINITION_BEGIN: After the definition title (title level offset = 2)</p>
 </li>
 <li>
-<p>DEFINITION_END: At the end of a model definition section (title level offset = 2)</p>
+<p>DEFINITION_END: At the end of the definition (title level offset = 2)</p>
 </li>
 <li>
 <p>DOCUMENT_END: At the end of the document (title level offset = 1)</p>
@@ -2036,17 +2097,43 @@ You can provide multiple contents for the same position, just specify different 
 </tr>
 </table>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+It&#8217;s <strong>highly recommended</strong> to configure a different contentPath for each extension (dynamicOverview, dynamicDefinitions, etc&#8230;&#8203;) because content files for DOCUMENT_* positions have the same naming convention.
+</td>
+</tr>
+</table>
+</div>
 <div class="exampleblock">
 <div class="title">Example 3. Example of provided content files for petstore Swagger sample</div>
 <div class="content">
 <div class="literalblock">
 <div class="content">
-<pre>document-before-intro.adoc
-updatePet/operation-begin-description.adoc
-updatePet/operation-end-example1.adoc
-updatePet/operation-end-example2.adoc
-Pet/definition-begin-description.adoc</pre>
+<pre>overview/document-before-intro.adoc <i class="conum" data-value="1"></i><b>(1)</b>
+paths/document-before-intro.adoc <i class="conum" data-value="2"></i><b>(2)</b>
+paths/updatePet/operation-begin-description.adoc
+paths/updatePet/operation-end-example1.adoc
+paths/updatePet/operation-end-example2.adoc <i class="conum" data-value="3"></i><b>(3)</b>
+definitions/Pet/definition-begin-description.adoc</pre>
 </div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>"overview", "paths" and "definitions" are different configured contentPath for different extensions.</p>
+</li>
+<li>
+<p>the document name is the same but will be used only in Paths document because contentPath is different (cf 1.).</p>
+</li>
+<li>
+<p>both example1 and example2 content files will be added to "updatePet" operation. They&#8217;ll be applied consecutively, with their names sorted by natural order.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -2875,7 +2962,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-04-14 10:38:30 UTC
+Last updated 2016-04-14 13:33:51 UTC
 </div>
 </div>
 </body>
