@@ -1142,6 +1142,18 @@ The properties are considered in the following order:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.flatBodyEnabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optionally isolate the body parameter, if any, from other parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.anchorPrefix</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optionally prefix all anchors for uniqueness if you want to include generated documents into a global documentation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all spread">
@@ -1314,12 +1326,6 @@ The properties are considered in the following order:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
 <td class="tableblock halign-left valign-top"></td>
 </tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.anchorPrefix</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Optionally prefix all anchors for uniqueness</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any String</p></td>
-<td class="tableblock halign-left valign-top"></td>
-</tr>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all spread">
@@ -1340,16 +1346,10 @@ The properties are considered in the following order:</p>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.inlineSchemaDepthLevel</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies maximum depth level for inline object schema displaying</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Any Integer</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.flatBodyEnabled</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Optionally isolate the body parameter, if any, from other parameters</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.inlineSchemaEnabled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable inline object schema support</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
 </tr>
 </tbody>
 </table>
@@ -3041,7 +3041,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.0-SNAPSHOT<br>
-Last updated 2016-04-14 14:47:51 UTC
+Last updated 2016-04-14 15:52:55 UTC
 </div>
 </div>
 </body>
