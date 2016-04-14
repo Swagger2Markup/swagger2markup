@@ -6,12 +6,13 @@ before_install:
 after_success:
 - ./gradlew jacocoTestReport coveralls
 - ./gradlew artifactoryPublish -PbintrayUsername="${BINTRAY_USER}" -PbintrayApiKey="${BINTRAY_KEY}"
-- ./gradlew publishGhPages -PgithubUser="${GITHUB_USER}" -PgithubPassword="${GITHUB_PASSWORD}" --stacktrace
+- ./gradlew publishGhPages -PgithubUser="${GITHUB_USER}" -PgithubPassword="${GITHUB_PASSWORD}"
+  --stacktrace
 notifications:
   slack: swagger2markup:Zz5kz0SnvtG6aVvZUM8yMkER
 env:
   global:
   - secure: SPKolgUdjIa/uJ+7/B/GPFlsa8IZg7NuZdFA8zROTaqew/xu+oX7qVGImseeBpPIEPJb02ac6hr7Y3/zvv0GJxIPtIbyDzVh73ImQUhT1ttLYGJfITAWqAPFF7RNNMtuOl3S2DLZ5OMJddkcFp00pa9nyI82Gk47B8GsaGIntAI=
   - secure: nXXuHfvFACZwdiFM3Ta0x/f49N7cAgi0AMkgEnQrh/2xWlvQk2z2ySGJQLkhJ7Wy8LDY7Yt1b1GUt6DlP3PuFFMW/cT4iARewqiJRXZXxUQz8fpTDeTo1nmVmW/zzII6Qj3QHM3NRbR/xDOVSJiT30Hnq2hcCBQJWYsTICmzjRk=
-  - secure: VuiKdtqn4BYWl9M+k18iZlhawaJDpN7gluIIcGzCpmgmDHgvG++D+qkmMsEWXA6nSf9SXAHj+X/ZV2glh1KmVxkx1jaZGAHjKajqT5euFlyrv9GO5xRcEYYVdRimn/lbItGvRxXZaUSEha3F240V6gTXHBn/g6KsGbEN0yJvWK8=
-  - secure: Olj2J5cdXuaJqCHDZb3OzXLsEkJphAR27H2A/1zrXRr9x8wecpaWmqgqiHDZeRtaYn55ScxEjmyIdUYEOCat9TDzdS64dfSkZKSmF0G4irUzzaj1fV4wTWbXOC36W/brkdjy/KL30807U5SerVh9REacqCoepPohwNdLZFamdlo=
+  - secure: Ia/wJ572M2II76roFeGEVCzIiktG4v2j/reSn60fpk1gnoEPQEObL4j1dbVCgXBLz54YWcaQ3mICvOfBPPEl9IIV3Y6DDE2sBOmB3soznfdA/YVnJx0h0f1pfXu1dwqoiv1sgc1wewQuUWq+FV7xeDhFE3cnh9CXIexe9ykip8k=
+  - secure: GWfhYDsHRmTfOuEOIcHY8kT4jKBTbdhNLDQ/2amY06xenFblb4pEn6pgmn4IdK3ytjNovnZPTOOK8HqdEjhbfIGoQt6PZwuyANn4Df+zdqOC0+V+7DFG2QhEhbRCyEwPlDqTPjxlOMfAmvjFuY/NvQywoF3PYUyMfJwUV8ehmYk=
