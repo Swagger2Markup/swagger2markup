@@ -82,6 +82,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
         public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
             super(docBuilder);
             Validate.inclusiveBetween(Position.OPERATION_BEFORE, Position.OPERATION_SECURITY_AFTER, position);
+            Validate.notNull(operation);
             this.position = position;
             this.operation = operation;
         }

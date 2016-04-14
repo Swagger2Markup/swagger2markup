@@ -53,7 +53,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
          */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
-            Validate.isTrue(position != Position.DEFINITION_BEGIN && position != Position.DEFINITION_END, "You must provide a definitionName for this position");
+            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
             this.position = position;
         }
 
@@ -65,6 +65,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
          */
         public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
             super(docBuilder);
+            Validate.inclusiveBetween(Position.DEFINITION_BEGIN, Position.DEFINITION_END, position);
             Validate.notNull(definitionName);
             Validate.notNull(model);
             this.position = position;

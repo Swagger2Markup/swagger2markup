@@ -20,7 +20,7 @@ See documentation of <<Extensions points>>.
 
 Here the list of all document naming conventions for each position. You have to replace `*` with an arbitrary, meaningful, identifier.
 
-IMPORTANT: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
+NOTE: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
 
 All extensions, relatively to each extension contentPath :
 
@@ -56,14 +56,19 @@ Paths extensions, relatively to each extension contentPath :
 * OPERATION_SECURITY_END: `<<swagger_operationId,<operationId> >>/operation-security-end-*.<<extension_import_files_markup,<markup.ext> >>`
 * OPERATION_SECURITY_AFTER: `<<swagger_operationId,<operationId> >>/operation-security-after-*.<<extension_import_files_markup,<markup.ext> >>`
 
-IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. *It is highly recommended to set operationId for operations* : see <<swagger_operationId,Swagger operationId>>. In all cases, `<operationId>` is case-sensitive.
-
-Definitions and Security extensions, relatively to each extension contentPath :
+Definitions extensions, relatively to each extension contentPath :
 
 * DEFINITION_BEGIN : `<definitionName>/definition-begin-*.<<extension_import_files_markup,<markup.ext> >>`
 * DEFINITION_END : `<definitionName>/definition-end-*.<<extension_import_files_markup,<markup.ext> >>`
 
-IMPORTANT: `<definitionName>` is case-sensitive
+Security extensions, relatively to each extension contentPath :
+
+* SECURITY_SCHEME_BEFORE : `<securitySchemeName>/security-scheme-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* SECURITY_SCHEME_BEGIN : `<securitySchemeName>/security-scheme-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* SECURITY_SCHEME_END : `<securitySchemeName>/security-scheme-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* SECURITY_SCHEME_AFTER : `<securitySchemeName>/security-scheme-after-*.<<extension_import_files_markup,<markup.ext> >>`
+
+IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. *It is highly recommended to set operationId for operations* : see <<swagger_operationId,Swagger operationId>>. In all cases, all placeholder values are case-sensitive.
 
 NOTE: It's *highly recommended* to configure a different contentPath for each extension (dynamicOverview, dynamicDefinitions, etc...) because content files for DOCUMENT_* positions have the same naming convention. 
 

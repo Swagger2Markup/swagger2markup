@@ -15,6 +15,7 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
+import com.google.common.collect.Ordering;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
@@ -85,20 +86,22 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
         this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, SECURITY_ANCHOR);
     }
 
-    private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> definitions) {
-        Set<String> definitionNames = toKeySet(definitions, config.getDefinitionOrdering());
-        for (String definitionName : definitionNames) {
-            SecuritySchemeDefinition definition = definitions.get(definitionName);
-            buildSecuritySchemeDefinitionTitle(definitionName);
-            applySecurityDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, definition));
-            buildDescriptionParagraph(definition.getDescription(), this.markupDocBuilder);
-            buildSecurityScheme(definition);
-            applySecurityDocumentExtension(new Context(Position.DEFINITION_END, markupDocBuilder, definitionName, definition));
+    private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> securitySchemes) {
+        Set<String> securitySchemeNames = toKeySet(securitySchemes, Ordering.natural()); // TODO : provide a dedicated ordering configuration for security schemes
+        for (String securitySchemeName : securitySchemeNames) {
+            SecuritySchemeDefinition securityScheme = securitySchemes.get(securitySchemeName);
+            applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEFORE, markupDocBuilder, securitySchemeName, securityScheme));
+            buildSecuritySchemeDefinitionTitle(securitySchemeName);
+            applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEGIN, markupDocBuilder, securitySchemeName, securityScheme));
+            buildDescriptionParagraph(securityScheme.getDescription(), this.markupDocBuilder);
+            buildSecurityScheme(securityScheme);
+            applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_END, markupDocBuilder, securitySchemeName, securityScheme));
+            applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_AFTER, markupDocBuilder, securitySchemeName, securityScheme));
         }
     }
 
-    private MarkupDocBuilder buildSecuritySchemeDefinitionTitle(String definitionName) {
-        return markupDocBuilder.sectionTitleWithAnchorLevel2(definitionName);
+    private MarkupDocBuilder buildSecuritySchemeDefinitionTitle(String securitySchemeName) {
+        return markupDocBuilder.sectionTitleWithAnchorLevel2(securitySchemeName);
     }
 
     private void buildSecurityScheme(SecuritySchemeDefinition securityScheme) {
