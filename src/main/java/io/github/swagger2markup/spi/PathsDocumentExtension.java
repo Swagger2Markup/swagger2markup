@@ -132,7 +132,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
             case OPERATION_RESPONSES_AFTER:
             case OPERATION_SECURITY_BEFORE:
             case OPERATION_SECURITY_AFTER:
-                levelOffset = 2;
+                levelOffset = increaseLevelOffset(2);
                 break;
             case OPERATION_DESCRIPTION_BEGIN:
             case OPERATION_DESCRIPTION_END:
