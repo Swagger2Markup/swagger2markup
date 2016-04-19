@@ -122,7 +122,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
                 break;
             case OPERATION_BEGIN:
             case OPERATION_END:
-                levelOffset = increaseLevelOffset(1);
+                levelOffset = increaseLevelOffset(2);
                 break;
             case OPERATION_DESCRIPTION_BEFORE:
             case OPERATION_DESCRIPTION_AFTER:
@@ -149,7 +149,6 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
         }
         return levelOffset;
     }
-
 
     private int increaseLevelOffset(int levelOffset) {
         if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
