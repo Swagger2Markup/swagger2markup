@@ -24,13 +24,13 @@ _Type_ : < < string, <<_collectionparameters_post_version,Version>> > map > arra
 [[_collectionparameters_post_version]]
 *Version*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*key* +
-_optional_|option key|string|
+_optional_|option key|string
 |*value* +
-_optional_|option value|string|
+_optional_|option value|string
 |===
 
 
@@ -45,13 +45,13 @@ _optional_|option value|string|
 [[_collectionparameters_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*key* +
-_optional_|option key|string|
+_optional_|option key|string
 |*value* +
-_optional_|option value|string|
+_optional_|option value|string
 |===
 
 
@@ -91,39 +91,39 @@ _Name_ : LaunchCommandRequest
 _Flags_ : optional
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*Command* +
-_required_|Dummy description|<<_launchcommand_post_command,Command>>|
+_required_|Dummy description|<<_launchcommand_post_command,Command>>
 |*Location* +
-_optional_|Dummy description|<<_location,Location>>|
+_optional_|Dummy description|<<_location,Location>>
 |*Options* +
-_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array|
+_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
 |===
 
 [[_launchcommand_post_command]]
 *Command*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*args* +
-_optional_|Command arguments|string|
+_optional_|Command arguments|string
 |*path* +
-_optional_|Command path|string|
+_optional_|Command path|string
 |===
 
 [[_launchcommand_post_options]]
 *Options*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*key* +
-_optional_|option key|string|
+_optional_|option key|string
 |*value* +
-_optional_|option value|string|
+_optional_|option value|string
 |===
 
 
@@ -143,27 +143,27 @@ _optional_|option value|string|
 [[_launchcommand_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*Location* +
-_optional_|<description>|<<_location,Location>>|
+_optional_|<description>|<<_location,Location>>
 |*Options* +
-_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array|
+_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
 |*ReservationId* +
-_optional_|<description>|string|
+_optional_|<description>|string
 |===
 
 [[_launchcommand_post_options]]
 *Options*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*key* +
-_optional_|option key|string|
+_optional_|option key|string
 |*value* +
-_optional_|option value|string|
+_optional_|option value|string
 |===
 
 
@@ -191,33 +191,33 @@ _Name_ : Version
 _Flags_ : optional
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myTable* +
-_optional_||< <<_mixedparameters_post_mytable,myTable>> > array|
+_optional_||< <<_mixedparameters_post_mytable,myTable>> > array
 |===
 
 [[_mixedparameters_post_mytable]]
 *myTable*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myDict* +
-_optional_||< string, <<_mixedparameters_post_mydict,myDict>> > map|
+_optional_||< string, <<_mixedparameters_post_mydict,myDict>> > map
 |===
 
 [[_mixedparameters_post_mydict]]
 *myDict*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*k* +
-_optional_||string|
+_optional_||string
 |*v* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -232,33 +232,33 @@ _optional_||string|
 [[_mixedparameters_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myTable* +
-_optional_||< <<_mixedparameters_post_mytable,myTable>> > array|
+_optional_||< <<_mixedparameters_post_mytable,myTable>> > array
 |===
 
 [[_mixedparameters_post_mytable]]
 *myTable*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myDict* +
-_optional_||< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map|
+_optional_||< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
 |===
 
 [[_mixedparameters_post_mytable_mydict]]
 *myDict*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*k* +
-_optional_||string|
+_optional_||string
 |*v* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -286,33 +286,33 @@ _Name_ : Version
 _Flags_ : optional
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>> > array|
+_optional_||< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
 *TableContent*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myDict* +
-_optional_||< string, <<_kvpair,KVPair>> > map|
+_optional_||< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
 *KVPair*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*k* +
-_optional_||string|
+_optional_||string
 |*v* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -327,33 +327,33 @@ _optional_||string|
 [[_result]]
 *Result*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>> > array|
+_optional_||< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
 *TableContent*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*myDict* +
-_optional_||< string, <<_kvpair,KVPair>> > map|
+_optional_||< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
 *KVPair*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*k* +
-_optional_||string|
+_optional_||string
 |*v* +
-_optional_||string|
+_optional_||string
 |===
 
 

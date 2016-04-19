@@ -115,13 +115,13 @@ _optional_|Metrics|< string, <<_createmetrics_body,body>> > map|
 [[_createmetrics_body]]
 *body*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*p1* +
-_optional_||string|
+_optional_||string
 |*p2* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -136,13 +136,13 @@ _optional_||string|
 [[_createmetrics_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*p1* +
-_optional_||string|
+_optional_||string
 |*p2* +
-_optional_||string|
+_optional_||string
 |===
 
 

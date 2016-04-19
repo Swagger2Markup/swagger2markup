@@ -2,6 +2,7 @@
 [[_paths]]
 == Resources
 
+[[_pet_resource]]
 === Pet
 Pet resource
 
@@ -347,6 +348,7 @@ _required_|Pet id to delete|integer(int64)|
 |===
 
 
+[[_store_resource]]
 === Store
 Store resource
 
@@ -467,6 +469,7 @@ _required_|ID of the order that needs to be deleted|string|
 * `application/xml`
 
 
+[[_user_resource]]
 === User
 User resource
 

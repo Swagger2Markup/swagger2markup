@@ -2,21 +2,21 @@
 [[_pet]]
 === Pet
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*category* +
-_optional_||<<_category,Category>>|
+_optional_||<<_category,Category>>
 |*id* +
-_optional_||integer(int64)|
+_optional_||integer(int64)
 |*name* +
-_required_|*Example* : `"doggie"`|string|
+_required_|*Example* : `"doggie"`|string
 |*photoUrls* +
-_required_||<string> array|
+_required_||< string > array
 |*status* +
-_optional_|pet status in the store,|enum (Dead, Alive)|
+_optional_|pet status in the store,|enum (Dead, Alive)
 |*tags* +
-_optional_||< <<_tag,Tag>>> array|
+_optional_||< <<_tag,Tag>> > array
 |===
 
 

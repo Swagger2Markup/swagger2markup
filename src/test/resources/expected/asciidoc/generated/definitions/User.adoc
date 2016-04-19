@@ -2,25 +2,25 @@
 [[_user]]
 === User
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*email* +
-_optional_||string|
+_optional_||string
 |*firstName* +
-_optional_||string|
+_optional_||string
 |*id* +
-_optional_||integer(int64)|
+_optional_||integer(int64)
 |*lastName* +
-_optional_||string|
+_optional_||string
 |*password* +
-_optional_||string|
+_optional_||string
 |*phone* +
-_optional_||string|
+_optional_||string
 |*userStatus* +
-_optional_|User Status|integer(int32)|
+_optional_|User Status|integer(int32)
 |*username* +
-_optional_||string|
+_optional_||string
 |===
 
 

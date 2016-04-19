@@ -599,6 +599,9 @@ definitions:
         format: int64
       name:
         type: string
+        description: The name of the category
+        default: DefaultCategory
+        example: FoobarCategory
   Pet:
     type: object
     required:
@@ -647,6 +650,8 @@ definitions:
       quantity:
         type: integer
         format: int32
+        default: 0
+        example: 10
       shipDate:
         type: string
         format: date-time

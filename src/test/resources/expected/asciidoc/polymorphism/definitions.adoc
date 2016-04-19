@@ -11,13 +11,13 @@ _Polymorphism_ : Inheritance
 _Discriminator_ : collType
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*collType* +
-_required_|collection type discriminator|string|
+_required_|collection type discriminator|string
 |*name* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -30,15 +30,16 @@ _Polymorphism_ : Inheritance
 _Discriminator_ : petType
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*huntingSkill* +
-_required_|The measured skill for hunting|enum (clueless, lazy, adventurous, aggressive)|`"lazy"`
+_required_|The measured skill for hunting +
+*Default* : `"lazy"`|enum (clueless, lazy, adventurous, aggressive)
 |*name* +
-_optional_|conflicting property with inheriting model (issue #44)|string|
+_optional_|conflicting property with inheriting model (issue #44)|string
 |*petType* +
-_required_||string|
+_required_||string
 |===
 
 
@@ -47,11 +48,11 @@ _required_||string|
 Collection parent type without discriminator
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*name* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -64,17 +65,18 @@ _Polymorphism_ : Inheritance
 _Discriminator_ : dogType
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*dogType* +
-_required_||string|
+_required_||string
 |*name* +
-_required_||string|
+_required_||string
 |*packSize* +
-_required_|the size of the pack the dog is from|integer(int32)|`0`
+_required_|the size of the pack the dog is from +
+*Default* : `0`|integer(int32)
 |*petType* +
-_required_||string|
+_required_||string
 |===
 
 
@@ -86,13 +88,13 @@ A map without discriminator
 _Polymorphism_ : Composition
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*collType* +
-_required_|collection type discriminator|string|
+_required_|collection type discriminator|string
 |*name* +
-_optional_||string|
+_optional_||string
 |===
 
 
@@ -101,13 +103,13 @@ _optional_||string|
 Pet parent type with discriminator
 
 
-[options="header", cols=".^3,.^11,.^4,.^2"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Description|Schema|Default
+|Name|Description|Schema
 |*name* +
-_required_||string|
+_required_||string
 |*petType* +
-_required_||string|
+_required_||string
 |===
 
 

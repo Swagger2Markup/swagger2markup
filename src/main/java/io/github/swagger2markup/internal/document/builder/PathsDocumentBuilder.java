@@ -155,7 +155,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
                 Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
                 for (String tagName : operationsGroupedByTag.keySet()) {
-                    this.markupDocBuilder.sectionTitleLevel2(WordUtils.capitalize(tagName));
+                    this.markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
 
                     Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
                     if (tagDescription.isPresent()) {

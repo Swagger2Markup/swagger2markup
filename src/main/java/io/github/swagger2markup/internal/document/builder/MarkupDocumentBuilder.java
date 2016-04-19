@@ -174,8 +174,7 @@ public abstract class MarkupDocumentBuilder {
         List<MarkupTableColumn> cols = Arrays.asList(
                 new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                 new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(11).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^11"),
-                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
+                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
             for (String propertyName : propertyNames) {
@@ -185,6 +184,8 @@ public abstract class MarkupDocumentBuilder {
                 propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
                 
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
+
+                Object defaultValue = PropertyUtils.getDefaultValue(property);
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
                 propertyNameContent.boldTextLine(propertyName, true);
@@ -201,18 +202,21 @@ public abstract class MarkupDocumentBuilder {
                 String description = defaultString(swaggerMarkupDescription(property.getDescription()));
                 if (isNotBlank(description))
                     descriptionContent.text(description);
-                if (example != null) {
+                if(defaultValue != null){
                     if (isNotBlank(description))
+                        descriptionContent.newLine(true);
+                    descriptionContent.boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(defaultValue));
+                }
+                if (example != null) {
+                    if (isNotBlank(description) || defaultValue != null)
                         descriptionContent.newLine(true);
                     descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(example));
                 }
-                Object defaultValue = PropertyUtils.getDefaultValue(property);
-                
+
                 List<String> content = Arrays.asList(
                         propertyNameContent.toString(),
                         descriptionContent.toString(),
-                        propertyType.displaySchema(docBuilder),
-                        defaultValue != null ? literalText(Json.pretty(defaultValue)) : ""
+                        propertyType.displaySchema(docBuilder)
                 );
                 cells.add(content);
             }
