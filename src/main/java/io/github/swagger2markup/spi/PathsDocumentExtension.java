@@ -89,24 +89,35 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
+                levelOffset = 0;
+                break;
             case DOCUMENT_AFTER:
                 levelOffset = 0;
                 break;
             case DOCUMENT_BEGIN:
+                levelOffset = 1;
+                break;
             case DOCUMENT_END:
                 levelOffset = 1;
                 break;
             case OPERATION_BEGIN:
+                levelOffset = increaseLevelOffset(2);
+                break;
             case OPERATION_END:
-                levelOffset = 2;
+                levelOffset = increaseLevelOffset(2);
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown position '%s'", context.position));
         }
-        if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
-            levelOffset++;
-        }
+        levelOffset = increaseLevelOffset(levelOffset);
         return levelOffset;
     }
 
+    private int increaseLevelOffset(int levelOffset) {
+        if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
+            return ++levelOffset;
+        }else {
+            return levelOffset;
+        }
+    }
 }
