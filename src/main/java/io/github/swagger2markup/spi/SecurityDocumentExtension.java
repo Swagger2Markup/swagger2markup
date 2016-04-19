@@ -28,23 +28,25 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOCUMENT_BEFORE,
-        DOCUMENT_AFTER,
         DOCUMENT_BEGIN,
         DOCUMENT_END,
-        DEFINITION_BEGIN,
-        DEFINITION_END
+        DOCUMENT_AFTER,
+        SECURITY_SCHEME_BEFORE,
+        SECURITY_SCHEME_BEGIN,
+        SECURITY_SCHEME_END,
+        SECURITY_SCHEME_AFTER
     }
 
     public static class Context extends ContentContext {
         private Position position;
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
-        private String definitionName;
+        private String securitySchemeName;
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
-        private SecuritySchemeDefinition definition;
+        private SecuritySchemeDefinition securityScheme;
 
         /**
          * @param position the current position
@@ -52,34 +54,36 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
          */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
+            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
             this.position = position;
         }
 
         /**
          * @param position the current position
          * @param docBuilder the MarkupDocBuilder
-         * @param definitionName the name of the current definition
-         * @param definition the current security scheme definition
+         * @param securitySchemeName the name of the current securityScheme
+         * @param securityScheme the current security scheme securityScheme
          */
-        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, SecuritySchemeDefinition definition) {
+        public Context(Position position, MarkupDocBuilder docBuilder, String securitySchemeName, SecuritySchemeDefinition securityScheme) {
             super(docBuilder);
-            Validate.notNull(definitionName);
-            Validate.notNull(definition);
+            Validate.inclusiveBetween(Position.SECURITY_SCHEME_BEFORE, Position.SECURITY_SCHEME_AFTER, position);
+            Validate.notNull(securitySchemeName);
+            Validate.notNull(securityScheme);
             this.position = position;
-            this.definitionName = definitionName;
-            this.definition = definition;
+            this.securitySchemeName = securitySchemeName;
+            this.securityScheme = securityScheme;
         }
 
         public Position getPosition() {
             return position;
         }
 
-        public Optional<String> getDefinitionName() {
-            return Optional.fromNullable(definitionName);
+        public Optional<String> getSecuritySchemeName() {
+            return Optional.fromNullable(securitySchemeName);
         }
 
-        public Optional<SecuritySchemeDefinition> getDefinition() {
-            return Optional.fromNullable(definition);
+        public Optional<SecuritySchemeDefinition> getSecurityScheme() {
+            return Optional.fromNullable(securityScheme);
         }
     }
 
@@ -102,10 +106,12 @@ public abstract class SecurityDocumentExtension extends AbstractExtension {
                 break;
             case DOCUMENT_BEGIN:
             case DOCUMENT_END:
+            case SECURITY_SCHEME_BEFORE:
+            case SECURITY_SCHEME_AFTER:
                 levelOffset = 1;
                 break;
-            case DEFINITION_BEGIN:
-            case DEFINITION_END:
+            case SECURITY_SCHEME_BEGIN:
+            case SECURITY_SCHEME_END:
                 levelOffset = 2;
                 break;
             default:

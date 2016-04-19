@@ -28,22 +28,24 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOCUMENT_BEFORE,
-        DOCUMENT_AFTER,
         DOCUMENT_BEGIN,
         DOCUMENT_END,
+        DOCUMENT_AFTER,
+        DEFINITION_BEFORE,
         DEFINITION_BEGIN,
-        DEFINITION_END
+        DEFINITION_END,
+        DEFINITION_AFTER
     }
 
     public static class Context extends ContentContext {
         private Position position;
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
         private String definitionName;
 
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
         private Model model;
 
@@ -53,7 +55,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
          */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
-            Validate.isTrue(position != Position.DEFINITION_BEGIN && position != Position.DEFINITION_END, "You must provide a definitionName for this position");
+            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
             this.position = position;
         }
 
@@ -65,6 +67,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
          */
         public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
             super(docBuilder);
+            Validate.inclusiveBetween(Position.DEFINITION_BEFORE, Position.DEFINITION_AFTER, position);
             Validate.notNull(definitionName);
             Validate.notNull(model);
             this.position = position;
@@ -104,6 +107,8 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
                 break;
             case DOCUMENT_BEGIN:
             case DOCUMENT_END:
+            case DEFINITION_BEFORE:
+            case DEFINITION_AFTER:
                 levelOffset = 1;
                 break;
             case DEFINITION_BEGIN:

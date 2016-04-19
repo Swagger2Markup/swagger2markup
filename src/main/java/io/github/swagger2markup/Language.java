@@ -25,7 +25,8 @@ public enum Language {
     EN(new Locale("en")),
     RU(new Locale("ru")),
     FR(new Locale("fr")),
-    DE(new Locale("de"));
+    DE(new Locale("de")),
+    TR(new Locale("tr"));
 
     private final Locale lang;
 

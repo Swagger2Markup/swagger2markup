@@ -108,7 +108,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         if(isNotBlank(version)){
             this.markupDocBuilder.sectionTitleLevel2(CURRENT_VERSION);
 
-            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder paragraph = copyMarkupDocBuilder();
             paragraph.italicText(VERSION).textLine(COLON + version);
             this.markupDocBuilder.paragraph(paragraph.toString(), true);
         }
@@ -117,7 +117,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private void buildContactInfoSection(Contact contact) {
         if(contact != null){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
-            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder paragraph = copyMarkupDocBuilder();
             if(isNotBlank(contact.getName())){
                 paragraph.italicText(CONTACT_NAME).textLine(COLON + contact.getName());
             }
@@ -134,7 +134,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
                         (isNotBlank(termOfService))
                 ) {
             this.markupDocBuilder.sectionTitleLevel2(LICENSE_INFORMATION);
-            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder paragraph = copyMarkupDocBuilder();
             if (license != null && isNotBlank(license.getName())) {
                 paragraph.italicText(LICENSE).textLine(COLON + license.getName());
             }
@@ -152,7 +152,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     private void buildUriSchemeSection(Swagger swagger) {
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             this.markupDocBuilder.sectionTitleLevel2(URI_SCHEME);
-            MarkupDocBuilder paragraph = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder paragraph = copyMarkupDocBuilder();
             if (isNotBlank(swagger.getHost())) {
                 paragraph.italicText(HOST).textLine(COLON + swagger.getHost());
             }

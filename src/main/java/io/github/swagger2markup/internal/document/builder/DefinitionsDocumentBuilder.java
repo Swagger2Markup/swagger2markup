@@ -57,7 +57,6 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private final Map<ObjectTypePolymorphism.Nature, String> POLYMORPHISM_NATURE;
     private final String TYPE_COLUMN;
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
-    private static final String DESCRIPTION_FILE_NAME = "description";
 
     public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         super(context, extensionRegistry, outputPath);
@@ -158,7 +157,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildDefinition(String definitionName, Model model) {
 
         if (config.isSeparatedDefinitionsEnabled()) {
-            MarkupDocBuilder defDocBuilder = this.markupDocBuilder.copy(false);
+            MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder();
             buildDefinition(definitionName, model, defDocBuilder);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
@@ -191,11 +190,13 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void buildDefinition(String definitionName, Model model, MarkupDocBuilder docBuilder) {
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEFORE, docBuilder, definitionName, model));
         buildDefinitionTitle(definitionName, definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
         buildDescriptionParagraph(model, docBuilder);
-        inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, config.getInlineSchemaDepthLevel(), docBuilder);
+        inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, docBuilder);
         applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_AFTER, docBuilder, definitionName, model));
     }
 
     /**
@@ -205,7 +206,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
-        buildDefinitionTitle(docBuilder.copy(false).crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+        buildDefinitionTitle(copyMarkupDocBuilder().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**
@@ -238,7 +239,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         
         if (modelType instanceof ObjectType) {
             ObjectType objectType = (ObjectType) modelType;
-            MarkupDocBuilder typeInfos = docBuilder.copy(false);
+            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
             switch (objectType.getPolymorphism().getNature()) {
                 case COMPOSITION:
                     typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
@@ -260,9 +261,9 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             if (StringUtils.isNotBlank(typeInfosString))
                 docBuilder.paragraph(typeInfosString, true);
 
-            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, config.getInlineSchemaDepthLevel(), new DefinitionDocumentResolverFromDefinition(), docBuilder));
+            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, new DefinitionDocumentResolverFromDefinition(), docBuilder));
         } else if (modelType != null) {
-            MarkupDocBuilder typeInfos = docBuilder.copy(false);
+            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
             typeInfos.italicText(TYPE_COLUMN).textLine(COLON + modelType.displaySchema(docBuilder));
 
             docBuilder.paragraph(typeInfos.toString());
@@ -301,16 +302,15 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param definitions  all inline definitions to display
      * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param depth        current inline schema depth
      * @param docBuilder   the docbuilder do use for output
      */
-    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, int depth, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, MarkupDocBuilder docBuilder) {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, depth, new DefinitionDocumentResolverFromDefinition(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, new DefinitionDocumentResolverFromDefinition(), docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), depth - 1, docBuilder);
+                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
             }
         }
     }

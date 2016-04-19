@@ -29,37 +29,59 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
 
     public enum Position {
         DOCUMENT_BEFORE,
-        DOCUMENT_AFTER,
         DOCUMENT_BEGIN,
         DOCUMENT_END,
+        DOCUMENT_AFTER,
+        OPERATION_BEFORE,
         OPERATION_BEGIN,
-        OPERATION_END
+        OPERATION_END,
+        OPERATION_AFTER,
+        OPERATION_DESCRIPTION_BEFORE,
+        OPERATION_DESCRIPTION_BEGIN,
+        OPERATION_DESCRIPTION_END,
+        OPERATION_DESCRIPTION_AFTER,
+        OPERATION_PARAMETERS_BEFORE,
+        OPERATION_PARAMETERS_BEGIN,
+        OPERATION_PARAMETERS_END,
+        OPERATION_PARAMETERS_AFTER,
+        OPERATION_RESPONSES_BEFORE,
+        OPERATION_RESPONSES_BEGIN,
+        OPERATION_RESPONSES_END,
+        OPERATION_RESPONSES_AFTER,
+        OPERATION_SECURITY_BEFORE,
+        OPERATION_SECURITY_BEGIN,
+        OPERATION_SECURITY_END,
+        OPERATION_SECURITY_AFTER
     }
 
     public static class Context extends ContentContext {
         private Position position;
         /**
-         * null if position == DOC_*
+         * null if position == DOCUMENT_*
          */
         private PathOperation operation;
 
         /**
-         * @param position the current position
+         * Context for positions DOCUMENT_*
+         *
+         * @param position   the current position
          * @param docBuilder the MarkupDocBuilder
          */
         public Context(Position position, MarkupDocBuilder docBuilder) {
             super(docBuilder);
-            Validate.isTrue(position != Position.OPERATION_BEGIN && position != Position.OPERATION_END, "You must provide an operation for this position");
+            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
             this.position = position;
         }
 
         /**
-         * @param position the current position
+         * Context for all other positions
+         * @param position   the current position
          * @param docBuilder the MarkupDocBuilder
-         * @param operation the current path operation
+         * @param operation  the current path operation
          */
         public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
             super(docBuilder);
+            Validate.inclusiveBetween(Position.OPERATION_BEFORE, Position.OPERATION_SECURITY_AFTER, position);
             Validate.notNull(operation);
             this.position = position;
             this.operation = operation;
@@ -89,29 +111,45 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
-                levelOffset = 0;
-                break;
             case DOCUMENT_AFTER:
                 levelOffset = 0;
                 break;
             case DOCUMENT_BEGIN:
-                levelOffset = 1;
-                break;
             case DOCUMENT_END:
+            case OPERATION_BEFORE:
+            case OPERATION_AFTER:
                 levelOffset = 1;
                 break;
             case OPERATION_BEGIN:
-                levelOffset = increaseLevelOffset(2);
-                break;
             case OPERATION_END:
-                levelOffset = increaseLevelOffset(2);
+                levelOffset = increaseLevelOffset(1);
+                break;
+            case OPERATION_DESCRIPTION_BEFORE:
+            case OPERATION_DESCRIPTION_AFTER:
+            case OPERATION_PARAMETERS_BEFORE:
+            case OPERATION_PARAMETERS_AFTER:
+            case OPERATION_RESPONSES_BEFORE:
+            case OPERATION_RESPONSES_AFTER:
+            case OPERATION_SECURITY_BEFORE:
+            case OPERATION_SECURITY_AFTER:
+                levelOffset = 2;
+                break;
+            case OPERATION_DESCRIPTION_BEGIN:
+            case OPERATION_DESCRIPTION_END:
+            case OPERATION_PARAMETERS_BEGIN:
+            case OPERATION_PARAMETERS_END:
+            case OPERATION_RESPONSES_BEGIN:
+            case OPERATION_RESPONSES_END:
+            case OPERATION_SECURITY_BEGIN:
+            case OPERATION_SECURITY_END:
+                levelOffset = 3;
                 break;
             default:
                 throw new RuntimeException(String.format("Unknown position '%s'", context.position));
         }
-        levelOffset = increaseLevelOffset(levelOffset);
         return levelOffset;
     }
+
 
     private int increaseLevelOffset(int levelOffset) {
         if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {

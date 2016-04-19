@@ -20,7 +20,7 @@ See documentation of <<Extensions points>>.
 
 Here the list of all document naming conventions for each position. You have to replace `*` with an arbitrary, meaningful, identifier.
 
-IMPORTANT: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
+NOTE: You can provide multiple contents for the same position, just specify different identifiers in place of `*` in the file name. The concurrent contents for a given position will all be added to the document in a determinist order, sorting content file by natural order.
 
 All extensions, relatively to each extension contentPath :
 
@@ -31,27 +31,63 @@ All extensions, relatively to each extension contentPath :
 
 Paths extensions, relatively to each extension contentPath :
 
+* OPERATION_BEFORE : `<<swagger_operationId,<operationId> >>/operation-before-*.<<extension_import_files_markup,<markup.ext> >>`
 * OPERATION_BEGIN : `<<swagger_operationId,<operationId> >>/operation-begin-*.<<extension_import_files_markup,<markup.ext> >>`
 * OPERATION_END : `<<swagger_operationId,<operationId> >>/operation-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_AFTER : `<<swagger_operationId,<operationId> >>/operation-after-*.<<extension_import_files_markup,<markup.ext> >>`
 
-IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. *It is highly recommended to set operationId for operations* : see <<swagger_operationId,Swagger operationId>>. In all cases, `<operationId>` is case-sensitive.
+* OPERATION_DESCRIPTION_BEFORE: `<<swagger_operationId,<operationId> >>/operation-description-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_DESCRIPTION_BEGIN: `<<swagger_operationId,<operationId> >>/operation-description-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_DESCRIPTION_END: `<<swagger_operationId,<operationId> >>/operation-description-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_DESCRIPTION_AFTER: `<<swagger_operationId,<operationId> >>/operation-description-after-*.<<extension_import_files_markup,<markup.ext> >>`
 
-Definitions and Security extensions, relatively to each extension contentPath :
+* OPERATION_PARAMETERS_BEFORE: `<<swagger_operationId,<operationId> >>/operation-parameters-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_PARAMETERS_BEGIN: `<<swagger_operationId,<operationId> >>/operation-parameters-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_PARAMETERS_END: `<<swagger_operationId,<operationId> >>/operation-parameters-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_PARAMETERS_AFTER: `<<swagger_operationId,<operationId> >>/operation-parameters-after-*.<<extension_import_files_markup,<markup.ext> >>`
 
+* OPERATION_RESPONSES_BEFORE: `<<swagger_operationId,<operationId> >>/operation-responses-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_RESPONSES_BEGIN: `<<swagger_operationId,<operationId> >>/operation-responses-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_RESPONSES_END: `<<swagger_operationId,<operationId> >>/operation-responses-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_RESPONSES_AFTER: `<<swagger_operationId,<operationId> >>/operation-responses-after-*.<<extension_import_files_markup,<markup.ext> >>`
+
+* OPERATION_SECURITY_BEFORE: `<<swagger_operationId,<operationId> >>/operation-security-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_SECURITY_BEGIN: `<<swagger_operationId,<operationId> >>/operation-security-begin*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_SECURITY_END: `<<swagger_operationId,<operationId> >>/operation-security-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* OPERATION_SECURITY_AFTER: `<<swagger_operationId,<operationId> >>/operation-security-after-*.<<extension_import_files_markup,<markup.ext> >>`
+
+Definitions extensions, relatively to each extension contentPath :
+
+* DEFINITION_BEFORE : `<definitionName>/definition-before-*.<<extension_import_files_markup,<markup.ext> >>`
 * DEFINITION_BEGIN : `<definitionName>/definition-begin-*.<<extension_import_files_markup,<markup.ext> >>`
 * DEFINITION_END : `<definitionName>/definition-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* DEFINITION_AFTER : `<definitionName>/definition-after-*.<<extension_import_files_markup,<markup.ext> >>`
 
-IMPORTANT: `<definitionName>` is case-sensitive
+Security extensions, relatively to each extension contentPath :
+
+* SECURITY_SCHEME_BEFORE : `<securitySchemeName>/security-scheme-before-*.<<extension_import_files_markup,<markup.ext> >>`
+* SECURITY_SCHEME_BEGIN : `<securitySchemeName>/security-scheme-begin-*.<<extension_import_files_markup,<markup.ext> >>`
+* SECURITY_SCHEME_END : `<securitySchemeName>/security-scheme-end-*.<<extension_import_files_markup,<markup.ext> >>`
+* SECURITY_SCHEME_AFTER : `<securitySchemeName>/security-scheme-after-*.<<extension_import_files_markup,<markup.ext> >>`
+
+IMPORTANT: `<operationId>` value depends on Swagger specification. If you provided an `operationId` for operations in the Swagger document, the value will be used primarily. *It is highly recommended to set operationId for operations* : see <<swagger_operationId,Swagger operationId>>. In all cases, all placeholder values are case-sensitive.
+
+NOTE: It's *highly recommended* to configure a different contentPath for each extension (dynamicOverview, dynamicDefinitions, etc...) because content files for DOCUMENT_* positions have the same naming convention. 
 
 .Example of provided content files for petstore Swagger sample
 ====
 ....
-document-before-intro.adoc
-updatePet/operation-begin-description.adoc
-updatePet/operation-end-example1.adoc
-updatePet/operation-end-example2.adoc
-Pet/definition-begin-description.adoc
+overview/document-before-intro.adoc <1>
+paths/document-before-intro.adoc <2>
+paths/updatePet/operation-begin-description.adoc
+paths/updatePet/operation-end-example1.adoc
+paths/updatePet/operation-end-example2.adoc <3>
+definitions/Pet/definition-begin-description.adoc
 ....
+1. "overview", "paths" and "definitions" are different configured contentPath for different extensions.
+2. the document name is the same but will be used only in Paths document because contentPath is different (cf 1.).
+3. both example1 and example2 content files will be added to "updatePet" operation. They'll be applied consecutively, with their names sorted by natural order.
+
 ====
 
 [[extension_import_files_markup]]

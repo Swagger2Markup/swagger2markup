@@ -46,7 +46,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitions");
         assertThat(config.isGeneratedExamplesEnabled()).isFalse();
-        assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(0);
+        assertThat(config.isInlineSchemaEnabled()).isEqualTo(true);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isNull();
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
         assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.NATURAL);
@@ -90,7 +90,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getDefinitionOrdering()).isNull();
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitionsTest");
         assertThat(config.isGeneratedExamplesEnabled()).isTrue();
-        assertThat(config.getInlineSchemaDepthLevel()).isEqualTo(2);
+        assertThat(config.isInlineSchemaEnabled()).isEqualTo(false);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
         assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.NATURAL);

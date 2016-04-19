@@ -130,7 +130,12 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withoutInlineSchema()
+                .build();
+
         Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
                 .build()
                 .toFolder(outputDirectory);
 
@@ -150,6 +155,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withoutInlineSchema()
                 .withGeneratedExamples()
                 .build();
 
@@ -174,7 +180,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withInlineSchemaDepthLevel(10)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -197,7 +202,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withInlineSchemaDepthLevel(10)
                 .withFlatBody()
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -221,7 +225,6 @@ public class AsciidocConverterTest {
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withPathsGroupedBy(GroupBy.TAGS)
-                .withInlineSchemaDepthLevel(10)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -397,7 +400,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withInlineSchemaDepthLevel(5)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -421,7 +423,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withInlineSchemaDepthLevel(5)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
