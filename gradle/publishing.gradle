@@ -8,10 +8,10 @@ Date buildTimeAndDate = new Date()
 ext {
     buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
     buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
-    projectUrl = 'https://github.com/RobWin/markup-document-builder'
-    licenseUrl = 'https://github.com/RobWin/markup-document-builder/blob/master/LICENSE.txt'
-    scmUrl = 'https://github.com/RobWin/markup-document-builder.git'
-    issuesUrl = 'https://github.com/RobWin/markup-document-builder/issues'
+    projectUrl = 'https://github.com/Swagger2Markup/markup-document-builder'
+    licenseUrl = 'https://github.com/Swagger2Markup/markup-document-builder/blob/master/LICENSE.txt'
+    scmUrl = 'https://github.com/Swagger2Markup/markup-document-builder.git'
+    issuesUrl = 'https://github.com/Swagger2Markup/markup-document-builder/issues'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
