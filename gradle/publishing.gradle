@@ -98,7 +98,7 @@ bintray {
     publications = ['mavenJava']
     pkg {
         repo = 'maven'
-        name = 'swagger2markup'
+        name = 'markup-document-builder'
         websiteUrl = projectUrl
         issueTrackerUrl = issuesUrl
         vcsUrl = scmUrl
