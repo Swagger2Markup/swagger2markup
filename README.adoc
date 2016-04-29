@@ -27,8 +27,7 @@ image::src/docs/asciidoc/images/Swagger2Markup.PNG[]
 image::src/docs/asciidoc/images/Swagger2Markup_definitions.PNG[]
 
 == Reference documentation
-- http://swagger2markup.readme.io/[Reference Documentation]
-- http://swagger2markup.github.io/swagger2markup/1.0.0-SNAPSHOT/[1.0.0-SNAPSHOT Documentation]
+- http://swagger2markup.github.io/swagger2markup/1.0.0/[Reference Documentation]
 - https://github.com/Swagger2Markup/swagger2markup/blob/master/RELEASENOTES.adoc[Release notes]
 - https://github.com/Swagger2Markup/spring-swagger2markup-demo[Demo using Swagger2Markup, Spring Boot, Springfox and spring-restdocs]
 
@@ -37,14 +36,6 @@ image::src/docs/asciidoc/images/Swagger2Markup_definitions.PNG[]
 === Community contributions
 
 Pull requests are welcome.
-
-* New feature https://github.com/Swagger2Markup/swagger2markup/issues/18[Swagger2Markup/swagger2Markup#18] by https://github.com/sg-ad[@sg-ad]: In addition to the definitions.adoc you can also generate separate files for each definition model (ex: person.adoc, address.adoc, purchase.adoc).
-
-* New feature https://github.com/Swagger2Markup/swagger2markup/issues/21[Swagger2Markup/swagger2Markup#21] by https://github.com/redowl[@redowl]: Support for both reference models and composed models.
-
-* New feature https://github.com/Swagger2Markup/swagger2markup/issues/27[Swagger2Markup/swagger2Markup#27] by https://github.com/zmitrok[@zmitrok]: Added a hook to preprocess a Swagger Model before it is converted.
-
-* New feature https://github.com/Swagger2Markup/swagger2markup/issues/48[Swagger2Markup/swagger2Markup#48] by https://github.com/MeteorBoom[@MeteorBoom]: Multi language support.
 
 === Questions
 You can ask questions about Swagger2Markup in https://gitter.im/Swagger2Markup/swagger2markup[Gitter].

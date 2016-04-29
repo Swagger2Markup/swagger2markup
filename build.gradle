@@ -13,7 +13,7 @@ buildscript {
     }
 }
 description = 'swagger2markup Build'
-version = '1.0.0-SNAPSHOT'
+version = '1.0.0'
 group = 'io.github.swagger2markup'
 
 apply plugin: 'java'
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    compile 'io.github.swagger2markup:markup-document-builder:1.0.0-SNAPSHOT'
+    compile 'io.github.swagger2markup:markup-document-builder:1.0.0'
     compile 'io.swagger:swagger-compat-spec-parser:1.0.18'
     compile 'org.apache.commons:commons-configuration2:2.0'
     compile 'commons-beanutils:commons-beanutils:1.9.2'

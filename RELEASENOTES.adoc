@@ -83,4 +83,11 @@
 * Enhancement #51 : Support for separated operations files
 * Enhancement #52: Markdown generation for inline schemas
 
-
+== Version 1.0.0
+* New configuration API
+* New extension SPI
+* Added new languages: turkish, german, france
+* New security document
+* Inline schema support
+* New configuration options
+* Support of deprecated path operations
