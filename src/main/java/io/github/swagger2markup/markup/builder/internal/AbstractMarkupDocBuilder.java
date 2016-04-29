@@ -88,22 +88,25 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void documentTitle(Markup markup, String title) {
-        Validate.notBlank(title, "title must not be null");
+        Validate.notBlank(title, "title must not be blank");
         documentBuilder.append(markup).append(replaceNewLinesWithWhiteSpace(title)).append(newLine).append(newLine);
     }
 
-    protected void sectionTitleWithAnchorLevel(Markup markup, int level, String title, String anchor) {
-        Validate.notBlank(title, "title must not be null");
+    protected void sectionTitleLevel(Markup markup, int level, String title) {
+        Validate.notBlank(title, "title must not be blank");
         Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
         documentBuilder.append(newLine);
-        if (anchor != null)
-            anchor(replaceNewLinesWithWhiteSpace(anchor)).newLine();
         documentBuilder.append(StringUtils.repeat(markup.toString(), level + 1)).append(" ").append(replaceNewLinesWithWhiteSpace(title)).append(newLine);
     }
 
-    @Override
-    public MarkupDocBuilder sectionTitleLevel(int level, String title) {
-        return sectionTitleWithAnchorLevel(level, title, null);
+    protected void sectionTitleWithAnchorLevel(Markup markup, int level, String title, String anchor) {
+        Validate.notBlank(title, "title must not be blank");
+        Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
+        documentBuilder.append(newLine);
+        if (anchor == null)
+            anchor = title;
+        anchor(replaceNewLinesWithWhiteSpace(anchor)).newLine();
+        documentBuilder.append(StringUtils.repeat(markup.toString(), level + 1)).append(" ").append(replaceNewLinesWithWhiteSpace(title)).append(newLine);
     }
 
     @Override
@@ -188,7 +191,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder textLine(String text, boolean forceLineBreak) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notNull(text, "text must not be null");
         text(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
@@ -202,11 +205,11 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder text(String text) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notNull(text, "text must not be null");
         documentBuilder.append(replaceNewLines(text));
         return this;
     }
-
+    
     @Override
     public MarkupDocBuilder paragraph(String text) {
         return paragraph(text, false);
@@ -214,18 +217,18 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder block(String text, MarkupBlockStyle style) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
         return block(replaceNewLines(text), style, null, null);
     }
 
     @Override
-    public MarkupDocBuilder listing(String text) {
-        Validate.notBlank(text, "text must not be null");
-        return listing(replaceNewLines(text), null);
+    public MarkupDocBuilder listingBlock(String text) {
+        Validate.notBlank(text, "text must not be blank");
+        return listingBlock(replaceNewLines(text), null);
     }
 
     protected void delimitedBlockText(Markup begin, String text, Markup end) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
         if (!StringUtils.isBlank(begin.toString()))
             documentBuilder.append(begin).append(newLine);
         documentBuilder.append(replaceNewLines(text)).append(newLine);
@@ -235,7 +238,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void delimitedTextWithoutLineBreaks(Markup begin, String text, Markup end) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
         if (!StringUtils.isBlank(begin.toString()))
             documentBuilder.append(begin);
         documentBuilder.append(replaceNewLines(text));
@@ -251,13 +254,30 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         delimitedTextWithoutLineBreaks(markup, text, markup);
     }
 
+    protected void literalText(Markup markup, String text) {
+        delimitedTextWithoutLineBreaks(markup, text);
+    }
+
+    @Override
+    public MarkupDocBuilder literalTextLine(String text, boolean forceLineBreak) {
+        Validate.notBlank(text, "text must not be blank");
+        literalText(replaceNewLines(text));
+        newLine(forceLineBreak);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder literalTextLine(String text) {
+        return literalTextLine(text, LINE_BREAK_DEFAULT);
+    }
+
     protected void boldText(Markup markup, String text) {
         delimitedTextWithoutLineBreaks(markup, text);
     }
 
     @Override
     public MarkupDocBuilder boldTextLine(String text, boolean forceLineBreak) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
         boldText(replaceNewLines(text));
         newLine(forceLineBreak);
         return this;
@@ -285,7 +305,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void unorderedList(Markup markup, List<String> list) {
-        Validate.notEmpty(list, "list must not be null");
+        Validate.notEmpty(list, "list must not be empty");
         documentBuilder.append(newLine);
         for (String listEntry : list) {
             unorderedListItem(markup, listEntry);
@@ -294,17 +314,17 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     protected void unorderedListItem(Markup markup, String item) {
-        Validate.notBlank(item, "item must not be null");
+        Validate.notBlank(item, "item must not be blank");
         documentBuilder.append(markup).append(item).append(newLine);
     }
 
     @Override
     public MarkupDocBuilder anchor(String anchor) {
-        Validate.notBlank(anchor, "anchor must not be null");
+        Validate.notBlank(anchor, "anchor must not be blank");
         return anchor(anchor, null);
     }
 
-    /**
+    /*
      * Generic normalization algorithm for all markups (less common denominator character set).
      * Key points :
      * - Anchor is normalized (Normalized.Form.NFD)

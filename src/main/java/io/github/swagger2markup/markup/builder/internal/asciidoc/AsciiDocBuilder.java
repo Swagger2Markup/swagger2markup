@@ -75,6 +75,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder sectionTitleLevel(int level, String title) {
+        sectionTitleLevel(AsciiDoc.TITLE, level, title);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         sectionTitleWithAnchorLevel(AsciiDoc.TITLE, level, title, anchor);
         return this;
@@ -82,7 +88,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
-        Validate.notBlank(text, "text must not be null");
+        Validate.notBlank(text, "text must not be blank");
         if (hardbreaks)
             documentBuilder.append("[%hardbreaks]").append(newLine);
         text = text.trim();
@@ -102,6 +108,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
                 return BLOCK_STYLE.get(style);
             }
         }, text);
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder literalText(String text) {
+        boldText(AsciiDoc.LITERAL, text);
         return this;
     }
 
@@ -130,7 +142,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder listing(String text, String language) {
+    public MarkupDocBuilder listingBlock(String text, String language) {
         if (language != null)
             documentBuilder.append(String.format("[source,%s]", language)).append(newLine);
         block(text, MarkupBlockStyle.LISTING);
@@ -171,8 +183,11 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         if (document != null)
             documentBuilder.append(document).append("#");
         documentBuilder.append(anchor);
-        if (text != null)
+        if (text != null) {
             documentBuilder.append(",").append(text);
+            if (text.endsWith(">"))
+                documentBuilder.append(" ");
+        }
         documentBuilder.append(AsciiDoc.CROSS_REFERENCE_END);
         return this;
     }

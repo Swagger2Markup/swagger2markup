@@ -32,8 +32,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.*;
 
 public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
@@ -87,40 +86,52 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder documentTitle(String title) {
-        Validate.notBlank(title, "title must not be null");
+        Validate.notBlank(title, "title must not be blank");
         documentBuilder.append(String.format(TITLE_FORMAT, 1, title));
         documentBuilder.append(newLine).append(newLine);
         return this;
     }
 
     @Override
-    public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
-        Validate.notBlank(title, "title must not be null");
+    public MarkupDocBuilder sectionTitleLevel(int level, String title) {
+        Validate.notBlank(title, "title must not be blank");
         Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
 
         documentBuilder.append(newLine);
-        documentBuilder.append(String.format(TITLE_FORMAT, level + 1, title));
-        if (isNotBlank(anchor)) {
-            documentBuilder.append(" ");
-            anchor(anchor);
-            documentBuilder.append(newLine);
-        }
+        documentBuilder.append(String.format(TITLE_FORMAT, level + 1, replaceNewLinesWithWhiteSpace(title)));
         documentBuilder.append(newLine);
+
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
+        Validate.notBlank(title, "title must not be blank");
+        Validate.inclusiveBetween(1, MAX_TITLE_LEVEL, level);
+
+        documentBuilder.append(newLine);
+        documentBuilder.append(String.format(TITLE_FORMAT, level + 1, replaceNewLinesWithWhiteSpace(title)));
+        if (isBlank(anchor))
+            anchor = title;
+        documentBuilder.append(" ");
+        anchor(replaceNewLinesWithWhiteSpace(anchor));
         
+        documentBuilder.append(newLine);
+
         return this;
     }
 
     @Override
     public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
-        Validate.notBlank(text, "text must not be null");
-        
+        Validate.notBlank(text, "text must not be blank");
+
         text = text.trim();
         if (hardbreaks)
             text = replaceNewLines(text, ConfluenceMarkup.LINE_BREAK + newLine);
         else
             text = replaceNewLines(text);
         documentBuilder.append(text).append(newLine).append(newLine);
-        
+
         return this;
     }
 
@@ -177,7 +188,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder listing(String text, final String language) {
+    public MarkupDocBuilder listingBlock(String text, final String language) {
         Markup blockMarkup = new Markup() {
             @Override
             public String toString() {
@@ -195,6 +206,12 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
         } else {
             delimitedBlockText(blockMarkup, text);
         }
+        return this;
+    }
+
+    @Override
+    public MarkupDocBuilder literalText(String text) {
+        boldText(ConfluenceMarkup.LITERAL, text);
         return this;
     }
 
@@ -251,7 +268,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
 
     private String formatCellContent(String cell) {
         cell = replaceNewLines(cell.trim(), ConfluenceMarkup.LINE_BREAK.toString());
-        if (StringUtils.isBlank(cell)) {
+        if (isBlank(cell)) {
             return " ";
         }
         return escapeCellPipes(cell);

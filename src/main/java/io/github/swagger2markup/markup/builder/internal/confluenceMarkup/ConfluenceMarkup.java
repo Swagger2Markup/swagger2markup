@@ -26,6 +26,7 @@ import io.github.swagger2markup.markup.builder.internal.Markup;
  */
 public enum ConfluenceMarkup implements Markup {
     TABLE_COLUMN_DELIMITER("|"),
+    LITERAL("{noformat}"),
     BOLD("*"),
     ITALIC("_"),
     LIST_ENTRY("* "),

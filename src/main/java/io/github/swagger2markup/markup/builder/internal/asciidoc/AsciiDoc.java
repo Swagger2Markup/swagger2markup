@@ -29,6 +29,7 @@ public enum AsciiDoc implements Markup {
     TABLE_COLUMN_DELIMITER("|"),
     TITLE("="),
     DOCUMENT_TITLE("= "),
+    LITERAL("`"),
     BOLD("*"),
     ITALIC("_"),
     LIST_ENTRY("* "),
