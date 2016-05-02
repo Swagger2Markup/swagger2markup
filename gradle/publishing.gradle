@@ -97,8 +97,9 @@ bintray {
     publish = true //If version should be auto published after an upload
     publications = ['mavenJava']
     pkg {
-        repo = 'maven'
+        repo = 'Maven'
         name = 'markup-document-builder'
+        userOrg = 'swagger2markup'
         websiteUrl = projectUrl
         issueTrackerUrl = issuesUrl
         vcsUrl = scmUrl
