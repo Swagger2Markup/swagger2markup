@@ -425,9 +425,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         if (hasParameters) {
             List<List<String>> cells = new ArrayList<>();
             List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
+                    new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                     new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(10).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^10"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(8).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^8"),
                     new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
                     new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
             for (Parameter parameter : parameters) {
@@ -644,8 +644,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
             List<MarkupTableColumn> responseCols = Arrays.asList(
-                    new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(1).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^1"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(15).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^15"),
+                    new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
+                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(13).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^13"),
                     new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
 
             List<List<String>> cells = new ArrayList<>();

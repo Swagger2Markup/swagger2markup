@@ -15,7 +15,7 @@ Return state
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*oldState* +
@@ -37,7 +37,7 @@ _optional_|State value|enum (ADDED, REMOVED, CHANGED)
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^3,.^13,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|enum (ADDED, REMOVED, CHANGED)
