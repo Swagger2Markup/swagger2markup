@@ -222,22 +222,24 @@ public class ExamplesUtil {
      */
     public static Map<String, Object> exampleMapForProperties(Map<String, Property> properties, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
         Map<String, Object> exampleMap = new LinkedHashMap<>();
-        for (Map.Entry<String, Property> property : properties.entrySet()) {
-            Object exampleObject = property.getValue().getExample();
-            if (exampleObject == null) {
-                if (property.getValue() instanceof RefProperty) {
-                    exampleObject = generateExampleForRefModel(true, ((RefProperty) property.getValue()).getSimpleRef(), definitions, markupDocBuilder);
-                } else if (property.getValue() instanceof ArrayProperty) {
-                    exampleObject = generateExampleForArrayProperty((ArrayProperty) property.getValue(), definitions, markupDocBuilder);
-                } else if (property.getValue() instanceof MapProperty) {
-                    exampleObject = generateExampleForMapProperty((MapProperty) property.getValue(), markupDocBuilder);
-                }
+        if (properties != null) {
+            for (Map.Entry<String, Property> property : properties.entrySet()) {
+                Object exampleObject = property.getValue().getExample();
                 if (exampleObject == null) {
-                    Property valueProperty = property.getValue();
-                    exampleObject = PropertyUtils.generateExample(valueProperty, markupDocBuilder);
+                    if (property.getValue() instanceof RefProperty) {
+                        exampleObject = generateExampleForRefModel(true, ((RefProperty) property.getValue()).getSimpleRef(), definitions, markupDocBuilder);
+                    } else if (property.getValue() instanceof ArrayProperty) {
+                        exampleObject = generateExampleForArrayProperty((ArrayProperty) property.getValue(), definitions, markupDocBuilder);
+                    } else if (property.getValue() instanceof MapProperty) {
+                        exampleObject = generateExampleForMapProperty((MapProperty) property.getValue(), markupDocBuilder);
+                    }
+                    if (exampleObject == null) {
+                        Property valueProperty = property.getValue();
+                        exampleObject = PropertyUtils.generateExample(valueProperty, markupDocBuilder);
+                    }
                 }
+                exampleMap.put(property.getKey(), exampleObject);
             }
-            exampleMap.put(property.getKey(), exampleObject);
         }
         return exampleMap;
     }
