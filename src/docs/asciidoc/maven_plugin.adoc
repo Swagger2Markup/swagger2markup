@@ -54,8 +54,8 @@ You can customize the task by configuring a Map of <<Swagger2Markup properties>>
         <artifactId>swagger2markup-maven-plugin</artifactId>
         <version>{project-version}</version>
         <configuration>
-          <swaggerInput>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</input>
-          <outputDir>${project.build.directory}/asciidoc</output>
+          <swaggerInput>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</swaggerInput>
+          <outputDir>${project.build.directory}/asciidoc</outputDir>
           <config>
             <swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
           </config>
