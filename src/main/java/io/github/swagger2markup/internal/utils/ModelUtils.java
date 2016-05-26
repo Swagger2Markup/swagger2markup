@@ -24,6 +24,7 @@ import io.swagger.models.refs.RefFormat;
 import org.apache.commons.lang3.Validate;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class ModelUtils {
@@ -69,7 +70,7 @@ public final class ModelUtils {
                 return new BasicType(modelImpl.getType(), modelImpl.getTitle());
         } else if (model instanceof ComposedModel) {
             ComposedModel composedModel = (ComposedModel) model;
-            Map<String, Property> allProperties = new HashMap<>();
+            Map<String, Property> allProperties = new LinkedHashMap<>();
             ObjectTypePolymorphism polymorphism = new ObjectTypePolymorphism(ObjectTypePolymorphism.Nature.NONE, null);
             String name = model.getTitle();
 

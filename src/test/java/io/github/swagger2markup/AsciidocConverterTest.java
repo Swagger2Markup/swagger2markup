@@ -480,6 +480,30 @@ public class AsciidocConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithPolymorphismAsIsOrdering() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_polymorphism.json").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/polymorphismAsIsOrdering");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withPropertyOrdering(OrderBy.AS_IS)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/polymorphismAsIsOrdering").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithPolymorphismAsIsOrdering.html");
+    }
+
+    @Test
     public void testSwagger2AsciiDocConversionWithResponseHeaders() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_response_headers.yaml").toURI());
