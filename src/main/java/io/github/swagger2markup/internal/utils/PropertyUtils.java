@@ -51,11 +51,17 @@ public final class PropertyUtils {
         } else if (property instanceof ArrayProperty) {
             ArrayProperty arrayProperty = (ArrayProperty) property;
             Property items = arrayProperty.getItems();
-            type = new ArrayType(arrayProperty.getTitle(), getType(items, definitionDocumentResolver));
+            if (items == null)
+                type = new ArrayType(arrayProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
+            else
+                type = new ArrayType(arrayProperty.getTitle(), getType(items, definitionDocumentResolver));
         } else if (property instanceof MapProperty) {
             MapProperty mapProperty = (MapProperty) property;
             Property additionalProperties = mapProperty.getAdditionalProperties();
-            type = new MapType(mapProperty.getTitle(), getType(additionalProperties, definitionDocumentResolver));
+            if (additionalProperties == null)
+                type = new MapType(mapProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
+            else
+                type = new MapType(mapProperty.getTitle(), getType(additionalProperties, definitionDocumentResolver));
         } else if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
             List<String> enums = stringProperty.getEnum();

@@ -1,0 +1,1228 @@
+
+[[_paths]]
+== Paths
+
+[[_geographies_geo-id_media_recent_get]]
+=== GET /geographies/{geo-id}/media/recent
+
+==== Description
+Get recent media from a geography subscription that you created.
+*Note*: You can only access Geographies that were explicitly created
+by your OAuth client. Check the Geography Subscriptions section of the
+https://instagram.com/developer/realtime/[real-time updates page].
+When you create a subscription to some geography
+that you define, you will be returned a unique geo-id that can be used
+in this query. To backfill photos from the location covered by this
+geography, use the https://instagram.com/developer/endpoints/media/[media search endpoint
+].
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*geo-id* +
+_required_|Geolocation ID|integer|
+|*Query*|*count* +
+_optional_|Max number of media to return.|integer|
+|*Query*|*min_id* +
+_optional_|Return media before this `min_id`.|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|No Content
+|===
+
+
+[[_locations_search_get]]
+=== GET /locations/search
+
+==== Description
+Search for a location by geographic coordinate.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*distance* +
+_optional_|Default is 1000m (distance=1000), max distance is 5000.|integer|
+|*Query*|*facebook_places_id* +
+_optional_|Returns a location mapped off of a Facebook places id. If used, a
+Foursquare id and lat, lng are not required.|integer|
+|*Query*|*foursquare_id* +
+_optional_|returns a location mapped off of a foursquare v1 api location id.
+If used, you are not required to use lat and lng. Note that this
+method is deprecated; you should use the new foursquare IDs with V2
+of their API.|integer|
+|*Query*|*foursquare_v2_id* +
+_optional_|Returns a location mapped off of a foursquare v2 api location id. If
+used, you are not required to use lat and lng.|integer|
+|*Query*|*lat* +
+_optional_|atitude of the center search coordinate. If used, lng is required.|number|
+|*Query*|*lng* +
+_optional_|ongitude of the center search coordinate. If used, lat is required.|number|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_locations_search_get_response_200,Response 200>>
+|===
+
+[[_locations_search_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_location,Location>> > array
+|===
+
+
+==== Tags
+
+* Location
+
+
+[[_locations_location-id_get]]
+=== GET /locations/{location-id}
+
+==== Description
+Get information about a location.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*location-id* +
+_required_|Location ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_locations_location-id_get_response_200,Response 200>>
+|===
+
+[[_locations_location-id_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||<<_location,Location>>
+|===
+
+
+==== Tags
+
+* Location
+
+
+[[_locations_location-id_media_recent_get]]
+=== GET /locations/{location-id}/media/recent
+
+==== Description
+Get a list of recent media objects from a given location.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*location-id* +
+_required_|Location ID|integer|
+|*Query*|*max_id* +
+_optional_|Return media earlier than this max_id.|string|
+|*Query*|*max_timestamp* +
+_optional_|Return media before this UNIX timestamp.|integer|
+|*Query*|*min_id* +
+_optional_|Return media later than this min_id.|string|
+|*Query*|*min_timestamp* +
+_optional_|Return media after this UNIX timestamp.|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_locations_location-id_media_recent_get_response_200,Response 200>>
+|===
+
+[[_locations_location-id_media_recent_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_media,Media>> > array
+|===
+
+
+==== Tags
+
+* Location
+* Media
+
+
+[[_media_popular_get]]
+=== GET /media/popular
+
+==== Description
+Get a list of what media is most popular at the moment.
+Can return mix of image and video types.
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_popular_get_response_200,Response 200>>
+|===
+
+[[_media_popular_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_media,Media>> > array
+|===
+
+
+==== Tags
+
+* Media
+
+
+[[_media_search_get]]
+=== GET /media/search
+
+==== Description
+Search for media in a given area. The default time span is set to 5
+days. The time span must not exceed 7 days. Defaults time stamps cover
+the last 5 days. Can return mix of image and video types.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*DISTANCE* +
+_optional_|Default is 1km (distance=1000), max distance is 5km.|integer|`"1000"`
+|*Query*|*LAT* +
+_optional_|Latitude of the center search coordinate. If used, lng is required.|number|
+|*Query*|*LNG* +
+_optional_|Longitude of the center search coordinate. If used, lat is required.|number|
+|*Query*|*MAX_TIMESTAMP* +
+_optional_|A unix timestamp. All media returned will be taken earlier than this
+timestamp.|integer|
+|*Query*|*MIN_TIMESTAMP* +
+_optional_|A unix timestamp. All media returned will be taken later than
+this timestamp.|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_search_get_response_200,Response 200>>
+|===
+
+[[_media_search_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< object > array
+|===
+
+
+==== Tags
+
+* Media
+
+
+[[_media_media-id_get]]
+=== GET /media/{media-id}
+
+==== Description
+Get information about a media object.
+The returned type key will allow you to differentiate between `image`
+and `video` media.
+
+Note: if you authenticate with an OAuth Token, you will receive the
+`user_has_liked` key which quickly tells you whether the current user
+has liked this media item.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|The media ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media,Media>>
+|===
+
+
+==== Tags
+
+* Media
+
+
+[[_media_media-id_comments_post]]
+=== POST /media/{media-id}/comments
+
+==== Description
+Create a comment on a media object with the following rules:
+
+* The total length of the comment cannot exceed 300 characters.
+* The comment cannot contain more than 4 hashtags.
+* The comment cannot contain more than 1 URL.
+* The comment cannot consist of all capital letters.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|Media ID|integer|
+|*Body*|*TEXT* +
+_optional_|Text to post as a comment on the media object as specified in
+media-id.|number|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_media-id_comments_post_response_200,Response 200>>
+|===
+
+[[_media_media-id_comments_post_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||object
+|*meta* +
+_optional_||<<_media_media-id_comments_post_meta,meta>>
+|===
+
+[[_media_media-id_comments_post_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||number
+|===
+
+
+==== Tags
+
+* Comments
+* Media
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|*oauth2*|*<<_oauth,oauth>>*|comments
+|===
+
+
+[[_media_media-id_comments_get]]
+=== GET /media/{media-id}/comments
+
+==== Description
+Get a list of recent comments on a media object.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|Media ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_media-id_comments_get_response_200,Response 200>>
+|===
+
+[[_media_media-id_comments_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_comment,Comment>> > array
+|*meta* +
+_optional_||<<_media_media-id_comments_get_meta,meta>>
+|===
+
+[[_media_media-id_comments_get_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||number
+|===
+
+
+==== Tags
+
+* Comments
+
+
+[[_media_media-id_comments_delete]]
+=== DELETE /media/{media-id}/comments
+
+==== Description
+Remove a comment either on the authenticated user's media object or
+authored by the authenticated user.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|Media ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_media-id_comments_delete_response_200,Response 200>>
+|===
+
+[[_media_media-id_comments_delete_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||object
+|*meta* +
+_optional_||<<_media_media-id_comments_delete_meta,meta>>
+|===
+
+[[_media_media-id_comments_delete_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||number
+|===
+
+
+==== Tags
+
+* Comments
+
+
+[[_media_media-id_likes_post]]
+=== POST /media/{media-id}/likes
+
+==== Description
+Set a like on this media by the currently authenticated user.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|Media ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_media-id_likes_post_response_200,Response 200>>
+|===
+
+[[_media_media-id_likes_post_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||object
+|*meta* +
+_optional_||<<_media_media-id_likes_post_meta,meta>>
+|===
+
+[[_media_media-id_likes_post_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||number
+|===
+
+
+==== Tags
+
+* Likes
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|*oauth2*|*<<_oauth,oauth>>*|comments
+|===
+
+
+[[_media_media-id_likes_get]]
+=== GET /media/{media-id}/likes
+
+==== Description
+Get a list of users who have liked this media.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|Media ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_media-id_likes_get_response_200,Response 200>>
+|===
+
+[[_media_media-id_likes_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_like,Like>> > array
+|*meta* +
+_optional_||<<_media_media-id_likes_get_meta,meta>>
+|===
+
+[[_media_media-id_likes_get_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||number
+|===
+
+
+==== Tags
+
+* Likes
+* Media
+
+
+[[_media_media-id_likes_delete]]
+=== DELETE /media/{media-id}/likes
+
+==== Description
+Remove a like on this media by the currently authenticated user.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*media-id* +
+_required_|Media ID|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media_media-id_likes_delete_response_200,Response 200>>
+|===
+
+[[_media_media-id_likes_delete_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||object
+|*meta* +
+_optional_||<<_media_media-id_likes_delete_meta,meta>>
+|===
+
+[[_media_media-id_likes_delete_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||number
+|===
+
+
+==== Tags
+
+* Likes
+
+
+[[_media1_shortcode_get]]
+=== GET /media1/{shortcode}
+
+==== Description
+This endpoint returns the same response as *GET* `/media/media-id`.
+
+A media object's shortcode can be found in its shortlink URL.
+An example shortlink is `http://instagram.com/p/D/`
+Its corresponding shortcode is D.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*shortcode* +
+_required_|The media shortcode|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_media,Media>>
+|===
+
+
+==== Tags
+
+* Media
+
+
+[[_tags_search_get]]
+=== GET /tags/search
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*q* +
+_optional_|A valid tag name without a leading #. (eg. snowy, nofilter)|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_tags_search_get_response_200,Response 200>>
+|===
+
+[[_tags_search_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_tag,Tag>> > array
+|*meta* +
+_optional_||<<_tags_search_get_meta,meta>>
+|===
+
+[[_tags_search_get_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||integer
+|===
+
+
+==== Tags
+
+* Tags
+
+
+[[_tags_tag-name_get]]
+=== GET /tags/{tag-name}
+
+==== Description
+Get information about a tag object.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*tag-name* +
+_required_|Tag name|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_tag,Tag>>
+|===
+
+
+==== Tags
+
+* Tags
+
+
+[[_tags_tag-name_media_recent_get]]
+=== GET /tags/{tag-name}/media/recent
+
+==== Description
+Get a list of recently tagged media. Use the `max_tag_id` and
+`min_tag_id` parameters in the pagination response to paginate through
+these objects.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*tag-name* +
+_required_|Tag name|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_tags_tag-name_media_recent_get_response_200,Response 200>>
+|===
+
+[[_tags_tag-name_media_recent_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_tag,Tag>> > array
+|===
+
+
+==== Tags
+
+* Tags
+
+
+[[_users_search_get]]
+=== GET /users/search
+
+==== Description
+Search for a user by name.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*count* +
+_optional_|Number of users to return.|string|
+|*Query*|*q* +
+_required_|A query string|string|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_search_get_response_200,Response 200>>
+|===
+
+[[_users_search_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_miniprofile,MiniProfile>> > array
+|===
+
+
+==== Tags
+
+* Users
+
+
+[[_users_self_feed_get]]
+=== GET /users/self/feed
+
+==== Description
+See the authenticated user's feed.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*count* +
+_optional_|Count of media to return.|integer|
+|*Query*|*max_id* +
+_optional_|Return media earlier than this max_id.s|integer|
+|*Query*|*min_id* +
+_optional_|Return media later than this min_id.|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_self_feed_get_response_200,Response 200>>
+|===
+
+[[_users_self_feed_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_media,Media>> > array
+|===
+
+
+==== Tags
+
+* Users
+
+
+[[_users_self_media_liked_get]]
+=== GET /users/self/media/liked
+
+==== Description
+See the list of media liked by the authenticated user.
+Private media is returned as long as the authenticated user
+has permissionto view that media. Liked media lists are only
+available for the currently authenticated user.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Query*|*count* +
+_optional_|Count of media to return.|integer|
+|*Query*|*max_like_id* +
+_optional_|Return media liked before this id.|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_self_media_liked_get_response_200,Response 200>>
+|===
+
+[[_users_self_media_liked_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_media,Media>> > array
+|===
+
+
+==== Tags
+
+* Users
+
+
+[[_users_self_requested-by_get]]
+=== GET /users/self/requested-by
+
+==== Description
+List the users who have requested this user's permission to follow.
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_self_requested-by_get_response_200,Response 200>>
+|===
+
+[[_users_self_requested-by_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_miniprofile,MiniProfile>> > array
+|*meta* +
+_optional_||<<_users_self_requested-by_get_meta,meta>>
+|===
+
+[[_users_self_requested-by_get_meta]]
+*meta*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*code* +
+_optional_||integer
+|===
+
+
+==== Tags
+
+* Relationships
+
+
+[[_users_user-id_get]]
+=== GET /users/{user-id}
+
+==== Description
+Get basic information about a user.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*user-id* +
+_required_|The user identifier number|number|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|The user object|<<_users_user-id_get_response_200,Response 200>>
+|===
+
+[[_users_user-id_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||<<_user,User>>
+|===
+
+
+==== Tags
+
+* Users
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|*apiKey*|*<<_key,key>>*|
+|*oauth2*|*<<_oauth,oauth>>*|basic
+|===
+
+
+[[_users_user-id_followed-by_get]]
+=== GET /users/{user-id}/followed-by
+
+==== Description
+Get the list of users this user is followed by.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*user-id* +
+_required_|The user identifier number|number|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_user-id_followed-by_get_response_200,Response 200>>
+|===
+
+[[_users_user-id_followed-by_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_miniprofile,MiniProfile>> > array
+|===
+
+
+==== Tags
+
+* Relationships
+
+
+[[_users_user-id_follows_get]]
+=== GET /users/{user-id}/follows
+
+==== Description
+Get the list of users this user follows.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*user-id* +
+_required_|The user identifier number|number|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_user-id_follows_get_response_200,Response 200>>
+|===
+
+[[_users_user-id_follows_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_miniprofile,MiniProfile>> > array
+|===
+
+
+==== Tags
+
+* Relationships
+
+
+[[_users_user-id_media_recent_get]]
+=== GET /users/{user-id}/media/recent
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*user-id* +
+_required_|The user identifier number|number|
+|*Query*|*count* +
+_optional_|Count of media to return.|integer|
+|*Query*|*max_id* +
+_optional_|Return media earlier than this max_id.|string|
+|*Query*|*max_timestamp* +
+_optional_|Return media before this UNIX timestamp.|integer|
+|*Query*|*min_id* +
+_optional_|Return media later than this min_id.|string|
+|*Query*|*min_timestamp* +
+_optional_|Return media after this UNIX timestamp.|integer|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|Get the most recent media published by a user. To get the most recent
+media published by the owner of the access token, you can use `self`
+instead of the `user-id`.|<<_users_user-id_media_recent_get_response_200,Response 200>>
+|===
+
+[[_users_user-id_media_recent_get_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_media,Media>> > array
+|===
+
+
+==== Tags
+
+* Users
+
+
+[[_users_user-id_relationship_post]]
+=== POST /users/{user-id}/relationship
+
+==== Description
+Modify the relationship between the current user and thetarget user.
+
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Path*|*user-id* +
+_required_|The user identifier number|number|
+|*Body*|*action* +
+_optional_|One of follow/unfollow/block/unblock/approve/ignore.|enum (follow, unfollow, block, unblock, approve)|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^1,.^15,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_users_user-id_relationship_post_response_200,Response 200>>
+|===
+
+[[_users_user-id_relationship_post_response_200]]
+*Response 200*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*data* +
+_optional_||< <<_miniprofile,MiniProfile>> > array
+|===
+
+
+==== Tags
+
+* Relationships
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|*oauth2*|*<<_oauth,oauth>>*|relationships
+|===
+
+
+

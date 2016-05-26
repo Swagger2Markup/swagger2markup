@@ -1,0 +1,32 @@
+
+[[_securityscheme]]
+== Security
+
+[[_key]]
+=== key
+[%hardbreaks]
+_Type_ : apiKey
+_Name_ : access_token
+_In_ : QUERY
+
+
+[[_oauth]]
+=== oauth
+[%hardbreaks]
+_Type_ : oauth2
+_Flow_ : implicit
+_Token URL_ : https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
+
+
+[options="header", cols=".^3,.^17"]
+|===
+|Name|Description
+|basic|to read any and all data related to a user (e.g. following/followed-by
+ lists, photos, etc.) (granted by default)
+|comments|to create or delete comments on a user’s behalf
+|relationships|to follow and unfollow users on a user’s behalf
+|likes|to like and unlike items on a user’s behalf
+|===
+
+
+
