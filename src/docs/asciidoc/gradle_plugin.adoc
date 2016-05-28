@@ -18,7 +18,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:{project-version}'
+        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:{release-version}'
     }
 }
 
