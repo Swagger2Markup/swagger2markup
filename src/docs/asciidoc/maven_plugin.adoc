@@ -45,14 +45,14 @@ The plugin adds a new task goal `swagger2markup:convertSwagger2markup`. You can 
 
 You can customize the task by configuring a Map of <<Swagger2Markup properties>>.
 
-[source,xml]
+[source,xml, subs="specialcharacters,attributes"]
 ----
 <build>
     <plugins>
       <plugin>
         <groupId>io.github.swagger2markup</groupId>
         <artifactId>swagger2markup-maven-plugin</artifactId>
-        <version>{project-version}</version>
+        <version>{release-version}</version>
         <configuration>
           <swaggerInput>${project.basedir}/src/docs/swagger/swagger_petstore.yaml</swaggerInput>
           <outputDir>${project.build.directory}/asciidoc</outputDir>
