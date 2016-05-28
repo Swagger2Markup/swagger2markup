@@ -31,7 +31,7 @@ Add the following snippet to your Maven POM file:
       <plugin>
         <groupId>io.github.swagger2markup</groupId>
         <artifactId>swagger2markup-maven-plugin</artifactId>
-        <version>{project-version}</version>
+        <version>{release-version}</version>
       </plugin>
     </plugins>
 </build>
