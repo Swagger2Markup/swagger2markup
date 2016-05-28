@@ -19,7 +19,7 @@ repositories {
     jCenter()
 }
 
-compile "io.github.swagger2markup:swagger2markup:{project-version}"
+compile "io.github.swagger2markup:swagger2markup:{release-version}"
 ----
 
 ==== Snapshot
@@ -50,7 +50,7 @@ repositories {
 <dependency>
     <groupId>io.github.swagger2markup</groupId>
     <artifactId>swagger2markup</artifactId>
-    <version>{project-version}</version>
+    <version>{release-version}</version>
 </dependency>
 ----
 
