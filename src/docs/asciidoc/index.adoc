@@ -6,7 +6,7 @@ Robert Winkler
 :numbered:
 :hardbreaks:
 :release-version: 1.0.0
-:revnumber: {project-version}
+:revnumber: 1.0.0
 :revdate: {localdate}
 :icons: font
 :pagenums:
