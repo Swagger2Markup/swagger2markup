@@ -16,7 +16,7 @@ You can show the help:
 
 [source, subs="attributes"]
 ----
-java -jar swagger2markup-cli-{project-version}.jar help convert
+java -jar swagger2markup-cli-{release-version}.jar help convert
 ----
 
 Output: 
@@ -57,7 +57,7 @@ You can convert a Swagger file into a folder as follows:
 
 [source, subs="attributes"]
 ----
-java -jar swagger2markup-cli-1.0.0.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc
+java -jar swagger2markup-cli-{release-version}.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc
 ----
 
 It generates the Markup documents into the `/tmp/asiidoc` folder.
@@ -68,7 +68,7 @@ You can convert a local Swagger file into a file as follows:
 
 [source, subs="attributes"]
 ----
-java -jar swagger2markup-cli-1.0.0.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger
+java -jar swagger2markup-cli-{release-version}.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger
 ----
 
 NOTE: The input file must not have a file extension
@@ -81,7 +81,7 @@ You can convert a remote Swagger specification which must be accessible via HTTP
 
 [source, subs="attributes"]
 ----
-java -jar swagger2markup-cli-1.0.0.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp
+java -jar swagger2markup-cli-{release-version}.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp
 ----
 
 === Configuration
@@ -98,6 +98,6 @@ Invoke the CLI as follows:
 
 [source, subs="attributes"]
 ----
-java -jar swagger2markup-cli-1.0.0.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties
+java -jar swagger2markup-cli-{release-version}.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties
 ----
 
