@@ -11,7 +11,7 @@ POST /pets
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -21,7 +21,7 @@ _optional_|Pet object that needs to be added to the store|<<_pet,Pet>>|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*405*|Invalid input|No Content
@@ -80,7 +80,7 @@ PUT /pets
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -90,7 +90,7 @@ _optional_|Pet object that needs to be added to the store|<<_pet,Pet>>|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*400*|Invalid ID supplied|No Content
@@ -138,7 +138,7 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*status* +
@@ -148,7 +148,7 @@ _optional_|Status values that need to be considered for filter|< string > array(
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|< <<_pet,Pet>> > array
@@ -189,7 +189,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*tags* +
@@ -199,7 +199,7 @@ _optional_|Tags to filter by|< string > array(multi)|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|< <<_pet,Pet>> > array
@@ -236,7 +236,7 @@ POST /pets/{petId}
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*petId* +
@@ -250,7 +250,7 @@ _required_|Updated status of the pet|string|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*405*|Invalid input|No Content
@@ -295,7 +295,7 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*petId* +
@@ -305,7 +305,7 @@ _required_|ID of the pet|integer(int64)|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|<<_pet,Pet>>
@@ -344,7 +344,7 @@ DELETE /pets/{petId}
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Header*|*api_key* +
@@ -356,7 +356,7 @@ _required_|Pet id to delete|integer(int64)|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*400*|Invalid pet value|No Content
@@ -392,7 +392,7 @@ POST /stores/order
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -402,7 +402,7 @@ _optional_|order placed for purchasing the pet|<<_order,Order>>|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|<<_order,Order>>
@@ -466,7 +466,7 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*orderId* +
@@ -476,7 +476,7 @@ _required_|ID of pet that needs to be fetched|string|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|<<_order,Order>>
@@ -525,7 +525,7 @@ For valid response try integer IDs with value &lt; 1000. Anything above 1000 or 
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*orderId* +
@@ -535,7 +535,7 @@ _required_|ID of the order that needs to be deleted|string|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*400*|Invalid ID supplied|No Content
@@ -567,7 +567,7 @@ This can only be done by the logged in user.
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -577,7 +577,7 @@ _optional_|Created user object|<<_user,User>>|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*default*|successful operation|No Content
@@ -604,7 +604,7 @@ POST /users/createWithArray
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -614,7 +614,7 @@ _optional_|List of user object|< <<_user,User>> > array|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*default*|successful operation|No Content
@@ -641,7 +641,7 @@ POST /users/createWithList
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*body* +
@@ -651,7 +651,7 @@ _optional_|List of user object|< <<_user,User>> > array|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*default*|successful operation|No Content
@@ -678,7 +678,7 @@ GET /users/login
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*password* +
@@ -690,7 +690,7 @@ _optional_|The user name for login|string|`"testUser"`
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|string
@@ -718,7 +718,7 @@ GET /users/logout
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*default*|successful operation|No Content
@@ -745,7 +745,7 @@ GET /users/{username}
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*username* +
@@ -755,7 +755,7 @@ _required_|The name that needs to be fetched. Use user1 for testing.|string|`"te
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|successful operation|<<_user,User>>
@@ -788,7 +788,7 @@ This can only be done by the logged in user.
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*username* +
@@ -800,7 +800,7 @@ _optional_|Updated user object|<<_user,User>>|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*400*|Invalid user supplied|No Content
@@ -832,7 +832,7 @@ This can only be done by the logged in user.
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*username* +
@@ -842,7 +842,7 @@ _required_|The name that needs to be deleted|string|
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*400*|Invalid username supplied|No Content

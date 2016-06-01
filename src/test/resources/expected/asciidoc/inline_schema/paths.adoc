@@ -15,7 +15,7 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*Version* +
@@ -37,7 +37,7 @@ _optional_|option value|string
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|Result|< < string, <<_collectionparameters_post_response_200,Response 200>> > map > array
@@ -74,7 +74,7 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*Option* +
@@ -126,7 +126,7 @@ _optional_|option value|string
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|Result +
@@ -182,7 +182,7 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*Version* +
@@ -224,7 +224,7 @@ _optional_||string
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|Result|<<_mixedparameters_post_response_200,Response 200>>
@@ -281,7 +281,7 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^3,.^3,.^8,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Body*|*Version* +
@@ -323,7 +323,7 @@ _optional_||string
 
 ==== Responses
 
-[options="header", cols=".^3,.^13,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|Result|<<_result,Result>>
