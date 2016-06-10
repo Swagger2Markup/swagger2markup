@@ -16,6 +16,10 @@
 
 package io.github.swagger2markup.internal.utils;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.*;
@@ -27,6 +31,7 @@ import io.swagger.models.properties.RefProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,11 +41,11 @@ public class ExamplesUtil {
     private static Logger logger = LoggerFactory.getLogger(ExamplesUtil.class);
 
     /**
-     * Generates a Map of response examples
+     * Generates a map of response examples from the given {@code operation}
      *
      * @param generateMissingExamples specifies the missing examples should be generated
      * @param operation the Swagger Operation
-     * @param definitions the map of definitions
+     * @param definitions the map of all available definitions
      * @param markupDocBuilder the markup builder
      * @return map containing response examples.
      */
@@ -75,13 +80,13 @@ public class ExamplesUtil {
     }
 
     /**
-     * Generates examples for request
+     * Generates a map of request examples from the given {@code operation}
      *
      * @param generateMissingExamples specifies the missing examples should be generated
      * @param pathOperation the Swagger Operation
-     * @param definitions the map of definitions
+     * @param definitions the map of all available definitions
      * @param markupDocBuilder the markup builder
-     * @return an Optional with the example content
+     * @return map containing request examples
      */
     public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, PathOperation pathOperation, Map<String, Model> definitions, MarkupDocBuilder markupDocBuilder) {
         Operation operation = pathOperation.getOperation();
@@ -174,6 +179,15 @@ public class ExamplesUtil {
         Object example = null;
         if (model != null) {
             example = model.getExample();
+            // Workaround for https://github.com/swagger-api/swagger-parser/issues/255 returning a string
+            if (model instanceof ArrayModel && example instanceof String) {
+                ObjectMapper mapper = new ObjectMapper();
+                try {
+                    example = mapper.readTree((String) example);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             if (example == null && generateMissingExamples) {
                 if (model instanceof ComposedModel) {
                     example = exampleMapForProperties(getPropertiesForComposedModel((ComposedModel) model, definitions), definitions, markupDocBuilder);

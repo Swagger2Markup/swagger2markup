@@ -717,6 +717,20 @@
           }
         }
       }
+    },
+    "/objectArray": {
+      "patch": {
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ObjectArray"
+            }
+          }
+        ]
+      }
     }
   },
   "securityDefinitions": {
@@ -757,6 +771,19 @@
     }
   },
   "definitions": {
+    "ObjectArray": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "example": [
+        {
+          "op": "replace",
+          "path": "/s",
+          "v": "w"
+        }
+      ]
+    },
     "Identified": {
       "properties": {
         "id": {

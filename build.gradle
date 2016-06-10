@@ -35,12 +35,12 @@ repositories {
     }
     jcenter()
     mavenCentral()
-    //mavenLocal()
+    mavenLocal()
 }
 
 dependencies {
     compile 'io.github.swagger2markup:markup-document-builder:1.0.0'
-    compile 'io.swagger:swagger-compat-spec-parser:1.0.18'
+    compile 'io.swagger:swagger-compat-spec-parser:1.0.21-SNAPSHOT'
     compile 'org.apache.commons:commons-configuration2:2.0'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
     compile 'org.apache.commons:commons-collections4:4.1'

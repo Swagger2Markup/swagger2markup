@@ -37,6 +37,11 @@ _optional_||integer(int64)
 |===
 
 
+[[_objectarray]]
+=== ObjectArray
+_Type_ : < object > array
+
+
 [[_order]]
 === Order
 

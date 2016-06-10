@@ -22,7 +22,19 @@ _optional_|*Example* : `"Canines"`|string
 |===
 |Name|Description|Schema
 |*subObject* +
-_optional_|*Example* : `"object"`|object
+_optional_|*Example* : `"object"`|<<_complexobject_subobject,subObject>>
+|===
+
+[[_complexobject_subobject]]
+*subObject*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*id* +
+_optional_|*Example* : `88`|integer(int64)
+|*value* +
+_optional_|*Example* : `"a value !"`|string
 |===
 
 
@@ -35,6 +47,11 @@ _optional_|*Example* : `"object"`|object
 |*id* +
 _optional_|*Example* : `0`|integer(int64)
 |===
+
+
+[[_objectarray]]
+=== ObjectArray
+_Type_ : < object > array
 
 
 [[_order]]

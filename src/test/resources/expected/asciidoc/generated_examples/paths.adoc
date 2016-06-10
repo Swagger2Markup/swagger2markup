@@ -2,6 +2,39 @@
 [[_paths]]
 == Paths
 
+[[_objectarray_patch]]
+=== PATCH /objectArray
+
+==== Parameters
+
+[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Body*|*body* +
+_required_||<<_objectarray,ObjectArray>>|
+|===
+
+
+==== Example HTTP request
+
+===== Request path
+[source,json]
+----
+"/objectArray"
+----
+
+
+===== Request body
+[source,json]
+----
+[ {
+  "op" : "replace",
+  "path" : "/s",
+  "v" : "w"
+} ]
+----
+
+
 [[_addpet]]
 === Add a new pet to the store
 ....
