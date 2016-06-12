@@ -225,18 +225,19 @@ public abstract class MarkupDocumentBuilder {
                 
                 MarkupDocBuilder descriptionContent = copyMarkupDocBuilder();
                 String description = defaultString(swaggerMarkupDescription(property.getDescription()));
-                if (isNotBlank(description))
+                if (isNotBlank(descriptionContent.toString())) 
                     descriptionContent.text(description);
+                
                 if(defaultValue != null){
-                    if (isNotBlank(description))
+                    if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
                     descriptionContent.boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(defaultValue));
                 }
                 
                 if (minlength != null && maxlength != null) {
                     // combination of minlength/maxlength
-
-                	if (isNotBlank(description))
+                	
+                	if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
                 	
                 	String lengthRange = minlength + " - " + maxlength;
@@ -248,13 +249,13 @@ public abstract class MarkupDocumentBuilder {
                     
                 } else {
                 	 if(minlength != null){
-                     	if (isNotBlank(description))
+                     	if (isNotBlank(descriptionContent.toString()))
                              descriptionContent.newLine(true);
                          descriptionContent.boldText(MINLENGTH_COLUMN).text(COLON).literalText(minlength.toString());
                      }
                      
                      if(maxlength != null){
-                     	if (isNotBlank(description))
+                     	if (isNotBlank(descriptionContent.toString()))
                              descriptionContent.newLine(true);
                          descriptionContent.boldText(MAXLENGTH_COLUMN).text(COLON).literalText(maxlength.toString());
                      }
@@ -263,19 +264,20 @@ public abstract class MarkupDocumentBuilder {
                
                 
                 if(pattern != null){
-                	if (isNotBlank(description))
+                	if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
+                	
                     descriptionContent.boldText(PATTERN_COLUMN).text(COLON).literalText(Json.pretty(pattern));
                 }
                 
                 if(minValue != null){
-                	if (isNotBlank(description))
+                	if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
                     descriptionContent.boldText(MINVALUE_COLUMN).text(COLON).literalText(minValue.toString());
                 }
                 
                 if(maxValue != null){
-                	if (isNotBlank(description))
+                	if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
                     descriptionContent.boldText(MAXVALUE_COLUMN).text(COLON).literalText(maxValue.toString());
                 }
