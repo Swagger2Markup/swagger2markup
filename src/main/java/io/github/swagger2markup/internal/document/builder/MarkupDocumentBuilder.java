@@ -51,6 +51,16 @@ public abstract class MarkupDocumentBuilder {
     protected static final String COLON = " : ";
 
     protected final String DEFAULT_COLUMN;
+    
+    protected final String MAXLENGTH_COLUMN;
+    protected final String MINLENGTH_COLUMN;
+    protected final String LENGTH_COLUMN;
+    
+    protected final String PATTERN_COLUMN;
+    protected final String MINVALUE_COLUMN;
+    protected final String MAXVALUE_COLUMN;
+    
+    
     protected final String EXAMPLE_COLUMN;
     protected final String SCHEMA_COLUMN;
     protected final String NAME_COLUMN;
@@ -85,6 +95,15 @@ public abstract class MarkupDocumentBuilder {
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
+        
+        MINLENGTH_COLUMN = labels.getString("minlength_column");
+        MAXLENGTH_COLUMN = labels.getString("maxlength_column");
+        LENGTH_COLUMN = labels.getString("length_column");
+        
+        PATTERN_COLUMN = labels.getString("pattern_column");
+        MINVALUE_COLUMN = labels.getString("minvalue_column");
+        MAXVALUE_COLUMN = labels.getString("maxvalue_column");
+        
         EXAMPLE_COLUMN = labels.getString("example_column");
         FLAGS_COLUMN = labels.getString("flags.column");
         FLAGS_REQUIRED = labels.getString("flags.required");
@@ -186,6 +205,12 @@ public abstract class MarkupDocumentBuilder {
                 Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
 
                 Object defaultValue = PropertyUtils.getDefaultValue(property);
+                
+                Integer maxlength = PropertyUtils.getMaxlength(property);
+                Integer minlength = PropertyUtils.getMinlength(property);
+                String pattern = PropertyUtils.getPattern(property);
+                Double minValue = PropertyUtils.getMin(property);
+                Double maxValue = PropertyUtils.getMax(property);
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
                 propertyNameContent.boldTextLine(propertyName, true);
@@ -207,6 +232,48 @@ public abstract class MarkupDocumentBuilder {
                         descriptionContent.newLine(true);
                     descriptionContent.boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(defaultValue));
                 }
+                
+                if (minlength != null && maxlength != null) {
+                    // combination of minlength/maxlength
+
+                	if (isNotBlank(description))
+                        descriptionContent.newLine(true);
+                    descriptionContent.boldText(LENGTH_COLUMN).text(COLON).literalText(Json.pretty(minlength + " - " + maxlength));
+                    
+                } else {
+                	 if(minlength != null){
+                     	if (isNotBlank(description))
+                             descriptionContent.newLine(true);
+                         descriptionContent.boldText(MINLENGTH_COLUMN).text(COLON).literalText(Json.pretty(minlength));
+                     }
+                     
+                     if(maxlength != null){
+                     	if (isNotBlank(description))
+                             descriptionContent.newLine(true);
+                         descriptionContent.boldText(MAXLENGTH_COLUMN).text(COLON).literalText(Json.pretty(maxlength));
+                     }
+                }
+                
+               
+                
+                if(pattern != null){
+                	if (isNotBlank(description))
+                        descriptionContent.newLine(true);
+                    descriptionContent.boldText(PATTERN_COLUMN).text(COLON).literalText(Json.pretty(pattern));
+                }
+                
+                if(minValue != null){
+                	if (isNotBlank(description))
+                        descriptionContent.newLine(true);
+                    descriptionContent.boldText(MINVALUE_COLUMN).text(COLON).literalText(Json.pretty(minValue));
+                }
+                
+                if(maxValue != null){
+                	if (isNotBlank(description))
+                        descriptionContent.newLine(true);
+                    descriptionContent.boldText(MAXVALUE_COLUMN).text(COLON).literalText(Json.pretty(maxValue));
+                }
+                
                 if (example != null) {
                     if (isNotBlank(description) || defaultValue != null)
                         descriptionContent.newLine(true);
