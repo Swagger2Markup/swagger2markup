@@ -238,19 +238,25 @@ public abstract class MarkupDocumentBuilder {
 
                 	if (isNotBlank(description))
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(LENGTH_COLUMN).text(COLON).literalText(Json.pretty(minlength + " - " + maxlength));
+                	
+                	String lengthRange = minlength + " - " + maxlength;
+                	if (minlength.equals(maxlength)) {
+                		lengthRange = minlength.toString();
+                	}
+                	
+                    descriptionContent.boldText(LENGTH_COLUMN).text(COLON).literalText(lengthRange);
                     
                 } else {
                 	 if(minlength != null){
                      	if (isNotBlank(description))
                              descriptionContent.newLine(true);
-                         descriptionContent.boldText(MINLENGTH_COLUMN).text(COLON).literalText(Json.pretty(minlength));
+                         descriptionContent.boldText(MINLENGTH_COLUMN).text(COLON).literalText(minlength.toString());
                      }
                      
                      if(maxlength != null){
                      	if (isNotBlank(description))
                              descriptionContent.newLine(true);
-                         descriptionContent.boldText(MAXLENGTH_COLUMN).text(COLON).literalText(Json.pretty(maxlength));
+                         descriptionContent.boldText(MAXLENGTH_COLUMN).text(COLON).literalText(maxlength.toString());
                      }
                 }
                 
@@ -265,13 +271,13 @@ public abstract class MarkupDocumentBuilder {
                 if(minValue != null){
                 	if (isNotBlank(description))
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(MINVALUE_COLUMN).text(COLON).literalText(Json.pretty(minValue));
+                    descriptionContent.boldText(MINVALUE_COLUMN).text(COLON).literalText(minValue.toString());
                 }
                 
                 if(maxValue != null){
                 	if (isNotBlank(description))
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(MAXVALUE_COLUMN).text(COLON).literalText(Json.pretty(maxValue));
+                    descriptionContent.boldText(MAXVALUE_COLUMN).text(COLON).literalText(maxValue.toString());
                 }
                 
                 if (example != null) {
