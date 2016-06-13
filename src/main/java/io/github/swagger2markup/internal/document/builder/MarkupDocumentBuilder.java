@@ -225,7 +225,7 @@ public abstract class MarkupDocumentBuilder {
                 
                 MarkupDocBuilder descriptionContent = copyMarkupDocBuilder();
                 String description = defaultString(swaggerMarkupDescription(property.getDescription()));
-                if (isNotBlank(descriptionContent.toString())) 
+                if (isNotBlank(description.toString())) 
                     descriptionContent.text(description);
                 
                 if(defaultValue != null){
