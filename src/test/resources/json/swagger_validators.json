@@ -40,7 +40,6 @@
 					"description": "sample int with range 0-10",
 					"minimum": 0,
 					"maximum": 10
-<<<<<<< HEAD
 				},
 				"sampleNumberNoDescription": {
 					"type":"integer",
@@ -59,8 +58,6 @@
 					"format":"int32",
 					"description": "sample int with range to 10",
 					"maximum": 10
-=======
->>>>>>> branch 'master' of https://github.com/jfiala/swagger2markup
 				}
 			}
 		}
