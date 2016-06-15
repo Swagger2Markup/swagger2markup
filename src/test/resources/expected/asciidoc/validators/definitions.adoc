@@ -12,6 +12,7 @@
 _optional_|sample int with range 0-10 +
 *Minimum value* : `0.0` +
 *Maximum value* : `10.0`|integer(int32)
+<<<<<<< HEAD
 |*sampleNumberNoDescription* +
 _optional_|*Minimum value* : `0.0` +
 *Maximum value* : `10.0`|integer(int32)
@@ -21,6 +22,8 @@ _optional_|sample int with range to 10 +
 |*sampleNumberOnlyMinimum* +
 _optional_|sample int with range from 0 +
 *Minimum value* : `0.0`|integer(int32)
+=======
+>>>>>>> branch 'master' of https://github.com/jfiala/swagger2markup
 |*sampleStringComplete* +
 _optional_|Sample string with range 0-2 and a pattern +
 *Length* : `0 - 2` +
