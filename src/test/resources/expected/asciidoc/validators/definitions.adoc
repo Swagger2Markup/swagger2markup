@@ -16,9 +16,11 @@ _optional_|sample int with range 0-10 +
 _optional_|*Minimum value* : `0.0` +
 *Maximum value* : `10.0`|integer(int32)
 |*sampleNumberOnlyMaximum* +
-_optional_|*Maximum value* : `10.0`|integer(int32)
+_optional_|sample int with range to 10 +
+*Maximum value* : `10.0`|integer(int32)
 |*sampleNumberOnlyMinimum* +
-_optional_|*Minimum value* : `0.0`|integer(int32)
+_optional_|sample int with range from 0 +
+*Minimum value* : `0.0`|integer(int32)
 |*sampleStringComplete* +
 _optional_|Sample string with range 0-2 and a pattern +
 *Length* : `0 - 2` +

@@ -87,7 +87,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> securitySchemes) {
-        Set<String> securitySchemeNames = toKeySet(securitySchemes, Ordering.natural()); // TODO : provide a dedicated ordering configuration for security schemes
+        Set<String> securitySchemeNames = toKeySet(securitySchemes, null); // TODO : provide a dedicated ordering configuration for security schemes
         for (String securitySchemeName : securitySchemeNames) {
             SecuritySchemeDefinition securityScheme = securitySchemes.get(securitySchemeName);
             applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEFORE, markupDocBuilder, securitySchemeName, securityScheme));

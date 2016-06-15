@@ -61,7 +61,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         super(context, extensionRegistry, outputPath);
 
-        ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        final ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFINITIONS = labels.getString("definitions");
         POLYMORPHISM_COLUMN = labels.getString("polymorphism.column");
         DISCRIMINATOR_COLUMN = labels.getString("polymorphism.discriminator");

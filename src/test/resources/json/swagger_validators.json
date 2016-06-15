@@ -50,11 +50,13 @@
 				"sampleNumberOnlyMinimum": {
 					"type":"integer",
 					"format":"int32",
+					"description": "sample int with range from 0",
 					"minimum": 0
 				},
 				"sampleNumberOnlyMaximum": {
 					"type":"integer",
 					"format":"int32",
+					"description": "sample int with range to 10",
 					"maximum": 10
 				}
 			}
