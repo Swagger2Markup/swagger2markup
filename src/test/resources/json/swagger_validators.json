@@ -40,22 +40,6 @@
 					"description": "sample int with range 0-10",
 					"minimum": 0,
 					"maximum": 10
-				},
-				"sampleNumberNoDescription": {
-					"type":"integer",
-					"format":"int32",
-					"minimum": 0,
-					"maximum": 10
-				},
-				"sampleNumberOnlyMinimum": {
-					"type":"integer",
-					"format":"int32",
-					"minimum": 0
-				},
-				"sampleNumberOnlyMaximum": {
-					"type":"integer",
-					"format":"int32",
-					"maximum": 10
 				}
 			}
 		}
