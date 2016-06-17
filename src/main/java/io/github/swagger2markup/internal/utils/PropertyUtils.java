@@ -91,6 +91,7 @@ public final class PropertyUtils {
     public static Object getDefaultValue(Property property) {
         Validate.notNull(property, "property must not be null");
         Object defaultValue = null;
+        
         if (property instanceof BooleanProperty) {
             BooleanProperty booleanProperty = (BooleanProperty) property;
             defaultValue = booleanProperty.getDefault();
@@ -115,7 +116,121 @@ public final class PropertyUtils {
         }
         return defaultValue;
     }
+    
 
+    /**
+     * Retrieves the minLength of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the minLength of the property, or otherwise null
+     */
+    public static Integer getMinlength(Property property) {
+        Validate.notNull(property, "property must not be null");
+        Integer minLength = null;
+        
+        if (property instanceof StringProperty) {
+            StringProperty stringProperty = (StringProperty) property;
+            minLength = stringProperty.getMinLength();
+        } else if (property instanceof UUIDProperty) {
+            UUIDProperty uuidProperty = (UUIDProperty) property;
+            minLength = uuidProperty.getMinLength();
+        }
+        return minLength;
+    }
+    
+
+    /**
+     * Retrieves the maxLength of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the maxLength of the property, or otherwise null
+     */
+    public static Integer getMaxlength(Property property) {
+        Validate.notNull(property, "property must not be null");
+        Integer maxLength = null;
+        
+        if (property instanceof StringProperty) {
+            StringProperty stringProperty = (StringProperty) property;
+            maxLength = stringProperty.getMaxLength();
+        } else if (property instanceof UUIDProperty) {
+            UUIDProperty uuidProperty = (UUIDProperty) property;
+            maxLength = uuidProperty.getMaxLength();
+        }
+        return maxLength;
+    }
+    
+    /**
+     * Retrieves the pattern of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the pattern of the property, or otherwise null
+     */
+    public static String getPattern(Property property) {
+        Validate.notNull(property, "property must not be null");
+        String pattern = null;
+        
+        if (property instanceof StringProperty) {
+            StringProperty stringProperty = (StringProperty) property;
+            pattern = stringProperty.getPattern();
+        } else if (property instanceof UUIDProperty) {
+            UUIDProperty uuidProperty = (UUIDProperty) property;
+            pattern = uuidProperty.getPattern();
+        }
+        return pattern;
+    }
+    
+    /**
+     * Retrieves the minimum value of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the minimum value of the property, or otherwise null
+     */
+    public static Double getMin(Property property) {
+        Validate.notNull(property, "property must not be null");
+        Double min = null;
+        
+        if (property instanceof DoubleProperty) {
+            DoubleProperty doubleProperty = (DoubleProperty) property;
+            min = doubleProperty.getMinimum();
+        } else if (property instanceof FloatProperty) {
+            FloatProperty floatProperty = (FloatProperty) property;
+            min = floatProperty.getMinimum();
+        } else if (property instanceof IntegerProperty) {
+            IntegerProperty integerProperty = (IntegerProperty) property;
+            min = integerProperty.getMinimum();
+        } else if (property instanceof LongProperty) {
+            LongProperty longProperty = (LongProperty) property;
+            min = longProperty.getMinimum();
+        }
+        return min;
+    }
+    
+    /**
+     * Retrieves the minimum value of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the minimum value of the property, or otherwise null
+     */
+    public static Double getMax(Property property) {
+        Validate.notNull(property, "property must not be null");
+        Double max = null;
+        
+        if (property instanceof DoubleProperty) {
+            DoubleProperty doubleProperty = (DoubleProperty) property;
+            max = doubleProperty.getMaximum();
+        } else if (property instanceof FloatProperty) {
+            FloatProperty floatProperty = (FloatProperty) property;
+            max = floatProperty.getMaximum();
+        } else if (property instanceof IntegerProperty) {
+            IntegerProperty integerProperty = (IntegerProperty) property;
+            max = integerProperty.getMaximum();
+        } else if (property instanceof LongProperty) {
+            LongProperty longProperty = (LongProperty) property;
+            max = longProperty.getMaximum();
+        }
+        return max;
+    }
+    
     /**
      * Return example display string for the given {@code property}.
      *

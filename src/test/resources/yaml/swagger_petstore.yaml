@@ -600,6 +600,9 @@ definitions:
       name:
         type: string
         description: The name of the category
+        minLength: 0
+        maxLength: 255
+        pattern: "[A-Za-zäöüÄÖÜß]{0,255}"
         default: DefaultCategory
         example: FoobarCategory
   Pet:
@@ -650,6 +653,8 @@ definitions:
       quantity:
         type: integer
         format: int32
+        minimum: 0
+        maximum: 10000.0
         default: 0
         example: 10
       shipDate:

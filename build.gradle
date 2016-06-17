@@ -17,6 +17,7 @@ version = '1.0.1-SNAPSHOT'
 group = 'io.github.swagger2markup'
 
 apply plugin: 'java'
+apply plugin: 'eclipse'
 apply from: 'gradle/publishing.gradle'
 apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/documentation.gradle'
