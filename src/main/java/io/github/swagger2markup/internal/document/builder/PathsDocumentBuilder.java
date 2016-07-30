@@ -277,7 +277,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             buildConsumesSection(operation, docBuilder);
             buildProducesSection(operation, docBuilder);
             buildTagsSection(operation, docBuilder);
-            buildSecuritySchemeSection(operation, docBuilder);
+            if (config.isPathSecuritySectionEnabled()) {
+            	buildSecuritySchemeSection(operation, docBuilder);
+            }
             buildExamplesSection(operation, docBuilder);
             applyPathsDocumentExtension(new Context(Position.OPERATION_END, docBuilder, operation));
             applyPathsDocumentExtension(new Context(Position.OPERATION_AFTER, docBuilder, operation));

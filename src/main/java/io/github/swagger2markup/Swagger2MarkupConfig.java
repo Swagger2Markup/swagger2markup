@@ -143,6 +143,11 @@ public interface Swagger2MarkupConfig {
      */
     boolean isFlatBodyEnabled();
 
+	/**
+	 * Optionally disable the security section for path sections
+	 */
+	boolean isPathSecuritySectionEnabled();
+
     /**
      * Optionally prefix all anchors for uniqueness.
      */

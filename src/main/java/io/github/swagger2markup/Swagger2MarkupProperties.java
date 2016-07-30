@@ -48,6 +48,7 @@ public class Swagger2MarkupProperties {
     public static final String INTER_DOCUMENT_CROSS_REFERENCES_ENABLED = PROPERTIES_PREFIX + ".interDocumentCrossReferencesEnabled";
     public static final String INTER_DOCUMENT_CROSS_REFERENCES_PREFIX = PROPERTIES_PREFIX + ".interDocumentCrossReferencesPrefix";
     public static final String FLAT_BODY_ENABLED = PROPERTIES_PREFIX + ".flatBodyEnabled";
+	public static final String PATH_SECURITY_SECTION_ENABLED = PROPERTIES_PREFIX + ".pathSecuritySectionEnabled";
     public static final String ANCHOR_PREFIX = PROPERTIES_PREFIX + ".anchorPrefix";
     public static final String OVERVIEW_DOCUMENT = PROPERTIES_PREFIX + ".overviewDocument";
     public static final String PATHS_DOCUMENT = PROPERTIES_PREFIX + ".pathsDocument";
