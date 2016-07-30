@@ -109,6 +109,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.interDocumentCrossReferencesEnabled = swagger2MarkupProperties.getRequiredBoolean(INTER_DOCUMENT_CROSS_REFERENCES_ENABLED);
         config.interDocumentCrossReferencesPrefix = swagger2MarkupProperties.getString(INTER_DOCUMENT_CROSS_REFERENCES_PREFIX, null);
         config.flatBodyEnabled = swagger2MarkupProperties.getRequiredBoolean(FLAT_BODY_ENABLED);
+		config.pathSecuritySectionEnabled = swagger2MarkupProperties.getRequiredBoolean(PATH_SECURITY_SECTION_ENABLED);
         config.anchorPrefix = swagger2MarkupProperties.getString(ANCHOR_PREFIX, null);
         config.overviewDocument = swagger2MarkupProperties.getRequiredString(OVERVIEW_DOCUMENT);
         config.pathsDocument = swagger2MarkupProperties.getRequiredString(PATHS_DOCUMENT);
@@ -467,6 +468,16 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
+	 * Optionally disable the security section for path sections
+	 *
+	 * @return this builder
+	 */
+	public Swagger2MarkupConfigBuilder withoutPathSecuritySection() {
+		config.pathSecuritySectionEnabled = false;
+		return this;
+	}
+	
+    /**
      * Optionally prefix all anchors for uniqueness.
      *
      * @param anchorPrefix anchor prefix.
@@ -515,6 +526,7 @@ public class Swagger2MarkupConfigBuilder  {
         private boolean interDocumentCrossReferencesEnabled;
         private String interDocumentCrossReferencesPrefix;
         private boolean flatBodyEnabled;
+		private boolean pathSecuritySectionEnabled;
         private String anchorPrefix;
         private LineSeparator lineSeparator;
 
@@ -641,6 +653,11 @@ public class Swagger2MarkupConfigBuilder  {
         public boolean isFlatBodyEnabled() {
             return flatBodyEnabled;
         }
+
+		@Override
+		public boolean isPathSecuritySectionEnabled() {
+			return pathSecuritySectionEnabled;
+		}
 
         @Override
         public String getAnchorPrefix() {

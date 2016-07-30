@@ -67,6 +67,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getTagOrderBy()).isEqualTo(OrderBy.NATURAL);
         assertThat(config.getTagOrdering()).isEqualTo(Ordering.natural());
         assertThat(config.isFlatBodyEnabled()).isFalse();
+        assertThat(config.isPathSecuritySectionEnabled()).isTrue();
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isFalse();
         assertThat(config.isSeparatedDefinitionsEnabled()).isFalse();
         assertThat(config.isSeparatedOperationsEnabled()).isFalse();
@@ -111,6 +112,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getTagOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getTagOrdering()).isNull();
         assertThat(config.isFlatBodyEnabled()).isTrue();
+        assertThat(config.isPathSecuritySectionEnabled()).isFalse();
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isTrue();
         assertThat(config.isSeparatedDefinitionsEnabled()).isTrue();
         assertThat(config.isSeparatedOperationsEnabled()).isTrue();

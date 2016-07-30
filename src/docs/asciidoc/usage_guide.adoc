@@ -141,6 +141,7 @@ The following tables list all available properties of Swagger2Markup:
 |swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | <System-dependent>
 |swagger2markup.generatedExamplesEnabled| Specifies if HTTP request and response examples should be generated | true, false | false
 |swagger2markup.flatBodyEnabled| Optionally isolate the body parameter, if any, from other parameters | true, false | false
+|swagger2markup.pathSecuritySectionEnabled| Optionally disable the security section for path sections | true, false | true
 |swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness if you want to include generated documents into a global documentation | Any String | 
 |===
 
