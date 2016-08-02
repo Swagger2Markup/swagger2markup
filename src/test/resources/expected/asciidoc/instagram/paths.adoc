@@ -19,7 +19,7 @@ geography, use the https://instagram.com/developer/endpoints/media/[media search
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*geo-id* +
@@ -33,7 +33,7 @@ _optional_|Return media before this `min_id`.|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|No Content
@@ -49,7 +49,7 @@ Search for a location by geographic coordinate.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*distance* +
@@ -74,7 +74,7 @@ _optional_|ongitude of the center search coordinate. If used, lat is required.|n
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_locations_search_get_response_200,Response 200>>
@@ -105,7 +105,7 @@ Get information about a location.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*location-id* +
@@ -115,7 +115,7 @@ _required_|Location ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_locations_location-id_get_response_200,Response 200>>
@@ -146,7 +146,7 @@ Get a list of recent media objects from a given location.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*location-id* +
@@ -164,7 +164,7 @@ _optional_|Return media after this UNIX timestamp.|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_locations_location-id_media_recent_get_response_200,Response 200>>
@@ -197,7 +197,7 @@ Can return mix of image and video types.
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_popular_get_response_200,Response 200>>
@@ -230,7 +230,7 @@ the last 5 days. Can return mix of image and video types.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*DISTANCE* +
@@ -250,7 +250,7 @@ this timestamp.|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_search_get_response_200,Response 200>>
@@ -287,7 +287,7 @@ has liked this media item.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -297,7 +297,7 @@ _required_|The media ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media,Media>>
@@ -323,7 +323,7 @@ Create a comment on a media object with the following rules:
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -336,7 +336,7 @@ media-id.|number|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_media-id_comments_post_response_200,Response 200>>
@@ -389,7 +389,7 @@ Get a list of recent comments on a media object.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -399,7 +399,7 @@ _required_|Media ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_media-id_comments_get_response_200,Response 200>>
@@ -443,7 +443,7 @@ authored by the authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -453,7 +453,7 @@ _required_|Media ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_media-id_comments_delete_response_200,Response 200>>
@@ -496,7 +496,7 @@ Set a like on this media by the currently authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -506,7 +506,7 @@ _required_|Media ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_media-id_likes_post_response_200,Response 200>>
@@ -558,7 +558,7 @@ Get a list of users who have liked this media.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -568,7 +568,7 @@ _required_|Media ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_media-id_likes_get_response_200,Response 200>>
@@ -612,7 +612,7 @@ Remove a like on this media by the currently authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*media-id* +
@@ -622,7 +622,7 @@ _required_|Media ID|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media_media-id_likes_delete_response_200,Response 200>>
@@ -669,7 +669,7 @@ Its corresponding shortcode is D.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*shortcode* +
@@ -679,7 +679,7 @@ _required_|The media shortcode|string|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_media,Media>>
@@ -696,7 +696,7 @@ _required_|The media shortcode|string|
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*q* +
@@ -706,7 +706,7 @@ _optional_|A valid tag name without a leading #. (eg. snowy, nofilter)|string|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_tags_search_get_response_200,Response 200>>
@@ -749,7 +749,7 @@ Get information about a tag object.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*tag-name* +
@@ -759,7 +759,7 @@ _required_|Tag name|string|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_tag,Tag>>
@@ -782,7 +782,7 @@ these objects.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*tag-name* +
@@ -792,7 +792,7 @@ _required_|Tag name|string|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_tags_tag-name_media_recent_get_response_200,Response 200>>
@@ -823,7 +823,7 @@ Search for a user by name.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*count* +
@@ -835,7 +835,7 @@ _required_|A query string|string|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_search_get_response_200,Response 200>>
@@ -866,7 +866,7 @@ See the authenticated user's feed.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*count* +
@@ -880,7 +880,7 @@ _optional_|Return media later than this min_id.|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_self_feed_get_response_200,Response 200>>
@@ -914,7 +914,7 @@ available for the currently authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Query*|*count* +
@@ -926,7 +926,7 @@ _optional_|Return media liked before this id.|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_self_media_liked_get_response_200,Response 200>>
@@ -957,7 +957,7 @@ List the users who have requested this user's permission to follow.
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_self_requested-by_get_response_200,Response 200>>
@@ -1000,7 +1000,7 @@ Get basic information about a user.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*user-id* +
@@ -1010,7 +1010,7 @@ _required_|The user identifier number|number|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|The user object|<<_users_user-id_get_response_200,Response 200>>
@@ -1051,7 +1051,7 @@ Get the list of users this user is followed by.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*user-id* +
@@ -1061,7 +1061,7 @@ _required_|The user identifier number|number|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_user-id_followed-by_get_response_200,Response 200>>
@@ -1092,7 +1092,7 @@ Get the list of users this user follows.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*user-id* +
@@ -1102,7 +1102,7 @@ _required_|The user identifier number|number|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_user-id_follows_get_response_200,Response 200>>
@@ -1129,7 +1129,7 @@ _optional_||< <<_miniprofile,MiniProfile>> > array
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*user-id* +
@@ -1149,7 +1149,7 @@ _optional_|Return media after this UNIX timestamp.|integer|
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|Get the most recent media published by a user. To get the most recent
@@ -1182,7 +1182,7 @@ Modify the relationship between the current user and thetarget user.
 
 ==== Parameters
 
-[options="header", cols=".^1,.^3,.^10,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
 |===
 |Type|Name|Description|Schema|Default
 |*Path*|*user-id* +
@@ -1194,7 +1194,7 @@ _optional_|One of follow/unfollow/block/unblock/approve/ignore.|enum (follow, un
 
 ==== Responses
 
-[options="header", cols=".^1,.^15,.^4"]
+[options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
 |*200*|OK|<<_users_user-id_relationship_post_response_200,Response 200>>

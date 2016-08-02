@@ -76,7 +76,8 @@ _required_||string
 _required_||string
 |*packSize* +
 _required_|the size of the pack the dog is from +
-*Default* : `0`|integer(int32)
+*Default* : `0` +
+*Minimum value* : `0.0`|integer(int32)
 |===
 
 

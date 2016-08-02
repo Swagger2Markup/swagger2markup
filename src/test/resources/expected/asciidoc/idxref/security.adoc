@@ -2,14 +2,6 @@
 [[_securityscheme]]
 == Security
 
-[[_api_key]]
-=== api_key
-[%hardbreaks]
-_Type_ : apiKey
-_Name_ : api_key
-_In_ : HEADER
-
-
 [[_petstore_auth]]
 === petstore_auth
 [%hardbreaks]
@@ -24,6 +16,14 @@ _Token URL_ : http://petstore.swagger.io/api/oauth/dialog
 |write_pets|modify pets in your account
 |read_pets|read your pets
 |===
+
+
+[[_api_key]]
+=== api_key
+[%hardbreaks]
+_Type_ : apiKey
+_Name_ : api_key
+_In_ : HEADER
 
 
 

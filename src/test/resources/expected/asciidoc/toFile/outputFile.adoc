@@ -1305,6 +1305,8 @@ _optional_|*Example* : `0`|integer(int64)
 |*name* +
 _optional_|The name of the category +
 *Default* : `"DefaultCategory"` +
+*Length* : `0 - 255` +
+*Pattern* : `"[A-Za-zäöüÄÖÜß]{0,255}"` +
 *Example* : `"FoobarCategory"`|string
 |===
 
@@ -1323,6 +1325,8 @@ _optional_|*Example* : `0`|integer(int64)
 _optional_|*Example* : `0`|integer(int64)
 |*quantity* +
 _optional_|*Default* : `0` +
+*Minimum value* : `0.0` +
+*Maximum value* : `10000.0` +
 *Example* : `10`|integer(int32)
 |*shipDate* +
 _optional_|*Example* : `"string"`|string(date-time)
@@ -1398,14 +1402,6 @@ _optional_|*Example* : `"string"`|string
 [[_securityscheme]]
 == Security
 
-[[_api_key]]
-=== api_key
-[%hardbreaks]
-_Type_ : apiKey
-_Name_ : api_key
-_In_ : HEADER
-
-
 [[_petstore_auth]]
 === petstore_auth
 [%hardbreaks]
@@ -1420,6 +1416,14 @@ _Token URL_ : http://petstore.swagger.io/api/oauth/dialog
 |write_pets|modify pets in your account
 |read_pets|read your pets
 |===
+
+
+[[_api_key]]
+=== api_key
+[%hardbreaks]
+_Type_ : apiKey
+_Name_ : api_key
+_In_ : HEADER
 
 
 

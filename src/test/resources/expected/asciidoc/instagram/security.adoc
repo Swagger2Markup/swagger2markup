@@ -2,14 +2,6 @@
 [[_securityscheme]]
 == Security
 
-[[_key]]
-=== key
-[%hardbreaks]
-_Type_ : apiKey
-_Name_ : access_token
-_In_ : QUERY
-
-
 [[_oauth]]
 === oauth
 [%hardbreaks]
@@ -27,6 +19,14 @@ _Token URL_ : https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirec
 |relationships|to follow and unfollow users on a user’s behalf
 |likes|to like and unlike items on a user’s behalf
 |===
+
+
+[[_key]]
+=== key
+[%hardbreaks]
+_Type_ : apiKey
+_Name_ : access_token
+_In_ : QUERY
 
 
 
