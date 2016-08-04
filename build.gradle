@@ -14,7 +14,7 @@ buildscript {
 }
 description = 'swagger2markup Build'
 version = '1.0.2-SNAPSHOT'
-releaseVersion = '1.0.1'
+ext.releaseVersion = '1.0.1'
 group = 'io.github.swagger2markup'
 
 apply plugin: 'java'
