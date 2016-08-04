@@ -515,7 +515,7 @@ table.CodeRay td.code>pre{padding:0}
 <h1>Swagger2Markup Documentation</h1>
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
-<span id="revnumber">version 1.0.0,</span>
+<span id="revnumber">version 1.0.1,</span>
 <span id="revdate">2016-08-04</span>
 </div>
 <div id="toc" class="toc2">
@@ -742,7 +742,7 @@ The <strong>groupId</strong> has been changed from <strong>io.github.robwin</str
     jCenter()
 }
 
-compile "io.github.swagger2markup:swagger2markup:1.0.0"</code></pre>
+compile "io.github.swagger2markup:swagger2markup:1.0.1"</code></pre>
 </div>
 </div>
 </div>
@@ -777,7 +777,7 @@ compile "io.github.swagger2markup:swagger2markup:1.0.0"</code></pre>
 <span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>swagger2markup<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;version&gt;</span>1.0.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></pre>
 </div>
 </div>
@@ -2521,7 +2521,7 @@ The Gradle Plugin requires at least JDK 8.
     }
 
     dependencies {
-        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:1.0.0'
+        classpath 'io.github.swagger2markup:swagger2markup-gradle-plugin:1.0.1'
     }
 }
 
@@ -2651,7 +2651,7 @@ The Maven Plugin requires at least JDK 8.
       <span class="tag">&lt;plugin&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>swagger2markup-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
+        <span class="tag">&lt;version&gt;</span>1.0.1<span class="tag">&lt;/version&gt;</span>
       <span class="tag">&lt;/plugin&gt;</span>
     <span class="tag">&lt;/plugins&gt;</span>
 <span class="tag">&lt;/build&gt;</span></code></pre>
@@ -2676,7 +2676,7 @@ The Maven Plugin requires at least JDK 8.
       <span class="tag">&lt;plugin&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>io.github.swagger2markup<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>swagger2markup-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span>1.0.0<span class="tag">&lt;/version&gt;</span>
+        <span class="tag">&lt;version&gt;</span>1.0.1<span class="tag">&lt;/version&gt;</span>
         <span class="tag">&lt;configuration&gt;</span>
           <span class="tag">&lt;swaggerInput&gt;</span>${project.basedir}/src/docs/swagger/swagger_petstore.yaml<span class="tag">&lt;/swaggerInput&gt;</span>
           <span class="tag">&lt;outputDir&gt;</span>${project.build.directory}/asciidoc<span class="tag">&lt;/outputDir&gt;</span>
@@ -2781,7 +2781,7 @@ The CLI requires at least JDK 8.
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0.jar help convert</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.1.jar help convert</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2825,7 +2825,7 @@ OPTIONS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.1.jar convert -i /path/to/swagger_petstore.yaml -d /tmp/asiidoc</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2839,7 +2839,7 @@ OPTIONS
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.1.jar convert -i /path/to/swagger_petstore.yaml -f /tmp/asiidoc/swagger</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -2865,7 +2865,7 @@ The input file must not have a file extension
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.1.jar convert -i "http://petstore.swagger.io/v2/swagger.json" -d /tmp</code></pre>
 </div>
 </div>
 </div>
@@ -2887,7 +2887,7 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.0.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties</code></pre>
+<pre class="CodeRay highlight"><code>java -jar swagger2markup-cli-1.0.1.jar convert -i /path/to/swagger_petstore.yaml -o /tmp -c /path/to/config.properties</code></pre>
 </div>
 </div>
 </div>
@@ -3046,8 +3046,8 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 1.0.0<br>
-Last updated 2016-07-07 11:06:10 +02:00
+Version 1.0.1<br>
+Last updated 2016-08-04 09:58:55 +02:00
 </div>
 </div>
 </body>
