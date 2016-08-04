@@ -5,8 +5,8 @@ Robert Winkler
 :source-highlighter: coderay
 :numbered:
 :hardbreaks:
-:release-version: 1.0.0
-:revnumber: 1.0.0
+:release-version: 1.0.1
+:revnumber: 1.0.1
 :revdate: {localdate}
 :icons: font
 :pagenums:
