@@ -115,7 +115,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildContactInfoSection(Contact contact) {
-        if(contact != null){
+        if(contact != null && (isNotBlank(contact.getName()) || isNotBlank(contact.getEmail()))){
             this.markupDocBuilder.sectionTitleLevel2(CONTACT_INFORMATION);
             MarkupDocBuilder paragraph = copyMarkupDocBuilder();
             if(isNotBlank(contact.getName())){
