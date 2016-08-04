@@ -1,0 +1,9 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Empty Contact",
+    "contact": {},
+    "version": "1.0"
+  },
+  "paths": {}
+}
