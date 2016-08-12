@@ -18,11 +18,9 @@ All endpoints are only accessible via https and are located at
 `api.instagram.com`. For instance: you can grab the most popular photos at
 the moment by accessing the following URL with your client ID
 (replace CLIENT-ID with your own):
-
-----
+`
   https://api.instagram.com/v1/media/popular?client_id=CLIENT-ID
-----
-
+`
 You're best off using an access_token for the authenticated user for each
 endpoint, though many endpoints don't require it.
 In some cases an access_token will give you more access to information, and

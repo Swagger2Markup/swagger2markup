@@ -365,7 +365,7 @@ public class AsciidocConverterTest {
 
         // Then
         assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
-                .contains("== ÐžÐ¿Ñ€ÐµÐ´ÐµÐ»ÐµÐ½Ð¸Ñ�");
+                .contains("== Определения");
     }
 
     @Test
