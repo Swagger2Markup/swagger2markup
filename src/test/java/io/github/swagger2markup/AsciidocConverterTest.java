@@ -189,6 +189,25 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/generated_examples").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithGeneratedExamples.html");
     }
+	
+	@Test
+    public void testSwagger2AsciiDocConversionWithGeneratedRecursiveExamples() throws IOException, URISyntaxException {
+        // Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_recursion.json"));
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated_recursion_examples");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        // When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withoutInlineSchema().withGeneratedExamples().build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build().toFolder(outputDirectory);
+
+        // Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/generated_recursion_examples").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithGeneratedRecursiveExamples.html");
+    }
 
     @Test
     public void testSwagger2AsciiDocWithInlineSchema() throws IOException, URISyntaxException {
