@@ -1,0 +1,126 @@
+
+[[_paths]]
+== Paths
+
+[[_usernavigation]]
+=== Get navigation
+....
+GET /
+....
+
+
+==== Description
+Returns the navigation as a tree
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|Successful response|<<_navigationentry,NavigationEntry>>
+|===
+
+
+==== Tags
+
+* Navigation
+
+
+==== Example HTTP request
+
+===== Request path
+[source,json]
+----
+"/"
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+{
+  "id" : 0.0,
+  "childs" : [ {
+    "id" : 0.0,
+    "childs" : [ "..." ]
+  } ]
+}
+----
+
+
+[[_updatenavigation]]
+=== update entry
+....
+PUT /
+....
+
+
+==== Description
+Updates the navigation tree
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+|===
+|Type|Name|Description|Schema|Default
+|*Body*|*entry* +
+_optional_||<<_navigationentry,NavigationEntry>>|
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|Successful response|<<_navigationentry,NavigationEntry>>
+|===
+
+
+==== Tags
+
+* Navigation
+
+
+==== Example HTTP request
+
+===== Request path
+[source,json]
+----
+"/"
+----
+
+
+===== Request body
+[source,json]
+----
+{
+  "id" : 0.0,
+  "childs" : [ {
+    "id" : 0.0,
+    "childs" : [ "..." ]
+  } ]
+}
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+{
+  "id" : 0.0,
+  "childs" : [ {
+    "id" : 0.0,
+    "childs" : [ "..." ]
+  } ]
+}
+----
+
+
+

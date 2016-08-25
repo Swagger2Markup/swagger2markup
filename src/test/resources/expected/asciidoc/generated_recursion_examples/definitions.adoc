@@ -1,0 +1,19 @@
+
+[[_definitions]]
+== Definitions
+
+[[_navigationentry]]
+=== NavigationEntry
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*childs* +
+_optional_|*Example* : `[ "<<_navigationentry>>" ]`|< <<_navigationentry,NavigationEntry>> > array
+|*id* +
+_optional_|Primary key of this entry +
+*Example* : `0.0`|number(int64)
+|===
+
+
+
