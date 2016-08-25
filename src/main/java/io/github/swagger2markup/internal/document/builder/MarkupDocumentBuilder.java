@@ -190,10 +190,11 @@ public abstract class MarkupDocumentBuilder {
     protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
         List<List<String>> cells = new ArrayList<>();
-        List<MarkupTableColumn> cols = Arrays.asList(
+        ArrayList<MarkupTableColumn> cols = new ArrayList<>(Arrays.asList(
                 new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                 new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(11).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^11"),
-                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
+                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4")));
+        ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
             for (String propertyName : propertyNames) {
@@ -288,13 +289,25 @@ public abstract class MarkupDocumentBuilder {
                     descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(example));
                 }
 
-                List<String> content = Arrays.asList(
+                ArrayList<String> content = new ArrayList<>(Arrays.asList(
                         propertyNameContent.toString(),
                         descriptionContent.toString(),
                         propertyType.displaySchema(docBuilder)
-                );
+                ));
+
+                unusedCols.removeIf(index -> !(content.get(index).equals("")));
+
                 cells.add(content);
             }
+
+            for (int index : unusedCols) {
+                cols.remove(index);
+
+                for (List cell : cells) {
+                    cell.remove(index);
+                }
+            }
+
             docBuilder.tableWithColumnSpecs(cols, cells);
         } else {
             docBuilder.textLine(NO_CONTENT);

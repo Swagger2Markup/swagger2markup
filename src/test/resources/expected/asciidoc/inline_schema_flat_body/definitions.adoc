@@ -29,11 +29,11 @@ _optional_|Place|string
 [[_inlinedepthschema]]
 === InlineDepthSchema
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*Loop* +
-_optional_||<<_inlinedepthschema_loop,Loop>>
+_optional_|<<_inlinedepthschema_loop,Loop>>
 |===
 
 [[_inlinedepthschema_loop]]
@@ -100,78 +100,78 @@ _optional_|Description p2-2-2-2|boolean
 [[_inlinepet]]
 === InlinePet
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*category* +
-_optional_||<<_inlinepet_category,category>>
+_optional_|<<_inlinepet_category,category>>
 |*id* +
-_required_||integer(int64)
+_required_|integer(int64)
 |*tags* +
-_optional_||< <<_inlinepet_tags,tags>> > array
+_optional_|< <<_inlinepet_tags,tags>> > array
 |===
 
 [[_inlinepet_category]]
 *category*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_|integer(int64)
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 [[_inlinepet_tags]]
 *tags*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_|integer(int64)
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 
 [[_inlinetitlepet]]
 === InlineTitlePet
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*category* +
-_optional_||<<_categorymodel,CategoryModel>>
+_optional_|<<_categorymodel,CategoryModel>>
 |*id* +
-_required_||integer(int64)
+_required_|integer(int64)
 |*tags* +
-_optional_||< <<_tagmodel,TagModel>> > array
+_optional_|< <<_tagmodel,TagModel>> > array
 |===
 
 [[_categorymodel]]
 *CategoryModel*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_|integer(int64)
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 [[_tagmodel]]
 *TagModel*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_|integer(int64)
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -191,33 +191,33 @@ _optional_|Place|string
 mixed collections and objects
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myTable* +
-_optional_||< <<_mixedschema_mytable,myTable>> > array
+_optional_|< <<_mixedschema_mytable,myTable>> > array
 |===
 
 [[_mixedschema_mytable]]
 *myTable*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myDict* +
-_optional_||< string, <<_mixedschema_mydict,myDict>> > map
+_optional_|< string, <<_mixedschema_mydict,myDict>> > map
 |===
 
 [[_mixedschema_mydict]]
 *myDict*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*k* +
-_optional_||string
+_optional_|string
 |*v* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -245,35 +245,35 @@ _optional_|option value|string
 mixed collections and objects
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>> > array
+_optional_|< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
 *TableContent*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*emptyObject* +
-_optional_||object
+_optional_|object
 |*myDict* +
-_optional_||< string, <<_kvpair,KVPair>> > map
+_optional_|< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
 *KVPair*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*k* +
-_optional_||string
+_optional_|string
 |*v* +
-_optional_||string
+_optional_|string
 |===
 
 

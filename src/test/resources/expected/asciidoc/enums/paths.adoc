@@ -15,13 +15,13 @@ Return state
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*oldState* +
-_required_|Old State as raw string|enum (ADDED, REMOVED, CHANGED)|
+_required_|Old State as raw string|enum (ADDED, REMOVED, CHANGED)
 |*Body*|*StateModel* +
-_optional_|State as enum in object|<<_createstate_statemodel,StateModel>>|
+_optional_|State as enum in object|<<_createstate_statemodel,StateModel>>
 |===
 
 [[_createstate_statemodel]]

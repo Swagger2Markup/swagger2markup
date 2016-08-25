@@ -15,9 +15,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer(int64)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer(int64)|
 
 
 #### Responses

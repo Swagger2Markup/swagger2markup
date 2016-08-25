@@ -19,15 +19,15 @@ geography, use the https://instagram.com/developer/endpoints/media/[media search
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*geo-id* +
-_required_|Geolocation ID|integer|
+_required_|Geolocation ID|integer
 |*Query*|*count* +
-_optional_|Max number of media to return.|integer|
+_optional_|Max number of media to return.|integer
 |*Query*|*min_id* +
-_optional_|Return media before this `min_id`.|integer|
+_optional_|Return media before this `min_id`.|integer
 |===
 
 
@@ -49,26 +49,26 @@ Search for a location by geographic coordinate.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*distance* +
-_optional_|Default is 1000m (distance=1000), max distance is 5000.|integer|
+_optional_|Default is 1000m (distance=1000), max distance is 5000.|integer
 |*Query*|*facebook_places_id* +
 _optional_|Returns a location mapped off of a Facebook places id. If used, a
-Foursquare id and lat, lng are not required.|integer|
+Foursquare id and lat, lng are not required.|integer
 |*Query*|*foursquare_id* +
 _optional_|returns a location mapped off of a foursquare v1 api location id.
 If used, you are not required to use lat and lng. Note that this
 method is deprecated; you should use the new foursquare IDs with V2
-of their API.|integer|
+of their API.|integer
 |*Query*|*foursquare_v2_id* +
 _optional_|Returns a location mapped off of a foursquare v2 api location id. If
-used, you are not required to use lat and lng.|integer|
+used, you are not required to use lat and lng.|integer
 |*Query*|*lat* +
-_optional_|atitude of the center search coordinate. If used, lng is required.|number|
+_optional_|atitude of the center search coordinate. If used, lng is required.|number
 |*Query*|*lng* +
-_optional_|ongitude of the center search coordinate. If used, lat is required.|number|
+_optional_|ongitude of the center search coordinate. If used, lat is required.|number
 |===
 
 
@@ -83,11 +83,11 @@ _optional_|ongitude of the center search coordinate. If used, lat is required.|n
 [[_locations_search_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_location,Location>> > array
+_optional_|< <<_location,Location>> > array
 |===
 
 
@@ -105,11 +105,11 @@ Get information about a location.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*location-id* +
-_required_|Location ID|integer|
+_required_|Location ID|integer
 |===
 
 
@@ -124,11 +124,11 @@ _required_|Location ID|integer|
 [[_locations_location-id_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||<<_location,Location>>
+_optional_|<<_location,Location>>
 |===
 
 
@@ -146,19 +146,19 @@ Get a list of recent media objects from a given location.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*location-id* +
-_required_|Location ID|integer|
+_required_|Location ID|integer
 |*Query*|*max_id* +
-_optional_|Return media earlier than this max_id.|string|
+_optional_|Return media earlier than this max_id.|string
 |*Query*|*max_timestamp* +
-_optional_|Return media before this UNIX timestamp.|integer|
+_optional_|Return media before this UNIX timestamp.|integer
 |*Query*|*min_id* +
-_optional_|Return media later than this min_id.|string|
+_optional_|Return media later than this min_id.|string
 |*Query*|*min_timestamp* +
-_optional_|Return media after this UNIX timestamp.|integer|
+_optional_|Return media after this UNIX timestamp.|integer
 |===
 
 
@@ -173,11 +173,11 @@ _optional_|Return media after this UNIX timestamp.|integer|
 [[_locations_location-id_media_recent_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_media,Media>> > array
+_optional_|< <<_media,Media>> > array
 |===
 
 
@@ -206,11 +206,11 @@ Can return mix of image and video types.
 [[_media_popular_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_media,Media>> > array
+_optional_|< <<_media,Media>> > array
 |===
 
 
@@ -259,11 +259,11 @@ this timestamp.|integer|
 [[_media_search_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< object > array
+_optional_|< object > array
 |===
 
 
@@ -287,11 +287,11 @@ has liked this media item.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|The media ID|integer|
+_required_|The media ID|integer
 |===
 
 
@@ -323,14 +323,14 @@ Create a comment on a media object with the following rules:
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|Media ID|integer|
+_required_|Media ID|integer
 |*Body*|*TEXT* +
 _optional_|Text to post as a comment on the media object as specified in
-media-id.|number|
+media-id.|number
 |===
 
 
@@ -345,23 +345,23 @@ media-id.|number|
 [[_media_media-id_comments_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||object
+_optional_|object
 |*meta* +
-_optional_||<<_media_media-id_comments_post_meta,meta>>
+_optional_|<<_media_media-id_comments_post_meta,meta>>
 |===
 
 [[_media_media-id_comments_post_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||number
+_optional_|number
 |===
 
 
@@ -389,11 +389,11 @@ Get a list of recent comments on a media object.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|Media ID|integer|
+_required_|Media ID|integer
 |===
 
 
@@ -408,23 +408,23 @@ _required_|Media ID|integer|
 [[_media_media-id_comments_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_comment,Comment>> > array
+_optional_|< <<_comment,Comment>> > array
 |*meta* +
-_optional_||<<_media_media-id_comments_get_meta,meta>>
+_optional_|<<_media_media-id_comments_get_meta,meta>>
 |===
 
 [[_media_media-id_comments_get_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||number
+_optional_|number
 |===
 
 
@@ -443,11 +443,11 @@ authored by the authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|Media ID|integer|
+_required_|Media ID|integer
 |===
 
 
@@ -462,23 +462,23 @@ _required_|Media ID|integer|
 [[_media_media-id_comments_delete_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||object
+_optional_|object
 |*meta* +
-_optional_||<<_media_media-id_comments_delete_meta,meta>>
+_optional_|<<_media_media-id_comments_delete_meta,meta>>
 |===
 
 [[_media_media-id_comments_delete_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||number
+_optional_|number
 |===
 
 
@@ -496,11 +496,11 @@ Set a like on this media by the currently authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|Media ID|integer|
+_required_|Media ID|integer
 |===
 
 
@@ -515,23 +515,23 @@ _required_|Media ID|integer|
 [[_media_media-id_likes_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||object
+_optional_|object
 |*meta* +
-_optional_||<<_media_media-id_likes_post_meta,meta>>
+_optional_|<<_media_media-id_likes_post_meta,meta>>
 |===
 
 [[_media_media-id_likes_post_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||number
+_optional_|number
 |===
 
 
@@ -558,11 +558,11 @@ Get a list of users who have liked this media.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|Media ID|integer|
+_required_|Media ID|integer
 |===
 
 
@@ -577,23 +577,23 @@ _required_|Media ID|integer|
 [[_media_media-id_likes_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_like,Like>> > array
+_optional_|< <<_like,Like>> > array
 |*meta* +
-_optional_||<<_media_media-id_likes_get_meta,meta>>
+_optional_|<<_media_media-id_likes_get_meta,meta>>
 |===
 
 [[_media_media-id_likes_get_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||number
+_optional_|number
 |===
 
 
@@ -612,11 +612,11 @@ Remove a like on this media by the currently authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*media-id* +
-_required_|Media ID|integer|
+_required_|Media ID|integer
 |===
 
 
@@ -631,23 +631,23 @@ _required_|Media ID|integer|
 [[_media_media-id_likes_delete_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||object
+_optional_|object
 |*meta* +
-_optional_||<<_media_media-id_likes_delete_meta,meta>>
+_optional_|<<_media_media-id_likes_delete_meta,meta>>
 |===
 
 [[_media_media-id_likes_delete_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||number
+_optional_|number
 |===
 
 
@@ -669,11 +669,11 @@ Its corresponding shortcode is D.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*shortcode* +
-_required_|The media shortcode|string|
+_required_|The media shortcode|string
 |===
 
 
@@ -696,11 +696,11 @@ _required_|The media shortcode|string|
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*q* +
-_optional_|A valid tag name without a leading #. (eg. snowy, nofilter)|string|
+_optional_|A valid tag name without a leading #. (eg. snowy, nofilter)|string
 |===
 
 
@@ -715,23 +715,23 @@ _optional_|A valid tag name without a leading #. (eg. snowy, nofilter)|string|
 [[_tags_search_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_tag,Tag>> > array
+_optional_|< <<_tag,Tag>> > array
 |*meta* +
-_optional_||<<_tags_search_get_meta,meta>>
+_optional_|<<_tags_search_get_meta,meta>>
 |===
 
 [[_tags_search_get_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||integer
+_optional_|integer
 |===
 
 
@@ -749,11 +749,11 @@ Get information about a tag object.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*tag-name* +
-_required_|Tag name|string|
+_required_|Tag name|string
 |===
 
 
@@ -782,11 +782,11 @@ these objects.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*tag-name* +
-_required_|Tag name|string|
+_required_|Tag name|string
 |===
 
 
@@ -801,11 +801,11 @@ _required_|Tag name|string|
 [[_tags_tag-name_media_recent_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_tag,Tag>> > array
+_optional_|< <<_tag,Tag>> > array
 |===
 
 
@@ -823,13 +823,13 @@ Search for a user by name.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*count* +
-_optional_|Number of users to return.|string|
+_optional_|Number of users to return.|string
 |*Query*|*q* +
-_required_|A query string|string|
+_required_|A query string|string
 |===
 
 
@@ -844,11 +844,11 @@ _required_|A query string|string|
 [[_users_search_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_miniprofile,MiniProfile>> > array
+_optional_|< <<_miniprofile,MiniProfile>> > array
 |===
 
 
@@ -866,15 +866,15 @@ See the authenticated user's feed.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*count* +
-_optional_|Count of media to return.|integer|
+_optional_|Count of media to return.|integer
 |*Query*|*max_id* +
-_optional_|Return media earlier than this max_id.s|integer|
+_optional_|Return media earlier than this max_id.s|integer
 |*Query*|*min_id* +
-_optional_|Return media later than this min_id.|integer|
+_optional_|Return media later than this min_id.|integer
 |===
 
 
@@ -889,11 +889,11 @@ _optional_|Return media later than this min_id.|integer|
 [[_users_self_feed_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_media,Media>> > array
+_optional_|< <<_media,Media>> > array
 |===
 
 
@@ -914,13 +914,13 @@ available for the currently authenticated user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*count* +
-_optional_|Count of media to return.|integer|
+_optional_|Count of media to return.|integer
 |*Query*|*max_like_id* +
-_optional_|Return media liked before this id.|integer|
+_optional_|Return media liked before this id.|integer
 |===
 
 
@@ -935,11 +935,11 @@ _optional_|Return media liked before this id.|integer|
 [[_users_self_media_liked_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_media,Media>> > array
+_optional_|< <<_media,Media>> > array
 |===
 
 
@@ -966,23 +966,23 @@ List the users who have requested this user's permission to follow.
 [[_users_self_requested-by_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_miniprofile,MiniProfile>> > array
+_optional_|< <<_miniprofile,MiniProfile>> > array
 |*meta* +
-_optional_||<<_users_self_requested-by_get_meta,meta>>
+_optional_|<<_users_self_requested-by_get_meta,meta>>
 |===
 
 [[_users_self_requested-by_get_meta]]
 *meta*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*code* +
-_optional_||integer
+_optional_|integer
 |===
 
 
@@ -1000,11 +1000,11 @@ Get basic information about a user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*user-id* +
-_required_|The user identifier number|number|
+_required_|The user identifier number|number
 |===
 
 
@@ -1019,11 +1019,11 @@ _required_|The user identifier number|number|
 [[_users_user-id_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||<<_user,User>>
+_optional_|<<_user,User>>
 |===
 
 
@@ -1051,11 +1051,11 @@ Get the list of users this user is followed by.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*user-id* +
-_required_|The user identifier number|number|
+_required_|The user identifier number|number
 |===
 
 
@@ -1070,11 +1070,11 @@ _required_|The user identifier number|number|
 [[_users_user-id_followed-by_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_miniprofile,MiniProfile>> > array
+_optional_|< <<_miniprofile,MiniProfile>> > array
 |===
 
 
@@ -1092,11 +1092,11 @@ Get the list of users this user follows.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*user-id* +
-_required_|The user identifier number|number|
+_required_|The user identifier number|number
 |===
 
 
@@ -1111,11 +1111,11 @@ _required_|The user identifier number|number|
 [[_users_user-id_follows_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_miniprofile,MiniProfile>> > array
+_optional_|< <<_miniprofile,MiniProfile>> > array
 |===
 
 
@@ -1129,21 +1129,21 @@ _optional_||< <<_miniprofile,MiniProfile>> > array
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*user-id* +
-_required_|The user identifier number|number|
+_required_|The user identifier number|number
 |*Query*|*count* +
-_optional_|Count of media to return.|integer|
+_optional_|Count of media to return.|integer
 |*Query*|*max_id* +
-_optional_|Return media earlier than this max_id.|string|
+_optional_|Return media earlier than this max_id.|string
 |*Query*|*max_timestamp* +
-_optional_|Return media before this UNIX timestamp.|integer|
+_optional_|Return media before this UNIX timestamp.|integer
 |*Query*|*min_id* +
-_optional_|Return media later than this min_id.|string|
+_optional_|Return media later than this min_id.|string
 |*Query*|*min_timestamp* +
-_optional_|Return media after this UNIX timestamp.|integer|
+_optional_|Return media after this UNIX timestamp.|integer
 |===
 
 
@@ -1160,11 +1160,11 @@ instead of the `user-id`.|<<_users_user-id_media_recent_get_response_200,Respons
 [[_users_user-id_media_recent_get_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_media,Media>> > array
+_optional_|< <<_media,Media>> > array
 |===
 
 
@@ -1182,13 +1182,13 @@ Modify the relationship between the current user and thetarget user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*user-id* +
-_required_|The user identifier number|number|
+_required_|The user identifier number|number
 |*Body*|*action* +
-_optional_|One of follow/unfollow/block/unblock/approve/ignore.|enum (follow, unfollow, block, unblock, approve)|
+_optional_|One of follow/unfollow/block/unblock/approve/ignore.|enum (follow, unfollow, block, unblock, approve)
 |===
 
 
@@ -1203,11 +1203,11 @@ _optional_|One of follow/unfollow/block/unblock/approve/ignore.|enum (follow, un
 [[_users_user-id_relationship_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*data* +
-_optional_||< <<_miniprofile,MiniProfile>> > array
+_optional_|< <<_miniprofile,MiniProfile>> > array
 |===
 
 

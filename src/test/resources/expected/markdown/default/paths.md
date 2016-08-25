@@ -11,9 +11,9 @@ POST /pets
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)|
 
 
 #### Responses
@@ -56,9 +56,9 @@ PUT /pets
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**body**  <br>*optional*|Pet object that needs to be added to the store|[Pet](#pet)|
 
 
 #### Responses
@@ -107,9 +107,9 @@ Multiple status values can be provided with comma seperated strings
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|< string > array(multi)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Query**|**status**  <br>*optional*|Status values that need to be considered for filter|< string > array(multi)|
 
 
 #### Responses
@@ -151,9 +151,9 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Query**|**tags**  <br>*optional*|Tags to filter by|< string > array(multi)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Query**|**tags**  <br>*optional*|Tags to filter by|< string > array(multi)|
 
 
 #### Responses
@@ -191,11 +191,11 @@ POST /pets/{petId}
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**petId**  <br>*required*|ID of pet that needs to be updated|string||
-|**FormData**|**name**  <br>*required*|Updated name of the pet|string||
-|**FormData**|**status**  <br>*required*|Updated status of the pet|string||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**petId**  <br>*required*|ID of pet that needs to be updated|string|
+|**FormData**|**name**  <br>*required*|Updated name of the pet|string|
+|**FormData**|**status**  <br>*required*|Updated status of the pet|string|
 
 
 #### Responses
@@ -241,9 +241,9 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer(int64)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer(int64)|
 
 
 #### Responses
@@ -283,10 +283,10 @@ DELETE /pets/{petId}
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Header**|**api_key**  <br>*required*||string||
-|**Path**|**petId**  <br>*required*|Pet id to delete|integer(int64)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Header**|**api_key**  <br>*required*||string|
+|**Path**|**petId**  <br>*required*|Pet id to delete|integer(int64)|
 
 
 #### Responses
@@ -323,9 +323,9 @@ POST /stores/order
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|order placed for purchasing the pet|[Order](#order)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**body**  <br>*optional*|order placed for purchasing the pet|[Order](#order)|
 
 
 #### Responses
@@ -360,9 +360,9 @@ For valid response try integer IDs with value <= 5 or > 10. Other values will ge
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**orderId**  <br>*required*|ID of pet that needs to be fetched|string||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**orderId**  <br>*required*|ID of pet that needs to be fetched|string|
 
 
 #### Responses
@@ -398,9 +398,9 @@ For valid response try integer IDs with value < 1000. Anything above 1000 or non
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**orderId**  <br>*required*|ID of the order that needs to be deleted|string||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**orderId**  <br>*required*|ID of the order that needs to be deleted|string|
 
 
 #### Responses
@@ -435,9 +435,9 @@ This can only be done by the logged in user.
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|Created user object|[User](#user)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**body**  <br>*optional*|Created user object|[User](#user)|
 
 
 #### Responses
@@ -467,9 +467,9 @@ POST /users/createWithArray
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|< [User](#user) > array||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**body**  <br>*optional*|List of user object|< [User](#user) > array|
 
 
 #### Responses
@@ -499,9 +499,9 @@ POST /users/createWithList
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Body**|**body**  <br>*optional*|List of user object|< [User](#user) > array||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Body**|**body**  <br>*optional*|List of user object|< [User](#user) > array|
 
 
 #### Responses
@@ -531,10 +531,10 @@ GET /users/login
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Query**|**password**  <br>*optional*|The password for login in clear text|string||
-|**Query**|**username**  <br>*optional*|The user name for login|string||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Query**|**password**  <br>*optional*|The password for login in clear text|string|
+|**Query**|**username**  <br>*optional*|The user name for login|string|
 
 
 #### Responses
@@ -590,9 +590,9 @@ GET /users/{username}
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**username**  <br>*required*|The name that needs to be fetched. Use user1 for testing.|string||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**username**  <br>*required*|The name that needs to be fetched. Use user1 for testing.|string|
 
 
 #### Responses
@@ -628,10 +628,10 @@ This can only be done by the logged in user.
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**username**  <br>*required*|name that need to be deleted|string||
-|**Body**|**body**  <br>*optional*|Updated user object|[User](#user)||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**username**  <br>*required*|name that need to be deleted|string|
+|**Body**|**body**  <br>*optional*|Updated user object|[User](#user)|
 
 
 #### Responses
@@ -666,9 +666,9 @@ This can only be done by the logged in user.
 
 #### Parameters
 
-|Type|Name|Description|Schema|Default|
-|---|---|---|---|---|
-|**Path**|**username**  <br>*required*|The name that needs to be deleted|string||
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Path**|**username**  <br>*required*|The name that needs to be deleted|string|
 
 
 #### Responses
