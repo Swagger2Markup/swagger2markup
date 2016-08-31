@@ -15,11 +15,11 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*petId* +
-_required_|ID of pet that needs to be fetched|integer(int64)|
+_required_|ID of pet that needs to be fetched|integer(int64)
 |===
 
 

@@ -11,11 +11,11 @@ POST /pets
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|Pet object that needs to be added to the store|<<definitions.adoc#_pet,Pet>>|
+_optional_|Pet object that needs to be added to the store|<<definitions.adoc#_pet,Pet>>
 |===
 
 
@@ -63,11 +63,11 @@ PUT /pets
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|Pet object that needs to be added to the store|<<definitions.adoc#_pet,Pet>>|
+_optional_|Pet object that needs to be added to the store|<<definitions.adoc#_pet,Pet>>
 |===
 
 
@@ -121,11 +121,11 @@ Multiple status values can be provided with comma seperated strings
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*status* +
-_optional_|Status values that need to be considered for filter|< string > array(multi)|
+_optional_|Status values that need to be considered for filter|< string > array(multi)
 |===
 
 
@@ -176,11 +176,11 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*tags* +
-_optional_|Tags to filter by|< string > array(multi)|
+_optional_|Tags to filter by|< string > array(multi)
 |===
 
 
@@ -227,15 +227,15 @@ POST /pets/{petId}
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*petId* +
-_required_|ID of pet that needs to be updated|string|
+_required_|ID of pet that needs to be updated|string
 |*FormData*|*name* +
-_required_|Updated name of the pet|string|
+_required_|Updated name of the pet|string
 |*FormData*|*status* +
-_required_|Updated status of the pet|string|
+_required_|Updated status of the pet|string
 |===
 
 
@@ -286,11 +286,11 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*petId* +
-_required_|ID of pet that needs to be fetched|integer(int64)|
+_required_|ID of pet that needs to be fetched|integer(int64)
 |===
 
 
@@ -339,13 +339,13 @@ DELETE /pets/{petId}
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Header*|*api_key* +
-_required_||string|
+_required_||string
 |*Path*|*petId* +
-_required_|Pet id to delete|integer(int64)|
+_required_|Pet id to delete|integer(int64)
 |===
 
 
@@ -387,11 +387,11 @@ POST /stores/order
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|order placed for purchasing the pet|<<definitions.adoc#_order,Order>>|
+_optional_|order placed for purchasing the pet|<<definitions.adoc#_order,Order>>
 |===
 
 
@@ -433,11 +433,11 @@ For valid response try integer IDs with value &lt;= 5 or &gt; 10. Other values w
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*orderId* +
-_required_|ID of pet that needs to be fetched|string|
+_required_|ID of pet that needs to be fetched|string
 |===
 
 
@@ -480,11 +480,11 @@ For valid response try integer IDs with value &lt; 1000. Anything above 1000 or 
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*orderId* +
-_required_|ID of the order that needs to be deleted|string|
+_required_|ID of the order that needs to be deleted|string
 |===
 
 
@@ -522,11 +522,11 @@ This can only be done by the logged in user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|Created user object|<<definitions.adoc#_user,User>>|
+_optional_|Created user object|<<definitions.adoc#_user,User>>
 |===
 
 
@@ -559,11 +559,11 @@ POST /users/createWithArray
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|List of user object|< <<definitions.adoc#_user,User>> > array|
+_optional_|List of user object|< <<definitions.adoc#_user,User>> > array
 |===
 
 
@@ -596,11 +596,11 @@ POST /users/createWithList
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|List of user object|< <<definitions.adoc#_user,User>> > array|
+_optional_|List of user object|< <<definitions.adoc#_user,User>> > array
 |===
 
 
@@ -633,13 +633,13 @@ GET /users/login
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*password* +
-_optional_|The password for login in clear text|string|
+_optional_|The password for login in clear text|string
 |*Query*|*username* +
-_optional_|The user name for login|string|
+_optional_|The user name for login|string
 |===
 
 
@@ -704,11 +704,11 @@ GET /users/{username}
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*username* +
-_required_|The name that needs to be fetched. Use user1 for testing.|string|
+_required_|The name that needs to be fetched. Use user1 for testing.|string
 |===
 
 
@@ -751,13 +751,13 @@ This can only be done by the logged in user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*username* +
-_required_|name that need to be deleted|string|
+_required_|name that need to be deleted|string
 |*Body*|*body* +
-_optional_|Updated user object|<<definitions.adoc#_user,User>>|
+_optional_|Updated user object|<<definitions.adoc#_user,User>>
 |===
 
 
@@ -795,11 +795,11 @@ This can only be done by the logged in user.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Path*|*username* +
-_required_|The name that needs to be deleted|string|
+_required_|The name that needs to be deleted|string
 |===
 
 

@@ -15,11 +15,11 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*Version* +
-_optional_|The API version|< < string, <<_collectionparameters_post_version,Version>> > map > array|
+_optional_|The API version|< < string, <<_collectionparameters_post_version,Version>> > map > array
 |===
 
 [[_collectionparameters_post_version]]
@@ -74,15 +74,15 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Query*|*Option* +
-_optional_|An optional option|string|
+_optional_|An optional option|string
 |*Query*|*Version* +
-_optional_|The API version|string|
+_optional_|The API version|string
 |*Body*|*LaunchCommandRequest* +
-_optional_|Launch something new|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>|
+_optional_|Launch something new|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>
 |===
 
 [[_launchcommand_post_launchcommandrequest]]
@@ -182,43 +182,43 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*Version* +
-_optional_|The API version|<<_mixedparameters_post_version,Version>>|
+_optional_|The API version|<<_mixedparameters_post_version,Version>>
 |===
 
 [[_mixedparameters_post_version]]
 *Version*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myTable* +
-_optional_||< <<_mixedparameters_post_mytable,myTable>> > array
+_optional_|< <<_mixedparameters_post_mytable,myTable>> > array
 |===
 
 [[_mixedparameters_post_mytable]]
 *myTable*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myDict* +
-_optional_||< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
+_optional_|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
 |===
 
 [[_mixedparameters_post_mytable_mydict]]
 *myDict*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*k* +
-_optional_||string
+_optional_|string
 |*v* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -233,33 +233,33 @@ _optional_||string
 [[_mixedparameters_post_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myTable* +
-_optional_||< <<_mixedparameters_post_mytable,myTable>> > array
+_optional_|< <<_mixedparameters_post_mytable,myTable>> > array
 |===
 
 [[_mixedparameters_post_mytable]]
 *myTable*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myDict* +
-_optional_||< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
+_optional_|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
 |===
 
 [[_mixedparameters_post_mytable_mydict]]
 *myDict*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*k* +
-_optional_||string
+_optional_|string
 |*v* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -281,43 +281,43 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*Version* +
-_optional_|The API version|<<_request,Request>>|
+_optional_|The API version|<<_request,Request>>
 |===
 
 [[_request]]
 *Request*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>> > array
+_optional_|< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
 *TableContent*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myDict* +
-_optional_||< string, <<_kvpair,KVPair>> > map
+_optional_|< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
 *KVPair*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*k* +
-_optional_||string
+_optional_|string
 |*v* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -332,33 +332,33 @@ _optional_||string
 [[_result]]
 *Result*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myTable* +
-_optional_||< <<_tablecontent,TableContent>> > array
+_optional_|< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
 *TableContent*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*myDict* +
-_optional_||< string, <<_kvpair,KVPair>> > map
+_optional_|< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
 *KVPair*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*k* +
-_optional_||string
+_optional_|string
 |*v* +
-_optional_||string
+_optional_|string
 |===
 
 

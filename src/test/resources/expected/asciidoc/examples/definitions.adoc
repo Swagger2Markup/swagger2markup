@@ -18,22 +18,22 @@ _optional_|*Example* : `"Canines"`|string
 [[_complexobject]]
 === ComplexObject
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*subObject* +
-_optional_||object
+_optional_|object
 |===
 
 
 [[_identified]]
 === Identified
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_|integer(int64)
 |===
 
 
@@ -89,13 +89,13 @@ _optional_|the weight of the pet|number
 [[_tag]]
 === Tag
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_|integer(int64)
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 

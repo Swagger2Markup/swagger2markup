@@ -64,11 +64,11 @@ Updates the navigation tree
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Schema
 |*Body*|*entry* +
-_optional_||<<_navigationentry,NavigationEntry>>|
+_optional_|<<_navigationentry,NavigationEntry>>
 |===
 
 

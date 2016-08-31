@@ -5,10 +5,10 @@
 <a name="category"></a>
 ### Category
 
-|Name|Description|Schema|
-|---|---|---|
-|**id**  <br>*optional*||integer(int64)|
-|**name**  <br>*optional*||string|
+|Name|Schema|
+|---|---|
+|**id**  <br>*optional*|integer(int64)|
+|**name**  <br>*optional*|string|
 
 
 <a name="pet"></a>
@@ -27,10 +27,10 @@
 <a name="tag"></a>
 ### Tag
 
-|Name|Description|Schema|
-|---|---|---|
-|**id**  <br>*optional*||integer(int64)|
-|**name**  <br>*optional*||string|
+|Name|Schema|
+|---|---|
+|**id**  <br>*optional*|integer(int64)|
+|**name**  <br>*optional*|string|
 
 
 

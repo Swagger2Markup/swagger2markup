@@ -425,12 +425,13 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
         if (hasParameters) {
             List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(
+            ArrayList<MarkupTableColumn> cols = new ArrayList<>(Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(2).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
                     new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                     new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(9).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^9"),
                     new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"));
+                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2")));
+            ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(4, 3, 2, 1, 0));
             for (Parameter parameter : parameters) {
                 if (filterParameter(parameter)) {
                     Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
@@ -448,15 +449,27 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                     Object defaultValue = ParameterUtils.getDefaultValue(parameter);
 
-                    List<String> content = Arrays.asList(
+                    ArrayList<String> content = new ArrayList<>(Arrays.asList(
                             boldText(parameterType),
                             parameterNameContent.toString(),
                             defaultString(swaggerMarkupDescription(parameter.getDescription())),
                             type.displaySchema(markupDocBuilder),
-                            defaultValue != null ? literalText(Json.pretty(defaultValue)) : "");
+                            defaultValue != null ? literalText(Json.pretty(defaultValue)) : ""));
+
+                    unusedCols.removeIf(index -> !(content.get(index).equals("")));
+
                     cells.add(content);
                 }
             }
+
+            for (int index : unusedCols) {
+                cols.remove(index);
+
+                for (List cell : cells) {
+                    cell.remove(index);
+                }
+            }
+
             parametersBuilder.tableWithColumnSpecs(cols, cells);
         }
         applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_END, parametersBuilder, operation));
@@ -595,10 +608,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
             Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
             List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(
+            ArrayList<MarkupTableColumn> cols = new ArrayList<>(Arrays.asList(
                     new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
                     new MarkupTableColumn(NAME_COLUMN).withWidthRatio(4).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(13).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^13"));
+                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(13).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^13")));
+            ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
@@ -607,9 +621,19 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         type = securityDefinitions.get(securityKey).getType();
                     }
 
-                    List<String> content = Arrays.asList(boldText(type), boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver(), securityKey, securityKey).toString()),
-                            Joiner.on(",").join(securityEntry.getValue()));
+                    ArrayList<String> content = new ArrayList<>(Arrays.asList(boldText(type), boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver(), securityKey, securityKey).toString()),
+                            Joiner.on(",").join(securityEntry.getValue())));
+
+                    unusedCols.removeIf(index -> !(content.get(index).equals("")));
+
                     cells.add(content);
+                }
+            }
+            for (int index : unusedCols) {
+                cols.remove(index);
+
+                for (List cell : cells) {
+                    cell.remove(index);
                 }
             }
             securityBuilder.tableWithColumnSpecs(cols, cells);
@@ -644,11 +668,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder();
         applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
-            List<MarkupTableColumn> responseCols = Arrays.asList(
+            ArrayList<MarkupTableColumn> responseCols = new ArrayList<>(Arrays.asList(
                     new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(2).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
                     new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(14).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^14"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"));
-
+                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4")));
+            ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
             List<List<String>> cells = new ArrayList<>();
 
             Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
@@ -698,7 +722,23 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     }
                 }
 
-                cells.add(Arrays.asList(boldText(responseName), descriptionBuilder.toString(), schemaContent));
+                ArrayList<String> content = new ArrayList<>(Arrays.asList(
+                        boldText(responseName),
+                        descriptionBuilder.toString(),
+                        schemaContent
+                ));
+
+                unusedCols.removeIf(index -> !(content.get(index).equals("")));
+
+                cells.add(content);
+            }
+
+            for (int index : unusedCols) {
+                responseCols.remove(index);
+
+                for (List cell : cells) {
+                    cell.remove(index);
+                }
             }
 
             responsesBuilder.tableWithColumnSpecs(responseCols, cells);

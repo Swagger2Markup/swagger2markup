@@ -48,11 +48,11 @@ _required_||string
 Collection parent type without discriminator
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -104,13 +104,13 @@ _optional_||string
 Pet parent type with discriminator
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*name* +
-_required_||string
+_required_|string
 |*petType* +
-_required_||string
+_required_|string
 |===
 
 

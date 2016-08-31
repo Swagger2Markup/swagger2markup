@@ -15,11 +15,11 @@ Returns integer metrics information for the application.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|String metrics|< string, integer(int32) > map|
+_optional_|String metrics|< string, integer(int32) > map
 |===
 
 
@@ -60,11 +60,11 @@ Returns a collated list of all `@RequestMapping` paths.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|Mappings|< string, <<_mappinginfo,MappingInfo>> > map|
+_optional_|Mappings|< string, <<_mappinginfo,MappingInfo>> > map
 |===
 
 
@@ -105,23 +105,23 @@ Returns metrics information for the application.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|Metrics|< string, <<_createmetrics_body,body>> > map|
+_optional_|Metrics|< string, <<_createmetrics_body,body>> > map
 |===
 
 [[_createmetrics_body]]
 *body*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*p1* +
-_optional_||string
+_optional_|string
 |*p2* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -136,13 +136,13 @@ _optional_||string
 [[_createmetrics_response_200]]
 *Response 200*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*p1* +
-_optional_||string
+_optional_|string
 |*p2* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -174,11 +174,11 @@ Returns string metrics information for the application.
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4,.^2"]
+[options="header", cols=".^2,.^3,.^9,.^4"]
 |===
-|Type|Name|Description|Schema|Default
+|Type|Name|Description|Schema
 |*Body*|*body* +
-_optional_|String metrics|< string, string > map|
+_optional_|String metrics|< string, string > map
 |===
 
 

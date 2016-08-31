@@ -5,68 +5,68 @@
 [[_comment]]
 === Comment
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*created_time* +
-_optional_||string
+_optional_|string
 |*from* +
-_optional_||<<_miniprofile,MiniProfile>>
+_optional_|<<_miniprofile,MiniProfile>>
 |*id* +
-_optional_||string
+_optional_|string
 |*text* +
-_optional_||string
+_optional_|string
 |===
 
 
 [[_image]]
 === Image
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*height* +
-_optional_||integer
+_optional_|integer
 |*url* +
-_optional_||string
+_optional_|string
 |*width* +
-_optional_||integer
+_optional_|integer
 |===
 
 
 [[_like]]
 === Like
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*first_name* +
-_optional_||string
+_optional_|string
 |*id* +
-_optional_||string
+_optional_|string
 |*last_name* +
-_optional_||string
+_optional_|string
 |*type* +
-_optional_||string
+_optional_|string
 |*user_name* +
-_optional_||string
+_optional_|string
 |===
 
 
 [[_location]]
 === Location
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*id* +
-_optional_||string
+_optional_|string
 |*latitude* +
-_optional_||number
+_optional_|number
 |*longitude* +
-_optional_||number
+_optional_|number
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 
@@ -105,51 +105,51 @@ _optional_||<<_media_videos,videos>>
 [[_media_comments]]
 *comments:*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*count* +
-_optional_||integer
+_optional_|integer
 |*data* +
-_optional_||< <<_comment,Comment>> > array
+_optional_|< <<_comment,Comment>> > array
 |===
 
 [[_media_images]]
 *images*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*low_resolution* +
-_optional_||<<_image,Image>>
+_optional_|<<_image,Image>>
 |*standard_resolution* +
-_optional_||<<_image,Image>>
+_optional_|<<_image,Image>>
 |*thumbnail* +
-_optional_||<<_image,Image>>
+_optional_|<<_image,Image>>
 |===
 
 [[_media_likes]]
 *likes*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*count* +
-_optional_||integer
+_optional_|integer
 |*data* +
-_optional_||< <<_miniprofile,MiniProfile>> > array
+_optional_|< <<_miniprofile,MiniProfile>> > array
 |===
 
 [[_media_videos]]
 *videos*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*low_resolution* +
-_optional_||<<_image,Image>>
+_optional_|<<_image,Image>>
 |*standard_resolution* +
-_optional_||<<_image,Image>>
+_optional_|<<_image,Image>>
 |===
 
 
@@ -158,67 +158,67 @@ _optional_||<<_image,Image>>
 A shorter version of User for likes array
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*full_name* +
-_optional_||string
+_optional_|string
 |*id* +
-_optional_||integer
+_optional_|integer
 |*profile_picture* +
-_optional_||string
+_optional_|string
 |*user_name* +
-_optional_||string
+_optional_|string
 |===
 
 
 [[_tag]]
 === Tag
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*media_count* +
-_optional_||integer
+_optional_|integer
 |*name* +
-_optional_||string
+_optional_|string
 |===
 
 
 [[_user]]
 === User
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*bio* +
-_optional_||string
+_optional_|string
 |*counts* +
-_optional_||<<_user_counts,counts>>
+_optional_|<<_user_counts,counts>>
 |*full_name* +
-_optional_||string
+_optional_|string
 |*id* +
-_optional_||integer
+_optional_|integer
 |*profile_picture* +
-_optional_||string
+_optional_|string
 |*username* +
-_optional_||string
+_optional_|string
 |*website* +
-_optional_||string
+_optional_|string
 |===
 
 [[_user_counts]]
 *counts*
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |*follows* +
-_optional_||integer
+_optional_|integer
 |*follwed_by* +
-_optional_||integer
+_optional_|integer
 |*media* +
-_optional_||integer
+_optional_|integer
 |===
 
 
