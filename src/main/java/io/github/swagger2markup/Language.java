@@ -22,11 +22,12 @@ import java.util.Locale;
  * @author Maksim Myshkin
  */
 public enum Language {
-    EN(new Locale("en")),
+    EN(Locale.ENGLISH),
     RU(new Locale("ru")),
-    FR(new Locale("fr")),
-    DE(new Locale("de")),
-    TR(new Locale("tr"));
+    FR(Locale.FRENCH),
+    DE(Locale.GERMAN),
+    TR(new Locale("tr")),
+    ZH(Locale.CHINESE);
 
     private final Locale lang;
 
