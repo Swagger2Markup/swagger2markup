@@ -516,7 +516,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.0.1,</span>
-<span id="revdate">2016-09-14</span>
+<span id="revdate">2016-09-23</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -625,19 +625,20 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_configuration_5">8.2. Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_spring_boot_and_springfox">9. Spring Boot and Springfox</a>
+<li><a href="#_docker_image">9. Docker image</a></li>
+<li><a href="#_spring_boot_and_springfox">10. Spring Boot and Springfox</a>
 <ul class="sectlevel2">
-<li><a href="#_demo">9.1. Demo</a></li>
+<li><a href="#_demo">10.1. Demo</a></li>
 </ul>
 </li>
-<li><a href="#_contributing">10. Contributing</a>
+<li><a href="#_contributing">11. Contributing</a>
 <ul class="sectlevel2">
-<li><a href="#_questions">10.1. Questions</a></li>
-<li><a href="#_bugs">10.2. Bugs</a></li>
-<li><a href="#_enhancements">10.3. Enhancements</a></li>
+<li><a href="#_questions">11.1. Questions</a></li>
+<li><a href="#_bugs">11.2. Bugs</a></li>
+<li><a href="#_enhancements">11.3. Enhancements</a></li>
 </ul>
 </li>
-<li><a href="#_license">11. License</a></li>
+<li><a href="#_license">12. License</a></li>
 </ul>
 </div>
 </div>
@@ -2894,7 +2895,24 @@ swagger2markup.outputLanguage=DE</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_spring_boot_and_springfox"><a class="anchor" href="#_spring_boot_and_springfox"></a>9. Spring Boot and Springfox</h2>
+<h2 id="_docker_image"><a class="anchor" href="#_docker_image"></a>9. Docker image</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Swagger2Markup-CLI has been published as a Docker image on DockerHub. You can pull the image:</p>
+</div>
+<div class="paragraph">
+<p><code>docker pull swagger2markup/swagger2markup</code></p>
+</div>
+<div class="paragraph">
+<p>You can convert a Swagger Spec by running a Docker container:</p>
+</div>
+<div class="paragraph">
+<p><code>docker run --rm -v $(pwd)/in:/tmp/in -v $(pwd)/out:/tmp/out swagger2markup/swagger2markup convert -i /tmp/in/swagger.yaml -c /tmp/in/config.properties -f /tmp/out/swagger</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spring_boot_and_springfox"><a class="anchor" href="#_spring_boot_and_springfox"></a>10. Spring Boot and Springfox</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If you use Spring Boot and Springfox or Swagger JAX-RS, you can do the following:</p>
@@ -2973,7 +2991,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 </div>
 <div class="sect2">
-<h3 id="_demo"><a class="anchor" href="#_demo"></a>9.1. Demo</h3>
+<h3 id="_demo"><a class="anchor" href="#_demo"></a>10.1. Demo</h3>
 <div class="paragraph">
 <p>The quickest way to get started is to look at the demo project <a href="https://github.com/Swagger2Markup/spring-swagger2markup-demo">spring-swagger2markup-demo</a>. The demo shows how to generate static docs (HTML5 and PDF) by using the Swagger2Markup Gradle Plugin and serve the generated documentation as static content in a Spring Boot App under <a href="http://localhost:9080/docs/index.html" class="bare">http://localhost:9080/docs/index.html</a> and <a href="http://localhost:9080/docs/index.pdf" class="bare">http://localhost:9080/docs/index.pdf</a>.</p>
 </div>
@@ -3002,22 +3020,22 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 </div>
 <div class="sect1">
-<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>10. Contributing</h2>
+<h2 id="_contributing"><a class="anchor" href="#_contributing"></a>11. Contributing</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_questions"><a class="anchor" href="#_questions"></a>10.1. Questions</h3>
+<h3 id="_questions"><a class="anchor" href="#_questions"></a>11.1. Questions</h3>
 <div class="paragraph">
 <p>You can ask questions about Swagger2Markup in <a href="https://gitter.im/Swagger2Markup/swagger2markup">Gitter</a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>10.2. Bugs</h3>
+<h3 id="_bugs"><a class="anchor" href="#_bugs"></a>11.2. Bugs</h3>
 <div class="paragraph">
 <p>If you believe you have found a bug, please take a moment to search the existing issues. If no one else has reported the problem, please open a new issue that describes the problem in detail and, ideally, includes a test that reproduces it.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>10.3. Enhancements</h3>
+<h3 id="_enhancements"><a class="anchor" href="#_enhancements"></a>11.3. Enhancements</h3>
 <div class="paragraph">
 <p>If you’d like an enhancement to be made to Swagger2Markup, pull requests are most welcome. The source code is on GitHub. You may want to search the existing issues and pull requests to see if the enhancement is already being worked on. You may also want to open a new issue to discuss a possible enhancement before work on it begins.</p>
 </div>
@@ -3025,7 +3043,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 </div>
 </div>
 <div class="sect1">
-<h2 id="_license"><a class="anchor" href="#_license"></a>11. License</h2>
+<h2 id="_license"><a class="anchor" href="#_license"></a>12. License</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Copyright 2016 Robert Winkler</p>
@@ -3047,7 +3065,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.1<br>
-Last updated 2016-09-14 07:56:33 UTC
+Last updated 2016-09-23 06:55:15 UTC
 </div>
 </div>
 </body>
