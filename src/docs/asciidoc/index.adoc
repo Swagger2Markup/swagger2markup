@@ -26,6 +26,8 @@ include::maven_plugin.adoc[]
 
 include::command_line_interface.adoc[]
 
+include::docker.adoc[]
+
 include::demo.adoc[]
 
 include::contributing.adoc[]
