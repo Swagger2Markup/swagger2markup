@@ -1,9 +1,13 @@
 == Docker image
 
-The Swagger2Markup-CLI has been published as a Docker image on DockerHub. You can pull the image:
+The Swagger2Markup-CLI has been published as a Docker image on DockerHub.
+
+=== Usage guide
+
+You can pull the Swagger2Markup image as follows:
 
 `docker pull swagger2markup/swagger2markup`
 
-You can convert a Swagger Spec by running a Docker container:
+You can convert a Swagger Spec by running a Docker container as follows:
 
-`docker run --rm -v $(pwd)/in:/tmp/in -v $(pwd)/out:/tmp/out swagger2markup/swagger2markup convert -i /tmp/in/swagger.yaml -c /tmp/in/config.properties -f /tmp/out/swagger`
+`docker run --rm -v $(pwd):/opt swagger2markup/swagger2markup convert -i /opt/swagger.yaml -f /opt/swagger -c /tmp/in/config.properties`
