@@ -625,7 +625,11 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_configuration_5">8.2. Configuration</a></li>
 </ul>
 </li>
-<li><a href="#_docker_image">9. Docker image</a></li>
+<li><a href="#_docker_image">9. Docker image</a>
+<ul class="sectlevel2">
+<li><a href="#_usage_guide_8">9.1. Usage guide</a></li>
+</ul>
+</li>
 <li><a href="#_spring_boot_and_springfox">10. Spring Boot and Springfox</a>
 <ul class="sectlevel2">
 <li><a href="#_demo">10.1. Demo</a></li>
@@ -2898,16 +2902,22 @@ swagger2markup.outputLanguage=DE</pre>
 <h2 id="_docker_image"><a class="anchor" href="#_docker_image"></a>9. Docker image</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Swagger2Markup-CLI has been published as a Docker image on DockerHub. You can pull the image:</p>
+<p>The Swagger2Markup-CLI has been published as a Docker image on DockerHub.</p>
+</div>
+<div class="sect2">
+<h3 id="_usage_guide_8"><a class="anchor" href="#_usage_guide_8"></a>9.1. Usage guide</h3>
+<div class="paragraph">
+<p>You can pull the Swagger2Markup image as follows:</p>
 </div>
 <div class="paragraph">
 <p><code>docker pull swagger2markup/swagger2markup</code></p>
 </div>
 <div class="paragraph">
-<p>You can convert a Swagger Spec by running a Docker container:</p>
+<p>You can convert a Swagger Spec by running a Docker container as follows:</p>
 </div>
 <div class="paragraph">
-<p><code>docker run --rm -v $(pwd)/in:/tmp/in -v $(pwd)/out:/tmp/out swagger2markup/swagger2markup convert -i /tmp/in/swagger.yaml -c /tmp/in/config.properties -f /tmp/out/swagger</code></p>
+<p><code>docker run --rm -v $(pwd):/opt swagger2markup/swagger2markup convert -i /opt/swagger.yaml -f /opt/swagger -c /tmp/in/config.properties</code></p>
+</div>
 </div>
 </div>
 </div>
@@ -3065,7 +3075,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.0.1<br>
-Last updated 2016-09-23 06:55:15 UTC
+Last updated 2016-09-23 08:22:28 UTC
 </div>
 </div>
 </body>
