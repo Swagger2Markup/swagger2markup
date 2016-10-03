@@ -430,6 +430,27 @@ public class AsciidocConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionWithSpanishOutputLanguage() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withOutputLanguage(Language.ES)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
+                .contains("Descripción");
+    }
+
+    @Test
     public void testSwagger2AsciiDocConversionWithMaps() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_maps.json").toURI());
