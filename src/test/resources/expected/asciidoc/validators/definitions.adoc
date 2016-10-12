@@ -8,19 +8,32 @@
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
+|*sampleDoubleComplete* +
+_optional_|sample double with range 0.0-10.0 +
+*Minimum value* : `0.0` +
+*Maximum value* : `10.0`|number(double)
+|*sampleDoubleNoDescription* +
+_optional_|*Minimum value* : `0.0` +
+*Maximum value* : `10.0`|number(double)
+|*sampleDoubleOnlyMaximum* +
+_optional_|sample double with range to 10.0 +
+*Maximum value* : `10.0`|number(double)
+|*sampleDoubleOnlyMinimum* +
+_optional_|sample double with range from 0.0 +
+*Minimum value* : `0.0`|number(double)
 |*sampleNumberComplete* +
 _optional_|sample int with range 0-10 +
-*Minimum value* : `0.0` +
-*Maximum value* : `10.0`|integer(int32)
+*Minimum value* : `0` +
+*Maximum value* : `10`|integer(int32)
 |*sampleNumberNoDescription* +
-_optional_|*Minimum value* : `0.0` +
-*Maximum value* : `10.0`|integer(int32)
+_optional_|*Minimum value* : `0` +
+*Maximum value* : `10`|integer(int32)
 |*sampleNumberOnlyMaximum* +
 _optional_|sample int with range to 10 +
-*Maximum value* : `10.0`|integer(int32)
+*Maximum value* : `10`|integer(int32)
 |*sampleNumberOnlyMinimum* +
 _optional_|sample int with range from 0 +
-*Minimum value* : `0.0`|integer(int32)
+*Minimum value* : `0`|integer(int32)
 |*sampleStringComplete* +
 _optional_|Sample string with range 0-2 and a pattern +
 *Length* : `0 - 2` +

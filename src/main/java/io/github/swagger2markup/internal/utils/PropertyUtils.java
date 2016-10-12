@@ -185,22 +185,16 @@ public final class PropertyUtils {
      * @param property the property
      * @return the minimum value of the property, or otherwise null
      */
-    public static Double getMin(Property property) {
+    public static Number getMin(Property property) {
         Validate.notNull(property, "property must not be null");
-        Double min = null;
-        
-        if (property instanceof DoubleProperty) {
-            DoubleProperty doubleProperty = (DoubleProperty) property;
-            min = doubleProperty.getMinimum();
-        } else if (property instanceof FloatProperty) {
-            FloatProperty floatProperty = (FloatProperty) property;
-            min = floatProperty.getMinimum();
-        } else if (property instanceof IntegerProperty) {
-            IntegerProperty integerProperty = (IntegerProperty) property;
-            min = integerProperty.getMinimum();
-        } else if (property instanceof LongProperty) {
-            LongProperty longProperty = (LongProperty) property;
-            min = longProperty.getMinimum();
+        Number min = null;
+
+        if (property instanceof BaseIntegerProperty){
+            BaseIntegerProperty integerProperty = (BaseIntegerProperty) property;
+            min = integerProperty.getMinimum() != null ? integerProperty.getMinimum().longValue() : null;
+        } else if (property instanceof AbstractNumericProperty){
+            AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
+            min = numericProperty.getMinimum();
         }
         return min;
     }
@@ -211,22 +205,16 @@ public final class PropertyUtils {
      * @param property the property
      * @return the minimum value of the property, or otherwise null
      */
-    public static Double getMax(Property property) {
+    public static Number getMax(Property property) {
         Validate.notNull(property, "property must not be null");
-        Double max = null;
-        
-        if (property instanceof DoubleProperty) {
-            DoubleProperty doubleProperty = (DoubleProperty) property;
-            max = doubleProperty.getMaximum();
-        } else if (property instanceof FloatProperty) {
-            FloatProperty floatProperty = (FloatProperty) property;
-            max = floatProperty.getMaximum();
-        } else if (property instanceof IntegerProperty) {
-            IntegerProperty integerProperty = (IntegerProperty) property;
-            max = integerProperty.getMaximum();
-        } else if (property instanceof LongProperty) {
-            LongProperty longProperty = (LongProperty) property;
-            max = longProperty.getMaximum();
+        Number max = null;
+
+        if (property instanceof BaseIntegerProperty){
+            BaseIntegerProperty integerProperty = (BaseIntegerProperty) property;
+            max = integerProperty.getMaximum() != null ? integerProperty.getMaximum().longValue() : null;
+        } else if (property instanceof AbstractNumericProperty){
+            AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
+            max = numericProperty.getMaximum();
         }
         return max;
     }

@@ -210,8 +210,8 @@ public abstract class MarkupDocumentBuilder {
                 Integer maxlength = PropertyUtils.getMaxlength(property);
                 Integer minlength = PropertyUtils.getMinlength(property);
                 String pattern = PropertyUtils.getPattern(property);
-                Double minValue = PropertyUtils.getMin(property);
-                Double maxValue = PropertyUtils.getMax(property);
+                Number minValue = PropertyUtils.getMin(property);
+                Number maxValue = PropertyUtils.getMax(property);
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
                 propertyNameContent.boldTextLine(propertyName, true);
