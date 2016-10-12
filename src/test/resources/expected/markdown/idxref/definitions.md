@@ -19,7 +19,7 @@
 |**complete**  <br>*optional*||boolean|
 |**id**  <br>*optional*||integer(int64)|
 |**petId**  <br>*optional*||integer(int64)|
-|**quantity**  <br>*optional*|**Default** : `0`  <br>**Minimum value** : `0.0`  <br>**Maximum value** : `10000.0`  <br>**Example** : `10`|integer(int32)|
+|**quantity**  <br>*optional*|**Default** : `0`  <br>**Minimum value** : `0`  <br>**Maximum value** : `10000`  <br>**Example** : `10`|integer(int32)|
 |**shipDate**  <br>*optional*||string(date-time)|
 |**status**  <br>*optional*|Order Status|enum (Ordered, Cancelled)|
 
