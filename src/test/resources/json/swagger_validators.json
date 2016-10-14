@@ -83,6 +83,29 @@
 					"format":"double",
 					"description": "sample double with range to 10.0",
 					"maximum": 10.0
+				},
+				"sampleDoubleExclusiveMinimum": {
+					"type":"number",
+					"format":"double",
+					"description": "sample double with range from 0.0 (exclusive)",
+					"minimum": 0.0,
+					"exclusiveMinimum": true
+				},
+				"sampleDoubleExclusiveMaximum": {
+					"type":"number",
+					"format":"double",
+					"description": "sample double with range to 10.0 (exclusive)",
+					"maximum": 10.0,
+					"exclusiveMaximum": true
+				},
+				"sampleDoubleExclusiveBoth": {
+					"type":"number",
+					"format":"double",
+					"description": "sample double with range 0.0-10.0 (both exclusive)",
+					"minimum": 0.0,
+					"maximum": 10.0,
+					"exclusiveMinimum": true,
+					"exclusiveMaximum": true
 				}
 			}
 		}

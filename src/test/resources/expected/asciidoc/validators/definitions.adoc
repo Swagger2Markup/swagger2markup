@@ -12,6 +12,16 @@
 _optional_|sample double with range 0.0-10.0 +
 *Minimum value* : `0.0` +
 *Maximum value* : `10.0`|number(double)
+|*sampleDoubleExclusiveBoth* +
+_optional_|sample double with range 0.0-10.0 (both exclusive) +
+*Minimum value (exclusive)* : `0.0` +
+*Maximum value (exclusive)* : `10.0`|number(double)
+|*sampleDoubleExclusiveMaximum* +
+_optional_|sample double with range to 10.0 (exclusive) +
+*Maximum value (exclusive)* : `10.0`|number(double)
+|*sampleDoubleExclusiveMinimum* +
+_optional_|sample double with range from 0.0 (exclusive) +
+*Minimum value (exclusive)* : `0.0`|number(double)
 |*sampleDoubleNoDescription* +
 _optional_|*Minimum value* : `0.0` +
 *Maximum value* : `10.0`|number(double)
