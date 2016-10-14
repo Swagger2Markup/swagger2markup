@@ -40,6 +40,7 @@ import java.nio.file.Path;
 import java.util.*;
 
 import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -58,8 +59,10 @@ public abstract class MarkupDocumentBuilder {
     
     protected final String PATTERN_COLUMN;
     protected final String MINVALUE_COLUMN;
+    protected final String MINVALUE_EXCLUSIVE_COLUMN;
     protected final String MAXVALUE_COLUMN;
-    
+    protected final String MAXVALUE_EXCLUSIVE_COLUMN;
+
     
     protected final String EXAMPLE_COLUMN;
     protected final String SCHEMA_COLUMN;
@@ -103,7 +106,9 @@ public abstract class MarkupDocumentBuilder {
         PATTERN_COLUMN = labels.getString("pattern_column");
         MINVALUE_COLUMN = labels.getString("minvalue_column");
         MAXVALUE_COLUMN = labels.getString("maxvalue_column");
-        
+        MINVALUE_EXCLUSIVE_COLUMN = labels.getString("minvalue_exclusive_column");
+        MAXVALUE_EXCLUSIVE_COLUMN = labels.getString("maxvalue_exclusive_column");
+
         EXAMPLE_COLUMN = labels.getString("example_column");
         FLAGS_COLUMN = labels.getString("flags.column");
         FLAGS_REQUIRED = labels.getString("flags.required");
@@ -211,15 +216,17 @@ public abstract class MarkupDocumentBuilder {
                 Integer minlength = PropertyUtils.getMinlength(property);
                 String pattern = PropertyUtils.getPattern(property);
                 Number minValue = PropertyUtils.getMin(property);
+                Boolean exclusiveMin = PropertyUtils.getExclusiveMin(property);
                 Number maxValue = PropertyUtils.getMax(property);
+                Boolean exclusiveMax = PropertyUtils.getExclusiveMax(property);
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
                 propertyNameContent.boldTextLine(propertyName, true);
-                if (BooleanUtils.isTrue(property.getRequired()))
+                if (isTrue(property.getRequired()))
                     propertyNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
                 else
                     propertyNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
-                if (BooleanUtils.isTrue(property.getReadOnly())) {
+                if (isTrue(property.getReadOnly())) {
                     propertyNameContent.newLine(true);
                     propertyNameContent.italicText(FLAGS_READ_ONLY.toLowerCase());
                 }
@@ -270,17 +277,21 @@ public abstract class MarkupDocumentBuilder {
                 	
                     descriptionContent.boldText(PATTERN_COLUMN).text(COLON).literalText(Json.pretty(pattern));
                 }
-                
+
                 if(minValue != null){
                 	if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(MINVALUE_COLUMN).text(COLON).literalText(minValue.toString());
+
+                    String minValueColumn = isTrue(exclusiveMin) ? MINVALUE_EXCLUSIVE_COLUMN : MINVALUE_COLUMN;
+                    descriptionContent.boldText(minValueColumn).text(COLON).literalText(minValue.toString());
                 }
                 
                 if(maxValue != null){
                 	if (isNotBlank(descriptionContent.toString()))
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(MAXVALUE_COLUMN).text(COLON).literalText(maxValue.toString());
+
+                    String maxValueColumn = isTrue(exclusiveMax) ? MAXVALUE_EXCLUSIVE_COLUMN : MAXVALUE_COLUMN;
+                    descriptionContent.boldText(maxValueColumn).text(COLON).literalText(maxValue.toString());
                 }
                 
                 if (example != null) {

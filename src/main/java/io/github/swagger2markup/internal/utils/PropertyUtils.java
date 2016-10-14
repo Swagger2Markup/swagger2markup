@@ -198,6 +198,23 @@ public final class PropertyUtils {
         }
         return min;
     }
+
+    /**
+     * Retrieves the exclusiveMinimum value of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the exclusiveMinimum value of the property, or otherwise null
+     */
+    public static Boolean getExclusiveMin(Property property) {
+        Validate.notNull(property, "property must not be null");
+        Boolean exclusiveMin = null;
+
+        if (property instanceof AbstractNumericProperty){
+            AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
+            exclusiveMin = numericProperty.getExclusiveMinimum();
+        }
+        return exclusiveMin;
+    }
     
     /**
      * Retrieves the minimum value of a property, or otherwise returns null.
@@ -217,6 +234,23 @@ public final class PropertyUtils {
             max = numericProperty.getMaximum();
         }
         return max;
+    }
+
+    /**
+     * Retrieves the exclusiveMaximum value of a property, or otherwise returns null.
+     *
+     * @param property the property
+     * @return the exclusiveMaximum value of the property, or otherwise null
+     */
+    public static Boolean getExclusiveMax(Property property) {
+        Validate.notNull(property, "property must not be null");
+        Boolean exclusiveMax = null;
+
+        if (property instanceof AbstractNumericProperty){
+            AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
+            exclusiveMax = numericProperty.getExclusiveMaximum();
+        }
+        return exclusiveMax;
     }
     
     /**

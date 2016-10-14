@@ -389,48 +389,25 @@ public class AsciidocConverterTest {
 
     @Test
     public void testSwagger2AsciiDocConversionWithRussianOutputLanguage() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withOutputLanguage(Language.RU)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        //Then
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
-                .contains("== Определения");
+        testSwagger2AsciiDocConversionWithOutputLanguage(Language.RU, "definitions.adoc", "== Определения");
     }
 
     @Test
     public void testSwagger2AsciiDocConversionWithFrenchOutputLanguage() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
+        testSwagger2AsciiDocConversionWithOutputLanguage(Language.FR, "overview.adoc", "== Sch\u00E9ma d'URI");
+    }
 
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withOutputLanguage(Language.FR)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        //Then
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("overview.adoc")), Charset.forName("UTF-8")))
-                .contains("== Sch\u00E9ma d'URI");
+    @Test
+    public void testSwagger2AsciiDocConversionWithGermanOutputLanguage() throws IOException, URISyntaxException {
+        testSwagger2AsciiDocConversionWithOutputLanguage(Language.DE, "definitions.adoc", "Beschreibung");
     }
 
     @Test
     public void testSwagger2AsciiDocConversionWithSpanishOutputLanguage() throws IOException, URISyntaxException {
+        testSwagger2AsciiDocConversionWithOutputLanguage(Language.ES, "definitions.adoc", "Descripción");
+    }
+
+    private void testSwagger2AsciiDocConversionWithOutputLanguage(Language language, String outputFilename, String expected) throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/generated");
@@ -438,7 +415,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withOutputLanguage(Language.ES)
+                .withOutputLanguage(language)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -446,8 +423,8 @@ public class AsciidocConverterTest {
                 .toFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve("definitions.adoc")), Charset.forName("UTF-8")))
-                .contains("Descripción");
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve(outputFilename)), Charset.forName("UTF-8")))
+                .contains(expected);
     }
 
     @Test
