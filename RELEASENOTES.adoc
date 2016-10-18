@@ -95,3 +95,11 @@
 === Version 1.0.1
 * Enhancement: Support to render validation constraints of properties
 * Enhancement: Possibility to disable rendering of the security chapter below operations
+
+=== Version 1.0.2
+* PR #177: Fixed rendering of recursive examples
+* PR #186: Add support for Chinese language
+* PR #190: Add support for Spanish language
+* PR #192: Updated min/max value to format correctly based on the data type
+* PR #193: Added support for exclusiveMin and exclusiveMax
+
