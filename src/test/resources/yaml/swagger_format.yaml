@@ -24,6 +24,18 @@ paths:
           required: true
           type: integer
           format: test
+        - in: query
+          name: stringQuery
+          description: test string in query
+          required: true
+          type: string
+          format: test
+        - in: query
+          name: intQuery
+          description: test integer in query
+          required: true
+          type: integer
+          format: test          
       responses:
         200:
           description: Result
@@ -73,6 +85,88 @@ paths:
                 items:
                   type: integer
                   format: test
+  "/stringStr":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: body
+          name: body
+          description: test string str in body
+          required: true
+          schema:
+            type: string
+            format: test                  
+  "/stringObj":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: body
+          name: body
+          description: test string str in body
+          required: true
+          schema:
+            type: object
+            properties:
+              test:
+                type: string
+                format: test
+  "/stringArray":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: body
+          name: body
+          description: test string str in body
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              format: test
+  "/integerStr":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: body
+          name: body
+          description: test integer str in body
+          required: true
+          schema:
+            type: integer
+            format: test                  
+  "/integerObj":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: body
+          name: body
+          description: test integer str in body
+          required: true
+          schema:
+            type: object
+            properties:
+              test:
+                type: integer
+                format: test
+  "/integerArray":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: body
+          name: body
+          description: test integer str in body
+          required: true
+          schema:
+            type: array
+            items:
+              type: integer
+              format: test
 definitions:
   StringStr:
     type: string
