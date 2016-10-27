@@ -14,6 +14,10 @@
 _required_|test integer in path|integer(test)
 |*Path*|*param* +
 _required_|test string in path|string(test)
+|*Query*|*intQuery* +
+_required_|test integer in query|integer(test)
+|*Query*|*stringQuery* +
+_required_|test string in query|string(test)
 |===
 
 
@@ -68,6 +72,134 @@ _optional_|integer(test)
 |Name|Schema
 |*test* +
 _optional_|< integer(test) > array
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_integerarray_get]]
+=== GET /integerArray
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Body*|*body* +
+_required_|test integer str in body|< integer(test) > array
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_integerobj_get]]
+=== GET /integerObj
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Body*|*body* +
+_required_|test integer str in body|<<_integerobj_get_body,body>>
+|===
+
+[[_integerobj_get_body]]
+*body*
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|*test* +
+_optional_|integer(test)
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_integerstr_get]]
+=== GET /integerStr
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Body*|*body* +
+_required_|test integer str in body|integer(test)
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_stringarray_get]]
+=== GET /stringArray
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Body*|*body* +
+_required_|test string str in body|< string(test) > array
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_stringobj_get]]
+=== GET /stringObj
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Body*|*body* +
+_required_|test string str in body|<<_stringobj_get_body,body>>
+|===
+
+[[_stringobj_get_body]]
+*body*
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|*test* +
+_optional_|string(test)
+|===
+
+
+==== Tags
+
+* All
+
+
+[[_stringstr_get]]
+=== GET /stringStr
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Body*|*body* +
+_required_|test string str in body|string(test)
 |===
 
 
