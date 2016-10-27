@@ -1,0 +1,79 @@
+
+[[_paths]]
+== Paths
+
+[[_c_param_intparam_get]]
+=== GET /C/{param}/{intParam}
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|*Path*|*intParam* +
+_required_|test integer in path|integer(test)
+|*Path*|*param* +
+_required_|test string in path|string(test)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|Result|string(test)
+|*201*|Result|<<_c_param_intparam_get_response_201,Response 201>>
+|*202*|Result|<<_c_param_intparam_get_response_202,Response 202>>
+|*203*|Result|integer(test)
+|*204*|Result|<<_c_param_intparam_get_response_204,Response 204>>
+|*205*|Result|<<_c_param_intparam_get_response_205,Response 205>>
+|===
+
+[[_c_param_intparam_get_response_201]]
+*Response 201*
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|*test* +
+_optional_|string(test)
+|===
+
+[[_c_param_intparam_get_response_202]]
+*Response 202*
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|*test* +
+_optional_|< string(test) > array
+|===
+
+[[_c_param_intparam_get_response_204]]
+*Response 204*
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|*test* +
+_optional_|integer(test)
+|===
+
+[[_c_param_intparam_get_response_205]]
+*Response 205*
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|*test* +
+_optional_|< integer(test) > array
+|===
+
+
+==== Tags
+
+* All
+
+
+

@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 public final class ModelUtils {
 
     /**
@@ -66,7 +68,9 @@ public final class ModelUtils {
                 objectType.getPolymorphism().setDiscriminator(modelImpl.getDiscriminator());
 
                 return objectType;
-            } else
+            } else if(isNotBlank(modelImpl.getFormat()))
+                return new BasicType(modelImpl.getType(), modelImpl.getTitle(), modelImpl.getFormat());
+            else
                 return new BasicType(modelImpl.getType(), modelImpl.getTitle());
         } else if (model instanceof ComposedModel) {
             ComposedModel composedModel = (ComposedModel) model;
