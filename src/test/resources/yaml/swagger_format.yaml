@@ -1,0 +1,104 @@
+swagger: "2.0"
+info:
+  title: API
+  version: "1.1"
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  "/C/{param}/{intParam}":
+    get:
+      tags:
+        - All
+      parameters:
+        - in: path
+          name: param
+          description: test string in path
+          required: true
+          type: string
+          format: test
+        - in: path
+          name: intParam
+          description: test integer in path
+          required: true
+          type: integer
+          format: test
+      responses:
+        200:
+          description: Result
+          schema:
+            description: test string
+            type: string
+            format: test
+        201:
+          description: Result
+          schema:
+            description: test string in object
+            properties:
+              test:
+                type: string
+                format: test
+        202:
+          description: Result
+          schema:
+            description: test string array
+            properties:
+              test:
+                type: array
+                items:
+                  type: string
+                  format: test
+        203:
+          description: Result
+          schema:
+            description: test integer
+            type: integer
+            format: test
+        204:
+          description: Result
+          schema:
+            description: test integer in object
+            properties:
+              test:
+                type: integer
+                format: test
+        205:
+          description: Result
+          schema:
+            description: test integer array
+            properties:
+              test:
+                type: array
+                items:
+                  type: integer
+                  format: test
+definitions:
+  StringStr:
+    type: string
+    format: test
+  StringObj:
+    type: object
+    properties:
+      test:
+        type: string
+        format: test
+  StringArray:
+    type: array
+    items:
+      type: string
+      format: test
+  IntegerStr:
+    type: integer
+    format: test
+  IntegerObj:
+    type: object
+    properties:
+      test:
+        type: integer
+        format: test
+  IntegerArray:
+    type: array
+    items:
+      type: integer
+      format: test

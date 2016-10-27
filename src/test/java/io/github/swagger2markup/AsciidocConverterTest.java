@@ -589,4 +589,27 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/emptycontact").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithEmptyContactUsingJSON.html");
     }
+
+    @Test
+    public void testSwagger2AsciiDocWithFormat() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_format.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/format");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+            .build();
+        Swagger2MarkupConverter.from(file)
+            .withConfig(config)
+            .build()
+            .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/format").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocWithFormat.html");
+    }
 }

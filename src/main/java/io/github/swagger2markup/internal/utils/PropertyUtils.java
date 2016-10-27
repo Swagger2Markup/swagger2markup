@@ -67,6 +67,8 @@ public final class PropertyUtils {
             List<String> enums = stringProperty.getEnum();
             if (CollectionUtils.isNotEmpty(enums)) {
                 type = new EnumType(stringProperty.getTitle(), enums);
+            } else if(isNotBlank(stringProperty.getFormat())) {
+                type = new BasicType(stringProperty.getType(), stringProperty.getTitle(), stringProperty.getFormat());
             } else {
                 type = new BasicType(stringProperty.getType(), stringProperty.getTitle());
             }
