@@ -193,11 +193,17 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         } else {
             pathOperations = new LinkedHashSet<>();
         }
-        for (Map.Entry<String, Path> path : paths.entrySet()) {
-            Map<HttpMethod, Operation> operations = path.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
+        for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
+            Map<HttpMethod, Operation> operations = pathEntry.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
             if (MapUtils.isNotEmpty(operations)) {
                 for (Map.Entry<HttpMethod, Operation> operation : operations.entrySet()) {
-                    pathOperations.add(new PathOperation(operation.getKey(), path.getKey(), operation.getValue()));
+                    String path;
+                    if(config.isBasePathPrefixEnabled()){
+                        path = StringUtils.defaultString(globalContext.getSwagger().getBasePath(), "") + pathEntry.getKey();
+                    }else{
+                        path = pathEntry.getKey();
+                    }
+                    pathOperations.add(new PathOperation(operation.getKey(), path, operation.getValue()));
                 }
             }
         }
@@ -267,9 +273,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (operation != null) {
             applyPathsDocumentExtension(new Context(Position.OPERATION_BEFORE, docBuilder, operation));
-            buildDeprecatedSection(operation, docBuilder);
             buildOperationTitle(operation, docBuilder);
             applyPathsDocumentExtension(new Context(Position.OPERATION_BEGIN, docBuilder, operation));
+            buildDeprecatedSection(operation, docBuilder);
             buildDescriptionSection(operation, docBuilder);
             inlineDefinitions(buildParametersSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), docBuilder);
             inlineDefinitions(buildBodyParameterSection(operation, docBuilder), operation.getPath() + " " + operation.getMethod(), docBuilder);

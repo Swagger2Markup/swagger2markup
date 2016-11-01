@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.builder;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import io.github.swagger2markup.*;
 import io.github.swagger2markup.markup.builder.LineSeparator;
@@ -46,35 +45,19 @@ public class Swagger2MarkupConfigBuilder  {
 
     static final Ordering<PathOperation> OPERATION_METHOD_NATURAL_ORDERING = Ordering
             .explicit(HttpMethod.POST, HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
-            .onResultOf(new Function<PathOperation, HttpMethod>() {
-                public HttpMethod apply(PathOperation operation) {
-                    return operation.getMethod();
-                }
-            });
+            .onResultOf(PathOperation::getMethod);
 
     static final Ordering<PathOperation> OPERATION_PATH_NATURAL_ORDERING = Ordering
             .natural()
-            .onResultOf(new Function<PathOperation, String>() {
-                public String apply(PathOperation operation) {
-                    return operation.getPath();
-                }
-            });
+            .onResultOf(PathOperation::getPath);
 
     static final Ordering<Parameter> PARAMETER_IN_NATURAL_ORDERING = Ordering
             .explicit("header", "path", "query", "formData", "body")
-            .onResultOf(new Function<Parameter, String>() {
-                public String apply(Parameter parameter) {
-                    return parameter.getIn();
-                }
-            });
+            .onResultOf(Parameter::getIn);
 
     static final Ordering<Parameter> PARAMETER_NAME_NATURAL_ORDERING = Ordering
             .natural()
-            .onResultOf(new Function<Parameter, String>() {
-                public String apply(Parameter parameter) {
-                    return parameter.getName();
-                }
-            });
+            .onResultOf(Parameter::getName);
 
     DefaultSwagger2MarkupConfig config = new DefaultSwagger2MarkupConfig();
 
@@ -101,6 +84,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
         config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
         config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
+        config.basePathPrefixEnabled = swagger2MarkupProperties.getRequiredBoolean(BASE_PATH_PREFIX_ENABLED);
         config.separatedDefinitionsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_DEFINITIONS_ENABLED);
         config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_OPERATIONS_ENABLED);
         config.pathsGroupedBy = swagger2MarkupProperties.getGroupBy(PATHS_GROUPED_BY);
@@ -476,6 +460,16 @@ public class Swagger2MarkupConfigBuilder  {
 		config.pathSecuritySectionEnabled = false;
 		return this;
 	}
+
+    /**
+     *  Prepend the base path to all paths.
+     *
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withBasePathPrefix() {
+        config.basePathPrefixEnabled = true;
+        return this;
+    }
 	
     /**
      * Optionally prefix all anchors for uniqueness.
@@ -506,6 +500,7 @@ public class Swagger2MarkupConfigBuilder  {
         private MarkupLanguage markupLanguage;
         private MarkupLanguage swaggerMarkupLanguage;
         private boolean generatedExamplesEnabled;
+        private boolean basePathPrefixEnabled;
         private boolean separatedDefinitionsEnabled;
         private boolean separatedOperationsEnabled;
         private GroupBy pathsGroupedBy;
@@ -702,6 +697,11 @@ public class Swagger2MarkupConfigBuilder  {
         @Override
         public Swagger2MarkupProperties getExtensionsProperties() {
             return extensionsProperties;
+        }
+
+        @Override
+        public boolean isBasePathPrefixEnabled() {
+            return basePathPrefixEnabled;
         }
     }
 }

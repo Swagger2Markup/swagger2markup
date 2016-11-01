@@ -44,6 +44,11 @@ public interface Swagger2MarkupConfig {
     boolean isGeneratedExamplesEnabled();
 
     /**
+     * Prepend the base path to all paths.
+     */
+    boolean isBasePathPrefixEnabled();
+
+    /**
      * In addition to the Definitions file, also create separate definition files for each model definition.
      */
     boolean isSeparatedDefinitionsEnabled();

@@ -1,0 +1,149 @@
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*id* +
+_optional_|*Example* : `123`|integer(int64)
+|*name* +
+_optional_|*Example* : `"Canines"`|string
+|===
+
+
+[[_complexobject]]
+=== ComplexObject
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*subObject* +
+_optional_|*Example* : `"object"`|<<_complexobject_subobject,subObject>>
+|===
+
+[[_complexobject_subobject]]
+*subObject*
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*id* +
+_optional_|*Example* : `88`|integer(int64)
+|*value* +
+_optional_|*Example* : `"a value !"`|string
+|===
+
+
+[[_identified]]
+=== Identified
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*id* +
+_optional_|*Example* : `0`|integer(int64)
+|===
+
+
+[[_order]]
+=== Order
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*complete* +
+_optional_|*Example* : `true`|boolean
+|*id* +
+_optional_|*Example* : `77`|integer(int64)
+|*petId* +
+_optional_|*Example* : `0`|integer(int64)
+|*quantity* +
+_optional_|*Example* : `0`|integer(int32)
+|*shipDate* +
+_optional_|*Example* : `"string"`|string(date-time)
+|*status* +
+_optional_|Order Status +
+*Example* : `"DONE"`|string
+|===
+
+
+[[_pet]]
+=== Pet
+Test description
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*category* +
+_optional_|*Example* : `"<<_category>>"`|<<_category,Category>>
+|*id* +
+_optional_|*Example* : `0`|integer(int64)
+|*name* +
+_required_|*Example* : `"doggie"`|string
+|*nicknames* +
+_optional_|*Example* : `{
+  "string" : "string"
+}`|< string, string > map
+|*photoUrls* +
+_required_|*Example* : `[ "string" ]`|< string > array
+|*status* +
+_optional_|pet status in the store +
+*Example* : `"string"`|string
+|*tags* +
+_optional_|*Example* : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
+|*weight* +
+_optional_|the weight of the pet +
+*Example* : `0.0`|number
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*id* +
+_optional_|*Example* : `0`|integer(int64)
+|*name* +
+_optional_|*Example* : `"string"`|string
+|===
+
+
+[[_user]]
+=== User
+[%hardbreaks]
+_Polymorphism_ : Composition
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*email* +
+_optional_|*Example* : `"string"`|string
+|*firstName* +
+_optional_|*Example* : `"string"`|string
+|*id* +
+_optional_|*Example* : `0`|integer(int64)
+|*lastName* +
+_optional_|*Example* : `"string"`|string
+|*password* +
+_optional_|*Example* : `"string"`|string
+|*phone* +
+_optional_|*Example* : `"string"`|string
+|*pictures* +
+_optional_|*Example* : `[ "string" ]`|< string(byte) > array
+|*userStatus* +
+_optional_|User Status +
+*Example* : `0`|integer(int32)
+|*username* +
+_optional_|*Example* : `"string"`|string
+|===
+
+
+

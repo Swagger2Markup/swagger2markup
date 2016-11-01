@@ -1,0 +1,29 @@
+
+[[_securityscheme]]
+== Security
+
+[[_petstore_auth]]
+=== petstore_auth
+[%hardbreaks]
+_Type_ : oauth2
+_Flow_ : implicit
+_Token URL_ : http://petstore.swagger.wordnik.com/api/oauth/dialog
+
+
+[options="header", cols=".^3,.^17"]
+|===
+|Name|Description
+|write_pets|modify pets in your account
+|read_pets|read your pets
+|===
+
+
+[[_api_key]]
+=== api_key
+[%hardbreaks]
+_Type_ : apiKey
+_Name_ : api_key
+_In_ : HEADER
+
+
+

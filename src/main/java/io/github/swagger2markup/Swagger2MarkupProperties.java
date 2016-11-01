@@ -40,6 +40,7 @@ public class Swagger2MarkupProperties {
     public static final String MARKUP_LANGUAGE = PROPERTIES_PREFIX + ".markupLanguage";
     public static final String SWAGGER_MARKUP_LANGUAGE = PROPERTIES_PREFIX + ".swaggerMarkupLanguage";
     public static final String GENERATED_EXAMPLES_ENABLED = PROPERTIES_PREFIX + ".generatedExamplesEnabled";
+    public static final String BASE_PATH_PREFIX_ENABLED = PROPERTIES_PREFIX + ".basePathPrefixEnabled";
     public static final String SEPARATED_DEFINITIONS_ENABLED = PROPERTIES_PREFIX + ".separatedDefinitionsEnabled";
     public static final String SEPARATED_OPERATIONS_ENABLED = PROPERTIES_PREFIX + ".separatedOperationsEnabled";
     public static final String PATHS_GROUPED_BY = PROPERTIES_PREFIX + ".pathsGroupedBy";

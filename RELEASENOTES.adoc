@@ -103,3 +103,6 @@
 * PR #192: Updated min/max value to format correctly based on the data type
 * PR #193: Added support for exclusiveMin and exclusiveMax
 
+=== Version 1.1.1
+* Issue #194: Added a config parameter which allows to prepend the basePath to all paths.
+
