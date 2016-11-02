@@ -431,6 +431,11 @@ public class AsciidocConverterTest {
         testSwagger2AsciiDocConversionWithOutputLanguage(Language.ES, "definitions.adoc", "Descripción");
     }
 
+    @Test
+    public void testSwagger2AsciiDocConversionWithJapaneseOutputLanguage() throws IOException, URISyntaxException {
+        testSwagger2AsciiDocConversionWithOutputLanguage(Language.JA, "definitions.adoc", "説明");
+    }
+
     private void testSwagger2AsciiDocConversionWithOutputLanguage(Language language, String outputFilename, String expected) throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());

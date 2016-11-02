@@ -29,7 +29,8 @@ public enum Language {
     TR(new Locale("tr")),
     ZH(Locale.CHINESE),
     ES(new Locale("es")),
-    BR(new Locale("pt", "BR"));
+    BR(new Locale("pt", "BR")),
+    JA(Locale.JAPANESE);
 
     private final Locale lang;
 
