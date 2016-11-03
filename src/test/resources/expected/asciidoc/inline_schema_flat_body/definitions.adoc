@@ -15,17 +15,6 @@ _optional_|Error message|string
 |===
 
 
-[[_externallocation]]
-=== ExternalLocation
-
-[options="header", cols=".^3,.^11,.^4"]
-|===
-|Name|Description|Schema
-|*Place* +
-_optional_|Place|string
-|===
-
-
 [[_inlinedepthschema]]
 === InlineDepthSchema
 

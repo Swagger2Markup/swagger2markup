@@ -259,9 +259,6 @@ paths:
 
 
 definitions:
-  ExternalLocation:
-    $ref: ./swagger_inlineSchema.yaml#/definitions/Location
-
   Error:
     type: object
     properties:
