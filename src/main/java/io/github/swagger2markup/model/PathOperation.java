@@ -23,9 +23,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class PathOperation {
 
-    protected HttpMethod method;
-    protected String path;
-    protected Operation operation;
+    private HttpMethod method;
+    private String path;
+    private Operation operation;
 
     public PathOperation(HttpMethod method, String path, Operation operation) {
         this.method = method;

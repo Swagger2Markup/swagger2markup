@@ -16,7 +16,7 @@
 
 package io.github.swagger2markup.internal.type;
 
-import com.google.common.base.Function;
+import java.util.function.Function;
 
 /**
  * A functor to return the document part of an inter-document cross-references, depending on the globalContext.

@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Ordering;
@@ -57,9 +56,9 @@ public class TagUtils {
     public static Optional<String> getTagDescription(Map<String, Tag> tagsMap, String tagName) {
         Tag tag = tagsMap.get(tagName);
         if(tag != null){
-            return Optional.fromNullable(tag.getDescription());
+            return Optional.ofNullable(tag.getDescription());
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     /**

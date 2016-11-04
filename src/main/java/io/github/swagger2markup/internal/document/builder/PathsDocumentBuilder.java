@@ -15,23 +15,23 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
+import ch.netzwerg.paleo.StringColumn;
 import com.google.common.base.Joiner;
-import com.google.common.base.Optional;
 import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
+import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.ExamplesUtil;
-import io.github.swagger2markup.internal.utils.ParameterUtils;
-import io.github.swagger2markup.internal.utils.PropertyUtils;
-import io.github.swagger2markup.internal.utils.TagUtils;
+import io.github.swagger2markup.internal.utils.*;
 import io.github.swagger2markup.markup.builder.*;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
-import io.swagger.models.*;
+import io.swagger.models.Path;
+import io.swagger.models.Response;
+import io.swagger.models.Tag;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
@@ -46,7 +46,9 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
+import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.ListUtils.toSet;
 import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
@@ -82,8 +84,12 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
     private static final String PATHS_ANCHOR = "paths";
 
+    private final DefinitionDocumentResolver definitionDocumentResolver;
+
     public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, java.nio.file.Path outputPath) {
         super(globalContext, extensionRegistry, outputPath);
+
+        definitionDocumentResolver = new DefinitionDocumentResolverFromOperation();
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
@@ -143,27 +149,26 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         return new MarkupDocument(markupDocBuilder);
     }
 
+    /**
+     * Builds the paths section. Groups the paths either as-is or by tags.
+     *
+     * @param paths the Swagger paths
+     */
     private void buildsPathsSection(Map<String, Path> paths) {
         Set<PathOperation> pathOperations = toPathOperationsSet(paths);
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-                for (PathOperation operation : pathOperations) {
-                    buildOperation(operation);
-                }
+                pathOperations.forEach(operation -> buildOperation(operation));
             } else {
+                // Group operations by tag
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
                 Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
                 for (String tagName : operationsGroupedByTag.keySet()) {
-                    this.markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
+                    markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
 
-                    Optional<String> tagDescription = getTagDescription(tagsMap, tagName);
-                    if (tagDescription.isPresent()) {
-                        this.markupDocBuilder.paragraph(tagDescription.get());
-                    }
+                    getTagDescription(tagsMap, tagName).ifPresent(tagDescription -> markupDocBuilder.paragraph(tagDescription));
 
-                    for (PathOperation operation : operationsGroupedByTag.get(tagName)) {
-                        buildOperation(operation);
-                    }
+                    operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(operation));
                 }
             }
         }
@@ -181,7 +186,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Converts the Swagger paths into a list PathOperations.
+     * Converts the Swagger paths into a list of PathOperations.
      *
      * @param paths the Swagger paths
      * @return the path operations
@@ -193,21 +198,23 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         } else {
             pathOperations = new LinkedHashSet<>();
         }
-        for (Map.Entry<String, Path> pathEntry : paths.entrySet()) {
-            Map<HttpMethod, Operation> operations = pathEntry.getValue().getOperationMap(); // TODO AS_IS does not work because of https://github.com/swagger-api/swagger-core/issues/1696
-            if (MapUtils.isNotEmpty(operations)) {
-                for (Map.Entry<HttpMethod, Operation> operation : operations.entrySet()) {
-                    String path;
-                    if(config.isBasePathPrefixEnabled()){
-                        path = StringUtils.defaultString(globalContext.getSwagger().getBasePath(), "") + pathEntry.getKey();
-                    }else{
-                        path = pathEntry.getKey();
-                    }
-                    pathOperations.add(new PathOperation(operation.getKey(), path, operation.getValue()));
-                }
-            }
-        }
+        paths.forEach((relativePath, path) -> path.getOperationMap().forEach((httpMethod, operation) -> {
+            pathOperations.add(new PathOperation(httpMethod, getPath(relativePath), operation));
+        }));
         return pathOperations;
+    }
+
+    /**
+     * Prepends the basePath to the relative path, if configured
+     *
+     * @param relativePath the relative operation path
+     * @return either the relative or the full path
+     */
+    private String getPath(String relativePath) {
+        if(config.isBasePathPrefixEnabled()){
+            return StringUtils.defaultString(globalContext.getSwagger().getBasePath()) + relativePath;
+        }
+        return relativePath;
     }
 
     private void buildPathsTitle(String title) {
@@ -283,9 +290,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             buildConsumesSection(operation, docBuilder);
             buildProducesSection(operation, docBuilder);
             buildTagsSection(operation, docBuilder);
-            if (config.isPathSecuritySectionEnabled()) {
-            	buildSecuritySchemeSection(operation, docBuilder);
-            }
+            buildSecuritySchemeSection(operation, docBuilder);
             buildExamplesSection(operation, docBuilder);
             applyPathsDocumentExtension(new Context(Position.OPERATION_END, docBuilder, operation));
             applyPathsDocumentExtension(new Context(Position.OPERATION_AFTER, docBuilder, operation));
@@ -318,7 +323,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildDeprecatedSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         Boolean deprecated = operation.getOperation().isDeprecated();
-        if (deprecated != null && deprecated) {
+        if (BooleanUtils.isTrue(deprecated)) {
             docBuilder.block(DEPRECATED_OPERATION, MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.CAUTION);
         }
     }
@@ -411,72 +416,57 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         return (!config.isFlatBodyEnabled() || !StringUtils.equals(parameter.getIn(), "body"));
     }
 
+    /**
+     * Builds the parameters section
+     *
+     * @param operation  the Swagger Operation
+     * @param docBuilder the docbuilder do use for output
+     */
     private List<ObjectType> buildParametersSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (config.getParameterOrdering() != null)
             Collections.sort(parameters, config.getParameterOrdering());
         List<ObjectType> inlineDefinitions = new ArrayList<>();
 
-        boolean hasParameters = false;
-        if (CollectionUtils.isNotEmpty(parameters)) {
-            for (Parameter p : parameters) {
-                if (filterParameter(p)) {
-                    hasParameters = true;
-                    break;
-                }
-            }
-        }
+        // Filter parameters to display in parameters section
+        List<Parameter> filteredParameters = parameters.stream()
+                .filter(this::filterParameter).collect(Collectors.toList());
 
         MarkupDocBuilder parametersBuilder = copyMarkupDocBuilder();
         applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
-        if (hasParameters) {
-            List<List<String>> cells = new ArrayList<>();
-            ArrayList<MarkupTableColumn> cols = new ArrayList<>(Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(2).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(9).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^9"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(DEFAULT_COLUMN).withWidthRatio(2).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2")));
-            ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(4, 3, 2, 1, 0));
-            for (Parameter parameter : parameters) {
-                if (filterParameter(parameter)) {
-                    Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
+        if (CollectionUtils.isNotEmpty(filteredParameters)) {
+            StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(TYPE_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "2");
+            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "3");
+            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "9")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
+            StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(SCHEMA_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "4")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
+            StringColumn.Builder defaultColumnBuilder = StringColumn.builder(StringColumnId.of(DEFAULT_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "2")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
 
-                    type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
+            for (Parameter parameter : filteredParameters) {
+                Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), definitionDocumentResolver);
+                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
 
-                    String parameterType = WordUtils.capitalize(parameter.getIn());
-
-                    MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder();
-                    parameterNameContent.boldTextLine(parameter.getName(), true);
-                    if (parameter.getRequired())
-                        parameterNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
-                    else
-                        parameterNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
-
-                    Object defaultValue = ParameterUtils.getDefaultValue(parameter);
-
-                    ArrayList<String> content = new ArrayList<>(Arrays.asList(
-                            boldText(parameterType),
-                            parameterNameContent.toString(),
-                            defaultString(swaggerMarkupDescription(parameter.getDescription())),
-                            type.displaySchema(markupDocBuilder),
-                            defaultValue != null ? literalText(Json.pretty(defaultValue)) : ""));
-
-                    unusedCols.removeIf(index -> !(content.get(index).equals("")));
-
-                    cells.add(content);
-                }
+                typeColumnBuilder.add(boldText(WordUtils.capitalize(parameter.getIn())));
+                nameColumnBuilder.add(getParameterNameColumnContent(parameter));
+                descriptionColumnBuilder.add(swaggerMarkupDescription(parameter.getDescription()));
+                schemaColumnBuilder.add(type.displaySchema(markupDocBuilder));
+                defaultColumnBuilder.add(ParameterUtils.getDefaultValue(parameter).map(value -> literalText(Json.pretty(value))).orElse(""));
             }
 
-            for (int index : unusedCols) {
-                cols.remove(index);
-
-                for (List cell : cells) {
-                    cell.remove(index);
-                }
-            }
-
-            parametersBuilder.tableWithColumnSpecs(cols, cells);
+            Table table = Table.ofAll(
+                    typeColumnBuilder.build(),
+                    nameColumnBuilder.build(),
+                    descriptionColumnBuilder.build(),
+                    schemaColumnBuilder.build(),
+                    defaultColumnBuilder.build());
+            parametersBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
         }
         applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_END, parametersBuilder, operation));
         String parametersContent = parametersBuilder.toString();
@@ -491,8 +481,24 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         return inlineDefinitions;
     }
 
+
     /**
-     * Builds the body parameter section, if {@code Swagger2MarkupConfig.isIsolatedBody()} is true
+     * @param parameter the Swagger parameter
+     * @return the name column column content of the parameter
+     */
+    private String getParameterNameColumnContent(Parameter parameter){
+        MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder();
+
+        parameterNameContent.boldTextLine(parameter.getName(), true);
+        if (parameter.getRequired())
+            parameterNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
+        else
+            parameterNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
+        return parameterNameContent.toString();
+    }
+
+    /**
+     * Builds the body parameter section
      *
      * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
@@ -506,7 +512,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
                     if (StringUtils.equals(parameter.getIn(), "body")) {
-                        Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromOperation());
+                        Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), definitionDocumentResolver);
 
                         if (!(type instanceof ObjectType)) {
                             type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
@@ -528,7 +534,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         docBuilder.paragraph(typeInfos.toString(), true);
 
                         if (type instanceof ObjectType) {
-                            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), new DefinitionDocumentResolverFromOperation(), docBuilder));
+                            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) type).getProperties(), operation.getId(), definitionDocumentResolver, docBuilder));
                         }
                     }
                 }
@@ -582,8 +588,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildExamplesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
 
-        Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, globalContext.getSwagger().getDefinitions(), markupDocBuilder);
-        Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation.getOperation(), globalContext.getSwagger().getDefinitions(), markupDocBuilder);
+        Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, globalContext.getSwagger().getDefinitions(), definitionDocumentResolver, markupDocBuilder);
+        Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation, globalContext.getSwagger().getDefinitions(), definitionDocumentResolver, markupDocBuilder);
 
         exampleMap(generatedRequestExampleMap, EXAMPLE_REQUEST, REQUEST, docBuilder);
         exampleMap(generatedResponseExampleMap, EXAMPLE_RESPONSE, RESPONSE, docBuilder);
@@ -606,53 +612,55 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder the MarkupDocBuilder document builder
      */
     private void buildSecuritySchemeSection(PathOperation operation, MarkupDocBuilder docBuilder) {
-        List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
+        if (config.isPathSecuritySectionEnabled()) {
+            List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
 
-        MarkupDocBuilder securityBuilder = copyMarkupDocBuilder();
-        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
-        if (CollectionUtils.isNotEmpty(securitySchemes)) {
+            MarkupDocBuilder securityBuilder = copyMarkupDocBuilder();
+            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
+            if (CollectionUtils.isNotEmpty(securitySchemes)) {
 
-            Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
-            List<List<String>> cells = new ArrayList<>();
-            ArrayList<MarkupTableColumn> cols = new ArrayList<>(Arrays.asList(
-                    new MarkupTableColumn(TYPE_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(4).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4"),
-                    new MarkupTableColumn(SCOPES_COLUMN).withWidthRatio(13).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^13")));
-            ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
-            for (Map<String, List<String>> securityScheme : securitySchemes) {
-                for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
-                    String securityKey = securityEntry.getKey();
-                    String type = UNKNOWN;
-                    if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
-                        type = securityDefinitions.get(securityKey).getType();
+                Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
+
+                StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(TYPE_COLUMN))
+                        .putMetaData(Table.WIDTH_RATIO, "3");
+                StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
+                        .putMetaData(Table.WIDTH_RATIO, "4");
+                StringColumn.Builder scopeColumnBuilder = StringColumn.builder(StringColumnId.of(SCOPES_COLUMN))
+                        .putMetaData(Table.WIDTH_RATIO, "13")
+                        .putMetaData(Table.HEADER_COLUMN, "true");
+
+
+                for (Map<String, List<String>> securityScheme : securitySchemes) {
+                    for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
+                        String securityKey = securityEntry.getKey();
+                        String type = UNKNOWN;
+                        if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
+                            type = securityDefinitions.get(securityKey).getType();
+                        }
+
+                        typeColumnBuilder.add(boldText(type));
+                        nameColumnBuilder.add(boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver(), securityKey, securityKey).toString()));
+                        scopeColumnBuilder.add(Joiner.on(",").join(securityEntry.getValue()));
                     }
-
-                    ArrayList<String> content = new ArrayList<>(Arrays.asList(boldText(type), boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver(), securityKey, securityKey).toString()),
-                            Joiner.on(",").join(securityEntry.getValue())));
-
-                    unusedCols.removeIf(index -> !(content.get(index).equals("")));
-
-                    cells.add(content);
                 }
-            }
-            for (int index : unusedCols) {
-                cols.remove(index);
 
-                for (List cell : cells) {
-                    cell.remove(index);
-                }
-            }
-            securityBuilder.tableWithColumnSpecs(cols, cells);
-        }
-        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_END, securityBuilder, operation));
-        String securityContent = securityBuilder.toString();
+                Table table = Table.ofAll(
+                        typeColumnBuilder.build(),
+                        nameColumnBuilder.build(),
+                        scopeColumnBuilder.build());
 
-        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEFORE, docBuilder, operation));
-        if (isNotBlank(securityContent)) {
-            buildSectionTitle(SECURITY, docBuilder);
-            docBuilder.text(securityContent);
+                securityBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
+            }
+            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_END, securityBuilder, operation));
+            String securityContent = securityBuilder.toString();
+
+            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEFORE, docBuilder, operation));
+            if (isNotBlank(securityContent)) {
+                buildSectionTitle(SECURITY, docBuilder);
+                docBuilder.text(securityContent);
+            }
+            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_AFTER, docBuilder, operation));
         }
-        applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_AFTER, docBuilder, operation));
     }
 
     /**
@@ -674,12 +682,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder();
         applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
-            ArrayList<MarkupTableColumn> responseCols = new ArrayList<>(Arrays.asList(
-                    new MarkupTableColumn(HTTP_CODE_COLUMN).withWidthRatio(2).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^2"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(14).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^14"),
-                    new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4")));
-            ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
-            List<List<String>> cells = new ArrayList<>();
+            StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(HTTP_CODE_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "2");
+            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "14")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
+            StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(SCHEMA_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "4")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
 
             Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
             for (String responseName : responseNames) {
@@ -697,7 +707,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                 MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder();
 
-                descriptionBuilder.text(defaultString(swaggerMarkupDescription(response.getDescription())));
+                descriptionBuilder.text(swaggerMarkupDescription(response.getDescription()));
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
@@ -706,7 +716,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                         descriptionBuilder.newLine(true);
                         Property headerProperty = header.getValue();
                         Type propertyType = PropertyUtils.getType(headerProperty, null);
-                        String headerDescription = defaultString(swaggerMarkupDescription(headerProperty.getDescription()));
+                        String headerDescription = swaggerMarkupDescription(headerProperty.getDescription());
                         Object defaultValue = PropertyUtils.getDefaultValue(headerProperty);
 
                         descriptionBuilder
@@ -728,26 +738,17 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     }
                 }
 
-                ArrayList<String> content = new ArrayList<>(Arrays.asList(
-                        boldText(responseName),
-                        descriptionBuilder.toString(),
-                        schemaContent
-                ));
-
-                unusedCols.removeIf(index -> !(content.get(index).equals("")));
-
-                cells.add(content);
+                httpCodeColumnBuilder.add(boldText(responseName));
+                descriptionColumnBuilder.add(descriptionBuilder.toString());
+                schemaColumnBuilder.add(schemaContent);
             }
 
-            for (int index : unusedCols) {
-                responseCols.remove(index);
+            Table table = Table.ofAll(
+                    httpCodeColumnBuilder.build(),
+                    descriptionColumnBuilder.build(),
+                    schemaColumnBuilder.build());
 
-                for (List cell : cells) {
-                    cell.remove(index);
-                }
-            }
-
-            responsesBuilder.tableWithColumnSpecs(responseCols, cells);
+            responsesBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
         }
         applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_END, responsesBuilder, operation));
         String responsesContent = responsesBuilder.toString();

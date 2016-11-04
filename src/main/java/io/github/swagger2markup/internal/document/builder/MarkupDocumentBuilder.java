@@ -15,21 +15,21 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
+import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.PropertyUtils;
+import io.github.swagger2markup.internal.utils.Table;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +39,7 @@ import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.*;
 
+import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.StringUtils.defaultString;
@@ -47,46 +48,46 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Robert Winkler
  */
-public abstract class MarkupDocumentBuilder {
+abstract class MarkupDocumentBuilder {
 
-    protected static final String COLON = " : ";
+    static final String COLON = " : ";
 
-    protected final String DEFAULT_COLUMN;
+    final String DEFAULT_COLUMN;
     
-    protected final String MAXLENGTH_COLUMN;
-    protected final String MINLENGTH_COLUMN;
-    protected final String LENGTH_COLUMN;
+    private final String MAXLENGTH_COLUMN;
+    private final String MINLENGTH_COLUMN;
+    private final String LENGTH_COLUMN;
     
-    protected final String PATTERN_COLUMN;
-    protected final String MINVALUE_COLUMN;
-    protected final String MINVALUE_EXCLUSIVE_COLUMN;
-    protected final String MAXVALUE_COLUMN;
-    protected final String MAXVALUE_EXCLUSIVE_COLUMN;
+    private final String PATTERN_COLUMN;
+    private final String MINVALUE_COLUMN;
+    private final String MINVALUE_EXCLUSIVE_COLUMN;
+    private final String MAXVALUE_COLUMN;
+    private final String MAXVALUE_EXCLUSIVE_COLUMN;
 
     
-    protected final String EXAMPLE_COLUMN;
-    protected final String SCHEMA_COLUMN;
-    protected final String NAME_COLUMN;
-    protected final String DESCRIPTION_COLUMN;
-    protected final String SCOPES_COLUMN;
-    protected final String DESCRIPTION;
-    protected final String PRODUCES;
-    protected final String CONSUMES;
+    private final String EXAMPLE_COLUMN;
+    final String SCHEMA_COLUMN;
+    final String NAME_COLUMN;
+    final String DESCRIPTION_COLUMN;
+    final String SCOPES_COLUMN;
+    final String DESCRIPTION;
+    final String PRODUCES;
+    final String CONSUMES;
     protected final String TAGS;
-    protected final String NO_CONTENT;
-    protected final String FLAGS_COLUMN;
-    protected final String FLAGS_REQUIRED;
-    protected final String FLAGS_OPTIONAL;
-    protected final String FLAGS_READ_ONLY;
+    final String NO_CONTENT;
+    final String FLAGS_COLUMN;
+    final String FLAGS_REQUIRED;
+    final String FLAGS_OPTIONAL;
+    private final String FLAGS_READ_ONLY;
     
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     protected Swagger2MarkupConverter.Context globalContext;
-    protected Swagger2MarkupExtensionRegistry extensionRegistry;
+    Swagger2MarkupExtensionRegistry extensionRegistry;
     protected Swagger2MarkupConfig config;
-    protected MarkupDocBuilder markupDocBuilder;
-    protected Path outputPath;
+    MarkupDocBuilder markupDocBuilder;
+    Path outputPath;
 
     MarkupDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         this.globalContext = globalContext;
@@ -145,7 +146,7 @@ public abstract class MarkupDocumentBuilder {
      * @param inlineDefinitions a non null collection of inline ObjectType
      * @return the type referencing the newly created inline ObjectType. Can be a RefType, an ArrayType or a MapType
      */
-    protected Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
+    Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
         if (!config.isInlineSchemaEnabled())
             return type;
         
@@ -167,7 +168,7 @@ public abstract class MarkupDocumentBuilder {
         }
     }
 
-    protected Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
+    private Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
         if (type instanceof ObjectType) {
             ObjectType objectType = (ObjectType)type;
             if (MapUtils.isNotEmpty(objectType.getProperties())) {
@@ -192,13 +193,18 @@ public abstract class MarkupDocumentBuilder {
      * @param docBuilder                 the docbuilder do use for output
      * @return a list of inline schemas referenced by some properties, for later display
      */
-    protected List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
+    List<ObjectType> buildPropertiesTable(Map<String, Property> properties, String uniquePrefix, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder docBuilder) {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
-        List<List<String>> cells = new ArrayList<>();
-        ArrayList<MarkupTableColumn> cols = new ArrayList<>(Arrays.asList(
-                new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withHeaderColumn(false).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(11).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^11"),
-                new MarkupTableColumn(SCHEMA_COLUMN).withWidthRatio(4).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^4")));
+
+        StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
+                .putMetaData(Table.WIDTH_RATIO, "3");
+        StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
+                .putMetaData(Table.WIDTH_RATIO, "11")
+                .putMetaData(Table.HEADER_COLUMN, "true");
+        StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(SCHEMA_COLUMN))
+                .putMetaData(Table.WIDTH_RATIO, "4")
+                .putMetaData(Table.HEADER_COLUMN, "true");
+
         ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
@@ -232,8 +238,8 @@ public abstract class MarkupDocumentBuilder {
                 }
                 
                 MarkupDocBuilder descriptionContent = copyMarkupDocBuilder();
-                String description = defaultString(swaggerMarkupDescription(property.getDescription()));
-                if (isNotBlank(description.toString())) 
+                String description = swaggerMarkupDescription(property.getDescription());
+                if (isNotBlank(description))
                     descriptionContent.text(description);
                 
                 if(defaultValue != null){
@@ -300,26 +306,16 @@ public abstract class MarkupDocumentBuilder {
                     descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(example));
                 }
 
-                ArrayList<String> content = new ArrayList<>(Arrays.asList(
-                        propertyNameContent.toString(),
-                        descriptionContent.toString(),
-                        propertyType.displaySchema(docBuilder)
-                ));
-
-                unusedCols.removeIf(index -> !(content.get(index).equals("")));
-
-                cells.add(content);
+                nameColumnBuilder.add(propertyNameContent.toString());
+                descriptionColumnBuilder.add(descriptionContent.toString());
+                schemaColumnBuilder.add(propertyType.displaySchema(docBuilder));
             }
 
-            for (int index : unusedCols) {
-                cols.remove(index);
-
-                for (List cell : cells) {
-                    cell.remove(index);
-                }
-            }
-
-            docBuilder.tableWithColumnSpecs(cols, cells);
+            Table table = Table.ofAll(
+                    nameColumnBuilder.build(),
+                    descriptionColumnBuilder.build(),
+                    schemaColumnBuilder.build());
+            docBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
         } else {
             docBuilder.textLine(NO_CONTENT);
         }
@@ -327,11 +323,11 @@ public abstract class MarkupDocumentBuilder {
         return inlineDefinitions;
     }
 
-    protected MarkupDocBuilder copyMarkupDocBuilder() {
+    MarkupDocBuilder copyMarkupDocBuilder() {
         return markupDocBuilder.copy(false);
     }
 
-    protected String boldText(String text) {
+    String boldText(String text) {
         return copyMarkupDocBuilder().boldText(text).toString();
     }
 
@@ -339,23 +335,23 @@ public abstract class MarkupDocumentBuilder {
         return copyMarkupDocBuilder().italicText(text).toString();
     }
 
-    protected String literalText(String text) {
+    String literalText(String text) {
         return copyMarkupDocBuilder().literalText(text).toString();
     }
     
     /**
      * Returns converted markup text from Swagger.
      *
-     * @param markupText text to convert, or null
-     * @return converted markup text, or null if {@code markupText} == null
+     * @param markupText text to convert, or empty string
+     * @return converted markup text, or an empty string if {@code markupText} == null
      */
-    protected String swaggerMarkupDescription(String markupText) {
+    String swaggerMarkupDescription(String markupText) {
         if (markupText == null)
-            return null;
+            return StringUtils.EMPTY;
         return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
     }
 
-    protected void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {
+    void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {
         if (isNotBlank(description)) {
             docBuilder.paragraph(swaggerMarkupDescription(description));
         }
@@ -366,7 +362,7 @@ public abstract class MarkupDocumentBuilder {
      */
     class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
 
-        public DefinitionDocumentResolverDefault() {
+        DefinitionDocumentResolverDefault() {
         }
 
         public String apply(String definitionName) {

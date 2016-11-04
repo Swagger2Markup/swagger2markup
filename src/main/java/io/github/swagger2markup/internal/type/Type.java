@@ -24,7 +24,7 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 public abstract class Type {
 
     protected String name;
-    protected String uniqueName;
+    private String uniqueName;
 
     public Type(String name, String uniqueName) {
         this.name = name;

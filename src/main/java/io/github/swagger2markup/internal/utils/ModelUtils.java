@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.*;
@@ -23,9 +22,9 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.lang3.Validate;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 

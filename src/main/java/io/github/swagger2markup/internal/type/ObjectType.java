@@ -26,8 +26,8 @@ import java.util.Map;
  */
 public class ObjectType extends Type {
     
-    protected Map<String, Property> properties;
-    protected ObjectTypePolymorphism polymorphism;
+    private Map<String, Property> properties;
+    private ObjectTypePolymorphism polymorphism;
 
     public ObjectType(String name, ObjectTypePolymorphism polymorphism, Map<String, Property> properties) {
         super(name);

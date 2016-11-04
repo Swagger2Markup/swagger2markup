@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import com.google.common.base.Function;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -27,6 +26,8 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
 
 
 public final class ParameterUtils {
@@ -78,20 +79,18 @@ public final class ParameterUtils {
     }
 
     /**
-     * Retrieves the default value of a parameter, or otherwise returns null
+     * Retrieves the default value of a parameter
      *
      * @param parameter the parameter
-     * @return the default value of the parameter, or otherwise null
+     * @return the default value of the parameter
      */
-    public static Object getDefaultValue(Parameter parameter){
+    public static Optional<String> getDefaultValue(Parameter parameter){
         Validate.notNull(parameter, "parameter must not be null!");
-        Object defaultValue = null;
-        
         if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
-            defaultValue = serializableParameter.getDefaultValue();
+            return Optional.ofNullable(serializableParameter.getDefaultValue());
         }
-        return defaultValue;
+        return Optional.empty();
     }
 
     /**

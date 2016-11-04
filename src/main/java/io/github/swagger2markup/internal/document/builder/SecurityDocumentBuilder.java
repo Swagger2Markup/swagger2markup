@@ -15,13 +15,12 @@
  */
 package io.github.swagger2markup.internal.document.builder;
 
-import com.google.common.collect.Ordering;
+import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.document.MarkupDocument;
+import io.github.swagger2markup.internal.utils.Table;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
@@ -31,6 +30,7 @@ import org.apache.commons.collections4.MapUtils;
 import java.nio.file.Path;
 import java.util.*;
 
+import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
@@ -125,18 +125,24 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             if (isNotBlank(oauth2Scheme.getTokenUrl())) {
                 paragraph.italicText(TOKEN_URL).textLine(COLON + oauth2Scheme.getTokenUrl());
             }
-            
-            List<List<String>> cells = new ArrayList<>();
-            List<MarkupTableColumn> cols = Arrays.asList(
-                    new MarkupTableColumn(NAME_COLUMN).withWidthRatio(3).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^3"),
-                    new MarkupTableColumn(DESCRIPTION_COLUMN).withWidthRatio(17).withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^17"));
+            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "3")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
+            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
+                    .putMetaData(Table.WIDTH_RATIO, "17")
+                    .putMetaData(Table.HEADER_COLUMN, "true");
+
             for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
-                List<String> content = Arrays.asList(scope.getKey(), scope.getValue());
-                cells.add(content);
+                nameColumnBuilder.add(scope.getKey());
+                descriptionColumnBuilder.add(scope.getValue());
             }
+
+            Table table = Table.ofAll(
+                    nameColumnBuilder.build(),
+                    descriptionColumnBuilder.build());
             
             markupDocBuilder.paragraph(paragraph.toString(), true);
-            markupDocBuilder.tableWithColumnSpecs(cols, cells);
+            markupDocBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
         } else {
             markupDocBuilder.paragraph(paragraph.toString(), true);
         }

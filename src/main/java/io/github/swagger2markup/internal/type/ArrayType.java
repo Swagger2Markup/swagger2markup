@@ -25,8 +25,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  */
 public class ArrayType extends Type {
 
-    protected String collectionFormat;
-    protected Type ofType;
+    private String collectionFormat;
+    private Type ofType;
 
     public ArrayType(String name, Type ofType) {
         this(name, ofType, null);

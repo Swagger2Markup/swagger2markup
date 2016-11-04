@@ -46,6 +46,8 @@ dependencies {
     compile 'org.apache.commons:commons-configuration2:2.1'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
     compile 'org.apache.commons:commons-collections4:4.1'
+    compile 'io.javaslang:javaslang:2.0.4'
+    compile 'ch.netzwerg:paleo-core:0.10.1'
     testCompile 'junit:junit:4.11'
     testCompile 'org.asciidoctor:asciidoctorj:1.5.4'
     testCompile 'ch.qos.logback:logback-classic:1.1.2'

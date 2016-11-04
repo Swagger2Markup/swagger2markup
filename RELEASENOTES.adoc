@@ -105,4 +105,7 @@
 
 === Version 1.1.1
 * Issue #194: Added a config parameter which allows to prepend the basePath to all paths.
+* Updated swagger-parser from v1.0.16 to v1.0.23
+* Added javslang v2.0.4 as a dependency
+* Added paleo-core v0.10.1 as a dependency
 

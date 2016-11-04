@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import com.google.common.base.Function;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
