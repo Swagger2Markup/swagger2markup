@@ -298,7 +298,7 @@ public final class PropertyUtils {
      * @param markupDocBuilder doc builder
      * @return a generated example for the property
      */
-    public static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
+    static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
         switch (property.getType()) {
             case "integer":
                 return 0;

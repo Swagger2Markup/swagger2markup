@@ -20,11 +20,16 @@ import com.google.common.collect.MultimapBuilder;
 import com.google.common.collect.Ordering;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Tag;
+import javaslang.Tuple;
+import javaslang.collection.Array;
+import javaslang.collection.Map;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
 
 public class TagUtils {
 
@@ -37,28 +42,16 @@ public class TagUtils {
      * @return the Map of tags
      */
     public static Map<String, Tag> convertTagsListToMap(List<Tag> tags) {
+        return Array.ofAll(tags)
+                .toMap((Tag tag) -> Tuple.of(tag.getName(), tag));
+        /*
         if (tags == null) {
             tags = new ArrayList<>();
         }
         Map<String, Tag> tagsMap = new HashMap<>();
         for (Tag tag : tags) tagsMap.put(tag.getName(), tag);
         return tagsMap;
-    }
-
-
-    /**
-     * Retrieves the optional description of a tag.
-     *
-     * @param tagsMap the Map of tags
-     * @param tagName the name of the tag
-     * @return the optional description of the tag
-     */
-    public static Optional<String> getTagDescription(Map<String, Tag> tagsMap, String tagName) {
-        Tag tag = tagsMap.get(tagName);
-        if(tag != null){
-            return Optional.ofNullable(tag.getDescription());
-        }
-        return Optional.empty();
+        */
     }
 
     /**

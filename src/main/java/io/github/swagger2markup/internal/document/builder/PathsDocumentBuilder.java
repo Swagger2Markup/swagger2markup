@@ -26,7 +26,9 @@ import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.*;
-import io.github.swagger2markup.markup.builder.*;
+import io.github.swagger2markup.markup.builder.MarkupAdmonition;
+import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.Path;
@@ -52,7 +54,6 @@ import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.ListUtils.toSet;
 import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
 import static io.github.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
-import static io.github.swagger2markup.internal.utils.TagUtils.getTagDescription;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
@@ -110,11 +111,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
         if (config.isGeneratedExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
-                logger.debug("Include examples is enabled.");
+                logger.debug("Generate examples is enabled.");
             }
         } else {
             if (logger.isDebugEnabled()) {
-                logger.debug("Include examples is disabled.");
+                logger.debug("Generate examples is disabled.");
             }
         }
 
@@ -158,17 +159,19 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         Set<PathOperation> pathOperations = toPathOperationsSet(paths);
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-                pathOperations.forEach(operation -> buildOperation(operation));
+                pathOperations.forEach(this::buildOperation);
             } else {
                 // Group operations by tag
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
-                Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
+                javaslang.collection.Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
                 for (String tagName : operationsGroupedByTag.keySet()) {
                     markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
 
-                    getTagDescription(tagsMap, tagName).ifPresent(tagDescription -> markupDocBuilder.paragraph(tagDescription));
+                    tagsMap.get(tagName)
+                            .map(Tag::getDescription)
+                            .map(tagDescription -> markupDocBuilder.paragraph(tagDescription));
 
-                    operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(operation));
+                    operationsGroupedByTag.get(tagName).forEach(this::buildOperation);
                 }
             }
         }

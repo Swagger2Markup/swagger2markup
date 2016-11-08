@@ -205,7 +205,6 @@ abstract class MarkupDocumentBuilder {
                 .putMetaData(Table.WIDTH_RATIO, "4")
                 .putMetaData(Table.HEADER_COLUMN, "true");
 
-        ArrayList<Integer> unusedCols = new ArrayList<>(Arrays.asList(2, 1, 0));
         if (MapUtils.isNotEmpty(properties)) {
             Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
             for (String propertyName : propertyNames) {

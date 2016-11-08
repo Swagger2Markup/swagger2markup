@@ -21,7 +21,6 @@ import io.github.swagger2markup.internal.document.builder.DefinitionsDocumentBui
 import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.PathsDocumentBuilder;
 import io.github.swagger2markup.internal.document.builder.SecurityDocumentBuilder;
-import io.github.swagger2markup.spi.*;
 import io.github.swagger2markup.utils.URIUtils;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -320,26 +319,15 @@ public class Swagger2MarkupConverter {
         }
 
         private void initExtensions(Context context) {
-            for (SwaggerModelExtension extension : extensionRegistry.getSwaggerModelExtensions())
-                extension.setGlobalContext(context);
-
-            for (OverviewDocumentExtension extension : extensionRegistry.getOverviewDocumentExtensions())
-                extension.setGlobalContext(context);
-
-            for (DefinitionsDocumentExtension extension : extensionRegistry.getDefinitionsDocumentExtensions())
-                extension.setGlobalContext(context);
-
-            for (PathsDocumentExtension extension : extensionRegistry.getPathsDocumentExtensions())
-                extension.setGlobalContext(context);
-
-            for (SecurityDocumentExtension extension : extensionRegistry.getSecurityDocumentExtensions())
-                extension.setGlobalContext(context);
+            extensionRegistry.getSwaggerModelExtensions().forEach(extension -> extension.setGlobalContext(context));
+            extensionRegistry.getOverviewDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
+            extensionRegistry.getDefinitionsDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
+            extensionRegistry.getPathsDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
+            extensionRegistry.getSecurityDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
         }
 
         private void applySwaggerExtensions(Context context) {
-            for (SwaggerModelExtension swaggerModelExtension : extensionRegistry.getSwaggerModelExtensions()) {
-                swaggerModelExtension.apply(context.getSwagger());
-            }
+            extensionRegistry.getSwaggerModelExtensions().forEach(extension -> extension.apply(context.getSwagger()));
         }
     }
 
