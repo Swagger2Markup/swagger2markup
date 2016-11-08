@@ -37,10 +37,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
+import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -206,9 +209,8 @@ abstract class MarkupDocumentBuilder {
                 .putMetaData(Table.HEADER_COLUMN, "true");
 
         if (MapUtils.isNotEmpty(properties)) {
-            Set<String> propertyNames = toKeySet(properties, config.getPropertyOrdering());
-            for (String propertyName : propertyNames) {
-                Property property = properties.get(propertyName);
+            Map<String, Property> sortedProperties = toSortedMap(properties, config.getPropertyOrdering());
+            sortedProperties.forEach((String propertyName, Property property) -> {
                 Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
 
                 propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
@@ -308,7 +310,7 @@ abstract class MarkupDocumentBuilder {
                 nameColumnBuilder.add(propertyNameContent.toString());
                 descriptionColumnBuilder.add(descriptionContent.toString());
                 schemaColumnBuilder.add(propertyType.displaySchema(docBuilder));
-            }
+            });
 
             Table table = Table.ofAll(
                     nameColumnBuilder.build(),

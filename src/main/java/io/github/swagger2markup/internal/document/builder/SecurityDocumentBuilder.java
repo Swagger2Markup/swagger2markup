@@ -28,10 +28,11 @@ import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections4.MapUtils;
 
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
+import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -87,9 +88,8 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> securitySchemes) {
-        Set<String> securitySchemeNames = toKeySet(securitySchemes, null); // TODO : provide a dedicated ordering configuration for security schemes
-        for (String securitySchemeName : securitySchemeNames) {
-            SecuritySchemeDefinition securityScheme = securitySchemes.get(securitySchemeName);
+        Map<String, SecuritySchemeDefinition> securitySchemeNames = toSortedMap(securitySchemes, null); // TODO : provide a dedicated ordering configuration for security schemes
+        securitySchemeNames.forEach((String securitySchemeName, SecuritySchemeDefinition securityScheme) -> {
             applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEFORE, markupDocBuilder, securitySchemeName, securityScheme));
             buildSecuritySchemeDefinitionTitle(securitySchemeName);
             applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEGIN, markupDocBuilder, securitySchemeName, securityScheme));
@@ -97,7 +97,7 @@ public class SecurityDocumentBuilder extends MarkupDocumentBuilder {
             buildSecurityScheme(securityScheme);
             applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_END, markupDocBuilder, securitySchemeName, securityScheme));
             applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_AFTER, markupDocBuilder, securitySchemeName, securityScheme));
-        }
+        });
     }
 
     private MarkupDocBuilder buildSecuritySchemeDefinitionTitle(String securitySchemeName) {

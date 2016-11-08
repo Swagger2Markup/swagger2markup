@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.*;
 
-import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
+import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
@@ -102,22 +102,13 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     private void buildDefinitionsSection() {
-        Set<String> definitionNames = toKeySet(globalContext.getSwagger().getDefinitions(), config.getDefinitionOrdering());
-        for (String definitionName : definitionNames) {
-            Model model = globalContext.getSwagger().getDefinitions().get(definitionName);
-            if (isNotBlank(definitionName)) {
-                if (checkThatDefinitionIsNotInIgnoreList(definitionName)) {
-                    buildDefinition(definitionName, model);
-                    if (logger.isInfoEnabled()) {
-                        logger.info("Definition processed : '{}'", definitionName);
-                    }
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("Definition was ignored : '{}'", definitionName);
-                    }
-                }
+        Map<String, Model> sortedMap = toSortedMap(globalContext.getSwagger().getDefinitions(), config.getDefinitionOrdering());
+        sortedMap.forEach((String definitionName, Model model) -> {
+            if(isNotBlank(definitionName)
+                    && checkThatDefinitionIsNotInIgnoreList(definitionName)){
+                buildDefinition(definitionName, model);
             }
-        }
+        });
     }
 
     private void buildDefinitionsTitle(String title) {
@@ -155,7 +146,9 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param model          definition model to process
      */
     private void buildDefinition(String definitionName, Model model) {
-
+        if (logger.isInfoEnabled()) {
+            logger.info("Definition processed : '{}'", definitionName);
+        }
         if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder();
             buildDefinition(definitionName, model, defDocBuilder);

@@ -51,8 +51,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.utils.ListUtils.toSet;
-import static io.github.swagger2markup.internal.utils.MapUtils.toKeySet;
+import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
@@ -552,9 +551,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         if (CollectionUtils.isNotEmpty(consumes)) {
             buildSectionTitle(CONSUMES, docBuilder);
             docBuilder.newLine();
-            for (String consume : consumes) {
-                docBuilder.unorderedListItem(literalText(consume));
-            }
+            consumes.forEach(consume -> docBuilder.unorderedListItem(literalText(consume)));
             docBuilder.newLine();
         }
 
@@ -565,9 +562,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         if (CollectionUtils.isNotEmpty(produces)) {
             buildSectionTitle(PRODUCES, docBuilder);
             docBuilder.newLine();
-            for (String produce : produces) {
-                docBuilder.unorderedListItem(literalText(produce));
-            }
+            produces.forEach(produce -> docBuilder.unorderedListItem(literalText(produce)));
             docBuilder.newLine();
         }
     }
@@ -577,8 +572,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
                 buildSectionTitle(TAGS, docBuilder);
-                Set<String> tagsSet = toSet(tags, config.getTagOrdering());
-                docBuilder.unorderedList(new ArrayList<>(tagsSet));
+                if (config.getTagOrdering() != null) {
+                    Collections.sort(tags, config.getTagOrdering());
+                }
+                docBuilder.unorderedList(tags);
             }
         }
     }
@@ -694,10 +691,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     .putMetaData(Table.WIDTH_RATIO, "4")
                     .putMetaData(Table.HEADER_COLUMN, "true");
 
-            Set<String> responseNames = toKeySet(responses, config.getResponseOrdering());
-            for (String responseName : responseNames) {
-                Response response = responses.get(responseName);
-
+            Map<String, Response> sortedResponses = toSortedMap(responses, config.getResponseOrdering());
+            sortedResponses.forEach((String responseName, Response response) -> {
                 String schemaContent = NO_CONTENT;
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
@@ -744,7 +739,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 httpCodeColumnBuilder.add(boldText(responseName));
                 descriptionColumnBuilder.add(descriptionBuilder.toString());
                 schemaColumnBuilder.add(schemaContent);
-            }
+            });
 
             Table table = Table.ofAll(
                     httpCodeColumnBuilder.build(),

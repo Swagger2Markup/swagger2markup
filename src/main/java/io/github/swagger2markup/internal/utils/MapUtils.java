@@ -20,19 +20,19 @@ import java.util.*;
 public class MapUtils {
 
     /**
-     * Returns the keys of the Map either ordered or as-is, if the comparator is null.
+     * Returns the the Map either ordered or as-is, if the comparator is null.
      *
      * @param map the Map
      * @param comparator the comparator to use.
      * @return the keySet of the Map
      */
-    public static Set<String> toKeySet(Map<String, ?> map, Comparator<String> comparator){
-        Set<String> keys;
+    public static <K, V> Map<K, V> toSortedMap(Map<K, V> map, Comparator<? super K> comparator){
+        Map<K, V> sortedMap;
         if (comparator == null)
-            keys = new LinkedHashSet<>();
+            sortedMap = new LinkedHashMap<>();
         else
-            keys = new TreeSet<>(comparator);
-        keys.addAll(map.keySet());
-        return keys;
+            sortedMap = new TreeMap<>(comparator);
+        sortedMap.putAll(map);
+        return sortedMap;
     }
 }
