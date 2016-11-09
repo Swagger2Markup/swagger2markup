@@ -17,8 +17,11 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.StringReader;
 import java.util.ResourceBundle;
 
 public abstract class MarkupComponent {
@@ -28,11 +31,25 @@ public abstract class MarkupComponent {
     ResourceBundle labels;
     MarkupDocBuilder markupDocBuilder;
     Swagger2MarkupConfig config;
+    Swagger2MarkupExtensionRegistry extensionRegistry;
 
     MarkupComponent(Context context){
         this.config = context.config;
         this.markupDocBuilder = context.markupDocBuilder;
         this.labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        this.extensionRegistry = context.extensionRegistry;
+    }
+
+    public static class Context {
+        public final Swagger2MarkupConfig config;
+        public final MarkupDocBuilder markupDocBuilder;
+        public final Swagger2MarkupExtensionRegistry extensionRegistry;
+
+        public Context(Swagger2MarkupConfig config, MarkupDocBuilder markupDocBuilder, Swagger2MarkupExtensionRegistry extensionRegistry){
+            this.config = config;
+            this.markupDocBuilder = markupDocBuilder;
+            this.extensionRegistry = extensionRegistry;
+        }
     }
 
     abstract MarkupDocBuilder render();
@@ -53,13 +70,17 @@ public abstract class MarkupComponent {
         return copyMarkupDocBuilder().italicText(text).toString();
     }
 
-    public static class Context {
-        public final Swagger2MarkupConfig config;
-        public final MarkupDocBuilder markupDocBuilder;
-
-        public Context(Swagger2MarkupConfig config, MarkupDocBuilder markupDocBuilder){
-            this.config = config;
-            this.markupDocBuilder = markupDocBuilder;
-        }
+    /**
+     * Returns converted markup text from Swagger.
+     *
+     * @param markupText text to convert, or empty string
+     * @return converted markup text, or an empty string if {@code markupText} == null
+     */
+    String swaggerMarkupDescription(String markupText) {
+        if (markupText == null)
+            return StringUtils.EMPTY;
+        return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), config.getSwaggerMarkupLanguage()).toString().trim();
     }
+
+
 }

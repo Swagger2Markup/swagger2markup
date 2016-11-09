@@ -18,8 +18,7 @@ package io.github.swagger2markup.internal.component;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.swagger.models.Scheme;
-import io.swagger.models.Swagger;
+import io.swagger.models.auth.OAuth2Definition;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,9 +28,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 
-public class UirSchemeComponentTest extends AbstractComponentTest{
+public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest{
 
-    private static final String COMPONENT_NAME = "uri_scheme";
+    private static final String COMPONENT_NAME = "security_scheme_definition";
     private Path outputDirectory;
 
     @Before
@@ -41,12 +40,15 @@ public class UirSchemeComponentTest extends AbstractComponentTest{
     }
 
     @Test
-    public void testUriSchemeComponent() throws URISyntaxException {
+    public void testSecuritySchemeDefinitionComponent() throws URISyntaxException {
 
-        Swagger swagger = new Swagger().host("http://localhost").basePath("/v2");
-        swagger.addScheme(Scheme.HTTP);
-        swagger.addScheme(Scheme.HTTPS);
-        MarkupDocBuilder markupDocBuilder = new UriSchemeComponent(getComponentContext(), swagger, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+        String securitySchemeDefinitionName = "SecuritySchemeDefinitionName";
+        OAuth2Definition securitySchemeDefinition = new OAuth2Definition();
+        securitySchemeDefinition.implicit("http://petstore.swagger.io/api/oauth/dialog");
+        securitySchemeDefinition.setDescription("Bla bla *blabla*");
+        securitySchemeDefinition.addScope("write_pets", "modify pets in your account");
+        securitySchemeDefinition.addScope("read_pets", "read pets in your account");
+        MarkupDocBuilder markupDocBuilder = new SecuritySchemeDefinitionComponent(getComponentContext(), securitySchemeDefinitionName, securitySchemeDefinition, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

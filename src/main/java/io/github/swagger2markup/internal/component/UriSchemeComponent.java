@@ -17,6 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Swagger;
+import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class UriSchemeComponent extends MarkupComponent {
                               Swagger swagger,
                               int titleLevel){
         super(context);
-        this.swagger = swagger;
+        this.swagger = Validate.notNull(swagger);
         this.titleLevel = titleLevel;
     }
 

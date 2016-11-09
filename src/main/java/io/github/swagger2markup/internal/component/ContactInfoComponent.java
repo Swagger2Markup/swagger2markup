@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Contact;
-import org.jsoup.helper.Validate;
+import org.apache.commons.lang3.Validate;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -31,8 +31,7 @@ public class ContactInfoComponent extends MarkupComponent {
                                 Contact contact,
                                 int titleLevel){
         super(context);
-        Validate.notNull(contact, "Contact must not be null");
-        this.contact = contact;
+        this.contact = Validate.notNull(contact, "Contact must not be null");
         this.titleLevel = titleLevel;
     }
 

@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Tag;
-import org.jsoup.helper.Validate;
+import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +34,7 @@ public class TagsComponent extends MarkupComponent {
                          List<Tag> tags,
                          int titleLevel){
         super(context);
-        Validate.notNull(tags, "Tags must not be null");
-        this.tags = tags;
+        this.tags = Validate.notNull(tags, "Tags must not be null");
         this.titleLevel = titleLevel;
     }
 

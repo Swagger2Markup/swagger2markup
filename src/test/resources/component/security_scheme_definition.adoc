@@ -1,0 +1,20 @@
+
+[[_securityschemedefinitionname]]
+=== SecuritySchemeDefinitionName
+Bla bla _blabla_
+
+[%hardbreaks]
+_Type_ : oauth2
+_Flow_ : implicit
+_Token URL_ : http://petstore.swagger.io/api/oauth/dialog
+
+
+[options="header", cols=".^3,.^17"]
+|===
+|Name|Description
+|write_pets|modify pets in your account
+|read_pets|read pets in your account
+|===
+
+
+

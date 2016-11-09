@@ -97,7 +97,7 @@ abstract class MarkupDocumentBuilder {
 
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
 
-        this.componentContext = new MarkupComponent.Context(config, markupDocBuilder);
+        this.componentContext = new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry);
 
         labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");

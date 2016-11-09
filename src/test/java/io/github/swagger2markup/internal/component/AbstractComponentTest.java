@@ -17,7 +17,9 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 
@@ -30,7 +32,8 @@ abstract class AbstractComponentTest {
     MarkupComponent.Context getComponentContext(){
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().build();
         MarkupDocBuilder markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
-        return new MarkupComponent.Context(config, markupDocBuilder);
+        Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
+        return new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry);
     }
 
     Path getOutputFile(String componentName){

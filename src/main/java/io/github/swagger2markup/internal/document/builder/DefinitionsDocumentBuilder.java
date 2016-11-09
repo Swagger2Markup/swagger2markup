@@ -23,7 +23,6 @@ import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.swagger.models.Model;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -121,9 +120,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyDefinitionsDocumentExtension(Context context) {
-        for (DefinitionsDocumentExtension extension : extensionRegistry.getDefinitionsDocumentExtensions()) {
-            extension.apply(context);
-        }
+        extensionRegistry.getDefinitionsDocumentExtensions().forEach(extension -> extension.apply(context));
     }
 
     /**

@@ -17,7 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import org.jsoup.helper.Validate;
+import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,8 +31,7 @@ public class ProducesComponent extends MarkupComponent {
                              List<String> produces,
                              int titleLevel){
         super(context);
-        Validate.notNull(produces, "Produces must not be null");
-        this.produces = produces;
+        this.produces = Validate.notNull(produces, "Produces must not be null");
         this.titleLevel = titleLevel;
     }
 

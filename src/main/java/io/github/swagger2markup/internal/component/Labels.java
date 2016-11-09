@@ -55,4 +55,13 @@ public class Labels {
     public static final String HOST = "host";
     public static final String BASE_PATH = "base_path";
     public static final String SCHEMES = "schemes";
+
+    //Security Document
+    public static final String SECURITY = "security";
+    public static final String TYPE = "security_type";
+    public static final String NAME = "security_name";
+    public static final String IN = "security_in";
+    public static final String FLOW = "security_flow";
+    public static final String AUTHORIZATION_URL = "security_authorizationUrl";
+    public static final String TOKEN_URL = "security_tokenUrl";
 }

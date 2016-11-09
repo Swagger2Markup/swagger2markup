@@ -17,7 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Info;
-import org.jsoup.helper.Validate;
+import org.apache.commons.lang3.Validate;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -30,8 +30,7 @@ public class VersionInfoComponent extends MarkupComponent {
                                 Info info,
                                 int titleLevel){
         super(context);
-        Validate.notNull(info, "Info must not be null");
-        this.info = info;
+        this.info = Validate.notNull(info, "Info must not be null");
         this.titleLevel = titleLevel;
     }
 
