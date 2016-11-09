@@ -1,0 +1,9 @@
+
+=== License information
+[%hardbreaks]
+_License_ : Apache 2.0
+_License URL_ : http://www.apache.org/licenses/LICENSE-2.0
+_Terms of service_ : Bla bla bla
+
+
+

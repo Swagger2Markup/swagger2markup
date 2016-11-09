@@ -1,0 +1,9 @@
+
+=== URI scheme
+[%hardbreaks]
+_Host_ : http://localhost
+_BasePath_ : /v2
+_Schemes_ : HTTP, HTTPS
+
+
+

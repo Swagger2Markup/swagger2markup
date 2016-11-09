@@ -1,0 +1,8 @@
+
+=== Produces
+
+* `application/json`
+* `application/xml`
+
+
+

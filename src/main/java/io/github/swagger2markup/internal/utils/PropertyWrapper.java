@@ -20,27 +20,30 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public final class PropertyUtils {
+public final class PropertyWrapper {
+
+    private final Property property;
+
+    public PropertyWrapper(Property property){
+        Validate.notNull(property, "property must not be null");
+        this.property = property;
+    }
 
     /**
      * Retrieves the type and format of a property.
      *
-     * @param property the property
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the property
      */
-    public static Type getType(Property property, Function<String, String> definitionDocumentResolver) {
-        Validate.notNull(property, "property must not be null");
+    public Type getType(Function<String, String> definitionDocumentResolver) {
         Type type;
         if (property instanceof RefProperty) {
             RefProperty refProperty = (RefProperty) property;
@@ -54,14 +57,14 @@ public final class PropertyUtils {
             if (items == null)
                 type = new ArrayType(arrayProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
             else
-                type = new ArrayType(arrayProperty.getTitle(), getType(items, definitionDocumentResolver));
+                type = new ArrayType(arrayProperty.getTitle(), new PropertyWrapper(items).getType(definitionDocumentResolver));
         } else if (property instanceof MapProperty) {
             MapProperty mapProperty = (MapProperty) property;
             Property additionalProperties = mapProperty.getAdditionalProperties();
             if (additionalProperties == null)
                 type = new MapType(mapProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
             else
-                type = new MapType(mapProperty.getTitle(), getType(additionalProperties, definitionDocumentResolver));
+                type = new MapType(mapProperty.getTitle(), new PropertyWrapper(additionalProperties).getType(definitionDocumentResolver));
         } else if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
             List<String> enums = stringProperty.getEnum();
@@ -85,210 +88,175 @@ public final class PropertyUtils {
     }
 
     /**
-     * Retrieves the default value of a property, or otherwise returns null.
+     * Retrieves the default value of a property
      *
-     * @param property the property
-     * @return the default value of the property, or otherwise null
+     * @return the default value of the property
      */
-    public static Object getDefaultValue(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Object defaultValue = null;
-        
+    public Optional<Object> getDefaultValue() {
         if (property instanceof BooleanProperty) {
             BooleanProperty booleanProperty = (BooleanProperty) property;
-            defaultValue = booleanProperty.getDefault();
+            return Optional.ofNullable(booleanProperty.getDefault());
         } else if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
-            defaultValue = stringProperty.getDefault();
+            return Optional.ofNullable(stringProperty.getDefault());
         } else if (property instanceof DoubleProperty) {
             DoubleProperty doubleProperty = (DoubleProperty) property;
-            defaultValue = doubleProperty.getDefault();
+            return Optional.ofNullable(doubleProperty.getDefault());
         } else if (property instanceof FloatProperty) {
             FloatProperty floatProperty = (FloatProperty) property;
-            defaultValue = floatProperty.getDefault();
+            return Optional.ofNullable(floatProperty.getDefault());
         } else if (property instanceof IntegerProperty) {
             IntegerProperty integerProperty = (IntegerProperty) property;
-            defaultValue = integerProperty.getDefault();
+            return Optional.ofNullable(integerProperty.getDefault());
         } else if (property instanceof LongProperty) {
             LongProperty longProperty = (LongProperty) property;
-            defaultValue = longProperty.getDefault();
+            return Optional.ofNullable(longProperty.getDefault());
         } else if (property instanceof UUIDProperty) {
             UUIDProperty uuidProperty = (UUIDProperty) property;
-            defaultValue = uuidProperty.getDefault();
+            return Optional.ofNullable(uuidProperty.getDefault());
         }
-        return defaultValue;
+        return Optional.empty();
     }
     
 
     /**
-     * Retrieves the minLength of a property, or otherwise returns null.
+     * Retrieves the minLength of a property
      *
-     * @param property the property
-     * @return the minLength of the property, or otherwise null
+     * @return the minLength of the property
      */
-    public static Integer getMinlength(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Integer minLength = null;
-        
+    public Optional<Integer> getMinlength() {
         if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
-            minLength = stringProperty.getMinLength();
+            return Optional.ofNullable(stringProperty.getMinLength());
         } else if (property instanceof UUIDProperty) {
             UUIDProperty uuidProperty = (UUIDProperty) property;
-            minLength = uuidProperty.getMinLength();
+            return Optional.ofNullable(uuidProperty.getMinLength());
         }
-        return minLength;
+        return Optional.empty();
     }
     
 
     /**
-     * Retrieves the maxLength of a property, or otherwise returns null.
+     * Retrieves the maxLength of a property
      *
-     * @param property the property
-     * @return the maxLength of the property, or otherwise null
+     * @return the maxLength of the property
      */
-    public static Integer getMaxlength(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Integer maxLength = null;
-        
+    public Optional<Integer> getMaxlength() {
         if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
-            maxLength = stringProperty.getMaxLength();
+            return Optional.ofNullable(stringProperty.getMaxLength());
         } else if (property instanceof UUIDProperty) {
             UUIDProperty uuidProperty = (UUIDProperty) property;
-            maxLength = uuidProperty.getMaxLength();
+            return Optional.ofNullable(uuidProperty.getMaxLength());
         }
-        return maxLength;
+        return Optional.empty();
     }
     
     /**
-     * Retrieves the pattern of a property, or otherwise returns null.
+     * Retrieves the pattern of a property
      *
-     * @param property the property
-     * @return the pattern of the property, or otherwise null
+     * @return the pattern of the property
      */
-    public static String getPattern(Property property) {
-        Validate.notNull(property, "property must not be null");
-        String pattern = null;
-        
+    public Optional<String> getPattern() {
         if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
-            pattern = stringProperty.getPattern();
+            return Optional.ofNullable(stringProperty.getPattern());
         } else if (property instanceof UUIDProperty) {
             UUIDProperty uuidProperty = (UUIDProperty) property;
-            pattern = uuidProperty.getPattern();
+            return Optional.ofNullable(uuidProperty.getPattern());
         }
-        return pattern;
+        return Optional.empty();
     }
     
     /**
-     * Retrieves the minimum value of a property, or otherwise returns null.
+     * Retrieves the minimum value of a property
      *
-     * @param property the property
-     * @return the minimum value of the property, or otherwise null
+     * @return the minimum value of the property
      */
-    public static Number getMin(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Number min = null;
-
+    public Optional<Number> getMin() {
         if (property instanceof BaseIntegerProperty){
             BaseIntegerProperty integerProperty = (BaseIntegerProperty) property;
-            min = integerProperty.getMinimum() != null ? integerProperty.getMinimum().longValue() : null;
+            return Optional.ofNullable(integerProperty.getMinimum() != null ? integerProperty.getMinimum().longValue() : null);
         } else if (property instanceof AbstractNumericProperty){
             AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
-            min = numericProperty.getMinimum();
+            return Optional.ofNullable(numericProperty.getMinimum());
         }
-        return min;
+        return Optional.empty();
     }
 
     /**
-     * Retrieves the exclusiveMinimum value of a property, or otherwise returns null.
+     * Retrieves the exclusiveMinimum value of a property
      *
-     * @param property the property
-     * @return the exclusiveMinimum value of the property, or otherwise null
+     * @return the exclusiveMinimum value of the property
      */
-    public static Boolean getExclusiveMin(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Boolean exclusiveMin = null;
-
+    public boolean getExclusiveMin() {
         if (property instanceof AbstractNumericProperty){
             AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
-            exclusiveMin = numericProperty.getExclusiveMinimum();
+            return BooleanUtils.isTrue(numericProperty.getExclusiveMinimum());
         }
-        return exclusiveMin;
+        return false;
     }
     
     /**
-     * Retrieves the minimum value of a property, or otherwise returns null.
+     * Retrieves the minimum value of a property
      *
-     * @param property the property
-     * @return the minimum value of the property, or otherwise null
+     * @return the minimum value of the property
      */
-    public static Number getMax(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Number max = null;
-
+    public Optional<Number> getMax() {
         if (property instanceof BaseIntegerProperty){
             BaseIntegerProperty integerProperty = (BaseIntegerProperty) property;
-            max = integerProperty.getMaximum() != null ? integerProperty.getMaximum().longValue() : null;
+            return Optional.ofNullable(integerProperty.getMaximum() != null ? integerProperty.getMaximum().longValue() : null);
         } else if (property instanceof AbstractNumericProperty){
             AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
-            max = numericProperty.getMaximum();
+            return Optional.ofNullable(numericProperty.getMaximum());
         }
-        return max;
+        return Optional.empty();
     }
 
     /**
-     * Retrieves the exclusiveMaximum value of a property, or otherwise returns null.
+     * Retrieves the exclusiveMaximum value of a property
      *
-     * @param property the property
-     * @return the exclusiveMaximum value of the property, or otherwise null
+     * @return the exclusiveMaximum value of the property
      */
-    public static Boolean getExclusiveMax(Property property) {
-        Validate.notNull(property, "property must not be null");
-        Boolean exclusiveMax = null;
-
+    public boolean getExclusiveMax() {
         if (property instanceof AbstractNumericProperty){
             AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
-            exclusiveMax = numericProperty.getExclusiveMaximum();
+            return BooleanUtils.isTrue((numericProperty.getExclusiveMaximum()));
         }
-        return exclusiveMax;
+        return false;
     }
     
     /**
      * Return example display string for the given {@code property}.
      *
      * @param generateMissingExamples specifies if missing examples should be generated
-     * @param property         property
      * @param markupDocBuilder doc builder
      * @return property example display string
      */
-    public static Object getExample(boolean generateMissingExamples, Property property, MarkupDocBuilder markupDocBuilder) {
-        Validate.notNull(property, "property must not be null");
-        Object examplesValue = null;
+    public Optional<Object> getExample(boolean generateMissingExamples, MarkupDocBuilder markupDocBuilder) {
         if (property.getExample() != null) {
-            examplesValue = property.getExample();
+            return Optional.ofNullable(property.getExample());
         } else if (property instanceof MapProperty) {
             Property additionalProperty = ((MapProperty) property).getAdditionalProperties();
             if (additionalProperty.getExample() != null) {
-                examplesValue = additionalProperty.getExample();
+                return Optional.ofNullable(additionalProperty.getExample());
             } else if (generateMissingExamples) {
                 Map<String, Object> exampleMap = new HashMap<>();
                 exampleMap.put("string", generateExample(additionalProperty, markupDocBuilder));
-                examplesValue = exampleMap;
+                return Optional.of(exampleMap);
             }
         } else if (property instanceof ArrayProperty) {
             if (generateMissingExamples) {
                 Property itemProperty = ((ArrayProperty) property).getItems();
                 List<Object> exampleArray = new ArrayList<>();
                 exampleArray.add(generateExample(itemProperty, markupDocBuilder));
-                examplesValue = exampleArray;
+                return Optional.of(exampleArray);
             }
         } else if (generateMissingExamples) {
-            examplesValue = generateExample(property, markupDocBuilder);
+            return Optional.of(generateExample(property, markupDocBuilder));
         }
 
-        return examplesValue;
+        return Optional.empty();
     }
 
     /**
@@ -345,5 +313,14 @@ public final class PropertyUtils {
         } catch (NumberFormatException e) {
             throw new RuntimeException(String.format("Value '%s' cannot be converted to '%s'", value, type), e);
         }
+    }
+
+    /**
+     * Checks if a property is read-only.
+     *
+     * @return true if the property is read-only
+     */
+    public boolean getReadOnly() {
+        return BooleanUtils.isTrue(property.getReadOnly());
     }
 }

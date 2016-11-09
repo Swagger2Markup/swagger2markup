@@ -44,14 +44,6 @@ public class TagUtils {
     public static Map<String, Tag> convertTagsListToMap(List<Tag> tags) {
         return Array.ofAll(tags)
                 .toMap((Tag tag) -> Tuple.of(tag.getName(), tag));
-        /*
-        if (tags == null) {
-            tags = new ArrayList<>();
-        }
-        Map<String, Tag> tagsMap = new HashMap<>();
-        for (Tag tag : tags) tagsMap.put(tag.getName(), tag);
-        return tagsMap;
-        */
     }
 
     /**

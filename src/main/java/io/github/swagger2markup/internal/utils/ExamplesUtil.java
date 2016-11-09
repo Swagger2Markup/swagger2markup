@@ -66,7 +66,7 @@ public class ExamplesUtil {
                             example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap< String, Integer >());
                         }
                         if (example == null && generateMissingExamples) {
-                            example = PropertyUtils.generateExample(schema, markupDocBuilder);
+                            example = PropertyWrapper.generateExample(schema, markupDocBuilder);
                         }
                     }
                 }
@@ -127,7 +127,7 @@ public class ExamplesUtil {
                         if (item != null) {
                             abstractSerializableParameterExample = item.getExample();
                             if (abstractSerializableParameterExample == null) {
-                                abstractSerializableParameterExample = PropertyUtils.generateExample(item, markupDocBuilder);
+                                abstractSerializableParameterExample = PropertyWrapper.generateExample(item, markupDocBuilder);
                             }
                         }
                         if (abstractSerializableParameterExample == null) {
@@ -251,7 +251,7 @@ public class ExamplesUtil {
                     }
                     if (exampleObject == null) {
                         Property valueProperty = property.getValue();
-                        exampleObject = PropertyUtils.generateExample(valueProperty, markupDocBuilder);
+                        exampleObject = PropertyWrapper.generateExample(valueProperty, markupDocBuilder);
                     }
                 }
                 exampleMap.put(property.getKey(), exampleObject);
@@ -269,7 +269,7 @@ public class ExamplesUtil {
         if (valueProperty.getExample() != null) {
             return valueProperty.getExample();
         }
-        exampleMap.put("string", PropertyUtils.generateExample(valueProperty, markupDocBuilder));
+        exampleMap.put("string", PropertyWrapper.generateExample(valueProperty, markupDocBuilder));
         return exampleMap;
     }
 
@@ -287,7 +287,7 @@ public class ExamplesUtil {
             } else if (itemProperty instanceof RefProperty) {
                 return new Object[]{generateExampleForRefModel(true, ((RefProperty) itemProperty).getSimpleRef(), definitions, definitionDocumentResolver, markupDocBuilder, refStack)};
             } else {
-                return new Object[]{PropertyUtils.generateExample(itemProperty, markupDocBuilder)};
+                return new Object[]{PropertyWrapper.generateExample(itemProperty, markupDocBuilder)};
             }
         }
     }
@@ -309,7 +309,7 @@ public class ExamplesUtil {
         } else if (property instanceof RefProperty) {
             return new Object[]{generateExampleForRefModel(true, ((RefProperty) property).getSimpleRef(), definitions, definitionDocumentResolver, markupDocBuilder, refStack)};
         } else {
-            return new Object[]{PropertyUtils.generateExample(property, markupDocBuilder)};
+            return new Object[]{PropertyWrapper.generateExample(property, markupDocBuilder)};
         }
     }
 

@@ -67,7 +67,7 @@ public final class ParameterUtils {
             if(serializableParameter.getType().equals("array")){
                 String collectionFormat = serializableParameter.getCollectionFormat();
                 
-                type = new ArrayType(null, PropertyUtils.getType(serializableParameter.getItems(), definitionDocumentResolver), collectionFormat);
+                type = new ArrayType(null, new PropertyWrapper(serializableParameter.getItems()).getType(definitionDocumentResolver), collectionFormat);
             }
         }
         else if(parameter instanceof RefParameter){

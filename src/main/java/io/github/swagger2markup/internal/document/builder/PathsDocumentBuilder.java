@@ -21,6 +21,8 @@ import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.component.ConsumesComponent;
+import io.github.swagger2markup.internal.component.ProducesComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
@@ -374,6 +376,17 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
+     * Retrieves the title level for sections
+     */
+    private int getSectionTitleLevel() {
+        if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
+           return 3;
+        } else {
+            return 4;
+        }
+    }
+
+    /**
      * Adds a example title to the document.
      *
      * @param title      the section title
@@ -549,10 +562,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildConsumesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<String> consumes = operation.getOperation().getConsumes();
         if (CollectionUtils.isNotEmpty(consumes)) {
-            buildSectionTitle(CONSUMES, docBuilder);
-            docBuilder.newLine();
-            consumes.forEach(consume -> docBuilder.unorderedListItem(literalText(consume)));
-            docBuilder.newLine();
+            new ConsumesComponent(componentContext, consumes, getSectionTitleLevel()).render();
         }
 
     }
@@ -560,10 +570,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildProducesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<String> produces = operation.getOperation().getProduces();
         if (CollectionUtils.isNotEmpty(produces)) {
-            buildSectionTitle(PRODUCES, docBuilder);
-            docBuilder.newLine();
-            produces.forEach(produce -> docBuilder.unorderedListItem(literalText(produce)));
-            docBuilder.newLine();
+            new ProducesComponent(componentContext, produces, getSectionTitleLevel()).render();
         }
     }
 
@@ -696,7 +703,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 String schemaContent = NO_CONTENT;
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
-                    Type type = PropertyUtils.getType(property, new DefinitionDocumentResolverFromOperation());
+                    Type type = new PropertyWrapper(property).getType(new DefinitionDocumentResolverFromOperation());
 
                     type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, inlineDefinitions);
 
@@ -713,15 +720,16 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     for (Map.Entry<String, Property> header : headers.entrySet()) {
                         descriptionBuilder.newLine(true);
                         Property headerProperty = header.getValue();
-                        Type propertyType = PropertyUtils.getType(headerProperty, null);
+                        PropertyWrapper headerPropertyWrapper = new PropertyWrapper(headerProperty);
+                        Type propertyType = headerPropertyWrapper.getType(null);
                         String headerDescription = swaggerMarkupDescription(headerProperty.getDescription());
-                        Object defaultValue = PropertyUtils.getDefaultValue(headerProperty);
+                        Optional<Object> optionalDefaultValue = headerPropertyWrapper.getDefaultValue();
 
                         descriptionBuilder
                                 .literalText(header.getKey())
                                 .text(String.format(" (%s)", propertyType.displaySchema(markupDocBuilder)));
 
-                        if (isNotBlank(headerDescription) || defaultValue != null) {
+                        if (isNotBlank(headerDescription) || optionalDefaultValue.isPresent()) {
                             descriptionBuilder.text(COLON);
 
                             if (isNotBlank(headerDescription) && !headerDescription.endsWith("."))
@@ -729,8 +737,8 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
                             descriptionBuilder.text(headerDescription);
 
-                            if (defaultValue != null) {
-                                descriptionBuilder.text(" ").boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(defaultValue));
+                            if (optionalDefaultValue.isPresent()) {
+                                descriptionBuilder.text(" ").boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
                             }
                         }
                     }

@@ -58,7 +58,7 @@ public final class ModelUtils {
             ModelImpl modelImpl = (ModelImpl) model;
 
             if (modelImpl.getAdditionalProperties() != null)
-                return new MapType(modelImpl.getTitle(), PropertyUtils.getType(modelImpl.getAdditionalProperties(), definitionDocumentResolver));
+                return new MapType(modelImpl.getTitle(), new PropertyWrapper(modelImpl.getAdditionalProperties()).getType(definitionDocumentResolver));
             else if (modelImpl.getEnum() != null)
                 return new EnumType(modelImpl.getTitle(), modelImpl.getEnum());
             else if (modelImpl.getProperties() != null) {
@@ -115,7 +115,7 @@ public final class ModelUtils {
         } else if (model instanceof ArrayModel) {
             ArrayModel arrayModel = ((ArrayModel) model);
 
-            return new ArrayType(null, PropertyUtils.getType(arrayModel.getItems(), definitionDocumentResolver));
+            return new ArrayType(null, new PropertyWrapper(arrayModel.getItems()).getType(definitionDocumentResolver));
         }
 
         return null;

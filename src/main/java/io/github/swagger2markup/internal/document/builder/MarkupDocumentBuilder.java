@@ -19,9 +19,10 @@ import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.component.MarkupComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.type.*;
-import io.github.swagger2markup.internal.utils.PropertyUtils;
+import io.github.swagger2markup.internal.utils.PropertyWrapper;
 import io.github.swagger2markup.internal.utils.Table;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
@@ -37,14 +38,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -74,8 +71,6 @@ abstract class MarkupDocumentBuilder {
     final String DESCRIPTION_COLUMN;
     final String SCOPES_COLUMN;
     final String DESCRIPTION;
-    final String PRODUCES;
-    final String CONSUMES;
     protected final String TAGS;
     final String NO_CONTENT;
     final String FLAGS_COLUMN;
@@ -86,11 +81,13 @@ abstract class MarkupDocumentBuilder {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    protected Swagger2MarkupConverter.Context globalContext;
+    Swagger2MarkupConverter.Context globalContext;
     Swagger2MarkupExtensionRegistry extensionRegistry;
-    protected Swagger2MarkupConfig config;
+    Swagger2MarkupConfig config;
     MarkupDocBuilder markupDocBuilder;
     Path outputPath;
+    ResourceBundle labels;
+    MarkupComponent.Context componentContext;
 
     MarkupDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         this.globalContext = globalContext;
@@ -100,7 +97,9 @@ abstract class MarkupDocumentBuilder {
 
         this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
 
-        ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        this.componentContext = new MarkupComponent.Context(config, markupDocBuilder);
+
+        labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         DEFAULT_COLUMN = labels.getString("default_column");
         
         MINLENGTH_COLUMN = labels.getString("minlength_column");
@@ -123,8 +122,6 @@ abstract class MarkupDocumentBuilder {
         DESCRIPTION_COLUMN = labels.getString("description_column");
         SCOPES_COLUMN = labels.getString("scopes_column");
         DESCRIPTION = DESCRIPTION_COLUMN;
-        PRODUCES = labels.getString("produces");
-        CONSUMES = labels.getString("consumes");
         TAGS = labels.getString("tags");
         NO_CONTENT = labels.getString("no_content");
     }
@@ -211,29 +208,28 @@ abstract class MarkupDocumentBuilder {
         if (MapUtils.isNotEmpty(properties)) {
             Map<String, Property> sortedProperties = toSortedMap(properties, config.getPropertyOrdering());
             sortedProperties.forEach((String propertyName, Property property) -> {
-                Type propertyType = PropertyUtils.getType(property, definitionDocumentResolver);
+                PropertyWrapper propertyWrapper = new PropertyWrapper(property);
+                Type propertyType = propertyWrapper.getType(definitionDocumentResolver);
 
                 propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
                 
-                Object example = PropertyUtils.getExample(config.isGeneratedExamplesEnabled(), property, markupDocBuilder);
-
-                Object defaultValue = PropertyUtils.getDefaultValue(property);
-                
-                Integer maxlength = PropertyUtils.getMaxlength(property);
-                Integer minlength = PropertyUtils.getMinlength(property);
-                String pattern = PropertyUtils.getPattern(property);
-                Number minValue = PropertyUtils.getMin(property);
-                Boolean exclusiveMin = PropertyUtils.getExclusiveMin(property);
-                Number maxValue = PropertyUtils.getMax(property);
-                Boolean exclusiveMax = PropertyUtils.getExclusiveMax(property);
+                Optional<Object> optionalExample = propertyWrapper.getExample(config.isGeneratedExamplesEnabled(), markupDocBuilder);
+                Optional<Object> optionalDefaultValue = propertyWrapper.getDefaultValue();
+                Optional<Integer> optionalMaxLength = propertyWrapper.getMaxlength();
+                Optional<Integer> optionalMinLength = propertyWrapper.getMinlength();
+                Optional<String> optionalPattern = propertyWrapper.getPattern();
+                Optional<Number> optionalMinValue = propertyWrapper.getMin();
+                boolean exclusiveMin = propertyWrapper.getExclusiveMin();
+                Optional<Number> optionalMaxValue = propertyWrapper.getMax();
+                boolean exclusiveMax = propertyWrapper.getExclusiveMax();
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
                 propertyNameContent.boldTextLine(propertyName, true);
-                if (isTrue(property.getRequired()))
+                if (property.getRequired())
                     propertyNameContent.italicText(FLAGS_REQUIRED.toLowerCase());
                 else
                     propertyNameContent.italicText(FLAGS_OPTIONAL.toLowerCase());
-                if (isTrue(property.getReadOnly())) {
+                if (propertyWrapper.getReadOnly()) {
                     propertyNameContent.newLine(true);
                     propertyNameContent.italicText(FLAGS_READ_ONLY.toLowerCase());
                 }
@@ -243,68 +239,73 @@ abstract class MarkupDocumentBuilder {
                 if (isNotBlank(description))
                     descriptionContent.text(description);
                 
-                if(defaultValue != null){
-                    if (isNotBlank(descriptionContent.toString()))
+                if(optionalDefaultValue.isPresent()){
+                    if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(defaultValue));
+                    }
+                    descriptionContent.boldText(DEFAULT_COLUMN).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
                 }
                 
-                if (minlength != null && maxlength != null) {
+                if (optionalMinLength.isPresent() && optionalMaxLength.isPresent()) {
                     // combination of minlength/maxlength
+                    Integer minLength = optionalMinLength.get();
+                    Integer maxLength = optionalMaxLength.get();
                 	
-                	if (isNotBlank(descriptionContent.toString()))
+                	if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
+                    }
                 	
-                	String lengthRange = minlength + " - " + maxlength;
-                	if (minlength.equals(maxlength)) {
-                		lengthRange = minlength.toString();
+                	String lengthRange = minLength + " - " + maxLength;
+                	if (minLength.equals(maxLength)) {
+                		lengthRange = minLength.toString();
                 	}
                 	
                     descriptionContent.boldText(LENGTH_COLUMN).text(COLON).literalText(lengthRange);
                     
                 } else {
-                	 if(minlength != null){
-                     	if (isNotBlank(descriptionContent.toString()))
-                             descriptionContent.newLine(true);
-                         descriptionContent.boldText(MINLENGTH_COLUMN).text(COLON).literalText(minlength.toString());
+                	 if(optionalMinLength.isPresent()){
+                     	if (isNotBlank(descriptionContent.toString())) {
+                            descriptionContent.newLine(true);
+                        }
+                        descriptionContent.boldText(MINLENGTH_COLUMN).text(COLON).literalText(optionalMinLength.get().toString());
                      }
                      
-                     if(maxlength != null){
-                     	if (isNotBlank(descriptionContent.toString()))
-                             descriptionContent.newLine(true);
-                         descriptionContent.boldText(MAXLENGTH_COLUMN).text(COLON).literalText(maxlength.toString());
+                     if(optionalMaxLength.isPresent()){
+                     	if (isNotBlank(descriptionContent.toString())) {
+                            descriptionContent.newLine(true);
+                        }
+                        descriptionContent.boldText(MAXLENGTH_COLUMN).text(COLON).literalText(optionalMaxLength.get().toString());
                      }
                 }
                 
-               
-                
-                if(pattern != null){
-                	if (isNotBlank(descriptionContent.toString()))
+                if(optionalPattern.isPresent()){
+                	if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
-                	
-                    descriptionContent.boldText(PATTERN_COLUMN).text(COLON).literalText(Json.pretty(pattern));
+                    }
+                    descriptionContent.boldText(PATTERN_COLUMN).text(COLON).literalText(Json.pretty(optionalPattern.get()));
                 }
 
-                if(minValue != null){
-                	if (isNotBlank(descriptionContent.toString()))
+                if(optionalMinValue.isPresent()){
+                	if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
-
-                    String minValueColumn = isTrue(exclusiveMin) ? MINVALUE_EXCLUSIVE_COLUMN : MINVALUE_COLUMN;
-                    descriptionContent.boldText(minValueColumn).text(COLON).literalText(minValue.toString());
+                    }
+                    String minValueColumn = exclusiveMin ? MINVALUE_EXCLUSIVE_COLUMN : MINVALUE_COLUMN;
+                    descriptionContent.boldText(minValueColumn).text(COLON).literalText(optionalMinValue.get().toString());
                 }
                 
-                if(maxValue != null){
-                	if (isNotBlank(descriptionContent.toString()))
+                if(optionalMaxValue.isPresent()){
+                	if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
-
-                    String maxValueColumn = isTrue(exclusiveMax) ? MAXVALUE_EXCLUSIVE_COLUMN : MAXVALUE_COLUMN;
-                    descriptionContent.boldText(maxValueColumn).text(COLON).literalText(maxValue.toString());
+                    }
+                    String maxValueColumn = exclusiveMax ? MAXVALUE_EXCLUSIVE_COLUMN : MAXVALUE_COLUMN;
+                    descriptionContent.boldText(maxValueColumn).text(COLON).literalText(optionalMaxValue.get().toString());
                 }
                 
-                if (example != null) {
-                    if (isNotBlank(description) || defaultValue != null)
+                if (optionalExample.isPresent()) {
+                    if (isNotBlank(description) || optionalDefaultValue.isPresent()) {
                         descriptionContent.newLine(true);
-                    descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(example));
+                    }
+                    descriptionContent.boldText(EXAMPLE_COLUMN).text(COLON).literalText(Json.pretty(optionalExample.get()));
                 }
 
                 nameColumnBuilder.add(propertyNameContent.toString());
@@ -330,10 +331,6 @@ abstract class MarkupDocumentBuilder {
 
     String boldText(String text) {
         return copyMarkupDocBuilder().boldText(text).toString();
-    }
-
-    protected String italicText(String text) {
-        return copyMarkupDocBuilder().italicText(text).toString();
     }
 
     String literalText(String text) {
