@@ -54,7 +54,6 @@ import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
-import static io.github.swagger2markup.internal.utils.TagUtils.convertTagsListToMap;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
@@ -157,23 +156,37 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param paths the Swagger paths
      */
     private void buildsPathsSection(Map<String, Path> paths) {
-        Set<PathOperation> pathOperations = toPathOperationsSet(paths);
+        Set<PathOperation> pathOperations = toPathOperationsSet(paths, config.getOperationOrdering());
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 pathOperations.forEach(this::buildOperation);
             } else {
+                Validate.notEmpty(globalContext.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
                 // Group operations by tag
-                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getTagOrdering(), config.getOperationOrdering());
-                javaslang.collection.Map<String, Tag> tagsMap = convertTagsListToMap(globalContext.getSwagger().getTags());
-                for (String tagName : operationsGroupedByTag.keySet()) {
+                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getOperationOrdering());
+
+                Map<String, Tag> tagsMap = TagUtils.toSortedMap(globalContext.getSwagger().getTags(), config.getTagOrdering());
+
+                tagsMap.forEach((String tagName, Tag tag) -> {
+                    markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
+                    String description = tag.getDescription();
+                    if(StringUtils.isNotBlank(description)){
+                        markupDocBuilder.paragraph(description);
+                    }
+                    operationsGroupedByTag.get(tagName).forEach(this::buildOperation);
+
+                });
+                /*
+                for (String tagName : tagNames) {
                     markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
 
                     tagsMap.get(tagName)
-                            .map(Tag::getDescription)
-                            .map(tagDescription -> markupDocBuilder.paragraph(tagDescription));
+                            .filter(tag -> StringUtils.isNotBlank(tag.getDescription()))
+                            .map(tag -> markupDocBuilder.paragraph(tag.getDescription()));
 
                     operationsGroupedByTag.get(tagName).forEach(this::buildOperation);
                 }
+                */
             }
         }
     }
@@ -193,12 +206,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * Converts the Swagger paths into a list of PathOperations.
      *
      * @param paths the Swagger paths
+     * @param comparator the comparator to use.
+     *
      * @return the path operations
      */
-    private Set<PathOperation> toPathOperationsSet(Map<String, Path> paths) {
+    private Set<PathOperation> toPathOperationsSet(Map<String, Path> paths, Comparator<PathOperation> comparator) {
         Set<PathOperation> pathOperations;
-        if (config.getOperationOrdering() != null) {
-            pathOperations = new TreeSet<>(config.getOperationOrdering());
+        if (comparator != null) {
+            pathOperations = new TreeSet<>(comparator);
         } else {
             pathOperations = new LinkedHashSet<>();
         }

@@ -20,6 +20,7 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Tag;
 import org.apache.commons.lang3.Validate;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,10 @@ public class TagsComponent extends MarkupComponent {
 
         List<String> tagsList = tags.stream()
                 .map(this::mapToString).collect(Collectors.toList());
+
+        if (config.getTagOrdering() != null)
+            Collections.sort(tagsList, config.getTagOrdering());
+
         this.markupDocBuilder.unorderedList(tagsList);
 
         return markupDocBuilder;

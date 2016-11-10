@@ -1,17 +1,18 @@
 swagger: "2.0"
 info:
   title: API
-
+tags:
+  - name: B
+  - name: A
+  - name: C
 paths:
   /C:
     post:
       tags:
         - C
-        - B
     get:
       tags:
         - C
-        - A
   /B:
     get:
       tags:
@@ -19,15 +20,12 @@ paths:
   /A:
     get:
       tags:
-        - B
-        - C
+        - A
     delete:
       tags:
-        - C
         - A
 
 definitions:
-
   C:
     type: string
 

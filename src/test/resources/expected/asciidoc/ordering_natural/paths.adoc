@@ -1,0 +1,29 @@
+
+[[_paths]]
+== Resources
+
+[[_a_resource]]
+=== A
+
+[[_a_get]]
+==== GET /A
+
+[[_a_delete]]
+==== DELETE /A
+
+[[_b_resource]]
+=== B
+
+[[_b_get]]
+==== GET /B
+
+[[_c_resource]]
+=== C
+
+[[_c_post]]
+==== POST /C
+
+[[_c_get]]
+==== GET /C
+
+

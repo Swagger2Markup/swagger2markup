@@ -81,6 +81,60 @@ public class AsciidocConverterTest {
     }
 
     @Test
+    public void testSwagger2AsciiDocConversionOrderByAsIs() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_ordering.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/ordering_asis");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withTagOrdering(OrderBy.AS_IS)
+                .withParameterOrdering(OrderBy.AS_IS)
+                .withOperationOrdering(OrderBy.AS_IS)
+                .withDefinitionOrdering(OrderBy.AS_IS)
+                .withPathsGroupedBy(GroupBy.TAGS)
+                .build();
+
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/ordering_asis").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionOrderingAsIs.html");
+    }
+
+    @Test
+    public void testSwagger2AsciiDocConversionOrderByNatural() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_ordering.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/ordering_natural");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withTagOrdering(OrderBy.NATURAL)
+                .withParameterOrdering(OrderBy.NATURAL)
+                .withOperationOrdering(OrderBy.NATURAL)
+                .withPathsGroupedBy(GroupBy.TAGS)
+                .build();
+
+        //When
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/ordering_natural").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionOrderingNatural.html");
+    }
+
+
+    @Test
     public void testSwagger2AsciiDocConversionInstagram() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_instagram.yaml").toURI());

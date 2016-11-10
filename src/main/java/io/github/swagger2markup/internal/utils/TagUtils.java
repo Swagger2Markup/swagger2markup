@@ -15,21 +15,16 @@
  */
 package io.github.swagger2markup.internal.utils;
 
+import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
-import com.google.common.collect.Ordering;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Tag;
-import javaslang.Tuple;
-import javaslang.collection.Array;
-import javaslang.collection.Map;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TagUtils {
 
@@ -37,13 +32,21 @@ public class TagUtils {
 
     /**
      * Converts the global Tag list into a Map where the tag name is the key and the Tag the value.
+     * Either ordered or as-is, if the comparator is null.
      *
      * @param tags the List of tags
-     * @return the Map of tags
+     * @param comparator the comparator to use.
+     *
+     * @return the Map of tags. Either ordered or as-is, if the comparator is null.
      */
-    public static Map<String, Tag> convertTagsListToMap(List<Tag> tags) {
-        return Array.ofAll(tags)
-                .toMap((Tag tag) -> Tuple.of(tag.getName(), tag));
+    public static Map<String, Tag> toSortedMap(List<Tag> tags, Comparator<String> comparator) {
+        Map<String, Tag> sortedMap;
+        if (comparator == null)
+            sortedMap = new LinkedHashMap<>();
+        else
+            sortedMap = new TreeMap<>(comparator);
+        tags.forEach(tag -> sortedMap.put(tag.getName(), tag));
+        return sortedMap;
     }
 
     /**
@@ -51,27 +54,21 @@ public class TagUtils {
      * The value of the Multimap is a PathOperation
      *
      * @param allOperations all operations
-     * @param tagOrdering comparator for tags
      * @param operationOrdering comparator for operations, for a given tag
      * @return Operations grouped by Tag
      */
-    public static Multimap<String, PathOperation> groupOperationsByTag(Set<PathOperation> allOperations, Comparator<String> tagOrdering, Comparator<PathOperation> operationOrdering) {
-        MultimapBuilder.MultimapBuilderWithKeys<String> multimapBuilderWithKeys;
-
-        if (tagOrdering == null)
-            multimapBuilderWithKeys = MultimapBuilder.SortedSetMultimapBuilder.treeKeys(Ordering.<String>natural()); // FIXME as-is sorting not supported because of limitations in MultiMap::hashkeys(). Replaced with Ordering.natural()
-        else
-            multimapBuilderWithKeys = MultimapBuilder.SortedSetMultimapBuilder.treeKeys(tagOrdering);
+    public static Multimap<String, PathOperation> groupOperationsByTag(Set<PathOperation> allOperations, Comparator<PathOperation> operationOrdering) {
 
         Multimap<String, PathOperation> operationsGroupedByTag;
-        if (operationOrdering == null)
-            operationsGroupedByTag = multimapBuilderWithKeys.hashSetValues().build();
-        else
-            operationsGroupedByTag = multimapBuilderWithKeys.treeSetValues(operationOrdering).build();
-
+        if (operationOrdering == null){
+            operationsGroupedByTag = LinkedHashMultimap.create();
+        }else {
+            operationsGroupedByTag = MultimapBuilder.linkedHashKeys().treeSetValues(operationOrdering).build();
+        }
         for (PathOperation operation : allOperations) {
             List<String> tags = operation.getOperation().getTags();
-            Validate.notEmpty(tags, "Can't GroupBy.TAGS > Operation '%s' has not tags", operation);
+
+            Validate.notEmpty(tags, "Can't GroupBy.TAGS. Operation '%s' has no tags", operation);
             for (String tag : tags) {
                 if (LOG.isInfoEnabled()) {
                     LOG.info("Added path operation '{}' to tag '{}'", operation, tag);
