@@ -18,20 +18,20 @@ Dummy description
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*Version* +
-_optional_|The API version|< < string, <<_collectionparameters_post_version,Version>> > map > array
+|**Body**|**Version** +
+__optional__|The API version|< < string, <<_collectionparameters_post_version,Version>> > map > array
 |===
 
 [[_collectionparameters_post_version]]
-*Version*
+**Version**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*key* +
-_optional_|option key|string
-|*value* +
-_optional_|option value|string
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
 |===
 
 
@@ -40,19 +40,19 @@ _optional_|option value|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Result|< < string, <<_collectionparameters_post_response_200,Response 200>> > map > array
+|**200**|Result|< < string, <<_collectionparameters_post_response_200,Response 200>> > map > array
 |===
 
 [[_collectionparameters_post_response_200]]
-*Response 200*
+**Response 200**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*key* +
-_optional_|option key|string
-|*value* +
-_optional_|option value|string
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
 |===
 
 
@@ -77,50 +77,50 @@ Dummy description
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Query*|*Option* +
-_optional_|An optional option|string
-|*Query*|*Version* +
-_optional_|The API version|string
-|*Body*|*LaunchCommandRequest* +
-_optional_|Launch something new|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>
+|**Query**|**Option** +
+__optional__|An optional option|string
+|**Query**|**Version** +
+__optional__|The API version|string
+|**Body**|**LaunchCommandRequest** +
+__optional__|Launch something new|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>
 |===
 
 [[_launchcommand_post_launchcommandrequest]]
-*LaunchCommandRequest*
+**LaunchCommandRequest**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*Command* +
-_required_|Dummy description|<<_launchcommand_post_command,Command>>
-|*Location* +
-_optional_|Dummy description|<<_location,Location>>
-|*Options* +
-_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
+|**Command** +
+__required__|Dummy description|<<_launchcommand_post_command,Command>>
+|**Location** +
+__optional__|Dummy description|<<_location,Location>>
+|**Options** +
+__optional__|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
 |===
 
 [[_launchcommand_post_command]]
-*Command*
+**Command**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*args* +
-_optional_|Command arguments|string
-|*path* +
-_optional_|Command path|string
+|**args** +
+__optional__|Command arguments|string
+|**path** +
+__optional__|Command path|string
 |===
 
 [[_launchcommand_post_options]]
-*Options*
+**Options**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*key* +
-_optional_|option key|string
-|*value* +
-_optional_|option value|string
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
 |===
 
 
@@ -129,38 +129,38 @@ _optional_|option value|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Result +
-*Headers* :  +
+|**200**|Result +
+**Headers** :  +
 `X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period. +
 `X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +
 `X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|<<_launchcommand_post_response_200,Response 200>>
-|*400*|Error|<<_error,Error>>
+|**400**|Error|<<_error,Error>>
 |===
 
 [[_launchcommand_post_response_200]]
-*Response 200*
+**Response 200**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*Location* +
-_optional_|<description>|<<_location,Location>>
-|*Options* +
-_optional_|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
-|*ReservationId* +
-_optional_|<description>|string
+|**Location** +
+__optional__|<description>|<<_location,Location>>
+|**Options** +
+__optional__|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
+|**ReservationId** +
+__optional__|<description>|string
 |===
 
 [[_launchcommand_post_options]]
-*Options*
+**Options**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*key* +
-_optional_|option key|string
-|*value* +
-_optional_|option value|string
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
 |===
 
 
@@ -185,40 +185,40 @@ Dummy description
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*Version* +
-_optional_|The API version|<<_mixedparameters_post_version,Version>>
+|**Body**|**Version** +
+__optional__|The API version|<<_mixedparameters_post_version,Version>>
 |===
 
 [[_mixedparameters_post_version]]
-*Version*
+**Version**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myTable* +
-_optional_|< <<_mixedparameters_post_mytable,myTable>> > array
+|**myTable** +
+__optional__|< <<_mixedparameters_post_mytable,myTable>> > array
 |===
 
 [[_mixedparameters_post_mytable]]
-*myTable*
+**myTable**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myDict* +
-_optional_|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
+|**myDict** +
+__optional__|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
 |===
 
 [[_mixedparameters_post_mytable_mydict]]
-*myDict*
+**myDict**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*k* +
-_optional_|string
-|*v* +
-_optional_|string
+|**k** +
+__optional__|string
+|**v** +
+__optional__|string
 |===
 
 
@@ -227,39 +227,39 @@ _optional_|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Result|<<_mixedparameters_post_response_200,Response 200>>
+|**200**|Result|<<_mixedparameters_post_response_200,Response 200>>
 |===
 
 [[_mixedparameters_post_response_200]]
-*Response 200*
+**Response 200**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myTable* +
-_optional_|< <<_mixedparameters_post_mytable,myTable>> > array
+|**myTable** +
+__optional__|< <<_mixedparameters_post_mytable,myTable>> > array
 |===
 
 [[_mixedparameters_post_mytable]]
-*myTable*
+**myTable**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myDict* +
-_optional_|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
+|**myDict** +
+__optional__|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
 |===
 
 [[_mixedparameters_post_mytable_mydict]]
-*myDict*
+**myDict**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*k* +
-_optional_|string
-|*v* +
-_optional_|string
+|**k** +
+__optional__|string
+|**v** +
+__optional__|string
 |===
 
 
@@ -284,40 +284,40 @@ Dummy description
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*Version* +
-_optional_|The API version|<<_request,Request>>
+|**Body**|**Version** +
+__optional__|The API version|<<_request,Request>>
 |===
 
 [[_request]]
-*Request*
+**Request**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myTable* +
-_optional_|< <<_tablecontent,TableContent>> > array
+|**myTable** +
+__optional__|< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
-*TableContent*
+**TableContent**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myDict* +
-_optional_|< string, <<_kvpair,KVPair>> > map
+|**myDict** +
+__optional__|< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
-*KVPair*
+**KVPair**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*k* +
-_optional_|string
-|*v* +
-_optional_|string
+|**k** +
+__optional__|string
+|**v** +
+__optional__|string
 |===
 
 
@@ -326,39 +326,39 @@ _optional_|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Result|<<_result,Result>>
+|**200**|Result|<<_result,Result>>
 |===
 
 [[_result]]
-*Result*
+**Result**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myTable* +
-_optional_|< <<_tablecontent,TableContent>> > array
+|**myTable** +
+__optional__|< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
-*TableContent*
+**TableContent**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myDict* +
-_optional_|< string, <<_kvpair,KVPair>> > map
+|**myDict** +
+__optional__|< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
-*KVPair*
+**KVPair**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*k* +
-_optional_|string
-|*v* +
-_optional_|string
+|**k** +
+__optional__|string
+|**v** +
+__optional__|string
 |===
 
 

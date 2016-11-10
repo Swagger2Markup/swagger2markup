@@ -12,26 +12,26 @@ For this sample, you can use the api key `special-key` to test the authorization
 
 === Version information
 [%hardbreaks]
-_Version_ : 1.0.0
+__Version__ : 1.0.0
 
 
 === Contact information
 [%hardbreaks]
-_Contact_ : apiteam@wordnik.com
+__Contact__ : apiteam@wordnik.com
 
 
 === License information
 [%hardbreaks]
-_License_ : Apache 2.0
-_License URL_ : http://www.apache.org/licenses/LICENSE-2.0.html
-_Terms of service_ : http://helloreverb.com/terms/
+__License__ : Apache 2.0
+__License URL__ : http://www.apache.org/licenses/LICENSE-2.0.html
+__Terms of service__ : http://helloreverb.com/terms/
 
 
 === URI scheme
 [%hardbreaks]
-_Host_ : petstore.swagger.wordnik.com
-_BasePath_ : /v2
-_Schemes_ : HTTP
+__Host__ : petstore.swagger.wordnik.com
+__BasePath__ : /v2
+__Schemes__ : HTTP
 
 
 === Tags

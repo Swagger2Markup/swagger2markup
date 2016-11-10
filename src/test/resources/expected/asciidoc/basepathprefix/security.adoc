@@ -5,9 +5,9 @@
 [[_petstore_auth]]
 === petstore_auth
 [%hardbreaks]
-_Type_ : oauth2
-_Flow_ : implicit
-_Token URL_ : http://petstore.swagger.wordnik.com/api/oauth/dialog
+__Type__ : oauth2
+__Flow__ : implicit
+__Token URL__ : http://petstore.swagger.wordnik.com/api/oauth/dialog
 
 
 [options="header", cols=".^3,.^17"]
@@ -21,9 +21,9 @@ _Token URL_ : http://petstore.swagger.wordnik.com/api/oauth/dialog
 [[_api_key]]
 === api_key
 [%hardbreaks]
-_Type_ : apiKey
-_Name_ : api_key
-_In_ : HEADER
+__Type__ : apiKey
+__Name__ : api_key
+__In__ : HEADER
 
 
 

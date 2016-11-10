@@ -4,7 +4,7 @@
 
 [[_integerarray]]
 === IntegerArray
-_Type_ : < integer(test) > array
+__Type__ : < integer(test) > array
 
 
 [[_integerobj]]
@@ -13,19 +13,19 @@ _Type_ : < integer(test) > array
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|integer(test)
+|**test** +
+__optional__|integer(test)
 |===
 
 
 [[_integerstr]]
 === IntegerStr
-_Type_ : integer(test)
+__Type__ : integer(test)
 
 
 [[_stringarray]]
 === StringArray
-_Type_ : < string(test) > array
+__Type__ : < string(test) > array
 
 
 [[_stringobj]]
@@ -34,14 +34,14 @@ _Type_ : < string(test) > array
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|string(test)
+|**test** +
+__optional__|string(test)
 |===
 
 
 [[_stringstr]]
 === StringStr
-_Type_ : string(test)
+__Type__ : string(test)
 
 
 

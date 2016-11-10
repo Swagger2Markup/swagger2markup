@@ -1,0 +1,47 @@
+
+[[_paths]]
+== Paths
+
+[[_v1_aardvarks_get]]
+=== GET /v1/aardvarks
+
+==== Description
+I would like this to appear after zebras
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_aardvark,Aardvark>>
+|===
+
+
+==== Tags
+
+* Aardvarks
+
+
+[[_v1_zebras_get]]
+=== GET /v1/zebras
+
+==== Description
+I would like this to appear before Aardvarks
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|*200*|OK|<<_zebra,Zebra>>
+|===
+
+
+==== Tags
+
+* Zebras
+
+
+

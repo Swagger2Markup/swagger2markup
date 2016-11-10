@@ -1,0 +1,53 @@
+
+[[_definitions]]
+== Definitions
+
+[[_aardvark]]
+=== Aardvark
+[%hardbreaks]
+_Polymorphism_ : Composition
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*etag* +
+_optional_ +
+_read-only_|This property is actually named _etag but shows up without the underscore. It also should show that it is a readOnly property.|string
+|*somePropertyOfAnimal* +
+_optional_||string
+|===
+
+
+[[_animal]]
+=== Animal
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*_etag* +
+_optional_ +
+_read-only_|This property is actually named _etag but shows up without the underscore. It also should show that it is a readOnly property.|string
+|*somePropertyOfAnimal* +
+_optional_||string
+|===
+
+
+[[_zebra]]
+=== Zebra
+[%hardbreaks]
+_Polymorphism_ : Composition
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|*_etag* +
+_optional_ +
+_read-only_|This property is actually named _etag but shows up without the underscore. It also should show that it is a readOnly property.|string
+|*somePropertyOfAnimal* +
+_optional_||string
+|===
+
+
+

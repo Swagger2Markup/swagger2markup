@@ -131,19 +131,19 @@ callbackFunction({
 
 === Version information
 [%hardbreaks]
-_Version_ : v1
+__Version__ : v1
 
 
 === License information
 [%hardbreaks]
-_Terms of service_ : http://instagram.com/about/legal/terms/api
+__Terms of service__ : http://instagram.com/about/legal/terms/api
 
 
 === URI scheme
 [%hardbreaks]
-_Host_ : api.instagram.com
-_BasePath_ : /v1
-_Schemes_ : HTTPS
+__Host__ : api.instagram.com
+__BasePath__ : /v1
+__Schemes__ : HTTPS
 
 
 === Tags

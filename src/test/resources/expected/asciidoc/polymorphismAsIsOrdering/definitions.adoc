@@ -7,17 +7,17 @@
 An array
 
 [%hardbreaks]
-_Polymorphism_ : Inheritance
-_Discriminator_ : collType
+__Polymorphism__ : Inheritance
+__Discriminator__ : collType
 
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*name* +
-_optional_||string
-|*collType* +
-_required_|collection type discriminator|string
+|**name** +
+__optional__||string
+|**collType** +
+__required__|collection type discriminator|string
 |===
 
 
@@ -26,20 +26,20 @@ _required_|collection type discriminator|string
 A representation of a cat
 
 [%hardbreaks]
-_Polymorphism_ : Inheritance
-_Discriminator_ : petType
+__Polymorphism__ : Inheritance
+__Discriminator__ : petType
 
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*name* +
-_optional_|conflicting property with inheriting model (issue #44)|string
-|*petType* +
-_required_||string
-|*huntingSkill* +
-_required_|The measured skill for hunting +
-*Default* : `"lazy"`|enum (clueless, lazy, adventurous, aggressive)
+|**name** +
+__optional__|conflicting property with inheriting model (issue #44)|string
+|**petType** +
+__required__||string
+|**huntingSkill** +
+__required__|The measured skill for hunting +
+**Default** : `"lazy"`|enum (clueless, lazy, adventurous, aggressive)
 |===
 
 
@@ -51,8 +51,8 @@ Collection parent type without discriminator
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*name* +
-_optional_|string
+|**name** +
+__optional__|string
 |===
 
 
@@ -61,23 +61,23 @@ _optional_|string
 A representation of a dog with an alternative discriminator
 
 [%hardbreaks]
-_Polymorphism_ : Inheritance
-_Discriminator_ : dogType
+__Polymorphism__ : Inheritance
+__Discriminator__ : dogType
 
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*name* +
-_required_||string
-|*petType* +
-_required_||string
-|*dogType* +
-_required_||string
-|*packSize* +
-_required_|the size of the pack the dog is from +
-*Default* : `0` +
-*Minimum value* : `0`|integer(int32)
+|**name** +
+__required__||string
+|**petType** +
+__required__||string
+|**dogType** +
+__required__||string
+|**packSize** +
+__required__|the size of the pack the dog is from +
+**Default** : `0` +
+**Minimum value** : `0`|integer(int32)
 |===
 
 
@@ -86,16 +86,16 @@ _required_|the size of the pack the dog is from +
 A map without discriminator
 
 [%hardbreaks]
-_Polymorphism_ : Composition
+__Polymorphism__ : Composition
 
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*name* +
-_optional_||string
-|*collType* +
-_required_|collection type discriminator|string
+|**name** +
+__optional__||string
+|**collType** +
+__required__|collection type discriminator|string
 |===
 
 
@@ -107,10 +107,10 @@ Pet parent type with discriminator
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*name* +
-_required_|string
-|*petType* +
-_required_|string
+|**name** +
+__required__|string
+|**petType** +
+__required__|string
 |===
 
 

@@ -18,7 +18,7 @@ Returns the navigation as a tree
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Successful response|<<_navigationentry,NavigationEntry>>
+|**200**|Successful response|<<_navigationentry,NavigationEntry>>
 |===
 
 
@@ -67,8 +67,8 @@ Updates the navigation tree
 [options="header", cols=".^2,.^3,.^4"]
 |===
 |Type|Name|Schema
-|*Body*|*entry* +
-_optional_|<<_navigationentry,NavigationEntry>>
+|**Body**|**entry** +
+__optional__|<<_navigationentry,NavigationEntry>>
 |===
 
 
@@ -77,7 +77,7 @@ _optional_|<<_navigationentry,NavigationEntry>>
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Successful response|<<_navigationentry,NavigationEntry>>
+|**200**|Successful response|<<_navigationentry,NavigationEntry>>
 |===
 
 

@@ -8,10 +8,10 @@
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*error-code* +
-_optional_|Error code|integer
-|*message* +
-_optional_|Error message|string
+|**error-code** +
+__optional__|Error code|integer
+|**message** +
+__optional__|Error message|string
 |===
 
 
@@ -21,68 +21,68 @@ _optional_|Error message|string
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*Loop* +
-_optional_|<<_inlinedepthschema_loop,Loop>>
+|**Loop** +
+__optional__|<<_inlinedepthschema_loop,Loop>>
 |===
 
 [[_inlinedepthschema_loop]]
-*Loop*
+**Loop**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*p1* +
-_optional_|Description p1|string
-|*p2* +
-_optional_|Description p2|<<_inlinedepthschema_p2,p2>>
+|**p1** +
+__optional__|Description p1|string
+|**p2** +
+__optional__|Description p2|<<_inlinedepthschema_p2,p2>>
 |===
 
 [[_inlinedepthschema_p2]]
-*p2*
+**p2**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*p2-1* +
-_optional_|Description p2-1|string
-|*p2-2* +
-_optional_|Description p2-2|<<_inlinedepthschema_p2_p2-2,p2-2>>
+|**p2-1** +
+__optional__|Description p2-1|string
+|**p2-2** +
+__optional__|Description p2-2|<<_inlinedepthschema_p2_p2-2,p2-2>>
 |===
 
 [[_inlinedepthschema_p2_p2-2]]
-*p2-2*
+**p2-2**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*p2-2-1* +
-_optional_|Description p2-2-1|<<_inlinedepthschema_p2_p2-2_p2-2-1,p2-2-1>>
-|*p2-2-2* +
-_optional_|Description p2-2-2|<<_inlinedepthschema_p2_p2-2_p2-2-2,p2-2-2>>
+|**p2-2-1** +
+__optional__|Description p2-2-1|<<_inlinedepthschema_p2_p2-2_p2-2-1,p2-2-1>>
+|**p2-2-2** +
+__optional__|Description p2-2-2|<<_inlinedepthschema_p2_p2-2_p2-2-2,p2-2-2>>
 |===
 
 [[_inlinedepthschema_p2_p2-2_p2-2-1]]
-*p2-2-1*
+**p2-2-1**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*p2-2-1-1* +
-_optional_|Description p2-2-1-1|string
-|*p2-2-1-2* +
-_optional_|Description p2-2-1-2|boolean
+|**p2-2-1-1** +
+__optional__|Description p2-2-1-1|string
+|**p2-2-1-2** +
+__optional__|Description p2-2-1-2|boolean
 |===
 
 [[_inlinedepthschema_p2_p2-2_p2-2-2]]
-*p2-2-2*
+**p2-2-2**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*p2-2-2-1* +
-_optional_|Description p2-2-2-1|string
-|*p2-2-2-2* +
-_optional_|Description p2-2-2-2|boolean
+|**p2-2-2-1** +
+__optional__|Description p2-2-2-1|string
+|**p2-2-2-2** +
+__optional__|Description p2-2-2-2|boolean
 |===
 
 
@@ -92,36 +92,36 @@ _optional_|Description p2-2-2-2|boolean
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*category* +
-_optional_|<<_inlinepet_category,category>>
-|*id* +
-_required_|integer(int64)
-|*tags* +
-_optional_|< <<_inlinepet_tags,tags>> > array
+|**category** +
+__optional__|<<_inlinepet_category,category>>
+|**id** +
+__required__|integer(int64)
+|**tags** +
+__optional__|< <<_inlinepet_tags,tags>> > array
 |===
 
 [[_inlinepet_category]]
-*category*
+**category**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 [[_inlinepet_tags]]
-*tags*
+**tags**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 
@@ -131,36 +131,36 @@ _optional_|string
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*category* +
-_optional_|<<_categorymodel,CategoryModel>>
-|*id* +
-_required_|integer(int64)
-|*tags* +
-_optional_|< <<_tagmodel,TagModel>> > array
+|**category** +
+__optional__|<<_categorymodel,CategoryModel>>
+|**id** +
+__required__|integer(int64)
+|**tags** +
+__optional__|< <<_tagmodel,TagModel>> > array
 |===
 
 [[_categorymodel]]
-*CategoryModel*
+**CategoryModel**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 [[_tagmodel]]
-*TagModel*
+**TagModel**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 
@@ -170,8 +170,8 @@ _optional_|string
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*Place* +
-_optional_|Place|string
+|**Place** +
+__optional__|Place|string
 |===
 
 
@@ -183,30 +183,30 @@ mixed collections and objects
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myTable* +
-_optional_|< <<_mixedschema_mytable,myTable>> > array
+|**myTable** +
+__optional__|< <<_mixedschema_mytable,myTable>> > array
 |===
 
 [[_mixedschema_mytable]]
-*myTable*
+**myTable**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myDict* +
-_optional_|< string, <<_mixedschema_mydict,myDict>> > map
+|**myDict** +
+__optional__|< string, <<_mixedschema_mydict,myDict>> > map
 |===
 
 [[_mixedschema_mydict]]
-*myDict*
+**myDict**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*k* +
-_optional_|string
-|*v* +
-_optional_|string
+|**k** +
+__optional__|string
+|**v** +
+__optional__|string
 |===
 
 
@@ -214,18 +214,18 @@ _optional_|string
 === RecursiveCollectionSchema
 Options k/v pairs list
 
-_Type_ : < < string, <<_recursivecollectionschema_inline,RecursiveCollectionSchema>> > map > array
+__Type__ : < < string, <<_recursivecollectionschema_inline,RecursiveCollectionSchema>> > map > array
 
 [[_recursivecollectionschema_inline]]
-*RecursiveCollectionSchema*
+**RecursiveCollectionSchema**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*key* +
-_optional_|option key|string
-|*value* +
-_optional_|option value|string
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
 |===
 
 
@@ -237,32 +237,32 @@ mixed collections and objects
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*myTable* +
-_optional_|< <<_tablecontent,TableContent>> > array
+|**myTable** +
+__optional__|< <<_tablecontent,TableContent>> > array
 |===
 
 [[_tablecontent]]
-*TableContent*
+**TableContent**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*emptyObject* +
-_optional_|object
-|*myDict* +
-_optional_|< string, <<_kvpair,KVPair>> > map
+|**emptyObject** +
+__optional__|object
+|**myDict** +
+__optional__|< string, <<_kvpair,KVPair>> > map
 |===
 
 [[_kvpair]]
-*KVPair*
+**KVPair**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*k* +
-_optional_|string
-|*v* +
-_optional_|string
+|**k** +
+__optional__|string
+|**v** +
+__optional__|string
 |===
 
 

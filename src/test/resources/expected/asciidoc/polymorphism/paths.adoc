@@ -18,7 +18,7 @@ Get collections
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<<_collection,Collection>>
+|**200**|OK|<<_collection,Collection>>
 |===
 
 
@@ -48,7 +48,7 @@ Get pets
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|<<_pet,Pet>>
+|**200**|OK|<<_pet,Pet>>
 |===
 
 

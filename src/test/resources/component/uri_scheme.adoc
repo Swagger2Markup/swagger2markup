@@ -1,9 +1,9 @@
 
 === URI scheme
 [%hardbreaks]
-_Host_ : http://localhost
-_BasePath_ : /v2
-_Schemes_ : HTTP, HTTPS
+__Host__ : http://localhost
+__BasePath__ : /v2
+__Schemes__ : HTTP, HTTPS
 
 
 

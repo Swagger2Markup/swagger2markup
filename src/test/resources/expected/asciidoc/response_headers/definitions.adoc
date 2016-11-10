@@ -8,10 +8,10 @@
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 
@@ -21,18 +21,18 @@ _optional_|string
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*category* +
-_optional_||<<_category,Category>>
-|*id* +
-_optional_||integer(int64)
-|*name* +
-_required_|*Example* : `"doggie"`|string
-|*photoUrls* +
-_required_||< string > array
-|*status* +
-_optional_|pet status in the store,|enum (Dead, Alive)
-|*tags* +
-_optional_||< <<_tag,Tag>> > array
+|**category** +
+__optional__||<<_category,Category>>
+|**id** +
+__optional__||integer(int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**photoUrls** +
+__required__||< string > array
+|**status** +
+__optional__|pet status in the store,|enum (Dead, Alive)
+|**tags** +
+__optional__||< <<_tag,Tag>> > array
 |===
 
 
@@ -42,10 +42,10 @@ _optional_||< <<_tag,Tag>> > array
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 

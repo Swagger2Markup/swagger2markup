@@ -5,9 +5,9 @@
 [[_oauth]]
 === oauth
 [%hardbreaks]
-_Type_ : oauth2
-_Flow_ : implicit
-_Token URL_ : https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
+__Type__ : oauth2
+__Flow__ : implicit
+__Token URL__ : https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
 
 
 [options="header", cols=".^3,.^17"]
@@ -24,9 +24,9 @@ _Token URL_ : https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirec
 [[_key]]
 === key
 [%hardbreaks]
-_Type_ : apiKey
-_Name_ : access_token
-_In_ : QUERY
+__Type__ : apiKey
+__Name__ : access_token
+__In__ : QUERY
 
 
 

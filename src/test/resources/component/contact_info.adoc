@@ -1,8 +1,8 @@
 
 === Contact information
 [%hardbreaks]
-_Contact_ : TestName
-_Contact Email_ : test@test.de
+__Contact__ : TestName
+__Contact Email__ : test@test.de
 
 
 

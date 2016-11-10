@@ -6,7 +6,7 @@
 
 === Version information
 [%hardbreaks]
-_Version_ : 1.1
+__Version__ : 1.1
 
 
 === Consumes

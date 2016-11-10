@@ -1,14 +1,18 @@
-= Title
+= Simple API
 
 
 [[_overview]]
 == Overview
-Description
-
 
 === Version information
 [%hardbreaks]
-__Version__ : Developer build
+_Version_ : 0.0.0
+
+
+=== Tags
+
+* Aardvarks
+* Zebras
 
 
 

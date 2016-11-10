@@ -8,10 +8,10 @@
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*id* +
-_optional_|*Example* : `123`|integer(int64)
-|*name* +
-_optional_|*Example* : `"Canines"`|string
+|**id** +
+__optional__|**Example** : `123`|integer(int64)
+|**name** +
+__optional__|**Example** : `"Canines"`|string
 |===
 
 
@@ -21,8 +21,8 @@ _optional_|*Example* : `"Canines"`|string
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*subObject* +
-_optional_|*Example* : `"object"`|object
+|**subObject** +
+__optional__|**Example** : `"object"`|object
 |===
 
 
@@ -32,8 +32,8 @@ _optional_|*Example* : `"object"`|object
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*id* +
-_optional_|*Example* : `0`|integer(int64)
+|**id** +
+__optional__|**Example** : `0`|integer(int64)
 |===
 
 
@@ -43,19 +43,19 @@ _optional_|*Example* : `0`|integer(int64)
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*complete* +
-_optional_|*Example* : `true`|boolean
-|*id* +
-_optional_|*Example* : `77`|integer(int64)
-|*petId* +
-_optional_|*Example* : `0`|integer(int64)
-|*quantity* +
-_optional_|*Example* : `0`|integer(int32)
-|*shipDate* +
-_optional_|*Example* : `"string"`|string(date-time)
-|*status* +
-_optional_|Order Status +
-*Example* : `"DONE"`|string
+|**complete** +
+__optional__|**Example** : `true`|boolean
+|**id** +
+__optional__|**Example** : `77`|integer(int64)
+|**petId** +
+__optional__|**Example** : `0`|integer(int64)
+|**quantity** +
+__optional__|**Example** : `0`|integer(int32)
+|**shipDate** +
+__optional__|**Example** : `"string"`|string(date-time)
+|**status** +
+__optional__|Order Status +
+**Example** : `"DONE"`|string
 |===
 
 
@@ -67,26 +67,26 @@ Test description
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*category* +
-_optional_|*Example* : `"<<_category>>"`|<<_category,Category>>
-|*id* +
-_optional_|*Example* : `0`|integer(int64)
-|*name* +
-_required_|*Example* : `"doggie"`|string
-|*nicknames* +
-_optional_|*Example* : `{
+|**category** +
+__optional__|**Example** : `"<<_category>>"`|<<_category,Category>>
+|**id** +
+__optional__|**Example** : `0`|integer(int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**nicknames** +
+__optional__|**Example** : `{
   "string" : "string"
 }`|< string, string > map
-|*photoUrls* +
-_required_|*Example* : `[ "string" ]`|< string > array
-|*status* +
-_optional_|pet status in the store +
-*Example* : `"string"`|string
-|*tags* +
-_optional_|*Example* : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
-|*weight* +
-_optional_|the weight of the pet +
-*Example* : `0.0`|number
+|**photoUrls** +
+__required__|**Example** : `[ "string" ]`|< string > array
+|**status** +
+__optional__|pet status in the store +
+**Example** : `"string"`|string
+|**tags** +
+__optional__|**Example** : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
+|**weight** +
+__optional__|the weight of the pet +
+**Example** : `0.0`|number
 |===
 
 
@@ -96,41 +96,41 @@ _optional_|the weight of the pet +
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*id* +
-_optional_|*Example* : `0`|integer(int64)
-|*name* +
-_optional_|*Example* : `"string"`|string
+|**id** +
+__optional__|**Example** : `0`|integer(int64)
+|**name** +
+__optional__|**Example** : `"string"`|string
 |===
 
 
 [[_user]]
 === User
 [%hardbreaks]
-_Polymorphism_ : Composition
+__Polymorphism__ : Composition
 
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*email* +
-_optional_|*Example* : `"string"`|string
-|*firstName* +
-_optional_|*Example* : `"string"`|string
-|*id* +
-_optional_|*Example* : `0`|integer(int64)
-|*lastName* +
-_optional_|*Example* : `"string"`|string
-|*password* +
-_optional_|*Example* : `"string"`|string
-|*phone* +
-_optional_|*Example* : `"string"`|string
-|*pictures* +
-_optional_|*Example* : `[ "string" ]`|< string(byte) > array
-|*userStatus* +
-_optional_|User Status +
-*Example* : `0`|integer(int32)
-|*username* +
-_optional_|*Example* : `"string"`|string
+|**email** +
+__optional__|**Example** : `"string"`|string
+|**firstName** +
+__optional__|**Example** : `"string"`|string
+|**id** +
+__optional__|**Example** : `0`|integer(int64)
+|**lastName** +
+__optional__|**Example** : `"string"`|string
+|**password** +
+__optional__|**Example** : `"string"`|string
+|**phone** +
+__optional__|**Example** : `"string"`|string
+|**pictures** +
+__optional__|**Example** : `[ "string" ]`|< string(byte) > array
+|**userStatus** +
+__optional__|User Status +
+**Example** : `0`|integer(int32)
+|**username** +
+__optional__|**Example** : `"string"`|string
 |===
 
 

@@ -8,18 +8,18 @@ Description
 
 === Version information
 [%hardbreaks]
-_Version_ : Developer build
+__Version__ : Developer build
 
 
 === Contact information
 [%hardbreaks]
-_Contact_ : (Contact name)
+__Contact__ : (Contact name)
 
 
 === URI scheme
 [%hardbreaks]
-_Host_ : localhost:8080
-_BasePath_ : /engine
+__Host__ : localhost:8080
+__BasePath__ : /engine
 
 
 === Tags

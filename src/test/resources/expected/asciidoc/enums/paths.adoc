@@ -18,20 +18,20 @@ Return state
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Path*|*oldState* +
-_required_|Old State as raw string|enum (ADDED, REMOVED, CHANGED)
-|*Body*|*StateModel* +
-_optional_|State as enum in object|<<_createstate_statemodel,StateModel>>
+|**Path**|**oldState** +
+__required__|Old State as raw string|enum (ADDED, REMOVED, CHANGED)
+|**Body**|**StateModel** +
+__optional__|State as enum in object|<<_createstate_statemodel,StateModel>>
 |===
 
 [[_createstate_statemodel]]
-*StateModel*
+**StateModel**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*value* +
-_optional_|State value|enum (ADDED, REMOVED, CHANGED)
+|**value** +
+__optional__|State value|enum (ADDED, REMOVED, CHANGED)
 |===
 
 
@@ -40,7 +40,7 @@ _optional_|State value|enum (ADDED, REMOVED, CHANGED)
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|enum (ADDED, REMOVED, CHANGED)
+|**200**|OK|enum (ADDED, REMOVED, CHANGED)
 |===
 
 

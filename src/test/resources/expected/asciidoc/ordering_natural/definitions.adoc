@@ -4,17 +4,17 @@
 
 [[_a]]
 === A
-_Type_ : string
+__Type__ : string
 
 
 [[_b]]
 === B
-_Type_ : string
+__Type__ : string
 
 
 [[_c]]
 === C
-_Type_ : string
+__Type__ : string
 
 
 

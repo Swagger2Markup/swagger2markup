@@ -892,6 +892,8 @@ paths:
         type: integer
         required: true
     get:
+      tags:
+        - Location
       description: |
         Get recent media from a geography subscription that you created.
         **Note**: You can only access Geographies that were explicitly created

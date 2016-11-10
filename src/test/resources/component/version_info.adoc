@@ -1,7 +1,7 @@
 
 === Version information
 [%hardbreaks]
-_Version_ : 1.0
+__Version__ : 1.0
 
 
 

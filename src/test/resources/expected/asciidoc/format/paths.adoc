@@ -10,14 +10,14 @@
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Path*|*intParam* +
-_required_|test integer in path|integer(test)
-|*Path*|*param* +
-_required_|test string in path|string(test)
-|*Query*|*intQuery* +
-_required_|test integer in query|integer(test)
-|*Query*|*stringQuery* +
-_required_|test string in query|string(test)
+|**Path**|**intParam** +
+__required__|test integer in path|integer(test)
+|**Path**|**param** +
+__required__|test string in path|string(test)
+|**Query**|**intQuery** +
+__required__|test integer in query|integer(test)
+|**Query**|**stringQuery** +
+__required__|test string in query|string(test)
 |===
 
 
@@ -26,52 +26,52 @@ _required_|test string in query|string(test)
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|Result|string(test)
-|*201*|Result|<<_c_param_intparam_get_response_201,Response 201>>
-|*202*|Result|<<_c_param_intparam_get_response_202,Response 202>>
-|*203*|Result|integer(test)
-|*204*|Result|<<_c_param_intparam_get_response_204,Response 204>>
-|*205*|Result|<<_c_param_intparam_get_response_205,Response 205>>
+|**200**|Result|string(test)
+|**201**|Result|<<_c_param_intparam_get_response_201,Response 201>>
+|**202**|Result|<<_c_param_intparam_get_response_202,Response 202>>
+|**203**|Result|integer(test)
+|**204**|Result|<<_c_param_intparam_get_response_204,Response 204>>
+|**205**|Result|<<_c_param_intparam_get_response_205,Response 205>>
 |===
 
 [[_c_param_intparam_get_response_201]]
-*Response 201*
+**Response 201**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|string(test)
+|**test** +
+__optional__|string(test)
 |===
 
 [[_c_param_intparam_get_response_202]]
-*Response 202*
+**Response 202**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|< string(test) > array
+|**test** +
+__optional__|< string(test) > array
 |===
 
 [[_c_param_intparam_get_response_204]]
-*Response 204*
+**Response 204**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|integer(test)
+|**test** +
+__optional__|integer(test)
 |===
 
 [[_c_param_intparam_get_response_205]]
-*Response 205*
+**Response 205**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|< integer(test) > array
+|**test** +
+__optional__|< integer(test) > array
 |===
 
 
@@ -88,8 +88,8 @@ _optional_|< integer(test) > array
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_required_|test integer str in body|< integer(test) > array
+|**Body**|**body** +
+__required__|test integer str in body|< integer(test) > array
 |===
 
 
@@ -106,18 +106,18 @@ _required_|test integer str in body|< integer(test) > array
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_required_|test integer str in body|<<_integerobj_get_body,body>>
+|**Body**|**body** +
+__required__|test integer str in body|<<_integerobj_get_body,body>>
 |===
 
 [[_integerobj_get_body]]
-*body*
+**body**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|integer(test)
+|**test** +
+__optional__|integer(test)
 |===
 
 
@@ -134,8 +134,8 @@ _optional_|integer(test)
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_required_|test integer str in body|integer(test)
+|**Body**|**body** +
+__required__|test integer str in body|integer(test)
 |===
 
 
@@ -152,8 +152,8 @@ _required_|test integer str in body|integer(test)
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_required_|test string str in body|< string(test) > array
+|**Body**|**body** +
+__required__|test string str in body|< string(test) > array
 |===
 
 
@@ -170,18 +170,18 @@ _required_|test string str in body|< string(test) > array
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_required_|test string str in body|<<_stringobj_get_body,body>>
+|**Body**|**body** +
+__required__|test string str in body|<<_stringobj_get_body,body>>
 |===
 
 [[_stringobj_get_body]]
-*body*
+**body**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*test* +
-_optional_|string(test)
+|**test** +
+__optional__|string(test)
 |===
 
 
@@ -198,8 +198,8 @@ _optional_|string(test)
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_required_|test string str in body|string(test)
+|**Body**|**body** +
+__required__|test string str in body|string(test)
 |===
 
 

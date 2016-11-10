@@ -18,8 +18,8 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Path*|*petId* +
-_required_|ID of pet that needs to be fetched|integer(int64)
+|**Path**|**petId** +
+__required__|ID of pet that needs to be fetched|integer(int64)
 |===
 
 
@@ -28,21 +28,21 @@ _required_|ID of pet that needs to be fetched|integer(int64)
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|successful operation +
-*Headers* :  +
-`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. *Default* : `"20"` +
+|**200**|successful operation +
+**Headers** :  +
+`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. **Default** : `"20"` +
 `X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +
 This is an important value !. +
-`X-Rate-Limit-Reset` (boolean) :  *Default* : `false`|<<_pet,Pet>>
-|*400*|Invalid ID supplied|No Content
-|*404*|Page not found (override) +
-*Headers* :  +
-`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. *Default* : `"20"` +
+`X-Rate-Limit-Reset` (boolean) :  **Default** : `false`|<<_pet,Pet>>
+|**400**|Invalid ID supplied|No Content
+|**404**|Page not found (override) +
+**Headers** :  +
+`X-Rate-Limit-Limit` (string) : The number of allowed requests in the current period. **Default** : `"20"` +
 `X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +
 This is an important value !. +
-`X-Rate-Limit-Reset` (boolean) :  *Default* : `false` +
+`X-Rate-Limit-Reset` (boolean) :  **Default** : `false` +
 `Nothing` (integer) +
-`DottedDescription` (string) : This description is terminated with a dot. *Default* : `"20"`|No Content
+`DottedDescription` (string) : This description is terminated with a dot. **Default** : `"20"`|No Content
 |===
 
 
@@ -62,8 +62,8 @@ This is an important value !. +
 [options="header", cols=".^3,.^4,.^13"]
 |===
 |Type|Name|Scopes
-|*apiKey*|*<<_api_key,api_key>>*|
-|*oauth2*|*<<_petstore_auth,petstore_auth>>*|write_pets,read_pets
+|**apiKey**|**<<_api_key,api_key>>**|
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
 |===
 
 

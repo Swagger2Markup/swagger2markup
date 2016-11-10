@@ -18,8 +18,8 @@ Returns integer metrics information for the application.
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_optional_|String metrics|< string, integer(int32) > map
+|**Body**|**body** +
+__optional__|String metrics|< string, integer(int32) > map
 |===
 
 
@@ -28,7 +28,7 @@ _optional_|String metrics|< string, integer(int32) > map
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|< string, string > map
+|**200**|OK|< string, string > map
 |===
 
 
@@ -63,8 +63,8 @@ Returns a collated list of all `@RequestMapping` paths.
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_optional_|Mappings|< string, <<_mappinginfo,MappingInfo>> > map
+|**Body**|**body** +
+__optional__|Mappings|< string, <<_mappinginfo,MappingInfo>> > map
 |===
 
 
@@ -73,7 +73,7 @@ _optional_|Mappings|< string, <<_mappinginfo,MappingInfo>> > map
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|< string, <<_mappinginfo,MappingInfo>> > map
+|**200**|OK|< string, <<_mappinginfo,MappingInfo>> > map
 |===
 
 
@@ -108,20 +108,20 @@ Returns metrics information for the application.
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_optional_|Metrics|< string, <<_createmetrics_body,body>> > map
+|**Body**|**body** +
+__optional__|Metrics|< string, <<_createmetrics_body,body>> > map
 |===
 
 [[_createmetrics_body]]
-*body*
+**body**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*p1* +
-_optional_|string
-|*p2* +
-_optional_|string
+|**p1** +
+__optional__|string
+|**p2** +
+__optional__|string
 |===
 
 
@@ -130,19 +130,19 @@ _optional_|string
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|< string, <<_createmetrics_response_200,Response 200>> > map
+|**200**|OK|< string, <<_createmetrics_response_200,Response 200>> > map
 |===
 
 [[_createmetrics_response_200]]
-*Response 200*
+**Response 200**
 
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*p1* +
-_optional_|string
-|*p2* +
-_optional_|string
+|**p1** +
+__optional__|string
+|**p2** +
+__optional__|string
 |===
 
 
@@ -177,8 +177,8 @@ Returns string metrics information for the application.
 [options="header", cols=".^2,.^3,.^9,.^4"]
 |===
 |Type|Name|Description|Schema
-|*Body*|*body* +
-_optional_|String metrics|< string, string > map
+|**Body**|**body** +
+__optional__|String metrics|< string, string > map
 |===
 
 
@@ -187,7 +187,7 @@ _optional_|String metrics|< string, string > map
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|*200*|OK|< string, string > map
+|**200**|OK|< string, string > map
 |===
 
 

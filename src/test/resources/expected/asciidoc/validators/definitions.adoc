@@ -8,55 +8,55 @@
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*sampleDoubleComplete* +
-_optional_|sample double with range 0.0-10.0 +
-*Minimum value* : `0.0` +
-*Maximum value* : `10.0`|number(double)
-|*sampleDoubleExclusiveBoth* +
-_optional_|sample double with range 0.0-10.0 (both exclusive) +
-*Minimum value (exclusive)* : `0.0` +
-*Maximum value (exclusive)* : `10.0`|number(double)
-|*sampleDoubleExclusiveMaximum* +
-_optional_|sample double with range to 10.0 (exclusive) +
-*Maximum value (exclusive)* : `10.0`|number(double)
-|*sampleDoubleExclusiveMinimum* +
-_optional_|sample double with range from 0.0 (exclusive) +
-*Minimum value (exclusive)* : `0.0`|number(double)
-|*sampleDoubleNoDescription* +
-_optional_|*Minimum value* : `0.0` +
-*Maximum value* : `10.0`|number(double)
-|*sampleDoubleOnlyMaximum* +
-_optional_|sample double with range to 10.0 +
-*Maximum value* : `10.0`|number(double)
-|*sampleDoubleOnlyMinimum* +
-_optional_|sample double with range from 0.0 +
-*Minimum value* : `0.0`|number(double)
-|*sampleNumberComplete* +
-_optional_|sample int with range 0-10 +
-*Minimum value* : `0` +
-*Maximum value* : `10`|integer(int32)
-|*sampleNumberNoDescription* +
-_optional_|*Minimum value* : `0` +
-*Maximum value* : `10`|integer(int32)
-|*sampleNumberOnlyMaximum* +
-_optional_|sample int with range to 10 +
-*Maximum value* : `10`|integer(int32)
-|*sampleNumberOnlyMinimum* +
-_optional_|sample int with range from 0 +
-*Minimum value* : `0`|integer(int32)
-|*sampleStringComplete* +
-_optional_|Sample string with range 0-2 and a pattern +
-*Length* : `0 - 2` +
-*Pattern* : `"[A-Z0-9]{0,2}"`|string
-|*sampleStringOnlyMaxLength* +
-_optional_|*Maximal length* : `2`|string
-|*sampleStringOnlyMinLength* +
-_optional_|*Minimum length* : `0`|string
-|*sampleStringOnlyPattern* +
-_optional_|*Pattern* : `"[A-Z0-9]{0,2}"`|string
-|*sampleStringWithNoDescription* +
-_optional_|*Length* : `0 - 2` +
-*Pattern* : `"[A-Z0-9]{0,2}"`|string
+|**sampleDoubleComplete** +
+__optional__|sample double with range 0.0-10.0 +
+**Minimum value** : `0.0` +
+**Maximum value** : `10.0`|number(double)
+|**sampleDoubleExclusiveBoth** +
+__optional__|sample double with range 0.0-10.0 (both exclusive) +
+**Minimum value (exclusive)** : `0.0` +
+**Maximum value (exclusive)** : `10.0`|number(double)
+|**sampleDoubleExclusiveMaximum** +
+__optional__|sample double with range to 10.0 (exclusive) +
+**Maximum value (exclusive)** : `10.0`|number(double)
+|**sampleDoubleExclusiveMinimum** +
+__optional__|sample double with range from 0.0 (exclusive) +
+**Minimum value (exclusive)** : `0.0`|number(double)
+|**sampleDoubleNoDescription** +
+__optional__|**Minimum value** : `0.0` +
+**Maximum value** : `10.0`|number(double)
+|**sampleDoubleOnlyMaximum** +
+__optional__|sample double with range to 10.0 +
+**Maximum value** : `10.0`|number(double)
+|**sampleDoubleOnlyMinimum** +
+__optional__|sample double with range from 0.0 +
+**Minimum value** : `0.0`|number(double)
+|**sampleNumberComplete** +
+__optional__|sample int with range 0-10 +
+**Minimum value** : `0` +
+**Maximum value** : `10`|integer(int32)
+|**sampleNumberNoDescription** +
+__optional__|**Minimum value** : `0` +
+**Maximum value** : `10`|integer(int32)
+|**sampleNumberOnlyMaximum** +
+__optional__|sample int with range to 10 +
+**Maximum value** : `10`|integer(int32)
+|**sampleNumberOnlyMinimum** +
+__optional__|sample int with range from 0 +
+**Minimum value** : `0`|integer(int32)
+|**sampleStringComplete** +
+__optional__|Sample string with range 0-2 and a pattern +
+**Length** : `0 - 2` +
+**Pattern** : `"[A-Z0-9]{0,2}"`|string
+|**sampleStringOnlyMaxLength** +
+__optional__|**Maximal length** : `2`|string
+|**sampleStringOnlyMinLength** +
+__optional__|**Minimum length** : `0`|string
+|**sampleStringOnlyPattern** +
+__optional__|**Pattern** : `"[A-Z0-9]{0,2}"`|string
+|**sampleStringWithNoDescription** +
+__optional__|**Length** : `0 - 2` +
+**Pattern** : `"[A-Z0-9]{0,2}"`|string
 |===
 
 

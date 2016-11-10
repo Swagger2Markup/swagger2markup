@@ -8,14 +8,14 @@
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*id* +
-_optional_||integer(int64)
-|*name* +
-_optional_|The name of the category +
-*Default* : `"DefaultCategory"` +
-*Length* : `0 - 255` +
-*Pattern* : `"[A-Za-zäöüÄÖÜß]{0,255}"` +
-*Example* : `"FoobarCategory"`|string
+|**id** +
+__optional__||integer(int64)
+|**name** +
+__optional__|The name of the category +
+**Default** : `"DefaultCategory"` +
+**Length** : `0 - 255` +
+**Pattern** : `"[A-Za-zäöüÄÖÜß]{0,255}"` +
+**Example** : `"FoobarCategory"`|string
 |===
 
 
@@ -25,21 +25,21 @@ _optional_|The name of the category +
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*complete* +
-_optional_||boolean
-|*id* +
-_optional_||integer(int64)
-|*petId* +
-_optional_||integer(int64)
-|*quantity* +
-_optional_|*Default* : `0` +
-*Minimum value* : `0` +
-*Maximum value* : `10000` +
-*Example* : `10`|integer(int32)
-|*shipDate* +
-_optional_||string(date-time)
-|*status* +
-_optional_|Order Status|enum (Ordered, Cancelled)
+|**complete** +
+__optional__||boolean
+|**id** +
+__optional__||integer(int64)
+|**petId** +
+__optional__||integer(int64)
+|**quantity** +
+__optional__|**Default** : `0` +
+**Minimum value** : `0` +
+**Maximum value** : `10000` +
+**Example** : `10`|integer(int32)
+|**shipDate** +
+__optional__||string(date-time)
+|**status** +
+__optional__|Order Status|enum (Ordered, Cancelled)
 |===
 
 
@@ -49,18 +49,18 @@ _optional_|Order Status|enum (Ordered, Cancelled)
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*category* +
-_optional_||<<_category,Category>>
-|*id* +
-_optional_||integer(int64)
-|*name* +
-_required_|*Example* : `"doggie"`|string
-|*photoUrls* +
-_required_||< string > array
-|*status* +
-_optional_|pet status in the store,|enum (Dead, Alive)
-|*tags* +
-_optional_||< <<_tag,Tag>> > array
+|**category** +
+__optional__||<<_category,Category>>
+|**id** +
+__optional__||integer(int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**photoUrls** +
+__required__||< string > array
+|**status** +
+__optional__|pet status in the store,|enum (Dead, Alive)
+|**tags** +
+__optional__||< <<_tag,Tag>> > array
 |===
 
 
@@ -70,10 +70,10 @@ _optional_||< <<_tag,Tag>> > array
 [options="header", cols=".^3,.^4"]
 |===
 |Name|Schema
-|*id* +
-_optional_|integer(int64)
-|*name* +
-_optional_|string
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
 |===
 
 
@@ -83,22 +83,22 @@ _optional_|string
 [options="header", cols=".^3,.^11,.^4"]
 |===
 |Name|Description|Schema
-|*email* +
-_optional_||string
-|*firstName* +
-_optional_||string
-|*id* +
-_optional_||integer(int64)
-|*lastName* +
-_optional_||string
-|*password* +
-_optional_||string
-|*phone* +
-_optional_||string
-|*userStatus* +
-_optional_|User Status|integer(int32)
-|*username* +
-_optional_||string
+|**email** +
+__optional__||string
+|**firstName** +
+__optional__||string
+|**id** +
+__optional__||integer(int64)
+|**lastName** +
+__optional__||string
+|**password** +
+__optional__||string
+|**phone** +
+__optional__||string
+|**userStatus** +
+__optional__|User Status|integer(int32)
+|**username** +
+__optional__||string
 |===
 
 
