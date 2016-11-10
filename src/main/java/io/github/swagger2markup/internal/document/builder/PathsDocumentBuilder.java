@@ -176,17 +176,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     operationsGroupedByTag.get(tagName).forEach(this::buildOperation);
 
                 });
-                /*
-                for (String tagName : tagNames) {
-                    markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
-
-                    tagsMap.get(tagName)
-                            .filter(tag -> StringUtils.isNotBlank(tag.getDescription()))
-                            .map(tag -> markupDocBuilder.paragraph(tag.getDescription()));
-
-                    operationsGroupedByTag.get(tagName).forEach(this::buildOperation);
-                }
-                */
             }
         }
     }
@@ -217,7 +206,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         } else {
             pathOperations = new LinkedHashSet<>();
         }
-        paths.forEach((relativePath, path) -> path.getOperationMap().forEach((httpMethod, operation) -> {
+        paths.forEach((relativePath, path) -> PathUtils.getOperationMap(path).forEach((httpMethod, operation) -> {
             pathOperations.add(new PathOperation(httpMethod, getPath(relativePath), operation));
         }));
         return pathOperations;
