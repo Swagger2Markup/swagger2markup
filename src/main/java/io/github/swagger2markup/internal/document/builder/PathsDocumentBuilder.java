@@ -22,9 +22,11 @@ import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.component.ConsumesComponent;
+import io.github.swagger2markup.internal.component.MarkupComponent;
 import io.github.swagger2markup.internal.component.ProducesComponent;
+import io.github.swagger2markup.internal.component.TableComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.*;
@@ -455,18 +457,18 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
         if (CollectionUtils.isNotEmpty(filteredParameters)) {
             StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(TYPE_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "2");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "2");
             StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "3");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "3");
             StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "9")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "9")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
             StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(SCHEMA_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "4")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "4")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
             StringColumn.Builder defaultColumnBuilder = StringColumn.builder(StringColumnId.of(DEFAULT_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "2")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "2")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             for (Parameter parameter : filteredParameters) {
                 Type type = ParameterUtils.getType(parameter, globalContext.getSwagger().getDefinitions(), definitionDocumentResolver);
@@ -479,13 +481,12 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 defaultColumnBuilder.add(ParameterUtils.getDefaultValue(parameter).map(value -> literalText(Json.pretty(value))).orElse(""));
             }
 
-            Table table = Table.ofAll(
+            parametersBuilder = new TableComponent(new MarkupComponent.Context(config, parametersBuilder, extensionRegistry),
                     typeColumnBuilder.build(),
                     nameColumnBuilder.build(),
                     descriptionColumnBuilder.build(),
                     schemaColumnBuilder.build(),
-                    defaultColumnBuilder.build());
-            parametersBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
+                    defaultColumnBuilder.build()).render();
         }
         applyPathsDocumentExtension(new Context(Position.OPERATION_DESCRIPTION_END, parametersBuilder, operation));
         String parametersContent = parametersBuilder.toString();
@@ -633,12 +634,12 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
 
                 StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(TYPE_COLUMN))
-                        .putMetaData(Table.WIDTH_RATIO, "3");
+                        .putMetaData(TableComponent.WIDTH_RATIO, "3");
                 StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
-                        .putMetaData(Table.WIDTH_RATIO, "4");
+                        .putMetaData(TableComponent.WIDTH_RATIO, "4");
                 StringColumn.Builder scopeColumnBuilder = StringColumn.builder(StringColumnId.of(SCOPES_COLUMN))
-                        .putMetaData(Table.WIDTH_RATIO, "13")
-                        .putMetaData(Table.HEADER_COLUMN, "true");
+                        .putMetaData(TableComponent.WIDTH_RATIO, "13")
+                        .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
 
                 for (Map<String, List<String>> securityScheme : securitySchemes) {
@@ -655,12 +656,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     }
                 }
 
-                Table table = Table.ofAll(
+                securityBuilder = new TableComponent(new MarkupComponent.Context(config, securityBuilder, extensionRegistry),
                         typeColumnBuilder.build(),
                         nameColumnBuilder.build(),
-                        scopeColumnBuilder.build());
-
-                securityBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
+                        scopeColumnBuilder.build()).render();
             }
             applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_END, securityBuilder, operation));
             String securityContent = securityBuilder.toString();
@@ -694,13 +693,13 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
         applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
             StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(HTTP_CODE_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "2");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "2");
             StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "14")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "14")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
             StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(SCHEMA_COLUMN))
-                    .putMetaData(Table.WIDTH_RATIO, "4")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "4")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             Map<String, Response> sortedResponses = toSortedMap(responses, config.getResponseOrdering());
             sortedResponses.forEach((String responseName, Response response) -> {
@@ -753,12 +752,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 schemaColumnBuilder.add(schemaContent);
             });
 
-            Table table = Table.ofAll(
+            responsesBuilder= new TableComponent(new MarkupComponent.Context(config, responsesBuilder, extensionRegistry),
                     httpCodeColumnBuilder.build(),
                     descriptionColumnBuilder.build(),
-                    schemaColumnBuilder.build());
-
-            responsesBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
+                    schemaColumnBuilder.build()).render();
         }
         applyPathsDocumentExtension(new Context(Position.OPERATION_RESPONSES_END, responsesBuilder, operation));
         String responsesContent = responsesBuilder.toString();

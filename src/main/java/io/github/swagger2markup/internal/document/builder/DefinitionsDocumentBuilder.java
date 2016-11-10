@@ -17,59 +17,43 @@ package io.github.swagger2markup.internal.document.builder;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.component.DefinitionComponent;
+import io.github.swagger2markup.internal.component.Labels;
+import io.github.swagger2markup.internal.component.MarkupComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.internal.type.ObjectType;
-import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
-import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.ModelUtils;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Model;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * @author Robert Winkler
  */
 public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
-
-    /* Discriminator is only displayed for inheriting definitions */
-    private static final boolean ALWAYS_DISPLAY_DISCRIMINATOR = false;
     
     private static final String DEFINITIONS_ANCHOR = "definitions";
-    private final String DEFINITIONS;
-    private final String DISCRIMINATOR_COLUMN;
-    private final String POLYMORPHISM_COLUMN;
-    private final Map<ObjectTypePolymorphism.Nature, String> POLYMORPHISM_NATURE;
-    private final String TYPE_COLUMN;
+
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
+    private final DefinitionDocumentResolver definitionsDocumentResolver;
 
     public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
         super(context, extensionRegistry, outputPath);
-
-        final ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
-        DEFINITIONS = labels.getString("definitions");
-        POLYMORPHISM_COLUMN = labels.getString("polymorphism.column");
-        DISCRIMINATOR_COLUMN = labels.getString("polymorphism.discriminator");
-        POLYMORPHISM_NATURE = new HashMap<ObjectTypePolymorphism.Nature, String>() {{
-            put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getString("polymorphism.nature.COMPOSITION"));
-            put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getString("polymorphism.nature.INHERITANCE"));
-        }};
-        TYPE_COLUMN = labels.getString("type_column");
-
+        definitionsDocumentResolver = new DefinitionDocumentResolverFromDefinition(markupDocBuilder, config, outputPath);
         if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
@@ -91,13 +75,17 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     public MarkupDocument build() {
         if (MapUtils.isNotEmpty(globalContext.getSwagger().getDefinitions())) {
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
-            buildDefinitionsTitle(DEFINITIONS);
+            buildDefinitionsTitle(labels.getString(Labels.DEFINITIONS));
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
             buildDefinitionsSection();
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         }
         return new MarkupDocument(markupDocBuilder);
+    }
+
+    private void buildDefinitionsTitle(String title) {
+        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, DEFINITIONS_ANCHOR);
     }
 
     private void buildDefinitionsSection() {
@@ -108,10 +96,6 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
                 buildDefinition(definitionName, model);
             }
         });
-    }
-
-    private void buildDefinitionsTitle(String title) {
-        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, DEFINITIONS_ANCHOR);
     }
 
     /**
@@ -177,16 +161,16 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      *
      * @param definitionName the name of the definition
      * @param model          the Swagger Model of the definition
-     * @param docBuilder     the docbuilder do use for output
+     * @param markupDocBuilder  the markupDocBuilder do use for output
      */
-    private void buildDefinition(String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEFORE, docBuilder, definitionName, model));
-        buildDefinitionTitle(definitionName, definitionName, docBuilder);
-        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, docBuilder, definitionName, model));
-        buildDescriptionParagraph(model, docBuilder);
-        inlineDefinitions(typeSection(definitionName, model, docBuilder), definitionName, docBuilder);
-        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, docBuilder, definitionName, model));
-        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_AFTER, docBuilder, definitionName, model));
+    private void buildDefinition(String definitionName, Model model, MarkupDocBuilder markupDocBuilder) {
+        new DefinitionComponent(
+                new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry),
+                globalContext.getSwagger().getDefinitions(),
+                definitionName,
+                model,
+                definitionsDocumentResolver,
+                2).render();
     }
 
     /**
@@ -209,118 +193,5 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
         docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
     }
-    
 
-    /**
-     * Builds the type informations of a definition
-     *
-     * @param definitionName name of the definition to display
-     * @param model          model of the definition to display
-     * @param docBuilder     the docbuilder do use for output
-     * @return a list of inlined types.
-     */
-    private List<ObjectType> typeSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
-        List<ObjectType> inlineDefinitions = new ArrayList<>();
-        Type modelType = ModelUtils.resolveRefType(ModelUtils.getType(model, globalContext.getSwagger().getDefinitions(), new DefinitionDocumentResolverFromDefinition()));
-
-        if (!(modelType instanceof ObjectType)) {
-            modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", inlineDefinitions);
-        }
-        
-        if (modelType instanceof ObjectType) {
-            ObjectType objectType = (ObjectType) modelType;
-            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
-            switch (objectType.getPolymorphism().getNature()) {
-                case COMPOSITION:
-                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
-                    break;
-                case INHERITANCE:
-                    typeInfos.italicText(POLYMORPHISM_COLUMN).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
-                    typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
-                    break;
-                case NONE:
-                    if (ALWAYS_DISPLAY_DISCRIMINATOR) {
-                        if (StringUtils.isNotBlank(objectType.getPolymorphism().getDiscriminator()))
-                            typeInfos.italicText(DISCRIMINATOR_COLUMN).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
-                    }
-
-                default: break;
-            }
-            
-            String typeInfosString = typeInfos.toString();
-            if (StringUtils.isNotBlank(typeInfosString))
-                docBuilder.paragraph(typeInfosString, true);
-
-            inlineDefinitions.addAll(buildPropertiesTable(((ObjectType) modelType).getProperties(), definitionName, new DefinitionDocumentResolverFromDefinition(), docBuilder));
-        } else if (modelType != null) {
-            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
-            typeInfos.italicText(TYPE_COLUMN).textLine(COLON + modelType.displaySchema(docBuilder));
-
-            docBuilder.paragraph(typeInfos.toString());
-        }
-
-        return inlineDefinitions;
-    }
-    
-    private void buildDescriptionParagraph(Model model, MarkupDocBuilder docBuilder) {
-        modelDescription(model, docBuilder);
-    }
-
-    private void modelDescription(Model model, MarkupDocBuilder docBuilder) {
-        String description = model.getDescription();
-        if (isNotBlank(description)) {
-            buildDescriptionParagraph(description, docBuilder);
-        }
-    }
-
-    /**
-     * Builds the title of an inline schema.
-     * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.
-     *
-     * @param title      inline schema title
-     * @param anchor     inline schema anchor
-     * @param docBuilder the docbuilder do use for output
-     */
-    private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        docBuilder.anchor(anchor, null);
-        docBuilder.newLine();
-        docBuilder.boldTextLine(title);
-    }
-
-    /**
-     * Builds inline schema definitions
-     *
-     * @param definitions  all inline definitions to display
-     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param docBuilder   the docbuilder do use for output
-     */
-    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, MarkupDocBuilder docBuilder) {
-        if (CollectionUtils.isNotEmpty(definitions)) {
-            for (ObjectType definition : definitions) {
-                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, new DefinitionDocumentResolverFromDefinition(), docBuilder);
-                for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
-            }
-        }
-    }
-
-    /**
-     * Overrides definition document resolver functor for inter-document cross-references from definitions files.
-     * This implementation simplify the path between two definitions because all definitions are in the same path.
-     */
-    class DefinitionDocumentResolverFromDefinition extends DefinitionDocumentResolverDefault {
-
-        public DefinitionDocumentResolverFromDefinition() {
-        }
-
-        public String apply(String definitionName) {
-            String defaultResolver = super.apply(definitionName);
-
-            if (defaultResolver != null && config.isSeparatedDefinitionsEnabled())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(normalizeName(definitionName));
-            else
-                return defaultResolver;
-        }
-    }
 }

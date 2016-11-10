@@ -18,8 +18,8 @@ package io.github.swagger2markup.internal.component;
 public class Labels {
 
     public static final String DEFAULT_COLUMN = "default_column";
-    public static final String MAXLENGTH_COLUMN = "minlength_column";
-    public static final String MINLENGTH_COLUMN = "maxlength_column";
+    public static final String MAXLENGTH_COLUMN = "maxlength_column";
+    public static final String MINLENGTH_COLUMN = "minlength_column";
     public static final String LENGTH_COLUMN = "length_column";
     public static final String PATTERN_COLUMN = "pattern_column";
     public static final String MINVALUE_COLUMN = "minvalue_column";
@@ -27,7 +27,7 @@ public class Labels {
     public static final String MAXVALUE_COLUMN = "maxvalue_column";
     public static final String MAXVALUE_EXCLUSIVE_COLUMN = "maxvalue_exclusive_column";
     public static final String EXAMPLE_COLUMN = "example_column";
-    public static final String SCHEMA_COLUMN = "example_column";
+    public static final String SCHEMA_COLUMN = "schema_column";
     public static final String NAME_COLUMN = "name_column";
     public static final String DESCRIPTION_COLUMN = "description_column";
     public static final String SCOPES_COLUMN = "scopes_column";
@@ -39,6 +39,7 @@ public class Labels {
     public static final String FLAGS_COLUMN = "flags.column";
     public static final String FLAGS_REQUIRED = "flags.required";
     public static final String FLAGS_OPTIONAL = "flags.optional";
+    public static final String FLAGS_READ_ONLY = "flags.read_only";
 
     // Overview Document
     public static final String CONTACT_INFORMATION ="contact_information";
@@ -64,4 +65,13 @@ public class Labels {
     public static final String FLOW = "security_flow";
     public static final String AUTHORIZATION_URL = "security_authorizationUrl";
     public static final String TOKEN_URL = "security_tokenUrl";
+
+    //Definitions Document
+    public static final String DEFINITIONS = "definitions";
+    public static final String POLYMORPHISM_COLUMN = "polymorphism.column";
+    public static final String POLYMORPHISM_DISCRIMINATOR_COLUMN = "polymorphism.discriminator";
+    public static final String TYPE_COLUMN = "type_column";
+    public static final String POLYMORPHISM_NATURE_COMPOSITION = "polymorphism.nature.COMPOSITION";
+    public static final String POLYMORPHISM_NATURE_INHERITANCE = "polymorphism.nature.INHERITANCE";
+
 }

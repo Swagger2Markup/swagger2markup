@@ -1,0 +1,11 @@
+
+[options="header", cols=".^0,.^0"]
+|===
+|type|name
+|type1|name1
+|type2|
+|type3|name3
+|===
+
+
+

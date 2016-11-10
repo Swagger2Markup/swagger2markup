@@ -20,10 +20,11 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.internal.component.MarkupComponent;
+import io.github.swagger2markup.internal.component.TableComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.PropertyWrapper;
-import io.github.swagger2markup.internal.utils.Table;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 import io.github.swagger2markup.utils.IOUtils;
@@ -197,13 +198,13 @@ abstract class MarkupDocumentBuilder {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
 
         StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
-                .putMetaData(Table.WIDTH_RATIO, "3");
+                .putMetaData(TableComponent.WIDTH_RATIO, "3");
         StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(DESCRIPTION_COLUMN))
-                .putMetaData(Table.WIDTH_RATIO, "11")
-                .putMetaData(Table.HEADER_COLUMN, "true");
+                .putMetaData(TableComponent.WIDTH_RATIO, "11")
+                .putMetaData(TableComponent.HEADER_COLUMN, "true");
         StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(SCHEMA_COLUMN))
-                .putMetaData(Table.WIDTH_RATIO, "4")
-                .putMetaData(Table.HEADER_COLUMN, "true");
+                .putMetaData(TableComponent.WIDTH_RATIO, "4")
+                .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
         if (MapUtils.isNotEmpty(properties)) {
             Map<String, Property> sortedProperties = toSortedMap(properties, config.getPropertyOrdering());
@@ -313,11 +314,10 @@ abstract class MarkupDocumentBuilder {
                 schemaColumnBuilder.add(propertyType.displaySchema(docBuilder));
             });
 
-            Table table = Table.ofAll(
+            new TableComponent(new MarkupComponent.Context(config, docBuilder, extensionRegistry),
                     nameColumnBuilder.build(),
                     descriptionColumnBuilder.build(),
-                    schemaColumnBuilder.build());
-            docBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
+                    schemaColumnBuilder.build()).render();
         } else {
             docBuilder.textLine(NO_CONTENT);
         }

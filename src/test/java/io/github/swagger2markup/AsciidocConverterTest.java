@@ -76,7 +76,7 @@ public class AsciidocConverterTest {
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/default").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversion.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testToFolder.html");
     }
 
     @Test
@@ -272,7 +272,7 @@ public class AsciidocConverterTest {
     }
 	
 	@Test
-    public void testSwagger2AsciiDocConversionWithGeneratedRecursiveExamples() throws IOException, URISyntaxException {
+    public void testWithGeneratedRecursiveExamples() throws IOException, URISyntaxException {
         // Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_recursion.json"));
         Path outputDirectory = Paths.get("build/test/asciidoc/generated_recursion_examples");
@@ -287,7 +287,7 @@ public class AsciidocConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/generated_recursion_examples").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversionWithGeneratedRecursiveExamples.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithGeneratedRecursiveExamples.html");
     }
 
     @Test

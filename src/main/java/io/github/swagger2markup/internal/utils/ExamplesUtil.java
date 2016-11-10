@@ -16,7 +16,7 @@
 
 package io.github.swagger2markup.internal.utils;
 
-import io.github.swagger2markup.internal.type.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;

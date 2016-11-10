@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.github.swagger2markup.internal.type;
+package io.github.swagger2markup.internal.resolver;
 
 import java.util.function.Function;
 

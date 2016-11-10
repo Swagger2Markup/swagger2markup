@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.utils;
+package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.DataFrame;
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import javaslang.collection.Array;
@@ -27,19 +28,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class Table {
+public class TableComponent extends MarkupComponent{
 
     public static final String WIDTH_RATIO = "widthRatio";
     public static final String HEADER_COLUMN = "headerColumn";
 
-    private static final Logger LOG = LoggerFactory.getLogger(Table.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TableComponent.class);
 
     private final DataFrame dataFrame;
     private final java.util.List<java.util.List<String>> cells;
     private final java.util.List<MarkupTableColumn> columnSpecs;
 
-    private Table(DataFrame dataFrame) {
-        this.dataFrame = dataFrame;
+    public TableComponent(Context context, StringColumn... columns){
+        super(context);
+        this.dataFrame = DataFrame.ofAll(List.of(columns).filter(TableComponent::isNotBlank));
 
         columnSpecs = dataFrame.getColumns().map(column -> {
                     Integer widthRatio = Integer.valueOf(column.getMetaData().get(WIDTH_RATIO).getOrElse("0"));
@@ -57,27 +59,20 @@ public class Table {
                 .map(rowNumber -> columnValues.map(values -> values.get(rowNumber)).toJavaList()).toJavaList();
     }
 
-    public static Table ofAll(StringColumn... columns) {
-        return new Table(DataFrame.ofAll(List.of(columns).filter(Table::isNotBlank)));
-    }
-
     public static boolean isNotBlank(StringColumn column) {
         return !column.getValues().filter(StringUtils::isNotBlank).isEmpty();
     }
 
-    public int getColumnCount() {
+    int getColumnCount() {
         return dataFrame.getColumnCount();
     }
 
-    public int getRowCount() {
+    int getRowCount() {
         return dataFrame.getRowCount();
     }
 
-    public java.util.List<MarkupTableColumn> getColumnSpecs(){
-        return columnSpecs;
-    }
-
-    public java.util.List<java.util.List<String>> getCells() {
-        return cells;
+    @Override
+    public MarkupDocBuilder render() {
+        return markupDocBuilder.tableWithColumnSpecs(columnSpecs, cells);
     }
 }

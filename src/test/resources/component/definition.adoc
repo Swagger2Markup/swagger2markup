@@ -1,0 +1,17 @@
+
+[[_testname]]
+=== TestName
+Blablabla _blabla_
+
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**IntProperty** +
+__optional__|integer(int32)
+|**StringProperty** +
+__required__|string
+|===
+
+
+

@@ -17,7 +17,6 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
-import io.github.swagger2markup.internal.utils.Table;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
@@ -55,7 +54,7 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent {
         applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_BEGIN, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
         String description = securitySchemeDefinition.getDescription();
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(swaggerMarkupDescription(description));
+            markupDocBuilder.paragraph(markupDescription(description));
         }
         buildSecurityScheme(securitySchemeDefinition);
         applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_END, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
@@ -86,11 +85,11 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent {
                 paragraphBuilder.italicText(labels.getString(TOKEN_URL)).textLine(COLON + oauth2Scheme.getTokenUrl());
             }
             StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(NAME_COLUMN)))
-                    .putMetaData(Table.WIDTH_RATIO, "3")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "3")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
             StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(DESCRIPTION_COLUMN)))
-                    .putMetaData(Table.WIDTH_RATIO, "17")
-                    .putMetaData(Table.HEADER_COLUMN, "true");
+                    .putMetaData(TableComponent.WIDTH_RATIO, "17")
+                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             if(oauth2Scheme.getScopes() != null) {
                 for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
@@ -99,12 +98,10 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent {
                 }
             }
 
-            Table table = Table.ofAll(
-                    nameColumnBuilder.build(),
-                    descriptionColumnBuilder.build());
-
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
-            markupDocBuilder.tableWithColumnSpecs(table.getColumnSpecs(), table.getCells());
+            markupDocBuilder = new TableComponent(new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry),
+                    nameColumnBuilder.build(),
+                    descriptionColumnBuilder.build()).render();
         } else {
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }

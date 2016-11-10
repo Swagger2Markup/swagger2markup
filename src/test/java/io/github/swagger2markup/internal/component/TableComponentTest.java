@@ -13,20 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.utils;
+package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.assertions.DiffUtils;
+import org.apache.commons.io.FileUtils;
+import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TableTest {
+public class TableComponentTest extends AbstractComponentTest{
+
+    private static final String COMPONENT_NAME = "table";
+    private Path outputDirectory;
+
+    @Before
+    public void setUp(){
+        outputDirectory = getOutputFile(COMPONENT_NAME);
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+    }
 
     @Test
-    public void testTable(){
+    public void testTable() throws URISyntaxException {
         StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of("type"));
         typeColumnBuilder.add("type1").add("type2").add("type3");
 
@@ -37,16 +51,17 @@ public class TableTest {
         descriptionColumnBuilder.add("").add("").add("");
 
 
-        Table table = Table.ofAll(typeColumnBuilder.build(), nameColumnBuilder.build(), descriptionColumnBuilder.build());
-        assertThat(table.getColumnCount()).isEqualTo(2);
-        assertThat(table.getRowCount()).isEqualTo(3);
+        TableComponent tableComponent = new TableComponent(getComponentContext(),
+                typeColumnBuilder.build(),
+                nameColumnBuilder.build(),
+                descriptionColumnBuilder.build());
+        tableComponent.render().writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
-        List<List<String>> cells = table.getCells();
-        assertThat(cells).hasSize(3);
-        assertThat(cells.get(0)).hasSize(2);
-        assertThat(cells.get(1)).hasSize(2);
+        Path expectedFile = getExpectedFile(COMPONENT_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
 
-        assertThat(table.getColumnSpecs()).hasSize(2);
+        assertThat(tableComponent.getColumnCount()).isEqualTo(2);
+        assertThat(tableComponent.getRowCount()).isEqualTo(3);
     }
 
 
