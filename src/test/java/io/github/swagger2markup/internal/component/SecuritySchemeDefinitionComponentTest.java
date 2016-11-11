@@ -15,10 +15,13 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.AsciidocConverterTest;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.swagger.models.auth.OAuth2Definition;
+import io.swagger.models.Swagger;
+import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +29,7 @@ import org.junit.Test;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest{
@@ -41,14 +45,14 @@ public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest
 
     @Test
     public void testSecuritySchemeDefinitionComponent() throws URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
+        Swagger swagger = converter.getContext().getSwagger();
 
-        String securitySchemeDefinitionName = "SecuritySchemeDefinitionName";
-        OAuth2Definition securitySchemeDefinition = new OAuth2Definition();
-        securitySchemeDefinition.implicit("http://petstore.swagger.io/api/oauth/dialog");
-        securitySchemeDefinition.setDescription("Bla bla *blabla*");
-        securitySchemeDefinition.addScope("write_pets", "modify pets in your account");
-        securitySchemeDefinition.addScope("read_pets", "read pets in your account");
-        MarkupDocBuilder markupDocBuilder = new SecuritySchemeDefinitionComponent(getComponentContext(), securitySchemeDefinitionName, securitySchemeDefinition, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+        SecuritySchemeDefinition securitySchemeDefinition = swagger.getSecurityDefinitions().get("petstore_auth");
+
+        MarkupDocBuilder markupDocBuilder = new SecuritySchemeDefinitionComponent(getComponentContext(), "petstore_auth", securitySchemeDefinition, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

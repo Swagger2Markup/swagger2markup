@@ -27,7 +27,6 @@ import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.PropertyWrapper;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
-import io.github.swagger2markup.utils.IOUtils;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.MapUtils;
@@ -35,7 +34,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
@@ -43,7 +41,6 @@ import java.util.*;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -352,24 +349,6 @@ abstract class MarkupDocumentBuilder {
     void buildDescriptionParagraph(String description, MarkupDocBuilder docBuilder) {
         if (isNotBlank(description)) {
             docBuilder.paragraph(swaggerMarkupDescription(description));
-        }
-    }
-
-    /**
-     * Default {@code DefinitionDocumentResolver} functor
-     */
-    class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
-
-        DefinitionDocumentResolverDefault() {
-        }
-
-        public String apply(String definitionName) {
-            if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
-                return null;
-            else if (config.isSeparatedDefinitionsEnabled())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(IOUtils.normalizeName(definitionName))).getPath();
-            else
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
         }
     }
 }

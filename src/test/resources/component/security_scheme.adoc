@@ -1,0 +1,11 @@
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
+|===
+
+
+

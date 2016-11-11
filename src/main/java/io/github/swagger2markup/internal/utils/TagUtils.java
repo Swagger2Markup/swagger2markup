@@ -57,7 +57,7 @@ public class TagUtils {
      * @param operationOrdering comparator for operations, for a given tag
      * @return Operations grouped by Tag
      */
-    public static Multimap<String, PathOperation> groupOperationsByTag(Set<PathOperation> allOperations, Comparator<PathOperation> operationOrdering) {
+    public static Multimap<String, PathOperation> groupOperationsByTag(List<PathOperation> allOperations, Comparator<PathOperation> operationOrdering) {
 
         Multimap<String, PathOperation> operationsGroupedByTag;
         if (operationOrdering == null){

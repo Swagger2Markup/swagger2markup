@@ -1,16 +1,22 @@
 
-[[_testname]]
-=== TestName
-Blablabla _blabla_
+[[_pet]]
+=== Pet
 
-
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3,.^11,.^4"]
 |===
-|Name|Schema
-|**IntProperty** +
-__optional__|integer(int32)
-|**StringProperty** +
-__required__|string
+|Name|Description|Schema
+|**category** +
+__optional__||<<_category,Category>>
+|**id** +
+__optional__||integer(int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**photoUrls** +
+__required__||< string > array
+|**status** +
+__optional__|pet status in the store,|enum (Dead, Alive)
+|**tags** +
+__optional__||< <<_tag,Tag>> > array
 |===
 
 

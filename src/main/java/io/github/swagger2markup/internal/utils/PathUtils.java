@@ -15,12 +15,15 @@
  */
 package io.github.swagger2markup.internal.utils;
 
+import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
+
+import static com.sun.xml.internal.xsom.impl.UName.comparator;
 
 public class PathUtils {
 
@@ -31,7 +34,7 @@ public class PathUtils {
      *
      * @return the operations of a path as a map
      */
-    public static Map<HttpMethod, Operation> getOperationMap(Path path) {
+    private static Map<HttpMethod, Operation> getOperationMap(Path path) {
         Map<HttpMethod, Operation> result = new LinkedHashMap<>();
 
         if (path.getGet() != null) {
@@ -57,5 +60,27 @@ public class PathUtils {
         }
 
         return result;
+    }
+
+    /**
+     * Converts the Swagger paths into a list of PathOperations.
+     *
+     * @param paths the Swagger paths
+     * @param paths the basePath of all paths
+     * @param comparator the comparator to use.
+     *
+     * @return the path operations
+     */
+    public static List<PathOperation> toPathOperationsList(Map<String, Path> paths,
+                                                           String basePath,
+                                                           Comparator<PathOperation> comparator) {
+        List<PathOperation> pathOperations = new ArrayList<>();
+        paths.forEach((relativePath, path) -> PathUtils.getOperationMap(path).forEach((httpMethod, operation) -> {
+            pathOperations.add(new PathOperation(httpMethod, basePath + relativePath, operation));
+        }));
+        if (comparator != null) {
+            Collections.sort(pathOperations, comparator);
+        }
+        return pathOperations;
     }
 }

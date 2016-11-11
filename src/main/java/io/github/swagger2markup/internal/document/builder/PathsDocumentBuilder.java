@@ -16,17 +16,15 @@
 package io.github.swagger2markup.internal.document.builder;
 
 import ch.netzwerg.paleo.StringColumn;
-import com.google.common.base.Joiner;
 import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
-import io.github.swagger2markup.internal.component.ConsumesComponent;
-import io.github.swagger2markup.internal.component.MarkupComponent;
-import io.github.swagger2markup.internal.component.ProducesComponent;
-import io.github.swagger2markup.internal.component.TableComponent;
+import io.github.swagger2markup.internal.component.*;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
+import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.*;
@@ -34,11 +32,9 @@ import io.github.swagger2markup.markup.builder.MarkupAdmonition;
 import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
-import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.Path;
 import io.swagger.models.Response;
 import io.swagger.models.Tag;
-import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
@@ -92,7 +88,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, java.nio.file.Path outputPath) {
         super(globalContext, extensionRegistry, outputPath);
 
-        definitionDocumentResolver = new DefinitionDocumentResolverFromOperation();
+        definitionDocumentResolver = new DefinitionDocumentResolverFromOperation(markupDocBuilder, config, outputPath);
 
         ResourceBundle labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         RESPONSE = labels.getString("response");
@@ -158,7 +154,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param paths the Swagger paths
      */
     private void buildsPathsSection(Map<String, Path> paths) {
-        Set<PathOperation> pathOperations = toPathOperationsSet(paths, config.getOperationOrdering());
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getBasePath(), config.getOperationOrdering());
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 pathOperations.forEach(this::buildOperation);
@@ -194,37 +190,15 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     }
 
     /**
-     * Converts the Swagger paths into a list of PathOperations.
+     * Returns the basePath which should be prepended to the relative path
      *
-     * @param paths the Swagger paths
-     * @param comparator the comparator to use.
-     *
-     * @return the path operations
-     */
-    private Set<PathOperation> toPathOperationsSet(Map<String, Path> paths, Comparator<PathOperation> comparator) {
-        Set<PathOperation> pathOperations;
-        if (comparator != null) {
-            pathOperations = new TreeSet<>(comparator);
-        } else {
-            pathOperations = new LinkedHashSet<>();
-        }
-        paths.forEach((relativePath, path) -> PathUtils.getOperationMap(path).forEach((httpMethod, operation) -> {
-            pathOperations.add(new PathOperation(httpMethod, getPath(relativePath), operation));
-        }));
-        return pathOperations;
-    }
-
-    /**
-     * Prepends the basePath to the relative path, if configured
-     *
-     * @param relativePath the relative operation path
      * @return either the relative or the full path
      */
-    private String getPath(String relativePath) {
+    private String getBasePath() {
         if(config.isBasePathPrefixEnabled()){
-            return StringUtils.defaultString(globalContext.getSwagger().getBasePath()) + relativePath;
+            return StringUtils.defaultString(globalContext.getSwagger().getBasePath());
         }
-        return relativePath;
+        return "";
     }
 
     private void buildPathsTitle(String title) {
@@ -237,9 +211,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @param context context
      */
     private void applyPathsDocumentExtension(Context context) {
-        for (PathsDocumentExtension extension : extensionRegistry.getPathsDocumentExtensions()) {
-            extension.apply(context);
-        }
+        extensionRegistry.getPathsDocumentExtensions().forEach(extension -> extension.apply(context));
     }
 
     /**
@@ -567,7 +539,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildConsumesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<String> consumes = operation.getOperation().getConsumes();
         if (CollectionUtils.isNotEmpty(consumes)) {
-            new ConsumesComponent(componentContext, consumes, getSectionTitleLevel()).render();
+            new ConsumesComponent(new MarkupComponent.Context(config, docBuilder, extensionRegistry),
+                    consumes,
+                    getSectionTitleLevel())
+                    .render();
         }
 
     }
@@ -575,7 +550,10 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildProducesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         List<String> produces = operation.getOperation().getProduces();
         if (CollectionUtils.isNotEmpty(produces)) {
-            new ProducesComponent(componentContext, produces, getSectionTitleLevel()).render();
+            new ProducesComponent(new MarkupComponent.Context(config, docBuilder, extensionRegistry),
+                    produces,
+                    getSectionTitleLevel())
+                    .render();
         }
     }
 
@@ -625,64 +603,14 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildSecuritySchemeSection(PathOperation operation, MarkupDocBuilder docBuilder) {
         if (config.isPathSecuritySectionEnabled()) {
-            List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
-
-            MarkupDocBuilder securityBuilder = copyMarkupDocBuilder();
-            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
-            if (CollectionUtils.isNotEmpty(securitySchemes)) {
-
-                Map<String, SecuritySchemeDefinition> securityDefinitions = globalContext.getSwagger().getSecurityDefinitions();
-
-                StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(TYPE_COLUMN))
-                        .putMetaData(TableComponent.WIDTH_RATIO, "3");
-                StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(NAME_COLUMN))
-                        .putMetaData(TableComponent.WIDTH_RATIO, "4");
-                StringColumn.Builder scopeColumnBuilder = StringColumn.builder(StringColumnId.of(SCOPES_COLUMN))
-                        .putMetaData(TableComponent.WIDTH_RATIO, "13")
-                        .putMetaData(TableComponent.HEADER_COLUMN, "true");
-
-
-                for (Map<String, List<String>> securityScheme : securitySchemes) {
-                    for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
-                        String securityKey = securityEntry.getKey();
-                        String type = UNKNOWN;
-                        if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
-                            type = securityDefinitions.get(securityKey).getType();
-                        }
-
-                        typeColumnBuilder.add(boldText(type));
-                        nameColumnBuilder.add(boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver(), securityKey, securityKey).toString()));
-                        scopeColumnBuilder.add(Joiner.on(",").join(securityEntry.getValue()));
-                    }
-                }
-
-                securityBuilder = new TableComponent(new MarkupComponent.Context(config, securityBuilder, extensionRegistry),
-                        typeColumnBuilder.build(),
-                        nameColumnBuilder.build(),
-                        scopeColumnBuilder.build()).render();
-            }
-            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_END, securityBuilder, operation));
-            String securityContent = securityBuilder.toString();
-
-            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_BEFORE, docBuilder, operation));
-            if (isNotBlank(securityContent)) {
-                buildSectionTitle(SECURITY, docBuilder);
-                docBuilder.text(securityContent);
-            }
-            applyPathsDocumentExtension(new Context(Position.OPERATION_SECURITY_AFTER, docBuilder, operation));
+            new SecuritySchemeComponent(
+                    new MarkupComponent.Context(config, docBuilder, extensionRegistry),
+                    operation,
+                    globalContext.getSwagger().getSecurityDefinitions(),
+                    new SecurityDocumentResolver(docBuilder, config, outputPath),
+                    getSectionTitleLevel()
+            ).render();
         }
-    }
-
-    /**
-     * Resolve Security document for use in cross-references.
-     *
-     * @return document or null if cross-reference is not inter-document
-     */
-    private String securityDocumentResolver() {
-        if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
-            return null;
-        else
-            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());
     }
 
     private List<ObjectType> buildResponsesSection(PathOperation operation, MarkupDocBuilder docBuilder) {
@@ -706,7 +634,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                 String schemaContent = NO_CONTENT;
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
-                    Type type = new PropertyWrapper(property).getType(new DefinitionDocumentResolverFromOperation());
+                    Type type = new PropertyWrapper(property).getType(definitionDocumentResolver);
 
                     type = createInlineType(type, RESPONSE + " " + responseName, operation.getId() + " " + RESPONSE + " " + responseName, inlineDefinitions);
 
@@ -796,30 +724,11 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             for (ObjectType definition : definitions) {
                 addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
 
-                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, new DefinitionDocumentResolverFromOperation(), docBuilder);
+                List<ObjectType> localDefinitions = buildPropertiesTable(definition.getProperties(), uniquePrefix, definitionDocumentResolver, docBuilder);
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
             }
         }
 
-    }
-
-    /**
-     * Overrides definition document resolver functor for inter-document cross-references from operations files.
-     * This implementation adapt the relative paths to definitions files
-     */
-    class DefinitionDocumentResolverFromOperation extends DefinitionDocumentResolverDefault {
-
-        public DefinitionDocumentResolverFromOperation() {
-        }
-
-        public String apply(String definitionName) {
-            String defaultResolver = super.apply(definitionName);
-
-            if (defaultResolver != null && config.isSeparatedOperationsEnabled())
-                return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File("..", defaultResolver).getPath();
-            else
-                return defaultResolver;
-        }
     }
 }

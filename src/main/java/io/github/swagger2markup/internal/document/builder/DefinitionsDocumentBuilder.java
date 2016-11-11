@@ -22,6 +22,7 @@ import io.github.swagger2markup.internal.component.Labels;
 import io.github.swagger2markup.internal.component.MarkupComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverDefault;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Model;
@@ -180,7 +181,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param docBuilder     the docbuilder do use for output
      */
     private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
-        buildDefinitionTitle(copyMarkupDocBuilder().crossReference(new DefinitionDocumentResolverDefault().apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+        buildDefinitionTitle(copyMarkupDocBuilder().crossReference(new DefinitionDocumentResolverDefault(markupDocBuilder, config, outputPath).apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 
     /**

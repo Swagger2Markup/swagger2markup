@@ -37,21 +37,33 @@ public abstract class MarkupComponent {
     Swagger2MarkupExtensionRegistry extensionRegistry;
 
     MarkupComponent(Context context){
-        this.config = context.config;
-        this.markupDocBuilder = context.markupDocBuilder;
+        this.config = context.getConfig();
+        this.markupDocBuilder = context.getMarkupDocBuilder();
         this.labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
-        this.extensionRegistry = context.extensionRegistry;
+        this.extensionRegistry = context.getExtensionRegistry();
     }
 
     public static class Context {
-        final Swagger2MarkupConfig config;
-        final MarkupDocBuilder markupDocBuilder;
-        final Swagger2MarkupExtensionRegistry extensionRegistry;
+        private final Swagger2MarkupConfig config;
+        private final MarkupDocBuilder markupDocBuilder;
+        private final Swagger2MarkupExtensionRegistry extensionRegistry;
 
         public Context(Swagger2MarkupConfig config, MarkupDocBuilder markupDocBuilder, Swagger2MarkupExtensionRegistry extensionRegistry){
             this.config = config;
             this.markupDocBuilder = markupDocBuilder;
             this.extensionRegistry = extensionRegistry;
+        }
+
+        public Swagger2MarkupConfig getConfig() {
+            return config;
+        }
+
+        public MarkupDocBuilder getMarkupDocBuilder() {
+            return markupDocBuilder;
+        }
+
+        public Swagger2MarkupExtensionRegistry getExtensionRegistry() {
+            return extensionRegistry;
         }
     }
 

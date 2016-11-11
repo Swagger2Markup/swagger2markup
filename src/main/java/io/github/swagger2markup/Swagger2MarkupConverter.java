@@ -60,7 +60,7 @@ public class Swagger2MarkupConverter {
      *
      * @return the global Context
      */
-    Context getContext(){
+    public Context getContext(){
         return context;
     }
 
