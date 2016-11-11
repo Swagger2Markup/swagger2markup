@@ -1,0 +1,12 @@
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
+|===
+
+
+

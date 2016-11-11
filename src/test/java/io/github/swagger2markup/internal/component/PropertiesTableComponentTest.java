@@ -19,6 +19,7 @@ import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
+import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
@@ -30,11 +31,13 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class DefinitionComponentTest extends AbstractComponentTest{
+public class PropertiesTableComponentTest extends AbstractComponentTest{
 
-    private static final String COMPONENT_NAME = "definition";
+    private static final String COMPONENT_NAME = "properties_table";
     private Path outputDirectory;
 
     @Before
@@ -44,7 +47,7 @@ public class DefinitionComponentTest extends AbstractComponentTest{
     }
 
     @Test
-    public void testDefinitionComponent() throws URISyntaxException {
+    public void testPropertiesTableComponent() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
@@ -54,13 +57,13 @@ public class DefinitionComponentTest extends AbstractComponentTest{
 
         MarkupComponent.Context context = getComponentContext();
 
+        List<ObjectType> localDefinitions = new ArrayList<>();
         //When
-        MarkupDocBuilder markupDocBuilder = new DefinitionComponent(context,
-                swagger.getDefinitions(),
+        MarkupDocBuilder markupDocBuilder = new PropertiesTableComponent(context,
+                petModel.getProperties(),
                 "Pet",
-                petModel,
                 new DefinitionDocumentResolverFromDefinition(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                2).render();
+                localDefinitions).render();
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         //Then

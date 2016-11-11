@@ -73,5 +73,20 @@ public class Labels {
     public static final String TYPE_COLUMN = "type_column";
     public static final String POLYMORPHISM_NATURE_COMPOSITION = "polymorphism.nature.COMPOSITION";
     public static final String POLYMORPHISM_NATURE_INHERITANCE = "polymorphism.nature.INHERITANCE";
+    
+    //Paths Document
+    public static final String RESPONSE = "response";
+    public static final String REQUEST = "request";
+    public static final String PATHS = "paths";
+    public static final String RESOURCES = "resources";
+    public static final String PARAMETERS = "parameters";
+    public static final String BODY_PARAMETER = "body_parameter";
+    public static final String RESPONSES = "responses";
+    public static final String HEADERS_COLUMN = "headers_column";
+    public static final String EXAMPLE_REQUEST = "example_request";
+    public static final String EXAMPLE_RESPONSE = "example_response";
+    public static final String HTTP_CODE_COLUMN = "http_code_column";
+    public static final String DEPRECATED_OPERATION = "operation.deprecated";
+    public static final String UNKNOWN = "unknown";
 
 }

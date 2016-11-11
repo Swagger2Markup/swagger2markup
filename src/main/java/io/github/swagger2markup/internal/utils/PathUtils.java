@@ -19,11 +19,8 @@ import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
-
-import static com.sun.xml.internal.xsom.impl.UName.comparator;
 
 public class PathUtils {
 
@@ -75,12 +72,27 @@ public class PathUtils {
                                                            String basePath,
                                                            Comparator<PathOperation> comparator) {
         List<PathOperation> pathOperations = new ArrayList<>();
-        paths.forEach((relativePath, path) -> PathUtils.getOperationMap(path).forEach((httpMethod, operation) -> {
-            pathOperations.add(new PathOperation(httpMethod, basePath + relativePath, operation));
-        }));
+
+        paths.forEach((relativePath, path) ->
+                pathOperations.addAll(toPathOperationsList(basePath + relativePath, path)));
         if (comparator != null) {
             Collections.sort(pathOperations, comparator);
         }
+        return pathOperations;
+    }
+
+    /**
+     * Converts a Swagger path into a PathOperation.
+     *
+     * @param path the  path
+     * @param pathModel the Swagger Path model
+     *
+     * @return the path operations
+     */
+    public static List<PathOperation> toPathOperationsList(String path, Path pathModel) {
+        List<PathOperation> pathOperations = new ArrayList<>();
+        getOperationMap(pathModel).forEach((httpMethod, operation) ->
+                pathOperations.add(new PathOperation(httpMethod, path, operation)));
         return pathOperations;
     }
 }

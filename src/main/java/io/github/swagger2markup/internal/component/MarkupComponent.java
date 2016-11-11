@@ -31,12 +31,14 @@ public abstract class MarkupComponent {
 
     static final String COLON = " : ";
 
+    Context context;
     ResourceBundle labels;
     MarkupDocBuilder markupDocBuilder;
     Swagger2MarkupConfig config;
     Swagger2MarkupExtensionRegistry extensionRegistry;
 
     MarkupComponent(Context context){
+        this.context = context;
         this.config = context.getConfig();
         this.markupDocBuilder = context.getMarkupDocBuilder();
         this.labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());

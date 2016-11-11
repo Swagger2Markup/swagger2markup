@@ -1,0 +1,16 @@
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|successful operation +
+**Headers** :  +
+`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period. +
+`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +
+`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|< <<_pet,Pet>> > array
+|**400**|Invalid status value|No Content
+|===
+
+
+

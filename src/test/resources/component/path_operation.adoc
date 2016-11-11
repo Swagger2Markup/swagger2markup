@@ -1,0 +1,56 @@
+
+[[_updatepet]]
+=== Update an existing pet
+....
+PUT /pets
+....
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**400**|Invalid ID supplied|No Content
+|**404**|Pet not found|No Content
+|**405**|Validation exception|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+* `application/xml`
+
+
+==== Produces
+
+* `application/json`
+* `application/xml`
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
+|===
+
+
+

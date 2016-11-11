@@ -59,7 +59,7 @@ public class PropertiesTableComponent extends MarkupComponent{
         this.properties = Validate.notNull(properties, "Properties must not be null");
         this.uniquePrefix = uniquePrefix;
         this.definitionDocumentResolver = definitionDocumentResolver;
-        this.inlineDefinitions = inlineDefinitions;
+        this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
 
     }
 

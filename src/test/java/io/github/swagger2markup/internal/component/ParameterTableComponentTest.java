@@ -18,9 +18,10 @@ package io.github.swagger2markup.internal.component;
 import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
+import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.swagger.models.Model;
+import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -30,11 +31,13 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class DefinitionComponentTest extends AbstractComponentTest{
+public class ParameterTableComponentTest extends AbstractComponentTest{
 
-    private static final String COMPONENT_NAME = "definition";
+    private static final String COMPONENT_NAME = "parameter_table";
     private Path outputDirectory;
 
     @Before
@@ -44,24 +47,25 @@ public class DefinitionComponentTest extends AbstractComponentTest{
     }
 
     @Test
-    public void testDefinitionComponent() throws URISyntaxException {
+    public void testParameterTableComponent() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
         Swagger swagger = converter.getContext().getSwagger();
 
-        Model petModel = swagger.getDefinitions().get("Pet");
+        io.swagger.models.Path path = swagger.getPaths().get("/pets");
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
         MarkupComponent.Context context = getComponentContext();
-
         //When
-        MarkupDocBuilder markupDocBuilder = new DefinitionComponent(context,
+        MarkupDocBuilder markupDocBuilder = new ParameterTableComponent(getComponentContext(),
+                pathOperations.get(0),
                 swagger.getDefinitions(),
-                "Pet",
-                petModel,
-                new DefinitionDocumentResolverFromDefinition(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                2).render();
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+                new DefinitionDocumentResolverFromOperation(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
+                new ArrayList<>(),
+                3).render();
+
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         //Then
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

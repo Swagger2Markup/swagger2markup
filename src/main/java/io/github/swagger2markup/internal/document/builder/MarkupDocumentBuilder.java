@@ -325,14 +325,6 @@ abstract class MarkupDocumentBuilder {
     MarkupDocBuilder copyMarkupDocBuilder() {
         return markupDocBuilder.copy(false);
     }
-
-    String boldText(String text) {
-        return copyMarkupDocBuilder().boldText(text).toString();
-    }
-
-    String literalText(String text) {
-        return copyMarkupDocBuilder().literalText(text).toString();
-    }
     
     /**
      * Returns converted markup text from Swagger.
