@@ -19,10 +19,10 @@ import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.component.Labels;
 import io.github.swagger2markup.internal.component.MarkupComponent;
 import io.github.swagger2markup.internal.component.PathOperationComponent;
 import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
@@ -53,21 +53,10 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public class PathsDocumentBuilder extends MarkupDocumentBuilder {
 
-    private final String PATHS;
-    private final String RESOURCES;
-
-
     private static final String PATHS_ANCHOR = "paths";
-
-    private final DefinitionDocumentResolver definitionDocumentResolver;
 
     public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, java.nio.file.Path outputPath) {
         super(globalContext, extensionRegistry, outputPath);
-
-        definitionDocumentResolver = new DefinitionDocumentResolverFromOperation(markupDocBuilder, config, outputPath);
-
-        PATHS = labels.getString("paths");
-        RESOURCES = labels.getString("resources");
 
         if (config.isGeneratedExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -145,9 +134,9 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      */
     private void buildPathsTitle() {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-            buildPathsTitle(PATHS);
+            buildPathsTitle(labels.getString(Labels.PATHS));
         } else {
-            buildPathsTitle(RESOURCES);
+            buildPathsTitle(labels.getString(Labels.RESOURCES));
         }
     }
 
@@ -203,7 +192,6 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced : '{}'", operationFile);
             }
-
             buildOperationRef(operation, this.markupDocBuilder);
 
         } else {
@@ -228,7 +216,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
                     operation,
                     swagger.getDefinitions(),
                     swagger.getSecurityDefinitions(),
-                    definitionDocumentResolver,
+                    new DefinitionDocumentResolverFromOperation(docBuilder, config, outputPath),
                     new SecurityDocumentResolver(docBuilder, config, outputPath)
                     ).render();
         }

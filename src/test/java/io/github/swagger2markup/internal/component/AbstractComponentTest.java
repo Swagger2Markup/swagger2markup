@@ -36,6 +36,12 @@ abstract class AbstractComponentTest {
         return new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry);
     }
 
+    MarkupComponent.Context getComponentContext(Swagger2MarkupConfig config){
+        MarkupDocBuilder markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
+        Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
+        return new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry);
+    }
+
     Path getOutputFile(String componentName){
         return Paths.get("build/test/component/" + componentName + ".adoc");
     }

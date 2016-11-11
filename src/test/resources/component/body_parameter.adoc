@@ -1,0 +1,11 @@
+
+==== Body parameter
+Pet object that needs to be added to the store
+
+[%hardbreaks]
+__Name__ : body
+__Flags__ : optional
+__Type__ : <<_pet,Pet>>
+
+
+

@@ -23,13 +23,16 @@ import io.swagger.models.Contact;
 import io.swagger.models.Info;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.StringReader;
 import java.nio.file.Path;
 import java.util.List;
 
 import static io.github.swagger2markup.spi.OverviewDocumentExtension.Context;
 import static io.github.swagger2markup.spi.OverviewDocumentExtension.Position;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
 
@@ -53,7 +56,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
         buildOverviewTitle(labels.getString(Labels.OVERVIEW));
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-        buildDescriptionParagraph(info.getDescription(), this.markupDocBuilder);
+        buildDescriptionParagraph(info.getDescription());
         buildVersionInfoSection(info);
         buildContactInfoSection(info.getContact());
         buildLicenseInfoSection(info);
@@ -72,6 +75,24 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
 
     private void buildOverviewTitle(String title) {
         this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, OVERVIEW_ANCHOR);
+    }
+
+    void buildDescriptionParagraph(String description) {
+        if (isNotBlank(description)) {
+            markupDocBuilder.paragraph(swaggerMarkupDescription(description));
+        }
+    }
+
+    /**
+     * Returns converted markup text from Swagger.
+     *
+     * @param markupText text to convert, or empty string
+     * @return converted markup text, or an empty string if {@code markupText} == null
+     */
+    String swaggerMarkupDescription(String markupText) {
+        if (markupText == null)
+            return StringUtils.EMPTY;
+        return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
     }
 
     private void buildVersionInfoSection(Info info) {

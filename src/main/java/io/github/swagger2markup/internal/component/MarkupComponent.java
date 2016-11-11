@@ -22,12 +22,16 @@ import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
 import java.util.List;
 import java.util.ResourceBundle;
 
 public abstract class MarkupComponent {
+
+    Logger logger = LoggerFactory.getLogger(getClass());
 
     static final String COLON = " : ";
 
@@ -94,15 +98,11 @@ public abstract class MarkupComponent {
      * @return converted markup text, or an empty string if {@code markupText} == null
      */
     String markupDescription(String markupText) {
-        if (markupText == null) {
+        if (StringUtils.isBlank(markupText)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), config.getSwaggerMarkupLanguage()).toString().trim();
     }
-
-
-
-
 
     /**
      * Returns a RefType to a new inlined type named with {@code name} and {@code uniqueName}.<br>
