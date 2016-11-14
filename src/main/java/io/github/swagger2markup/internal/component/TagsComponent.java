@@ -16,6 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Tag;
 import org.apache.commons.lang3.Validate;
@@ -26,30 +28,40 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class TagsComponent extends MarkupComponent {
+public class TagsComponent extends MarkupComponent<TagsComponent.Parameters> {
 
-    private final List<Tag> tags;
-    private final int titleLevel;
-
-    public TagsComponent(Context context,
-                         List<Tag> tags,
-                         int titleLevel){
+    public TagsComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.tags = Validate.notNull(tags, "Tags must not be null");
-        this.titleLevel = titleLevel;
+    }
+
+    public static TagsComponent.Parameters parameters(List<Tag> tags,
+                                                      int titleLevel){
+        return new TagsComponent.Parameters(tags, titleLevel);
+    }
+
+    public static class Parameters {
+
+        private final List<Tag> tags;
+        private final int titleLevel;
+
+        public Parameters(List<Tag> tags,
+                          int titleLevel){
+            this.tags = Validate.notNull(tags, "Tags must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
-        this.markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.TAGS));
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.TAGS));
 
-        List<String> tagsList = tags.stream()
+        List<String> tagsList = params.tags.stream()
                 .map(this::mapToString).collect(Collectors.toList());
 
         if (config.getTagOrdering() != null)
             Collections.sort(tagsList, config.getTagOrdering());
 
-        this.markupDocBuilder.unorderedList(tagsList);
+        markupDocBuilder.unorderedList(tagsList);
 
         return markupDocBuilder;
     }

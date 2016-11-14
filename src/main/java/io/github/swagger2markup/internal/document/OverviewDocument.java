@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.document.builder;
+package io.github.swagger2markup.internal.document;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.component.*;
-import io.github.swagger2markup.internal.document.MarkupDocument;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
 import io.swagger.models.Swagger;
@@ -34,22 +34,39 @@ import static io.github.swagger2markup.spi.OverviewDocumentExtension.Position;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
+public class OverviewDocument extends MarkupDocument {
 
     private static final String OVERVIEW_ANCHOR = "overview";
     public static final int SECTION_TITLE_LEVEL = 2;
+    private final VersionInfoComponent versionInfoComponent;
+    private final ContactInfoComponent contactInfoComponent;
+    private final LicenseInfoComponent licenseInfoComponent;
+    private final UriSchemeComponent uriSchemeComponent;
+    private final TagsComponent tagsComponent;
+    private final ProducesComponent producesComponent;
+    private final ConsumesComponent consumesComponent;
 
-    public OverviewDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath){
-        super(context, extensionRegistry, outputPath);
+    public OverviewDocument(Swagger2MarkupConverter.Context context){
+        this(context, null);
     }
 
+    public OverviewDocument(Swagger2MarkupConverter.Context context, Path outputPath){
+        super(context, outputPath);
+        versionInfoComponent = new VersionInfoComponent(context);
+        contactInfoComponent = new ContactInfoComponent(context);
+        licenseInfoComponent = new LicenseInfoComponent(context);
+        uriSchemeComponent = new UriSchemeComponent(context);
+        tagsComponent = new TagsComponent(context);
+        producesComponent = new ProducesComponent(context);
+        consumesComponent = new ConsumesComponent(context);
+    }
     /**
      * Builds the overview MarkupDocument.
      *
      * @return the overview MarkupDocument
      */
     @Override
-    public MarkupDocument build(){
+    public MarkupDocBuilder apply(){
         Swagger swagger = globalContext.getSwagger();
         Info info = swagger.getInfo();
         buildDocumentTitle(info.getTitle());
@@ -66,7 +83,7 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
         buildProducesSection(swagger.getProduces());
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
-        return new MarkupDocument(markupDocBuilder);
+        return markupDocBuilder;
     }
 
     private void buildDocumentTitle(String title) {
@@ -97,41 +114,41 @@ public class OverviewDocumentBuilder extends MarkupDocumentBuilder {
 
     private void buildVersionInfoSection(Info info) {
         if (info != null) {
-            new VersionInfoComponent(componentContext, info, SECTION_TITLE_LEVEL).render();
+            versionInfoComponent.apply(markupDocBuilder, VersionInfoComponent.parameters(info, SECTION_TITLE_LEVEL));
         }
     }
 
     private void buildContactInfoSection(Contact contact) {
         if(contact != null){
-            new ContactInfoComponent(componentContext, contact, SECTION_TITLE_LEVEL).render();
+            contactInfoComponent.apply(markupDocBuilder, ContactInfoComponent.parameters(contact, SECTION_TITLE_LEVEL));
         }
     }
 
     private void buildLicenseInfoSection(Info info) {
         if (info != null) {
-            new LicenseInfoComponent(componentContext, info, SECTION_TITLE_LEVEL).render();
+            licenseInfoComponent.apply(markupDocBuilder, LicenseInfoComponent.parameters(info, SECTION_TITLE_LEVEL));
         }
     }
 
     private void buildUriSchemeSection(Swagger swagger) {
-        new UriSchemeComponent(componentContext, swagger, SECTION_TITLE_LEVEL).render();
+        uriSchemeComponent.apply(markupDocBuilder, UriSchemeComponent.parameters(swagger, SECTION_TITLE_LEVEL));
     }
 
     private void buildTagsSection(List<Tag> tags) {
         if(isNotEmpty(tags)){
-            new TagsComponent(componentContext, tags, SECTION_TITLE_LEVEL).render();
+            tagsComponent.apply(markupDocBuilder, TagsComponent.parameters(tags, SECTION_TITLE_LEVEL));
         }
     }
 
     private void buildConsumesSection(List<String> consumes) {
         if (isNotEmpty(consumes)) {
-            new ConsumesComponent(componentContext, consumes, SECTION_TITLE_LEVEL).render();
+            consumesComponent.apply(markupDocBuilder, ConsumesComponent.parameters(consumes, SECTION_TITLE_LEVEL));;
         }
     }
 
     private void buildProducesSection(List<String> produces) {
         if (isNotEmpty(produces)) {
-            new ProducesComponent(componentContext, produces, SECTION_TITLE_LEVEL).render();
+            producesComponent.apply(markupDocBuilder, ProducesComponent.parameters(produces, SECTION_TITLE_LEVEL));
         }
     }
 

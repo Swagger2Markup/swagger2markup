@@ -15,8 +15,9 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
+import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Tag;
 import org.apache.commons.io.FileUtils;
@@ -46,7 +47,11 @@ public class TagsComponentTest extends AbstractComponentTest{
         List<Tag> tags = new ArrayList<>();
         tags.add(new Tag().name("Tag1").description("description"));
         tags.add(new Tag().name("Tag2"));
-        MarkupDocBuilder markupDocBuilder = new TagsComponent(getComponentContext(), tags, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+
+        Swagger2MarkupConverter.Context context = createContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
+        markupDocBuilder = new TagsComponent(context).apply(markupDocBuilder, TagsComponent.parameters(tags, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

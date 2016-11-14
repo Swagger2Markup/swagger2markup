@@ -55,14 +55,12 @@ public class SecuritySchemeComponentTest extends AbstractComponentTest{
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList(swagger.getPaths(), "",
                 converter.getContext().getConfig().getOperationOrdering());
 
-        MarkupComponent.Context context = getComponentContext();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         //When
-        MarkupDocBuilder markupDocBuilder = new SecuritySchemeComponent(getComponentContext(),
-                pathOperations.get(0),
-                swagger.getSecurityDefinitions(),
-                new SecurityDocumentResolver(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                3).render();
+        markupDocBuilder = new SecuritySchemeComponent(context,new SecurityDocumentResolver(markupDocBuilder, context.getConfig(), Paths.get("")))
+                .apply(markupDocBuilder, SecuritySchemeComponent.parameters(pathOperations.get(0), 3));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 

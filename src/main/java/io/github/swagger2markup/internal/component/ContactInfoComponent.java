@@ -16,30 +16,41 @@
 package io.github.swagger2markup.internal.component;
 
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Contact;
 import org.apache.commons.lang3.Validate;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class ContactInfoComponent extends MarkupComponent {
+public class ContactInfoComponent extends MarkupComponent<ContactInfoComponent.Parameters> {
 
-    private final Contact contact;
-    private final int titleLevel;
-
-    public ContactInfoComponent(Context context,
-                                Contact contact,
-                                int titleLevel){
+    public ContactInfoComponent(Swagger2MarkupConverter.Context context) {
         super(context);
-        this.contact = Validate.notNull(contact, "Contact must not be null");
-        this.titleLevel = titleLevel;
+    }
+
+    public static class Parameters {
+        private final Contact contact;
+        private final int titleLevel;
+        public Parameters(Contact contact,
+                int titleLevel){
+            this.contact = Validate.notNull(contact, "Contact must not be null");
+            this.titleLevel = titleLevel;
+        }
+    }
+
+    public static ContactInfoComponent.Parameters parameters(Contact contact,
+                                                             int titleLevel){
+        return new ContactInfoComponent.Parameters(contact, titleLevel);
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        Contact contact = params.contact;
         if (isNotBlank(contact.getName()) || isNotBlank(contact.getEmail())){
-            this.markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.CONTACT_INFORMATION));
-            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder();
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.CONTACT_INFORMATION));
+            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             if (isNotBlank(contact.getName())) {
                 paragraphBuilder.italicText(labels.getString(Labels.CONTACT_NAME))
                         .textLine(COLON + contact.getName());
@@ -48,9 +59,8 @@ public class ContactInfoComponent extends MarkupComponent {
                 paragraphBuilder.italicText(labels.getString(Labels.CONTACT_EMAIL))
                         .textLine(COLON + contact.getEmail());
             }
-            this.markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
+            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
         return markupDocBuilder;
     }
-
 }

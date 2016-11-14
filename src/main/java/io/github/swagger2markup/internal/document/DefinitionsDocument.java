@@ -13,15 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.document.builder;
+package io.github.swagger2markup.internal.document;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.component.DefinitionComponent;
-import io.github.swagger2markup.internal.component.Labels;
-import io.github.swagger2markup.internal.component.MarkupComponent;
-import io.github.swagger2markup.internal.document.MarkupDocument;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverDefault;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
@@ -45,16 +41,19 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Robert Winkler
  */
-public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
+public class DefinitionsDocument extends MarkupDocument {
     
     private static final String DEFINITIONS_ANCHOR = "definitions";
 
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
-    private final DefinitionDocumentResolver definitionsDocumentResolver;
+    private final DefinitionComponent definitionComponent;
 
-    public DefinitionsDocumentBuilder(Swagger2MarkupConverter.Context context, Swagger2MarkupExtensionRegistry extensionRegistry, Path outputPath) {
-        super(context, extensionRegistry, outputPath);
-        definitionsDocumentResolver = new DefinitionDocumentResolverFromDefinition(markupDocBuilder, config, outputPath);
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context) {
+        this(context, null);
+    }
+
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
+        super(context, outputPath);
         if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
@@ -65,6 +64,8 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
                 logger.debug("Create separated definition files is disabled.");
             }
         }
+        this.definitionComponent = new DefinitionComponent(context,
+                new DefinitionDocumentResolverFromDefinition(markupDocBuilder, config, outputPath));
     }
 
     /**
@@ -73,7 +74,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @return the definitions MarkupDocument
      */
     @Override
-    public MarkupDocument build() {
+    public MarkupDocBuilder apply() {
         if (MapUtils.isNotEmpty(globalContext.getSwagger().getDefinitions())) {
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
             buildDefinitionsTitle(labels.getString(Labels.DEFINITIONS));
@@ -82,7 +83,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         }
-        return new MarkupDocument(markupDocBuilder);
+        return markupDocBuilder;
     }
 
     private void buildDefinitionsTitle(String title) {
@@ -133,17 +134,17 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
         }
         if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder();
-            buildDefinition(definitionName, model, defDocBuilder);
+            buildDefinition(defDocBuilder, definitionName, model);
             Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate definition file produced : '{}'", definitionFile);
             }
 
-            definitionRef(definitionName, this.markupDocBuilder);
+            definitionRef(this.markupDocBuilder, definitionName);
 
         } else {
-            buildDefinition(definitionName, model, this.markupDocBuilder);
+            buildDefinition(this.markupDocBuilder, definitionName, model);
         }
     }
 
@@ -160,18 +161,15 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
     /**
      * Builds a concrete definition
      *
+     * @param markupDocBuilder  the markupDocBuilder do use for output
      * @param definitionName the name of the definition
      * @param model          the Swagger Model of the definition
-     * @param markupDocBuilder  the markupDocBuilder do use for output
      */
-    private void buildDefinition(String definitionName, Model model, MarkupDocBuilder markupDocBuilder) {
-        new DefinitionComponent(
-                new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry),
-                globalContext.getSwagger().getDefinitions(),
+    private void buildDefinition(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
+        definitionComponent.apply(markupDocBuilder, DefinitionComponent.parameters(
                 definitionName,
                 model,
-                definitionsDocumentResolver,
-                2).render();
+                2));
     }
 
     /**
@@ -180,7 +178,7 @@ public class DefinitionsDocumentBuilder extends MarkupDocumentBuilder {
      * @param definitionName definition name to target
      * @param docBuilder     the docbuilder do use for output
      */
-    private void definitionRef(String definitionName, MarkupDocBuilder docBuilder) {
+    private void definitionRef(MarkupDocBuilder docBuilder, String definitionName) {
         buildDefinitionTitle(copyMarkupDocBuilder().crossReference(new DefinitionDocumentResolverDefault(markupDocBuilder, config, outputPath).apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
     }
 

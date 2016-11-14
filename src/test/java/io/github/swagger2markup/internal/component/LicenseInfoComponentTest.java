@@ -15,8 +15,9 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
+import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Info;
 import io.swagger.models.License;
@@ -46,7 +47,11 @@ public class LicenseInfoComponentTest extends AbstractComponentTest{
         Info info = new Info()
                 .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0"))
                 .termsOfService("Bla bla bla");
-        MarkupDocBuilder markupDocBuilder = new LicenseInfoComponent(getComponentContext(), info, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+
+        Swagger2MarkupConverter.Context context = createContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
+        markupDocBuilder = new LicenseInfoComponent(context).apply(markupDocBuilder, LicenseInfoComponent.parameters(info, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

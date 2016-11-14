@@ -16,30 +16,41 @@
 package io.github.swagger2markup.internal.component;
 
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ProducesComponent extends MarkupComponent {
+public class ProducesComponent extends MarkupComponent<ProducesComponent.Parameters> {
 
-    private final List<String> produces;
-    private final int titleLevel;
 
-    public ProducesComponent(Context context,
-                             List<String> produces,
-                             int titleLevel){
+    public ProducesComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.produces = Validate.notNull(produces, "Produces must not be null");
-        this.titleLevel = titleLevel;
+    }
+
+    public static class Parameters {
+        private final List<String> produces;
+        private final int titleLevel;
+
+        public Parameters(List<String> produces, int titleLevel){
+            this.produces = Validate.notNull(produces, "Produces must not be null");
+            this.titleLevel = titleLevel;
+        }
+    }
+
+    public static ProducesComponent.Parameters parameters(List<String> consumes,
+                                                          int titleLevel){
+        return new ProducesComponent.Parameters(consumes, titleLevel);
     }
 
     @Override
-    public MarkupDocBuilder render() {
-        markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.PRODUCES));
-        markupDocBuilder.unorderedList(produces.stream()
-                .map(this::literalText).collect(Collectors.toList()));
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.PRODUCES));
+        markupDocBuilder.unorderedList(params.produces.stream()
+                .map(value -> literalText(markupDocBuilder, value)).collect(Collectors.toList()));
         return markupDocBuilder;
     }
 }

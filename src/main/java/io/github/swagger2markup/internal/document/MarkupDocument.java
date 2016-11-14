@@ -15,47 +15,42 @@
  */
 package io.github.swagger2markup.internal.document;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
+import javaslang.Function0;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.nio.charset.Charset;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
+import java.util.ResourceBundle;
 
-public class MarkupDocument {
+/**
+ * @author Robert Winkler
+ */
+abstract class MarkupDocument <T> implements Function0<MarkupDocBuilder> {
 
-    private MarkupDocBuilder markupDocBuilder;
+    Logger logger = LoggerFactory.getLogger(getClass());
 
-    public MarkupDocument(MarkupDocBuilder markupDocBuilder) {
-        this.markupDocBuilder = markupDocBuilder;
+    Swagger2MarkupConverter.Context globalContext;
+    Swagger2MarkupExtensionRegistry extensionRegistry;
+    Swagger2MarkupConfig config;
+    MarkupDocBuilder markupDocBuilder;
+    Path outputPath;
+    ResourceBundle labels;
+
+    MarkupDocument(Swagger2MarkupConverter.Context globalContext, Path outputPath) {
+        this.globalContext = globalContext;
+        this.extensionRegistry = globalContext.getExtensionRegistry();
+        this.config = globalContext.getConfig();
+        this.outputPath = outputPath;
+        this.markupDocBuilder = MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(), config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
+        labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
     }
 
-    /**
-     * Returns a string representation of the document.
-     */
-    public String toString() {
-        return markupDocBuilder.toString();
-    }
-
-    /**
-     * Writes the content of the builder to a file.<br>
-     * An extension identifying the markup language will be automatically added to file name.
-     *
-     * @param file    the generated file
-     * @param charset the the charset to use for encoding
-     * @param options the file open options
-     */
-    public void writeToFile(Path file, Charset charset, OpenOption... options) {
-        markupDocBuilder.writeToFile(file, charset, options);
-    }
-
-    /**
-     * Writes the content of the builder to a file.
-     *
-     * @param file    the generated file
-     * @param charset the the charset to use for encoding
-     * @param options the file open options
-     */
-    public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) {
-        markupDocBuilder.writeToFileWithoutExtension(file, charset, options);
+    MarkupDocBuilder copyMarkupDocBuilder() {
+        return markupDocBuilder.copy(false);
     }
 }

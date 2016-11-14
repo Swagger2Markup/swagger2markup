@@ -15,34 +15,45 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Info;
 import io.swagger.models.License;
 import org.apache.commons.lang3.Validate;
 
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class LicenseInfoComponent extends MarkupComponent {
+public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.Parameters> {
 
-    private final int titleLevel;
-    private final Info info;
-
-    public LicenseInfoComponent(Context context,
-                                Info info,
-                                int titleLevel){
+    public LicenseInfoComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.info = Validate.notNull(info, "Info must not be null");
-        this.titleLevel = titleLevel;
+    }
+
+    public static class Parameters {
+        private final int titleLevel;
+        private final Info info;
+
+        public Parameters(Info info,
+                          int titleLevel){
+            this.info = Validate.notNull(info, "Info must not be null");
+            this.titleLevel = titleLevel;
+        }
+    }
+
+    public static LicenseInfoComponent.Parameters parameters(Info info,
+                                                             int titleLevel){
+        return new LicenseInfoComponent.Parameters(info, titleLevel);
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        Info info = params.info;
         License license = info.getLicense();
         String termOfService = info.getTermsOfService();
         if((license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) || isNotBlank(termOfService)) {
-            this.markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(LICENSE_INFORMATION));
-            MarkupDocBuilder paragraph = copyMarkupDocBuilder();
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(LICENSE_INFORMATION));
+            MarkupDocBuilder paragraph = copyMarkupDocBuilder(markupDocBuilder);
             if (license != null) {
                 if (isNotBlank(license.getName())) {
                     paragraph.italicText(labels.getString(LICENSE)).textLine(COLON + license.getName());
@@ -54,7 +65,7 @@ public class LicenseInfoComponent extends MarkupComponent {
 
             paragraph.italicText(labels.getString(TERMS_OF_SERVICE)).textLine(COLON + termOfService);
 
-            this.markupDocBuilder.paragraph(paragraph.toString(), true);
+            markupDocBuilder.paragraph(paragraph.toString(), true);
         }
 
         return markupDocBuilder;

@@ -56,14 +56,12 @@ public class ParameterTableComponentTest extends AbstractComponentTest{
         io.swagger.models.Path path = swagger.getPaths().get("/pets");
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
-        MarkupComponent.Context context = getComponentContext();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
         //When
-        MarkupDocBuilder markupDocBuilder = new ParameterTableComponent(getComponentContext(),
-                pathOperations.get(0),
-                swagger.getDefinitions(),
-                new DefinitionDocumentResolverFromOperation(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                new ArrayList<>(),
-                3).render();
+        markupDocBuilder = new ParameterTableComponent(context, new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")))
+                .apply(markupDocBuilder, ParameterTableComponent.parameters(pathOperations.get(0), new ArrayList<>(), 3));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 

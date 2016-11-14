@@ -15,6 +15,8 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Swagger;
 import org.apache.commons.lang3.Validate;
@@ -26,24 +28,35 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.join;
 
-public class UriSchemeComponent extends MarkupComponent {
+public class UriSchemeComponent extends MarkupComponent<UriSchemeComponent.Parameters> {
 
-    private final int titleLevel;
-    private final Swagger swagger;
 
-    public UriSchemeComponent(Context context,
-                              Swagger swagger,
-                              int titleLevel){
+    public UriSchemeComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.swagger = Validate.notNull(swagger);
-        this.titleLevel = titleLevel;
+    }
+
+    public static UriSchemeComponent.Parameters parameters(Swagger swagger, int titleLevel){
+        return new UriSchemeComponent.Parameters(swagger, titleLevel);
+    }
+
+    public static class Parameters {
+
+        private final int titleLevel;
+        private final Swagger swagger;
+
+        public Parameters(Swagger swagger, int titleLevel){
+
+            this.swagger = Validate.notNull(swagger);
+            this.titleLevel = titleLevel;
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        Swagger swagger = params.swagger;
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
-            this.markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.URI_SCHEME));
-            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder();
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.URI_SCHEME));
+            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             if (isNotBlank(swagger.getHost())) {
                 paragraphBuilder.italicText(labels.getString(Labels.HOST))
                         .textLine(COLON + swagger.getHost());
@@ -59,7 +72,7 @@ public class UriSchemeComponent extends MarkupComponent {
                 paragraphBuilder.italicText(labels.getString(Labels.SCHEMES))
                         .textLine(COLON + join(schemes, ", "));
             }
-            this.markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
+            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
         return markupDocBuilder;
     }

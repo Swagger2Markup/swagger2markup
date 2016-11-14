@@ -17,6 +17,8 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
@@ -35,34 +37,50 @@ import java.util.Map;
 import java.util.Optional;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class ResponseComponent extends MarkupComponent {
+public class ResponseComponent extends MarkupComponent<ResponseComponent.Parameters> {
 
-    private final PathOperation operation;
-    private final int titleLevel;
+    private final TableComponent tableComponent;
     private final DefinitionDocumentResolver definitionDocumentResolver;
-    private final List<ObjectType> inlineDefinitions;
 
-    public ResponseComponent(Context context,
-                             PathOperation operation,
-                             DefinitionDocumentResolver definitionDocumentResolver,
-                             List<ObjectType> inlineDefinitions,
-                             int titleLevel){
+    public ResponseComponent(Swagger2MarkupConverter.Context context,
+                             DefinitionDocumentResolver definitionDocumentResolver){
         super(context);
-        this.operation = Validate.notNull(operation, "PathOperation must not be null");
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
-        this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
-        this.titleLevel = titleLevel;
+        this.tableComponent = new TableComponent(context);
+    }
+
+    public static ResponseComponent.Parameters parameters(PathOperation operation,
+                                                                int titleLevel,
+                                                                List<ObjectType> inlineDefinitions){
+        return new ResponseComponent.Parameters(operation, titleLevel, inlineDefinitions);
+    }
+
+    public static class Parameters {
+        private final PathOperation operation;
+        private final int titleLevel;
+        private final List<ObjectType> inlineDefinitions;
+
+        public Parameters(PathOperation operation,
+                          int titleLevel,
+                          List<ObjectType> inlineDefinitions){
+
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+            this.titleLevel = titleLevel;
+            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        PathOperation operation = params.operation;
         Map<String, Response> responses = operation.getOperation().getResponses();
 
-        MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder();
+        MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder(markupDocBuilder);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
             StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(Labels.HTTP_CODE_COLUMN)))
@@ -81,14 +99,16 @@ public class ResponseComponent extends MarkupComponent {
                     Property property = response.getSchema();
                     Type type = new PropertyWrapper(property).getType(definitionDocumentResolver);
 
-                    type = createInlineType(type, labels.getString(Labels.RESPONSE) + " " + responseName, operation.getId() + " " + labels.getString(Labels.RESPONSE) + " " + responseName, inlineDefinitions);
+                    if (config.isInlineSchemaEnabled()) {
+                        type = createInlineType(type, labels.getString(Labels.RESPONSE) + " " + responseName, operation.getId() + " " + labels.getString(Labels.RESPONSE) + " " + responseName, params.inlineDefinitions);
+                    }
 
                     schemaContent = type.displaySchema(markupDocBuilder);
                 }
 
-                MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder();
+                MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder(markupDocBuilder);
 
-                descriptionBuilder.text(markupDescription(response.getDescription()));
+                descriptionBuilder.text(markupDescription(markupDocBuilder, response.getDescription()));
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
@@ -98,7 +118,7 @@ public class ResponseComponent extends MarkupComponent {
                         Property headerProperty = header.getValue();
                         PropertyWrapper headerPropertyWrapper = new PropertyWrapper(headerProperty);
                         Type propertyType = headerPropertyWrapper.getType(null);
-                        String headerDescription = markupDescription(headerProperty.getDescription());
+                        String headerDescription = markupDescription(markupDocBuilder, headerProperty.getDescription());
                         Optional<Object> optionalDefaultValue = headerPropertyWrapper.getDefaultValue();
 
                         descriptionBuilder
@@ -120,22 +140,21 @@ public class ResponseComponent extends MarkupComponent {
                     }
                 }
 
-                httpCodeColumnBuilder.add(boldText(responseName));
+                httpCodeColumnBuilder.add(boldText(markupDocBuilder, responseName));
                 descriptionColumnBuilder.add(descriptionBuilder.toString());
                 schemaColumnBuilder.add(schemaContent);
             });
 
-            responsesBuilder= new TableComponent(new MarkupComponent.Context(config, responsesBuilder, extensionRegistry),
-                    httpCodeColumnBuilder.build(),
+            responsesBuilder = tableComponent.apply(responsesBuilder, TableComponent.parameters(httpCodeColumnBuilder.build(),
                     descriptionColumnBuilder.build(),
-                    schemaColumnBuilder.build()).render();
+                    schemaColumnBuilder.build()));
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_END, responsesBuilder, operation));
         String responsesContent = responsesBuilder.toString();
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(responsesContent)) {
-            markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.RESPONSES));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.RESPONSES));
             markupDocBuilder.text(responsesContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_AFTER, markupDocBuilder, operation));

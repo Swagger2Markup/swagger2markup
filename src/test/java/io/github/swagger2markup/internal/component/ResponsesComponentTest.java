@@ -56,13 +56,12 @@ public class ResponsesComponentTest extends AbstractComponentTest{
         io.swagger.models.Path path = swagger.getPaths().get("/pets/findByStatus");
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByStatus", path);
 
-        MarkupComponent.Context context = getComponentContext();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
         //When
-        MarkupDocBuilder markupDocBuilder = new ResponseComponent(getComponentContext(),
-                pathOperations.get(0),
-                new DefinitionDocumentResolverFromOperation(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                new ArrayList<>(),
-                3).render();
+        markupDocBuilder = new ResponseComponent(context, new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")))
+                .apply(markupDocBuilder, ResponseComponent.parameters(pathOperations.get(0), 3, new ArrayList<>()));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 

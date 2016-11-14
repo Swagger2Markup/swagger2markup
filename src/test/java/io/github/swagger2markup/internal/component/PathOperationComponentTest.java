@@ -25,7 +25,6 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.net.URISyntaxException;
@@ -37,17 +36,12 @@ import java.util.List;
 
 public class PathOperationComponentTest extends AbstractComponentTest{
 
-    private static final String COMPONENT_NAME = "path_operation";
-    private Path outputDirectory;
-
-    @Before
-    public void setUp(){
-        outputDirectory = getOutputFile(COMPONENT_NAME);
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-    }
-
     @Test
     public void testPathOperationComponent() throws URISyntaxException {
+        String COMPONENT_NAME = "path_operation";
+        Path outputDirectory = getOutputFile(COMPONENT_NAME);
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
@@ -56,15 +50,44 @@ public class PathOperationComponentTest extends AbstractComponentTest{
         io.swagger.models.Path path = swagger.getPaths().get("/pets");
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
-        MarkupComponent.Context context = getComponentContext();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
         //When
-        MarkupDocBuilder markupDocBuilder = new PathOperationComponent(getComponentContext(),
-                pathOperations.get(0),
-                swagger.getDefinitions(),
-                swagger.getSecurityDefinitions(),
-                new DefinitionDocumentResolverFromOperation(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                new SecurityDocumentResolver(context.getMarkupDocBuilder(), context.getConfig(), Paths.get(""))
-                ).render();
+        markupDocBuilder = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")),
+                new SecurityDocumentResolver(markupDocBuilder, context.getConfig(), Paths.get(""))).
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
+
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
+
+        //Then
+        Path expectedFile = getExpectedFile(COMPONENT_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
+    }
+
+    @Test
+    public void testInlineSchema() throws URISyntaxException {
+        String COMPONENT_NAME = "path_operation_inline_schema";
+        Path outputDirectory = getOutputFile(COMPONENT_NAME);
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
+        Swagger swagger = converter.getContext().getSwagger();
+
+        io.swagger.models.Path path = swagger.getPaths().get("/LaunchCommand");
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
+
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
+        //When
+        markupDocBuilder = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")),
+                new SecurityDocumentResolver(markupDocBuilder, context.getConfig(), Paths.get(""))).
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
@@ -73,4 +96,6 @@ public class PathOperationComponentTest extends AbstractComponentTest{
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
 
     }
+
+
 }

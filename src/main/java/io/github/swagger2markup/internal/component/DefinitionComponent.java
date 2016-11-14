@@ -16,6 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
@@ -30,51 +32,65 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.*;
 
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class DefinitionComponent extends MarkupComponent {
+public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Parameters> {
 
     /* Discriminator is only displayed for inheriting definitions */
     private static final boolean ALWAYS_DISPLAY_DISCRIMINATOR = false;
 
     private final Map<String, Model> definitions;
-    private final String definitionName;
-    private final Model model;
-    private final int titleLevel;
     private final Map<ObjectTypePolymorphism.Nature, String> POLYMORPHISM_NATURE;
     private final DefinitionDocumentResolver definitionsDocumentResolver;
+    private PropertiesTableComponent propertiesTableComponent;
 
-    public DefinitionComponent(Context context,
-                               Map<String, Model> definitions,
-                               String definitionName,
-                               Model model,
-                               DefinitionDocumentResolver definitionsDocumentResolver,
-                               int titleLevel) {
+    public DefinitionComponent(Swagger2MarkupConverter.Context context,
+                               DefinitionDocumentResolver definitionsDocumentResolver) {
         super(context);
-        this.definitions = Validate.notNull(definitions, "Definitions must not be empty");
-        this.definitionName = Validate.notBlank(definitionName, "DefinitionName must not be empty");
-        this.model = Validate.notNull(model, "Model must not be null");
-        this.titleLevel = titleLevel;
+        this.definitions = context.getSwagger().getDefinitions();
         this.definitionsDocumentResolver = definitionsDocumentResolver;
-
         POLYMORPHISM_NATURE = new HashMap<ObjectTypePolymorphism.Nature, String>() {{
             put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getString(Labels.POLYMORPHISM_NATURE_COMPOSITION));
             put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getString(Labels.POLYMORPHISM_NATURE_INHERITANCE));
         }};
+        propertiesTableComponent = new PropertiesTableComponent(context, definitionsDocumentResolver);
+    }
+
+    public static DefinitionComponent.Parameters parameters(String definitionName,
+                                                             Model model,
+                                                             int titleLevel){
+        return new DefinitionComponent.Parameters(definitionName, model, titleLevel);
+    }
+
+    public static class Parameters {
+        private final String definitionName;
+        private final Model model;
+        private final int titleLevel;
+
+        public Parameters(String definitionName,
+                Model model,
+                int titleLevel){
+            this.definitionName = Validate.notBlank(definitionName, "DefinitionName must not be empty");
+            this.model = Validate.notNull(model, "Model must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        String definitionName = params.definitionName;
+        Model model = params.model;
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_BEFORE, markupDocBuilder, definitionName, model));
-        markupDocBuilder.sectionTitleWithAnchorLevel(titleLevel, definitionName, definitionName);
+        markupDocBuilder.sectionTitleWithAnchorLevel(params.titleLevel, definitionName, definitionName);
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, model));
         String description = model.getDescription();
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(markupDescription(description));
+            markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
         }
-        inlineDefinitions(typeSection(definitionName, model, markupDocBuilder), definitionName, markupDocBuilder);
+        inlineDefinitions(markupDocBuilder, typeSection(markupDocBuilder, definitionName, model), definitionName);
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_END, markupDocBuilder, definitionName, model));
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_AFTER, markupDocBuilder, definitionName, model));
 
@@ -98,24 +114,20 @@ public class DefinitionComponent extends MarkupComponent {
     /**
      * Builds inline schema definitions
      *
+     * @param markupDocBuilder   the docbuilder do use for output
      * @param definitions  all inline definitions to display
      * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param docBuilder   the docbuilder do use for output
+
      */
-    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(MarkupDocBuilder markupDocBuilder, List<ObjectType> definitions, String uniquePrefix) {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
-                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
+                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), markupDocBuilder);
 
                 List<ObjectType> localDefinitions = new ArrayList<>();
-                new PropertiesTableComponent(
-                        new Context(config, docBuilder, extensionRegistry),
-                        definition.getProperties(),
-                        uniquePrefix,
-                        definitionsDocumentResolver,
-                        localDefinitions).render();
+                propertiesTableComponent.apply(markupDocBuilder, new PropertiesTableComponent.Parameters(definition.getProperties(), uniquePrefix, localDefinitions));
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
+                    inlineDefinitions(markupDocBuilder, Collections.singletonList(localDefinition), localDefinition.getUniqueName());
             }
         }
     }
@@ -123,22 +135,25 @@ public class DefinitionComponent extends MarkupComponent {
     /**
      * Builds the type informations of a definition
      *
+     * @param markupDocBuilder     the docbuilder do use for output
      * @param definitionName name of the definition to display
      * @param model          model of the definition to display
-     * @param docBuilder     the docbuilder do use for output
+
      * @return a list of inlined types.
      */
-    private List<ObjectType> typeSection(String definitionName, Model model, MarkupDocBuilder docBuilder) {
+    private List<ObjectType> typeSection(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
         Type modelType = ModelUtils.resolveRefType(ModelUtils.getType(model, definitions, definitionsDocumentResolver));
 
         if (!(modelType instanceof ObjectType)) {
-            modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", inlineDefinitions);
+            if (config.isInlineSchemaEnabled()) {
+                modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", inlineDefinitions);
+            }
         }
 
         if (modelType instanceof ObjectType) {
             ObjectType objectType = (ObjectType) modelType;
-            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
+            MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
             switch (objectType.getPolymorphism().getNature()) {
                 case COMPOSITION:
                     typeInfos.italicText(labels.getString(Labels.POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
@@ -158,19 +173,18 @@ public class DefinitionComponent extends MarkupComponent {
 
             String typeInfosString = typeInfos.toString();
             if (StringUtils.isNotBlank(typeInfosString))
-                docBuilder.paragraph(typeInfosString, true);
+                markupDocBuilder.paragraph(typeInfosString, true);
 
-            new PropertiesTableComponent(
-                    new Context(config, docBuilder, extensionRegistry),
-                    ((ObjectType) modelType).getProperties(),
-                    definitionName,
-                    definitionsDocumentResolver,
-                    inlineDefinitions).render();
+            propertiesTableComponent.apply(markupDocBuilder,
+                    PropertiesTableComponent.parameters(
+                            ((ObjectType) modelType).getProperties(),
+                            definitionName,
+                            inlineDefinitions));
         } else if (modelType != null) {
-            MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
-            typeInfos.italicText(labels.getString(TYPE_COLUMN)).textLine(COLON + modelType.displaySchema(docBuilder));
+            MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
+            typeInfos.italicText(labels.getString(TYPE_COLUMN)).textLine(COLON + modelType.displaySchema(markupDocBuilder));
 
-            docBuilder.paragraph(typeInfos.toString());
+            markupDocBuilder.paragraph(typeInfos.toString());
         }
 
         return inlineDefinitions;

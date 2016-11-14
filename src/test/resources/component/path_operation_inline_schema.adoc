@@ -1,0 +1,110 @@
+
+[[_launchcommand_post]]
+=== LaunchCommand
+....
+POST /LaunchCommand
+....
+
+
+==== Description
+Dummy description
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**Option** +
+__optional__|An optional option|string
+|**Query**|**Version** +
+__optional__|The API version|string
+|**Body**|**LaunchCommandRequest** +
+__optional__|Launch something new|<<_launchcommand_post_launchcommandrequest,LaunchCommandRequest>>
+|===
+
+[[_launchcommand_post_launchcommandrequest]]
+**LaunchCommandRequest**
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**Command** +
+__required__|Dummy description|<<_launchcommand_post_command,Command>>
+|**Location** +
+__optional__|Dummy description|<<_location,Location>>
+|**Options** +
+__optional__|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
+|===
+
+[[_launchcommand_post_command]]
+**Command**
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**args** +
+__optional__|Command arguments|string
+|**path** +
+__optional__|Command path|string
+|===
+
+[[_launchcommand_post_options]]
+**Options**
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Result +
+**Headers** :  +
+`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period. +
+`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +
+`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|<<_launchcommand_post_response_200,Response 200>>
+|**400**|Error|<<_error,Error>>
+|===
+
+[[_launchcommand_post_response_200]]
+**Response 200**
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**Location** +
+__optional__|<description>|<<_location,Location>>
+|**Options** +
+__optional__|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
+|**ReservationId** +
+__optional__|<description>|string
+|===
+
+[[_launchcommand_post_options]]
+**Options**
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**key** +
+__optional__|option key|string
+|**value** +
+__optional__|option value|string
+|===
+
+
+==== Tags
+
+* All
+
+
+

@@ -52,15 +52,12 @@ public class DefinitionComponentTest extends AbstractComponentTest{
 
         Model petModel = swagger.getDefinitions().get("Pet");
 
-        MarkupComponent.Context context = getComponentContext();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         //When
-        MarkupDocBuilder markupDocBuilder = new DefinitionComponent(context,
-                swagger.getDefinitions(),
-                "Pet",
-                petModel,
-                new DefinitionDocumentResolverFromDefinition(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                2).render();
+        markupDocBuilder = new DefinitionComponent(context, new DefinitionDocumentResolverFromDefinition(markupDocBuilder, context.getConfig(), Paths.get("")))
+                .apply(markupDocBuilder, DefinitionComponent.parameters("Pet", petModel, 2));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         //Then

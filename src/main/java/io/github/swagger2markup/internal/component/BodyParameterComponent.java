@@ -17,6 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
@@ -34,30 +35,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class BodyParameterComponent extends MarkupComponent {
+public class BodyParameterComponent extends MarkupComponent<BodyParameterComponent.Parameters> {
 
-    private final PathOperation operation;
     private final DefinitionDocumentResolver definitionDocumentResolver;
     private final Map<String, Model> definitions;
-    private final List<ObjectType> inlineDefinitions;
+    private final PropertiesTableComponent propertiesTableComponent;
 
-    public BodyParameterComponent(Context context,
-                                  PathOperation operation,
-                                  Map<String, Model> definitions,
-                                  DefinitionDocumentResolver definitionDocumentResolver,
-                                  List<ObjectType> inlineDefinitions){
+    public BodyParameterComponent(Swagger2MarkupConverter.Context context,
+                                  DefinitionDocumentResolver definitionDocumentResolver){
         super(context);
-        this.operation = Validate.notNull(operation, "PathOperation must not be null");
-        this.definitions = definitions;
-        this.inlineDefinitions = inlineDefinitions;
+        this.definitions = context.getSwagger().getDefinitions();
+
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
+        this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
+    }
+
+    public static BodyParameterComponent.Parameters parameters(PathOperation operation,
+                                                               List<ObjectType> inlineDefinitions){
+        return new BodyParameterComponent.Parameters(operation, inlineDefinitions);
+    }
+
+    public static class Parameters{
+        private PathOperation operation;
+        private final List<ObjectType> inlineDefinitions;
+        public Parameters(PathOperation operation,
+                          List<ObjectType> inlineDefinitions){
+            Validate.notNull(operation, "Operation must not be null");
+            this.operation = operation;
+            this.inlineDefinitions = inlineDefinitions;
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        PathOperation operation = params.operation;
         if (config.isFlatBodyEnabled()) {
             List<Parameter> parameters = operation.getOperation().getParameters();
             if (CollectionUtils.isNotEmpty(parameters)) {
@@ -66,18 +81,20 @@ public class BodyParameterComponent extends MarkupComponent {
                         Type type = ParameterUtils.getType(parameter, definitions, definitionDocumentResolver);
 
                         if (!(type instanceof ObjectType)) {
-                            type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
-                        }
-
-                        buildSectionTitle(labels.getString(BODY_PARAMETER));
-                        String description = parameter.getDescription();
-                        if (isNotBlank(description)) {
-                            if (isNotBlank(description)) {
-                                markupDocBuilder.paragraph(markupDescription(description));
+                            if (config.isInlineSchemaEnabled()) {
+                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), params.inlineDefinitions);
                             }
                         }
 
-                        MarkupDocBuilder typeInfos = copyMarkupDocBuilder();
+                        buildSectionTitle(markupDocBuilder, labels.getString(BODY_PARAMETER));
+                        String description = parameter.getDescription();
+                        if (isNotBlank(description)) {
+                            if (isNotBlank(description)) {
+                                markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
+                            }
+                        }
+
+                        MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
                         typeInfos.italicText(labels.getString(NAME_COLUMN)).textLine(COLON + parameter.getName());
                         typeInfos.italicText(labels.getString(FLAGS_COLUMN)).textLine(COLON + (BooleanUtils.isTrue(parameter.getRequired()) ? labels.getString(FLAGS_REQUIRED).toLowerCase() : labels.getString(FLAGS_OPTIONAL).toLowerCase()));
 
@@ -89,14 +106,12 @@ public class BodyParameterComponent extends MarkupComponent {
 
                         if (type instanceof ObjectType) {
                             List<ObjectType> localDefinitions = new ArrayList<>();
-                            new PropertiesTableComponent(
-                                    context,
+
+                            propertiesTableComponent.apply(markupDocBuilder, PropertiesTableComponent.parameters(
                                     ((ObjectType) type).getProperties(),
                                     operation.getId(),
-                                    definitionDocumentResolver,
-                                    localDefinitions).render();
-
-                            inlineDefinitions.addAll(localDefinitions);
+                                    localDefinitions
+                            ));
                         }
                     }
                 }
@@ -105,12 +120,7 @@ public class BodyParameterComponent extends MarkupComponent {
         return markupDocBuilder;
     }
 
-    /**
-     * Adds a operation section title to the document.
-     *
-     * @param title      the section title
-     */
-    private void buildSectionTitle(String title) {
+    private void buildSectionTitle(MarkupDocBuilder markupDocBuilder, String title) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             markupDocBuilder.sectionTitleLevel3(title);
         } else {

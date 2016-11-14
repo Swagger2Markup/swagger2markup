@@ -17,6 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.DataFrame;
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
@@ -24,26 +25,36 @@ import javaslang.collection.Array;
 import javaslang.collection.IndexedSeq;
 import javaslang.collection.List;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
-public class TableComponent extends MarkupComponent{
+public class TableComponent extends MarkupComponent<TableComponent.Parameters>{
 
     public static final String WIDTH_RATIO = "widthRatio";
     public static final String HEADER_COLUMN = "headerColumn";
 
-    private static final Logger LOG = LoggerFactory.getLogger(TableComponent.class);
-
-    private final DataFrame dataFrame;
-    private final java.util.List<java.util.List<String>> cells;
-    private final java.util.List<MarkupTableColumn> columnSpecs;
-
-    public TableComponent(Context context, StringColumn... columns){
+    public TableComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.dataFrame = DataFrame.ofAll(List.of(columns).filter(TableComponent::isNotBlank));
+    }
 
-        columnSpecs = dataFrame.getColumns().map(column -> {
+    public static TableComponent.Parameters parameters(StringColumn... columns){
+        return new TableComponent.Parameters(columns);
+    }
+
+    public static class Parameters {
+        private final DataFrame dataFrame;
+        public Parameters(StringColumn... columns){
+            this.dataFrame = DataFrame.ofAll(List.of(columns).filter(TableComponent::isNotBlank));
+        }
+    }
+
+    public static boolean isNotBlank(StringColumn column) {
+        return !column.getValues().filter(StringUtils::isNotBlank).isEmpty();
+    }
+
+    @Override
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        DataFrame dataFrame = params.dataFrame;
+        java.util.List<MarkupTableColumn> columnSpecs = dataFrame.getColumns().map(column -> {
                     Integer widthRatio = Integer.valueOf(column.getMetaData().get(WIDTH_RATIO).getOrElse("0"));
                     return new MarkupTableColumn(column.getId().getName())
                             .withWidthRatio(widthRatio)
@@ -55,24 +66,9 @@ public class TableComponent extends MarkupComponent{
         IndexedSeq<IndexedSeq<String>> columnValues = dataFrame.getColumns()
                 .map(column -> ((StringColumn) column).getValues());
 
-        cells = Array.range(0, getRowCount())
+        java.util.List<java.util.List<String>> cells = Array.range(0, dataFrame.getRowCount())
                 .map(rowNumber -> columnValues.map(values -> values.get(rowNumber)).toJavaList()).toJavaList();
-    }
 
-    public static boolean isNotBlank(StringColumn column) {
-        return !column.getValues().filter(StringUtils::isNotBlank).isEmpty();
-    }
-
-    int getColumnCount() {
-        return dataFrame.getColumnCount();
-    }
-
-    int getRowCount() {
-        return dataFrame.getRowCount();
-    }
-
-    @Override
-    public MarkupDocBuilder render() {
         return markupDocBuilder.tableWithColumnSpecs(columnSpecs, cells);
     }
 }

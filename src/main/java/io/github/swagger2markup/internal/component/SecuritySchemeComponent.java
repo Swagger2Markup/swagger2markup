@@ -18,6 +18,7 @@ package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.StringColumn;
 import com.google.common.base.Joiner;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
@@ -31,31 +32,44 @@ import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static com.sun.org.apache.xml.internal.serializer.Method.UNKNOWN;
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class SecuritySchemeComponent extends MarkupComponent {
+public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeComponent.Parameters> {
 
-    private final PathOperation operation;
-    private final int titleLevel;
     private final Map<String, SecuritySchemeDefinition> securityDefinitions;
     private final DefinitionDocumentResolver securityDocumentResolver;
+    private final TableComponent tableComponent;
 
-    public SecuritySchemeComponent(Context context,
-                                   PathOperation operation,
-                                   Map<String, SecuritySchemeDefinition> securityDefinitions,
-                                   DefinitionDocumentResolver securityDocumentResolver,
-                                   int titleLevel){
+    public SecuritySchemeComponent(Swagger2MarkupConverter.Context context,
+                                   DefinitionDocumentResolver securityDocumentResolver){
         super(context);
-        this.operation = Validate.notNull(operation, "PathOperation must not be null");
-        this.securityDefinitions = securityDefinitions;
+        this.securityDefinitions = context.getSwagger().getSecurityDefinitions();
         this.securityDocumentResolver = Validate.notNull(securityDocumentResolver, "SecurityDocumentResolver must not be null");
-        this.titleLevel = titleLevel;
+        this.tableComponent = new TableComponent(context);
     }
 
+    public static class Parameters {
+        private final PathOperation operation;
+        private final int titleLevel;
+
+        public Parameters(PathOperation operation,
+                          int titleLevel){
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+            this.titleLevel = titleLevel;
+        }
+    }
+
+    public static SecuritySchemeComponent.Parameters parameters(PathOperation operation,
+                                                                 int titleLevel){
+        return new SecuritySchemeComponent.Parameters(operation, titleLevel);
+    }
+
+
     @Override
-    public MarkupDocBuilder render() {
-        MarkupDocBuilder securityBuilder = copyMarkupDocBuilder();
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        PathOperation operation = params.operation;
+        MarkupDocBuilder securityBuilder = copyMarkupDocBuilder(markupDocBuilder);
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
         if (CollectionUtils.isNotEmpty(securitySchemes)) {
@@ -76,23 +90,22 @@ public class SecuritySchemeComponent extends MarkupComponent {
                         type = securityDefinitions.get(securityKey).getType();
                     }
 
-                    typeColumnBuilder.add(boldText(type));
-                    nameColumnBuilder.add(boldText(copyMarkupDocBuilder().crossReference(securityDocumentResolver.apply(securityKey), securityKey, securityKey).toString()));
+                    typeColumnBuilder.add(boldText(markupDocBuilder, type));
+                    nameColumnBuilder.add(boldText(markupDocBuilder, crossReference(markupDocBuilder, securityDocumentResolver.apply(securityKey), securityKey, securityKey)));
                     scopeColumnBuilder.add(Joiner.on(",").join(securityEntry.getValue()));
                 }
             }
 
-            securityBuilder = new TableComponent(new MarkupComponent.Context(config, securityBuilder, extensionRegistry),
-                    typeColumnBuilder.build(),
+            securityBuilder = tableComponent.apply(securityBuilder, TableComponent.parameters(typeColumnBuilder.build(),
                     nameColumnBuilder.build(),
-                    scopeColumnBuilder.build()).render();
+                    scopeColumnBuilder.build()));
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_END, securityBuilder, operation));
         String securityContent = securityBuilder.toString();
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(securityContent)) {
-            markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(SECURITY));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(SECURITY));
             markupDocBuilder.text(securityContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_AFTER, markupDocBuilder, operation));

@@ -59,14 +59,13 @@ public class BodyParameterComponentTest extends AbstractComponentTest{
         io.swagger.models.Path path = swagger.getPaths().get("/pets");
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
-        MarkupComponent.Context context = getComponentContext(config);
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
         //When
-        MarkupDocBuilder markupDocBuilder = new BodyParameterComponent(context,
-                pathOperations.get(0),
-                swagger.getDefinitions(),
-                new DefinitionDocumentResolverFromOperation(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                new ArrayList<>()
-                ).render();
+        markupDocBuilder = new BodyParameterComponent(converter.getContext(),
+                new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")))
+                .apply(markupDocBuilder, BodyParameterComponent.parameters(pathOperations.get(0), new ArrayList<>()));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 

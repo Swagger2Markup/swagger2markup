@@ -16,7 +16,9 @@
 package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +28,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class TableComponentTest extends AbstractComponentTest{
 
@@ -50,18 +51,18 @@ public class TableComponentTest extends AbstractComponentTest{
         StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of("description"));
         descriptionColumnBuilder.add("").add("").add("");
 
+        Swagger2MarkupConverter.Context context = createContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
-        TableComponent tableComponent = new TableComponent(getComponentContext(),
+        markupDocBuilder = new TableComponent(context).apply(markupDocBuilder,
+                TableComponent.parameters(
                 typeColumnBuilder.build(),
                 nameColumnBuilder.build(),
-                descriptionColumnBuilder.build());
-        tableComponent.render().writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+                descriptionColumnBuilder.build()));
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
-
-        assertThat(tableComponent.getColumnCount()).isEqualTo(2);
-        assertThat(tableComponent.getRowCount()).isEqualTo(3);
     }
 
 

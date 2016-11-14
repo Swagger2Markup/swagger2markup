@@ -17,6 +17,8 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
@@ -37,47 +39,70 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class PathOperationComponent extends MarkupComponent {
+public class PathOperationComponent extends MarkupComponent<PathOperationComponent.Parameters> {
 
-    private final PathOperation operation;
     private final DefinitionDocumentResolver definitionDocumentResolver;
     private final DefinitionDocumentResolver securityDocumentResolver;
     private final Map<String, Model> definitions;
     private final Map<String, SecuritySchemeDefinition> securityDefinitions;
+    private final PropertiesTableComponent propertiesTableComponent;
+    private final ParameterTableComponent parameterTableComponent;
+    private final ConsumesComponent consumesComponent;
+    private final ProducesComponent producesComponent;
+    private final SecuritySchemeComponent securitySchemeComponent;
+    private final BodyParameterComponent bodyParameterComponent;
+    private final ResponseComponent responseComponent;
 
-    public PathOperationComponent(Context context,
-                                  PathOperation operation,
-                                  Map<String, Model> definitions,
-                                  Map<String, SecuritySchemeDefinition> securityDefinitions,
+    public PathOperationComponent(Swagger2MarkupConverter.Context context,
                                   DefinitionDocumentResolver definitionDocumentResolver,
                                   DefinitionDocumentResolver securityDocumentResolver){
         super(context);
-        this.operation = Validate.notNull(operation, "PathOperation must not be null");
-        this.definitions = definitions;
-        this.securityDefinitions = securityDefinitions;
+        this.definitions = context.getSwagger().getDefinitions();
+        this.securityDefinitions = context.getSwagger().getSecurityDefinitions();
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
         this.securityDocumentResolver = Validate.notNull(securityDocumentResolver, "SecurityDocumentResolver must not be null");
+        this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
+        this.parameterTableComponent = new ParameterTableComponent(context, definitionDocumentResolver);
+        this.consumesComponent = new ConsumesComponent(context);
+        this.producesComponent = new ProducesComponent(context);
+        this.securitySchemeComponent = new SecuritySchemeComponent(context, securityDocumentResolver);
+        this.bodyParameterComponent = new BodyParameterComponent(context, definitionDocumentResolver);
+        this.responseComponent = new ResponseComponent(context, definitionDocumentResolver);
+    }
+
+    public static PathOperationComponent.Parameters parameters(PathOperation operation){
+        return new PathOperationComponent.Parameters(operation);
+    }
+
+    public static class Parameters {
+
+        private final PathOperation operation;
+
+        public Parameters(PathOperation operation){
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        PathOperation operation = params.operation;
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_BEFORE, markupDocBuilder, operation));
-        buildOperationTitle(operation);
+        buildOperationTitle(markupDocBuilder, operation);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_BEGIN, markupDocBuilder, operation));
-        buildDeprecatedSection(operation);
-        buildDescriptionSection(operation);
-        inlineDefinitions(buildParametersSection(operation), operation.getPath() + " " + operation.getMethod(), markupDocBuilder);
-        inlineDefinitions(buildBodyParameterSection(operation), operation.getPath() + " " + operation.getMethod(), markupDocBuilder);
-        inlineDefinitions(buildResponsesSection(operation), operation.getPath() + " " + operation.getMethod(), markupDocBuilder);
-        buildConsumesSection(operation);
-        buildProducesSection(operation);
-        buildTagsSection(operation);
-        buildSecuritySchemeSection(operation);
-        buildExamplesSection(operation);
+        buildDeprecatedSection(markupDocBuilder, operation);
+        buildDescriptionSection(markupDocBuilder, operation);
+        inlineDefinitions(markupDocBuilder, buildParametersSection(markupDocBuilder, operation), operation.getPath() + " " + operation.getMethod());
+        inlineDefinitions(markupDocBuilder, buildBodyParameterSection(markupDocBuilder, operation), operation.getPath() + " " + operation.getMethod());
+        inlineDefinitions(markupDocBuilder, buildResponsesSection(markupDocBuilder, operation), operation.getPath() + " " + operation.getMethod());
+        buildConsumesSection(markupDocBuilder, operation);
+        buildProducesSection(markupDocBuilder, operation);
+        buildTagsSection(markupDocBuilder, operation);
+        buildSecuritySchemeSection(markupDocBuilder, operation);
+        buildExamplesSection(markupDocBuilder, operation);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_END, markupDocBuilder, operation));
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_AFTER, markupDocBuilder, operation));
         return markupDocBuilder;
@@ -90,8 +115,8 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param operation  the Swagger Operation
      */
-    private void buildOperationTitle(PathOperation operation) {
-        buildOperationTitle(operation.getTitle(), operation.getId());
+    private void buildOperationTitle(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
+        buildOperationTitle(markupDocBuilder, operation.getTitle(), operation.getId());
         if (operation.getTitle().equals(operation.getOperation().getSummary())) {
             markupDocBuilder.block(operation.getMethod() + " " + operation.getPath(), MarkupBlockStyle.LITERAL);
         }
@@ -103,7 +128,7 @@ public class PathOperationComponent extends MarkupComponent {
      * @param title      the operation title
      * @param anchor     optional anchor (null => auto-generate from title)
      */
-    private void buildOperationTitle(String title, String anchor) {
+    private void buildOperationTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             markupDocBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         } else {
@@ -116,7 +141,7 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param operation  the Swagger Operation
      */
-    private void buildDeprecatedSection(PathOperation operation) {
+    private void buildDeprecatedSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (BooleanUtils.isTrue(operation.getOperation().isDeprecated())) {
             markupDocBuilder.block(DEPRECATED_OPERATION, MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.CAUTION);
         }
@@ -127,19 +152,19 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param operation  the Swagger Operation
      */
-    private void buildDescriptionSection(PathOperation operation) {
-        MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder();
+    private void buildDescriptionSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
+        MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder(markupDocBuilder);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_BEGIN, descriptionBuilder, operation));
         String description = operation.getOperation().getDescription();
         if (isNotBlank(description)) {
-            descriptionBuilder.paragraph(markupDescription(description));
+            descriptionBuilder.paragraph(markupDescription(markupDocBuilder, description));
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_END, descriptionBuilder, operation));
         String descriptionContent = descriptionBuilder.toString();
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(descriptionContent)) {
-            buildSectionTitle(labels.getString(Labels.DESCRIPTION));
+            buildSectionTitle(markupDocBuilder, labels.getString(Labels.DESCRIPTION));
             markupDocBuilder.text(descriptionContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_AFTER, markupDocBuilder, operation));
@@ -150,17 +175,15 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param operation  the Swagger Operation
      */
-    private List<ObjectType> buildParametersSection(PathOperation operation) {
+    private List<ObjectType> buildParametersSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
 
         List<ObjectType> inlineDefinitions = new ArrayList<>();
 
-        new ParameterTableComponent(context,
+        parameterTableComponent.apply(markupDocBuilder, ParameterTableComponent.parameters(
                 operation,
-                definitions,
-                definitionDocumentResolver,
                 inlineDefinitions,
                 getSectionTitleLevel()
-        ).render();
+        ));
 
         return inlineDefinitions;
     }
@@ -171,28 +194,25 @@ public class PathOperationComponent extends MarkupComponent {
      * @param operation  the Swagger Operation
      * @return a list of inlined types.
      */
-    private List<ObjectType> buildBodyParameterSection(PathOperation operation) {
+    private List<ObjectType> buildBodyParameterSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
-        new BodyParameterComponent(context,
+
+        bodyParameterComponent.apply(markupDocBuilder, BodyParameterComponent.parameters(
                 operation,
-                definitions,
-                definitionDocumentResolver,
                 inlineDefinitions
-        ).render();
+        ));
 
         return inlineDefinitions;
     }
 
-    private List<ObjectType> buildResponsesSection(PathOperation operation) {
+    private List<ObjectType> buildResponsesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         List<ObjectType> inlineDefinitions = new ArrayList<>();
 
-        new ResponseComponent(
-                context,
+        responseComponent.apply(markupDocBuilder, ResponseComponent.parameters(
                 operation,
-                definitionDocumentResolver,
-                inlineDefinitions,
-                getSectionTitleLevel()
-        ).render();
+                getSectionTitleLevel(),
+                inlineDefinitions
+        ));
 
         return inlineDefinitions;
     }
@@ -202,7 +222,7 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param title      the section title
      */
-    private void buildSectionTitle(String title) {
+    private void buildSectionTitle(MarkupDocBuilder markupDocBuilder, String title) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             markupDocBuilder.sectionTitleLevel3(title);
         } else {
@@ -218,66 +238,60 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param title      inline schema title
      * @param anchor     inline schema anchor
-     * @param docBuilder the docbuilder do use for output
      */
-    private void addInlineDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        docBuilder.anchor(anchor);
-        docBuilder.newLine();
-        docBuilder.boldTextLine(title);
+    private void addInlineDefinitionTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
+        markupDocBuilder.anchor(anchor);
+        markupDocBuilder.newLine();
+        markupDocBuilder.boldTextLine(title);
     }
 
     /**
      * Builds inline schema definitions
-     *
+
+     * @param markupDocBuilder   the docbuilder do use for output
      * @param definitions  all inline definitions to display
      * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-     * @param docBuilder   the docbuilder do use for output
      */
-    private void inlineDefinitions(List<ObjectType> definitions, String uniquePrefix, MarkupDocBuilder docBuilder) {
+    private void inlineDefinitions(MarkupDocBuilder markupDocBuilder, List<ObjectType> definitions, String uniquePrefix) {
         if (CollectionUtils.isNotEmpty(definitions)) {
             for (ObjectType definition : definitions) {
-                addInlineDefinitionTitle(definition.getName(), definition.getUniqueName(), docBuilder);
+                addInlineDefinitionTitle(markupDocBuilder, definition.getName(), definition.getUniqueName());
 
                 List<ObjectType> localDefinitions = new ArrayList<>();
-                        new PropertiesTableComponent(
-                                new Context(config, docBuilder, extensionRegistry),
+                        propertiesTableComponent.apply(markupDocBuilder, PropertiesTableComponent.parameters(
                                 definition.getProperties(),
                                 uniquePrefix,
-                                definitionDocumentResolver,
-                                localDefinitions).render();
+                                localDefinitions
+                        ));
                 for (ObjectType localDefinition : localDefinitions)
-                    inlineDefinitions(Collections.singletonList(localDefinition), localDefinition.getUniqueName(), docBuilder);
+                    inlineDefinitions(markupDocBuilder, Collections.singletonList(localDefinition), localDefinition.getUniqueName());
             }
         }
 
     }
 
-    private void buildConsumesSection(PathOperation operation) {
+    private void buildConsumesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         List<String> consumes = operation.getOperation().getConsumes();
         if (CollectionUtils.isNotEmpty(consumes)) {
-            new ConsumesComponent(context,
-                    consumes,
-                    getSectionTitleLevel())
-                    .render();
+            consumesComponent.apply(markupDocBuilder, ConsumesComponent.parameters(consumes,
+                    getSectionTitleLevel()));
         }
 
     }
 
-    private void buildProducesSection(PathOperation operation) {
+    private void buildProducesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         List<String> produces = operation.getOperation().getProduces();
         if (CollectionUtils.isNotEmpty(produces)) {
-            new ProducesComponent(context,
-                    produces,
-                    getSectionTitleLevel())
-                    .render();
+            producesComponent.apply(markupDocBuilder, ProducesComponent.parameters(produces,
+                    getSectionTitleLevel()));
         }
     }
 
-    private void buildTagsSection(PathOperation operation) {
+    private void buildTagsSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
-                buildSectionTitle(labels.getString(TAGS));
+                buildSectionTitle(markupDocBuilder, labels.getString(TAGS));
                 if (config.getTagOrdering() != null) {
                     Collections.sort(tags, config.getTagOrdering());
                 }
@@ -291,15 +305,12 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param operation  the Swagger Operation
      */
-    private void buildSecuritySchemeSection(PathOperation operation) {
+    private void buildSecuritySchemeSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (config.isPathSecuritySectionEnabled()) {
-            new SecuritySchemeComponent(
-                    context,
+            securitySchemeComponent.apply(markupDocBuilder, SecuritySchemeComponent.parameters(
                     operation,
-                    securityDefinitions,
-                    securityDocumentResolver,
                     getSectionTitleLevel()
-            ).render();
+            ));
         }
     }
 
@@ -320,20 +331,20 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param operation  the Swagger Operation
      */
-    private void buildExamplesSection(PathOperation operation) {
+    private void buildExamplesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
 
         Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
         Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
 
-        exampleMap(generatedRequestExampleMap, labels.getString(EXAMPLE_REQUEST), labels.getString(REQUEST));
-        exampleMap(generatedResponseExampleMap, labels.getString(EXAMPLE_RESPONSE), labels.getString(RESPONSE));
+        exampleMap(markupDocBuilder, generatedRequestExampleMap, labels.getString(EXAMPLE_REQUEST), labels.getString(REQUEST));
+        exampleMap(markupDocBuilder, generatedResponseExampleMap, labels.getString(EXAMPLE_RESPONSE), labels.getString(RESPONSE));
     }
 
-    private void exampleMap(Map<String, Object> exampleMap, String operationSectionTitle, String sectionTitle) {
+    private void exampleMap(MarkupDocBuilder markupDocBuilder, Map<String, Object> exampleMap, String operationSectionTitle, String sectionTitle) {
         if (exampleMap.size() > 0) {
-            buildSectionTitle(operationSectionTitle);
+            buildSectionTitle(markupDocBuilder, operationSectionTitle);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
-                buildExampleTitle(sectionTitle + " " + entry.getKey());
+                buildExampleTitle(markupDocBuilder, sectionTitle + " " + entry.getKey());
                 markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
             }
         }
@@ -344,7 +355,7 @@ public class PathOperationComponent extends MarkupComponent {
      *
      * @param title      the section title
      */
-    private void buildExampleTitle(String title) {
+    private void buildExampleTitle(MarkupDocBuilder markupDocBuilder, String title) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             markupDocBuilder.sectionTitleLevel4(title);
         } else {

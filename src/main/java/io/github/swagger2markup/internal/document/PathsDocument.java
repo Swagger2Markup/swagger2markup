@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.document.builder;
+package io.github.swagger2markup.internal.document;
 
 import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
-import io.github.swagger2markup.internal.component.Labels;
-import io.github.swagger2markup.internal.component.MarkupComponent;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.component.PathOperationComponent;
-import io.github.swagger2markup.internal.document.MarkupDocument;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
@@ -30,7 +27,6 @@ import io.github.swagger2markup.internal.utils.TagUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Path;
-import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -51,12 +47,20 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 /**
  * @author Robert Winkler
  */
-public class PathsDocumentBuilder extends MarkupDocumentBuilder {
+public class PathsDocument extends MarkupDocument {
 
     private static final String PATHS_ANCHOR = "paths";
+    private final PathOperationComponent pathOperationComponent;
 
-    public PathsDocumentBuilder(Swagger2MarkupConverter.Context globalContext, Swagger2MarkupExtensionRegistry extensionRegistry, java.nio.file.Path outputPath) {
-        super(globalContext, extensionRegistry, outputPath);
+    public PathsDocument(Swagger2MarkupConverter.Context context) {
+        this(context, null);
+    }
+
+    public PathsDocument(Swagger2MarkupConverter.Context context, java.nio.file.Path outputPath) {
+        super(context, outputPath);
+        this.pathOperationComponent = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(markupDocBuilder, config, outputPath),
+                new SecurityDocumentResolver(markupDocBuilder, config, outputPath));
 
         if (config.isGeneratedExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -86,7 +90,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
      * @return the paths MarkupDocument
      */
     @Override
-    public MarkupDocument build() {
+    public MarkupDocBuilder apply() {
         Map<String, Path> paths = globalContext.getSwagger().getPaths();
         if (MapUtils.isNotEmpty(paths)) {
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
@@ -96,7 +100,7 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
         }
-        return new MarkupDocument(markupDocBuilder);
+        return markupDocBuilder;
     }
 
     /**
@@ -186,16 +190,16 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     private void buildOperation(PathOperation operation) {
         if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder();
-            buildOperation(operation, pathDocBuilder);
+            buildOperation(pathDocBuilder, operation);
             java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced : '{}'", operationFile);
             }
-            buildOperationRef(operation, this.markupDocBuilder);
+            buildOperationRef(markupDocBuilder, operation);
 
         } else {
-            buildOperation(operation, this.markupDocBuilder);
+            buildOperation(markupDocBuilder, operation);
         }
 
         if (logger.isInfoEnabled()) {
@@ -206,29 +210,23 @@ public class PathsDocumentBuilder extends MarkupDocumentBuilder {
     /**
      * Builds a path operation.
      *
+     * @param markupDocBuilder the docbuilder do use for output
      * @param operation  the Swagger Operation
-     * @param docBuilder the docbuilder do use for output
+     *
      */
-    private void buildOperation(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (operation != null) {
-            Swagger swagger = globalContext.getSwagger();
-            new PathOperationComponent(new MarkupComponent.Context(config ,docBuilder, extensionRegistry),
-                    operation,
-                    swagger.getDefinitions(),
-                    swagger.getSecurityDefinitions(),
-                    new DefinitionDocumentResolverFromOperation(docBuilder, config, outputPath),
-                    new SecurityDocumentResolver(docBuilder, config, outputPath)
-                    ).render();
+            pathOperationComponent.apply(markupDocBuilder, PathOperationComponent.parameters(operation));
         }
     }
 
     /**
      * Builds a cross-reference to a separated operation file
      *
-     * @param operation  the Swagger Operation
      * @param docBuilder the docbuilder do use for output
+     * @param operation  the Swagger Operation
      */
-    private void buildOperationRef(PathOperation operation, MarkupDocBuilder docBuilder) {
+    private void buildOperationRef(MarkupDocBuilder docBuilder, PathOperation operation) {
         String document;
         if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
             document = null;

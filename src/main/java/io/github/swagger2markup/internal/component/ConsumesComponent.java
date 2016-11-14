@@ -16,30 +16,40 @@
 package io.github.swagger2markup.internal.component;
 
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ConsumesComponent extends MarkupComponent {
+public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Parameters>{
 
-    private final List<String> consumes;
-    private final int titleLevel;
-
-    public ConsumesComponent(Context context,
-                             List<String> consumes,
-                             int titleLevel){
+    public ConsumesComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.consumes = Validate.notNull(consumes, "Consumes must not be null");
-        this.titleLevel = titleLevel;
+    }
+
+    public static class Parameters {
+        private final List<String> consumes;
+        private final int titleLevel;
+        public Parameters(List<String> consumes,
+                       int titleLevel){
+            this.consumes = Validate.notNull(consumes, "Consumes must not be null");
+            this.titleLevel = titleLevel;
+        }
+    }
+
+    public static ConsumesComponent.Parameters parameters(List<String> consumes,
+                                                          int titleLevel){
+        return new ConsumesComponent.Parameters(consumes, titleLevel);
     }
 
     @Override
-    public MarkupDocBuilder render() {
-        markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.CONSUMES));
-        markupDocBuilder.unorderedList(consumes.stream()
-                .map(this::literalText).collect(Collectors.toList()));
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.CONSUMES));
+        markupDocBuilder.unorderedList(params.consumes.stream()
+                .map(value -> literalText(markupDocBuilder, value)).collect(Collectors.toList()));
         return markupDocBuilder;
     }
 }

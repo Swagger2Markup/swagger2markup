@@ -17,140 +17,69 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
-import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import org.apache.commons.collections4.MapUtils;
+import javaslang.Function2;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public abstract class MarkupComponent {
+public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder, T, MarkupDocBuilder> {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
     static final String COLON = " : ";
 
-    Context context;
+    Swagger2MarkupConverter.Context context;
     ResourceBundle labels;
-    MarkupDocBuilder markupDocBuilder;
     Swagger2MarkupConfig config;
     Swagger2MarkupExtensionRegistry extensionRegistry;
 
-    MarkupComponent(Context context){
+    MarkupComponent(Swagger2MarkupConverter.Context context){
         this.context = context;
         this.config = context.getConfig();
-        this.markupDocBuilder = context.getMarkupDocBuilder();
-        this.labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
         this.extensionRegistry = context.getExtensionRegistry();
+        this.labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
     }
 
-    public static class Context {
-        private final Swagger2MarkupConfig config;
-        private final MarkupDocBuilder markupDocBuilder;
-        private final Swagger2MarkupExtensionRegistry extensionRegistry;
-
-        public Context(Swagger2MarkupConfig config, MarkupDocBuilder markupDocBuilder, Swagger2MarkupExtensionRegistry extensionRegistry){
-            this.config = config;
-            this.markupDocBuilder = markupDocBuilder;
-            this.extensionRegistry = extensionRegistry;
-        }
-
-        public Swagger2MarkupConfig getConfig() {
-            return config;
-        }
-
-        public MarkupDocBuilder getMarkupDocBuilder() {
-            return markupDocBuilder;
-        }
-
-        public Swagger2MarkupExtensionRegistry getExtensionRegistry() {
-            return extensionRegistry;
-        }
-    }
-
-    public abstract MarkupDocBuilder render();
-
-    MarkupDocBuilder copyMarkupDocBuilder() {
+    MarkupDocBuilder copyMarkupDocBuilder(MarkupDocBuilder markupDocBuilder) {
         return markupDocBuilder.copy(false);
     }
 
-    String literalText(String text) {
-        return copyMarkupDocBuilder().literalText(text).toString();
+    String literalText(MarkupDocBuilder markupDocBuilder, String text) {
+        if (StringUtils.isBlank(text)) {
+            return StringUtils.EMPTY;
+        }
+        return copyMarkupDocBuilder(markupDocBuilder).literalText(text).toString();
     }
 
-    String boldText(String text) {
-        return copyMarkupDocBuilder().boldText(text).toString();
+    String boldText(MarkupDocBuilder markupDocBuilder, String text) {
+        if (StringUtils.isBlank(text)) {
+            return StringUtils.EMPTY;
+        }
+        return copyMarkupDocBuilder(markupDocBuilder).boldText(text).toString();
     }
 
-    String italicText(String text) {
-        return copyMarkupDocBuilder().italicText(text).toString();
+    String italicText(MarkupDocBuilder markupDocBuilder, String text) {
+        if (StringUtils.isBlank(text)) {
+            return StringUtils.EMPTY;
+        }
+        return copyMarkupDocBuilder(markupDocBuilder).italicText(text).toString();
     }
 
-    /**
-     * Returns converted markup text from Swagger.
-     *
-     * @param markupText text to convert, or empty string
-     * @return converted markup text, or an empty string if {@code markupText} == null
-     */
-    String markupDescription(String markupText) {
+    String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
+        return copyMarkupDocBuilder(markupDocBuilder)
+                .crossReference(document, anchor, text).toString();
+    }
+
+    String markupDescription(MarkupDocBuilder markupDocBuilder, String markupText) {
         if (StringUtils.isBlank(markupText)) {
             return StringUtils.EMPTY;
         }
-        return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), config.getSwaggerMarkupLanguage()).toString().trim();
-    }
-
-    /**
-     * Returns a RefType to a new inlined type named with {@code name} and {@code uniqueName}.<br>
-     * The returned RefType point to the new inlined type which is added to the {@code inlineDefinitions} collection.<br>
-     * The function is recursive and support collections (ArrayType and MapType).<br>
-     * The function is transparent : {@code type} is returned as-is if type is not inlinable or if !config.isInlineSchemaEnabled().<br>
-     *
-     * @param type type to inline
-     * @param name name of the created inline ObjectType
-     * @param uniqueName unique name of the created inline ObjectType
-     * @param inlineDefinitions a non null collection of inline ObjectType
-     * @return the type referencing the newly created inline ObjectType. Can be a RefType, an ArrayType or a MapType
-     */
-    Type createInlineType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
-        if (!config.isInlineSchemaEnabled())
-            return type;
-
-        if (type instanceof ObjectType) {
-            return createInlineObjectType(type, name, uniqueName, inlineDefinitions);
-        } else if (type instanceof ArrayType) {
-            ArrayType arrayType = (ArrayType)type;
-            arrayType.setOfType(createInlineType(arrayType.getOfType(), name, uniqueName, inlineDefinitions));
-
-            return arrayType;
-        } else if (type instanceof MapType) {
-            MapType mapType = (MapType)type;
-            if (mapType.getValueType() instanceof ObjectType)
-                mapType.setValueType(createInlineType(mapType.getValueType(), name, uniqueName, inlineDefinitions));
-
-            return mapType;
-        } else {
-            return type;
-        }
-    }
-
-    private Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
-        if (type instanceof ObjectType) {
-            ObjectType objectType = (ObjectType)type;
-            if (MapUtils.isNotEmpty(objectType.getProperties())) {
-                if (objectType.getName() == null) {
-                    objectType.setName(name);
-                    objectType.setUniqueName(uniqueName);
-                }
-                inlineDefinitions.add(objectType);
-                return new RefType(objectType);
-            } else
-                return type;
-        } else
-            return type;
+        return copyMarkupDocBuilder(markupDocBuilder).importMarkup(new StringReader(markupText), config.getSwaggerMarkupLanguage()).toString().trim();
     }
 }

@@ -17,6 +17,8 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
@@ -38,33 +40,50 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class ParameterTableComponent extends MarkupComponent {
+public class ParameterTableComponent extends MarkupComponent<ParameterTableComponent.Parameters> {
 
-    private final PathOperation operation;
-    private final int titleLevel;
+
     private final DefinitionDocumentResolver definitionDocumentResolver;
     private final Map<String, Model> definitions;
-    private final List<ObjectType> inlineDefinitions;
+    private final TableComponent tableComponent;
 
-    public ParameterTableComponent(Context context,
-                                   PathOperation operation,
-                                   Map<String, Model> definitions,
-                                   DefinitionDocumentResolver definitionDocumentResolver,
-                                   List<ObjectType> inlineDefinitions,
-                                   int titleLevel){
+    public ParameterTableComponent(Swagger2MarkupConverter.Context context,
+                                   DefinitionDocumentResolver definitionDocumentResolver){
         super(context);
-        this.operation = Validate.notNull(operation, "PathOperation must not be null");
-        this.definitions = definitions;
+        this.definitions = context.getSwagger().getDefinitions();
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
-        this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
-        this.titleLevel = titleLevel;
+        this.tableComponent = new TableComponent(context);
+
+    }
+
+    public static ParameterTableComponent.Parameters parameters(PathOperation operation,
+                                                                List<ObjectType> inlineDefinitions,
+                                                                int titleLevel){
+        return new ParameterTableComponent.Parameters(operation, inlineDefinitions, titleLevel);
+    }
+
+    public static class Parameters {
+        private final PathOperation operation;
+        private final int titleLevel;
+        private final List<ObjectType> inlineDefinitions;
+
+        public Parameters(PathOperation operation,
+                          List<ObjectType> inlineDefinitions,
+                          int titleLevel){
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        PathOperation operation = params.operation;
+        List<ObjectType> inlineDefinitions = params.inlineDefinitions;
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (config.getParameterOrdering() != null)
             Collections.sort(parameters, config.getParameterOrdering());
@@ -73,7 +92,7 @@ public class ParameterTableComponent extends MarkupComponent {
         List<Parameter> filteredParameters = parameters.stream()
                 .filter(this::filterParameter).collect(Collectors.toList());
 
-        MarkupDocBuilder parametersBuilder = copyMarkupDocBuilder();
+        MarkupDocBuilder parametersBuilder = copyMarkupDocBuilder(markupDocBuilder);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
         if (CollectionUtils.isNotEmpty(filteredParameters)) {
             StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(TYPE_COLUMN)))
@@ -92,28 +111,30 @@ public class ParameterTableComponent extends MarkupComponent {
 
             for (Parameter parameter : filteredParameters) {
                 Type type = ParameterUtils.getType(parameter, definitions, definitionDocumentResolver);
-                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
+                if (config.isInlineSchemaEnabled()){
+                    type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
+                }
 
-                typeColumnBuilder.add(boldText(WordUtils.capitalize(parameter.getIn())));
-                nameColumnBuilder.add(getParameterNameColumnContent(parameter));
-                descriptionColumnBuilder.add(markupDescription(parameter.getDescription()));
+                typeColumnBuilder.add(boldText(markupDocBuilder, WordUtils.capitalize(parameter.getIn())));
+                nameColumnBuilder.add(getParameterNameColumnContent(markupDocBuilder, parameter));
+                descriptionColumnBuilder.add(markupDescription(markupDocBuilder, parameter.getDescription()));
                 schemaColumnBuilder.add(type.displaySchema(markupDocBuilder));
-                defaultColumnBuilder.add(ParameterUtils.getDefaultValue(parameter).map(value -> literalText(Json.pretty(value))).orElse(""));
+                defaultColumnBuilder.add(ParameterUtils.getDefaultValue(parameter).map(value -> literalText(markupDocBuilder, Json.pretty(value))).orElse(""));
             }
 
-            parametersBuilder = new TableComponent(new MarkupComponent.Context(config, parametersBuilder, extensionRegistry),
+            parametersBuilder = tableComponent.apply(parametersBuilder, TableComponent.parameters(
                     typeColumnBuilder.build(),
                     nameColumnBuilder.build(),
                     descriptionColumnBuilder.build(),
                     schemaColumnBuilder.build(),
-                    defaultColumnBuilder.build()).render();
+                    defaultColumnBuilder.build()));
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_DESCRIPTION_END, parametersBuilder, operation));
         String parametersContent = parametersBuilder.toString();
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(parametersContent)) {
-            markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.PARAMETERS));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.PARAMETERS));
             markupDocBuilder.text(parametersContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_AFTER, markupDocBuilder, operation));
@@ -121,12 +142,8 @@ public class ParameterTableComponent extends MarkupComponent {
         return markupDocBuilder;
     }
 
-    /**
-     * @param parameter the Swagger parameter
-     * @return the name column column content of the parameter
-     */
-    private String getParameterNameColumnContent(Parameter parameter){
-        MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder();
+    private String getParameterNameColumnContent(MarkupDocBuilder markupDocBuilder, Parameter parameter){
+        MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder(markupDocBuilder);
 
         parameterNameContent.boldTextLine(parameter.getName(), true);
         if (parameter.getRequired())

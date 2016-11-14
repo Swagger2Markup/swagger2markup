@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.component;
+package io.github.swagger2markup.internal;
 
 public class Labels {
 

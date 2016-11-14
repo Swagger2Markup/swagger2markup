@@ -15,8 +15,9 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
+import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Info;
 import org.apache.commons.io.FileUtils;
@@ -43,7 +44,11 @@ public class VersionInfoComponentTest extends AbstractComponentTest{
     public void testVersionInfoComponent() throws URISyntaxException {
 
         Info info = new Info().version("1.0");
-        MarkupDocBuilder markupDocBuilder = new VersionInfoComponent(getComponentContext(), info, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+
+        Swagger2MarkupConverter.Context context = createContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
+        markupDocBuilder = new VersionInfoComponent(context).apply(markupDocBuilder, VersionInfoComponent.parameters(info, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

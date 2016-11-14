@@ -55,15 +55,15 @@ public class PropertiesTableComponentTest extends AbstractComponentTest{
 
         Model petModel = swagger.getDefinitions().get("Pet");
 
-        MarkupComponent.Context context = getComponentContext();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         List<ObjectType> localDefinitions = new ArrayList<>();
         //When
-        MarkupDocBuilder markupDocBuilder = new PropertiesTableComponent(context,
-                petModel.getProperties(),
-                "Pet",
-                new DefinitionDocumentResolverFromDefinition(context.getMarkupDocBuilder(), context.getConfig(), Paths.get("")),
-                localDefinitions).render();
+        markupDocBuilder = new PropertiesTableComponent(context,
+                new DefinitionDocumentResolverFromDefinition(markupDocBuilder, context.getConfig(), Paths.get("")))
+                .apply(markupDocBuilder, PropertiesTableComponent.parameters(petModel.getProperties(),
+                        "Pet", localDefinitions));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         //Then

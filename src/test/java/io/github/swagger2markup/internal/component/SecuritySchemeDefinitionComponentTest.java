@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
+import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Swagger;
 import io.swagger.models.auth.SecuritySchemeDefinition;
@@ -52,7 +52,13 @@ public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest
 
         SecuritySchemeDefinition securitySchemeDefinition = swagger.getSecurityDefinitions().get("petstore_auth");
 
-        MarkupDocBuilder markupDocBuilder = new SecuritySchemeDefinitionComponent(getComponentContext(), "petstore_auth", securitySchemeDefinition, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
+        markupDocBuilder = new SecuritySchemeDefinitionComponent(context).apply(
+                markupDocBuilder, SecuritySchemeDefinitionComponent.parameters("petstore_auth",
+                        securitySchemeDefinition,
+                        OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

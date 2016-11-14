@@ -15,33 +15,48 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Info;
 import org.apache.commons.lang3.Validate;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class VersionInfoComponent extends MarkupComponent {
+public class VersionInfoComponent extends MarkupComponent<VersionInfoComponent.Parameters> {
 
-    private final int titleLevel;
-    private final Info info;
 
-    public VersionInfoComponent(Context context,
-                                Info info,
-                                int titleLevel){
+
+    public VersionInfoComponent(Swagger2MarkupConverter.Context context){
         super(context);
-        this.info = Validate.notNull(info, "Info must not be null");
-        this.titleLevel = titleLevel;
+    }
+
+    public static VersionInfoComponent.Parameters parameters(Info info,
+                                                           int titleLevel){
+        return new VersionInfoComponent.Parameters(info, titleLevel);
+    }
+
+    public static class Parameters {
+
+        private final int titleLevel;
+        private final Info info;
+
+        public Parameters(
+                Info info,
+                int titleLevel){
+            this.info = Validate.notNull(info, "Info must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 
     @Override
-    public MarkupDocBuilder render() {
-        String version = info.getVersion();
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+        String version = params.info.getVersion();
         if(isNotBlank(version)){
-            this.markupDocBuilder.sectionTitleLevel(titleLevel, labels.getString(Labels.CURRENT_VERSION));
-            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder();
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.CURRENT_VERSION));
+            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             paragraphBuilder.italicText(labels.getString(Labels.VERSION)).textLine(COLON + version);
-            this.markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
+            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
         return markupDocBuilder;
     }

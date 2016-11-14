@@ -17,6 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.ColumnIds;
 import ch.netzwerg.paleo.StringColumn;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
@@ -31,39 +32,53 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.swagger2markup.internal.component.Labels.*;
+import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
-public class PropertiesTableComponent extends MarkupComponent{
+public class PropertiesTableComponent extends MarkupComponent<PropertiesTableComponent.Parameters>{
 
-    private final Map<String, Property> properties;
-    private final String uniquePrefix;
+
     private final DefinitionDocumentResolver definitionDocumentResolver;
-    private final List<ObjectType> inlineDefinitions;
+    private final TableComponent tableComponent;
 
     /**
      * Build a generic property table
      *
-     * @param properties                 properties to display
-     * @param uniquePrefix               unique prefix to prepend to inline object names to enforce unicity
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      */
-    public PropertiesTableComponent(Context context,
-                                    Map<String, Property> properties,
-                                    String uniquePrefix,
-                                    DefinitionDocumentResolver definitionDocumentResolver,
-                                    List<ObjectType> inlineDefinitions){
+    public PropertiesTableComponent(Swagger2MarkupConverter.Context context,
+                                    DefinitionDocumentResolver definitionDocumentResolver){
         super(context);
-        this.properties = Validate.notNull(properties, "Properties must not be null");
-        this.uniquePrefix = uniquePrefix;
         this.definitionDocumentResolver = definitionDocumentResolver;
-        this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
-
+        this.tableComponent = new TableComponent(context);
     }
 
-    public MarkupDocBuilder render() {
+    public static PropertiesTableComponent.Parameters parameters(Map<String, Property> properties,
+                                                                 String parameterName,
+                                                                 List<ObjectType> inlineDefinitions){
+        return new PropertiesTableComponent.Parameters(properties, parameterName, inlineDefinitions);
+    }
+
+
+    public static class Parameters {
+        private final Map<String, Property> properties;
+        private final String parameterName;
+        private final List<ObjectType> inlineDefinitions;
+
+        public Parameters(Map<String, Property> properties,
+                          String parameterName,
+                          List<ObjectType> inlineDefinitions){
+
+            this.properties = Validate.notNull(properties, "Properties must not be null");
+            this.parameterName = Validate.notBlank(parameterName, "ParameterName must not be blank");
+            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
+        }
+    }
+
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
         StringColumn.Builder nameColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getString(NAME_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "3");
         StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getString(DESCRIPTION_COLUMN)))
@@ -72,13 +87,16 @@ public class PropertiesTableComponent extends MarkupComponent{
         StringColumn.Builder schemaColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getString(SCHEMA_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "4")
                 .putMetaData(TableComponent.HEADER_COLUMN, "true");
+        Map<String, Property> properties = params.properties;
         if (MapUtils.isNotEmpty(properties)) {
             Map<String, Property> sortedProperties = toSortedMap(properties, config.getPropertyOrdering());
             sortedProperties.forEach((String propertyName, Property property) -> {
                 PropertyWrapper propertyWrapper = new PropertyWrapper(property);
                 Type propertyType = propertyWrapper.getType(definitionDocumentResolver);
 
-                propertyType = createInlineType(propertyType, propertyName, uniquePrefix + " " + propertyName, inlineDefinitions);
+                if (config.isInlineSchemaEnabled()) {
+                    propertyType = createInlineType(propertyType, propertyName, params.parameterName + " " + propertyName, params.inlineDefinitions);
+                }
 
                 Optional<Object> optionalExample = propertyWrapper.getExample(config.isGeneratedExamplesEnabled(), markupDocBuilder);
                 Optional<Object> optionalDefaultValue = propertyWrapper.getDefaultValue();
@@ -90,7 +108,7 @@ public class PropertiesTableComponent extends MarkupComponent{
                 Optional<Number> optionalMaxValue = propertyWrapper.getMax();
                 boolean exclusiveMax = propertyWrapper.getExclusiveMax();
 
-                MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder();
+                MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder(markupDocBuilder);
                 propertyNameContent.boldTextLine(propertyName, true);
                 if (property.getRequired())
                     propertyNameContent.italicText(labels.getString(FLAGS_REQUIRED).toLowerCase());
@@ -101,8 +119,8 @@ public class PropertiesTableComponent extends MarkupComponent{
                     propertyNameContent.italicText(labels.getString(FLAGS_READ_ONLY).toLowerCase());
                 }
 
-                MarkupDocBuilder descriptionContent = copyMarkupDocBuilder();
-                String description = markupDescription(property.getDescription());
+                MarkupDocBuilder descriptionContent = copyMarkupDocBuilder(markupDocBuilder);
+                String description = markupDescription(markupDocBuilder, property.getDescription());
                 if (isNotBlank(description))
                     descriptionContent.text(description);
 
@@ -181,9 +199,9 @@ public class PropertiesTableComponent extends MarkupComponent{
             });
         }
 
-        return new TableComponent(new MarkupComponent.Context(config, markupDocBuilder, extensionRegistry),
+        return tableComponent.apply(markupDocBuilder, TableComponent.parameters(
                 nameColumnBuilder.build(),
                 descriptionColumnBuilder.build(),
-                schemaColumnBuilder.build()).render();
+                schemaColumnBuilder.build()));
     }
 }

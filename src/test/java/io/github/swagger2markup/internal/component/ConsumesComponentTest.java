@@ -15,8 +15,9 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.internal.document.builder.OverviewDocumentBuilder;
+import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -45,7 +46,12 @@ public class ConsumesComponentTest extends AbstractComponentTest{
         List<String> consumes = new ArrayList<>();
         consumes.add("application/json");
         consumes.add("application/xml");
-        MarkupDocBuilder markupDocBuilder = new ConsumesComponent(getComponentContext(), consumes, OverviewDocumentBuilder.SECTION_TITLE_LEVEL).render();
+
+        Swagger2MarkupConverter.Context context = createContext();
+        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+
+        markupDocBuilder = new ConsumesComponent(context).apply(markupDocBuilder, ConsumesComponent.parameters(
+                consumes, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
