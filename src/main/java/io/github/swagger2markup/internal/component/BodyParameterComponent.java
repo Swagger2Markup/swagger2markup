@@ -73,6 +73,7 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         PathOperation operation = params.operation;
+        List<ObjectType> inlineDefinitions = params.inlineDefinitions;
         if (config.isFlatBodyEnabled()) {
             List<Parameter> parameters = operation.getOperation().getParameters();
             if (CollectionUtils.isNotEmpty(parameters)) {
@@ -82,7 +83,7 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
 
                         if (!(type instanceof ObjectType)) {
                             if (config.isInlineSchemaEnabled()) {
-                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), params.inlineDefinitions);
+                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                             }
                         }
 
@@ -112,6 +113,8 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
                                     operation.getId(),
                                     localDefinitions
                             ));
+
+                            inlineDefinitions.addAll(localDefinitions);
                         }
                     }
                 }
