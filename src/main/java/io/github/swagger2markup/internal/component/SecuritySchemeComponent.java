@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static com.sun.org.apache.xml.internal.serializer.Method.UNKNOWN;
 import static io.github.swagger2markup.internal.Labels.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -85,7 +84,7 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
-                    String type = UNKNOWN;
+                    String type = labels.getString(UNKNOWN);
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
