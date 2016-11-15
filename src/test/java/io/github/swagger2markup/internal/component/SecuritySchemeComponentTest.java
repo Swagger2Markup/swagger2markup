@@ -59,7 +59,7 @@ public class SecuritySchemeComponentTest extends AbstractComponentTest{
         MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         //When
-        markupDocBuilder = new SecuritySchemeComponent(context,new SecurityDocumentResolver(markupDocBuilder, context.getConfig(), Paths.get("")))
+        markupDocBuilder = new SecuritySchemeComponent(context,new SecurityDocumentResolver(context))
                 .apply(markupDocBuilder, SecuritySchemeComponent.parameters(pathOperations.get(0), 3));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);

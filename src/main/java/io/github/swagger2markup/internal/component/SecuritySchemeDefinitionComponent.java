@@ -19,6 +19,7 @@ package io.github.swagger2markup.internal.component;
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
@@ -28,7 +29,7 @@ import org.apache.commons.lang3.Validate;
 import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -82,27 +83,27 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
         String type = securityScheme.getType();
         MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
 
-        paragraphBuilder.italicText(labels.getString(TYPE)).textLine(COLON + type);
+        paragraphBuilder.italicText(labels.getLabel(TYPE)).textLine(COLON + type);
 
         if (securityScheme instanceof ApiKeyAuthDefinition) {
-            paragraphBuilder.italicText(labels.getString(NAME)).textLine(COLON + ((ApiKeyAuthDefinition) securityScheme).getName());
-            paragraphBuilder.italicText(labels.getString(IN)).textLine(COLON + ((ApiKeyAuthDefinition) securityScheme).getIn());
+            paragraphBuilder.italicText(labels.getLabel(NAME)).textLine(COLON + ((ApiKeyAuthDefinition) securityScheme).getName());
+            paragraphBuilder.italicText(labels.getLabel(IN)).textLine(COLON + ((ApiKeyAuthDefinition) securityScheme).getIn());
 
             return markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         } else if (securityScheme instanceof OAuth2Definition) {
             OAuth2Definition oauth2Scheme = (OAuth2Definition) securityScheme;
             String flow = oauth2Scheme.getFlow();
-            paragraphBuilder.italicText(labels.getString(FLOW)).textLine(COLON + flow);
+            paragraphBuilder.italicText(labels.getLabel(FLOW)).textLine(COLON + flow);
             if (isNotBlank(oauth2Scheme.getAuthorizationUrl())) {
-                paragraphBuilder.italicText(labels.getString(AUTHORIZATION_URL)).textLine(COLON + oauth2Scheme.getAuthorizationUrl());
+                paragraphBuilder.italicText(labels.getLabel(AUTHORIZATION_URL)).textLine(COLON + oauth2Scheme.getAuthorizationUrl());
             }
             if (isNotBlank(oauth2Scheme.getTokenUrl())) {
-                paragraphBuilder.italicText(labels.getString(TOKEN_URL)).textLine(COLON + oauth2Scheme.getTokenUrl());
+                paragraphBuilder.italicText(labels.getLabel(TOKEN_URL)).textLine(COLON + oauth2Scheme.getTokenUrl());
             }
-            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(NAME_COLUMN)))
+            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(NAME_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "3")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
-            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(DESCRIPTION_COLUMN)))
+            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "17")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 

@@ -56,7 +56,7 @@ public class DefinitionComponentTest extends AbstractComponentTest{
         MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         //When
-        markupDocBuilder = new DefinitionComponent(context, new DefinitionDocumentResolverFromDefinition(markupDocBuilder, context.getConfig(), Paths.get("")))
+        markupDocBuilder = new DefinitionComponent(context, new DefinitionDocumentResolverFromDefinition(context))
                 .apply(markupDocBuilder, DefinitionComponent.parameters("Pet", petModel, 2));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
 

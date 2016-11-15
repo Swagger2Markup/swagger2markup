@@ -17,15 +17,16 @@ package io.github.swagger2markup.internal.document;
 
 import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.component.PathOperationComponent;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.internal.utils.TagUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Path;
 import io.swagger.models.Tag;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,20 +48,16 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 /**
  * @author Robert Winkler
  */
-public class PathsDocument extends MarkupDocument {
+public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
 
     private static final String PATHS_ANCHOR = "paths";
     private final PathOperationComponent pathOperationComponent;
 
-    public PathsDocument(Swagger2MarkupConverter.Context context) {
-        this(context, null);
-    }
-
-    public PathsDocument(Swagger2MarkupConverter.Context context, java.nio.file.Path outputPath) {
-        super(context, outputPath);
-        this.pathOperationComponent = new PathOperationComponent(context,
-                new DefinitionDocumentResolverFromOperation(markupDocBuilder, config, outputPath),
-                new SecurityDocumentResolver(markupDocBuilder, config, outputPath));
+    public PathsDocument(Swagger2MarkupConverter.Context context,
+                         DefinitionDocumentResolver definitionDocumentResolver,
+                         SecurityDocumentResolver securityDocumentResolver) {
+        super(context);
+        this.pathOperationComponent = new PathOperationComponent(context, definitionDocumentResolver, securityDocumentResolver);
 
         if (config.isGeneratedExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -76,11 +73,22 @@ public class PathsDocument extends MarkupDocument {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated operation files is enabled.");
             }
-            Validate.notNull(outputPath, "Output directory is required for separated operation files!");
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated operation files is disabled.");
             }
+        }
+    }
+
+    public static PathsDocument.Parameters parameters(Map<String, Path> paths){
+        return new PathsDocument.Parameters(paths);
+    }
+
+    public static class Parameters {
+        private final Map<String, Path> paths;
+
+        public Parameters(Map<String, Path> paths){
+            this.paths = paths;
         }
     }
 
@@ -90,15 +98,15 @@ public class PathsDocument extends MarkupDocument {
      * @return the paths MarkupDocument
      */
     @Override
-    public MarkupDocBuilder apply() {
-        Map<String, Path> paths = globalContext.getSwagger().getPaths();
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, PathsDocument.Parameters params) {
+        Map<String, Path> paths = params.paths;
         if (MapUtils.isNotEmpty(paths)) {
-            applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
-            buildPathsTitle();
-            applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-            buildsPathsSection(paths);
-            applyPathsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
-            applyPathsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
+            buildPathsTitle(markupDocBuilder);
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, markupDocBuilder));
+            buildsPathsSection(markupDocBuilder, paths);
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_END, markupDocBuilder));
+            applyPathsDocumentExtension(new Context(Position.DOCUMENT_AFTER, markupDocBuilder));
         }
         return markupDocBuilder;
     }
@@ -108,17 +116,17 @@ public class PathsDocument extends MarkupDocument {
      *
      * @param paths the Swagger paths
      */
-    private void buildsPathsSection(Map<String, Path> paths) {
+    private void buildsPathsSection(MarkupDocBuilder markupDocBuilder, Map<String, Path> paths) {
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getBasePath(), config.getOperationOrdering());
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-                pathOperations.forEach(this::buildOperation);
+                pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation));
             } else {
-                Validate.notEmpty(globalContext.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
+                Validate.notEmpty(context.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
                 // Group operations by tag
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getOperationOrdering());
 
-                Map<String, Tag> tagsMap = TagUtils.toSortedMap(globalContext.getSwagger().getTags(), config.getTagOrdering());
+                Map<String, Tag> tagsMap = TagUtils.toSortedMap(context.getSwagger().getTags(), config.getTagOrdering());
 
                 tagsMap.forEach((String tagName, Tag tag) -> {
                     markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
@@ -126,7 +134,7 @@ public class PathsDocument extends MarkupDocument {
                     if(StringUtils.isNotBlank(description)){
                         markupDocBuilder.paragraph(description);
                     }
-                    operationsGroupedByTag.get(tagName).forEach(this::buildOperation);
+                    operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(markupDocBuilder, operation));
 
                 });
             }
@@ -136,11 +144,11 @@ public class PathsDocument extends MarkupDocument {
     /**
      * Builds the path title depending on the operationsGroupedBy configuration setting.
      */
-    private void buildPathsTitle() {
+    private void buildPathsTitle(MarkupDocBuilder markupDocBuilder) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-            buildPathsTitle(labels.getString(Labels.PATHS));
+            buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.PATHS));
         } else {
-            buildPathsTitle(labels.getString(Labels.RESOURCES));
+            buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.RESOURCES));
         }
     }
 
@@ -151,13 +159,13 @@ public class PathsDocument extends MarkupDocument {
      */
     private String getBasePath() {
         if(config.isBasePathPrefixEnabled()){
-            return StringUtils.defaultString(globalContext.getSwagger().getBasePath());
+            return StringUtils.defaultString(context.getSwagger().getBasePath());
         }
         return "";
     }
 
-    private void buildPathsTitle(String title) {
-        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, PATHS_ANCHOR);
+    private void buildPathsTitle(MarkupDocBuilder markupDocBuilder, String title) {
+        markupDocBuilder.sectionTitleWithAnchorLevel1(title, PATHS_ANCHOR);
     }
 
     /**
@@ -175,11 +183,11 @@ public class PathsDocument extends MarkupDocument {
      * @param operation operation
      * @return operation filename
      */
-    private String resolveOperationDocument(PathOperation operation) {
+    private String resolveOperationDocument(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (config.isSeparatedOperationsEnabled())
-            return new File(config.getSeparatedOperationsFolder(), this.markupDocBuilder.addFileExtension(normalizeName(operation.getId()))).getPath();
+            return new File(config.getSeparatedOperationsFolder(), markupDocBuilder.addFileExtension(normalizeName(operation.getId()))).getPath();
         else
-            return this.markupDocBuilder.addFileExtension(config.getPathsDocument());
+            return markupDocBuilder.addFileExtension(config.getPathsDocument());
     }
 
     /**
@@ -187,11 +195,11 @@ public class PathsDocument extends MarkupDocument {
      *
      * @param operation operation
      */
-    private void buildOperation(PathOperation operation) {
+    private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (config.isSeparatedOperationsEnabled()) {
-            MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder();
-            buildOperation(pathDocBuilder, operation);
-            java.nio.file.Path operationFile = outputPath.resolve(resolveOperationDocument(operation));
+            MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
+            applyPathOperationComponent(pathDocBuilder, operation);
+            java.nio.file.Path operationFile = context.getOutputPath().resolve(resolveOperationDocument(markupDocBuilder, operation));
             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced : '{}'", operationFile);
@@ -199,7 +207,7 @@ public class PathsDocument extends MarkupDocument {
             buildOperationRef(markupDocBuilder, operation);
 
         } else {
-            buildOperation(markupDocBuilder, operation);
+            applyPathOperationComponent(markupDocBuilder, operation);
         }
 
         if (logger.isInfoEnabled()) {
@@ -214,7 +222,7 @@ public class PathsDocument extends MarkupDocument {
      * @param operation  the Swagger Operation
      *
      */
-    private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
+    private void applyPathOperationComponent(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (operation != null) {
             pathOperationComponent.apply(markupDocBuilder, PathOperationComponent.parameters(operation));
         }
@@ -223,19 +231,19 @@ public class PathsDocument extends MarkupDocument {
     /**
      * Builds a cross-reference to a separated operation file
      *
-     * @param docBuilder the docbuilder do use for output
+     * @param markupDocBuilder the markupDocBuilder do use for output
      * @param operation  the Swagger Operation
      */
-    private void buildOperationRef(MarkupDocBuilder docBuilder, PathOperation operation) {
+    private void buildOperationRef(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         String document;
-        if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
+        if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
             document = null;
         else if (config.isSeparatedOperationsEnabled())
-            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
+            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(markupDocBuilder, operation);
         else
-            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(operation);
+            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(markupDocBuilder, operation);
 
-        buildOperationTitle(copyMarkupDocBuilder().crossReference(document, operation.getId(), operation.getTitle()).toString(), "ref-" + operation.getId(), docBuilder);
+        buildOperationTitle(markupDocBuilder, crossReference(markupDocBuilder, document, operation.getId(), operation.getTitle()), "ref-" + operation.getId());
     }
 
     /**
@@ -243,13 +251,12 @@ public class PathsDocument extends MarkupDocument {
      *
      * @param title      the operation title
      * @param anchor     optional anchor (null => auto-generate from title)
-     * @param docBuilder the MarkupDocBuilder to use
      */
-    private void buildOperationTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
+    private void buildOperationTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-            docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
+            markupDocBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         } else {
-            docBuilder.sectionTitleWithAnchorLevel3(title, anchor);
+            markupDocBuilder.sectionTitleWithAnchorLevel3(title, anchor);
         }
     }
 }

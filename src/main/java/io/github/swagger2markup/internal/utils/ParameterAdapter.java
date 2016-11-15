@@ -15,6 +15,7 @@
  */
 package io.github.swagger2markup.internal.utils;
 
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -23,30 +24,39 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.RefParameter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
+public class ParameterAdapter {
 
-public final class ParameterUtils {
+    private final Parameter parameter;
+
+    public ParameterAdapter(Parameter parameter){
+        Validate.notNull(parameter, "parameter must not be null");
+        this.parameter = parameter;
+    }
+
+    public String getIn(){
+        return WordUtils.capitalize(parameter.getIn());
+    }
 
     /**
      * Retrieves the type of a parameter, or otherwise null
      *
-     * @param parameter the parameter
      * @param definitionDocumentResolver the defintion document resolver
      * @return the type of the parameter, or otherwise null
      */
-    public static Type getType(Parameter parameter, Map<String, Model> definitions, Function<String, String> definitionDocumentResolver){
+    public Type getType(Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
-        
+
         if(parameter instanceof BodyParameter){
             BodyParameter bodyParameter = (BodyParameter)parameter;
             Model model = bodyParameter.getSchema();
-            
+
             if(model != null){
                 type = ModelUtils.getType(model, definitions, definitionDocumentResolver);
             }else{
@@ -58,7 +68,7 @@ public final class ParameterUtils {
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
             @SuppressWarnings("unchecked")
             List<String> enums = serializableParameter.getEnum();
-            
+
             if(CollectionUtils.isNotEmpty(enums)){
                 type = new EnumType(null, enums);
             }else{
@@ -66,13 +76,13 @@ public final class ParameterUtils {
             }
             if(serializableParameter.getType().equals("array")){
                 String collectionFormat = serializableParameter.getCollectionFormat();
-                
-                type = new ArrayType(null, new PropertyWrapper(serializableParameter.getItems()).getType(definitionDocumentResolver), collectionFormat);
+
+                type = new ArrayType(null, new PropertyAdapter(serializableParameter.getItems()).getType(definitionDocumentResolver), collectionFormat);
             }
         }
         else if(parameter instanceof RefParameter){
             String refName = ((RefParameter)parameter).getSimpleRef();
-            
+
             type = new RefType(definitionDocumentResolver.apply(refName), new ObjectType(refName, null /* FIXME, not used for now */));
         }
         return type;
@@ -81,10 +91,9 @@ public final class ParameterUtils {
     /**
      * Retrieves the default value of a parameter
      *
-     * @param parameter the parameter
      * @return the default value of the parameter
      */
-    public static Optional<String> getDefaultValue(Parameter parameter){
+    public Optional<String> getDefaultValue(){
         Validate.notNull(parameter, "parameter must not be null!");
         if(parameter instanceof AbstractSerializableParameter){
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
@@ -113,4 +122,5 @@ public final class ParameterUtils {
                 return parameter.getType();
         }
     }
+
 }

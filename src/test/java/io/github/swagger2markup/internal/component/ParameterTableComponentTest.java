@@ -60,7 +60,7 @@ public class ParameterTableComponentTest extends AbstractComponentTest{
         MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         //When
-        markupDocBuilder = new ParameterTableComponent(context, new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")))
+        markupDocBuilder = new ParameterTableComponent(context, new DefinitionDocumentResolverFromOperation(context))
                 .apply(markupDocBuilder, ParameterTableComponent.parameters(pathOperations.get(0), new ArrayList<>(), 3));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);

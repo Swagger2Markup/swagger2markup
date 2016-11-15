@@ -17,8 +17,9 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Tag;
 import org.apache.commons.lang3.Validate;
 
@@ -53,7 +54,7 @@ public class TagsComponent extends MarkupComponent<TagsComponent.Parameters> {
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
-        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.TAGS));
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.TAGS));
 
         List<String> tagsList = params.tags.stream()
                 .map(this::mapToString).collect(Collectors.toList());

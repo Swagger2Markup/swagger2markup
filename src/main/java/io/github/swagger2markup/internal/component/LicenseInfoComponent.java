@@ -17,11 +17,12 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Info;
 import io.swagger.models.License;
 import org.apache.commons.lang3.Validate;
 
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.Parameters> {
@@ -52,18 +53,18 @@ public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.P
         License license = info.getLicense();
         String termOfService = info.getTermsOfService();
         if((license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) || isNotBlank(termOfService)) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(LICENSE_INFORMATION));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(LICENSE_INFORMATION));
             MarkupDocBuilder paragraph = copyMarkupDocBuilder(markupDocBuilder);
             if (license != null) {
                 if (isNotBlank(license.getName())) {
-                    paragraph.italicText(labels.getString(LICENSE)).textLine(COLON + license.getName());
+                    paragraph.italicText(labels.getLabel(LICENSE)).textLine(COLON + license.getName());
                 }
                 if (isNotBlank(license.getUrl())) {
-                    paragraph.italicText(labels.getString(LICENSE_URL)).textLine(COLON + license.getUrl());
+                    paragraph.italicText(labels.getLabel(LICENSE_URL)).textLine(COLON + license.getUrl());
                 }
             }
 
-            paragraph.italicText(labels.getString(TERMS_OF_SERVICE)).textLine(COLON + termOfService);
+            paragraph.italicText(labels.getLabel(TERMS_OF_SERVICE)).textLine(COLON + termOfService);
 
             markupDocBuilder.paragraph(paragraph.toString(), true);
         }

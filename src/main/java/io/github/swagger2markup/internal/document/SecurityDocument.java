@@ -18,13 +18,13 @@ package io.github.swagger2markup.internal.document;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.SecuritySchemeDefinitionComponent;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections4.MapUtils;
 
-import java.nio.file.Path;
 import java.util.Map;
 
-import static io.github.swagger2markup.internal.Labels.SECURITY;
+import static io.github.swagger2markup.Labels.SECURITY;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
@@ -32,19 +32,26 @@ import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 /**
  * @author Robert Winkler
  */
-public class SecurityDocument extends MarkupDocument {
+public class SecurityDocument extends MarkupComponent<SecurityDocument.Parameters> {
 
     private static final String SECURITY_ANCHOR = "securityScheme";
     private final SecuritySchemeDefinitionComponent securitySchemeDefinitionComponent;
 
     public SecurityDocument(Swagger2MarkupConverter.Context context) {
-        this(context, null);
-
+        super(context);
+        this.securitySchemeDefinitionComponent = new SecuritySchemeDefinitionComponent(context);
     }
 
-    public SecurityDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
-        super(context, outputPath);
-        this.securitySchemeDefinitionComponent = new SecuritySchemeDefinitionComponent(context);
+    public static SecurityDocument.Parameters parameters(Map<String, SecuritySchemeDefinition> securitySchemeDefinitions){
+        return new SecurityDocument.Parameters(securitySchemeDefinitions);
+    }
+
+    public static class Parameters {
+        private final Map<String, SecuritySchemeDefinition> securitySchemeDefinitions;
+
+        public Parameters(Map<String, SecuritySchemeDefinition> securitySchemeDefinitions){
+            this.securitySchemeDefinitions = securitySchemeDefinitions;
+        }
     }
 
     /**
@@ -53,24 +60,24 @@ public class SecurityDocument extends MarkupDocument {
      * @return the security MarkupDocument
      */
     @Override
-    public MarkupDocBuilder apply(){
-        Map<String, SecuritySchemeDefinition> definitions = globalContext.getSwagger().getSecurityDefinitions();
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, SecurityDocument.Parameters params) {
+        Map<String, SecuritySchemeDefinition> definitions = params.securitySchemeDefinitions;
         if (MapUtils.isNotEmpty(definitions)) {
-            applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
-            buildSecurityTitle(labels.getString(SECURITY));
-            applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-            buildSecuritySchemeDefinitionsSection(definitions);
-            applySecurityDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
-            applySecurityDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
+            buildSecurityTitle(markupDocBuilder, labels.getLabel(SECURITY));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_BEGIN, markupDocBuilder));
+            buildSecuritySchemeDefinitionsSection(markupDocBuilder, definitions);
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_END, markupDocBuilder));
+            applySecurityDocumentExtension(new Context(Position.DOCUMENT_AFTER, markupDocBuilder));
         }
         return markupDocBuilder;
     }
 
-    private void buildSecurityTitle(String title) {
-        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, SECURITY_ANCHOR);
+    private void buildSecurityTitle(MarkupDocBuilder markupDocBuilder, String title) {
+        markupDocBuilder.sectionTitleWithAnchorLevel1(title, SECURITY_ANCHOR);
     }
 
-    private void buildSecuritySchemeDefinitionsSection(Map<String, SecuritySchemeDefinition> securitySchemes) {
+    private void buildSecuritySchemeDefinitionsSection(MarkupDocBuilder markupDocBuilder, Map<String, SecuritySchemeDefinition> securitySchemes) {
         Map<String, SecuritySchemeDefinition> securitySchemeNames = toSortedMap(securitySchemes, null); // TODO : provide a dedicated ordering configuration for security schemes
         securitySchemeNames.forEach((String securitySchemeName, SecuritySchemeDefinition securityScheme) ->
                 securitySchemeDefinitionComponent.apply(markupDocBuilder, SecuritySchemeDefinitionComponent.parameters(

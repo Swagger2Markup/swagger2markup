@@ -15,29 +15,18 @@
  */
 package io.github.swagger2markup.internal.resolver;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-
-import java.nio.file.Path;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
-public class SecurityDocumentResolver implements DefinitionDocumentResolver {
+public class SecurityDocumentResolver extends DefinitionDocumentResolver {
 
-    private MarkupDocBuilder markupDocBuilder;
-    private Swagger2MarkupConfig config;
-    private Path outputPath;
-
-    public SecurityDocumentResolver(MarkupDocBuilder markupDocBuilder,
-                             Swagger2MarkupConfig config,
-                             Path outputPath) {
-        this.markupDocBuilder = markupDocBuilder;
-        this.config = config;
-        this.outputPath = outputPath;
+    public SecurityDocumentResolver(Swagger2MarkupConverter.Context context) {
+        super(context);
     }
 
     public String apply(String definitionName) {
-        if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
+        if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
             return null;
         else
             return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());

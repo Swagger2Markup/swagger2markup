@@ -16,8 +16,9 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Info;
 import org.apache.commons.lang3.Validate;
 
@@ -53,9 +54,9 @@ public class VersionInfoComponent extends MarkupComponent<VersionInfoComponent.P
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
         String version = params.info.getVersion();
         if(isNotBlank(version)){
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.CURRENT_VERSION));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.CURRENT_VERSION));
             MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
-            paragraphBuilder.italicText(labels.getString(Labels.VERSION)).textLine(COLON + version);
+            paragraphBuilder.italicText(labels.getLabel(Labels.VERSION)).textLine(COLON + version);
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
         return markupDocBuilder;

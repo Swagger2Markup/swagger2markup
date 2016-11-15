@@ -16,8 +16,9 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Swagger;
 import org.apache.commons.lang3.Validate;
 
@@ -55,21 +56,21 @@ public class UriSchemeComponent extends MarkupComponent<UriSchemeComponent.Param
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
         Swagger swagger = params.swagger;
         if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.URI_SCHEME));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.URI_SCHEME));
             MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             if (isNotBlank(swagger.getHost())) {
-                paragraphBuilder.italicText(labels.getString(Labels.HOST))
+                paragraphBuilder.italicText(labels.getLabel(Labels.HOST))
                         .textLine(COLON + swagger.getHost());
             }
             if (isNotBlank(swagger.getBasePath())) {
-                paragraphBuilder.italicText(labels.getString(Labels.BASE_PATH))
+                paragraphBuilder.italicText(labels.getLabel(Labels.BASE_PATH))
                         .textLine(COLON + swagger.getBasePath());
             }
             if (isNotEmpty(swagger.getSchemes())) {
                 List<String> schemes = swagger.getSchemes().stream()
                         .map(Enum::toString)
                         .collect(Collectors.toList());
-                paragraphBuilder.italicText(labels.getString(Labels.SCHEMES))
+                paragraphBuilder.italicText(labels.getLabel(Labels.SCHEMES))
                         .textLine(COLON + join(schemes, ", "));
             }
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);

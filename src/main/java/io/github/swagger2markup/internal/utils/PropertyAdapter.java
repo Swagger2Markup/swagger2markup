@@ -15,6 +15,7 @@
  */
 package io.github.swagger2markup.internal.utils;
 
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
@@ -24,15 +25,14 @@ import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.*;
-import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public final class PropertyWrapper {
+public final class PropertyAdapter {
 
     private final Property property;
 
-    public PropertyWrapper(Property property){
+    public PropertyAdapter(Property property){
         Validate.notNull(property, "property must not be null");
         this.property = property;
     }
@@ -43,7 +43,7 @@ public final class PropertyWrapper {
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the property
      */
-    public Type getType(Function<String, String> definitionDocumentResolver) {
+    public Type getType(DefinitionDocumentResolver definitionDocumentResolver) {
         Type type;
         if (property instanceof RefProperty) {
             RefProperty refProperty = (RefProperty) property;
@@ -57,14 +57,14 @@ public final class PropertyWrapper {
             if (items == null)
                 type = new ArrayType(arrayProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
             else
-                type = new ArrayType(arrayProperty.getTitle(), new PropertyWrapper(items).getType(definitionDocumentResolver));
+                type = new ArrayType(arrayProperty.getTitle(), new PropertyAdapter(items).getType(definitionDocumentResolver));
         } else if (property instanceof MapProperty) {
             MapProperty mapProperty = (MapProperty) property;
             Property additionalProperties = mapProperty.getAdditionalProperties();
             if (additionalProperties == null)
                 type = new MapType(mapProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
             else
-                type = new MapType(mapProperty.getTitle(), new PropertyWrapper(additionalProperties).getType(definitionDocumentResolver));
+                type = new MapType(mapProperty.getTitle(), new PropertyAdapter(additionalProperties).getType(definitionDocumentResolver));
         } else if (property instanceof StringProperty) {
             StringProperty stringProperty = (StringProperty) property;
             List<String> enums = stringProperty.getEnum();

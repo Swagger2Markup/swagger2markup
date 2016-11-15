@@ -21,9 +21,10 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.ParameterUtils;
+import io.github.swagger2markup.internal.utils.ParameterAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.Parameter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -79,7 +80,10 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
                     if (StringUtils.equals(parameter.getIn(), "body")) {
-                        Type type = ParameterUtils.getType(parameter, definitions, definitionDocumentResolver);
+                        ParameterAdapter parameterAdapter = new ParameterAdapter(parameter);
+
+
+                        Type type = parameterAdapter.getType(definitions, definitionDocumentResolver);
 
                         if (!(type instanceof ObjectType)) {
                             if (config.isInlineSchemaEnabled()) {
@@ -87,7 +91,7 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
                             }
                         }
 
-                        buildSectionTitle(markupDocBuilder, labels.getString(BODY_PARAMETER));
+                        buildSectionTitle(markupDocBuilder, labels.getLabel(BODY_PARAMETER));
                         String description = parameter.getDescription();
                         if (isNotBlank(description)) {
                             if (isNotBlank(description)) {
@@ -96,11 +100,11 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
                         }
 
                         MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
-                        typeInfos.italicText(labels.getString(NAME_COLUMN)).textLine(COLON + parameter.getName());
-                        typeInfos.italicText(labels.getString(FLAGS_COLUMN)).textLine(COLON + (BooleanUtils.isTrue(parameter.getRequired()) ? labels.getString(FLAGS_REQUIRED).toLowerCase() : labels.getString(FLAGS_OPTIONAL).toLowerCase()));
+                        typeInfos.italicText(labels.getLabel(NAME_COLUMN)).textLine(COLON + parameter.getName());
+                        typeInfos.italicText(labels.getLabel(FLAGS_COLUMN)).textLine(COLON + (BooleanUtils.isTrue(parameter.getRequired()) ? labels.getLabel(FLAGS_REQUIRED).toLowerCase() : labels.getLabel(FLAGS_OPTIONAL).toLowerCase()));
 
                         if (!(type instanceof ObjectType)) {
-                            typeInfos.italicText(labels.getString(TYPE_COLUMN)).textLine(COLON + type.displaySchema(markupDocBuilder));
+                            typeInfos.italicText(labels.getLabel(TYPE_COLUMN)).textLine(COLON + type.displaySchema(markupDocBuilder));
                         }
 
                         markupDocBuilder.paragraph(typeInfos.toString(), true);

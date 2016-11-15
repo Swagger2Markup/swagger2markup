@@ -18,13 +18,14 @@ package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.ParameterUtils;
+import io.github.swagger2markup.internal.utils.ParameterAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.Parameter;
@@ -32,7 +33,6 @@ import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -40,7 +40,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -95,31 +95,33 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
         MarkupDocBuilder parametersBuilder = copyMarkupDocBuilder(markupDocBuilder);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
         if (CollectionUtils.isNotEmpty(filteredParameters)) {
-            StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(TYPE_COLUMN)))
+            StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(TYPE_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "2");
-            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(NAME_COLUMN)))
+            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(NAME_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "3");
-            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(DESCRIPTION_COLUMN)))
+            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "9")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
-            StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(SCHEMA_COLUMN)))
+            StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(SCHEMA_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "4")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
-            StringColumn.Builder defaultColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(DEFAULT_COLUMN)))
+            StringColumn.Builder defaultColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DEFAULT_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "2")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             for (Parameter parameter : filteredParameters) {
-                Type type = ParameterUtils.getType(parameter, definitions, definitionDocumentResolver);
+                ParameterAdapter parameterAdapter = new ParameterAdapter(parameter);
+
+                Type type = parameterAdapter.getType(definitions, definitionDocumentResolver);
                 if (config.isInlineSchemaEnabled()){
                     type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                 }
 
-                typeColumnBuilder.add(boldText(markupDocBuilder, WordUtils.capitalize(parameter.getIn())));
+                typeColumnBuilder.add(boldText(markupDocBuilder, parameterAdapter.getIn()));
                 nameColumnBuilder.add(getParameterNameColumnContent(markupDocBuilder, parameter));
                 descriptionColumnBuilder.add(markupDescription(markupDocBuilder, parameter.getDescription()));
                 schemaColumnBuilder.add(type.displaySchema(markupDocBuilder));
-                defaultColumnBuilder.add(ParameterUtils.getDefaultValue(parameter).map(value -> literalText(markupDocBuilder, Json.pretty(value))).orElse(""));
+                defaultColumnBuilder.add(parameterAdapter.getDefaultValue().map(value -> literalText(markupDocBuilder, Json.pretty(value))).orElse(""));
             }
 
             parametersBuilder = tableComponent.apply(parametersBuilder, TableComponent.parameters(
@@ -134,7 +136,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(parametersContent)) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.PARAMETERS));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.PARAMETERS));
             markupDocBuilder.text(parametersContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_AFTER, markupDocBuilder, operation));
@@ -147,9 +149,9 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
         parameterNameContent.boldTextLine(parameter.getName(), true);
         if (parameter.getRequired())
-            parameterNameContent.italicText(labels.getString(FLAGS_REQUIRED).toLowerCase());
+            parameterNameContent.italicText(labels.getLabel(FLAGS_REQUIRED).toLowerCase());
         else
-            parameterNameContent.italicText(labels.getString(FLAGS_OPTIONAL).toLowerCase());
+            parameterNameContent.italicText(labels.getLabel(FLAGS_OPTIONAL).toLowerCase());
         return parameterNameContent.toString();
     }
 

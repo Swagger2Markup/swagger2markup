@@ -15,34 +15,24 @@
  */
 package io.github.swagger2markup.internal.resolver;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.utils.IOUtils;
 
 import java.io.File;
-import java.nio.file.Path;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Default {@code DefinitionDocumentResolver} functor
  */
-public class DefinitionDocumentResolverDefault implements DefinitionDocumentResolver {
+public class DefinitionDocumentResolverDefault extends DefinitionDocumentResolver {
 
-    MarkupDocBuilder markupDocBuilder;
-    Swagger2MarkupConfig config;
-    private Path outputPath;
-
-    public DefinitionDocumentResolverDefault(MarkupDocBuilder markupDocBuilder,
-                                      Swagger2MarkupConfig config,
-                                      Path outputPath) {
-        this.markupDocBuilder = markupDocBuilder;
-        this.config = config;
-        this.outputPath = outputPath;
+    public DefinitionDocumentResolverDefault(Swagger2MarkupConverter.Context context) {
+        super(context);
     }
 
     public String apply(String definitionName) {
-        if (!config.isInterDocumentCrossReferencesEnabled() || outputPath == null)
+        if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
             return null;
         else if (config.isSeparatedDefinitionsEnabled())
             return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(IOUtils.normalizeName(definitionName))).getPath();

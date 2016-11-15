@@ -17,7 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
@@ -25,6 +25,7 @@ import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +33,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.*;
 
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -53,8 +54,8 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
         this.definitions = context.getSwagger().getDefinitions();
         this.definitionsDocumentResolver = definitionsDocumentResolver;
         POLYMORPHISM_NATURE = new HashMap<ObjectTypePolymorphism.Nature, String>() {{
-            put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getString(Labels.POLYMORPHISM_NATURE_COMPOSITION));
-            put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getString(Labels.POLYMORPHISM_NATURE_INHERITANCE));
+            put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getLabel(Labels.POLYMORPHISM_NATURE_COMPOSITION));
+            put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getLabel(Labels.POLYMORPHISM_NATURE_INHERITANCE));
         }};
         propertiesTableComponent = new PropertiesTableComponent(context, definitionsDocumentResolver);
     }
@@ -156,16 +157,16 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
             MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
             switch (objectType.getPolymorphism().getNature()) {
                 case COMPOSITION:
-                    typeInfos.italicText(labels.getString(Labels.POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    typeInfos.italicText(labels.getLabel(Labels.POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
                     break;
                 case INHERITANCE:
-                    typeInfos.italicText(labels.getString(POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
-                    typeInfos.italicText(labels.getString(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
+                    typeInfos.italicText(labels.getLabel(POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     break;
                 case NONE:
                     if (ALWAYS_DISPLAY_DISCRIMINATOR) {
                         if (StringUtils.isNotBlank(objectType.getPolymorphism().getDiscriminator()))
-                            typeInfos.italicText(labels.getString(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
+                            typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     }
 
                 default: break;
@@ -182,7 +183,7 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
                             inlineDefinitions));
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
-            typeInfos.italicText(labels.getString(TYPE_COLUMN)).textLine(COLON + modelType.displaySchema(markupDocBuilder));
+            typeInfos.italicText(labels.getLabel(TYPE_COLUMN)).textLine(COLON + modelType.displaySchema(markupDocBuilder));
 
             markupDocBuilder.paragraph(typeInfos.toString());
         }

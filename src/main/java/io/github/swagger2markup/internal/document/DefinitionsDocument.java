@@ -15,15 +15,15 @@
  */
 package io.github.swagger2markup.internal.document;
 
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.component.DefinitionComponent;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverDefault;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.Validate;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -41,31 +41,39 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * @author Robert Winkler
  */
-public class DefinitionsDocument extends MarkupDocument {
+public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Parameters> {
     
     private static final String DEFINITIONS_ANCHOR = "definitions";
 
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private final DefinitionComponent definitionComponent;
+    private final DefinitionDocumentResolverDefault definitionDocumentResolverDefault;
 
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context) {
-        this(context, null);
-    }
-
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context, Path outputPath) {
-        super(context, outputPath);
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context, DefinitionDocumentResolver definitionDocumentResolver) {
+        super(context);
         if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is enabled.");
             }
-            Validate.notNull(outputPath, "Output directory is required for separated definition files!");
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Create separated definition files is disabled.");
             }
         }
-        this.definitionComponent = new DefinitionComponent(context,
-                new DefinitionDocumentResolverFromDefinition(markupDocBuilder, config, outputPath));
+        this.definitionComponent = new DefinitionComponent(context, definitionDocumentResolver);
+        this.definitionDocumentResolverDefault = new DefinitionDocumentResolverDefault(context);
+    }
+
+    public static DefinitionsDocument.Parameters parameters(Map<String, Model> definitions){
+        return new DefinitionsDocument.Parameters(definitions);
+    }
+
+    public static class Parameters {
+        private final Map<String, Model> definitions;
+
+        public Parameters(Map<String, Model> definitions){
+            this.definitions = definitions;
+        }
     }
 
     /**
@@ -74,28 +82,29 @@ public class DefinitionsDocument extends MarkupDocument {
      * @return the definitions MarkupDocument
      */
     @Override
-    public MarkupDocBuilder apply() {
-        if (MapUtils.isNotEmpty(globalContext.getSwagger().getDefinitions())) {
-            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
-            buildDefinitionsTitle(labels.getString(Labels.DEFINITIONS));
-            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-            buildDefinitionsSection();
-            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
-            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, DefinitionsDocument.Parameters params) {
+        Map<String, Model> definitions = params.definitions;
+        if (MapUtils.isNotEmpty(definitions)) {
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
+            buildDefinitionsTitle(markupDocBuilder, labels.getLabel(Labels.DEFINITIONS));
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, markupDocBuilder));
+            buildDefinitionsSection(markupDocBuilder, definitions);
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, markupDocBuilder));
+            applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_AFTER, markupDocBuilder));
         }
         return markupDocBuilder;
     }
 
-    private void buildDefinitionsTitle(String title) {
-        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, DEFINITIONS_ANCHOR);
+    private void buildDefinitionsTitle(MarkupDocBuilder markupDocBuilder, String title) {
+        markupDocBuilder.sectionTitleWithAnchorLevel1(title, DEFINITIONS_ANCHOR);
     }
 
-    private void buildDefinitionsSection() {
-        Map<String, Model> sortedMap = toSortedMap(globalContext.getSwagger().getDefinitions(), config.getDefinitionOrdering());
+    private void buildDefinitionsSection(MarkupDocBuilder markupDocBuilder, Map<String, Model> definitions) {
+        Map<String, Model> sortedMap = toSortedMap(definitions, config.getDefinitionOrdering());
         sortedMap.forEach((String definitionName, Model model) -> {
             if(isNotBlank(definitionName)
                     && checkThatDefinitionIsNotInIgnoreList(definitionName)){
-                buildDefinition(definitionName, model);
+                buildDefinition(markupDocBuilder, definitionName, model);
             }
         });
     }
@@ -115,7 +124,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param definitionName definition name
      * @return definition filename
      */
-    private String resolveDefinitionDocument(String definitionName) {
+    private String resolveDefinitionDocument(MarkupDocBuilder markupDocBuilder, String definitionName) {
         if (config.isSeparatedDefinitionsEnabled())
             return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(normalizeName(definitionName))).getPath();
         else
@@ -128,23 +137,23 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param definitionName definition name to process
      * @param model          definition model to process
      */
-    private void buildDefinition(String definitionName, Model model) {
+    private void buildDefinition(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
         if (logger.isInfoEnabled()) {
             logger.info("Definition processed : '{}'", definitionName);
         }
         if (config.isSeparatedDefinitionsEnabled()) {
-            MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder();
-            buildDefinition(defDocBuilder, definitionName, model);
-            Path definitionFile = outputPath.resolve(resolveDefinitionDocument(definitionName));
+            MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
+            applyDefintionComponent(defDocBuilder, definitionName, model);
+            Path definitionFile = context.getOutputPath().resolve(resolveDefinitionDocument(markupDocBuilder, definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate definition file produced : '{}'", definitionFile);
             }
 
-            definitionRef(this.markupDocBuilder, definitionName);
+            definitionRef(markupDocBuilder, definitionName);
 
         } else {
-            buildDefinition(this.markupDocBuilder, definitionName, model);
+            applyDefintionComponent(markupDocBuilder, definitionName, model);
         }
     }
 
@@ -165,7 +174,7 @@ public class DefinitionsDocument extends MarkupDocument {
      * @param definitionName the name of the definition
      * @param model          the Swagger Model of the definition
      */
-    private void buildDefinition(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
+    private void applyDefintionComponent(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
         definitionComponent.apply(markupDocBuilder, DefinitionComponent.parameters(
                 definitionName,
                 model,
@@ -176,21 +185,20 @@ public class DefinitionsDocument extends MarkupDocument {
      * Builds a cross-reference to a separated definition file.
      *
      * @param definitionName definition name to target
-     * @param docBuilder     the docbuilder do use for output
      */
-    private void definitionRef(MarkupDocBuilder docBuilder, String definitionName) {
-        buildDefinitionTitle(copyMarkupDocBuilder().crossReference(new DefinitionDocumentResolverDefault(markupDocBuilder, config, outputPath).apply(definitionName), definitionName, definitionName).toString(), "ref-" + definitionName, docBuilder);
+    private void definitionRef(MarkupDocBuilder markupDocBuilder, String definitionName) {
+        buildDefinitionTitle(markupDocBuilder, crossReference(markupDocBuilder, definitionDocumentResolverDefault.apply(definitionName), definitionName, definitionName), "ref-" + definitionName);
     }
 
     /**
      * Builds definition title
-     *
+
+     * @param markupDocBuilder the markupDocBuilder do use for output
      * @param title      definition title
      * @param anchor     optional anchor (null => auto-generate from title)
-     * @param docBuilder the docbuilder do use for output
      */
-    private void buildDefinitionTitle(String title, String anchor, MarkupDocBuilder docBuilder) {
-        docBuilder.sectionTitleWithAnchorLevel2(title, anchor);
+    private void buildDefinitionTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
+        markupDocBuilder.sectionTitleWithAnchorLevel2(title, anchor);
     }
 
 }

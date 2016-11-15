@@ -22,6 +22,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections4.CollectionUtils;
@@ -31,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeComponent.Parameters> {
@@ -72,11 +73,11 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
         if (CollectionUtils.isNotEmpty(securitySchemes)) {
-            StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(TYPE_COLUMN)))
+            StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(TYPE_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "3");
-            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(NAME_COLUMN)))
+            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(NAME_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "4");
-            StringColumn.Builder scopeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(SCOPES_COLUMN)))
+            StringColumn.Builder scopeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(SCOPES_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "13")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
@@ -84,7 +85,7 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
             for (Map<String, List<String>> securityScheme : securitySchemes) {
                 for (Map.Entry<String, List<String>> securityEntry : securityScheme.entrySet()) {
                     String securityKey = securityEntry.getKey();
-                    String type = labels.getString(UNKNOWN);
+                    String type = labels.getLabel(UNKNOWN);
                     if (securityDefinitions != null && securityDefinitions.containsKey(securityKey)) {
                         type = securityDefinitions.get(securityKey).getType();
                     }
@@ -104,7 +105,7 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(securityContent)) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(SECURITY));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(SECURITY));
             markupDocBuilder.text(securityContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_AFTER, markupDocBuilder, operation));

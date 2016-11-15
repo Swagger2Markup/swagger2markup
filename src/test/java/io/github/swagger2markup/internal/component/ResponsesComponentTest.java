@@ -60,7 +60,7 @@ public class ResponsesComponentTest extends AbstractComponentTest{
         MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
 
         //When
-        markupDocBuilder = new ResponseComponent(context, new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")))
+        markupDocBuilder = new ResponseComponent(context, new DefinitionDocumentResolverFromOperation(context))
                 .apply(markupDocBuilder, ResponseComponent.parameters(pathOperations.get(0), 3, new ArrayList<>()));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);

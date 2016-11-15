@@ -21,13 +21,14 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
+import io.github.swagger2markup.spi.MarkupComponent;
 import javaslang.collection.Array;
 import javaslang.collection.IndexedSeq;
 import javaslang.collection.List;
 import org.apache.commons.lang3.StringUtils;
 
 
-public class TableComponent extends MarkupComponent<TableComponent.Parameters>{
+public class TableComponent extends MarkupComponent<TableComponent.Parameters> {
 
     public static final String WIDTH_RATIO = "widthRatio";
     public static final String HEADER_COLUMN = "headerColumn";

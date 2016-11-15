@@ -64,7 +64,7 @@ public class BodyParameterComponentTest extends AbstractComponentTest{
 
         //When
         markupDocBuilder = new BodyParameterComponent(converter.getContext(),
-                new DefinitionDocumentResolverFromOperation(markupDocBuilder, context.getConfig(), Paths.get("")))
+                new DefinitionDocumentResolverFromOperation(context))
                 .apply(markupDocBuilder, BodyParameterComponent.parameters(pathOperations.get(0), new ArrayList<>()));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);

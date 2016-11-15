@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
@@ -26,9 +26,9 @@ import io.github.swagger2markup.markup.builder.MarkupAdmonition;
 import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.Model;
-import io.swagger.models.auth.SecuritySchemeDefinition;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -39,16 +39,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class PathOperationComponent extends MarkupComponent<PathOperationComponent.Parameters> {
 
     private final DefinitionDocumentResolver definitionDocumentResolver;
-    private final DefinitionDocumentResolver securityDocumentResolver;
     private final Map<String, Model> definitions;
-    private final Map<String, SecuritySchemeDefinition> securityDefinitions;
     private final PropertiesTableComponent propertiesTableComponent;
     private final ParameterTableComponent parameterTableComponent;
     private final ConsumesComponent consumesComponent;
@@ -62,9 +60,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                                   DefinitionDocumentResolver securityDocumentResolver){
         super(context);
         this.definitions = context.getSwagger().getDefinitions();
-        this.securityDefinitions = context.getSwagger().getSecurityDefinitions();
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
-        this.securityDocumentResolver = Validate.notNull(securityDocumentResolver, "SecurityDocumentResolver must not be null");
         this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
         this.parameterTableComponent = new ParameterTableComponent(context, definitionDocumentResolver);
         this.consumesComponent = new ConsumesComponent(context);
@@ -164,7 +160,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(descriptionContent)) {
-            buildSectionTitle(markupDocBuilder, labels.getString(Labels.DESCRIPTION));
+            buildSectionTitle(markupDocBuilder, labels.getLabel(Labels.DESCRIPTION));
             markupDocBuilder.text(descriptionContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_AFTER, markupDocBuilder, operation));
@@ -291,7 +287,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             List<String> tags = operation.getOperation().getTags();
             if (CollectionUtils.isNotEmpty(tags)) {
-                buildSectionTitle(markupDocBuilder, labels.getString(TAGS));
+                buildSectionTitle(markupDocBuilder, labels.getLabel(TAGS));
                 if (config.getTagOrdering() != null) {
                     Collections.sort(tags, config.getTagOrdering());
                 }
@@ -336,8 +332,8 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
         Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
 
-        exampleMap(markupDocBuilder, generatedRequestExampleMap, labels.getString(EXAMPLE_REQUEST), labels.getString(REQUEST));
-        exampleMap(markupDocBuilder, generatedResponseExampleMap, labels.getString(EXAMPLE_RESPONSE), labels.getString(RESPONSE));
+        exampleMap(markupDocBuilder, generatedRequestExampleMap, labels.getLabel(EXAMPLE_REQUEST), labels.getLabel(REQUEST));
+        exampleMap(markupDocBuilder, generatedResponseExampleMap, labels.getLabel(EXAMPLE_RESPONSE), labels.getLabel(RESPONSE));
     }
 
     private void exampleMap(MarkupDocBuilder markupDocBuilder, Map<String, Object> exampleMap, String operationSectionTitle, String sectionTitle) {

@@ -1,10 +1,8 @@
 package io.github.swagger2markup.internal.resolver;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 
 import java.io.File;
-import java.nio.file.Path;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -14,10 +12,8 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */public
 class DefinitionDocumentResolverFromOperation extends DefinitionDocumentResolverDefault {
 
-    public DefinitionDocumentResolverFromOperation(MarkupDocBuilder markupDocBuilder,
-                                                   Swagger2MarkupConfig config,
-                                                   Path outputPath) {
-        super(markupDocBuilder, config, outputPath);
+    public DefinitionDocumentResolverFromOperation(Swagger2MarkupConverter.Context context) {
+        super(context);
     }
 
     public String apply(String definitionName) {

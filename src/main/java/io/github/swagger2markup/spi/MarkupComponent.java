@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.swagger2markup.internal.component;
+package io.github.swagger2markup.spi;
 
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
@@ -26,57 +27,55 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
-import java.util.ResourceBundle;
 
 public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder, T, MarkupDocBuilder> {
 
-    Logger logger = LoggerFactory.getLogger(getClass());
+    public Logger logger = LoggerFactory.getLogger(getClass());
 
-    static final String COLON = " : ";
+    public static final String COLON = " : ";
 
-    Swagger2MarkupConverter.Context context;
-    ResourceBundle labels;
-    Swagger2MarkupConfig config;
-    Swagger2MarkupExtensionRegistry extensionRegistry;
+    public Swagger2MarkupConverter.Context context;
+    public Labels labels;
+    public Swagger2MarkupConfig config;
+    public Swagger2MarkupExtensionRegistry extensionRegistry;
 
-    MarkupComponent(Swagger2MarkupConverter.Context context){
+    public MarkupComponent(Swagger2MarkupConverter.Context context){
         this.context = context;
         this.config = context.getConfig();
         this.extensionRegistry = context.getExtensionRegistry();
-        this.labels = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+        this.labels = context.getLabels();
     }
 
-    MarkupDocBuilder copyMarkupDocBuilder(MarkupDocBuilder markupDocBuilder) {
+    public MarkupDocBuilder copyMarkupDocBuilder(MarkupDocBuilder markupDocBuilder) {
         return markupDocBuilder.copy(false);
     }
 
-    String literalText(MarkupDocBuilder markupDocBuilder, String text) {
+    public String literalText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).literalText(text).toString();
     }
-
-    String boldText(MarkupDocBuilder markupDocBuilder, String text) {
+    public String boldText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).boldText(text).toString();
     }
 
-    String italicText(MarkupDocBuilder markupDocBuilder, String text) {
+    public String italicText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).italicText(text).toString();
     }
 
-    String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
+    public String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
         return copyMarkupDocBuilder(markupDocBuilder)
                 .crossReference(document, anchor, text).toString();
     }
 
-    String markupDescription(MarkupDocBuilder markupDocBuilder, String markupText) {
+    public String markupDescription(MarkupDocBuilder markupDocBuilder, String markupText) {
         if (StringUtils.isBlank(markupText)) {
             return StringUtils.EMPTY;
         }

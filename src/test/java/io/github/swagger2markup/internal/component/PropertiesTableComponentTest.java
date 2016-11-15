@@ -61,7 +61,7 @@ public class PropertiesTableComponentTest extends AbstractComponentTest{
         List<ObjectType> localDefinitions = new ArrayList<>();
         //When
         markupDocBuilder = new PropertiesTableComponent(context,
-                new DefinitionDocumentResolverFromDefinition(markupDocBuilder, context.getConfig(), Paths.get("")))
+                new DefinitionDocumentResolverFromDefinition(context))
                 .apply(markupDocBuilder, PropertiesTableComponent.parameters(petModel.getProperties(),
                         "Pet", localDefinitions));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);

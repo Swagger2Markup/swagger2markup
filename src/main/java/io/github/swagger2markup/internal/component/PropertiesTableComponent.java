@@ -21,8 +21,9 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.PropertyWrapper;
+import io.github.swagger2markup.internal.utils.PropertyAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.MapUtils;
@@ -32,13 +33,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
-public class PropertiesTableComponent extends MarkupComponent<PropertiesTableComponent.Parameters>{
+public class PropertiesTableComponent extends MarkupComponent<PropertiesTableComponent.Parameters> {
 
 
     private final DefinitionDocumentResolver definitionDocumentResolver;
@@ -79,44 +80,44 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
     }
 
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
-        StringColumn.Builder nameColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getString(NAME_COLUMN)))
+        StringColumn.Builder nameColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(NAME_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "3");
-        StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getString(DESCRIPTION_COLUMN)))
+        StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "11")
                 .putMetaData(TableComponent.HEADER_COLUMN, "true");
-        StringColumn.Builder schemaColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getString(SCHEMA_COLUMN)))
+        StringColumn.Builder schemaColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(SCHEMA_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "4")
                 .putMetaData(TableComponent.HEADER_COLUMN, "true");
         Map<String, Property> properties = params.properties;
         if (MapUtils.isNotEmpty(properties)) {
             Map<String, Property> sortedProperties = toSortedMap(properties, config.getPropertyOrdering());
             sortedProperties.forEach((String propertyName, Property property) -> {
-                PropertyWrapper propertyWrapper = new PropertyWrapper(property);
-                Type propertyType = propertyWrapper.getType(definitionDocumentResolver);
+                PropertyAdapter propertyAdapter = new PropertyAdapter(property);
+                Type propertyType = propertyAdapter.getType(definitionDocumentResolver);
 
                 if (config.isInlineSchemaEnabled()) {
                     propertyType = createInlineType(propertyType, propertyName, params.parameterName + " " + propertyName, params.inlineDefinitions);
                 }
 
-                Optional<Object> optionalExample = propertyWrapper.getExample(config.isGeneratedExamplesEnabled(), markupDocBuilder);
-                Optional<Object> optionalDefaultValue = propertyWrapper.getDefaultValue();
-                Optional<Integer> optionalMaxLength = propertyWrapper.getMaxlength();
-                Optional<Integer> optionalMinLength = propertyWrapper.getMinlength();
-                Optional<String> optionalPattern = propertyWrapper.getPattern();
-                Optional<Number> optionalMinValue = propertyWrapper.getMin();
-                boolean exclusiveMin = propertyWrapper.getExclusiveMin();
-                Optional<Number> optionalMaxValue = propertyWrapper.getMax();
-                boolean exclusiveMax = propertyWrapper.getExclusiveMax();
+                Optional<Object> optionalExample = propertyAdapter.getExample(config.isGeneratedExamplesEnabled(), markupDocBuilder);
+                Optional<Object> optionalDefaultValue = propertyAdapter.getDefaultValue();
+                Optional<Integer> optionalMaxLength = propertyAdapter.getMaxlength();
+                Optional<Integer> optionalMinLength = propertyAdapter.getMinlength();
+                Optional<String> optionalPattern = propertyAdapter.getPattern();
+                Optional<Number> optionalMinValue = propertyAdapter.getMin();
+                boolean exclusiveMin = propertyAdapter.getExclusiveMin();
+                Optional<Number> optionalMaxValue = propertyAdapter.getMax();
+                boolean exclusiveMax = propertyAdapter.getExclusiveMax();
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder(markupDocBuilder);
                 propertyNameContent.boldTextLine(propertyName, true);
                 if (property.getRequired())
-                    propertyNameContent.italicText(labels.getString(FLAGS_REQUIRED).toLowerCase());
+                    propertyNameContent.italicText(labels.getLabel(FLAGS_REQUIRED).toLowerCase());
                 else
-                    propertyNameContent.italicText(labels.getString(FLAGS_OPTIONAL).toLowerCase());
-                if (propertyWrapper.getReadOnly()) {
+                    propertyNameContent.italicText(labels.getLabel(FLAGS_OPTIONAL).toLowerCase());
+                if (propertyAdapter.getReadOnly()) {
                     propertyNameContent.newLine(true);
-                    propertyNameContent.italicText(labels.getString(FLAGS_READ_ONLY).toLowerCase());
+                    propertyNameContent.italicText(labels.getLabel(FLAGS_READ_ONLY).toLowerCase());
                 }
 
                 MarkupDocBuilder descriptionContent = copyMarkupDocBuilder(markupDocBuilder);
@@ -128,7 +129,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
                     }
-                    descriptionContent.boldText(labels.getString(DEFAULT_COLUMN)).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
+                    descriptionContent.boldText(labels.getLabel(DEFAULT_COLUMN)).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
                 }
 
                 if (optionalMinLength.isPresent() && optionalMaxLength.isPresent()) {
@@ -145,21 +146,21 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                         lengthRange = minLength.toString();
                     }
 
-                    descriptionContent.boldText(labels.getString(LENGTH_COLUMN)).text(COLON).literalText(lengthRange);
+                    descriptionContent.boldText(labels.getLabel(LENGTH_COLUMN)).text(COLON).literalText(lengthRange);
 
                 } else {
                     if (optionalMinLength.isPresent()) {
                         if (isNotBlank(descriptionContent.toString())) {
                             descriptionContent.newLine(true);
                         }
-                        descriptionContent.boldText(labels.getString(MINLENGTH_COLUMN)).text(COLON).literalText(optionalMinLength.get().toString());
+                        descriptionContent.boldText(labels.getLabel(MINLENGTH_COLUMN)).text(COLON).literalText(optionalMinLength.get().toString());
                     }
 
                     if (optionalMaxLength.isPresent()) {
                         if (isNotBlank(descriptionContent.toString())) {
                             descriptionContent.newLine(true);
                         }
-                        descriptionContent.boldText(labels.getString(MAXLENGTH_COLUMN)).text(COLON).literalText(optionalMaxLength.get().toString());
+                        descriptionContent.boldText(labels.getLabel(MAXLENGTH_COLUMN)).text(COLON).literalText(optionalMaxLength.get().toString());
                     }
                 }
 
@@ -167,14 +168,14 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
                     }
-                    descriptionContent.boldText(labels.getString(PATTERN_COLUMN)).text(COLON).literalText(Json.pretty(optionalPattern.get()));
+                    descriptionContent.boldText(labels.getLabel(PATTERN_COLUMN)).text(COLON).literalText(Json.pretty(optionalPattern.get()));
                 }
 
                 if (optionalMinValue.isPresent()) {
                     if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
                     }
-                    String minValueColumn = exclusiveMin ? labels.getString(MINVALUE_EXCLUSIVE_COLUMN) : labels.getString(MINVALUE_COLUMN);
+                    String minValueColumn = exclusiveMin ? labels.getLabel(MINVALUE_EXCLUSIVE_COLUMN) : labels.getLabel(MINVALUE_COLUMN);
                     descriptionContent.boldText(minValueColumn).text(COLON).literalText(optionalMinValue.get().toString());
                 }
 
@@ -182,7 +183,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
                     }
-                    String maxValueColumn = exclusiveMax ? labels.getString(MAXVALUE_EXCLUSIVE_COLUMN) : labels.getString(MAXVALUE_COLUMN);
+                    String maxValueColumn = exclusiveMax ? labels.getLabel(MAXVALUE_EXCLUSIVE_COLUMN) : labels.getLabel(MAXVALUE_COLUMN);
                     descriptionContent.boldText(maxValueColumn).text(COLON).literalText(optionalMaxValue.get().toString());
                 }
 
@@ -190,7 +191,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     if (isNotBlank(description) || optionalDefaultValue.isPresent()) {
                         descriptionContent.newLine(true);
                     }
-                    descriptionContent.boldText(labels.getString(EXAMPLE_COLUMN)).text(COLON).literalText(Json.pretty(optionalExample.get()));
+                    descriptionContent.boldText(labels.getLabel(EXAMPLE_COLUMN)).text(COLON).literalText(Json.pretty(optionalExample.get()));
                 }
 
                 nameColumnBuilder.add(propertyNameContent.toString());

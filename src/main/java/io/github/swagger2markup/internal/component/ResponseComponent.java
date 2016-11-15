@@ -18,13 +18,14 @@ package io.github.swagger2markup.internal.component;
 
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.PropertyWrapper;
+import io.github.swagger2markup.internal.utils.PropertyAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.Response;
 import io.swagger.models.properties.Property;
@@ -37,7 +38,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.internal.Labels.*;
+import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -83,24 +84,24 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
         MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder(markupDocBuilder);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
-            StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(Labels.HTTP_CODE_COLUMN)))
+            StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(Labels.HTTP_CODE_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "2");
-            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(DESCRIPTION_COLUMN)))
+            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "14")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
-            StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getString(SCHEMA_COLUMN)))
+            StringColumn.Builder schemaColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(SCHEMA_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "4")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             Map<String, Response> sortedResponses = toSortedMap(responses, config.getResponseOrdering());
             sortedResponses.forEach((String responseName, Response response) -> {
-                String schemaContent = labels.getString(NO_CONTENT);
+                String schemaContent = labels.getLabel(NO_CONTENT);
                 if (response.getSchema() != null) {
                     Property property = response.getSchema();
-                    Type type = new PropertyWrapper(property).getType(definitionDocumentResolver);
+                    Type type = new PropertyAdapter(property).getType(definitionDocumentResolver);
 
                     if (config.isInlineSchemaEnabled()) {
-                        type = createInlineType(type, labels.getString(Labels.RESPONSE) + " " + responseName, operation.getId() + " " + labels.getString(Labels.RESPONSE) + " " + responseName, params.inlineDefinitions);
+                        type = createInlineType(type, labels.getLabel(Labels.RESPONSE) + " " + responseName, operation.getId() + " " + labels.getLabel(Labels.RESPONSE) + " " + responseName, params.inlineDefinitions);
                     }
 
                     schemaContent = type.displaySchema(markupDocBuilder);
@@ -112,14 +113,14 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
-                    descriptionBuilder.newLine(true).boldText(labels.getString(Labels.HEADERS_COLUMN)).text(COLON);
+                    descriptionBuilder.newLine(true).boldText(labels.getLabel(Labels.HEADERS_COLUMN)).text(COLON);
                     for (Map.Entry<String, Property> header : headers.entrySet()) {
                         descriptionBuilder.newLine(true);
                         Property headerProperty = header.getValue();
-                        PropertyWrapper headerPropertyWrapper = new PropertyWrapper(headerProperty);
-                        Type propertyType = headerPropertyWrapper.getType(null);
+                        PropertyAdapter headerPropertyAdapter = new PropertyAdapter(headerProperty);
+                        Type propertyType = headerPropertyAdapter.getType(null);
                         String headerDescription = markupDescription(markupDocBuilder, headerProperty.getDescription());
-                        Optional<Object> optionalDefaultValue = headerPropertyWrapper.getDefaultValue();
+                        Optional<Object> optionalDefaultValue = headerPropertyAdapter.getDefaultValue();
 
                         descriptionBuilder
                                 .literalText(header.getKey())
@@ -134,7 +135,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
                             descriptionBuilder.text(headerDescription);
 
                             if (optionalDefaultValue.isPresent()) {
-                                descriptionBuilder.text(" ").boldText(labels.getString(DEFAULT_COLUMN)).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
+                                descriptionBuilder.text(" ").boldText(labels.getLabel(DEFAULT_COLUMN)).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
                             }
                         }
                     }
@@ -154,7 +155,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(responsesContent)) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.RESPONSES));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.RESPONSES));
             markupDocBuilder.text(responsesContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_AFTER, markupDocBuilder, operation));

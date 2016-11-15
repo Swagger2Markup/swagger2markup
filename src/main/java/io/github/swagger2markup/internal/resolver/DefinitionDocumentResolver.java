@@ -16,9 +16,23 @@
 
 package io.github.swagger2markup.internal.resolver;
 
-import java.util.function.Function;
+import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import javaslang.Function1;
 
 /**
  * A functor to return the document part of an inter-document cross-references, depending on the globalContext.
  */
-public interface DefinitionDocumentResolver extends Function<String, String> {}
+public abstract class DefinitionDocumentResolver implements Function1<String, String> {
+
+    Swagger2MarkupConverter.Context context;
+    MarkupDocBuilder markupDocBuilder;
+    Swagger2MarkupConfig config;
+
+    public DefinitionDocumentResolver(Swagger2MarkupConverter.Context context) {
+        this.context = context;
+        this.markupDocBuilder = context.createMarkupDocBuilder();
+        this.config = context.getConfig();
+    }
+}

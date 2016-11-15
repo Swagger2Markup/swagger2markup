@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal;
+package io.github.swagger2markup;
+
+import java.util.ResourceBundle;
 
 public class Labels {
 
@@ -89,4 +91,19 @@ public class Labels {
     public static final String DEPRECATED_OPERATION = "operation.deprecated";
     public static final String UNKNOWN = "unknown";
 
+    private ResourceBundle resourceBundle;
+
+    public Labels(Swagger2MarkupConfig config) {
+        this.resourceBundle = ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getOutputLanguage().toLocale());
+    }
+
+    /**
+     * Gets a label for the given key from this resource bundle.
+     *
+     * @param key the key for the desired label
+     * @return the label for the given key
+     */
+    public String getLabel(String key){
+        return resourceBundle.getString(key);
+    }
 }

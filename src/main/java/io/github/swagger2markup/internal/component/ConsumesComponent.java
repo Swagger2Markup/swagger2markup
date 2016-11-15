@@ -17,14 +17,15 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Parameters>{
+public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Parameters> {
 
     public ConsumesComponent(Swagger2MarkupConverter.Context context){
         super(context);
@@ -47,7 +48,7 @@ public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Paramet
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.CONSUMES));
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.CONSUMES));
         markupDocBuilder.unorderedList(params.consumes.stream()
                 .map(value -> literalText(markupDocBuilder, value)).collect(Collectors.toList()));
         return markupDocBuilder;

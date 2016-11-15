@@ -17,8 +17,9 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Contact;
 import org.apache.commons.lang3.Validate;
 
@@ -49,14 +50,14 @@ public class ContactInfoComponent extends MarkupComponent<ContactInfoComponent.P
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         Contact contact = params.contact;
         if (isNotBlank(contact.getName()) || isNotBlank(contact.getEmail())){
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getString(Labels.CONTACT_INFORMATION));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.CONTACT_INFORMATION));
             MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             if (isNotBlank(contact.getName())) {
-                paragraphBuilder.italicText(labels.getString(Labels.CONTACT_NAME))
+                paragraphBuilder.italicText(labels.getLabel(Labels.CONTACT_NAME))
                         .textLine(COLON + contact.getName());
             }
             if (isNotBlank(contact.getEmail())) {
-                paragraphBuilder.italicText(labels.getString(Labels.CONTACT_EMAIL))
+                paragraphBuilder.italicText(labels.getLabel(Labels.CONTACT_EMAIL))
                         .textLine(COLON + contact.getEmail());
             }
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);

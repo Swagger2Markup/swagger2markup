@@ -16,6 +16,7 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.*;
 import io.swagger.models.properties.Property;
@@ -24,7 +25,6 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -52,13 +52,13 @@ public final class ModelUtils {
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the model, or otherwise null
      */
-    public static Type getType(Model model, Map<String, Model> definitions, Function<String, String> definitionDocumentResolver) {
+    public static Type getType(Model model, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver) {
         Validate.notNull(model, "model must not be null!");
         if (model instanceof ModelImpl) {
             ModelImpl modelImpl = (ModelImpl) model;
 
             if (modelImpl.getAdditionalProperties() != null)
-                return new MapType(modelImpl.getTitle(), new PropertyWrapper(modelImpl.getAdditionalProperties()).getType(definitionDocumentResolver));
+                return new MapType(modelImpl.getTitle(), new PropertyAdapter(modelImpl.getAdditionalProperties()).getType(definitionDocumentResolver));
             else if (modelImpl.getEnum() != null)
                 return new EnumType(modelImpl.getTitle(), modelImpl.getEnum());
             else if (modelImpl.getProperties() != null) {
@@ -115,7 +115,7 @@ public final class ModelUtils {
         } else if (model instanceof ArrayModel) {
             ArrayModel arrayModel = ((ArrayModel) model);
 
-            return new ArrayType(null, new PropertyWrapper(arrayModel.getItems()).getType(definitionDocumentResolver));
+            return new ArrayType(null, new PropertyAdapter(arrayModel.getItems()).getType(definitionDocumentResolver));
         }
 
         return null;

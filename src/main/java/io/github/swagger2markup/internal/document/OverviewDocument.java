@@ -15,18 +15,17 @@
  */
 package io.github.swagger2markup.internal.document;
 
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.Labels;
 import io.github.swagger2markup.internal.component.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Contact;
 import io.swagger.models.Info;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 
-import java.io.StringReader;
-import java.nio.file.Path;
 import java.util.List;
 
 import static io.github.swagger2markup.spi.OverviewDocumentExtension.Context;
@@ -34,7 +33,7 @@ import static io.github.swagger2markup.spi.OverviewDocumentExtension.Position;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class OverviewDocument extends MarkupDocument {
+public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameters> {
 
     private static final String OVERVIEW_ANCHOR = "overview";
     public static final int SECTION_TITLE_LEVEL = 2;
@@ -47,11 +46,7 @@ public class OverviewDocument extends MarkupDocument {
     private final ConsumesComponent consumesComponent;
 
     public OverviewDocument(Swagger2MarkupConverter.Context context){
-        this(context, null);
-    }
-
-    public OverviewDocument(Swagger2MarkupConverter.Context context, Path outputPath){
-        super(context, outputPath);
+        super(context);
         versionInfoComponent = new VersionInfoComponent(context);
         contactInfoComponent = new ContactInfoComponent(context);
         licenseInfoComponent = new LicenseInfoComponent(context);
@@ -60,93 +55,94 @@ public class OverviewDocument extends MarkupDocument {
         producesComponent = new ProducesComponent(context);
         consumesComponent = new ConsumesComponent(context);
     }
+
+    public static OverviewDocument.Parameters parameters(Swagger swagger){
+        return new OverviewDocument.Parameters(swagger);
+    }
+
+    public static class Parameters {
+        private final Swagger swagger;
+
+        public Parameters(Swagger swagger){
+            this.swagger = Validate.notNull(swagger, "Swagger must not be null");
+        }
+    }
+
     /**
      * Builds the overview MarkupDocument.
      *
      * @return the overview MarkupDocument
      */
     @Override
-    public MarkupDocBuilder apply(){
-        Swagger swagger = globalContext.getSwagger();
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, OverviewDocument.Parameters params) {
+        Swagger swagger = params.swagger;
         Info info = swagger.getInfo();
-        buildDocumentTitle(info.getTitle());
-        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, this.markupDocBuilder));
-        buildOverviewTitle(labels.getString(Labels.OVERVIEW));
-        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, this.markupDocBuilder));
-        buildDescriptionParagraph(info.getDescription());
-        buildVersionInfoSection(info);
-        buildContactInfoSection(info.getContact());
-        buildLicenseInfoSection(info);
-        buildUriSchemeSection(swagger);
-        buildTagsSection(swagger.getTags());
-        buildConsumesSection(swagger.getConsumes());
-        buildProducesSection(swagger.getProduces());
-        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_END, this.markupDocBuilder));
-        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_AFTER, this.markupDocBuilder));
+        buildDocumentTitle(markupDocBuilder, info.getTitle());
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
+        buildOverviewTitle(markupDocBuilder, labels.getLabel(Labels.OVERVIEW));
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, markupDocBuilder));
+        buildDescriptionParagraph(markupDocBuilder, info.getDescription());
+        buildVersionInfoSection(markupDocBuilder, info);
+        buildContactInfoSection(markupDocBuilder, info.getContact());
+        buildLicenseInfoSection(markupDocBuilder, info);
+        buildUriSchemeSection(markupDocBuilder, swagger);
+        buildTagsSection(markupDocBuilder, swagger.getTags());
+        buildConsumesSection(markupDocBuilder, swagger.getConsumes());
+        buildProducesSection(markupDocBuilder, swagger.getProduces());
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_END, markupDocBuilder));
+        applyOverviewDocumentExtension(new Context(Position.DOCUMENT_AFTER, markupDocBuilder));
         return markupDocBuilder;
     }
 
-    private void buildDocumentTitle(String title) {
-        this.markupDocBuilder.documentTitle(title);
+    private void buildDocumentTitle(MarkupDocBuilder markupDocBuilder, String title) {
+        markupDocBuilder.documentTitle(title);
     }
 
-    private void buildOverviewTitle(String title) {
-        this.markupDocBuilder.sectionTitleWithAnchorLevel1(title, OVERVIEW_ANCHOR);
+    private void buildOverviewTitle(MarkupDocBuilder markupDocBuilder, String title) {
+        markupDocBuilder.sectionTitleWithAnchorLevel1(title, OVERVIEW_ANCHOR);
     }
 
-    void buildDescriptionParagraph(String description) {
+    void buildDescriptionParagraph(MarkupDocBuilder markupDocBuilder, String description) {
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(swaggerMarkupDescription(description));
+            markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
         }
     }
 
-    /**
-     * Returns converted markup text from Swagger.
-     *
-     * @param markupText text to convert, or empty string
-     * @return converted markup text, or an empty string if {@code markupText} == null
-     */
-    String swaggerMarkupDescription(String markupText) {
-        if (markupText == null)
-            return StringUtils.EMPTY;
-        return copyMarkupDocBuilder().importMarkup(new StringReader(markupText), globalContext.getConfig().getSwaggerMarkupLanguage()).toString().trim();
-    }
-
-    private void buildVersionInfoSection(Info info) {
+    private void buildVersionInfoSection(MarkupDocBuilder markupDocBuilder, Info info) {
         if (info != null) {
             versionInfoComponent.apply(markupDocBuilder, VersionInfoComponent.parameters(info, SECTION_TITLE_LEVEL));
         }
     }
 
-    private void buildContactInfoSection(Contact contact) {
+    private void buildContactInfoSection(MarkupDocBuilder markupDocBuilder, Contact contact) {
         if(contact != null){
             contactInfoComponent.apply(markupDocBuilder, ContactInfoComponent.parameters(contact, SECTION_TITLE_LEVEL));
         }
     }
 
-    private void buildLicenseInfoSection(Info info) {
+    private void buildLicenseInfoSection(MarkupDocBuilder markupDocBuilder, Info info) {
         if (info != null) {
             licenseInfoComponent.apply(markupDocBuilder, LicenseInfoComponent.parameters(info, SECTION_TITLE_LEVEL));
         }
     }
 
-    private void buildUriSchemeSection(Swagger swagger) {
+    private void buildUriSchemeSection(MarkupDocBuilder markupDocBuilder, Swagger swagger) {
         uriSchemeComponent.apply(markupDocBuilder, UriSchemeComponent.parameters(swagger, SECTION_TITLE_LEVEL));
     }
 
-    private void buildTagsSection(List<Tag> tags) {
+    private void buildTagsSection(MarkupDocBuilder markupDocBuilder, List<Tag> tags) {
         if(isNotEmpty(tags)){
             tagsComponent.apply(markupDocBuilder, TagsComponent.parameters(tags, SECTION_TITLE_LEVEL));
         }
     }
 
-    private void buildConsumesSection(List<String> consumes) {
+    private void buildConsumesSection(MarkupDocBuilder markupDocBuilder, List<String> consumes) {
         if (isNotEmpty(consumes)) {
             consumesComponent.apply(markupDocBuilder, ConsumesComponent.parameters(consumes, SECTION_TITLE_LEVEL));;
         }
     }
 
-    private void buildProducesSection(List<String> produces) {
+    private void buildProducesSection(MarkupDocBuilder markupDocBuilder, List<String> produces) {
         if (isNotEmpty(produces)) {
             producesComponent.apply(markupDocBuilder, ProducesComponent.parameters(produces, SECTION_TITLE_LEVEL));
         }
