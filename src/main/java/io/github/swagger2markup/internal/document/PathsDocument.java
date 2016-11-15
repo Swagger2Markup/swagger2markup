@@ -20,7 +20,9 @@ import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.PathOperationComponent;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
+import io.github.swagger2markup.internal.resolver.OperationDocumentNameResolver;
+import io.github.swagger2markup.internal.resolver.OperationDocumentResolverDefault;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.internal.utils.TagUtils;
@@ -35,7 +37,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,6 @@ import java.util.Map;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
-import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * @author Robert Winkler
@@ -52,12 +52,16 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
 
     private static final String PATHS_ANCHOR = "paths";
     private final PathOperationComponent pathOperationComponent;
+    private final OperationDocumentNameResolver operationDocumentNameResolver;
+    private final OperationDocumentResolverDefault operationDocumentResolverDefault;
 
-    public PathsDocument(Swagger2MarkupConverter.Context context,
-                         DefinitionDocumentResolver definitionDocumentResolver,
-                         SecurityDocumentResolver securityDocumentResolver) {
+    public PathsDocument(Swagger2MarkupConverter.Context context) {
         super(context);
-        this.pathOperationComponent = new PathOperationComponent(context, definitionDocumentResolver, securityDocumentResolver);
+        this.pathOperationComponent = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(context),
+                new SecurityDocumentResolver(context));
+        this.operationDocumentNameResolver = new OperationDocumentNameResolver(context);
+        this.operationDocumentResolverDefault = new OperationDocumentResolverDefault(context);
 
         if (config.isGeneratedExamplesEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -178,19 +182,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     }
 
     /**
-     * Create the operation filename depending on the generation mode
-     *
-     * @param operation operation
-     * @return operation filename
-     */
-    private String resolveOperationDocument(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
-        if (config.isSeparatedOperationsEnabled())
-            return new File(config.getSeparatedOperationsFolder(), markupDocBuilder.addFileExtension(normalizeName(operation.getId()))).getPath();
-        else
-            return markupDocBuilder.addFileExtension(config.getPathsDocument());
-    }
-
-    /**
      * Builds a path operation depending on generation mode.
      *
      * @param operation operation
@@ -199,7 +190,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
             applyPathOperationComponent(pathDocBuilder, operation);
-            java.nio.file.Path operationFile = context.getOutputPath().resolve(resolveOperationDocument(markupDocBuilder, operation));
+            java.nio.file.Path operationFile = context.getOutputPath().resolve(operationDocumentNameResolver.apply(operation));
             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate operation file produced : '{}'", operationFile);
@@ -235,15 +226,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @param operation  the Swagger Operation
      */
     private void buildOperationRef(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
-        String document;
-        if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
-            document = null;
-        else if (config.isSeparatedOperationsEnabled())
-            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(markupDocBuilder, operation);
-        else
-            document = defaultString(config.getInterDocumentCrossReferencesPrefix()) + resolveOperationDocument(markupDocBuilder, operation);
-
-        buildOperationTitle(markupDocBuilder, crossReference(markupDocBuilder, document, operation.getId(), operation.getTitle()), "ref-" + operation.getId());
+        buildOperationTitle(markupDocBuilder, crossReference(markupDocBuilder, operationDocumentResolverDefault.apply(operation), operation.getId(), operation.getTitle()), "ref-" + operation.getId());
     }
 
     /**

@@ -13,22 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.github.swagger2markup.internal.resolver;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import javaslang.Function1;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
+/**
+ * A functor to return the document part of an inter-document cross-references, depending on the context.
+ */
+public abstract class DocumentResolver implements Function1<String, String> {
 
-public class SecurityDocumentResolver extends DocumentResolver {
+    Swagger2MarkupConverter.Context context;
+    MarkupDocBuilder markupDocBuilder;
+    Swagger2MarkupConfig config;
 
-    public SecurityDocumentResolver(Swagger2MarkupConverter.Context context) {
-        super(context);
-    }
-
-    public String apply(String definitionName) {
-        if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
-            return null;
-        else
-            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());
+    public DocumentResolver(Swagger2MarkupConverter.Context context) {
+        this.context = context;
+        this.markupDocBuilder = context.createMarkupDocBuilder();
+        this.config = context.getConfig();
     }
 }

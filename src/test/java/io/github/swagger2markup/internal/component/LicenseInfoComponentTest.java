@@ -29,6 +29,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
+
 
 public class LicenseInfoComponentTest extends AbstractComponentTest{
 
@@ -49,7 +51,7 @@ public class LicenseInfoComponentTest extends AbstractComponentTest{
                 .termsOfService("Bla bla bla");
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new LicenseInfoComponent(context).apply(markupDocBuilder, LicenseInfoComponent.parameters(info, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);

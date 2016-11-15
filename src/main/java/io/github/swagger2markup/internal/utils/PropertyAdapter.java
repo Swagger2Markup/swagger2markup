@@ -15,7 +15,7 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
@@ -43,7 +43,7 @@ public final class PropertyAdapter {
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the property
      */
-    public Type getType(DefinitionDocumentResolver definitionDocumentResolver) {
+    public Type getType(DocumentResolver definitionDocumentResolver) {
         Type type;
         if (property instanceof RefProperty) {
             RefProperty refProperty = (RefProperty) property;

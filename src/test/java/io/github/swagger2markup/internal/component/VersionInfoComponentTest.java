@@ -28,6 +28,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
+
 
 public class VersionInfoComponentTest extends AbstractComponentTest{
 
@@ -46,7 +48,7 @@ public class VersionInfoComponentTest extends AbstractComponentTest{
         Info info = new Info().version("1.0");
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new VersionInfoComponent(context).apply(markupDocBuilder, VersionInfoComponent.parameters(info, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);

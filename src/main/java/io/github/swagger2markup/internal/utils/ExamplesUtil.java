@@ -16,7 +16,7 @@
 
 package io.github.swagger2markup.internal.utils;
 
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
@@ -49,7 +49,7 @@ public class ExamplesUtil {
      * @param markupDocBuilder the markup builder
      * @return map containing response examples.
      */
-    public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, PathOperation operation, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
+    public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, PathOperation operation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
         Map<String, Object> examples = new LinkedHashMap<>();
         Map<String, Response> responses = operation.getOperation().getResponses();
         if (responses != null)
@@ -88,7 +88,7 @@ public class ExamplesUtil {
      * @param markupDocBuilder the markup builder
      * @return an Optional with the example content
      */
-    public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, PathOperation pathOperation, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
+    public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, PathOperation pathOperation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
         Operation operation = pathOperation.getOperation();
         List<Parameter> parameters = operation.getParameters();
         Map<String, Object> examples = new LinkedHashMap<>();
@@ -174,7 +174,7 @@ public class ExamplesUtil {
 	 * @param refStack map to detect cyclic references
      * @return returns an Object or Map of examples
      */
-    public static Object generateExampleForRefModel(boolean generateMissingExamples, String simpleRef, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
+    public static Object generateExampleForRefModel(boolean generateMissingExamples, String simpleRef, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
         Model model = definitions.get(simpleRef);
         Object example = null;
         if (model != null) {
@@ -236,7 +236,7 @@ public class ExamplesUtil {
      *
      * @return a Map of examples
      */
-    public static Map<String, Object> exampleMapForProperties(Map<String, Property> properties, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
+    public static Map<String, Object> exampleMapForProperties(Map<String, Property> properties, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
         Map<String, Object> exampleMap = new LinkedHashMap<>();
         if (properties != null) {
             for (Map.Entry<String, Property> property : properties.entrySet()) {
@@ -273,7 +273,7 @@ public class ExamplesUtil {
         return exampleMap;
     }
 
-    public static Object generateExampleForArrayModel(ArrayModel model, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
+    public static Object generateExampleForArrayModel(ArrayModel model, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
         if (model.getExample() != null) {
             return model.getExample();
         } else if (model.getProperties() != null) {
@@ -300,7 +300,7 @@ public class ExamplesUtil {
      * @param markupDocBuilder the markup builder
      * @return array of Object
      */
-    public static Object[] generateExampleForArrayProperty(ArrayProperty value, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
+    public static Object[] generateExampleForArrayProperty(ArrayProperty value, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map< String, Integer > refStack) {
         Property property = value.getItems();
         if (property.getExample() != null) {
             return new Object[]{property.getExample()};

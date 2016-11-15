@@ -16,19 +16,26 @@
 package io.github.swagger2markup.internal.resolver;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.model.PathOperation;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
-public class SecurityDocumentResolver extends DocumentResolver {
+/**
+ * Default {@code DocumentResolver} functor
+ */
+public class OperationDocumentResolverDefault extends OperationDocumentResolver {
 
-    public SecurityDocumentResolver(Swagger2MarkupConverter.Context context) {
+    private final OperationDocumentNameResolver operationDocumentNameResolver;
+
+    public OperationDocumentResolverDefault(Swagger2MarkupConverter.Context context) {
         super(context);
+        this.operationDocumentNameResolver = new OperationDocumentNameResolver(context);
     }
 
-    public String apply(String definitionName) {
+    public String apply(PathOperation operation) {
         if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
             return null;
         else
-            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());
+            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + operationDocumentNameResolver.apply(operation);
     }
 }

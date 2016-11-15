@@ -29,6 +29,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
+
 
 public class ProducesComponentTest extends AbstractComponentTest{
 
@@ -48,7 +50,7 @@ public class ProducesComponentTest extends AbstractComponentTest{
         produces.add("application/xml");
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new ProducesComponent(context)
                 .apply(markupDocBuilder, ProducesComponent.parameters(produces, OverviewDocument.SECTION_TITLE_LEVEL));

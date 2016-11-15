@@ -28,6 +28,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
+
 
 public class ContactInfoComponentTest extends AbstractComponentTest{
 
@@ -45,7 +47,7 @@ public class ContactInfoComponentTest extends AbstractComponentTest{
         Contact contact = new Contact().name("TestName").email("test@test.de");
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new ContactInfoComponent(context).apply(markupDocBuilder, ContactInfoComponent.parameters(
                 contact, OverviewDocument.SECTION_TITLE_LEVEL));

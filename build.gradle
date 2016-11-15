@@ -51,7 +51,7 @@ dependencies {
     testCompile 'junit:junit:4.11'
     testCompile 'org.asciidoctor:asciidoctorj:1.5.4'
     testCompile 'ch.qos.logback:logback-classic:1.1.2'
-    testCompile 'org.assertj:assertj-core:3.4.0'
+    testCompile 'org.assertj:assertj-core:3.5.2'
     testCompile 'io.github.robwin:assertj-diff:0.1.1'
 }
 

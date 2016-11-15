@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package io.github.swagger2markup.internal.resolver;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
+
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import javaslang.Function1;
+import io.github.swagger2markup.model.PathOperation;
 
-/**
- * A functor to return the document part of an inter-document cross-references, depending on the globalContext.
- */
-public abstract class DefinitionDocumentResolver implements Function1<String, String> {
+import java.io.File;
 
-    Swagger2MarkupConverter.Context context;
-    MarkupDocBuilder markupDocBuilder;
-    Swagger2MarkupConfig config;
+import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 
-    public DefinitionDocumentResolver(Swagger2MarkupConverter.Context context) {
-        this.context = context;
-        this.markupDocBuilder = context.createMarkupDocBuilder();
-        this.config = context.getConfig();
+public class OperationDocumentNameResolver extends OperationDocumentResolver {
+
+    public OperationDocumentNameResolver(Swagger2MarkupConverter.Context context) {
+        super(context);
+    }
+
+    public String apply(PathOperation operation) {
+        if (config.isSeparatedOperationsEnabled())
+            return new File(config.getSeparatedOperationsFolder(), markupDocBuilder.addFileExtension(normalizeName(operation.getId()))).getPath();
+        else
+            return markupDocBuilder.addFileExtension(config.getPathsDocument());
     }
 }

@@ -21,9 +21,6 @@ import io.github.swagger2markup.internal.document.DefinitionsDocument;
 import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.internal.document.PathsDocument;
 import io.github.swagger2markup.internal.document.SecurityDocument;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
-import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
 import io.github.swagger2markup.utils.URIUtils;
@@ -60,11 +57,8 @@ public class Swagger2MarkupConverter {
     public Swagger2MarkupConverter(Context context) {
         this.context = context;
         this.overviewDocument =  new OverviewDocument(context);
-        this.pathsDocument =  new PathsDocument(context,
-                new DefinitionDocumentResolverFromOperation(context),
-                new SecurityDocumentResolver(context));
-        this.definitionsDocument =  new DefinitionsDocument(context,
-                new DefinitionDocumentResolverFromDefinition(context));
+        this.pathsDocument =  new PathsDocument(context);
+        this.definitionsDocument =  new DefinitionsDocument(context);
         this.securityDocument =  new SecurityDocument(context);
     }
 

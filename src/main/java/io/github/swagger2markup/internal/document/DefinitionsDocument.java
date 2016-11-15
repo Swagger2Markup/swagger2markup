@@ -18,14 +18,14 @@ package io.github.swagger2markup.internal.document;
 import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.DefinitionComponent;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverDefault;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentNameResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import org.apache.commons.collections4.MapUtils;
 
-import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.Collections;
@@ -35,7 +35,6 @@ import java.util.Map;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
-import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
@@ -48,8 +47,9 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
     private final DefinitionComponent definitionComponent;
     private final DefinitionDocumentResolverDefault definitionDocumentResolverDefault;
+    private final DefinitionDocumentNameResolver definitionDocumentNameResolver;
 
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context, DefinitionDocumentResolver definitionDocumentResolver) {
+    public DefinitionsDocument(Swagger2MarkupConverter.Context context) {
         super(context);
         if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -60,7 +60,8 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
                 logger.debug("Create separated definition files is disabled.");
             }
         }
-        this.definitionComponent = new DefinitionComponent(context, definitionDocumentResolver);
+        this.definitionDocumentNameResolver = new DefinitionDocumentNameResolver(context);
+        this.definitionComponent = new DefinitionComponent(context, new DefinitionDocumentResolverFromDefinition(context));
         this.definitionDocumentResolverDefault = new DefinitionDocumentResolverDefault(context);
     }
 
@@ -119,19 +120,6 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
     }
 
     /**
-     * Create the definition filename depending on the generation mode
-     *
-     * @param definitionName definition name
-     * @return definition filename
-     */
-    private String resolveDefinitionDocument(MarkupDocBuilder markupDocBuilder, String definitionName) {
-        if (config.isSeparatedDefinitionsEnabled())
-            return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(normalizeName(definitionName))).getPath();
-        else
-            return markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
-    }
-
-    /**
      * Generate definition files depending on the generation mode
      *
      * @param definitionName definition name to process
@@ -144,7 +132,7 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
         if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
             applyDefintionComponent(defDocBuilder, definitionName, model);
-            Path definitionFile = context.getOutputPath().resolve(resolveDefinitionDocument(markupDocBuilder, definitionName));
+            Path definitionFile = context.getOutputPath().resolve(definitionDocumentNameResolver.apply(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
                 logger.info("Separate definition file produced : '{}'", definitionFile);

@@ -15,20 +15,23 @@
  */
 package io.github.swagger2markup.internal.resolver;
 
+
 import io.github.swagger2markup.Swagger2MarkupConverter;
 
-import static org.apache.commons.lang3.StringUtils.defaultString;
+import java.io.File;
 
-public class SecurityDocumentResolver extends DocumentResolver {
+import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 
-    public SecurityDocumentResolver(Swagger2MarkupConverter.Context context) {
+public class DefinitionDocumentNameResolver extends DocumentResolver {
+
+    public DefinitionDocumentNameResolver(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
     public String apply(String definitionName) {
-        if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
-            return null;
+        if (config.isSeparatedDefinitionsEnabled())
+            return new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(normalizeName(definitionName))).getPath();
         else
-            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getSecurityDocument());
+            return markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
     }
 }

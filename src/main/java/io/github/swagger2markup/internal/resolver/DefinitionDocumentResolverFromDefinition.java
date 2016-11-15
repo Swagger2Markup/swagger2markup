@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
  * Overrides definition document resolver functor for inter-document cross-references from definitions files.
- * This implementation simplify the path between two definitions because all definitions are in the same path.
+ * This implementation simplifies the path between two definitions because all definitions are in the same path.
  */
 public class DefinitionDocumentResolverFromDefinition extends DefinitionDocumentResolverDefault {
 

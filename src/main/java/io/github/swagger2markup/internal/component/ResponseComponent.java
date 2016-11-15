@@ -19,7 +19,7 @@ package io.github.swagger2markup.internal.component;
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.PropertyAdapter;
@@ -46,12 +46,12 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class ResponseComponent extends MarkupComponent<ResponseComponent.Parameters> {
 
     private final TableComponent tableComponent;
-    private final DefinitionDocumentResolver definitionDocumentResolver;
+    private final DocumentResolver definitionDocumentResolver;
 
     public ResponseComponent(Swagger2MarkupConverter.Context context,
-                             DefinitionDocumentResolver definitionDocumentResolver){
+                             DocumentResolver definitionDocumentResolver){
         super(context);
-        this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
+        this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
     }
 

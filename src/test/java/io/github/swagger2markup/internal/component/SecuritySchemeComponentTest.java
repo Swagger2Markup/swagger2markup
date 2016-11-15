@@ -56,7 +56,7 @@ public class SecuritySchemeComponentTest extends AbstractComponentTest{
                 converter.getContext().getConfig().getOperationOrdering());
 
         Swagger2MarkupConverter.Context context = converter.getContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
         markupDocBuilder = new SecuritySchemeComponent(context,new SecurityDocumentResolver(context))

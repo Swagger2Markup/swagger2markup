@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 import ch.netzwerg.paleo.ColumnIds;
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.PropertyAdapter;
@@ -42,7 +42,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class PropertiesTableComponent extends MarkupComponent<PropertiesTableComponent.Parameters> {
 
 
-    private final DefinitionDocumentResolver definitionDocumentResolver;
+    private final DocumentResolver definitionDocumentResolver;
     private final TableComponent tableComponent;
 
     /**
@@ -51,7 +51,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      */
     public PropertiesTableComponent(Swagger2MarkupConverter.Context context,
-                                    DefinitionDocumentResolver definitionDocumentResolver){
+                                    DocumentResolver definitionDocumentResolver){
         super(context);
         this.definitionDocumentResolver = definitionDocumentResolver;
         this.tableComponent = new TableComponent(context);

@@ -30,14 +30,14 @@ import java.io.StringReader;
 
 public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder, T, MarkupDocBuilder> {
 
-    public Logger logger = LoggerFactory.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
-    public static final String COLON = " : ";
+    protected static final String COLON = " : ";
 
-    public Swagger2MarkupConverter.Context context;
-    public Labels labels;
-    public Swagger2MarkupConfig config;
-    public Swagger2MarkupExtensionRegistry extensionRegistry;
+    protected Swagger2MarkupConverter.Context context;
+    protected Labels labels;
+    protected Swagger2MarkupConfig config;
+    protected Swagger2MarkupExtensionRegistry extensionRegistry;
 
     public MarkupComponent(Swagger2MarkupConverter.Context context){
         this.context = context;
@@ -46,36 +46,36 @@ public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder,
         this.labels = context.getLabels();
     }
 
-    public MarkupDocBuilder copyMarkupDocBuilder(MarkupDocBuilder markupDocBuilder) {
+    protected MarkupDocBuilder copyMarkupDocBuilder(MarkupDocBuilder markupDocBuilder) {
         return markupDocBuilder.copy(false);
     }
 
-    public String literalText(MarkupDocBuilder markupDocBuilder, String text) {
+    protected String literalText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).literalText(text).toString();
     }
-    public String boldText(MarkupDocBuilder markupDocBuilder, String text) {
+    protected String boldText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).boldText(text).toString();
     }
 
-    public String italicText(MarkupDocBuilder markupDocBuilder, String text) {
+    protected String italicText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).italicText(text).toString();
     }
 
-    public String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
+    protected String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
         return copyMarkupDocBuilder(markupDocBuilder)
                 .crossReference(document, anchor, text).toString();
     }
 
-    public String markupDescription(MarkupDocBuilder markupDocBuilder, String markupText) {
+    protected String markupDescription(MarkupDocBuilder markupDocBuilder, String markupText) {
         if (StringUtils.isBlank(markupText)) {
             return StringUtils.EMPTY;
         }

@@ -29,6 +29,8 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
+
 
 public class UriSchemeComponentTest extends AbstractComponentTest{
 
@@ -49,7 +51,7 @@ public class UriSchemeComponentTest extends AbstractComponentTest{
         swagger.addScheme(Scheme.HTTPS);
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new UriSchemeComponent(context).apply(markupDocBuilder, UriSchemeComponent.parameters(swagger, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);

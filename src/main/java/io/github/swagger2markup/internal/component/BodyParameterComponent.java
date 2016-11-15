@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ParameterAdapter;
@@ -42,16 +42,16 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class BodyParameterComponent extends MarkupComponent<BodyParameterComponent.Parameters> {
 
-    private final DefinitionDocumentResolver definitionDocumentResolver;
+    private final DocumentResolver definitionDocumentResolver;
     private final Map<String, Model> definitions;
     private final PropertiesTableComponent propertiesTableComponent;
 
     public BodyParameterComponent(Swagger2MarkupConverter.Context context,
-                                  DefinitionDocumentResolver definitionDocumentResolver){
+                                  DocumentResolver definitionDocumentResolver){
         super(context);
         this.definitions = context.getSwagger().getDefinitions();
 
-        this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
+        this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
     }
 
@@ -94,9 +94,7 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
                         buildSectionTitle(markupDocBuilder, labels.getLabel(BODY_PARAMETER));
                         String description = parameter.getDescription();
                         if (isNotBlank(description)) {
-                            if (isNotBlank(description)) {
-                                markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
-                            }
+                            markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
                         }
 
                         MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);

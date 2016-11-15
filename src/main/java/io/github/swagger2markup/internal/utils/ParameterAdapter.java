@@ -15,7 +15,7 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
@@ -49,7 +49,7 @@ public class ParameterAdapter {
      * @param definitionDocumentResolver the defintion document resolver
      * @return the type of the parameter, or otherwise null
      */
-    public Type getType(Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver){
+    public Type getType(Map<String, Model> definitions, DocumentResolver definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
 

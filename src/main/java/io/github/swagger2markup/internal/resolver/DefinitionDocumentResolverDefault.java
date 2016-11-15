@@ -16,27 +16,25 @@
 package io.github.swagger2markup.internal.resolver;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.utils.IOUtils;
-
-import java.io.File;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
 /**
- * Default {@code DefinitionDocumentResolver} functor
+ * Default {@code DocumentResolver} functor
  */
-public class DefinitionDocumentResolverDefault extends DefinitionDocumentResolver {
+public class DefinitionDocumentResolverDefault extends DocumentResolver {
+
+    private final DefinitionDocumentNameResolver definitionDocumentNameResolver;
 
     public DefinitionDocumentResolverDefault(Swagger2MarkupConverter.Context context) {
         super(context);
+        this.definitionDocumentNameResolver = new DefinitionDocumentNameResolver(context);
     }
 
     public String apply(String definitionName) {
         if (!config.isInterDocumentCrossReferencesEnabled() || context.getOutputPath() == null)
             return null;
-        else if (config.isSeparatedDefinitionsEnabled())
-            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + new File(config.getSeparatedDefinitionsFolder(), markupDocBuilder.addFileExtension(IOUtils.normalizeName(definitionName))).getPath();
         else
-            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + markupDocBuilder.addFileExtension(config.getDefinitionsDocument());
+            return defaultString(config.getInterDocumentCrossReferencesPrefix()) + definitionDocumentNameResolver.apply(definitionName);
     }
 }

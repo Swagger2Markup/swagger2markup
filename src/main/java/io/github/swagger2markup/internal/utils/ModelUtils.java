@@ -16,7 +16,7 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.collect.ImmutableMap;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.*;
 import io.swagger.models.properties.Property;
@@ -52,7 +52,7 @@ public final class ModelUtils {
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the model, or otherwise null
      */
-    public static Type getType(Model model, Map<String, Model> definitions, DefinitionDocumentResolver definitionDocumentResolver) {
+    public static Type getType(Model model, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver) {
         Validate.notNull(model, "model must not be null!");
         if (model instanceof ModelImpl) {
             ModelImpl modelImpl = (ModelImpl) model;

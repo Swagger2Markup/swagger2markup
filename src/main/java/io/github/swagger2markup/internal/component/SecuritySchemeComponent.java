@@ -19,7 +19,7 @@ package io.github.swagger2markup.internal.component;
 import ch.netzwerg.paleo.StringColumn;
 import com.google.common.base.Joiner;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
@@ -38,11 +38,11 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeComponent.Parameters> {
 
     private final Map<String, SecuritySchemeDefinition> securityDefinitions;
-    private final DefinitionDocumentResolver securityDocumentResolver;
+    private final DocumentResolver securityDocumentResolver;
     private final TableComponent tableComponent;
 
     public SecuritySchemeComponent(Swagger2MarkupConverter.Context context,
-                                   DefinitionDocumentResolver securityDocumentResolver){
+                                   DocumentResolver securityDocumentResolver){
         super(context);
         this.securityDefinitions = context.getSwagger().getSecurityDefinitions();
         this.securityDocumentResolver = Validate.notNull(securityDocumentResolver, "SecurityDocumentResolver must not be null");

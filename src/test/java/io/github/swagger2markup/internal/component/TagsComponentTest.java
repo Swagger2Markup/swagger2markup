@@ -30,6 +30,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
+
 
 public class TagsComponentTest extends AbstractComponentTest{
 
@@ -49,7 +51,7 @@ public class TagsComponentTest extends AbstractComponentTest{
         tags.add(new Tag().name("Tag2"));
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new TagsComponent(context).apply(markupDocBuilder, TagsComponent.parameters(tags, OverviewDocument.SECTION_TITLE_LEVEL));
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);

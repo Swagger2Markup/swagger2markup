@@ -28,6 +28,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
+import static io.github.swagger2markup.helper.ContextUtils.createContext;
 
 public class TableComponentTest extends AbstractComponentTest{
 
@@ -52,7 +53,7 @@ public class TableComponentTest extends AbstractComponentTest{
         descriptionColumnBuilder.add("").add("").add("");
 
         Swagger2MarkupConverter.Context context = createContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new TableComponent(context).apply(markupDocBuilder,
                 TableComponent.parameters(

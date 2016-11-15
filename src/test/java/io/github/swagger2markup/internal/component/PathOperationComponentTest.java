@@ -51,7 +51,7 @@ public class PathOperationComponentTest extends AbstractComponentTest{
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
         Swagger2MarkupConverter.Context context = converter.getContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
         markupDocBuilder = new PathOperationComponent(context,
@@ -81,7 +81,7 @@ public class PathOperationComponentTest extends AbstractComponentTest{
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
 
         Swagger2MarkupConverter.Context context = converter.getContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
         markupDocBuilder = new PathOperationComponent(context,

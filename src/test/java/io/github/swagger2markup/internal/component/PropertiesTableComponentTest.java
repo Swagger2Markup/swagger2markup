@@ -56,7 +56,7 @@ public class PropertiesTableComponentTest extends AbstractComponentTest{
         Model petModel = swagger.getDefinitions().get("Pet");
 
         Swagger2MarkupConverter.Context context = converter.getContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         List<ObjectType> localDefinitions = new ArrayList<>();
         //When

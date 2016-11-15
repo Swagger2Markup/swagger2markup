@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
 import io.github.swagger2markup.internal.type.Type;
@@ -45,11 +45,11 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
 
     private final Map<String, Model> definitions;
     private final Map<ObjectTypePolymorphism.Nature, String> POLYMORPHISM_NATURE;
-    private final DefinitionDocumentResolver definitionsDocumentResolver;
+    private final DocumentResolver definitionsDocumentResolver;
     private PropertiesTableComponent propertiesTableComponent;
 
     public DefinitionComponent(Swagger2MarkupConverter.Context context,
-                               DefinitionDocumentResolver definitionsDocumentResolver) {
+                               DocumentResolver definitionsDocumentResolver) {
         super(context);
         this.definitions = context.getSwagger().getDefinitions();
         this.definitionsDocumentResolver = definitionsDocumentResolver;

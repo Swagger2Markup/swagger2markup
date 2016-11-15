@@ -19,7 +19,7 @@ package io.github.swagger2markup.internal.component;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolver;
+import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.markup.builder.MarkupAdmonition;
@@ -45,7 +45,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class PathOperationComponent extends MarkupComponent<PathOperationComponent.Parameters> {
 
-    private final DefinitionDocumentResolver definitionDocumentResolver;
+    private final DocumentResolver definitionDocumentResolver;
     private final Map<String, Model> definitions;
     private final PropertiesTableComponent propertiesTableComponent;
     private final ParameterTableComponent parameterTableComponent;
@@ -56,11 +56,11 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     private final ResponseComponent responseComponent;
 
     public PathOperationComponent(Swagger2MarkupConverter.Context context,
-                                  DefinitionDocumentResolver definitionDocumentResolver,
-                                  DefinitionDocumentResolver securityDocumentResolver){
+                                  DocumentResolver definitionDocumentResolver,
+                                  DocumentResolver securityDocumentResolver){
         super(context);
         this.definitions = context.getSwagger().getDefinitions();
-        this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DefinitionDocumentResolver must not be null");
+        this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
         this.parameterTableComponent = new ParameterTableComponent(context, definitionDocumentResolver);
         this.consumesComponent = new ConsumesComponent(context);

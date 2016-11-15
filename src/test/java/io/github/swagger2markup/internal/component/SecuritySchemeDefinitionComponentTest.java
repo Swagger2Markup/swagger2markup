@@ -53,7 +53,7 @@ public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest
         SecuritySchemeDefinition securitySchemeDefinition = swagger.getSecurityDefinitions().get("petstore_auth");
 
         Swagger2MarkupConverter.Context context = converter.getContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new SecuritySchemeDefinitionComponent(context).apply(
                 markupDocBuilder, SecuritySchemeDefinitionComponent.parameters("petstore_auth",

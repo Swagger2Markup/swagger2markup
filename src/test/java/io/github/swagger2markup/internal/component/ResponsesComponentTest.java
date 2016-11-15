@@ -57,7 +57,7 @@ public class ResponsesComponentTest extends AbstractComponentTest{
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByStatus", path);
 
         Swagger2MarkupConverter.Context context = converter.getContext();
-        MarkupDocBuilder markupDocBuilder = createMarkupDocBuilder(context);
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
         markupDocBuilder = new ResponseComponent(context, new DefinitionDocumentResolverFromOperation(context))
