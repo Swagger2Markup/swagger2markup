@@ -131,7 +131,7 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
         }
         if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
-            applyDefintionComponent(defDocBuilder, definitionName, model);
+            applyDefinitionComponent(defDocBuilder, definitionName, model);
             Path definitionFile = context.getOutputPath().resolve(definitionDocumentNameResolver.apply(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
             if (logger.isInfoEnabled()) {
@@ -141,7 +141,7 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
             definitionRef(markupDocBuilder, definitionName);
 
         } else {
-            applyDefintionComponent(markupDocBuilder, definitionName, model);
+            applyDefinitionComponent(markupDocBuilder, definitionName, model);
         }
     }
 
@@ -162,7 +162,7 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
      * @param definitionName the name of the definition
      * @param model          the Swagger Model of the definition
      */
-    private void applyDefintionComponent(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
+    private void applyDefinitionComponent(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
         definitionComponent.apply(markupDocBuilder, DefinitionComponent.parameters(
                 definitionName,
                 model,
