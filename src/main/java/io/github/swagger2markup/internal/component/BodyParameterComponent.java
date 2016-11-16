@@ -21,7 +21,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.ParameterAdapter;
+import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 
 import static io.github.swagger2markup.Labels.*;
-import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class BodyParameterComponent extends MarkupComponent<BodyParameterComponent.Parameters> {
@@ -80,16 +79,10 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
                     if (StringUtils.equals(parameter.getIn(), "body")) {
-                        ParameterAdapter parameterAdapter = new ParameterAdapter(parameter);
+                        ParameterAdapter parameterAdapter = new ParameterAdapter(config, operation, parameter, definitions, definitionDocumentResolver);
 
-
-                        Type type = parameterAdapter.getType(definitions, definitionDocumentResolver);
-
-                        if (!(type instanceof ObjectType)) {
-                            if (config.isInlineSchemaEnabled()) {
-                                type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
-                            }
-                        }
+                        Type type = parameterAdapter.getType();
+                        inlineDefinitions.addAll(parameterAdapter.getInlineDefinitions());
 
                         buildSectionTitle(markupDocBuilder, labels.getLabel(BODY_PARAMETER));
                         String description = parameter.getDescription();

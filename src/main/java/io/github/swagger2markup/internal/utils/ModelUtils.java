@@ -16,6 +16,7 @@
 package io.github.swagger2markup.internal.utils;
 
 import com.google.common.collect.ImmutableMap;
+import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.swagger.models.*;

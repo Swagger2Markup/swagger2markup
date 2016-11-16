@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.utils;
+package io.github.swagger2markup.internal.adapter;
 
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
@@ -266,7 +266,7 @@ public final class PropertyAdapter {
      * @param markupDocBuilder doc builder
      * @return a generated example for the property
      */
-    static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
+    public static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
         switch (property.getType()) {
             case "integer":
                 return 0;

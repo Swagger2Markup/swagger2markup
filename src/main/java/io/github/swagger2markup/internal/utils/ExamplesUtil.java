@@ -16,6 +16,8 @@
 
 package io.github.swagger2markup.internal.utils;
 
+import io.github.swagger2markup.internal.adapter.ParameterAdapter;
+import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;

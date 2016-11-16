@@ -17,12 +17,12 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.utils.ParameterAdapter;
+import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
@@ -41,7 +41,6 @@ import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
-import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ParameterTableComponent extends MarkupComponent<ParameterTableComponent.Parameters> {
@@ -110,12 +109,10 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             for (Parameter parameter : filteredParameters) {
-                ParameterAdapter parameterAdapter = new ParameterAdapter(parameter);
+                ParameterAdapter parameterAdapter = new ParameterAdapter(config, operation, parameter, definitions, definitionDocumentResolver);
 
-                Type type = parameterAdapter.getType(definitions, definitionDocumentResolver);
-                if (config.isInlineSchemaEnabled()){
-                    type = createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
-                }
+                Type type = parameterAdapter.getType();
+                inlineDefinitions.addAll(parameterAdapter.getInlineDefinitions());
 
                 typeColumnBuilder.add(boldText(markupDocBuilder, parameterAdapter.getIn()));
                 nameColumnBuilder.add(getParameterNameColumnContent(markupDocBuilder, parameter));

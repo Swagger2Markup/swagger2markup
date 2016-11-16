@@ -46,7 +46,7 @@ public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest
     @Test
     public void testSecuritySchemeDefinitionComponent() throws URISyntaxException {
         //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path file = Paths.get(SecuritySchemeDefinitionComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
         Swagger swagger = converter.getContext().getSwagger();
 

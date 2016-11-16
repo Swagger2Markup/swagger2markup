@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.utils;
+package io.github.swagger2markup.internal.adapter;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.internal.utils.InlineSchemaUtils;
+import io.github.swagger2markup.internal.utils.ModelUtils;
+import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.BodyParameter;
@@ -26,6 +30,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -33,14 +38,38 @@ import java.util.Optional;
 public class ParameterAdapter {
 
     private final Parameter parameter;
+    private Type type;
+    private final List<ObjectType> inlineDefinitions = new ArrayList<>();
 
-    public ParameterAdapter(Parameter parameter){
+    public ParameterAdapter(Swagger2MarkupConfig config,
+                            PathOperation operation,
+                            Parameter parameter,
+                            Map<String, Model> definitions,
+                            DocumentResolver definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null");
         this.parameter = parameter;
+        type = getType(definitions, definitionDocumentResolver);
+        if (config.isInlineSchemaEnabled()){
+            if(config.isFlatBodyEnabled()) {
+                if (!(type instanceof ObjectType)){
+                    type = InlineSchemaUtils.createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
+                }
+            }else{
+                type = InlineSchemaUtils.createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
+            }
+        }
     }
 
     public String getIn(){
         return WordUtils.capitalize(parameter.getIn());
+    }
+
+    public Type getType(){
+        return type;
+    }
+
+    public List<ObjectType> getInlineDefinitions(){
+        return inlineDefinitions;
     }
 
     /**
@@ -49,7 +78,7 @@ public class ParameterAdapter {
      * @param definitionDocumentResolver the defintion document resolver
      * @return the type of the parameter, or otherwise null
      */
-    public Type getType(Map<String, Model> definitions, DocumentResolver definitionDocumentResolver){
+    private Type getType(Map<String, Model> definitions, DocumentResolver definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
 
@@ -60,7 +89,7 @@ public class ParameterAdapter {
             if(model != null){
                 type = ModelUtils.getType(model, definitions, definitionDocumentResolver);
             }else{
-                type = new BasicType("string", null);
+                type = new BasicType("string", bodyParameter.getName());
             }
 
         }
@@ -70,14 +99,14 @@ public class ParameterAdapter {
             List<String> enums = serializableParameter.getEnum();
 
             if(CollectionUtils.isNotEmpty(enums)){
-                type = new EnumType(null, enums);
+                type = new EnumType(serializableParameter.getName(), enums);
             }else{
-                type = new BasicType(serializableParameter.getType(), null, serializableParameter.getFormat());
+                type = new BasicType(serializableParameter.getType(), serializableParameter.getName(), serializableParameter.getFormat());
             }
             if(serializableParameter.getType().equals("array")){
                 String collectionFormat = serializableParameter.getCollectionFormat();
 
-                type = new ArrayType(null, new PropertyAdapter(serializableParameter.getItems()).getType(definitionDocumentResolver), collectionFormat);
+                type = new ArrayType(serializableParameter.getName(), new PropertyAdapter(serializableParameter.getItems()).getType(definitionDocumentResolver), collectionFormat);
             }
         }
         else if(parameter instanceof RefParameter){

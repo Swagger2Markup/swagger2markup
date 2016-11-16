@@ -43,7 +43,7 @@ public class PathOperationComponentTest extends AbstractComponentTest{
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
         Swagger swagger = converter.getContext().getSwagger();
 
@@ -73,7 +73,7 @@ public class PathOperationComponentTest extends AbstractComponentTest{
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
+        Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
         Swagger swagger = converter.getContext().getSwagger();
 
