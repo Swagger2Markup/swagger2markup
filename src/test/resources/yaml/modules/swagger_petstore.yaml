@@ -1,0 +1,24 @@
+swagger: '2.0'
+info:
+  $ref: info.yaml
+host: petstore.swagger.io
+basePath: /v2
+schemes:
+  - http
+tags:
+  - name: pet
+    description: Pet resource
+  - name: store
+    description: Store resource
+  - name: user
+    description: User resource
+paths:
+  $ref: paths.yaml
+parameters:
+  $ref: parameters.yaml
+responses:
+  $ref: responses.yaml
+definitions:
+  $ref: definitions.yaml
+securityDefinitions:
+  $ref: security_definitions.yaml

@@ -55,10 +55,10 @@ public class MarkdownConverterTest {
 
 
     @Test
-    public void testSwagger2MarkdownConversion() throws IOException, URISyntaxException {
+    public void testToFolder() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/default");
+        Path outputDirectory = Paths.get("build/test/markdown/to_folder");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -74,12 +74,12 @@ public class MarkdownConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/default").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2MarkdownConversion.html");
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/to_folder").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testToFolder.html");
     }
 
     @Test
-    public void testSwagger2MarkdownConversionWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
+    public void testWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/markdown/idxref");
@@ -99,11 +99,11 @@ public class MarkdownConverterTest {
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/idxref").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2MarkdownConversionWithInterDocumentCrossReferences.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithInterDocumentCrossReferences.html");
     }
     
     @Test
-    public void testSwagger2MarkdownConversionWithSeparatedDefinitions() throws IOException, URISyntaxException {
+    public void testWithSeparatedDefinitions() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/markdown/generated");
@@ -131,7 +131,7 @@ public class MarkdownConverterTest {
     }
 
     @Test
-    public void testSwagger2MarkdownConversionWithResponseHeaders() throws IOException, URISyntaxException {
+    public void testWithResponseHeaders() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_response_headers.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/markdown/response_headers");
@@ -151,11 +151,11 @@ public class MarkdownConverterTest {
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/response_headers").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2MarkdownConversionWithResponseHeaders.html");
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithResponseHeaders.html");
     }
     
     @Test
-    public void testSwagger2MarkdownConversionHandlesComposition() throws IOException, URISyntaxException {
+    public void testHandlesComposition() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/markdown/generated");

@@ -1,0 +1,100 @@
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+        format: int32
+        description: User Status
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        description: The name of the category
+        minLength: 0
+        maxLength: 255
+        pattern: "[A-Za-zäöüÄÖÜß]{0,255}"
+        default: DefaultCategory
+        example: FoobarCategory
+  Pet:
+    type: object
+    required:
+      - name
+      - photoUrls
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        $ref: "#/definitions/Category"
+      name:
+        type: string
+        example: doggie
+      photoUrls:
+        type: array
+        items:
+          type: string
+      tags:
+        type: array
+        items:
+          $ref: "#/definitions/Tag"
+      status:
+        type: string
+        description: pet status in the store,
+        enum:
+          - Dead
+          - Alive
+  Tag:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+  Order:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      petId:
+        type: integer
+        format: int64
+      quantity:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10000.0
+        default: 0
+        example: 10
+      shipDate:
+        type: string
+        format: date-time
+      status:
+        type: string
+        description: Order Status
+        enum:
+          - Ordered
+          - Cancelled
+      complete:
+        type: boolean

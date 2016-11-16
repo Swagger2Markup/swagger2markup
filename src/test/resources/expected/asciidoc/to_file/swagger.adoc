@@ -98,35 +98,6 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 |===
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "category" : {
-    "id" : 0,
-    "name" : "FoobarCategory"
-  },
-  "name" : "doggie",
-  "photoUrls" : [ "string" ],
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
-  "status" : "string"
-}
-----
-
-
 [[_updatepet]]
 === Update an existing pet
 ....
@@ -179,35 +150,6 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 |Type|Name|Scopes
 |**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "category" : {
-    "id" : 0,
-    "name" : "FoobarCategory"
-  },
-  "name" : "doggie",
-  "photoUrls" : [ "string" ],
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
-  "status" : "string"
-}
-----
 
 
 [[_findpetsbystatus]]
@@ -265,33 +207,6 @@ __optional__|Status values that need to be considered for filter|< string > arra
 |===
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/findByStatus"
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "status" : "string"
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-"array"
-----
-
-
 [[_findpetsbytags]]
 === Finds Pets by tags
 ....
@@ -347,33 +262,6 @@ __optional__|Tags to filter by|< string > array(multi)
 |===
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/findByTags"
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "tags" : "string"
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-"array"
-----
-
-
 [[_updatepetwithform]]
 === Updates a pet in the store with form data
 ....
@@ -427,22 +315,6 @@ __required__|Updated status of the pet|string
 |Type|Name|Scopes
 |**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
 |===
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/string"
-----
-
-
-===== Request formData
-[source,json]
-----
-"string"
-----
 
 
 [[_getpetbyid]]
@@ -502,37 +374,6 @@ __required__|ID of pet that needs to be fetched|integer(int64)
 |===
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/0"
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "category" : {
-    "id" : 0,
-    "name" : "FoobarCategory"
-  },
-  "name" : "doggie",
-  "photoUrls" : [ "string" ],
-  "tags" : [ {
-    "id" : 0,
-    "name" : "string"
-  } ],
-  "status" : "string"
-}
-----
-
-
 [[_deletepet]]
 === Deletes a pet
 ....
@@ -581,22 +422,6 @@ __required__|Pet id to delete|integer(int64)
 |===
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/pets/0"
-----
-
-
-===== Request header
-[source,json]
-----
-"string"
-----
-
-
 [[_placeorder]]
 === Place an order for a pet
 ....
@@ -637,45 +462,6 @@ __optional__|order placed for purchasing the pet|<<_order,Order>>
 ==== Tags
 
 * store
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/stores/order"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "petId" : 0,
-  "quantity" : 10,
-  "shipDate" : "string",
-  "status" : "string",
-  "complete" : true
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "petId" : 0,
-  "quantity" : 10,
-  "shipDate" : "string",
-  "status" : "string",
-  "complete" : true
-}
-----
 
 
 [[_getorderbyid]]
@@ -725,31 +511,6 @@ __required__|ID of pet that needs to be fetched|string
 * store
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/stores/order/string"
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "petId" : 0,
-  "quantity" : 10,
-  "shipDate" : "string",
-  "status" : "string",
-  "complete" : true
-}
-----
-
-
 [[_deleteorder]]
 === Delete purchase order by ID
 ....
@@ -790,15 +551,6 @@ __required__|ID of the order that needs to be deleted|string
 ==== Tags
 
 * store
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/stores/order/string"
-----
 
 
 [[_createuser]]
@@ -842,31 +594,6 @@ __optional__|Created user object|<<_user,User>>
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-}
-----
-
-
 [[_createuserswitharrayinput]]
 === Creates list of users with given input array
 ....
@@ -904,31 +631,6 @@ __optional__|List of user object|< <<_user,User>> > array
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/createWithArray"
-----
-
-
-===== Request body
-[source,json]
-----
-[ {
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-} ]
-----
-
-
 [[_createuserswithlistinput]]
 === Creates list of users with given input array
 ....
@@ -964,31 +666,6 @@ __optional__|List of user object|< <<_user,User>> > array
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/createWithList"
-----
-
-
-===== Request body
-[source,json]
-----
-[ {
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-} ]
-----
 
 
 [[_loginuser]]
@@ -1035,34 +712,6 @@ __optional__|The user name for login|string
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/login"
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "password" : "string",
-  "username" : "string"
-}
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-"string"
-----
-
-
 [[_logoutuser]]
 === Logs out current logged in user session
 ....
@@ -1088,15 +737,6 @@ GET /users/logout
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/logout"
-----
 
 
 [[_getuserbyname]]
@@ -1140,33 +780,6 @@ __required__|The name that needs to be fetched. Use user1 for testing.|string
 ==== Tags
 
 * user
-
-
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/string"
-----
-
-
-==== Example HTTP response
-
-===== Response 200
-[source,json]
-----
-{
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-}
-----
 
 
 [[_updateuser]]
@@ -1213,31 +826,6 @@ __optional__|Updated user object|<<_user,User>>
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/string"
-----
-
-
-===== Request body
-[source,json]
-----
-{
-  "id" : 0,
-  "username" : "string",
-  "firstName" : "string",
-  "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
-  "phone" : "string",
-  "userStatus" : 0
-}
-----
-
-
 [[_deleteuser]]
 === Delete user
 ....
@@ -1280,15 +868,6 @@ __required__|The name that needs to be deleted|string
 * user
 
 
-==== Example HTTP request
-
-===== Request path
-[source,json]
-----
-"/users/string"
-----
-
-
 
 
 [[_definitions]]
@@ -1301,7 +880,7 @@ __required__|The name that needs to be deleted|string
 |===
 |Name|Description|Schema
 |**id** +
-__optional__|**Example** : `0`|integer(int64)
+__optional__||integer(int64)
 |**name** +
 __optional__|The name of the category +
 **Default** : `"DefaultCategory"` +
@@ -1318,21 +897,20 @@ __optional__|The name of the category +
 |===
 |Name|Description|Schema
 |**complete** +
-__optional__|**Example** : `true`|boolean
+__optional__||boolean
 |**id** +
-__optional__|**Example** : `0`|integer(int64)
+__optional__||integer(int64)
 |**petId** +
-__optional__|**Example** : `0`|integer(int64)
+__optional__||integer(int64)
 |**quantity** +
 __optional__|**Default** : `0` +
 **Minimum value** : `0` +
 **Maximum value** : `10000` +
 **Example** : `10`|integer(int32)
 |**shipDate** +
-__optional__|**Example** : `"string"`|string(date-time)
+__optional__||string(date-time)
 |**status** +
-__optional__|Order Status +
-**Example** : `"string"`|enum (Ordered, Cancelled)
+__optional__|Order Status|enum (Ordered, Cancelled)
 |===
 
 
@@ -1343,31 +921,30 @@ __optional__|Order Status +
 |===
 |Name|Description|Schema
 |**category** +
-__optional__|**Example** : `"<<_category>>"`|<<_category,Category>>
+__optional__||<<_category,Category>>
 |**id** +
-__optional__|**Example** : `0`|integer(int64)
+__optional__||integer(int64)
 |**name** +
 __required__|**Example** : `"doggie"`|string
 |**photoUrls** +
-__required__|**Example** : `[ "string" ]`|< string > array
+__required__||< string > array
 |**status** +
-__optional__|pet status in the store, +
-**Example** : `"string"`|enum (Dead, Alive)
+__optional__|pet status in the store,|enum (Dead, Alive)
 |**tags** +
-__optional__|**Example** : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
+__optional__||< <<_tag,Tag>> > array
 |===
 
 
 [[_tag]]
 === Tag
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3,.^4"]
 |===
-|Name|Description|Schema
+|Name|Schema
 |**id** +
-__optional__|**Example** : `0`|integer(int64)
+__optional__|integer(int64)
 |**name** +
-__optional__|**Example** : `"string"`|string
+__optional__|string
 |===
 
 
@@ -1378,22 +955,21 @@ __optional__|**Example** : `"string"`|string
 |===
 |Name|Description|Schema
 |**email** +
-__optional__|**Example** : `"string"`|string
+__optional__||string
 |**firstName** +
-__optional__|**Example** : `"string"`|string
+__optional__||string
 |**id** +
-__optional__|**Example** : `0`|integer(int64)
+__optional__||integer(int64)
 |**lastName** +
-__optional__|**Example** : `"string"`|string
+__optional__||string
 |**password** +
-__optional__|**Example** : `"string"`|string
+__optional__||string
 |**phone** +
-__optional__|**Example** : `"string"`|string
+__optional__||string
 |**userStatus** +
-__optional__|User Status +
-**Example** : `0`|integer(int32)
+__optional__|User Status|integer(int32)
 |**username** +
-__optional__|**Example** : `"string"`|string
+__optional__||string
 |===
 
 

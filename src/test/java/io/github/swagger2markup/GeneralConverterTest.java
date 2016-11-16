@@ -15,10 +15,7 @@
  */
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,27 +39,6 @@ public class GeneralConverterTest {
     @Before
     public void setUp(){
         expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
-    }
-
-    @Test
-    public void testToFileWithoutExtension() throws IOException, URISyntaxException {
-        //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
-        Path outputFile = Paths.get("build/test/asciidoc/toFile/outputFile.adoc");
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withGeneratedExamples()
-                .build();
-
-        Swagger2MarkupConverter.from(swaggerJsonString)
-                .withConfig(config)
-                .build()
-                .toFileWithoutExtension(outputFile);
-
-        //Then
-        Path expectedFile = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/toFile/outputFile.adoc").toURI());
-        DiffUtils.assertThatFileIsEqual(expectedFile, outputFile, "testOutputFile.html");
     }
 
     @Test

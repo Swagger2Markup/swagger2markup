@@ -64,7 +64,7 @@ public class AsciidocConverterTest {
     public void testToFolder() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/asciidoc/default");
+        Path outputDirectory = Paths.get("build/test/asciidoc/to_folder");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -75,8 +75,44 @@ public class AsciidocConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/default").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/to_folder").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testToFolder.html");
+    }
+
+    @Test
+    public void testToFileWithoutExtension() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputFile = Paths.get("build/test/asciidoc/to_file/swagger.adoc");
+
+        //When
+        Swagger2MarkupConverter.from(file)
+                .build()
+                .toFileWithoutExtension(outputFile);
+
+        //Then
+        Path expectedFile = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/to_file/swagger.adoc").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputFile, "testToFileWithoutExtension.html");
+    }
+
+    @Test
+    public void testModularizedSwaggerSpec() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputFile = Paths.get("build/test/asciidoc/modularized_swagger/swagger.adoc");
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .build();
+
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFileWithoutExtension(outputFile);
+
+        //Then
+        Path expectedFile = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/to_file/swagger.adoc").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputFile, "testModularizedSwaggerSpec.html");
     }
 
     @Test
@@ -207,7 +243,7 @@ public class AsciidocConverterTest {
     public void testSwagger2AsciiDocConversionFromString() throws IOException, URISyntaxException {
         //Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
-        Path outputDirectory = Paths.get("build/test/asciidoc/default");
+        Path outputDirectory = Paths.get("build/test/asciidoc/to_folder");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
@@ -218,7 +254,7 @@ public class AsciidocConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
 
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/default").toURI());
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/to_folder").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testSwagger2AsciiDocConversion.html");
     }
 
@@ -493,10 +529,15 @@ public class AsciidocConverterTest {
         testWithOutputLanguage(Language.JA, "definitions.adoc", "説明");
     }
 
+    @Test
+    public void testWithChineseOutputLanguage() throws IOException, URISyntaxException {
+        testWithOutputLanguage(Language.ZH, "definitions.adoc", "说明");
+    }
+
     private void testWithOutputLanguage(Language language, String outputFilename, String expected) throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
+        Path outputDirectory = Paths.get("build/test/asciidoc/language");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
