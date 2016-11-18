@@ -22,11 +22,8 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import javaslang.Function2;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.StringReader;
 
 public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder, T, MarkupDocBuilder> {
 
@@ -44,41 +41,5 @@ public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder,
         this.config = context.getConfig();
         this.extensionRegistry = context.getExtensionRegistry();
         this.labels = context.getLabels();
-    }
-
-    protected MarkupDocBuilder copyMarkupDocBuilder(MarkupDocBuilder markupDocBuilder) {
-        return markupDocBuilder.copy(false);
-    }
-
-    protected String literalText(MarkupDocBuilder markupDocBuilder, String text) {
-        if (StringUtils.isBlank(text)) {
-            return StringUtils.EMPTY;
-        }
-        return copyMarkupDocBuilder(markupDocBuilder).literalText(text).toString();
-    }
-    protected String boldText(MarkupDocBuilder markupDocBuilder, String text) {
-        if (StringUtils.isBlank(text)) {
-            return StringUtils.EMPTY;
-        }
-        return copyMarkupDocBuilder(markupDocBuilder).boldText(text).toString();
-    }
-
-    protected String italicText(MarkupDocBuilder markupDocBuilder, String text) {
-        if (StringUtils.isBlank(text)) {
-            return StringUtils.EMPTY;
-        }
-        return copyMarkupDocBuilder(markupDocBuilder).italicText(text).toString();
-    }
-
-    protected String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
-        return copyMarkupDocBuilder(markupDocBuilder)
-                .crossReference(document, anchor, text).toString();
-    }
-
-    protected String markupDescription(MarkupDocBuilder markupDocBuilder, String markupText) {
-        if (StringUtils.isBlank(markupText)) {
-            return StringUtils.EMPTY;
-        }
-        return copyMarkupDocBuilder(markupDocBuilder).importMarkup(new StringReader(markupText), config.getSwaggerMarkupLanguage()).toString().trim();
     }
 }

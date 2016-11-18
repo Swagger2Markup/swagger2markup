@@ -23,6 +23,7 @@ import io.swagger.models.License;
 import org.apache.commons.lang3.Validate;
 
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.Parameters> {

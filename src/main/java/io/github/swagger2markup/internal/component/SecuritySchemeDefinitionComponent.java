@@ -30,6 +30,8 @@ import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -71,7 +73,7 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
         applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_BEGIN, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
         String description = securitySchemeDefinition.getDescription();
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
+            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
         }
         buildSecurityScheme(markupDocBuilder, securitySchemeDefinition);
         applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_END, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));

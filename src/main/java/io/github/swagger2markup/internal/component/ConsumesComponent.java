@@ -16,14 +16,16 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.literalText;
 
 public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Parameters> {
 

@@ -23,6 +23,7 @@ import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Contact;
 import org.apache.commons.lang3.Validate;
 
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ContactInfoComponent extends MarkupComponent<ContactInfoComponent.Parameters> {

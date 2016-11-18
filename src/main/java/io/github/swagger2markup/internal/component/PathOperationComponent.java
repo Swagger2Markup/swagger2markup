@@ -40,6 +40,8 @@ import java.util.List;
 import java.util.Map;
 
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -153,7 +155,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_BEGIN, descriptionBuilder, operation));
         String description = operation.getOperation().getDescription();
         if (isNotBlank(description)) {
-            descriptionBuilder.paragraph(markupDescription(markupDocBuilder, description));
+            descriptionBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_END, descriptionBuilder, operation));
         String descriptionContent = descriptionBuilder.toString();

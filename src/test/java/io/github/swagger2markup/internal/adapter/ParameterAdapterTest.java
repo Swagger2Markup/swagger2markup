@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.internal.utils;
+package io.github.swagger2markup.internal.adapter;
 
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.type.BasicType;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
+import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Swagger;
 import io.swagger.models.parameters.Parameter;
@@ -53,32 +53,30 @@ public class ParameterAdapterTest {
         DefinitionDocumentResolverFromOperation resolverFromOperation = new DefinitionDocumentResolverFromOperation(context);
 
         //Test Query Parameter
-        Parameter parameter = parameters.get(0);
-        ParameterAdapter parameterAdapter = new ParameterAdapter(
-                context.getConfig(),
+        Parameter queryParamter = parameters.get(0);
+        ParameterAdapter queryParameterAdapter = new ParameterAdapter(
+                context,
                 operation,
-                parameter,
-                swagger.getDefinitions(),
+                queryParamter,
                 resolverFromOperation);
-        Type type = parameterAdapter.getType();
+        Type type = queryParameterAdapter.getType();
 
-        assertThat(parameterAdapter.getIn()).isEqualTo("Query");
+        assertThat(queryParameterAdapter.getIn()).isEqualTo("Query");
         assertThat(type).isInstanceOf(BasicType.class);
         assertThat(type.getName()).isEqualTo("Version");
         assertThat(type.getUniqueName()).isEqualTo("Version");
         assertThat(((BasicType)type).getType()).isEqualTo("string");
 
         //Test Body Parameter
-        parameter = parameters.get(2);
-        parameterAdapter = new ParameterAdapter(
-                context.getConfig(),
+        Parameter bodyParameter = parameters.get(2);
+        ParameterAdapter bodyParameterAdapter = new ParameterAdapter(
+                context,
                 operation,
-                parameter,
-                swagger.getDefinitions(),
+                bodyParameter,
                 resolverFromOperation);
-        type = parameterAdapter.getType();
+        type = bodyParameterAdapter.getType();
 
-        assertThat(parameterAdapter.getIn()).isEqualTo("Body");
+        assertThat(bodyParameterAdapter.getIn()).isEqualTo("Body");
         assertThat(type).isInstanceOf(RefType.class);
         Type refType = ((RefType)type).getRefType();
         assertThat(refType).isInstanceOf(ObjectType.class);
@@ -86,7 +84,6 @@ public class ParameterAdapterTest {
         assertThat(objectType.getProperties()).hasSize(3);
 
         //Inline Schema
-
-        assertThat(parameterAdapter.getInlineDefinitions()).hasSize(1);
+        assertThat(bodyParameterAdapter.getInlineDefinitions()).hasSize(1);
     }
 }

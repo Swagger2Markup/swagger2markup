@@ -18,14 +18,13 @@ package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
-import io.swagger.models.Model;
 import io.swagger.models.parameters.Parameter;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -34,22 +33,20 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class BodyParameterComponent extends MarkupComponent<BodyParameterComponent.Parameters> {
 
     private final DocumentResolver definitionDocumentResolver;
-    private final Map<String, Model> definitions;
     private final PropertiesTableComponent propertiesTableComponent;
 
     public BodyParameterComponent(Swagger2MarkupConverter.Context context,
                                   DocumentResolver definitionDocumentResolver){
         super(context);
-        this.definitions = context.getSwagger().getDefinitions();
-
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
     }
@@ -79,7 +76,8 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
             if (CollectionUtils.isNotEmpty(parameters)) {
                 for (Parameter parameter : parameters) {
                     if (StringUtils.equals(parameter.getIn(), "body")) {
-                        ParameterAdapter parameterAdapter = new ParameterAdapter(config, operation, parameter, definitions, definitionDocumentResolver);
+                        ParameterAdapter parameterAdapter = new ParameterAdapter(context,
+                                operation, parameter, definitionDocumentResolver);
 
                         Type type = parameterAdapter.getType();
                         inlineDefinitions.addAll(parameterAdapter.getInlineDefinitions());
@@ -87,7 +85,7 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
                         buildSectionTitle(markupDocBuilder, labels.getLabel(BODY_PARAMETER));
                         String description = parameter.getDescription();
                         if (isNotBlank(description)) {
-                            markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
+                            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
                         }
 
                         MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);

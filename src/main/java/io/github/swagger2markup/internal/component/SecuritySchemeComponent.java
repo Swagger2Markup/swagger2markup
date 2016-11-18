@@ -33,6 +33,9 @@ import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.boldText;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.crossReference;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeComponent.Parameters> {

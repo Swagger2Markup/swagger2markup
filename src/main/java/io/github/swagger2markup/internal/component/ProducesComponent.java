@@ -25,6 +25,8 @@ import org.apache.commons.lang3.Validate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.literalText;
+
 public class ProducesComponent extends MarkupComponent<ProducesComponent.Parameters> {
 
 

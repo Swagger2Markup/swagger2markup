@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  $ref: info.yaml
+  $ref: "./info.yaml"
 host: petstore.swagger.io
 basePath: /v2
 schemes:
@@ -13,12 +13,12 @@ tags:
   - name: user
     description: User resource
 paths:
-  $ref: paths.yaml
+  $ref: "./paths.yaml"
 parameters:
-  $ref: parameters.yaml
+  $ref: "./parameters.yaml"
 responses:
-  $ref: responses.yaml
+  $ref: "./responses.yaml"
 definitions:
-  $ref: definitions.yaml
+  $ref: "./definitions.yaml"
 securityDefinitions:
-  $ref: security_definitions.yaml
+  $ref: "./security_definitions.yaml"

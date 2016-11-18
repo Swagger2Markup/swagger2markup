@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Map;
 
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.crossReference;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;

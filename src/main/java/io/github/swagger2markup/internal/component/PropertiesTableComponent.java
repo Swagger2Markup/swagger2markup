@@ -36,6 +36,8 @@ import java.util.Optional;
 import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
@@ -121,7 +123,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                 }
 
                 MarkupDocBuilder descriptionContent = copyMarkupDocBuilder(markupDocBuilder);
-                String description = markupDescription(markupDocBuilder, property.getDescription());
+                String description = markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, property.getDescription());
                 if (isNotBlank(description))
                     descriptionContent.text(description);
 

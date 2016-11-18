@@ -15,17 +15,21 @@
  */
 package io.github.swagger2markup.internal.adapter;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.swagger2markup.Swagger2MarkupConfig;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.InlineSchemaUtils;
 import io.github.swagger2markup.internal.utils.ModelUtils;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Model;
 import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.RefParameter;
+import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.text.WordUtils;
@@ -35,20 +39,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
+
 public class ParameterAdapter {
 
     private final Parameter parameter;
     private Type type;
     private final List<ObjectType> inlineDefinitions = new ArrayList<>();
+    private final Swagger2MarkupConfig config;
 
-    public ParameterAdapter(Swagger2MarkupConfig config,
+    public ParameterAdapter(Swagger2MarkupConverter.Context context,
                             PathOperation operation,
                             Parameter parameter,
-                            Map<String, Model> definitions,
                             DocumentResolver definitionDocumentResolver){
         Validate.notNull(parameter, "parameter must not be null");
         this.parameter = parameter;
-        type = getType(definitions, definitionDocumentResolver);
+        type = getType(context.getSwagger().getDefinitions(), definitionDocumentResolver);
+        config = context.getConfig();
         if (config.isInlineSchemaEnabled()){
             if(config.isFlatBodyEnabled()) {
                 if (!(type instanceof ObjectType)){
@@ -58,6 +65,53 @@ public class ParameterAdapter {
                 type = InlineSchemaUtils.createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
             }
         }
+    }
+
+    @JsonIgnore
+    public String getAccess() {
+        return parameter.getAccess();
+    }
+
+    public String getName() {
+        return parameter.getName();
+    }
+
+    public String getUniqueName() {
+        return type.getUniqueName();
+    }
+
+    public String displaySchema(MarkupDocBuilder docBuilder) {
+        return type.displaySchema(docBuilder);
+    }
+
+    public String displayDefaultValue(MarkupDocBuilder docBuilder) {
+        return getDefaultValue().map(value -> literalText(docBuilder, Json.pretty(value))).orElse("");
+    }
+
+    public String displayDescription(MarkupDocBuilder markupDocBuilder) {
+        return markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, getDescription());
+    }
+
+    public String displayType(MarkupDocBuilder markupDocBuilder) {
+        return boldText(markupDocBuilder, getIn());
+    }
+
+
+
+    public String getDescription() {
+        return parameter.getDescription();
+    }
+
+    public boolean getRequired() {
+        return parameter.getRequired();
+    }
+
+    public String getPattern() {
+        return parameter.getPattern();
+    }
+
+    public Map<String, Object> getVendorExtensions() {
+        return parameter.getVendorExtensions();
     }
 
     public String getIn(){
@@ -75,7 +129,7 @@ public class ParameterAdapter {
     /**
      * Retrieves the type of a parameter, or otherwise null
      *
-     * @param definitionDocumentResolver the defintion document resolver
+     * @param definitionDocumentResolver the definition document resolver
      * @return the type of the parameter, or otherwise null
      */
     private Type getType(Map<String, Model> definitions, DocumentResolver definitionDocumentResolver){

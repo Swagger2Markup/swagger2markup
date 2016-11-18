@@ -19,41 +19,36 @@ package io.github.swagger2markup.internal.component;
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
-import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
-import io.swagger.models.Model;
 import io.swagger.models.parameters.Parameter;
-import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ParameterTableComponent extends MarkupComponent<ParameterTableComponent.Parameters> {
 
 
     private final DocumentResolver definitionDocumentResolver;
-    private final Map<String, Model> definitions;
     private final TableComponent tableComponent;
 
     public ParameterTableComponent(Swagger2MarkupConverter.Context context,
                                    DocumentResolver definitionDocumentResolver){
         super(context);
-        this.definitions = context.getSwagger().getDefinitions();
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
 
@@ -109,16 +104,16 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
             for (Parameter parameter : filteredParameters) {
-                ParameterAdapter parameterAdapter = new ParameterAdapter(config, operation, parameter, definitions, definitionDocumentResolver);
+                ParameterAdapter parameterAdapter = new ParameterAdapter(context,
+                        operation, parameter, definitionDocumentResolver);
 
-                Type type = parameterAdapter.getType();
                 inlineDefinitions.addAll(parameterAdapter.getInlineDefinitions());
 
-                typeColumnBuilder.add(boldText(markupDocBuilder, parameterAdapter.getIn()));
-                nameColumnBuilder.add(getParameterNameColumnContent(markupDocBuilder, parameter));
-                descriptionColumnBuilder.add(markupDescription(markupDocBuilder, parameter.getDescription()));
-                schemaColumnBuilder.add(type.displaySchema(markupDocBuilder));
-                defaultColumnBuilder.add(parameterAdapter.getDefaultValue().map(value -> literalText(markupDocBuilder, Json.pretty(value))).orElse(""));
+                typeColumnBuilder.add(parameterAdapter.displayType(markupDocBuilder));
+                nameColumnBuilder.add(getParameterNameColumnContent(markupDocBuilder, parameterAdapter));
+                descriptionColumnBuilder.add(parameterAdapter.displayDescription(markupDocBuilder));
+                schemaColumnBuilder.add(parameterAdapter.displaySchema(markupDocBuilder));
+                defaultColumnBuilder.add(parameterAdapter.displayDefaultValue(markupDocBuilder));
             }
 
             parametersBuilder = tableComponent.apply(parametersBuilder, TableComponent.parameters(
@@ -141,7 +136,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
         return markupDocBuilder;
     }
 
-    private String getParameterNameColumnContent(MarkupDocBuilder markupDocBuilder, Parameter parameter){
+    private String getParameterNameColumnContent(MarkupDocBuilder markupDocBuilder, ParameterAdapter parameter){
         MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder(markupDocBuilder);
 
         parameterNameContent.boldTextLine(parameter.getName(), true);

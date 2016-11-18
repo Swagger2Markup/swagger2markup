@@ -15,8 +15,8 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Swagger;
@@ -25,6 +25,7 @@ import org.apache.commons.lang3.Validate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.join;
@@ -77,4 +78,6 @@ public class UriSchemeComponent extends MarkupComponent<UriSchemeComponent.Param
         }
         return markupDocBuilder;
     }
+
+
 }

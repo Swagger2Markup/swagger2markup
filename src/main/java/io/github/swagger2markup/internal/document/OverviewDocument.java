@@ -28,6 +28,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static io.github.swagger2markup.spi.OverviewDocumentExtension.Context;
 import static io.github.swagger2markup.spi.OverviewDocumentExtension.Position;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
@@ -104,7 +105,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
 
     void buildDescriptionParagraph(MarkupDocBuilder markupDocBuilder, String description) {
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(markupDescription(markupDocBuilder, description));
+            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
         }
     }
 

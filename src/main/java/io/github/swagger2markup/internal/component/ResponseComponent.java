@@ -17,12 +17,12 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
-import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
@@ -41,6 +41,7 @@ import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ResponseComponent extends MarkupComponent<ResponseComponent.Parameters> {
@@ -109,7 +110,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
                 MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder(markupDocBuilder);
 
-                descriptionBuilder.text(markupDescription(markupDocBuilder, response.getDescription()));
+                descriptionBuilder.text(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, response.getDescription()));
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
@@ -119,7 +120,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
                         Property headerProperty = header.getValue();
                         PropertyAdapter headerPropertyAdapter = new PropertyAdapter(headerProperty);
                         Type propertyType = headerPropertyAdapter.getType(null);
-                        String headerDescription = markupDescription(markupDocBuilder, headerProperty.getDescription());
+                        String headerDescription = markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, headerProperty.getDescription());
                         Optional<Object> optionalDefaultValue = headerPropertyAdapter.getDefaultValue();
 
                         descriptionBuilder
