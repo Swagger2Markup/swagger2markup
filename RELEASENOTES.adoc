@@ -18,5 +18,5 @@
 === Version 0.1.5
 * Added SECTION_TITLE_LEVEL4
 
-== Version 1.0.1
+== Version 1.1.0
 * Changed bold to ** and italic to __ so that special chars in the text are possible
