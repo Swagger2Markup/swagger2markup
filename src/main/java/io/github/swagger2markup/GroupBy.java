@@ -17,5 +17,6 @@ package io.github.swagger2markup;
 
 public enum GroupBy {
     AS_IS,
-    TAGS
+    TAGS,
+    REGEX
 }

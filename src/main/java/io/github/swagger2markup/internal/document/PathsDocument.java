@@ -127,7 +127,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation));
-            } else {
+            } else if(config.getPathsGroupedBy() == GroupBy.TAGS) {
                 Validate.notEmpty(context.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
                 // Group operations by tag
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getOperationOrdering());
@@ -143,6 +143,8 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
                     operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(markupDocBuilder, operation));
 
                 });
+            } else if(config.getPathsGroupedBy() == GroupBy.REGEX) {
+                //TODO: Iterate over paths to find matching group names and assign accordingly.
             }
         }
     }
