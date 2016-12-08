@@ -105,6 +105,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      */
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, PathsDocument.Parameters params) {
+        //TODO: Probably need to do something here for REGEX grouping
         Map<String, Path> paths = params.paths;
         if (MapUtils.isNotEmpty(paths)) {
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
@@ -155,6 +156,8 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     private void buildPathsTitle(MarkupDocBuilder markupDocBuilder) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.PATHS));
+        } else if(config.getPathsGroupedBy() == GroupBy.REGEX) {
+            buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.OPERATIONS));
         } else {
             buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.RESOURCES));
         }

@@ -81,6 +81,7 @@ public class Labels {
     public static final String REQUEST = "request";
     public static final String PATHS = "paths";
     public static final String RESOURCES = "resources";
+    public static final String OPERATIONS = "operations";
     public static final String PARAMETERS = "parameters";
     public static final String BODY_PARAMETER = "body_parameter";
     public static final String RESPONSES = "responses";
