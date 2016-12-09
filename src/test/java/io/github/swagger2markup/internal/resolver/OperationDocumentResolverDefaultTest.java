@@ -25,12 +25,15 @@ import io.swagger.models.Operation;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 
 import static io.github.swagger2markup.helper.ContextUtils.createContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OperationDocumentResolverDefaultTest {
+
+    private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
     private PathOperation operation;
 
@@ -66,7 +69,7 @@ public class OperationDocumentResolverDefaultTest {
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new OperationDocumentResolverDefault(context).apply(operation))
-                .isEqualTo("operations/test_get.adoc");
+                .isEqualTo("operations" + fileSeparator + "test_get.adoc");
     }
 
     @Test

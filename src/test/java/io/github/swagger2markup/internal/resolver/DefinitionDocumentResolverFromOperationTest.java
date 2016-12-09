@@ -21,12 +21,15 @@ import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.junit.Test;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Paths;
 
 import static io.github.swagger2markup.helper.ContextUtils.createContext;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DefinitionDocumentResolverFromOperationTest {
+
+    private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
     @Test
     public void testDefault(){
@@ -55,7 +58,7 @@ public class DefinitionDocumentResolverFromOperationTest {
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new DefinitionDocumentResolverFromOperation(context).apply("DefinitionName"))
-                .isEqualTo("../definitions.adoc");
+                .isEqualTo(".." + fileSeparator + "definitions.adoc");
     }
 
     @Test
@@ -69,7 +72,7 @@ public class DefinitionDocumentResolverFromOperationTest {
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new DefinitionDocumentResolverFromOperation(context).apply("DefinitionName"))
-                .isEqualTo("../definitions/DefinitionName.adoc");
+                .isEqualTo(".." + fileSeparator + "definitions" + fileSeparator + "DefinitionName.adoc");
     }
 
     @Test
