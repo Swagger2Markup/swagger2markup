@@ -121,7 +121,7 @@ public class Swagger2MarkupConfigBuilderTest {
                         "uniqueId1.customProperty2",
                         "uniqueId2.customProperty1",
                         "uniqueId2.customProperty2"
-                        );
+                );
     }
 
     @Test

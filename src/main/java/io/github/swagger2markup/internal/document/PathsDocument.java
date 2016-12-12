@@ -25,6 +25,7 @@ import io.github.swagger2markup.internal.resolver.OperationDocumentNameResolver;
 import io.github.swagger2markup.internal.resolver.OperationDocumentResolverDefault;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
+import io.github.swagger2markup.internal.utils.RegexUtils;
 import io.github.swagger2markup.internal.utils.TagUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
@@ -40,6 +41,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.crossReference;
@@ -86,14 +89,14 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         }
     }
 
-    public static PathsDocument.Parameters parameters(Map<String, Path> paths){
+    public static PathsDocument.Parameters parameters(Map<String, Path> paths) {
         return new PathsDocument.Parameters(paths);
     }
 
     public static class Parameters {
         private final Map<String, Path> paths;
 
-        public Parameters(Map<String, Path> paths){
+        public Parameters(Map<String, Path> paths) {
             this.paths = paths;
         }
     }
@@ -119,7 +122,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     }
 
     /**
-     * Builds the paths section. Groups the paths either as-is or by tags.
+     * Builds the paths section. Groups the paths either as-is, by tags or using regex.
      *
      * @param paths the Swagger paths
      */
@@ -128,7 +131,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation));
-            } else if(config.getPathsGroupedBy() == GroupBy.TAGS) {
+            } else if (config.getPathsGroupedBy() == GroupBy.TAGS) {
                 Validate.notEmpty(context.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
                 // Group operations by tag
                 Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getOperationOrdering());
@@ -138,14 +141,25 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
                 tagsMap.forEach((String tagName, Tag tag) -> {
                     markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
                     String description = tag.getDescription();
-                    if(StringUtils.isNotBlank(description)){
+                    if (StringUtils.isNotBlank(description)) {
                         markupDocBuilder.paragraph(description);
                     }
                     operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(markupDocBuilder, operation));
 
                 });
-            } else if(config.getPathsGroupedBy() == GroupBy.REGEX) {
-                //TODO: Iterate over paths to find matching group names and assign accordingly.
+            } else if (config.getPathsGroupedBy() == GroupBy.REGEX) {
+                //TODO: Cas check this
+                Validate.notNull(config.getHeaderPattern(), "Header regex pattern must not be empty when operations are grouped using regex");
+
+                Pattern headerPattern = config.getHeaderPattern();
+                Multimap<String, PathOperation> operationsGroupedByRegex = RegexUtils.groupOperationsByRegex(pathOperations, headerPattern);
+                Set<String> keys = operationsGroupedByRegex.keySet();
+                String[] sortedHeaders = RegexUtils.toSortedArray(keys);
+
+                for (String header : sortedHeaders) {
+                    markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(header), header + "_resource");
+                    operationsGroupedByRegex.get(header).forEach(operation -> buildOperation(markupDocBuilder, operation));
+                }
             }
         }
     }
@@ -156,7 +170,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     private void buildPathsTitle(MarkupDocBuilder markupDocBuilder) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
             buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.PATHS));
-        } else if(config.getPathsGroupedBy() == GroupBy.REGEX) {
+        } else if (config.getPathsGroupedBy() == GroupBy.REGEX) {
             buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.OPERATIONS));
         } else {
             buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.RESOURCES));
@@ -169,7 +183,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @return either the relative or the full path
      */
     private String getBasePath() {
-        if(config.isBasePathPrefixEnabled()){
+        if (config.isBasePathPrefixEnabled()) {
             return StringUtils.defaultString(context.getSwagger().getBasePath());
         }
         return "";
@@ -217,8 +231,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * Builds a path operation.
      *
      * @param markupDocBuilder the docbuilder do use for output
-     * @param operation  the Swagger Operation
-     *
+     * @param operation        the Swagger Operation
      */
     private void applyPathOperationComponent(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (operation != null) {
@@ -230,7 +243,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * Builds a cross-reference to a separated operation file
      *
      * @param markupDocBuilder the markupDocBuilder do use for output
-     * @param operation  the Swagger Operation
+     * @param operation        the Swagger Operation
      */
     private void buildOperationRef(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         buildOperationTitle(markupDocBuilder, crossReference(markupDocBuilder, operationDocumentResolverDefault.apply(operation), operation.getId(), operation.getTitle()), "ref-" + operation.getId());
@@ -239,8 +252,8 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     /**
      * Adds a operation title to the document.
      *
-     * @param title      the operation title
-     * @param anchor     optional anchor (null => auto-generate from title)
+     * @param title  the operation title
+     * @param anchor optional anchor (null => auto-generate from title)
      */
     private void buildOperationTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {

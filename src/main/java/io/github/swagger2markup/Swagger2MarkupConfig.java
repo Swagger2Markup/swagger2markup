@@ -21,6 +21,7 @@ import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.parameters.Parameter;
 
 import java.util.Comparator;
+import java.util.regex.Pattern;
 
 /**
  * Swagger2Markup configuration interface.
@@ -77,6 +78,11 @@ public interface Swagger2MarkupConfig {
      * Specifies tag ordering.
      */
     OrderBy getTagOrderBy();
+
+    /**
+     * Specifies the regex pattern used for header matching
+     */
+    Pattern getHeaderPattern();
 
     /**
      * Specifies a custom comparator function to order tags.
@@ -148,10 +154,10 @@ public interface Swagger2MarkupConfig {
      */
     boolean isFlatBodyEnabled();
 
-	/**
-	 * Optionally disable the security section for path sections
-	 */
-	boolean isPathSecuritySectionEnabled();
+    /**
+     * Optionally disable the security section for path sections
+     */
+    boolean isPathSecuritySectionEnabled();
 
     /**
      * Optionally prefix all anchors for uniqueness.
