@@ -1,0 +1,35 @@
+
+[[_paths]]
+== Operations
+
+[[_a_resource]]
+=== A
+
+[[_a_get]]
+==== GET /A
+
+[[_a_delete]]
+==== DELETE /A
+
+[[_b_resource]]
+=== B
+
+[[_b_get]]
+==== GET /B
+
+[[_payments_resource]]
+=== payments
+
+[[_payments_post]]
+==== POST /payments
+
+[[_payments_get]]
+==== GET /payments
+
+[[_payments_approve_post]]
+==== POST /payments/approve
+
+[[_payments_reject_post]]
+==== POST /payments/reject
+
+

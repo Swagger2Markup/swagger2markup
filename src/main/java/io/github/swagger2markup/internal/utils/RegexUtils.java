@@ -39,7 +39,7 @@ public class RegexUtils {
      */
     public static String[] toSortedArray(Set<String> groups) {
         //TODO: sort in another way than just alphabetically
-        String[] sortedArray = (String[]) groups.toArray();
+        String[] sortedArray = groups.toArray(new String[groups.size()]);
 
         Arrays.sort(sortedArray);
 
