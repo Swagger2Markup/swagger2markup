@@ -39,33 +39,19 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
 
     private final TableComponent tableComponent;
 
-    public SecuritySchemeDefinitionComponent(Swagger2MarkupConverter.Context context){
+    public SecuritySchemeDefinitionComponent(Swagger2MarkupConverter.Context context) {
         super(context);
         this.tableComponent = new TableComponent(context);
     }
 
-    public static class Parameters {
-        private final String securitySchemeDefinitionName;
-        private final SecuritySchemeDefinition securitySchemeDefinition;
-        private final int titleLevel;
-
-        public Parameters(String securitySchemeDefinitionName,
-                          SecuritySchemeDefinition securitySchemeDefinition,
-                          int titleLevel){
-            this.securitySchemeDefinitionName = Validate.notBlank(securitySchemeDefinitionName, "SecuritySchemeDefinitionName must not be empty");
-            this.securitySchemeDefinition = Validate.notNull(securitySchemeDefinition, "SecuritySchemeDefinition must not be null");
-            this.titleLevel = titleLevel;
-        }
-    }
-
     public static SecuritySchemeDefinitionComponent.Parameters parameters(String securitySchemeDefinitionName,
                                                                           SecuritySchemeDefinition securitySchemeDefinition,
-                                                                          int titleLevel){
+                                                                          int titleLevel) {
         return new SecuritySchemeDefinitionComponent.Parameters(securitySchemeDefinitionName, securitySchemeDefinition, titleLevel);
     }
 
     @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         String securitySchemeDefinitionName = params.securitySchemeDefinitionName;
         SecuritySchemeDefinition securitySchemeDefinition = params.securitySchemeDefinition;
         applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_BEFORE, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
@@ -109,7 +95,7 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
                     .putMetaData(TableComponent.WIDTH_RATIO, "17")
                     .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
-            if(oauth2Scheme.getScopes() != null) {
+            if (oauth2Scheme.getScopes() != null) {
                 for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
                     nameColumnBuilder.add(scope.getKey());
                     descriptionColumnBuilder.add(scope.getValue());
@@ -131,5 +117,19 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
      */
     private void applySecurityDocumentExtension(SecurityDocumentExtension.Context context) {
         extensionRegistry.getSecurityDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final String securitySchemeDefinitionName;
+        private final SecuritySchemeDefinition securitySchemeDefinition;
+        private final int titleLevel;
+
+        public Parameters(String securitySchemeDefinitionName,
+                          SecuritySchemeDefinition securitySchemeDefinition,
+                          int titleLevel) {
+            this.securitySchemeDefinitionName = Validate.notBlank(securitySchemeDefinitionName, "SecuritySchemeDefinitionName must not be empty");
+            this.securitySchemeDefinition = Validate.notNull(securitySchemeDefinition, "SecuritySchemeDefinition must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 }

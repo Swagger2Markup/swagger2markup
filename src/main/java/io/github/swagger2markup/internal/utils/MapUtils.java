@@ -15,18 +15,21 @@
  */
 package io.github.swagger2markup.internal.utils;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class MapUtils {
 
     /**
      * Returns the the Map either ordered or as-is, if the comparator is null.
      *
-     * @param map the Map
+     * @param map        the Map
      * @param comparator the comparator to use.
      * @return the keySet of the Map
      */
-    public static <K, V> Map<K, V> toSortedMap(Map<K, V> map, Comparator<? super K> comparator){
+    public static <K, V> Map<K, V> toSortedMap(Map<K, V> map, Comparator<? super K> comparator) {
         Map<K, V> sortedMap;
         if (comparator == null)
             sortedMap = new LinkedHashMap<>();

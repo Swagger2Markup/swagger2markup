@@ -28,23 +28,12 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.Parameters> {
 
-    public LicenseInfoComponent(Swagger2MarkupConverter.Context context){
+    public LicenseInfoComponent(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
-    public static class Parameters {
-        private final int titleLevel;
-        private final Info info;
-
-        public Parameters(Info info,
-                          int titleLevel){
-            this.info = Validate.notNull(info, "Info must not be null");
-            this.titleLevel = titleLevel;
-        }
-    }
-
     public static LicenseInfoComponent.Parameters parameters(Info info,
-                                                             int titleLevel){
+                                                             int titleLevel) {
         return new LicenseInfoComponent.Parameters(info, titleLevel);
     }
 
@@ -53,7 +42,7 @@ public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.P
         Info info = params.info;
         License license = info.getLicense();
         String termOfService = info.getTermsOfService();
-        if((license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) || isNotBlank(termOfService)) {
+        if ((license != null && (isNotBlank(license.getName()) || isNotBlank(license.getUrl()))) || isNotBlank(termOfService)) {
             markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(LICENSE_INFORMATION));
             MarkupDocBuilder paragraph = copyMarkupDocBuilder(markupDocBuilder);
             if (license != null) {
@@ -71,5 +60,16 @@ public class LicenseInfoComponent extends MarkupComponent<LicenseInfoComponent.P
         }
 
         return markupDocBuilder;
+    }
+
+    public static class Parameters {
+        private final int titleLevel;
+        private final Info info;
+
+        public Parameters(Info info,
+                          int titleLevel) {
+            this.info = Validate.notNull(info, "Info must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 }

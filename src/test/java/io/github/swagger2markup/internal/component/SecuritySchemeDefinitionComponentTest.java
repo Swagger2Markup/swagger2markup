@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.document.OverviewDocument;
@@ -32,13 +31,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
-public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest{
+public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "security_scheme_definition";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -59,7 +58,7 @@ public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest
                 markupDocBuilder, SecuritySchemeDefinitionComponent.parameters("petstore_auth",
                         securitySchemeDefinition,
                         OverviewDocument.SECTION_TITLE_LEVEL));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));

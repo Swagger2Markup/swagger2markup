@@ -33,30 +33,18 @@ import static org.apache.commons.lang3.StringUtils.join;
 public class UriSchemeComponent extends MarkupComponent<UriSchemeComponent.Parameters> {
 
 
-    public UriSchemeComponent(Swagger2MarkupConverter.Context context){
+    public UriSchemeComponent(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
-    public static UriSchemeComponent.Parameters parameters(Swagger swagger, int titleLevel){
+    public static UriSchemeComponent.Parameters parameters(Swagger swagger, int titleLevel) {
         return new UriSchemeComponent.Parameters(swagger, titleLevel);
     }
 
-    public static class Parameters {
-
-        private final int titleLevel;
-        private final Swagger swagger;
-
-        public Parameters(Swagger swagger, int titleLevel){
-
-            this.swagger = Validate.notNull(swagger);
-            this.titleLevel = titleLevel;
-        }
-    }
-
     @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         Swagger swagger = params.swagger;
-        if(isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
+        if (isNotBlank(swagger.getHost()) || isNotBlank(swagger.getBasePath()) || isNotEmpty(swagger.getSchemes())) {
             markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.URI_SCHEME));
             MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             if (isNotBlank(swagger.getHost())) {
@@ -77,6 +65,18 @@ public class UriSchemeComponent extends MarkupComponent<UriSchemeComponent.Param
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
         return markupDocBuilder;
+    }
+
+    public static class Parameters {
+
+        private final int titleLevel;
+        private final Swagger swagger;
+
+        public Parameters(Swagger swagger, int titleLevel) {
+
+            this.swagger = Validate.notNull(swagger);
+            this.titleLevel = titleLevel;
+        }
     }
 
 

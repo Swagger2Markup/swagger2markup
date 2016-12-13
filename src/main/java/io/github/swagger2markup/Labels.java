@@ -44,7 +44,7 @@ public class Labels {
     public static final String FLAGS_READ_ONLY = "flags.read_only";
 
     // Overview Document
-    public static final String CONTACT_INFORMATION ="contact_information";
+    public static final String CONTACT_INFORMATION = "contact_information";
     public static final String CONTACT_NAME = "contact_name";
     public static final String CONTACT_EMAIL = "contact_email";
     public static final String LICENSE_INFORMATION = "license_information";
@@ -75,7 +75,7 @@ public class Labels {
     public static final String TYPE_COLUMN = "type_column";
     public static final String POLYMORPHISM_NATURE_COMPOSITION = "polymorphism.nature.COMPOSITION";
     public static final String POLYMORPHISM_NATURE_INHERITANCE = "polymorphism.nature.INHERITANCE";
-    
+
     //Paths Document
     public static final String RESPONSE = "response";
     public static final String REQUEST = "request";
@@ -104,7 +104,7 @@ public class Labels {
      * @param key the key for the desired label
      * @return the label for the given key
      */
-    public String getLabel(String key){
+    public String getLabel(String key) {
         return resourceBundle.getString(key);
     }
 }

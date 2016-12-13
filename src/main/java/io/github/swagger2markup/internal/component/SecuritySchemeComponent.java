@@ -33,9 +33,7 @@ import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.boldText;
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.crossReference;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeComponent.Parameters> {
@@ -45,32 +43,20 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
     private final TableComponent tableComponent;
 
     public SecuritySchemeComponent(Swagger2MarkupConverter.Context context,
-                                   DocumentResolver securityDocumentResolver){
+                                   DocumentResolver securityDocumentResolver) {
         super(context);
         this.securityDefinitions = context.getSwagger().getSecurityDefinitions();
         this.securityDocumentResolver = Validate.notNull(securityDocumentResolver, "SecurityDocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
     }
 
-    public static class Parameters {
-        private final PathOperation operation;
-        private final int titleLevel;
-
-        public Parameters(PathOperation operation,
-                          int titleLevel){
-            this.operation = Validate.notNull(operation, "PathOperation must not be null");
-            this.titleLevel = titleLevel;
-        }
-    }
-
     public static SecuritySchemeComponent.Parameters parameters(PathOperation operation,
-                                                                 int titleLevel){
+                                                                int titleLevel) {
         return new SecuritySchemeComponent.Parameters(operation, titleLevel);
     }
 
-
     @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         PathOperation operation = params.operation;
         MarkupDocBuilder securityBuilder = copyMarkupDocBuilder(markupDocBuilder);
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
@@ -122,5 +108,16 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
      */
     private void applyPathsDocumentExtension(PathsDocumentExtension.Context context) {
         extensionRegistry.getPathsDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final PathOperation operation;
+        private final int titleLevel;
+
+        public Parameters(PathOperation operation,
+                          int titleLevel) {
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 }

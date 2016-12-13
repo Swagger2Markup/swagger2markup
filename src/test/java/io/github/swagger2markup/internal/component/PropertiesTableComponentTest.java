@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
@@ -35,13 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PropertiesTableComponentTest extends AbstractComponentTest{
+public class PropertiesTableComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "properties_table";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -64,7 +63,7 @@ public class PropertiesTableComponentTest extends AbstractComponentTest{
                 new DefinitionDocumentResolverFromDefinition(context))
                 .apply(markupDocBuilder, PropertiesTableComponent.parameters(petModel.getProperties(),
                         "Pet", localDefinitions));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         //Then
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
@@ -35,13 +34,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ParameterTableComponentTest extends AbstractComponentTest{
+public class ParameterTableComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "parameter_table";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }

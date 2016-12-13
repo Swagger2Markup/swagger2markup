@@ -22,7 +22,7 @@ import java.nio.file.Paths;
 
 abstract class AbstractComponentTest {
 
-    Path getOutputFile(String componentName){
+    Path getOutputFile(String componentName) {
         return Paths.get("build/test/component/" + componentName + ".adoc");
     }
 
@@ -30,7 +30,7 @@ abstract class AbstractComponentTest {
         return Paths.get(AbstractComponentTest.class.getResource("/component/" + componentName + ".adoc").toURI());
     }
 
-    String getReportName(String componentName){
+    String getReportName(String componentName) {
         return "/component/" + componentName + ".html";
     }
 

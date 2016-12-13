@@ -1,54 +1,75 @@
 {
-  "apiVersion" : "0.0.1-SNAPSHOT",
-  "swaggerVersion" : "1.2",
-  "basePath" : "",
-  "resourcePath" : "/resource/x/v2",
-  "apis" : [ {
-    "path" : "/resource/x/v2",
-    "operations" : [ {
-      "method" : "POST",
-      "nickname" : "createX",
-      "type" : "string",
-      "parameters" : [ {
-        "type": "string",
-        "description" : "The x in JSON format",
-        "paramType" : "body",
-        "name" : "body",
-        "required" : true
-      } ],
-      "summary" : "Creates a x x.",
-      "notes" : "If id already exists, the x is updated.",
-      "responseMessages" : [ {
-        "code" : 200,
-        "message" : "ok"
-      }, {
-        "code" : 500,
-        "message" : "error"
-      } ],
-      "consumes" : [ "application/json" ]
-    } ]
-  }, {
-    "path" : "/resource/x/v2/{id}",
-    "operations" : [ {
-      "method" : "GET",
-      "nickname" : "getX",
-      "type" : "string",
-      "parameters" : [ {
-        "type" : "integer",
-        "description" : "A valid x x UUID",
-        "paramType" : "path",
-        "name" : "id",
-        "required" : true
-      } ],
-      "summary" : "Gets the x x with the specified id.",
-      "responseMessages" : [ {
-        "code" : 200,
-        "message" : "ok"
-      }, {
-        "code" : 404,
-        "message" : "not found"
-      } ],
-      "produces" : [ "application/json" ]
-    } ]
-  } ]
+  "apiVersion": "0.0.1-SNAPSHOT",
+  "swaggerVersion": "1.2",
+  "basePath": "",
+  "resourcePath": "/resource/x/v2",
+  "apis": [
+    {
+      "path": "/resource/x/v2",
+      "operations": [
+        {
+          "method": "POST",
+          "nickname": "createX",
+          "type": "string",
+          "parameters": [
+            {
+              "type": "string",
+              "description": "The x in JSON format",
+              "paramType": "body",
+              "name": "body",
+              "required": true
+            }
+          ],
+          "summary": "Creates a x x.",
+          "notes": "If id already exists, the x is updated.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "ok"
+            },
+            {
+              "code": 500,
+              "message": "error"
+            }
+          ],
+          "consumes": [
+            "application/json"
+          ]
+        }
+      ]
+    },
+    {
+      "path": "/resource/x/v2/{id}",
+      "operations": [
+        {
+          "method": "GET",
+          "nickname": "getX",
+          "type": "string",
+          "parameters": [
+            {
+              "type": "integer",
+              "description": "A valid x x UUID",
+              "paramType": "path",
+              "name": "id",
+              "required": true
+            }
+          ],
+          "summary": "Gets the x x with the specified id.",
+          "responseMessages": [
+            {
+              "code": 200,
+              "message": "ok"
+            },
+            {
+              "code": 404,
+              "message": "not found"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ]
+        }
+      ]
+    }
+  ]
 }

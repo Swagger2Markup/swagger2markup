@@ -25,7 +25,7 @@ public class MapType extends Type {
 
     private Type keyType = new BasicType("string", null);
     private Type valueType;
-    
+
     public MapType(String name, Type valueType) {
         super(name);
         this.valueType = valueType;

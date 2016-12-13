@@ -37,7 +37,7 @@ public class GeneralConverterTest {
     private List<String> expectedFiles;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
     }
 
@@ -115,5 +115,5 @@ public class GeneralConverterTest {
         String[] files = outputDirectory.toFile().list();
         assertThat(files).hasSize(4).containsAll(expectedFiles);
     }
-    
+
 }

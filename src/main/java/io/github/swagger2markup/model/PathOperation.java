@@ -43,6 +43,7 @@ public class PathOperation {
 
     /**
      * Returns the display title for an operation
+     *
      * @return the operation title
      */
     public String getTitle() {

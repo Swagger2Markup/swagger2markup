@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Contact;
@@ -32,25 +32,15 @@ public class ContactInfoComponent extends MarkupComponent<ContactInfoComponent.P
         super(context);
     }
 
-    public static class Parameters {
-        private final Contact contact;
-        private final int titleLevel;
-        public Parameters(Contact contact,
-                int titleLevel){
-            this.contact = Validate.notNull(contact, "Contact must not be null");
-            this.titleLevel = titleLevel;
-        }
-    }
-
     public static ContactInfoComponent.Parameters parameters(Contact contact,
-                                                             int titleLevel){
+                                                             int titleLevel) {
         return new ContactInfoComponent.Parameters(contact, titleLevel);
     }
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         Contact contact = params.contact;
-        if (isNotBlank(contact.getName()) || isNotBlank(contact.getEmail())){
+        if (isNotBlank(contact.getName()) || isNotBlank(contact.getEmail())) {
             markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.CONTACT_INFORMATION));
             MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
             if (isNotBlank(contact.getName())) {
@@ -64,5 +54,16 @@ public class ContactInfoComponent extends MarkupComponent<ContactInfoComponent.P
             markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
         return markupDocBuilder;
+    }
+
+    public static class Parameters {
+        private final Contact contact;
+        private final int titleLevel;
+
+        public Parameters(Contact contact,
+                          int titleLevel) {
+            this.contact = Validate.notNull(contact, "Contact must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 }

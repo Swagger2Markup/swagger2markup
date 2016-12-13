@@ -37,7 +37,7 @@ import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.Labels.*;
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ParameterTableComponent extends MarkupComponent<ParameterTableComponent.Parameters> {
@@ -47,7 +47,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
     private final TableComponent tableComponent;
 
     public ParameterTableComponent(Swagger2MarkupConverter.Context context,
-                                   DocumentResolver definitionDocumentResolver){
+                                   DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
@@ -56,22 +56,8 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
     public static ParameterTableComponent.Parameters parameters(PathOperation operation,
                                                                 List<ObjectType> inlineDefinitions,
-                                                                int titleLevel){
+                                                                int titleLevel) {
         return new ParameterTableComponent.Parameters(operation, inlineDefinitions, titleLevel);
-    }
-
-    public static class Parameters {
-        private final PathOperation operation;
-        private final int titleLevel;
-        private final List<ObjectType> inlineDefinitions;
-
-        public Parameters(PathOperation operation,
-                          List<ObjectType> inlineDefinitions,
-                          int titleLevel){
-            this.operation = Validate.notNull(operation, "PathOperation must not be null");
-            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
-            this.titleLevel = titleLevel;
-        }
     }
 
     @Override
@@ -136,7 +122,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
         return markupDocBuilder;
     }
 
-    private String getParameterNameColumnContent(MarkupDocBuilder markupDocBuilder, ParameterAdapter parameter){
+    private String getParameterNameColumnContent(MarkupDocBuilder markupDocBuilder, ParameterAdapter parameter) {
         MarkupDocBuilder parameterNameContent = copyMarkupDocBuilder(markupDocBuilder);
 
         parameterNameContent.boldTextLine(parameter.getName(), true);
@@ -164,5 +150,19 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
      */
     private void applyPathsDocumentExtension(PathsDocumentExtension.Context context) {
         extensionRegistry.getPathsDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final PathOperation operation;
+        private final int titleLevel;
+        private final List<ObjectType> inlineDefinitions;
+
+        public Parameters(PathOperation operation,
+                          List<ObjectType> inlineDefinitions,
+                          int titleLevel) {
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 }

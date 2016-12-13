@@ -80,7 +80,7 @@ public class DocumentationTest {
         // end::convertIntoString[]
     }
 
-    public void swagger2MarkupConfigBuilder(){
+    public void swagger2MarkupConfigBuilder() {
         Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
 
         // tag::swagger2MarkupConfigBuilder[]

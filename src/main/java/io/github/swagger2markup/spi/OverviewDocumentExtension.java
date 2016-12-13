@@ -23,30 +23,6 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
  */
 public abstract class OverviewDocumentExtension extends AbstractExtension {
 
-    public enum Position {
-        DOCUMENT_BEFORE,
-        DOCUMENT_AFTER,
-        DOCUMENT_BEGIN,
-        DOCUMENT_END
-    }
-
-    public static class Context extends ContentContext {
-        private Position position;
-
-        /**
-         * @param position the current position
-         * @param docBuilder the MarkupDocBuilder
-         */
-        public Context(Position position, MarkupDocBuilder docBuilder) {
-            super(docBuilder);
-            this.position = position;
-        }
-
-        public Position getPosition() {
-            return position;
-        }
-    }
-
     public OverviewDocumentExtension() {
     }
 
@@ -54,6 +30,7 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
 
     /**
      * Returns title level offset from 1 to apply to content
+     *
      * @param context context
      * @return title level offset
      */
@@ -73,6 +50,30 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
         }
 
         return levelOffset;
+    }
+
+    public enum Position {
+        DOCUMENT_BEFORE,
+        DOCUMENT_AFTER,
+        DOCUMENT_BEGIN,
+        DOCUMENT_END
+    }
+
+    public static class Context extends ContentContext {
+        private Position position;
+
+        /**
+         * @param position   the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
+        public Context(Position position, MarkupDocBuilder docBuilder) {
+            super(docBuilder);
+            this.position = position;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
     }
 
 }

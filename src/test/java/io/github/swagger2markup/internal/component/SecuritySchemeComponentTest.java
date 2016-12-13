@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
@@ -34,13 +33,13 @@ import java.nio.file.Paths;
 import java.util.List;
 
 
-public class SecuritySchemeComponentTest extends AbstractComponentTest{
+public class SecuritySchemeComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "security_scheme";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -59,7 +58,7 @@ public class SecuritySchemeComponentTest extends AbstractComponentTest{
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
-        markupDocBuilder = new SecuritySchemeComponent(context,new SecurityDocumentResolver(context))
+        markupDocBuilder = new SecuritySchemeComponent(context, new SecurityDocumentResolver(context))
                 .apply(markupDocBuilder, SecuritySchemeComponent.parameters(pathOperations.get(0), 3));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
