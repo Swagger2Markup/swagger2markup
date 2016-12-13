@@ -6,30 +6,58 @@
 === A
 
 [[_a_get]]
-==== GET /A
+==== List A
+....
+GET /A
+....
+
 
 [[_a_delete]]
-==== DELETE /A
+==== Delete A
+....
+DELETE /A
+....
+
 
 [[_b_resource]]
 === B
 
 [[_b_get]]
-==== GET /B
+==== List B
+....
+GET /B
+....
+
 
 [[_payments_resource]]
 === Payments
 
 [[_payments_post]]
-==== POST /payments
+==== Create Payment
+....
+POST /payments
+....
+
 
 [[_payments_get]]
-==== GET /payments
+==== List Payments
+....
+GET /payments
+....
+
 
 [[_payments_approve_post]]
-==== POST /payments/approve
+==== Approve Payment
+....
+POST /payments/approve
+....
+
 
 [[_payments_reject_post]]
-==== POST /payments/reject
+==== Reject Payment
+....
+POST /payments/reject
+....
+
 
 
