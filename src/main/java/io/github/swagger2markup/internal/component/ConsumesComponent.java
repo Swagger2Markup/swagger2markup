@@ -29,22 +29,12 @@ import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.lite
 
 public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Parameters> {
 
-    public ConsumesComponent(Swagger2MarkupConverter.Context context){
+    public ConsumesComponent(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
-    public static class Parameters {
-        private final List<String> consumes;
-        private final int titleLevel;
-        public Parameters(List<String> consumes,
-                       int titleLevel){
-            this.consumes = Validate.notNull(consumes, "Consumes must not be null");
-            this.titleLevel = titleLevel;
-        }
-    }
-
     public static ConsumesComponent.Parameters parameters(List<String> consumes,
-                                                          int titleLevel){
+                                                          int titleLevel) {
         return new ConsumesComponent.Parameters(consumes, titleLevel);
     }
 
@@ -54,5 +44,16 @@ public class ConsumesComponent extends MarkupComponent<ConsumesComponent.Paramet
         markupDocBuilder.unorderedList(params.consumes.stream()
                 .map(value -> literalText(markupDocBuilder, value)).collect(Collectors.toList()));
         return markupDocBuilder;
+    }
+
+    public static class Parameters {
+        private final List<String> consumes;
+        private final int titleLevel;
+
+        public Parameters(List<String> consumes,
+                          int titleLevel) {
+            this.consumes = Validate.notNull(consumes, "Consumes must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 }

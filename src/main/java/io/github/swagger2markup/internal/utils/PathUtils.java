@@ -28,7 +28,6 @@ public class PathUtils {
      * Returns the operations of a path as a map which preserves the insertion order.
      *
      * @param path the path
-     *
      * @return the operations of a path as a map
      */
     private static Map<HttpMethod, Operation> getOperationMap(Path path) {
@@ -62,10 +61,9 @@ public class PathUtils {
     /**
      * Converts the Swagger paths into a list of PathOperations.
      *
-     * @param paths the Swagger paths
-     * @param paths the basePath of all paths
+     * @param paths      the Swagger paths
+     * @param paths      the basePath of all paths
      * @param comparator the comparator to use.
-     *
      * @return the path operations
      */
     public static List<PathOperation> toPathOperationsList(Map<String, Path> paths,
@@ -84,9 +82,8 @@ public class PathUtils {
     /**
      * Converts a Swagger path into a PathOperation.
      *
-     * @param path the  path
+     * @param path      the  path
      * @param pathModel the Swagger Path model
-     *
      * @return the path operations
      */
     public static List<PathOperation> toPathOperationsList(String path, Path pathModel) {

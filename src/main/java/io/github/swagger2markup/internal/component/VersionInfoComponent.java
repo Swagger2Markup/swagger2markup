@@ -15,8 +15,8 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Info;
@@ -28,14 +28,25 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class VersionInfoComponent extends MarkupComponent<VersionInfoComponent.Parameters> {
 
 
-
-    public VersionInfoComponent(Swagger2MarkupConverter.Context context){
+    public VersionInfoComponent(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
     public static VersionInfoComponent.Parameters parameters(Info info,
-                                                           int titleLevel){
+                                                             int titleLevel) {
         return new VersionInfoComponent.Parameters(info, titleLevel);
+    }
+
+    @Override
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        String version = params.info.getVersion();
+        if (isNotBlank(version)) {
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.CURRENT_VERSION));
+            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
+            paragraphBuilder.italicText(labels.getLabel(Labels.VERSION)).textLine(COLON + version);
+            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
+        }
+        return markupDocBuilder;
     }
 
     public static class Parameters {
@@ -45,21 +56,9 @@ public class VersionInfoComponent extends MarkupComponent<VersionInfoComponent.P
 
         public Parameters(
                 Info info,
-                int titleLevel){
+                int titleLevel) {
             this.info = Validate.notNull(info, "Info must not be null");
             this.titleLevel = titleLevel;
         }
-    }
-
-    @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
-        String version = params.info.getVersion();
-        if(isNotBlank(version)){
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.CURRENT_VERSION));
-            MarkupDocBuilder paragraphBuilder = copyMarkupDocBuilder(markupDocBuilder);
-            paragraphBuilder.italicText(labels.getLabel(Labels.VERSION)).textLine(COLON + version);
-            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
-        }
-        return markupDocBuilder;
     }
 }

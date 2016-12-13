@@ -23,6 +23,7 @@ import java.nio.file.Paths;
 public class URIUtils {
     /**
      * Return URI parent
+     *
      * @param uri source URI
      * @return URI parent
      */
@@ -36,7 +37,7 @@ public class URIUtils {
      * @param uri the source URI
      * @return the converted URI
      */
-    public static URI convertUriWithoutSchemeToFileScheme(URI uri){
+    public static URI convertUriWithoutSchemeToFileScheme(URI uri) {
         if (uri.getScheme() == null) {
             return Paths.get(uri.getPath()).toUri();
         }
@@ -49,10 +50,10 @@ public class URIUtils {
      * @param input String representation of a URI or a Path.
      * @return the URI
      */
-    public static URI create(String input){
-        if(isFile(input) || isURL(input)){
+    public static URI create(String input) {
+        if (isFile(input) || isURL(input)) {
             return URI.create(input);
-        }else{
+        } else {
             return Paths.get(input).toUri();
         }
     }

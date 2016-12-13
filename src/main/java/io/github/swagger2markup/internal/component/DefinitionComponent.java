@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
@@ -63,23 +63,9 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
     }
 
     public static DefinitionComponent.Parameters parameters(String definitionName,
-                                                             Model model,
-                                                             int titleLevel){
+                                                            Model model,
+                                                            int titleLevel) {
         return new DefinitionComponent.Parameters(definitionName, model, titleLevel);
-    }
-
-    public static class Parameters {
-        private final String definitionName;
-        private final Model model;
-        private final int titleLevel;
-
-        public Parameters(String definitionName,
-                Model model,
-                int titleLevel){
-            this.definitionName = Validate.notBlank(definitionName, "DefinitionName must not be empty");
-            this.model = Validate.notNull(model, "Model must not be null");
-            this.titleLevel = titleLevel;
-        }
     }
 
     @Override
@@ -117,10 +103,9 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
     /**
      * Builds inline schema definitions
      *
-     * @param markupDocBuilder   the docbuilder do use for output
-     * @param definitions  all inline definitions to display
-     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
-
+     * @param markupDocBuilder the docbuilder do use for output
+     * @param definitions      all inline definitions to display
+     * @param uniquePrefix     unique prefix to prepend to inline object names to enforce unicity
      */
     private void inlineDefinitions(MarkupDocBuilder markupDocBuilder, List<ObjectType> definitions, String uniquePrefix) {
         if (CollectionUtils.isNotEmpty(definitions)) {
@@ -138,10 +123,9 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
     /**
      * Builds the type informations of a definition
      *
-     * @param markupDocBuilder     the docbuilder do use for output
-     * @param definitionName name of the definition to display
-     * @param model          model of the definition to display
-
+     * @param markupDocBuilder the docbuilder do use for output
+     * @param definitionName   name of the definition to display
+     * @param model            model of the definition to display
      * @return a list of inlined types.
      */
     private List<ObjectType> typeSection(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
@@ -171,7 +155,8 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
                             typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     }
 
-                default: break;
+                default:
+                    break;
             }
 
             String typeInfosString = typeInfos.toString();
@@ -193,7 +178,6 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
         return inlineDefinitions;
     }
 
-
     /**
      * Apply extension context to all DefinitionsContentExtension
      *
@@ -201,6 +185,20 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
      */
     private void applyDefinitionsDocumentExtension(DefinitionsDocumentExtension.Context context) {
         extensionRegistry.getDefinitionsDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final String definitionName;
+        private final Model model;
+        private final int titleLevel;
+
+        public Parameters(String definitionName,
+                          Model model,
+                          int titleLevel) {
+            this.definitionName = Validate.notBlank(definitionName, "DefinitionName must not be empty");
+            this.model = Validate.notNull(model, "Model must not be null");
+            this.titleLevel = titleLevel;
+        }
     }
 
 

@@ -33,19 +33,12 @@ public class TableComponent extends MarkupComponent<TableComponent.Parameters> {
     public static final String WIDTH_RATIO = "widthRatio";
     public static final String HEADER_COLUMN = "headerColumn";
 
-    public TableComponent(Swagger2MarkupConverter.Context context){
+    public TableComponent(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
-    public static TableComponent.Parameters parameters(StringColumn... columns){
+    public static TableComponent.Parameters parameters(StringColumn... columns) {
         return new TableComponent.Parameters(columns);
-    }
-
-    public static class Parameters {
-        private final DataFrame dataFrame;
-        public Parameters(StringColumn... columns){
-            this.dataFrame = DataFrame.ofAll(List.of(columns).filter(TableComponent::isNotBlank));
-        }
     }
 
     public static boolean isNotBlank(StringColumn column) {
@@ -53,7 +46,7 @@ public class TableComponent extends MarkupComponent<TableComponent.Parameters> {
     }
 
     @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         DataFrame dataFrame = params.dataFrame;
         java.util.List<MarkupTableColumn> columnSpecs = dataFrame.getColumns().map(column -> {
                     Integer widthRatio = Integer.valueOf(column.getMetaData().get(WIDTH_RATIO).getOrElse("0"));
@@ -71,5 +64,13 @@ public class TableComponent extends MarkupComponent<TableComponent.Parameters> {
                 .map(rowNumber -> columnValues.map(values -> values.get(rowNumber)).toJavaList()).toJavaList();
 
         return markupDocBuilder.tableWithColumnSpecs(columnSpecs, cells);
+    }
+
+    public static class Parameters {
+        private final DataFrame dataFrame;
+
+        public Parameters(StringColumn... columns) {
+            this.dataFrame = DataFrame.ofAll(List.of(columns).filter(TableComponent::isNotBlank));
+        }
     }
 }

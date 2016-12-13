@@ -29,25 +29,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DefinitionDocumentNameResolverTest {
 
     @Test
-    public void testDefault(){
+    public void testDefault() {
         Swagger2MarkupConverter.Context context = createContext();
 
         assertThat(new DefinitionDocumentNameResolver(context).apply("DefinitionName")).isEqualTo("definitions.adoc");
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndNoOutputPath(){
+    public void testWithInterDocumentCrossReferencesAndNoOutputPath() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
         Swagger2MarkupConverter.Context context = createContext(config);
 
         assertThat(new DefinitionDocumentNameResolver(context).apply("DefinitionName"))
-            .isEqualTo("definitions.adoc");
+                .isEqualTo("definitions.adoc");
     }
 
     @Test
-    public void testWithInterDocumentCrossReferences(){
+    public void testWithInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
@@ -59,7 +59,7 @@ public class DefinitionDocumentNameResolverTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndPrefix(){
+    public void testWithInterDocumentCrossReferencesAndPrefix() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences("prefix_")
                 .build();
@@ -71,7 +71,7 @@ public class DefinitionDocumentNameResolverTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndMarkdown(){
+    public void testWithInterDocumentCrossReferencesAndMarkdown() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)

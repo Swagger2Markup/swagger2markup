@@ -24,18 +24,18 @@ import io.swagger.models.Swagger;
 
 public class ContextUtils {
 
-    public static Swagger2MarkupConverter.Context createContext(){
+    public static Swagger2MarkupConverter.Context createContext() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().build();
         Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
         return new Swagger2MarkupConverter.Context(config, extensionRegistry, null, null);
     }
 
-    public static Swagger2MarkupConverter.Context createContext(Swagger2MarkupConfig config){
+    public static Swagger2MarkupConverter.Context createContext(Swagger2MarkupConfig config) {
         Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
         return new Swagger2MarkupConverter.Context(config, extensionRegistry, null, null);
     }
 
-    public static  Swagger2MarkupConverter.Context createContext(Swagger2MarkupConfig config, Swagger swagger){
+    public static Swagger2MarkupConverter.Context createContext(Swagger2MarkupConfig config, Swagger swagger) {
         Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
         return new Swagger2MarkupConverter.Context(config, extensionRegistry, swagger, null);
     }

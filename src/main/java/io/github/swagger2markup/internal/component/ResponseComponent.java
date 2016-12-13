@@ -50,35 +50,20 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
     private final DocumentResolver definitionDocumentResolver;
 
     public ResponseComponent(Swagger2MarkupConverter.Context context,
-                             DocumentResolver definitionDocumentResolver){
+                             DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
     }
 
     public static ResponseComponent.Parameters parameters(PathOperation operation,
-                                                                int titleLevel,
-                                                                List<ObjectType> inlineDefinitions){
+                                                          int titleLevel,
+                                                          List<ObjectType> inlineDefinitions) {
         return new ResponseComponent.Parameters(operation, titleLevel, inlineDefinitions);
     }
 
-    public static class Parameters {
-        private final PathOperation operation;
-        private final int titleLevel;
-        private final List<ObjectType> inlineDefinitions;
-
-        public Parameters(PathOperation operation,
-                          int titleLevel,
-                          List<ObjectType> inlineDefinitions){
-
-            this.operation = Validate.notNull(operation, "PathOperation must not be null");
-            this.titleLevel = titleLevel;
-            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
-        }
-    }
-
     @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         PathOperation operation = params.operation;
         Map<String, Response> responses = operation.getOperation().getResponses();
 
@@ -170,5 +155,20 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
      */
     private void applyPathsDocumentExtension(PathsDocumentExtension.Context context) {
         extensionRegistry.getPathsDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final PathOperation operation;
+        private final int titleLevel;
+        private final List<ObjectType> inlineDefinitions;
+
+        public Parameters(PathOperation operation,
+                          int titleLevel,
+                          List<ObjectType> inlineDefinitions) {
+
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+            this.titleLevel = titleLevel;
+            this.inlineDefinitions = Validate.notNull(inlineDefinitions, "InlineDefinitions must not be null");
+        }
     }
 }

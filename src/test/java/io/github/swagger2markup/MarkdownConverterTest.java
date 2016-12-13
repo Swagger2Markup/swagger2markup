@@ -48,144 +48,6 @@ public class MarkdownConverterTest {
     private static final String[] EXPECTED_FILES = new String[]{"definitions.md", "overview.md", "paths.md", "security.md"};
     private List<String> expectedFiles;
 
-    @Before
-    public void setUp(){
-        expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
-    }
-
-
-    @Test
-    public void testToFolder() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/to_folder");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        //Then
-        String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(expectedFiles);
-
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/to_folder").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testToFolder.html");
-    }
-
-    @Test
-    public void testWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/idxref");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .withInterDocumentCrossReferences()
-                .build();
-
-        Swagger2MarkupConverter.from(file).withConfig(config).build()
-                .toFolder(outputDirectory);
-
-        //Then
-        String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(expectedFiles);
-
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/idxref").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithInterDocumentCrossReferences.html");
-    }
-    
-    @Test
-    public void testWithSeparatedDefinitions() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withSeparatedDefinitions()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        //Then
-        String[] files = outputDirectory.toFile().list();
-        expectedFiles.add("definitions");
-        assertThat(files).hasSize(5).containsAll(expectedFiles);
-
-        Path definitionsDirectory = outputDirectory.resolve("definitions");
-        String[] definitions = definitionsDirectory.toFile().list();
-        assertThat(definitions).hasSize(5).containsAll(
-                asList("Category.md", "Order.md", "Pet.md", "Tag.md", "User.md"));
-    }
-
-    @Test
-    public void testWithResponseHeaders() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_response_headers.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/response_headers");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        //Then
-        String[] files = outputDirectory.toFile().list();
-        assertThat(files).hasSize(4).containsAll(expectedFiles);
-
-        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/response_headers").toURI());
-        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithResponseHeaders.html");
-    }
-    
-    @Test
-    public void testHandlesComposition() throws IOException, URISyntaxException {
-        //Given
-        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Path outputDirectory = Paths.get("build/test/markdown/generated");
-        FileUtils.deleteQuietly(outputDirectory.toFile());
-
-        //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withSeparatedDefinitions()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
-                .build();
-        Swagger2MarkupConverter.from(file)
-                .withConfig(config)
-                .build()
-                .toFolder(outputDirectory);
-
-        // Then
-        String[] files = outputDirectory.toFile().list();
-        expectedFiles.add("definitions");
-        assertThat(files).hasSize(5).containsAll(expectedFiles);
-        Path definitionsDirectory = outputDirectory.resolve("definitions");
-        verifyMarkdownContainsFieldsInTables(
-                definitionsDirectory.resolve("User.md").toFile(),
-                ImmutableMap.<String, Set<String>>builder()
-                        .put("User", ImmutableSet.of("id", "username", "firstName",
-                                "lastName", "email", "password", "phone", "userStatus"))
-                        .build()
-        );
-
-    }
-
     /**
      * Given a markdown document to search, this checks to see if the specified tables
      * have all of the expected fields listed.
@@ -249,5 +111,142 @@ public class MarkdownConverterTest {
         return line.startsWith("###")
                 ? line.replace("###", "").trim()
                 : null;
+    }
+
+    @Before
+    public void setUp() {
+        expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
+    }
+
+    @Test
+    public void testToFolder() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/to_folder");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/to_folder").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testToFolder.html");
+    }
+
+    @Test
+    public void testWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/idxref");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .withInterDocumentCrossReferences()
+                .build();
+
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/idxref").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithInterDocumentCrossReferences.html");
+    }
+
+    @Test
+    public void testWithSeparatedDefinitions() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withSeparatedDefinitions()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        expectedFiles.add("definitions");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
+
+        Path definitionsDirectory = outputDirectory.resolve("definitions");
+        String[] definitions = definitionsDirectory.toFile().list();
+        assertThat(definitions).hasSize(5).containsAll(
+                asList("Category.md", "Order.md", "Pet.md", "Tag.md", "User.md"));
+    }
+
+    @Test
+    public void testWithResponseHeaders() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_response_headers.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/response_headers");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/response_headers").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithResponseHeaders.html");
+    }
+
+    @Test
+    public void testHandlesComposition() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withSeparatedDefinitions()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        // Then
+        String[] files = outputDirectory.toFile().list();
+        expectedFiles.add("definitions");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
+        Path definitionsDirectory = outputDirectory.resolve("definitions");
+        verifyMarkdownContainsFieldsInTables(
+                definitionsDirectory.resolve("User.md").toFile(),
+                ImmutableMap.<String, Set<String>>builder()
+                        .put("User", ImmutableSet.of("id", "username", "firstName",
+                                "lastName", "email", "password", "phone", "userStatus"))
+                        .build()
+        );
+
     }
 }
