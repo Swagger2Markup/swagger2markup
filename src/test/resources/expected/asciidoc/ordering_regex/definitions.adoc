@@ -1,0 +1,20 @@
+
+[[_definitions]]
+== Definitions
+
+[[_a]]
+=== A
+__Type__ : string
+
+
+[[_b]]
+=== B
+__Type__ : string
+
+
+[[_c]]
+=== C
+__Type__ : string
+
+
+

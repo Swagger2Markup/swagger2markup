@@ -1,5 +1,6 @@
 /*
  * Copyright 2016 Robert Winkler
+ * Modified December 12 2016 by Cas Eliëns
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +18,7 @@ package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
 import io.github.swagger2markup.*;
+import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.LineSeparator;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
@@ -34,10 +36,12 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import static io.github.swagger2markup.Swagger2MarkupProperties.*;
 
-public class Swagger2MarkupConfigBuilder  {
+public class Swagger2MarkupConfigBuilder {
 
     private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfigBuilder.class);
 
@@ -93,7 +97,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.interDocumentCrossReferencesEnabled = swagger2MarkupProperties.getRequiredBoolean(INTER_DOCUMENT_CROSS_REFERENCES_ENABLED);
         config.interDocumentCrossReferencesPrefix = swagger2MarkupProperties.getString(INTER_DOCUMENT_CROSS_REFERENCES_PREFIX, null);
         config.flatBodyEnabled = swagger2MarkupProperties.getRequiredBoolean(FLAT_BODY_ENABLED);
-		config.pathSecuritySectionEnabled = swagger2MarkupProperties.getRequiredBoolean(PATH_SECURITY_SECTION_ENABLED);
+        config.pathSecuritySectionEnabled = swagger2MarkupProperties.getRequiredBoolean(PATH_SECURITY_SECTION_ENABLED);
         config.anchorPrefix = swagger2MarkupProperties.getString(ANCHOR_PREFIX, null);
         config.overviewDocument = swagger2MarkupProperties.getRequiredString(OVERVIEW_DOCUMENT);
         config.pathsDocument = swagger2MarkupProperties.getRequiredString(PATHS_DOCUMENT);
@@ -108,7 +112,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.propertyOrderBy = swagger2MarkupProperties.getOrderBy(PROPERTY_ORDER_BY);
         config.responseOrderBy = swagger2MarkupProperties.getOrderBy(RESPONSE_ORDER_BY);
         Optional<String> lineSeparator = swagger2MarkupProperties.getString(LINE_SEPARATOR);
-        if(lineSeparator.isPresent() && StringUtils.isNoneBlank(lineSeparator.get())){
+        if (lineSeparator.isPresent() && StringUtils.isNoneBlank(lineSeparator.get())) {
             config.lineSeparator = LineSeparator.valueOf(lineSeparator.get());
         }
 
@@ -222,6 +226,19 @@ public class Swagger2MarkupConfigBuilder  {
     public Swagger2MarkupConfigBuilder withPathsGroupedBy(GroupBy pathsGroupedBy) {
         Validate.notNull(pathsGroupedBy, "%s must not be null", "pathsGroupedBy");
         config.pathsGroupedBy = pathsGroupedBy;
+        return this;
+    }
+
+    /**
+     * Specifies the regex pattern to use for grouping paths.
+     *
+     * @param headerRegex regex pattern string containing one capture group
+     * @return this builder
+     * @throws PatternSyntaxException when pattern cannot be compiled
+     */
+    public Swagger2MarkupConfigBuilder withHeaderRegex(String headerRegex) {
+        Validate.notNull(headerRegex, "%s must not be null", headerRegex);
+        config.headerPattern = Pattern.compile(headerRegex);
         return this;
     }
 
@@ -452,17 +469,17 @@ public class Swagger2MarkupConfigBuilder  {
     }
 
     /**
-	 * Optionally disable the security section for path sections
-	 *
-	 * @return this builder
-	 */
-	public Swagger2MarkupConfigBuilder withoutPathSecuritySection() {
-		config.pathSecuritySectionEnabled = false;
-		return this;
-	}
+     * Optionally disable the security section for path sections
+     *
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withoutPathSecuritySection() {
+        config.pathSecuritySectionEnabled = false;
+        return this;
+    }
 
     /**
-     *  Prepend the base path to all paths.
+     * Prepend the base path to all paths.
      *
      * @return this builder
      */
@@ -470,7 +487,7 @@ public class Swagger2MarkupConfigBuilder  {
         config.basePathPrefixEnabled = true;
         return this;
     }
-	
+
     /**
      * Optionally prefix all anchors for uniqueness.
      *
@@ -495,7 +512,7 @@ public class Swagger2MarkupConfigBuilder  {
         return this;
     }
 
-    static class DefaultSwagger2MarkupConfig implements Swagger2MarkupConfig{
+    static class DefaultSwagger2MarkupConfig implements Swagger2MarkupConfig {
 
         private MarkupLanguage markupLanguage;
         private MarkupLanguage swaggerMarkupLanguage;
@@ -521,7 +538,7 @@ public class Swagger2MarkupConfigBuilder  {
         private boolean interDocumentCrossReferencesEnabled;
         private String interDocumentCrossReferencesPrefix;
         private boolean flatBodyEnabled;
-		private boolean pathSecuritySectionEnabled;
+        private boolean pathSecuritySectionEnabled;
         private String anchorPrefix;
         private LineSeparator lineSeparator;
 
@@ -531,6 +548,8 @@ public class Swagger2MarkupConfigBuilder  {
         private String securityDocument;
         private String separatedOperationsFolder;
         private String separatedDefinitionsFolder;
+
+        private Pattern headerPattern;
 
         private Swagger2MarkupProperties extensionsProperties;
 
@@ -577,6 +596,11 @@ public class Swagger2MarkupConfigBuilder  {
         @Override
         public OrderBy getTagOrderBy() {
             return tagOrderBy;
+        }
+
+        @Override
+        public Pattern getHeaderPattern() {
+            return headerPattern;
         }
 
         @Override
@@ -649,10 +673,10 @@ public class Swagger2MarkupConfigBuilder  {
             return flatBodyEnabled;
         }
 
-		@Override
-		public boolean isPathSecuritySectionEnabled() {
-			return pathSecuritySectionEnabled;
-		}
+        @Override
+        public boolean isPathSecuritySectionEnabled() {
+            return pathSecuritySectionEnabled;
+        }
 
         @Override
         public String getAnchorPrefix() {

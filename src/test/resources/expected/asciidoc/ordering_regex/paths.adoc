@@ -1,0 +1,63 @@
+
+[[_paths]]
+== Operations
+
+[[_a_resource]]
+=== A
+
+[[_a_get]]
+==== List A
+....
+GET /A
+....
+
+
+[[_a_delete]]
+==== Delete A
+....
+DELETE /A
+....
+
+
+[[_b_resource]]
+=== B
+
+[[_b_get]]
+==== List B
+....
+GET /B
+....
+
+
+[[_payments_resource]]
+=== Payments
+
+[[_payments_post]]
+==== Create Payment
+....
+POST /payments
+....
+
+
+[[_payments_get]]
+==== List Payments
+....
+GET /payments
+....
+
+
+[[_payments_approve_post]]
+==== Approve Payment
+....
+POST /payments/approve
+....
+
+
+[[_payments_reject_post]]
+==== Reject Payment
+....
+POST /payments/reject
+....
+
+
+
