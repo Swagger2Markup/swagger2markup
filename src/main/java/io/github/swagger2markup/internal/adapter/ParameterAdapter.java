@@ -44,26 +44,47 @@ import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
 public class ParameterAdapter {
 
     private final Parameter parameter;
-    private Type type;
     private final List<ObjectType> inlineDefinitions = new ArrayList<>();
     private final Swagger2MarkupConfig config;
+    private Type type;
 
     public ParameterAdapter(Swagger2MarkupConverter.Context context,
                             PathOperation operation,
                             Parameter parameter,
-                            DocumentResolver definitionDocumentResolver){
+                            DocumentResolver definitionDocumentResolver) {
         Validate.notNull(parameter, "parameter must not be null");
         this.parameter = parameter;
         type = getType(context.getSwagger().getDefinitions(), definitionDocumentResolver);
         config = context.getConfig();
-        if (config.isInlineSchemaEnabled()){
-            if(config.isFlatBodyEnabled()) {
-                if (!(type instanceof ObjectType)){
+        if (config.isInlineSchemaEnabled()) {
+            if (config.isFlatBodyEnabled()) {
+                if (!(type instanceof ObjectType)) {
                     type = InlineSchemaUtils.createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
                 }
-            }else{
+            } else {
                 type = InlineSchemaUtils.createInlineType(type, parameter.getName(), operation.getId() + " " + parameter.getName(), inlineDefinitions);
             }
+        }
+    }
+
+    /**
+     * Generate a default example value for parameter.
+     *
+     * @param parameter parameter
+     * @return a generated example for the parameter
+     */
+    public static Object generateExample(AbstractSerializableParameter parameter) {
+        switch (parameter.getType()) {
+            case "integer":
+                return 0;
+            case "number":
+                return 0.0;
+            case "boolean":
+                return true;
+            case "string":
+                return "string";
+            default:
+                return parameter.getType();
         }
     }
 
@@ -96,8 +117,6 @@ public class ParameterAdapter {
         return boldText(markupDocBuilder, getIn());
     }
 
-
-
     public String getDescription() {
         return parameter.getDescription();
     }
@@ -114,15 +133,15 @@ public class ParameterAdapter {
         return parameter.getVendorExtensions();
     }
 
-    public String getIn(){
+    public String getIn() {
         return WordUtils.capitalize(parameter.getIn());
     }
 
-    public Type getType(){
+    public Type getType() {
         return type;
     }
 
-    public List<ObjectType> getInlineDefinitions(){
+    public List<ObjectType> getInlineDefinitions() {
         return inlineDefinitions;
     }
 
@@ -132,39 +151,37 @@ public class ParameterAdapter {
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the parameter, or otherwise null
      */
-    private Type getType(Map<String, Model> definitions, DocumentResolver definitionDocumentResolver){
+    private Type getType(Map<String, Model> definitions, DocumentResolver definitionDocumentResolver) {
         Validate.notNull(parameter, "parameter must not be null!");
         Type type = null;
 
-        if(parameter instanceof BodyParameter){
-            BodyParameter bodyParameter = (BodyParameter)parameter;
+        if (parameter instanceof BodyParameter) {
+            BodyParameter bodyParameter = (BodyParameter) parameter;
             Model model = bodyParameter.getSchema();
 
-            if(model != null){
+            if (model != null) {
                 type = ModelUtils.getType(model, definitions, definitionDocumentResolver);
-            }else{
+            } else {
                 type = new BasicType("string", bodyParameter.getName());
             }
 
-        }
-        else if(parameter instanceof AbstractSerializableParameter){
-            AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
+        } else if (parameter instanceof AbstractSerializableParameter) {
+            AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter) parameter;
             @SuppressWarnings("unchecked")
             List<String> enums = serializableParameter.getEnum();
 
-            if(CollectionUtils.isNotEmpty(enums)){
+            if (CollectionUtils.isNotEmpty(enums)) {
                 type = new EnumType(serializableParameter.getName(), enums);
-            }else{
+            } else {
                 type = new BasicType(serializableParameter.getType(), serializableParameter.getName(), serializableParameter.getFormat());
             }
-            if(serializableParameter.getType().equals("array")){
+            if (serializableParameter.getType().equals("array")) {
                 String collectionFormat = serializableParameter.getCollectionFormat();
 
                 type = new ArrayType(serializableParameter.getName(), new PropertyAdapter(serializableParameter.getItems()).getType(definitionDocumentResolver), collectionFormat);
             }
-        }
-        else if(parameter instanceof RefParameter){
-            String refName = ((RefParameter)parameter).getSimpleRef();
+        } else if (parameter instanceof RefParameter) {
+            String refName = ((RefParameter) parameter).getSimpleRef();
 
             type = new RefType(definitionDocumentResolver.apply(refName), new ObjectType(refName, null /* FIXME, not used for now */));
         }
@@ -176,34 +193,13 @@ public class ParameterAdapter {
      *
      * @return the default value of the parameter
      */
-    public Optional<String> getDefaultValue(){
+    public Optional<String> getDefaultValue() {
         Validate.notNull(parameter, "parameter must not be null!");
-        if(parameter instanceof AbstractSerializableParameter){
-            AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter)parameter;
+        if (parameter instanceof AbstractSerializableParameter) {
+            AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter) parameter;
             return Optional.ofNullable(serializableParameter.getDefaultValue());
         }
         return Optional.empty();
-    }
-
-    /**
-     * Generate a default example value for parameter.
-     *
-     * @param parameter parameter
-     * @return a generated example for the parameter
-     */
-    public static Object generateExample(AbstractSerializableParameter parameter) {
-        switch (parameter.getType()) {
-            case "integer":
-                return 0;
-            case "number":
-                return 0.0;
-            case "boolean":
-                return true;
-            case "string":
-                return "string";
-            default:
-                return parameter.getType();
-        }
     }
 
 }

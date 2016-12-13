@@ -32,13 +32,13 @@ import java.nio.file.Path;
 import static io.github.swagger2markup.helper.ContextUtils.createContext;
 
 
-public class UriSchemeComponentTest extends AbstractComponentTest{
+public class UriSchemeComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "uri_scheme";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -54,7 +54,7 @@ public class UriSchemeComponentTest extends AbstractComponentTest{
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new UriSchemeComponent(context).apply(markupDocBuilder, UriSchemeComponent.parameters(swagger, OverviewDocument.SECTION_TITLE_LEVEL));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));

@@ -22,7 +22,9 @@ import io.github.swagger2markup.model.PathOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,6 +34,7 @@ public class RegexUtils {
 
     /**
      * Alphabetically sort the list of groups
+     *
      * @param groups List of available groups
      * @return String[] of sorted groups
      */
@@ -62,7 +65,7 @@ public class RegexUtils {
             Matcher m = headerPattern.matcher(path);
 
             if (m.matches() && m.group(1) != null) {
-                if(LOG.isInfoEnabled()) {
+                if (LOG.isInfoEnabled()) {
                     LOG.info("Added path operation '{}' to header '{}'", operation, m.group(1));
                 }
                 operationsGroupedByRegex.put(m.group(1), operation);

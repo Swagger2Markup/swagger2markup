@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Tag;
@@ -31,29 +31,17 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class TagsComponent extends MarkupComponent<TagsComponent.Parameters> {
 
-    public TagsComponent(Swagger2MarkupConverter.Context context){
+    public TagsComponent(Swagger2MarkupConverter.Context context) {
         super(context);
     }
 
     public static TagsComponent.Parameters parameters(List<Tag> tags,
-                                                      int titleLevel){
+                                                      int titleLevel) {
         return new TagsComponent.Parameters(tags, titleLevel);
     }
 
-    public static class Parameters {
-
-        private final List<Tag> tags;
-        private final int titleLevel;
-
-        public Parameters(List<Tag> tags,
-                          int titleLevel){
-            this.tags = Validate.notNull(tags, "Tags must not be null");
-            this.titleLevel = titleLevel;
-        }
-    }
-
     @Override
-    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params){
+    public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.TAGS));
 
         List<String> tagsList = params.tags.stream()
@@ -67,13 +55,25 @@ public class TagsComponent extends MarkupComponent<TagsComponent.Parameters> {
         return markupDocBuilder;
     }
 
-    private String mapToString(Tag tag){
+    private String mapToString(Tag tag) {
         String name = tag.getName();
         String description = tag.getDescription();
-        if(isNotBlank(description)){
+        if (isNotBlank(description)) {
             return name + COLON + description;
-        }else{
+        } else {
             return name;
+        }
+    }
+
+    public static class Parameters {
+
+        private final List<Tag> tags;
+        private final int titleLevel;
+
+        public Parameters(List<Tag> tags,
+                          int titleLevel) {
+            this.tags = Validate.notNull(tags, "Tags must not be null");
+            this.titleLevel = titleLevel;
         }
     }
 }

@@ -50,7 +50,7 @@ public class Swagger2MarkupProperties {
     public static final String INTER_DOCUMENT_CROSS_REFERENCES_ENABLED = PROPERTIES_PREFIX + ".interDocumentCrossReferencesEnabled";
     public static final String INTER_DOCUMENT_CROSS_REFERENCES_PREFIX = PROPERTIES_PREFIX + ".interDocumentCrossReferencesPrefix";
     public static final String FLAT_BODY_ENABLED = PROPERTIES_PREFIX + ".flatBodyEnabled";
-	public static final String PATH_SECURITY_SECTION_ENABLED = PROPERTIES_PREFIX + ".pathSecuritySectionEnabled";
+    public static final String PATH_SECURITY_SECTION_ENABLED = PROPERTIES_PREFIX + ".pathSecuritySectionEnabled";
     public static final String ANCHOR_PREFIX = PROPERTIES_PREFIX + ".anchorPrefix";
     public static final String OVERVIEW_DOCUMENT = PROPERTIES_PREFIX + ".overviewDocument";
     public static final String PATHS_DOCUMENT = PROPERTIES_PREFIX + ".pathsDocument";
@@ -81,63 +81,63 @@ public class Swagger2MarkupProperties {
         this(new MapConfiguration(map));
     }
 
-    public Swagger2MarkupProperties(Configuration configuration){
+    public Swagger2MarkupProperties(Configuration configuration) {
         this.configuration = configuration;
     }
 
     /**
      * Returns an optional String property value associated with the given key.
-     * @param key the property name to resolve
      *
+     * @param key the property name to resolve
      * @return The string property
      */
-    public Optional<String> getString(String key){
+    public Optional<String> getString(String key) {
         return Optional.ofNullable(configuration.getString(key));
     }
 
     /**
      * Return the String property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @param defaultValue the default value to return if no value is found
      *
+     * @param key          the property name to resolve
+     * @param defaultValue the default value to return if no value is found
      * @return The string property
      */
-    public String getString(String key, String defaultValue){
+    public String getString(String key, String defaultValue) {
         return configuration.getString(key, defaultValue);
     }
 
     /**
      * Return the int property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @param defaultValue the default value to return if no value is found
      *
+     * @param key          the property name to resolve
+     * @param defaultValue the default value to return if no value is found
      * @return The int property
      */
-    public int getInt(String key, int defaultValue){
+    public int getInt(String key, int defaultValue) {
         return configuration.getInt(key, defaultValue);
     }
 
     /**
      * Returns an optional Integer property value associated with the given key.
-     * @param key the property name to resolve
      *
+     * @param key the property name to resolve
      * @return An optional Integer property
      */
-    public Optional<Integer> getInteger(String key){
+    public Optional<Integer> getInteger(String key) {
         return Optional.ofNullable(configuration.getInteger(key, null));
     }
 
     /**
      * Return the int property value associated with the given key (never {@code null}).
-     * @throws IllegalStateException if the key cannot be
      *
      * @return The int property
+     * @throws IllegalStateException if the key cannot be
      */
-    public int getRequiredInt(String key){
+    public int getRequiredInt(String key) {
         Optional<Integer> value = getInteger(key);
-        if(value.isPresent()){
+        if (value.isPresent()) {
             return value.get();
         }
         throw new IllegalStateException(String.format("required key [%s] not found", key));
@@ -145,15 +145,15 @@ public class Swagger2MarkupProperties {
 
     /**
      * Return the boolean property value associated with the given key (never {@code null}).
-     * @throws IllegalStateException if the key cannot be resolved
      *
      * @return The boolean property
+     * @throws IllegalStateException if the key cannot be resolved
      */
-    public boolean getRequiredBoolean(String key){
+    public boolean getRequiredBoolean(String key) {
         Boolean value = configuration.getBoolean(key, null);
-        if(value != null){
+        if (value != null) {
             return value;
-        }else{
+        } else {
             throw new IllegalStateException(String.format("required key [%s] not found", key));
         }
     }
@@ -161,43 +161,43 @@ public class Swagger2MarkupProperties {
     /**
      * Return the boolean property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @param defaultValue the default value to return if no value is found
      *
+     * @param key          the property name to resolve
+     * @param defaultValue the default value to return if no value is found
      * @return The boolean property
      */
-    public boolean getBoolean(String key, boolean defaultValue){
+    public boolean getBoolean(String key, boolean defaultValue) {
         return configuration.getBoolean(key, defaultValue);
     }
 
     /**
      * Return the URI property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @throws IllegalStateException if the value cannot be mapped to the enum
      *
+     * @param key the property name to resolve
      * @return The URI property
+     * @throws IllegalStateException if the value cannot be mapped to the enum
      */
-    public Optional<URI> getURI(String key){
+    public Optional<URI> getURI(String key) {
         Optional<String> property = getString(key);
-        if(property.isPresent()){
+        if (property.isPresent()) {
             return Optional.of(URIUtils.create(property.get()));
-        }else{
+        } else {
             return Optional.empty();
         }
     }
 
     /**
      * Return the URI property value associated with the given key (never {@code null}).
-     * @throws IllegalStateException if the key cannot be resolved
      *
      * @return The URI property
+     * @throws IllegalStateException if the key cannot be resolved
      */
-    public URI getRequiredURI(String key){
+    public URI getRequiredURI(String key) {
         Optional<String> property = getString(key);
-        if(property.isPresent()){
+        if (property.isPresent()) {
             return URIUtils.create(property.get());
-        }else{
+        } else {
             throw new IllegalStateException(String.format("required key [%s] not found", key));
         }
     }
@@ -205,31 +205,31 @@ public class Swagger2MarkupProperties {
     /**
      * Return the Path property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @throws IllegalStateException if the value cannot be mapped to the enum
      *
+     * @param key the property name to resolve
      * @return The Path property
+     * @throws IllegalStateException if the value cannot be mapped to the enum
      */
-    public Optional<Path> getPath(String key){
+    public Optional<Path> getPath(String key) {
         Optional<String> property = getString(key);
-        if(property.isPresent()){
+        if (property.isPresent()) {
             return Optional.of(Paths.get(property.get()));
-        }else{
+        } else {
             return Optional.empty();
         }
     }
 
     /**
      * Return the Path property value associated with the given key (never {@code null}).
-     * @throws IllegalStateException if the key cannot be resolved
      *
      * @return The Path property
+     * @throws IllegalStateException if the key cannot be resolved
      */
-    public Path getRequiredPath(String key){
+    public Path getRequiredPath(String key) {
         Optional<String> property = getString(key);
-        if(property.isPresent()){
+        if (property.isPresent()) {
             return Paths.get(property.get());
-        }else{
+        } else {
             throw new IllegalStateException(String.format("required key [%s] not found", key));
         }
     }
@@ -237,75 +237,75 @@ public class Swagger2MarkupProperties {
     /**
      * Return the MarkupLanguage property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
      *
+     * @param key the property name to resolve
      * @return The MarkupLanguage property
      */
-    public Optional<MarkupLanguage> getMarkupLanguage(String key){
+    public Optional<MarkupLanguage> getMarkupLanguage(String key) {
         Optional<String> property = getString(key);
-        if(property.isPresent()){
+        if (property.isPresent()) {
             return Optional.of(MarkupLanguage.valueOf(property.get()));
-        }else{
+        } else {
             return Optional.empty();
         }
     }
 
     /**
      * Return the MarkupLanguage property value associated with the given key (never {@code null}).
-     * @throws IllegalStateException if the key cannot be resolved
      *
      * @return The MarkupLanguage property
+     * @throws IllegalStateException if the key cannot be resolved
      */
-    public MarkupLanguage getRequiredMarkupLanguage(String key){
+    public MarkupLanguage getRequiredMarkupLanguage(String key) {
         return MarkupLanguage.valueOf(configuration.getString(key));
     }
 
     /**
      * Return the Language property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
      *
+     * @param key the property name to resolve
      * @return The Language property
      */
-    public Language getLanguage(String key){
+    public Language getLanguage(String key) {
         return Language.valueOf(configuration.getString(key));
     }
 
     /**
      * Return the GroupBy property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @throws IllegalStateException if the value cannot be mapped to the enum
      *
+     * @param key the property name to resolve
      * @return The GroupBy property
+     * @throws IllegalStateException if the value cannot be mapped to the enum
      */
-    public GroupBy getGroupBy(String key){
+    public GroupBy getGroupBy(String key) {
         return GroupBy.valueOf(configuration.getString(key));
     }
 
     /**
      * Return the OrderBy property value associated with the given key, or
      * {@code defaultValue} if the key cannot be resolved.
-     * @param key the property name to resolve
-     * @throws IllegalStateException if the value cannot be mapped to the enum
      *
+     * @param key the property name to resolve
      * @return The OrderBy property
+     * @throws IllegalStateException if the value cannot be mapped to the enum
      */
-    public OrderBy getOrderBy(String key){
+    public OrderBy getOrderBy(String key) {
         return OrderBy.valueOf(configuration.getString(key));
     }
 
     /**
      * Return the String property value associated with the given key (never {@code null}).
-     * @throws IllegalStateException if the key cannot be resolved
      *
      * @return The String property
+     * @throws IllegalStateException if the key cannot be resolved
      */
-    public String getRequiredString(String key) throws IllegalStateException{
+    public String getRequiredString(String key) throws IllegalStateException {
         Optional<String> property = getString(key);
-        if(property.isPresent()){
+        if (property.isPresent()) {
             return property.get();
-        }else{
+        } else {
             throw new IllegalStateException(String.format("required key [%s] not found", key));
         }
     }
@@ -315,7 +315,7 @@ public class Swagger2MarkupProperties {
      *
      * @return the list of keys.
      */
-    public List<String> getKeys(){
+    public List<String> getKeys() {
         return IteratorUtils.toList(configuration.getKeys());
     }
 
@@ -332,10 +332,9 @@ public class Swagger2MarkupProperties {
      * interpreted - depends on a concrete implementation.
      *
      * @param prefix The prefix to test against.
-     *
      * @return the list of keys.
      */
-    public List<String> getKeys(String prefix){
+    public List<String> getKeys(String prefix) {
         return IteratorUtils.toList(configuration.getKeys(prefix));
     }
 }

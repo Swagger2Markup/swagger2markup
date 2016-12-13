@@ -1,113 +1,113 @@
 {
-	"swagger": "2.0",
-	"info": {
-		"description": "Description",
-		"version": "Developer build",
-		"title": "Title"
-	},
-	"definitions": {
-		"SampleRequest": {
-			"type": "object",
-			"properties": {
-				"sampleStringComplete": {
-					"type": "string",
-					"description": "Sample string with range 0-2 and a pattern",
-					"minLength": 0,
-					"maxLength": 2,
-					"pattern": "[A-Z0-9]{0,2}"
-				},
-				"sampleStringWithNoDescription": {
-					"type": "string",
-					"minLength": 0,
-					"maxLength": 2,
-					"pattern": "[A-Z0-9]{0,2}"
-				},
-				"sampleStringOnlyMinLength": {
-					"type": "string",
-					"minLength": 0
-				},
-				"sampleStringOnlyMaxLength": {
-					"type": "string",
-					"maxLength": 2
-				},
-				"sampleStringOnlyPattern": {
-					"type": "string",
-					"pattern": "[A-Z0-9]{0,2}"
-				},
-				"sampleNumberComplete": {
-					"type":"integer",
-					"format":"int32",
-					"description": "sample int with range 0-10",
-					"minimum": 0,
-					"maximum": 10
-				},
-				"sampleNumberNoDescription": {
-					"type":"integer",
-					"format":"int32",
-					"minimum": 0,
-					"maximum": 10
-				},
-				"sampleNumberOnlyMinimum": {
-					"type":"integer",
-					"format":"int32",
-					"description": "sample int with range from 0",
-					"minimum": 0
-				},
-				"sampleNumberOnlyMaximum": {
-					"type":"integer",
-					"format":"int32",
-					"description": "sample int with range to 10",
-					"maximum": 10
-				},
-				"sampleDoubleComplete": {
-					"type":"number",
-					"format":"double",
-					"description": "sample double with range 0.0-10.0",
-					"minimum": 0.0,
-					"maximum": 10.0
-				},
-				"sampleDoubleNoDescription": {
-					"type":"number",
-					"format":"double",
-					"minimum": 0.0,
-					"maximum": 10.0
-				},
-				"sampleDoubleOnlyMinimum": {
-					"type":"number",
-					"format":"double",
-					"description": "sample double with range from 0.0",
-					"minimum": 0.0
-				},
-				"sampleDoubleOnlyMaximum": {
-					"type":"number",
-					"format":"double",
-					"description": "sample double with range to 10.0",
-					"maximum": 10.0
-				},
-				"sampleDoubleExclusiveMinimum": {
-					"type":"number",
-					"format":"double",
-					"description": "sample double with range from 0.0 (exclusive)",
-					"minimum": 0.0,
-					"exclusiveMinimum": true
-				},
-				"sampleDoubleExclusiveMaximum": {
-					"type":"number",
-					"format":"double",
-					"description": "sample double with range to 10.0 (exclusive)",
-					"maximum": 10.0,
-					"exclusiveMaximum": true
-				},
-				"sampleDoubleExclusiveBoth": {
-					"type":"number",
-					"format":"double",
-					"description": "sample double with range 0.0-10.0 (both exclusive)",
-					"minimum": 0.0,
-					"maximum": 10.0,
-					"exclusiveMinimum": true,
-					"exclusiveMaximum": true
-				}
-			}
-		}
-	}
+  "swagger": "2.0",
+  "info": {
+    "description": "Description",
+    "version": "Developer build",
+    "title": "Title"
+  },
+  "definitions": {
+    "SampleRequest": {
+      "type": "object",
+      "properties": {
+        "sampleStringComplete": {
+          "type": "string",
+          "description": "Sample string with range 0-2 and a pattern",
+          "minLength": 0,
+          "maxLength": 2,
+          "pattern": "[A-Z0-9]{0,2}"
+        },
+        "sampleStringWithNoDescription": {
+          "type": "string",
+          "minLength": 0,
+          "maxLength": 2,
+          "pattern": "[A-Z0-9]{0,2}"
+        },
+        "sampleStringOnlyMinLength": {
+          "type": "string",
+          "minLength": 0
+        },
+        "sampleStringOnlyMaxLength": {
+          "type": "string",
+          "maxLength": 2
+        },
+        "sampleStringOnlyPattern": {
+          "type": "string",
+          "pattern": "[A-Z0-9]{0,2}"
+        },
+        "sampleNumberComplete": {
+          "type": "integer",
+          "format": "int32",
+          "description": "sample int with range 0-10",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "sampleNumberNoDescription": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "sampleNumberOnlyMinimum": {
+          "type": "integer",
+          "format": "int32",
+          "description": "sample int with range from 0",
+          "minimum": 0
+        },
+        "sampleNumberOnlyMaximum": {
+          "type": "integer",
+          "format": "int32",
+          "description": "sample int with range to 10",
+          "maximum": 10
+        },
+        "sampleDoubleComplete": {
+          "type": "number",
+          "format": "double",
+          "description": "sample double with range 0.0-10.0",
+          "minimum": 0.0,
+          "maximum": 10.0
+        },
+        "sampleDoubleNoDescription": {
+          "type": "number",
+          "format": "double",
+          "minimum": 0.0,
+          "maximum": 10.0
+        },
+        "sampleDoubleOnlyMinimum": {
+          "type": "number",
+          "format": "double",
+          "description": "sample double with range from 0.0",
+          "minimum": 0.0
+        },
+        "sampleDoubleOnlyMaximum": {
+          "type": "number",
+          "format": "double",
+          "description": "sample double with range to 10.0",
+          "maximum": 10.0
+        },
+        "sampleDoubleExclusiveMinimum": {
+          "type": "number",
+          "format": "double",
+          "description": "sample double with range from 0.0 (exclusive)",
+          "minimum": 0.0,
+          "exclusiveMinimum": true
+        },
+        "sampleDoubleExclusiveMaximum": {
+          "type": "number",
+          "format": "double",
+          "description": "sample double with range to 10.0 (exclusive)",
+          "maximum": 10.0,
+          "exclusiveMaximum": true
+        },
+        "sampleDoubleExclusiveBoth": {
+          "type": "number",
+          "format": "double",
+          "description": "sample double with range 0.0-10.0 (both exclusive)",
+          "minimum": 0.0,
+          "maximum": 10.0,
+          "exclusiveMinimum": true,
+          "exclusiveMaximum": true
+        }
+      }
+    }
+  }
 }

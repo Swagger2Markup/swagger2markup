@@ -42,9 +42,9 @@ public class AsciidocConverterTest {
     private static final Logger LOG = LoggerFactory.getLogger(AsciidocConverterTest.class);
     private static final String[] EXPECTED_FILES = new String[]{"definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"};
     private List<String> expectedFiles;
-    
+
     @Before
-    public void setUp(){
+    public void setUp() {
         expectedFiles = new ArrayList<>(asList(EXPECTED_FILES));
     }
 
@@ -226,7 +226,7 @@ public class AsciidocConverterTest {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
-        
+
         Swagger2MarkupConverter.from(file).withConfig(config).build()
                 .toFolder(outputDirectory);
 
@@ -329,8 +329,8 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/generated_examples").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithGeneratedExamples.html");
     }
-	
-	@Test
+
+    @Test
     public void testWithGeneratedRecursiveExamples() throws IOException, URISyntaxException {
         // Given
         String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_recursion.json"));
@@ -623,7 +623,7 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/enums").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithEnums.html");
     }
-    
+
 
     @Test
     public void testWithValidators() throws IOException, URISyntaxException {
@@ -750,11 +750,11 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-            .build();
+                .build();
         Swagger2MarkupConverter.from(file)
-            .withConfig(config)
-            .build()
-            .toFolder(outputDirectory);
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();

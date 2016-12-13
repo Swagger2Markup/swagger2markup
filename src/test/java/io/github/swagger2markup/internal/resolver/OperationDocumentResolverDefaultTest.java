@@ -38,19 +38,19 @@ public class OperationDocumentResolverDefaultTest {
     private PathOperation operation;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         operation = new PathOperation(HttpMethod.GET, "/test", new Operation());
     }
 
     @Test
-    public void testDefault(){
+    public void testDefault() {
         Swagger2MarkupConverter.Context context = createContext();
 
         assertThat(new OperationDocumentResolverDefault(context).apply(operation)).isNull();
     }
 
     @Test
-    public void testWithSeparatedOperations(){
+    public void testWithSeparatedOperations() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedOperations()
                 .build();
@@ -60,7 +60,7 @@ public class OperationDocumentResolverDefaultTest {
     }
 
     @Test
-    public void testWithSeparatedOperationsAndInterDocumentCrossReferences(){
+    public void testWithSeparatedOperationsAndInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedOperations()
                 .withInterDocumentCrossReferences()
@@ -73,7 +73,7 @@ public class OperationDocumentResolverDefaultTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferences(){
+    public void testWithInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
@@ -85,7 +85,7 @@ public class OperationDocumentResolverDefaultTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndPrefix(){
+    public void testWithInterDocumentCrossReferencesAndPrefix() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences("prefix_")
                 .build();
@@ -97,7 +97,7 @@ public class OperationDocumentResolverDefaultTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndMarkdown(){
+    public void testWithInterDocumentCrossReferencesAndMarkdown() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)

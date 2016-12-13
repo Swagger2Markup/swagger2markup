@@ -25,7 +25,7 @@ import java.util.Map;
  * Complex object abstraction
  */
 public class ObjectType extends Type {
-    
+
     private Map<String, Property> properties;
     private ObjectTypePolymorphism polymorphism;
 
@@ -43,7 +43,7 @@ public class ObjectType extends Type {
     public String displaySchema(MarkupDocBuilder docBuilder) {
         return "object";
     }
-    
+
     public ObjectTypePolymorphism getPolymorphism() {
         return polymorphism;
     }

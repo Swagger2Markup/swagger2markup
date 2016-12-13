@@ -31,13 +31,13 @@ import java.nio.file.Path;
 import static io.github.swagger2markup.helper.ContextUtils.createContext;
 
 
-public class ContactInfoComponentTest extends AbstractComponentTest{
+public class ContactInfoComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "contact_info";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -51,7 +51,7 @@ public class ContactInfoComponentTest extends AbstractComponentTest{
 
         markupDocBuilder = new ContactInfoComponent(context).apply(markupDocBuilder, ContactInfoComponent.parameters(
                 contact, OverviewDocument.SECTION_TITLE_LEVEL));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));

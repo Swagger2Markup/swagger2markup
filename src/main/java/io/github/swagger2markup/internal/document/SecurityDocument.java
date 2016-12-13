@@ -42,16 +42,8 @@ public class SecurityDocument extends MarkupComponent<SecurityDocument.Parameter
         this.securitySchemeDefinitionComponent = new SecuritySchemeDefinitionComponent(context);
     }
 
-    public static SecurityDocument.Parameters parameters(Map<String, SecuritySchemeDefinition> securitySchemeDefinitions){
+    public static SecurityDocument.Parameters parameters(Map<String, SecuritySchemeDefinition> securitySchemeDefinitions) {
         return new SecurityDocument.Parameters(securitySchemeDefinitions);
-    }
-
-    public static class Parameters {
-        private final Map<String, SecuritySchemeDefinition> securitySchemeDefinitions;
-
-        public Parameters(Map<String, SecuritySchemeDefinition> securitySchemeDefinitions){
-            this.securitySchemeDefinitions = securitySchemeDefinitions;
-        }
     }
 
     /**
@@ -92,5 +84,13 @@ public class SecurityDocument extends MarkupComponent<SecurityDocument.Parameter
      */
     private void applySecurityDocumentExtension(Context context) {
         extensionRegistry.getSecurityDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final Map<String, SecuritySchemeDefinition> securitySchemeDefinitions;
+
+        public Parameters(Map<String, SecuritySchemeDefinition> securitySchemeDefinitions) {
+            this.securitySchemeDefinitions = securitySchemeDefinitions;
+        }
     }
 }

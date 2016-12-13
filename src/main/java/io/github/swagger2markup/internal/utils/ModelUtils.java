@@ -33,6 +33,7 @@ public final class ModelUtils {
 
     /**
      * Recursively resolve referenced type if {@code type} is of type RefType
+     *
      * @param type type to resolve
      * @return referenced type
      */
@@ -68,7 +69,7 @@ public final class ModelUtils {
                 objectType.getPolymorphism().setDiscriminator(modelImpl.getDiscriminator());
 
                 return objectType;
-            } else if(isNotBlank(modelImpl.getFormat()))
+            } else if (isNotBlank(modelImpl.getFormat()))
                 return new BasicType(modelImpl.getType(), modelImpl.getTitle(), modelImpl.getFormat());
             else
                 return new BasicType(modelImpl.getType(), modelImpl.getTitle());
@@ -99,7 +100,7 @@ public final class ModelUtils {
                     }
                 }
             }
-            
+
             return new ObjectType(name, polymorphism, allProperties);
         } else if (model instanceof RefModel) {
             RefModel refModel = (RefModel) model;

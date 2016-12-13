@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
@@ -34,7 +33,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 
-public class PathOperationComponentTest extends AbstractComponentTest{
+public class PathOperationComponentTest extends AbstractComponentTest {
 
     @Test
     public void testPathOperationComponent() throws URISyntaxException {

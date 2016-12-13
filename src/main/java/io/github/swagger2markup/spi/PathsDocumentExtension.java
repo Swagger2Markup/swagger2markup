@@ -27,75 +27,6 @@ import org.apache.commons.lang3.Validate;
  */
 public abstract class PathsDocumentExtension extends AbstractExtension {
 
-    public enum Position {
-        DOCUMENT_BEFORE,
-        DOCUMENT_BEGIN,
-        DOCUMENT_END,
-        DOCUMENT_AFTER,
-        OPERATION_BEFORE,
-        OPERATION_BEGIN,
-        OPERATION_END,
-        OPERATION_AFTER,
-        OPERATION_DESCRIPTION_BEFORE,
-        OPERATION_DESCRIPTION_BEGIN,
-        OPERATION_DESCRIPTION_END,
-        OPERATION_DESCRIPTION_AFTER,
-        OPERATION_PARAMETERS_BEFORE,
-        OPERATION_PARAMETERS_BEGIN,
-        OPERATION_PARAMETERS_END,
-        OPERATION_PARAMETERS_AFTER,
-        OPERATION_RESPONSES_BEFORE,
-        OPERATION_RESPONSES_BEGIN,
-        OPERATION_RESPONSES_END,
-        OPERATION_RESPONSES_AFTER,
-        OPERATION_SECURITY_BEFORE,
-        OPERATION_SECURITY_BEGIN,
-        OPERATION_SECURITY_END,
-        OPERATION_SECURITY_AFTER
-    }
-
-    public static class Context extends ContentContext {
-        private Position position;
-        /**
-         * null if position == DOCUMENT_*
-         */
-        private PathOperation operation;
-
-        /**
-         * Context for positions DOCUMENT_*
-         *
-         * @param position   the current position
-         * @param docBuilder the MarkupDocBuilder
-         */
-        public Context(Position position, MarkupDocBuilder docBuilder) {
-            super(docBuilder);
-            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
-            this.position = position;
-        }
-
-        /**
-         * Context for all other positions
-         * @param position   the current position
-         * @param docBuilder the MarkupDocBuilder
-         * @param operation  the current path operation
-         */
-        public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
-            super(docBuilder);
-            Validate.inclusiveBetween(Position.OPERATION_BEFORE, Position.OPERATION_SECURITY_AFTER, position);
-            Validate.notNull(operation);
-            this.position = position;
-            this.operation = operation;
-        }
-
-        public Position getPosition() {
-            return position;
-        }
-
-        public Optional<PathOperation> getOperation() {
-            return Optional.fromNullable(operation);
-        }
-    }
-
     public PathsDocumentExtension() {
     }
 
@@ -153,8 +84,78 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
     private int increaseLevelOffset(int levelOffset) {
         if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
             return ++levelOffset;
-        }else {
+        } else {
             return levelOffset;
+        }
+    }
+
+    public enum Position {
+        DOCUMENT_BEFORE,
+        DOCUMENT_BEGIN,
+        DOCUMENT_END,
+        DOCUMENT_AFTER,
+        OPERATION_BEFORE,
+        OPERATION_BEGIN,
+        OPERATION_END,
+        OPERATION_AFTER,
+        OPERATION_DESCRIPTION_BEFORE,
+        OPERATION_DESCRIPTION_BEGIN,
+        OPERATION_DESCRIPTION_END,
+        OPERATION_DESCRIPTION_AFTER,
+        OPERATION_PARAMETERS_BEFORE,
+        OPERATION_PARAMETERS_BEGIN,
+        OPERATION_PARAMETERS_END,
+        OPERATION_PARAMETERS_AFTER,
+        OPERATION_RESPONSES_BEFORE,
+        OPERATION_RESPONSES_BEGIN,
+        OPERATION_RESPONSES_END,
+        OPERATION_RESPONSES_AFTER,
+        OPERATION_SECURITY_BEFORE,
+        OPERATION_SECURITY_BEGIN,
+        OPERATION_SECURITY_END,
+        OPERATION_SECURITY_AFTER
+    }
+
+    public static class Context extends ContentContext {
+        private Position position;
+        /**
+         * null if position == DOCUMENT_*
+         */
+        private PathOperation operation;
+
+        /**
+         * Context for positions DOCUMENT_*
+         *
+         * @param position   the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
+        public Context(Position position, MarkupDocBuilder docBuilder) {
+            super(docBuilder);
+            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
+            this.position = position;
+        }
+
+        /**
+         * Context for all other positions
+         *
+         * @param position   the current position
+         * @param docBuilder the MarkupDocBuilder
+         * @param operation  the current path operation
+         */
+        public Context(Position position, MarkupDocBuilder docBuilder, PathOperation operation) {
+            super(docBuilder);
+            Validate.inclusiveBetween(Position.OPERATION_BEFORE, Position.OPERATION_SECURITY_AFTER, position);
+            Validate.notNull(operation);
+            this.position = position;
+            this.operation = operation;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public Optional<PathOperation> getOperation() {
+            return Optional.fromNullable(operation);
         }
     }
 }

@@ -36,8 +36,8 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameters> {
 
-    private static final String OVERVIEW_ANCHOR = "overview";
     public static final int SECTION_TITLE_LEVEL = 2;
+    private static final String OVERVIEW_ANCHOR = "overview";
     private final VersionInfoComponent versionInfoComponent;
     private final ContactInfoComponent contactInfoComponent;
     private final LicenseInfoComponent licenseInfoComponent;
@@ -46,7 +46,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
     private final ProducesComponent producesComponent;
     private final ConsumesComponent consumesComponent;
 
-    public OverviewDocument(Swagger2MarkupConverter.Context context){
+    public OverviewDocument(Swagger2MarkupConverter.Context context) {
         super(context);
         versionInfoComponent = new VersionInfoComponent(context);
         contactInfoComponent = new ContactInfoComponent(context);
@@ -57,16 +57,8 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         consumesComponent = new ConsumesComponent(context);
     }
 
-    public static OverviewDocument.Parameters parameters(Swagger swagger){
+    public static OverviewDocument.Parameters parameters(Swagger swagger) {
         return new OverviewDocument.Parameters(swagger);
-    }
-
-    public static class Parameters {
-        private final Swagger swagger;
-
-        public Parameters(Swagger swagger){
-            this.swagger = Validate.notNull(swagger, "Swagger must not be null");
-        }
     }
 
     /**
@@ -116,7 +108,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
     }
 
     private void buildContactInfoSection(MarkupDocBuilder markupDocBuilder, Contact contact) {
-        if(contact != null){
+        if (contact != null) {
             contactInfoComponent.apply(markupDocBuilder, ContactInfoComponent.parameters(contact, SECTION_TITLE_LEVEL));
         }
     }
@@ -132,14 +124,15 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
     }
 
     private void buildTagsSection(MarkupDocBuilder markupDocBuilder, List<Tag> tags) {
-        if(isNotEmpty(tags)){
+        if (isNotEmpty(tags)) {
             tagsComponent.apply(markupDocBuilder, TagsComponent.parameters(tags, SECTION_TITLE_LEVEL));
         }
     }
 
     private void buildConsumesSection(MarkupDocBuilder markupDocBuilder, List<String> consumes) {
         if (isNotEmpty(consumes)) {
-            consumesComponent.apply(markupDocBuilder, ConsumesComponent.parameters(consumes, SECTION_TITLE_LEVEL));;
+            consumesComponent.apply(markupDocBuilder, ConsumesComponent.parameters(consumes, SECTION_TITLE_LEVEL));
+            ;
         }
     }
 
@@ -156,6 +149,14 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
      */
     private void applyOverviewDocumentExtension(Context context) {
         extensionRegistry.getOverviewDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+        private final Swagger swagger;
+
+        public Parameters(Swagger swagger) {
+            this.swagger = Validate.notNull(swagger, "Swagger must not be null");
+        }
     }
 
 }

@@ -56,19 +56,10 @@ public class Swagger2MarkupConverter {
 
     public Swagger2MarkupConverter(Context context) {
         this.context = context;
-        this.overviewDocument =  new OverviewDocument(context);
-        this.pathsDocument =  new PathsDocument(context);
-        this.definitionsDocument =  new DefinitionsDocument(context);
-        this.securityDocument =  new SecurityDocument(context);
-    }
-
-    /**
-     * Returns the global Context
-     *
-     * @return the global Context
-     */
-    public Context getContext(){
-        return context;
+        this.overviewDocument = new OverviewDocument(context);
+        this.pathsDocument = new PathsDocument(context);
+        this.definitionsDocument = new DefinitionsDocument(context);
+        this.securityDocument = new SecurityDocument(context);
     }
 
     /**
@@ -80,17 +71,15 @@ public class Swagger2MarkupConverter {
     public static Builder from(URI swaggerUri) {
         Validate.notNull(swaggerUri, "swaggerUri must not be null");
         String scheme = swaggerUri.getScheme();
-        if(scheme != null && swaggerUri.getScheme().startsWith("http")){
+        if (scheme != null && swaggerUri.getScheme().startsWith("http")) {
             try {
                 return from(swaggerUri.toURL());
-            }
-            catch (MalformedURLException e) {
+            } catch (MalformedURLException e) {
                 throw new RuntimeException("Failed to convert URI to URL", e);
             }
-        } else if(scheme != null && swaggerUri.getScheme().startsWith("file")){
+        } else if (scheme != null && swaggerUri.getScheme().startsWith("file")) {
             return from(Paths.get(swaggerUri));
-        }
-        else {
+        } else {
             return from(URIUtils.convertUriWithoutSchemeToFileScheme(swaggerUri));
         }
     }
@@ -101,7 +90,7 @@ public class Swagger2MarkupConverter {
      * @param swaggerURL the remote URL
      * @return a Swagger2MarkupConverter
      */
-    public static Builder from(URL swaggerURL){
+    public static Builder from(URL swaggerURL) {
         Validate.notNull(swaggerURL, "swaggerURL must not be null");
         return new Builder(swaggerURL);
     }
@@ -114,11 +103,11 @@ public class Swagger2MarkupConverter {
      */
     public static Builder from(Path swaggerPath) {
         Validate.notNull(swaggerPath, "swaggerPath must not be null");
-        if(Files.notExists(swaggerPath)){
+        if (Files.notExists(swaggerPath)) {
             throw new IllegalArgumentException(String.format("swaggerPath does not exist: %s", swaggerPath));
         }
         try {
-            if(Files.isHidden(swaggerPath)){
+            if (Files.isHidden(swaggerPath)) {
                 throw new IllegalArgumentException("swaggerPath must not be a hidden file");
             }
         } catch (IOException e) {
@@ -170,11 +159,20 @@ public class Swagger2MarkupConverter {
     }
 
     /**
+     * Returns the global Context
+     *
+     * @return the global Context
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
      * Converts the Swagger specification into the given {@code outputDirectory}.
      *
      * @param outputDirectory the output directory path
      */
-    public void toFolder(Path outputDirectory){
+    public void toFolder(Path outputDirectory) {
         Validate.notNull(outputDirectory, "outputDirectory must not be null");
 
         context.setOutputPath(outputDirectory);
@@ -249,7 +247,7 @@ public class Swagger2MarkupConverter {
      *
      * @param outputFile the output file
      */
-    public void toFileWithoutExtension(Path outputFile){
+    public void toFileWithoutExtension(Path outputFile) {
         Validate.notNull(outputFile, "outputFile must not be null");
 
         applyOverviewDocument().writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
@@ -266,7 +264,7 @@ public class Swagger2MarkupConverter {
     public String toString() {
 
         StringBuilder sb = new StringBuilder();
-        sb.append(applyOverviewDocument() .toString());
+        sb.append(applyOverviewDocument().toString());
         sb.append(applyPathsDocument().toString());
         sb.append(applyDefinitionsDocument().toString());
         sb.append(applySecurityDocument().toString());
@@ -319,7 +317,7 @@ public class Swagger2MarkupConverter {
          * @param swaggerLocation the location of the Swagger source
          * @return the Swagger model
          */
-        private Swagger readSwagger(String swaggerLocation){
+        private Swagger readSwagger(String swaggerLocation) {
             Swagger swagger = new SwaggerParser().read(swaggerLocation);
             if (swagger == null) {
                 throw new IllegalArgumentException("Failed to read the Swagger source");
@@ -377,9 +375,9 @@ public class Swagger2MarkupConverter {
         private Path outputPath;
 
         public Context(Swagger2MarkupConfig config,
-                Swagger2MarkupExtensionRegistry extensionRegistry,
-                Swagger swagger,
-                URI swaggerLocation) {
+                       Swagger2MarkupExtensionRegistry extensionRegistry,
+                       Swagger swagger,
+                       URI swaggerLocation) {
             this.config = config;
             this.extensionRegistry = extensionRegistry;
             this.swagger = swagger;
@@ -407,7 +405,7 @@ public class Swagger2MarkupConverter {
             return labels;
         }
 
-        public MarkupDocBuilder createMarkupDocBuilder(){
+        public MarkupDocBuilder createMarkupDocBuilder() {
             return MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(),
                     config.getLineSeparator()).withAnchorPrefix(config.getAnchorPrefix());
         }

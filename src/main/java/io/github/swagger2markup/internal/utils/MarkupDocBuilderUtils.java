@@ -27,32 +27,33 @@ public class MarkupDocBuilderUtils {
         return markupDocBuilder.copy(false);
     }
 
-    public static  String literalText(MarkupDocBuilder markupDocBuilder, String text) {
+    public static String literalText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).literalText(text).toString();
     }
-    public static  String boldText(MarkupDocBuilder markupDocBuilder, String text) {
+
+    public static String boldText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).boldText(text).toString();
     }
 
-    public static  String italicText(MarkupDocBuilder markupDocBuilder, String text) {
+    public static String italicText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
         return copyMarkupDocBuilder(markupDocBuilder).italicText(text).toString();
     }
 
-    public static  String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
+    public static String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
         return copyMarkupDocBuilder(markupDocBuilder)
                 .crossReference(document, anchor, text).toString();
     }
 
-    public static  String markupDescription(MarkupLanguage swaggerMarkupLanguage, MarkupDocBuilder markupDocBuilder, String markupText) {
+    public static String markupDescription(MarkupLanguage swaggerMarkupLanguage, MarkupDocBuilder markupDocBuilder, String markupText) {
         if (StringUtils.isBlank(markupText)) {
             return StringUtils.EMPTY;
         }

@@ -25,18 +25,16 @@ import javaslang.Function2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class MarkupComponent <T> implements Function2<MarkupDocBuilder, T, MarkupDocBuilder> {
-
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+public abstract class MarkupComponent<T> implements Function2<MarkupDocBuilder, T, MarkupDocBuilder> {
 
     protected static final String COLON = " : ";
-
+    protected Logger logger = LoggerFactory.getLogger(getClass());
     protected Swagger2MarkupConverter.Context context;
     protected Labels labels;
     protected Swagger2MarkupConfig config;
     protected Swagger2MarkupExtensionRegistry extensionRegistry;
 
-    public MarkupComponent(Swagger2MarkupConverter.Context context){
+    public MarkupComponent(Swagger2MarkupConverter.Context context) {
         this.context = context;
         this.config = context.getConfig();
         this.extensionRegistry = context.getExtensionRegistry();

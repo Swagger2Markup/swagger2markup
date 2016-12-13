@@ -29,14 +29,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SecurityDocumentResolverTest {
 
     @Test
-    public void testDefault(){
+    public void testDefault() {
         Swagger2MarkupConverter.Context context = createContext();
 
         assertThat(new SecurityDocumentResolver(context).apply("petstore_auth")).isNull();
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndNoOutputPath(){
+    public void testWithInterDocumentCrossReferencesAndNoOutputPath() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
@@ -47,7 +47,7 @@ public class SecurityDocumentResolverTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferences(){
+    public void testWithInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
@@ -59,7 +59,7 @@ public class SecurityDocumentResolverTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndPrefix(){
+    public void testWithInterDocumentCrossReferencesAndPrefix() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences("prefix_")
                 .build();
@@ -71,7 +71,7 @@ public class SecurityDocumentResolverTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndMarkdown(){
+    public void testWithInterDocumentCrossReferencesAndMarkdown() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
