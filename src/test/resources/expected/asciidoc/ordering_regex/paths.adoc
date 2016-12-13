@@ -18,7 +18,7 @@
 ==== GET /B
 
 [[_payments_resource]]
-=== payments
+=== Payments
 
 [[_payments_post]]
 ==== POST /payments

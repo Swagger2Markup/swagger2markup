@@ -63,11 +63,11 @@ public class RegexUtils {
             String path = operation.getPath();
             Matcher m = headerPattern.matcher(path);
 
-            if (m.matches() && m.group(0) != null) {
+            if (m.matches() && m.group(1) != null) {
                 if(LOG.isInfoEnabled()) {
-                    LOG.info("Added path operation '{}' to header '{}'", operation, m.group(0));
+                    LOG.info("Added path operation '{}' to header '{}'", operation, m.group(1));
                 }
-                operationsGroupedByRegex.put(m.group(0), operation);
+                operationsGroupedByRegex.put(m.group(1), operation);
             }
         }
 
