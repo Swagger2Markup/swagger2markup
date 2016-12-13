@@ -23,9 +23,6 @@ import io.swagger.models.Swagger;
  */
 public abstract class SwaggerModelExtension extends AbstractExtension {
 
-    public SwaggerModelExtension() {
-    }
-
     public abstract void apply(Swagger swagger);
 
 }

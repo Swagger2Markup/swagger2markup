@@ -27,8 +27,6 @@ import java.util.Optional;
  */
 public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
-    public DefinitionsDocumentExtension() {
-    }
 
     public abstract void apply(Context context);
 
@@ -39,6 +37,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
      * @return title level offset
      */
     protected int levelOffset(Context context) throws RuntimeException {
+        //TODO: Unused method, make sure this is never used and then remove it.
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
