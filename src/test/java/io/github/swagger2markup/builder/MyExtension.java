@@ -29,6 +29,7 @@ import java.io.StringReader;
 public class MyExtension extends DefinitionsDocumentExtension {
 
     private static final String EXTENSION_ID = "myExtension";
+    //TODO: Unused field, make sure this is never used and then remove it.
     private String extensionProperty;
 
     @Override
@@ -36,6 +37,7 @@ public class MyExtension extends DefinitionsDocumentExtension {
         // init is executed once
         Swagger2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties(); //<1>
         extensionProperty = extensionProperties.getRequiredString(EXTENSION_ID + ".propertyName");
+        //TODO: Unused field, make sure this is never used and then remove it.
         Swagger model = globalContext.getSwagger();
     }
 

@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+//FIXME: These tests are never called
 public class DocumentationTest {
 
     public void localSwaggerSpec() throws URISyntaxException, IOException {
