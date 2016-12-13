@@ -20,6 +20,7 @@ public class ObjectTypePolymorphism {
 
     public Nature nature = Nature.NONE;
     public String discriminator;
+
     public ObjectTypePolymorphism(Nature nature, String discriminator) {
         this.nature = nature;
         this.discriminator = discriminator;
