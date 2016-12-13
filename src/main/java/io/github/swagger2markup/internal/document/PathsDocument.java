@@ -93,17 +93,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         return new PathsDocument.Parameters(paths);
     }
 
-<<<<<<< HEAD
-    public static class Parameters {
-        private final Map<String, Path> paths;
-
-        public Parameters(Map<String, Path> paths) {
-            this.paths = paths;
-        }
-    }
-
-=======
->>>>>>> 852b2ac3b4cbe0aa0c4a066a3f244d3f1f593c39
     /**
      * Builds the paths MarkupDocument.
      *
