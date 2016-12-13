@@ -26,68 +26,6 @@ import org.apache.commons.lang3.Validate;
  */
 public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
-    public enum Position {
-        DOCUMENT_BEFORE,
-        DOCUMENT_BEGIN,
-        DOCUMENT_END,
-        DOCUMENT_AFTER,
-        DEFINITION_BEFORE,
-        DEFINITION_BEGIN,
-        DEFINITION_END,
-        DEFINITION_AFTER
-    }
-
-    public static class Context extends ContentContext {
-        private Position position;
-        /**
-         * null if position == DOCUMENT_*
-         */
-        private String definitionName;
-
-        /**
-         * null if position == DOCUMENT_*
-         */
-        private Model model;
-
-        /**
-         * @param position the current position
-         * @param docBuilder the MarkupDocBuilder
-         */
-        public Context(Position position, MarkupDocBuilder docBuilder) {
-            super(docBuilder);
-            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
-            this.position = position;
-        }
-
-        /**
-         * @param position the current position
-         * @param docBuilder the MarkupDocBuilder
-         * @param definitionName the name of the current definition
-         * @param model the current Model of the definition
-         */
-        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
-            super(docBuilder);
-            Validate.inclusiveBetween(Position.DEFINITION_BEFORE, Position.DEFINITION_AFTER, position);
-            Validate.notNull(definitionName);
-            Validate.notNull(model);
-            this.position = position;
-            this.definitionName = definitionName;
-            this.model = model;
-        }
-
-        public Position getPosition() {
-            return position;
-        }
-
-        public Optional<String> getDefinitionName() {
-            return Optional.fromNullable(definitionName);
-        }
-
-        public Optional<Model> getModel() {
-            return Optional.fromNullable(model);
-        }
-    }
-
     public DefinitionsDocumentExtension() {
     }
 
@@ -95,6 +33,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
     /**
      * Returns title level offset from 1 to apply to content
+     *
      * @param context context
      * @return title level offset
      */
@@ -120,5 +59,67 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
         }
 
         return levelOffset;
+    }
+
+    public enum Position {
+        DOCUMENT_BEFORE,
+        DOCUMENT_BEGIN,
+        DOCUMENT_END,
+        DOCUMENT_AFTER,
+        DEFINITION_BEFORE,
+        DEFINITION_BEGIN,
+        DEFINITION_END,
+        DEFINITION_AFTER
+    }
+
+    public static class Context extends ContentContext {
+        private Position position;
+        /**
+         * null if position == DOCUMENT_*
+         */
+        private String definitionName;
+
+        /**
+         * null if position == DOCUMENT_*
+         */
+        private Model model;
+
+        /**
+         * @param position   the current position
+         * @param docBuilder the MarkupDocBuilder
+         */
+        public Context(Position position, MarkupDocBuilder docBuilder) {
+            super(docBuilder);
+            Validate.inclusiveBetween(Position.DOCUMENT_BEFORE, Position.DOCUMENT_AFTER, position);
+            this.position = position;
+        }
+
+        /**
+         * @param position       the current position
+         * @param docBuilder     the MarkupDocBuilder
+         * @param definitionName the name of the current definition
+         * @param model          the current Model of the definition
+         */
+        public Context(Position position, MarkupDocBuilder docBuilder, String definitionName, Model model) {
+            super(docBuilder);
+            Validate.inclusiveBetween(Position.DEFINITION_BEFORE, Position.DEFINITION_AFTER, position);
+            Validate.notNull(definitionName);
+            Validate.notNull(model);
+            this.position = position;
+            this.definitionName = definitionName;
+            this.model = model;
+        }
+
+        public Position getPosition() {
+            return position;
+        }
+
+        public Optional<String> getDefinitionName() {
+            return Optional.fromNullable(definitionName);
+        }
+
+        public Optional<Model> getModel() {
+            return Optional.fromNullable(model);
+        }
     }
 }

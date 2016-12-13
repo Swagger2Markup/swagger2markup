@@ -37,13 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BodyParameterComponentTest extends AbstractComponentTest{
+public class BodyParameterComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "body_parameter";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }

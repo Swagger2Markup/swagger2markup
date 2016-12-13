@@ -17,12 +17,6 @@
 package io.github.swagger2markup.internal.type;
 
 public class ObjectTypePolymorphism {
-    
-    public enum Nature {
-        NONE,
-        COMPOSITION,
-        INHERITANCE
-    }
 
     public Nature nature = Nature.NONE;
     public String discriminator;
@@ -46,6 +40,12 @@ public class ObjectTypePolymorphism {
 
     public void setDiscriminator(String discriminator) {
         this.discriminator = discriminator;
+    }
+
+    public enum Nature {
+        NONE,
+        COMPOSITION,
+        INHERITANCE
     }
 
 }

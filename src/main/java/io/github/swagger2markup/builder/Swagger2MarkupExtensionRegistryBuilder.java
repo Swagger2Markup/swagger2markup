@@ -71,7 +71,7 @@ public class Swagger2MarkupExtensionRegistryBuilder {
         return this;
     }
 
-    static class DefaultSwagger2MarkupExtensionRegistry implements Swagger2MarkupExtensionRegistry{
+    static class DefaultSwagger2MarkupExtensionRegistry implements Swagger2MarkupExtensionRegistry {
 
         private Context context;
 
@@ -80,27 +80,27 @@ public class Swagger2MarkupExtensionRegistryBuilder {
         }
 
         @Override
-        public List<SwaggerModelExtension> getSwaggerModelExtensions(){
+        public List<SwaggerModelExtension> getSwaggerModelExtensions() {
             return context.swaggerModelExtensions;
         }
 
         @Override
-        public List<OverviewDocumentExtension> getOverviewDocumentExtensions(){
+        public List<OverviewDocumentExtension> getOverviewDocumentExtensions() {
             return context.overviewDocumentExtensions;
         }
 
         @Override
-        public List<DefinitionsDocumentExtension> getDefinitionsDocumentExtensions(){
+        public List<DefinitionsDocumentExtension> getDefinitionsDocumentExtensions() {
             return context.definitionsDocumentExtensions;
         }
 
         @Override
-        public List<SecurityDocumentExtension> getSecurityDocumentExtensions(){
+        public List<SecurityDocumentExtension> getSecurityDocumentExtensions() {
             return context.securityDocumentExtensions;
         }
 
         @Override
-        public List<PathsDocumentExtension> getPathsDocumentExtensions(){
+        public List<PathsDocumentExtension> getPathsDocumentExtensions() {
             return context.pathsDocumentExtensions;
         }
 
@@ -117,7 +117,7 @@ public class Swagger2MarkupExtensionRegistryBuilder {
                        List<OverviewDocumentExtension> overviewDocumentExtensions,
                        List<DefinitionsDocumentExtension> definitionsDocumentExtensions,
                        List<PathsDocumentExtension> pathsDocumentExtensions,
-                       List<SecurityDocumentExtension> securityDocumentExtensions){
+                       List<SecurityDocumentExtension> securityDocumentExtensions) {
             this.swaggerModelExtensions = swaggerModelExtensions;
             this.overviewDocumentExtensions = overviewDocumentExtensions;
             this.definitionsDocumentExtensions = definitionsDocumentExtensions;

@@ -34,9 +34,8 @@ public class TagUtils {
      * Converts the global Tag list into a Map where the tag name is the key and the Tag the value.
      * Either ordered or as-is, if the comparator is null.
      *
-     * @param tags the List of tags
+     * @param tags       the List of tags
      * @param comparator the comparator to use.
-     *
      * @return the Map of tags. Either ordered or as-is, if the comparator is null.
      */
     public static Map<String, Tag> toSortedMap(List<Tag> tags, Comparator<String> comparator) {
@@ -53,16 +52,16 @@ public class TagUtils {
      * Groups the operations by tag. The key of the Multimap is the tag name.
      * The value of the Multimap is a PathOperation
      *
-     * @param allOperations all operations
+     * @param allOperations     all operations
      * @param operationOrdering comparator for operations, for a given tag
      * @return Operations grouped by Tag
      */
     public static Multimap<String, PathOperation> groupOperationsByTag(List<PathOperation> allOperations, Comparator<PathOperation> operationOrdering) {
 
         Multimap<String, PathOperation> operationsGroupedByTag;
-        if (operationOrdering == null){
+        if (operationOrdering == null) {
             operationsGroupedByTag = LinkedHashMultimap.create();
-        }else {
+        } else {
             operationsGroupedByTag = MultimapBuilder.linkedHashKeys().treeSetValues(operationOrdering).build();
         }
         for (PathOperation operation : allOperations) {

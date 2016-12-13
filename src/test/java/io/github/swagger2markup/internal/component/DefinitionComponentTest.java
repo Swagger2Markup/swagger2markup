@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.AsciidocConverterTest;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
@@ -32,13 +31,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 
-public class DefinitionComponentTest extends AbstractComponentTest{
+public class DefinitionComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "definition";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -58,7 +57,7 @@ public class DefinitionComponentTest extends AbstractComponentTest{
         //When
         markupDocBuilder = new DefinitionComponent(context, new DefinitionDocumentResolverFromDefinition(context))
                 .apply(markupDocBuilder, DefinitionComponent.parameters("Pet", petModel, 2));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         //Then
         Path expectedFile = getExpectedFile(COMPONENT_NAME);

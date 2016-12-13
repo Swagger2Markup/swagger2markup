@@ -20,7 +20,7 @@ import io.github.swagger2markup.internal.type.*;
 
 import java.util.List;
 
-import static org.apache.commons.collections4.MapUtils.*;
+import static org.apache.commons.collections4.MapUtils.isNotEmpty;
 
 public class InlineSchemaUtils {
     /**
@@ -29,9 +29,9 @@ public class InlineSchemaUtils {
      * The function is recursive and support collections (ArrayType and MapType).<br>
      * The function is transparent : {@code type} is returned as-is if type is not inlinable or if !config.isInlineSchemaEnabled().<br>
      *
-     * @param type type to inline
-     * @param name name of the created inline ObjectType
-     * @param uniqueName unique name of the created inline ObjectType
+     * @param type              type to inline
+     * @param name              name of the created inline ObjectType
+     * @param uniqueName        unique name of the created inline ObjectType
      * @param inlineDefinitions a non null collection of inline ObjectType
      * @return the type referencing the newly created inline ObjectType. Can be a RefType, an ArrayType or a MapType
      */
@@ -39,12 +39,12 @@ public class InlineSchemaUtils {
         if (type instanceof ObjectType) {
             return createInlineObjectType(type, name, uniqueName, inlineDefinitions);
         } else if (type instanceof ArrayType) {
-            ArrayType arrayType = (ArrayType)type;
+            ArrayType arrayType = (ArrayType) type;
             arrayType.setOfType(createInlineType(arrayType.getOfType(), name, uniqueName, inlineDefinitions));
 
             return arrayType;
         } else if (type instanceof MapType) {
-            MapType mapType = (MapType)type;
+            MapType mapType = (MapType) type;
             if (mapType.getValueType() instanceof ObjectType)
                 mapType.setValueType(createInlineType(mapType.getValueType(), name, uniqueName, inlineDefinitions));
 
@@ -56,7 +56,7 @@ public class InlineSchemaUtils {
 
     private static Type createInlineObjectType(Type type, String name, String uniqueName, List<ObjectType> inlineDefinitions) {
         if (type instanceof ObjectType) {
-            ObjectType objectType = (ObjectType)type;
+            ObjectType objectType = (ObjectType) type;
             if (isNotEmpty(objectType.getProperties())) {
                 if (objectType.getName() == null) {
                     objectType.setName(name);

@@ -17,8 +17,8 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.GroupBy;
-import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
@@ -59,7 +59,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
     public PathOperationComponent(Swagger2MarkupConverter.Context context,
                                   DocumentResolver definitionDocumentResolver,
-                                  DocumentResolver securityDocumentResolver){
+                                  DocumentResolver securityDocumentResolver) {
         super(context);
         this.definitions = context.getSwagger().getDefinitions();
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
@@ -72,17 +72,8 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         this.responseComponent = new ResponseComponent(context, definitionDocumentResolver);
     }
 
-    public static PathOperationComponent.Parameters parameters(PathOperation operation){
+    public static PathOperationComponent.Parameters parameters(PathOperation operation) {
         return new PathOperationComponent.Parameters(operation);
-    }
-
-    public static class Parameters {
-
-        private final PathOperation operation;
-
-        public Parameters(PathOperation operation){
-            this.operation = Validate.notNull(operation, "PathOperation must not be null");
-        }
     }
 
     @Override
@@ -106,12 +97,11 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         return markupDocBuilder;
     }
 
-
     /**
      * Adds the operation title to the document. If the operation has a summary, the title is the summary.
      * Otherwise the title is the method of the operation and the URL of the operation.
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      */
     private void buildOperationTitle(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         buildOperationTitle(markupDocBuilder, operation.getTitle(), operation.getId());
@@ -123,8 +113,8 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Adds a operation title to the document.
      *
-     * @param title      the operation title
-     * @param anchor     optional anchor (null => auto-generate from title)
+     * @param title  the operation title
+     * @param anchor optional anchor (null => auto-generate from title)
      */
     private void buildOperationTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
@@ -137,7 +127,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Builds a warning if method is deprecated.
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      */
     private void buildDeprecatedSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (BooleanUtils.isTrue(operation.getOperation().isDeprecated())) {
@@ -148,7 +138,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Adds a operation description to the document.
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      */
     private void buildDescriptionSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder(markupDocBuilder);
@@ -171,7 +161,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Builds the parameters section
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      */
     private List<ObjectType> buildParametersSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
 
@@ -189,7 +179,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Builds the body parameter section
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      * @return a list of inlined types.
      */
     private List<ObjectType> buildBodyParameterSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
@@ -218,7 +208,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Adds a operation section title to the document.
      *
-     * @param title      the section title
+     * @param title the section title
      */
     private void buildSectionTitle(MarkupDocBuilder markupDocBuilder, String title) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
@@ -228,14 +218,12 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         }
     }
 
-
-
     /**
      * Builds the title of an inline schema.
      * Inline definitions should never been referenced in TOC because they have no real existence, so they are just text.
      *
-     * @param title      inline schema title
-     * @param anchor     inline schema anchor
+     * @param title  inline schema title
+     * @param anchor inline schema anchor
      */
     private void addInlineDefinitionTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
         markupDocBuilder.anchor(anchor);
@@ -245,10 +233,10 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
     /**
      * Builds inline schema definitions
-
-     * @param markupDocBuilder   the docbuilder do use for output
-     * @param definitions  all inline definitions to display
-     * @param uniquePrefix unique prefix to prepend to inline object names to enforce unicity
+     *
+     * @param markupDocBuilder the docbuilder do use for output
+     * @param definitions      all inline definitions to display
+     * @param uniquePrefix     unique prefix to prepend to inline object names to enforce unicity
      */
     private void inlineDefinitions(MarkupDocBuilder markupDocBuilder, List<ObjectType> definitions, String uniquePrefix) {
         if (CollectionUtils.isNotEmpty(definitions)) {
@@ -256,11 +244,11 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                 addInlineDefinitionTitle(markupDocBuilder, definition.getName(), definition.getUniqueName());
 
                 List<ObjectType> localDefinitions = new ArrayList<>();
-                        propertiesTableComponent.apply(markupDocBuilder, PropertiesTableComponent.parameters(
-                                definition.getProperties(),
-                                uniquePrefix,
-                                localDefinitions
-                        ));
+                propertiesTableComponent.apply(markupDocBuilder, PropertiesTableComponent.parameters(
+                        definition.getProperties(),
+                        uniquePrefix,
+                        localDefinitions
+                ));
                 for (ObjectType localDefinition : localDefinitions)
                     inlineDefinitions(markupDocBuilder, Collections.singletonList(localDefinition), localDefinition.getUniqueName());
             }
@@ -301,7 +289,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Builds the security section of a Swagger Operation.
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      */
     private void buildSecuritySchemeSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (config.isPathSecuritySectionEnabled()) {
@@ -323,11 +311,10 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         }
     }
 
-
     /**
      * Builds the example section of a Swagger Operation.
      *
-     * @param operation  the Swagger Operation
+     * @param operation the Swagger Operation
      */
     private void buildExamplesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
 
@@ -351,7 +338,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Adds a example title to the document.
      *
-     * @param title      the section title
+     * @param title the section title
      */
     private void buildExampleTitle(MarkupDocBuilder markupDocBuilder, String title) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
@@ -361,7 +348,6 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         }
     }
 
-
     /**
      * Apply extension context to all OperationsContentExtension.
      *
@@ -369,5 +355,14 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
      */
     private void applyPathsDocumentExtension(PathsDocumentExtension.Context context) {
         extensionRegistry.getPathsDocumentExtensions().forEach(extension -> extension.apply(context));
+    }
+
+    public static class Parameters {
+
+        private final PathOperation operation;
+
+        public Parameters(PathOperation operation) {
+            this.operation = Validate.notNull(operation, "PathOperation must not be null");
+        }
     }
 }

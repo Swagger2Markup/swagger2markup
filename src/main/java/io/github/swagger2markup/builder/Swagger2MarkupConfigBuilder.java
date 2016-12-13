@@ -43,26 +43,20 @@ import static io.github.swagger2markup.Swagger2MarkupProperties.*;
 
 public class Swagger2MarkupConfigBuilder {
 
-    private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfigBuilder.class);
-
-    private static final String PROPERTIES_DEFAULT = "io/github/swagger2markup/config/default.properties";
-
     static final Ordering<PathOperation> OPERATION_METHOD_NATURAL_ORDERING = Ordering
             .explicit(HttpMethod.POST, HttpMethod.GET, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.PATCH, HttpMethod.HEAD, HttpMethod.OPTIONS)
             .onResultOf(PathOperation::getMethod);
-
     static final Ordering<PathOperation> OPERATION_PATH_NATURAL_ORDERING = Ordering
             .natural()
             .onResultOf(PathOperation::getPath);
-
     static final Ordering<Parameter> PARAMETER_IN_NATURAL_ORDERING = Ordering
             .explicit("header", "path", "query", "formData", "body")
             .onResultOf(Parameter::getIn);
-
     static final Ordering<Parameter> PARAMETER_NAME_NATURAL_ORDERING = Ordering
             .natural()
             .onResultOf(Parameter::getName);
-
+    private static final Logger logger = LoggerFactory.getLogger(Swagger2MarkupConfigBuilder.class);
+    private static final String PROPERTIES_DEFAULT = "io/github/swagger2markup/config/default.properties";
     DefaultSwagger2MarkupConfig config = new DefaultSwagger2MarkupConfig();
 
     public Swagger2MarkupConfigBuilder() {

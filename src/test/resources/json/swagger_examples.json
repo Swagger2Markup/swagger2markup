@@ -882,7 +882,6 @@
           "type": "integer",
           "format": "int64",
           "example": 77
-
         },
         "petId": {
           "type": "integer",
@@ -931,8 +930,8 @@
           },
           "example": {
             "id": 99,
-            "value" : "an example value !"
-          } 
+            "value": "an example value !"
+          }
         }
       }
     }

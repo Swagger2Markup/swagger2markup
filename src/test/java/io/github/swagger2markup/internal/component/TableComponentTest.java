@@ -30,13 +30,13 @@ import java.nio.file.Path;
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
 import static io.github.swagger2markup.helper.ContextUtils.createContext;
 
-public class TableComponentTest extends AbstractComponentTest{
+public class TableComponentTest extends AbstractComponentTest {
 
     private static final String COMPONENT_NAME = "table";
     private Path outputDirectory;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         outputDirectory = getOutputFile(COMPONENT_NAME);
         FileUtils.deleteQuietly(outputDirectory.toFile());
     }
@@ -57,10 +57,10 @@ public class TableComponentTest extends AbstractComponentTest{
 
         markupDocBuilder = new TableComponent(context).apply(markupDocBuilder,
                 TableComponent.parameters(
-                typeColumnBuilder.build(),
-                nameColumnBuilder.build(),
-                descriptionColumnBuilder.build()));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory,  StandardCharsets.UTF_8);
+                        typeColumnBuilder.build(),
+                        nameColumnBuilder.build(),
+                        descriptionColumnBuilder.build()));
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));

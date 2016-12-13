@@ -49,7 +49,7 @@ public class ParameterAdapterTest {
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
 
         PathOperation operation = pathOperations.get(0);
-        List<Parameter> parameters  = operation.getOperation().getParameters();
+        List<Parameter> parameters = operation.getOperation().getParameters();
         DefinitionDocumentResolverFromOperation resolverFromOperation = new DefinitionDocumentResolverFromOperation(context);
 
         //Test Query Parameter
@@ -65,7 +65,7 @@ public class ParameterAdapterTest {
         assertThat(type).isInstanceOf(BasicType.class);
         assertThat(type.getName()).isEqualTo("Version");
         assertThat(type.getUniqueName()).isEqualTo("Version");
-        assertThat(((BasicType)type).getType()).isEqualTo("string");
+        assertThat(((BasicType) type).getType()).isEqualTo("string");
 
         //Test Body Parameter
         Parameter bodyParameter = parameters.get(2);
@@ -78,9 +78,9 @@ public class ParameterAdapterTest {
 
         assertThat(bodyParameterAdapter.getIn()).isEqualTo("Body");
         assertThat(type).isInstanceOf(RefType.class);
-        Type refType = ((RefType)type).getRefType();
+        Type refType = ((RefType) type).getRefType();
         assertThat(refType).isInstanceOf(ObjectType.class);
-        ObjectType objectType = (ObjectType)refType;
+        ObjectType objectType = (ObjectType) refType;
         assertThat(objectType.getProperties()).hasSize(3);
 
         //Inline Schema

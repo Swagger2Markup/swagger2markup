@@ -32,14 +32,14 @@ public class DefinitionDocumentResolverFromOperationTest {
     private final String fileSeparator = FileSystems.getDefault().getSeparator();
 
     @Test
-    public void testDefault(){
+    public void testDefault() {
         Swagger2MarkupConverter.Context context = createContext();
 
         assertThat(new DefinitionDocumentResolverFromOperation(context).apply("DefinitionName")).isNull();
     }
 
     @Test
-    public void testWithSeparatedDefinitions(){
+    public void testWithSeparatedDefinitions() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .build();
@@ -49,7 +49,7 @@ public class DefinitionDocumentResolverFromOperationTest {
     }
 
     @Test
-    public void testWithSeparatedOperationsAndInterDocumentCrossReferences(){
+    public void testWithSeparatedOperationsAndInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedOperations()
                 .withInterDocumentCrossReferences()
@@ -62,7 +62,7 @@ public class DefinitionDocumentResolverFromOperationTest {
     }
 
     @Test
-    public void testWithSeparatedOperationsAndSeparatedDefinitionsAndInterDocumentCrossReferences(){
+    public void testWithSeparatedOperationsAndSeparatedDefinitionsAndInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withSeparatedOperations()
                 .withSeparatedDefinitions()
@@ -76,7 +76,7 @@ public class DefinitionDocumentResolverFromOperationTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferences(){
+    public void testWithInterDocumentCrossReferences() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
@@ -88,7 +88,7 @@ public class DefinitionDocumentResolverFromOperationTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndNoOutputPath(){
+    public void testWithInterDocumentCrossReferencesAndNoOutputPath() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
@@ -99,7 +99,7 @@ public class DefinitionDocumentResolverFromOperationTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndPrefix(){
+    public void testWithInterDocumentCrossReferencesAndPrefix() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences("prefix_")
                 .build();
@@ -111,7 +111,7 @@ public class DefinitionDocumentResolverFromOperationTest {
     }
 
     @Test
-    public void testWithInterDocumentCrossReferencesAndMarkdown(){
+    public void testWithInterDocumentCrossReferencesAndMarkdown() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)

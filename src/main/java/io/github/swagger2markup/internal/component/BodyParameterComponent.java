@@ -45,26 +45,15 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
     private final PropertiesTableComponent propertiesTableComponent;
 
     public BodyParameterComponent(Swagger2MarkupConverter.Context context,
-                                  DocumentResolver definitionDocumentResolver){
+                                  DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
     }
 
     public static BodyParameterComponent.Parameters parameters(PathOperation operation,
-                                                               List<ObjectType> inlineDefinitions){
+                                                               List<ObjectType> inlineDefinitions) {
         return new BodyParameterComponent.Parameters(operation, inlineDefinitions);
-    }
-
-    public static class Parameters{
-        private PathOperation operation;
-        private final List<ObjectType> inlineDefinitions;
-        public Parameters(PathOperation operation,
-                          List<ObjectType> inlineDefinitions){
-            Validate.notNull(operation, "Operation must not be null");
-            this.operation = operation;
-            this.inlineDefinitions = inlineDefinitions;
-        }
     }
 
     @Override
@@ -121,6 +110,18 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
             markupDocBuilder.sectionTitleLevel3(title);
         } else {
             markupDocBuilder.sectionTitleLevel4(title);
+        }
+    }
+
+    public static class Parameters {
+        private final List<ObjectType> inlineDefinitions;
+        private PathOperation operation;
+
+        public Parameters(PathOperation operation,
+                          List<ObjectType> inlineDefinitions) {
+            Validate.notNull(operation, "Operation must not be null");
+            this.operation = operation;
+            this.inlineDefinitions = inlineDefinitions;
         }
     }
 }

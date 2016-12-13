@@ -1,81 +1,81 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "2.0.0",
-        "title": "API"
-    },
-    "schemes": [
-        "https"
-    ],
-    "basePath": "/navigation",
-    "produces": [
-        "application/json"
-    ],
-    "consumes": [
-        "application/json"
-    ],
-    "paths": {
-        "/": {
-            "get": {
-                "operationId": "userNavigation",
-                "summary": "Get navigation",
-                "description": "Returns the navigation as a tree",
-                "parameters": [],
-                "tags": [
-                    "Navigation"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "schema": {
-                            "$ref": "#/definitions/NavigationEntry"
-                        }
-                    }
-                }
-            },
-            "put": {
-                "operationId": "updateNavigation",
-                "summary": "update entry",
-                "description": "Updates the navigation tree",
-                "parameters": [
-                    {
-                      "name": "entry",
-                      "in": "body",
-                      "schema": {
-                        "$ref": "#/definitions/NavigationEntry"
-                      }
-                    }
-                ],
-                "tags": [
-                    "Navigation"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Successful response",
-                        "schema": {
-                            "$ref": "#/definitions/NavigationEntry"
-                        }
-                    }
-                }
+  "swagger": "2.0",
+  "info": {
+    "version": "2.0.0",
+    "title": "API"
+  },
+  "schemes": [
+    "https"
+  ],
+  "basePath": "/navigation",
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "operationId": "userNavigation",
+        "summary": "Get navigation",
+        "description": "Returns the navigation as a tree",
+        "parameters": [],
+        "tags": [
+          "Navigation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/NavigationEntry"
             }
+          }
         }
-    },
-    "definitions": {
-        "NavigationEntry": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "description": "Primary key of this entry",
-                    "type": "number",
-                    "format": "int64"
-                },
-                "childs": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/NavigationEntry"
-                    }
-                }
+      },
+      "put": {
+        "operationId": "updateNavigation",
+        "summary": "update entry",
+        "description": "Updates the navigation tree",
+        "parameters": [
+          {
+            "name": "entry",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/NavigationEntry"
             }
+          }
+        ],
+        "tags": [
+          "Navigation"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "$ref": "#/definitions/NavigationEntry"
+            }
+          }
         }
+      }
     }
+  },
+  "definitions": {
+    "NavigationEntry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Primary key of this entry",
+          "type": "number",
+          "format": "int64"
+        },
+        "childs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NavigationEntry"
+          }
+        }
+      }
+    }
+  }
 }

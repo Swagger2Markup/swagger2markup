@@ -18,9 +18,9 @@ package io.github.swagger2markup.internal.document;
 import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.DefinitionComponent;
+import io.github.swagger2markup.internal.resolver.DefinitionDocumentNameResolver;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverDefault;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
-import io.github.swagger2markup.internal.resolver.DefinitionDocumentNameResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
@@ -43,7 +43,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * @author Robert Winkler
  */
 public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Parameters> {
-    
+
     private static final String DEFINITIONS_ANCHOR = "definitions";
 
     private static final List<String> IGNORED_DEFINITIONS = Collections.singletonList("Void");
@@ -67,16 +67,8 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
         this.definitionDocumentResolverDefault = new DefinitionDocumentResolverDefault(context);
     }
 
-    public static DefinitionsDocument.Parameters parameters(Map<String, Model> definitions){
+    public static DefinitionsDocument.Parameters parameters(Map<String, Model> definitions) {
         return new DefinitionsDocument.Parameters(definitions);
-    }
-
-    public static class Parameters {
-        private final Map<String, Model> definitions;
-
-        public Parameters(Map<String, Model> definitions){
-            this.definitions = definitions;
-        }
     }
 
     /**
@@ -105,8 +97,8 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
     private void buildDefinitionsSection(MarkupDocBuilder markupDocBuilder, Map<String, Model> definitions) {
         Map<String, Model> sortedMap = toSortedMap(definitions, config.getDefinitionOrdering());
         sortedMap.forEach((String definitionName, Model model) -> {
-            if(isNotBlank(definitionName)
-                    && checkThatDefinitionIsNotInIgnoreList(definitionName)){
+            if (isNotBlank(definitionName)
+                    && checkThatDefinitionIsNotInIgnoreList(definitionName)) {
                 buildDefinition(markupDocBuilder, definitionName, model);
             }
         });
@@ -160,9 +152,9 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
     /**
      * Builds a concrete definition
      *
-     * @param markupDocBuilder  the markupDocBuilder do use for output
-     * @param definitionName the name of the definition
-     * @param model          the Swagger Model of the definition
+     * @param markupDocBuilder the markupDocBuilder do use for output
+     * @param definitionName   the name of the definition
+     * @param model            the Swagger Model of the definition
      */
     private void applyDefinitionComponent(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
         definitionComponent.apply(markupDocBuilder, DefinitionComponent.parameters(
@@ -182,13 +174,21 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
 
     /**
      * Builds definition title
-
+     *
      * @param markupDocBuilder the markupDocBuilder do use for output
-     * @param title      definition title
-     * @param anchor     optional anchor (null => auto-generate from title)
+     * @param title            definition title
+     * @param anchor           optional anchor (null => auto-generate from title)
      */
     private void buildDefinitionTitle(MarkupDocBuilder markupDocBuilder, String title, String anchor) {
         markupDocBuilder.sectionTitleWithAnchorLevel2(title, anchor);
+    }
+
+    public static class Parameters {
+        private final Map<String, Model> definitions;
+
+        public Parameters(Map<String, Model> definitions) {
+            this.definitions = definitions;
+        }
     }
 
 }

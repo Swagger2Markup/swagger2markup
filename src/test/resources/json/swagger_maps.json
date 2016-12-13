@@ -96,9 +96,13 @@
               "additionalProperties": {
                 "type": "object",
                 "properties": {
-                  "p1": { "type": "string" },
-                  "p2": { "type": "string" }
-                }                 
+                  "p1": {
+                    "type": "string"
+                  },
+                  "p2": {
+                    "type": "string"
+                  }
+                }
               }
             }
           }
@@ -111,8 +115,12 @@
               "additionalProperties": {
                 "type": "object",
                 "properties": {
-                  "p1": { "type": "string" },
-                  "p2": { "type": "string" }
+                  "p1": {
+                    "type": "string"
+                  },
+                  "p2": {
+                    "type": "string"
+                  }
                 }
               }
             }

@@ -93,14 +93,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         return new PathsDocument.Parameters(paths);
     }
 
-    public static class Parameters {
-        private final Map<String, Path> paths;
-
-        public Parameters(Map<String, Path> paths) {
-            this.paths = paths;
-        }
-    }
-
     /**
      * Builds the paths MarkupDocument.
      *
@@ -260,6 +252,14 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
             markupDocBuilder.sectionTitleWithAnchorLevel2(title, anchor);
         } else {
             markupDocBuilder.sectionTitleWithAnchorLevel3(title, anchor);
+        }
+    }
+
+    public static class Parameters {
+        private final Map<String, Path> paths;
+
+        public Parameters(Map<String, Path> paths) {
+            this.paths = paths;
         }
     }
 }
