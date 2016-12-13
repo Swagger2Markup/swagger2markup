@@ -100,7 +100,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      */
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, PathsDocument.Parameters params) {
-        //TODO: Probably need to do something here for REGEX grouping
         Map<String, Path> paths = params.paths;
         if (MapUtils.isNotEmpty(paths)) {
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));

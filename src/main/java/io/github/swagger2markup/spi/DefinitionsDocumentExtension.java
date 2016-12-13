@@ -16,10 +16,11 @@
 
 package io.github.swagger2markup.spi;
 
-import com.google.common.base.Optional;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.Model;
 import org.apache.commons.lang3.Validate;
+
+import java.util.Optional;
 
 /**
  * DefinitionsDocumentExtension extension point can be used to extend the definitions document content.
@@ -37,7 +38,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
      * @param context context
      * @return title level offset
      */
-    protected int levelOffset(Context context) {
+    protected int levelOffset(Context context) throws RuntimeException {
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
@@ -115,11 +116,11 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
         }
 
         public Optional<String> getDefinitionName() {
-            return Optional.fromNullable(definitionName);
+            return Optional.ofNullable(definitionName);
         }
 
         public Optional<Model> getModel() {
-            return Optional.fromNullable(model);
+            return Optional.ofNullable(model);
         }
     }
 }
