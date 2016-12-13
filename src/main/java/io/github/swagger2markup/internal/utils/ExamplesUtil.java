@@ -28,8 +28,6 @@ import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -39,7 +37,6 @@ import java.util.Map;
 public class ExamplesUtil {
 
     private static final Integer MAX_RECURSION_TO_DISPLAY = 2;
-    private static Logger logger = LoggerFactory.getLogger(ExamplesUtil.class);
 
     /**
      * Generates a Map of response examples
@@ -64,7 +61,7 @@ public class ExamplesUtil {
 
                         if (example == null && schema instanceof RefProperty) {
                             String simpleRef = ((RefProperty) schema).getSimpleRef();
-                            example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<String, Integer>());
+                            example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                         }
                         if (example == null && generateMissingExamples) {
                             example = PropertyAdapter.generateExample(schema, markupDocBuilder);
@@ -108,6 +105,7 @@ public class ExamplesUtil {
                         example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                     } else if (generateMissingExamples) {
                         if (schema instanceof ComposedModel) {
+                            //FIXME: getProperties() may throw NullPointerException
                             example = exampleMapForProperties(((ObjectType) ModelUtils.getType(schema, definitions, definitionDocumentResolver)).getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                         } else if (schema instanceof ArrayModel) {
                             example = generateExampleForArrayModel((ArrayModel) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
@@ -155,7 +153,7 @@ public class ExamplesUtil {
                 }
             } else if (parameter instanceof RefParameter) {
                 String simpleRef = ((RefParameter) parameter).getSimpleRef();
-                example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<String, Integer>());
+                example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
             }
 
             if (example != null)
@@ -188,6 +186,7 @@ public class ExamplesUtil {
                 }
                 if (refStack.get(simpleRef) <= MAX_RECURSION_TO_DISPLAY) {
                     if (model instanceof ComposedModel) {
+                        //FIXME: getProperties() may throw NullPointerException
                         example = exampleMapForProperties(((ObjectType) ModelUtils.getType(model, definitions, definitionDocumentResolver)).getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                     } else {
                         example = exampleMapForProperties(model.getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, refStack);
@@ -202,6 +201,7 @@ public class ExamplesUtil {
     }
 
     private static Map<String, Property> getPropertiesForComposedModel(ComposedModel model, Map<String, Model> definitions) {
+        //TODO: Unused method, make sure this is never used and then remove it.
         Map<String, Property> combinedProperties;
         if (model.getParent() instanceof RefModel) {
             Map<String, Property> parentProperties = definitions.get(((RefModel) model.getParent()).getSimpleRef()).getProperties();
@@ -280,15 +280,7 @@ public class ExamplesUtil {
             return new Object[]{exampleMapForProperties(model.getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, refStack)};
         } else {
             Property itemProperty = model.getItems();
-            if (itemProperty.getExample() != null) {
-                return new Object[]{itemProperty.getExample()};
-            } else if (itemProperty instanceof ArrayProperty) {
-                return new Object[]{generateExampleForArrayProperty((ArrayProperty) itemProperty, definitions, definitionDocumentResolver, markupDocBuilder, refStack)};
-            } else if (itemProperty instanceof RefProperty) {
-                return new Object[]{generateExampleForRefModel(true, ((RefProperty) itemProperty).getSimpleRef(), definitions, definitionDocumentResolver, markupDocBuilder, refStack)};
-            } else {
-                return new Object[]{PropertyAdapter.generateExample(itemProperty, markupDocBuilder)};
-            }
+            return getExample(itemProperty, definitions, definitionDocumentResolver, markupDocBuilder, refStack);
         }
     }
 
@@ -302,6 +294,25 @@ public class ExamplesUtil {
      */
     public static Object[] generateExampleForArrayProperty(ArrayProperty value, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder, Map<String, Integer> refStack) {
         Property property = value.getItems();
+        return getExample(property, definitions, definitionDocumentResolver, markupDocBuilder, refStack);
+    }
+
+    /**
+     * Get example from a property
+     *
+     * @param property                   Property
+     * @param definitions                map of definitions
+     * @param definitionDocumentResolver DocumentResolver
+     * @param markupDocBuilder           the markup builder
+     * @param refStack                   reference stack
+     * @return array of Object
+     */
+    private static Object[] getExample(
+            Property property,
+            Map<String, Model> definitions,
+            DocumentResolver definitionDocumentResolver,
+            MarkupDocBuilder markupDocBuilder,
+            Map<String, Integer> refStack) {
         if (property.getExample() != null) {
             return new Object[]{property.getExample()};
         } else if (property instanceof ArrayProperty) {
@@ -312,5 +323,8 @@ public class ExamplesUtil {
             return new Object[]{PropertyAdapter.generateExample(property, markupDocBuilder)};
         }
     }
+
+    //TODO: Unused method, make sure this is never used and then remove it.
+    //FIXME: getProperties() may throw NullPointerException
 
 }
