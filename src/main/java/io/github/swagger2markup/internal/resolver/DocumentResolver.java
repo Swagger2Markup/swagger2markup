@@ -30,7 +30,8 @@ public abstract class DocumentResolver implements Function1<String, String> {
     MarkupDocBuilder markupDocBuilder;
     Swagger2MarkupConfig config;
 
-    public DocumentResolver(Swagger2MarkupConverter.Context context) {
+
+    DocumentResolver(Swagger2MarkupConverter.Context context) {
         this.context = context;
         this.markupDocBuilder = context.createMarkupDocBuilder();
         this.config = context.getConfig();

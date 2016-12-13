@@ -34,7 +34,7 @@ public abstract class MarkupComponent<T> implements Function2<MarkupDocBuilder, 
     protected Swagger2MarkupConfig config;
     protected Swagger2MarkupExtensionRegistry extensionRegistry;
 
-    public MarkupComponent(Swagger2MarkupConverter.Context context) {
+    protected MarkupComponent(Swagger2MarkupConverter.Context context) {
         this.context = context;
         this.config = context.getConfig();
         this.extensionRegistry = context.getExtensionRegistry();

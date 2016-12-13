@@ -25,8 +25,6 @@ import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +40,6 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.assertj.core.api.BDDAssertions.assertThat;
 
 public class MarkdownConverterTest {
-
-    private static final Logger LOG = LoggerFactory.getLogger(MarkdownConverterTest.class);
 
     private static final String[] EXPECTED_FILES = new String[]{"definitions.md", "overview.md", "paths.md", "security.md"};
     private List<String> expectedFiles;
@@ -88,12 +84,7 @@ public class MarkdownConverterTest {
                     final Set<String> fieldsLeft = fieldsLeftByTable.get(inTable);
                     // Mark the field as found and if this table has no more fields to find,
                     //  remove it from the "fieldsLeftByTable" map to mark the table as done
-                    Iterator<String> fieldIt = fieldsLeft.iterator();
-                    while (fieldIt.hasNext()) {
-                        String fieldLeft = fieldIt.next();
-                        if (fieldName.contains(fieldLeft))
-                            fieldIt.remove();
-                    }
+                    fieldsLeft.removeIf(fieldName::contains);
                     if (fieldsLeft.isEmpty()) {
                         fieldsLeftByTable.remove(inTable);
                     }

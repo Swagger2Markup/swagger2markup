@@ -18,8 +18,8 @@ package io.github.swagger2markup.internal.type;
 
 public class ObjectTypePolymorphism {
 
-    public Nature nature = Nature.NONE;
-    public String discriminator;
+    private Nature nature = Nature.NONE;
+    private String discriminator;
 
     public ObjectTypePolymorphism(Nature nature, String discriminator) {
         this.nature = nature;
