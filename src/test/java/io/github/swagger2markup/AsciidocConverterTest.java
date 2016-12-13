@@ -165,6 +165,32 @@ public class AsciidocConverterTest {
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testOrderingNatural.html");
     }
 
+    @Test
+    public void testOrderByRegex() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_ordering_regex.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/ordering_regex");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withTagOrdering(OrderBy.NATURAL)
+                .withParameterOrdering(OrderBy.NATURAL)
+                .withOperationOrdering(OrderBy.NATURAL)
+                .withPathsGroupedBy(GroupBy.REGEX)
+                .withHeaderRegex("\\/(\\w+)(\\/|\\w)*$")
+                .build();
+
+        //When
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/ordering_regex").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testOrderingRegex.html");
+    }
 
     @Test
     public void testMarkupRenderingInInstagram() throws IOException, URISyntaxException {

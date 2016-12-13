@@ -1,0 +1,51 @@
+swagger: "2.0"
+info:
+  title: API
+tags:
+  - name: B
+  - name: A
+  - name: C
+paths:
+  /payments:
+    post:
+      tags:
+        - C
+      summary: Create Payment
+    get:
+      tags:
+        - C
+      summary: List Payments
+  /payments/approve:
+    post:
+      tags:
+        - C
+      summary: Approve Payment
+  /B:
+    get:
+      tags:
+        - B
+      summary: List B
+  /A:
+    get:
+      tags:
+        - A
+      summary: List A
+    delete:
+      tags:
+        - A
+      summary: Delete A
+  /payments/reject:
+    post:
+      tags:
+        -C
+      summary: Reject Payment
+
+definitions:
+  C:
+    type: string
+
+  B:
+    type: string
+
+  A:
+    type: string
