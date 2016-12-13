@@ -23,8 +23,6 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
  */
 public abstract class OverviewDocumentExtension extends AbstractExtension {
 
-    public OverviewDocumentExtension() {
-    }
 
     public abstract void apply(Context context);
 
@@ -35,6 +33,7 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
      * @return title level offset
      */
     protected int levelOffset(Context context) {
+        //TODO: Unused method, make sure this is never used and then remove it.
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
