@@ -132,7 +132,6 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
     private void buildConsumesSection(MarkupDocBuilder markupDocBuilder, List<String> consumes) {
         if (isNotEmpty(consumes)) {
             consumesComponent.apply(markupDocBuilder, ConsumesComponent.parameters(consumes, SECTION_TITLE_LEVEL));
-            ;
         }
     }
 
