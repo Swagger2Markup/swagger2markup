@@ -139,7 +139,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
 
                 });
             } else if (config.getPathsGroupedBy() == GroupBy.REGEX) {
-                //TODO: Cas check this
                 Validate.notNull(config.getHeaderPattern(), "Header regex pattern must not be empty when operations are grouped using regex");
 
                 Pattern headerPattern = config.getHeaderPattern();
