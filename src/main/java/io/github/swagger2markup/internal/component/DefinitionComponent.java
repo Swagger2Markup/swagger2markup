@@ -130,10 +130,8 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
         List<ObjectType> inlineDefinitions = new ArrayList<>();
         Type modelType = ModelUtils.resolveRefType(ModelUtils.getType(model, definitions, definitionsDocumentResolver));
 
-        if (!(modelType instanceof ObjectType)) {
-            if (config.isInlineSchemaEnabled()) {
-                modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", inlineDefinitions);
-            }
+        if (!(modelType instanceof ObjectType) && config.isInlineSchemaEnabled()) {
+            modelType = createInlineType(modelType, definitionName, definitionName + " " + "inline", inlineDefinitions);
         }
 
         if (modelType instanceof ObjectType) {
@@ -148,10 +146,8 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
                     typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     break;
                 case NONE:
-                    if (ALWAYS_DISPLAY_DISCRIMINATOR) {
-                        if (isNotBlank(objectType.getPolymorphism().getDiscriminator()))
-                            typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
-                    }
+                    if (ALWAYS_DISPLAY_DISCRIMINATOR && isNotBlank(objectType.getPolymorphism().getDiscriminator()))
+                        typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     break;
                 default:
                     break;
