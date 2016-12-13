@@ -63,6 +63,7 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
     public static DefinitionComponent.Parameters parameters(String definitionName,
                                                             Model model,
                                                             int titleLevel) {
+        //TODO: This method is always called with titleLevel = 2. Perhaps it could be hardcoded?
         return new DefinitionComponent.Parameters(definitionName, model, titleLevel);
     }
 

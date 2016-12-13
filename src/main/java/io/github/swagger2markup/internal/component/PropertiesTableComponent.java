@@ -101,10 +101,8 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder(markupDocBuilder);
                 propertyNameContent.boldTextLine(propertyName, true);
-                if (property.getRequired())
-                    propertyNameContent.italicText(labels.getLabel(FLAGS_REQUIRED).toLowerCase());
-                else
-                    propertyNameContent.italicText(labels.getLabel(FLAGS_OPTIONAL).toLowerCase());
+                propertyNameContent.italicText(property.getRequired() ? labels.getLabel(FLAGS_REQUIRED).toLowerCase() : labels.getLabel(FLAGS_OPTIONAL).toLowerCase());
+
                 if (propertyAdapter.getReadOnly()) {
                     propertyNameContent.newLine(true);
                     propertyNameContent.italicText(labels.getLabel(FLAGS_READ_ONLY).toLowerCase());

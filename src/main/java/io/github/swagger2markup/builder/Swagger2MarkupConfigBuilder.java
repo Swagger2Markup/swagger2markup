@@ -159,6 +159,7 @@ public class Swagger2MarkupConfigBuilder {
      * @return this builder
      */
     public Swagger2MarkupConfigBuilder withMarkupLanguage(MarkupLanguage markupLanguage) {
+        //TODO: This method is always called with markupLanguage=MARKDOWN. Perhaps it could be hardcoded
         Validate.notNull(markupLanguage, "%s must not be null", "markupLanguage");
         config.markupLanguage = markupLanguage;
         return this;

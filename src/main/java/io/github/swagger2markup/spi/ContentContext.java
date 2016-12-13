@@ -18,7 +18,7 @@ package io.github.swagger2markup.spi;
 
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 
-public class ContentContext {
+class ContentContext {
     private MarkupDocBuilder docBuilder;
 
     ContentContext(MarkupDocBuilder docBuilder) {
