@@ -82,6 +82,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
     }
 
     private int increaseLevelOffset(int levelOffset) {
+        //TODO: This method always receives levelOffset=2. Perhaps the parameter could be removed
         if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
             return ++levelOffset;
         } else {

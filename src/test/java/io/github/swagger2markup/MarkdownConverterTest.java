@@ -59,6 +59,7 @@ public class MarkdownConverterTest {
      * @throws IOException if the markdown document could not be read
      */
     private static void verifyMarkdownContainsFieldsInTables(File doc, Map<String, Set<String>> fieldsByTable) throws IOException {
+        //TODO: This method is too complex, split it up in smaller methods to increase readability
         final List<String> lines = Files.readAllLines(doc.toPath(), Charset.defaultCharset());
         final Map<String, Set<String>> fieldsLeftByTable = Maps.newHashMap();
         for (Map.Entry<String, Set<String>> entry : fieldsByTable.entrySet()) {

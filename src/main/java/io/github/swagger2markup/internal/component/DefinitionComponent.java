@@ -16,7 +16,6 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
@@ -28,7 +27,6 @@ import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import java.util.*;
@@ -56,8 +54,8 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
         this.definitions = context.getSwagger().getDefinitions();
         this.definitionsDocumentResolver = definitionsDocumentResolver;
         POLYMORPHISM_NATURE = new HashMap<ObjectTypePolymorphism.Nature, String>() {{
-            put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getLabel(Labels.POLYMORPHISM_NATURE_COMPOSITION));
-            put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getLabel(Labels.POLYMORPHISM_NATURE_INHERITANCE));
+            put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getLabel(POLYMORPHISM_NATURE_COMPOSITION));
+            put(ObjectTypePolymorphism.Nature.INHERITANCE, labels.getLabel(POLYMORPHISM_NATURE_INHERITANCE));
         }};
         propertiesTableComponent = new PropertiesTableComponent(context, definitionsDocumentResolver);
     }
@@ -143,7 +141,7 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
             MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
             switch (objectType.getPolymorphism().getNature()) {
                 case COMPOSITION:
-                    typeInfos.italicText(labels.getLabel(Labels.POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
+                    typeInfos.italicText(labels.getLabel(POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
                     break;
                 case INHERITANCE:
                     typeInfos.italicText(labels.getLabel(POLYMORPHISM_COLUMN)).textLine(COLON + POLYMORPHISM_NATURE.get(objectType.getPolymorphism().getNature()));
@@ -151,16 +149,16 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
                     break;
                 case NONE:
                     if (ALWAYS_DISPLAY_DISCRIMINATOR) {
-                        if (StringUtils.isNotBlank(objectType.getPolymorphism().getDiscriminator()))
+                        if (isNotBlank(objectType.getPolymorphism().getDiscriminator()))
                             typeInfos.italicText(labels.getLabel(POLYMORPHISM_DISCRIMINATOR_COLUMN)).textLine(COLON + objectType.getPolymorphism().getDiscriminator());
                     }
-
+                    break;
                 default:
                     break;
             }
 
             String typeInfosString = typeInfos.toString();
-            if (StringUtils.isNotBlank(typeInfosString))
+            if (isNotBlank(typeInfosString))
                 markupDocBuilder.paragraph(typeInfosString, true);
 
             propertiesTableComponent.apply(markupDocBuilder,

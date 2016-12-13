@@ -17,7 +17,6 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
@@ -31,7 +30,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,8 +44,8 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
     private final DocumentResolver definitionDocumentResolver;
     private final TableComponent tableComponent;
 
-    public ParameterTableComponent(Swagger2MarkupConverter.Context context,
-                                   DocumentResolver definitionDocumentResolver) {
+    ParameterTableComponent(Swagger2MarkupConverter.Context context,
+                            DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
@@ -66,7 +64,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
         List<ObjectType> inlineDefinitions = params.inlineDefinitions;
         List<Parameter> parameters = operation.getOperation().getParameters();
         if (config.getParameterOrdering() != null)
-            Collections.sort(parameters, config.getParameterOrdering());
+            parameters.sort(config.getParameterOrdering());
 
         // Filter parameters to display in parameters section
         List<Parameter> filteredParameters = parameters.stream()
@@ -114,7 +112,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(parametersContent)) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.PARAMETERS));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(PARAMETERS));
             markupDocBuilder.text(parametersContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_AFTER, markupDocBuilder, operation));
