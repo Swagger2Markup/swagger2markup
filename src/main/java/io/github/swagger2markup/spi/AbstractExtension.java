@@ -23,7 +23,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
  */
 abstract class AbstractExtension implements Extension {
 
-    Swagger2MarkupConverter.Context globalContext;
+    protected Swagger2MarkupConverter.Context globalContext;
 
     /**
      * Global context lazy initialization
@@ -40,7 +40,7 @@ abstract class AbstractExtension implements Extension {
      *
      * @param globalContext Global context
      */
-    private void init(Swagger2MarkupConverter.Context globalContext) {
+    public void init(Swagger2MarkupConverter.Context globalContext) {
         /* must be left empty */
     }
 

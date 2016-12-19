@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.join;
  */
 public class EnumType extends Type {
 
-    private List<String> values;
+    protected List<String> values;
 
     public EnumType(String name, List<String> values) {
         super(name);

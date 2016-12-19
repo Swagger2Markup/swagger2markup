@@ -29,8 +29,8 @@ public class BasicType extends Type {
     /**
      * Basic type
      */
-    private String type;
-    private String format;
+    protected String type;
+    protected String format;
 
     public BasicType(String type, String name) {
         this(type, name, null);

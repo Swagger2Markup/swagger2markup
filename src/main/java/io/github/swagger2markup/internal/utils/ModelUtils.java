@@ -109,7 +109,6 @@ public final class ModelUtils {
             Type refType = new ObjectType(refName, null);
             if (definitions.containsKey(refName)) {
                 refType = getType(definitions.get(refName), definitions, definitionDocumentResolver);
-                //FIXME: setName() may throw NullPointerException
                 refType.setName(refName);
                 refType.setUniqueName(refName);
             }

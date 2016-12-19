@@ -25,13 +25,13 @@ import javaslang.Function1;
 /**
  * A functor to return the document part of an inter-document cross-references, depending on the context.
  */
-abstract class OperationDocumentResolver implements Function1<PathOperation, String> {
+public abstract class OperationDocumentResolver implements Function1<PathOperation, String> {
 
     Swagger2MarkupConverter.Context context;
     MarkupDocBuilder markupDocBuilder;
     Swagger2MarkupConfig config;
 
-    OperationDocumentResolver(Swagger2MarkupConverter.Context context) {
+    public OperationDocumentResolver(Swagger2MarkupConverter.Context context) {
         this.context = context;
         this.markupDocBuilder = context.createMarkupDocBuilder();
         this.config = context.getConfig();
