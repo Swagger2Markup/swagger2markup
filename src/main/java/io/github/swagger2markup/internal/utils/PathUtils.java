@@ -62,7 +62,7 @@ public class PathUtils {
      * Converts the Swagger paths into a list of PathOperations.
      *
      * @param paths      the Swagger paths
-     * @param basePath   the basePath of all paths
+     * @param paths      the basePath of all paths
      * @param comparator the comparator to use.
      * @return the path operations
      */

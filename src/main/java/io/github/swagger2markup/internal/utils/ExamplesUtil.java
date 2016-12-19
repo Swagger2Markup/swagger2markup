@@ -200,6 +200,32 @@ public class ExamplesUtil {
         return example;
     }
 
+    private static Map<String, Property> getPropertiesForComposedModel(ComposedModel model, Map<String, Model> definitions) {
+        //TODO: Unused method, make sure this is never used and then remove it.
+        Map<String, Property> combinedProperties;
+        if (model.getParent() instanceof RefModel) {
+            Map<String, Property> parentProperties = definitions.get(((RefModel) model.getParent()).getSimpleRef()).getProperties();
+            if (parentProperties == null) {
+                return null;
+            } else {
+                combinedProperties = new LinkedHashMap<>(parentProperties);
+            }
+
+        } else {
+            combinedProperties = new LinkedHashMap<>(model.getParent().getProperties());
+        }
+        Map<String, Property> childProperties;
+        if (model.getChild() instanceof RefModel) {
+            childProperties = definitions.get(((RefModel) model.getChild()).getSimpleRef()).getProperties();
+        } else {
+            childProperties = model.getChild().getProperties();
+        }
+        if (childProperties != null) {
+            combinedProperties.putAll(childProperties);
+        }
+        return combinedProperties;
+    }
+
     /**
      * Generates a map of examples from a map of properties. If defined examples are found, those are used. Otherwise,
      * examples are generated from the type.

@@ -263,10 +263,12 @@ public class Swagger2MarkupConverter {
      */
     public String toString() {
 
-        return applyOverviewDocument().toString() +
-                applyPathsDocument().toString() +
-                applyDefinitionsDocument().toString() +
-                applySecurityDocument().toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append(applyOverviewDocument().toString());
+        sb.append(applyPathsDocument().toString());
+        sb.append(applyDefinitionsDocument().toString());
+        sb.append(applySecurityDocument().toString());
+        return sb.toString();
     }
 
     public static class Builder {

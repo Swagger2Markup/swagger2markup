@@ -133,7 +133,7 @@ public class Swagger2MarkupConfigBuilderTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
-        builder.withTagOrdering(Ordering.natural());
+        builder.withTagOrdering(Ordering.<String>natural());
         assertThat(builder.config.getTagOrderBy()).isEqualTo(OrderBy.CUSTOM);
         assertThat(builder.config.getTagOrdering()).isEqualTo(Ordering.natural());
 
@@ -151,7 +151,7 @@ public class Swagger2MarkupConfigBuilderTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
-        builder.withDefinitionOrdering(Ordering.natural());
+        builder.withDefinitionOrdering(Ordering.<String>natural());
         assertThat(builder.config.getDefinitionOrderBy()).isEqualTo(OrderBy.CUSTOM);
         assertThat(builder.config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
 
@@ -169,7 +169,7 @@ public class Swagger2MarkupConfigBuilderTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
-        builder.withPropertyOrdering(Ordering.natural());
+        builder.withPropertyOrdering(Ordering.<String>natural());
         assertThat(builder.config.getPropertyOrderBy()).isEqualTo(OrderBy.CUSTOM);
         assertThat(builder.config.getPropertyOrdering()).isEqualTo(Ordering.natural());
 
@@ -178,7 +178,7 @@ public class Swagger2MarkupConfigBuilderTest {
         } catch (IllegalArgumentException e) {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
-        builder.withResponseOrdering(Ordering.natural());
+        builder.withResponseOrdering(Ordering.<String>natural());
         assertThat(builder.config.getResponseOrderBy()).isEqualTo(OrderBy.CUSTOM);
         assertThat(builder.config.getResponseOrdering()).isEqualTo(Ordering.natural());
     }
