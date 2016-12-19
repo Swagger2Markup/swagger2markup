@@ -17,7 +17,6 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.GroupBy;
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
@@ -152,7 +151,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(descriptionContent)) {
-            buildSectionTitle(markupDocBuilder, labels.getLabel(Labels.DESCRIPTION));
+            buildSectionTitle(markupDocBuilder, labels.getLabel(DESCRIPTION));
             markupDocBuilder.text(descriptionContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_DESCRIPTION_AFTER, markupDocBuilder, operation));
@@ -279,7 +278,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
             if (CollectionUtils.isNotEmpty(tags)) {
                 buildSectionTitle(markupDocBuilder, labels.getLabel(TAGS));
                 if (config.getTagOrdering() != null) {
-                    Collections.sort(tags, config.getTagOrdering());
+                    tags.sort(config.getTagOrdering());
                 }
                 markupDocBuilder.unorderedList(tags);
             }

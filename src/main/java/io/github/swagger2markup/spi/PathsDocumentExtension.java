@@ -27,8 +27,6 @@ import org.apache.commons.lang3.Validate;
  */
 public abstract class PathsDocumentExtension extends AbstractExtension {
 
-    public PathsDocumentExtension() {
-    }
 
     public abstract void apply(Context context);
 
@@ -39,6 +37,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
      * @return title level offset
      */
     protected int levelOffset(Context context) {
+        //TODO: Unused method, make sure this is never used and then remove it.
         int levelOffset;
         switch (context.position) {
             case DOCUMENT_BEFORE:
@@ -82,6 +81,7 @@ public abstract class PathsDocumentExtension extends AbstractExtension {
     }
 
     private int increaseLevelOffset(int levelOffset) {
+        //TODO: This method always receives levelOffset=2. Perhaps the parameter could be removed
         if (globalContext.getConfig().getPathsGroupedBy() == GroupBy.TAGS) {
             return ++levelOffset;
         } else {

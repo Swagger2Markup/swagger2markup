@@ -100,7 +100,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      */
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, PathsDocument.Parameters params) {
-        //TODO: Probably need to do something here for REGEX grouping
         Map<String, Path> paths = params.paths;
         if (MapUtils.isNotEmpty(paths)) {
             applyPathsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
@@ -140,7 +139,6 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
 
                 });
             } else if (config.getPathsGroupedBy() == GroupBy.REGEX) {
-                //TODO: Cas check this
                 Validate.notNull(config.getHeaderPattern(), "Header regex pattern must not be empty when operations are grouped using regex");
 
                 Pattern headerPattern = config.getHeaderPattern();

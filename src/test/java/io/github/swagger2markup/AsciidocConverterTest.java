@@ -21,8 +21,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -39,7 +37,6 @@ import static org.assertj.core.api.BDDAssertions.assertThat;
 
 public class AsciidocConverterTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AsciidocConverterTest.class);
     private static final String[] EXPECTED_FILES = new String[]{"definitions.adoc", "overview.adoc", "paths.adoc", "security.adoc"};
     private List<String> expectedFiles;
 

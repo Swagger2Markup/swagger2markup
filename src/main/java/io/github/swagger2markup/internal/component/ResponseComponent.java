@@ -17,7 +17,6 @@ package io.github.swagger2markup.internal.component;
 
 
 import ch.netzwerg.paleo.StringColumn;
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
@@ -49,8 +48,8 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
     private final TableComponent tableComponent;
     private final DocumentResolver definitionDocumentResolver;
 
-    public ResponseComponent(Swagger2MarkupConverter.Context context,
-                             DocumentResolver definitionDocumentResolver) {
+    ResponseComponent(Swagger2MarkupConverter.Context context,
+                      DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
@@ -70,7 +69,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
         MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder(markupDocBuilder);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_BEGIN, responsesBuilder, operation));
         if (MapUtils.isNotEmpty(responses)) {
-            StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(Labels.HTTP_CODE_COLUMN)))
+            StringColumn.Builder httpCodeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(HTTP_CODE_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "2");
             StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "14")
@@ -87,7 +86,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
                     Type type = new PropertyAdapter(property).getType(definitionDocumentResolver);
 
                     if (config.isInlineSchemaEnabled()) {
-                        type = createInlineType(type, labels.getLabel(Labels.RESPONSE) + " " + responseName, operation.getId() + " " + labels.getLabel(Labels.RESPONSE) + " " + responseName, params.inlineDefinitions);
+                        type = createInlineType(type, labels.getLabel(RESPONSE) + " " + responseName, operation.getId() + " " + labels.getLabel(RESPONSE) + " " + responseName, params.inlineDefinitions);
                     }
 
                     schemaContent = type.displaySchema(markupDocBuilder);
@@ -99,7 +98,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
-                    descriptionBuilder.newLine(true).boldText(labels.getLabel(Labels.HEADERS_COLUMN)).text(COLON);
+                    descriptionBuilder.newLine(true).boldText(labels.getLabel(HEADERS_COLUMN)).text(COLON);
                     for (Map.Entry<String, Property> header : headers.entrySet()) {
                         descriptionBuilder.newLine(true);
                         Property headerProperty = header.getValue();
@@ -120,9 +119,9 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
                             descriptionBuilder.text(headerDescription);
 
-                            if (optionalDefaultValue.isPresent()) {
-                                descriptionBuilder.text(" ").boldText(labels.getLabel(DEFAULT_COLUMN)).text(COLON).literalText(Json.pretty(optionalDefaultValue.get()));
-                            }
+                            optionalDefaultValue.ifPresent(o -> descriptionBuilder.text(" ")
+                                    .boldText(labels.getLabel(DEFAULT_COLUMN))
+                                    .text(COLON).literalText(Json.pretty(o)));
                         }
                     }
                 }
@@ -141,7 +140,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_BEFORE, markupDocBuilder, operation));
         if (isNotBlank(responsesContent)) {
-            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.RESPONSES));
+            markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(RESPONSES));
             markupDocBuilder.text(responsesContent);
         }
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_RESPONSES_AFTER, markupDocBuilder, operation));

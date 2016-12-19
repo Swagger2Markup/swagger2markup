@@ -52,8 +52,8 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
      *
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      */
-    public PropertiesTableComponent(Swagger2MarkupConverter.Context context,
-                                    DocumentResolver definitionDocumentResolver) {
+    PropertiesTableComponent(Swagger2MarkupConverter.Context context,
+                             DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = definitionDocumentResolver;
         this.tableComponent = new TableComponent(context);
@@ -66,14 +66,18 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
     }
 
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
+        //TODO: This method is too complex, split it up in smaller methods to increase readability
         StringColumn.Builder nameColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(NAME_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "3");
+
         StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "11")
                 .putMetaData(TableComponent.HEADER_COLUMN, "true");
+
         StringColumn.Builder schemaColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(SCHEMA_COLUMN)))
                 .putMetaData(TableComponent.WIDTH_RATIO, "4")
                 .putMetaData(TableComponent.HEADER_COLUMN, "true");
+
         Map<String, Property> properties = params.properties;
         if (MapUtils.isNotEmpty(properties)) {
             Map<String, Property> sortedProperties = toSortedMap(properties, config.getPropertyOrdering());
