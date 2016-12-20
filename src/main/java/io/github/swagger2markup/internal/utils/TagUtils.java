@@ -28,7 +28,7 @@ import java.util.*;
 
 public class TagUtils {
 
-    private static Logger LOG = LoggerFactory.getLogger(TagUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(TagUtils.class);
 
     /**
      * Converts the global Tag list into a Map where the tag name is the key and the Tag the value.
@@ -69,8 +69,8 @@ public class TagUtils {
 
             Validate.notEmpty(tags, "Can't GroupBy.TAGS. Operation '%s' has no tags", operation);
             for (String tag : tags) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Added path operation '{}' to tag '{}'", operation, tag);
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Added path operation '{}' to tag '{}'", operation, tag);
                 }
                 operationsGroupedByTag.put(tag, operation);
             }
