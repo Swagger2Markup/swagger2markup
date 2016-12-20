@@ -120,16 +120,16 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
      * @param model          definition model to process
      */
     private void buildDefinition(MarkupDocBuilder markupDocBuilder, String definitionName, Model model) {
-        if (logger.isInfoEnabled()) {
-            logger.info("Definition processed : '{}'", definitionName);
+        if (logger.isDebugEnabled()) {
+            logger.debug("Definition processed : '{}'", definitionName);
         }
         if (config.isSeparatedDefinitionsEnabled()) {
             MarkupDocBuilder defDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
             applyDefinitionComponent(defDocBuilder, definitionName, model);
             Path definitionFile = context.getOutputPath().resolve(definitionDocumentNameResolver.apply(definitionName));
             defDocBuilder.writeToFileWithoutExtension(definitionFile, StandardCharsets.UTF_8);
-            if (logger.isInfoEnabled()) {
-                logger.info("Separate definition file produced : '{}'", definitionFile);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Separate definition file produced : '{}'", definitionFile);
             }
 
             definitionRef(markupDocBuilder, definitionName);

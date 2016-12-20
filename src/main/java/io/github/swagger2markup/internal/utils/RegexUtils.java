@@ -29,7 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RegexUtils {
-    private static Logger LOG = LoggerFactory.getLogger(TagUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(TagUtils.class);
 
 
     /**
@@ -65,10 +65,14 @@ public class RegexUtils {
             Matcher m = headerPattern.matcher(path);
 
             if (m.matches() && m.group(1) != null) {
-                if (LOG.isInfoEnabled()) {
-                    LOG.info("Added path operation '{}' to header '{}'", operation, m.group(1));
+                if (logger.isDebugEnabled()) {
+                    logger.debug("Added path operation '{}' to header '{}'", operation, m.group(1));
                 }
                 operationsGroupedByRegex.put(m.group(1), operation);
+            } else {
+                if(logger.isWarnEnabled()) {
+                    logger.warn("Operation '{}' does not match regex '{}' and will not be included in output", operation, headerPattern.toString());
+                }
             }
         }
 

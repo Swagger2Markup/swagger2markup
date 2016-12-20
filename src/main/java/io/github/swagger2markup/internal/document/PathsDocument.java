@@ -203,8 +203,8 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
             applyPathOperationComponent(pathDocBuilder, operation);
             java.nio.file.Path operationFile = context.getOutputPath().resolve(operationDocumentNameResolver.apply(operation));
             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
-            if (logger.isInfoEnabled()) {
-                logger.info("Separate operation file produced : '{}'", operationFile);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Separate operation file produced : '{}'", operationFile);
             }
             buildOperationRef(markupDocBuilder, operation);
 
@@ -212,8 +212,8 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
             applyPathOperationComponent(markupDocBuilder, operation);
         }
 
-        if (logger.isInfoEnabled()) {
-            logger.info("Operation processed : '{}' (normalized id = '{}')", operation, normalizeName(operation.getId()));
+        if (logger.isDebugEnabled()) {
+            logger.debug("Operation processed : '{}' (normalized id = '{}')", operation, normalizeName(operation.getId()));
         }
     }
 
