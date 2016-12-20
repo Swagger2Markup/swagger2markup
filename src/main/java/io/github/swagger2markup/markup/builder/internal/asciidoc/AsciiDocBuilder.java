@@ -97,6 +97,12 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder pageBreak() {
+        documentBuilder.append(newLine).append("<<<").append(newLine);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
         if (admonition != null)
             documentBuilder.append("[").append(admonition).append("]").append(newLine);

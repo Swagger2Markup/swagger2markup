@@ -103,7 +103,13 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
         return this;
     }
-    
+
+    @Override
+    public MarkupDocBuilder pageBreak() {
+        documentBuilder.append(newLine).append("***").append(newLine);
+        return this;
+    }
+
     @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
         if (admonition != null)

@@ -136,6 +136,12 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     }
 
     @Override
+    public MarkupDocBuilder pageBreak() {
+        documentBuilder.append(newLine).append("<div style='page-break-before:always;'></div>").append(newLine);
+        return this;
+    }
+
+    @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
 
         String block = BLOCK_STYLE.get(style);

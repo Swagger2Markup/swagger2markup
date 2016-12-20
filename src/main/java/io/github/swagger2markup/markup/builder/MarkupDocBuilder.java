@@ -245,7 +245,14 @@ public interface MarkupDocBuilder {
      * @return this builder
      */
     MarkupDocBuilder paragraph(String text);
-    
+
+    /**
+     * Insert a page break
+     *
+     * @return this builder
+     */
+    MarkupDocBuilder pageBreak();
+
     /**
      * Builds a block of {@code text} with specified {@code style}.
      *
