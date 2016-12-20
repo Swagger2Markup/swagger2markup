@@ -82,6 +82,8 @@ Warning :
 Passthrough
 
 
+***
+
 |Header1||Header3|
 |---|---|---|
 |Row 1 \| Column 1|Row 1 \| Column 2|Row 1 \| Column 3|
