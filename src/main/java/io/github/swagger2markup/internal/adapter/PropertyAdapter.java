@@ -17,12 +17,15 @@ package io.github.swagger2markup.internal.adapter;
 
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.internal.utils.TagUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -31,6 +34,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public final class PropertyAdapter {
 
     private final Property property;
+    private static Logger logger = LoggerFactory.getLogger(PropertyAdapter.class);
 
     public PropertyAdapter(Property property) {
         Validate.notNull(property, "property must not be null");
@@ -45,6 +49,7 @@ public final class PropertyAdapter {
      * @return a generated example for the property
      */
     public static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
+
         switch (property.getType()) {
             case "integer":
                 return 0;
@@ -56,7 +61,10 @@ public final class PropertyAdapter {
                 return "string";
             case "ref":
                 if (property instanceof RefProperty) {
+                    if(logger.isDebugEnabled()) logger.debug("generateExample RefProperty for " + property.getName());
                     return markupDocBuilder.copy(false).crossReference(((RefProperty) property).getSimpleRef()).toString();
+                } else {
+                    if(logger.isDebugEnabled()) logger.debug("generateExample for ref not RefProperty");
                 }
             default:
                 return property.getType();
