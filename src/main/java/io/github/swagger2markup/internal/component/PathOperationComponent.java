@@ -340,6 +340,8 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     JsonNode rootNode = mapper.readTree(Json.pretty(entry.getValue()));
 
                     Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
+                    //FIXME: This does not pass all unit tests!
+
                     while (fieldsIterator.hasNext()) {
                         Map.Entry<String, JsonNode> field = fieldsIterator.next();
 
