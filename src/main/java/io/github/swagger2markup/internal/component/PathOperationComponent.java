@@ -16,6 +16,9 @@
 package io.github.swagger2markup.internal.component;
 
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
@@ -31,12 +34,10 @@ import io.swagger.models.Model;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static io.github.swagger2markup.Labels.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
@@ -328,8 +329,45 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         if (exampleMap.size() > 0) {
             buildSectionTitle(markupDocBuilder, operationSectionTitle);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
+
+                // Status tile, like Response 200
                 buildExampleTitle(markupDocBuilder, sectionTitle + " " + entry.getKey());
-                markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
+
+                try {
+                    JsonFactory factory = new JsonFactory();
+
+                    ObjectMapper mapper = new ObjectMapper(factory);
+                    JsonNode rootNode = mapper.readTree(Json.pretty(entry.getValue()));
+
+                    Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
+                    while (fieldsIterator.hasNext()) {
+                        Map.Entry<String, JsonNode> field = fieldsIterator.next();
+
+                        String example = field.getValue().toString();
+
+                        if (field.getKey().equals("application/json")) {
+                            example = example.replaceAll("^\"+", "") // Strip leading quotes
+                                    .replaceAll("\"+$", ""); // Strip trailing quotes
+
+                            example = StringEscapeUtils.unescapeJava(example);
+
+                            markupDocBuilder.listingBlock(example, "json");
+                        } else {
+                            example = example.replaceAll("^\"+", "") // Strip leading quotes
+                                    .replaceAll("\"+$", ""); // Strip trailing quotes
+
+                            example = StringEscapeUtils.unescapeJava(example);
+                            String contentType = field.getKey();
+
+                            if (contentType.contains("/"))
+                                contentType = contentType.substring(contentType.lastIndexOf("/") + 1);
+
+                            markupDocBuilder.listingBlock(example, contentType);
+                        }
+                    }
+                } catch (Exception ex) {
+                    //TODO: Actually handle exception
+                }
             }
         }
     }
