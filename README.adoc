@@ -7,7 +7,7 @@ image:https://travis-ci.org/Swagger2Markup/markup-document-builder.svg?branch=ma
 
 == Overview
 
-This project is a Markup document builder (AsciiDoc and Markdown). The primary goal of this project is to simplify the creation of Markup documents. The builder is used by https://github.com/RobWin/swagger2markup[swagger2markup].
+This project is a Markup document builder (AsciiDoc, Markdown and ConfluenceWiki). The primary goal of this project is to simplify the creation of Markup documents. The builder is used by https://github.com/RobWin/swagger2markup[swagger2markup].
 
 The project requires at least JDK 7.
 
