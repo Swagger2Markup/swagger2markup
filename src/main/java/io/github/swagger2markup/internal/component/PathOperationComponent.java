@@ -335,7 +335,6 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
                 try {
                     JsonFactory factory = new JsonFactory();
-
                     ObjectMapper mapper = new ObjectMapper(factory);
                     JsonNode rootNode = mapper.readTree(Json.pretty(entry.getValue()));
 
@@ -345,27 +344,22 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     while (fieldsIterator.hasNext()) {
                         Map.Entry<String, JsonNode> field = fieldsIterator.next();
 
-                        String example = field.getValue().toString();
+                        System.out.println(field.getKey() + ": " + field.getValue().toString());
 
                         if (field.getKey().equals("application/json")) {
-                            example = example.replaceAll("^\"+", "") // Strip leading quotes
-                                    .replaceAll("\"+$", ""); // Strip trailing quotes
 
-                            example = StringEscapeUtils.unescapeJava(example);
+                            String example = Json.pretty(field.getValue());
 
                             markupDocBuilder.listingBlock(example, "json");
-                        } else {
-                            example = example.replaceAll("^\"+", "") // Strip leading quotes
+                        } else if(field.getKey().equals("application/xml")) {
+                            String example = field.getValue().toString().replaceAll("^\"+", "") // Strip leading quotes
                                     .replaceAll("\"+$", ""); // Strip trailing quotes
 
                             example = StringEscapeUtils.unescapeJava(example);
-                            String contentType = field.getKey();
 
-                            if (contentType.contains("/"))
-                                contentType = contentType.substring(contentType.lastIndexOf("/") + 1);
-
-                            markupDocBuilder.listingBlock(example, contentType);
+                            markupDocBuilder.listingBlock(example, "xml");
                         }
+                        //TODO: Generic example if neither json nor xml
                     }
                 } catch (Exception ex) {
                     //TODO: Actually handle exception
