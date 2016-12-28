@@ -57,9 +57,8 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets"
+/v2/pets
 ----
 
 
@@ -93,14 +92,17 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 [source,json]
 ----
 {
-  "application/json" : {
-    "name" : "Puma",
-    "type" : 22,
-    "color" : "Black",
-    "gender" : "Female",
-    "breed" : "Mixed"
-  }
+  "name" : "Puma",
+  "type" : 22,
+  "color" : "Black",
+  "gender" : "Female",
+  "breed" : "Mixed"
 }
+----
+
+[source,xml]
+----
+<resource><name>Puma</name><type>22</type><color>Black</color><gender>Female</gender><breed>Mixed</breed></resource>
 ----
 
 
@@ -161,9 +163,8 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets"
+/v2/pets
 ----
 
 
@@ -245,9 +246,8 @@ __optional__|Status values that need to be considered for filter|< string > arra
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets/findByStatus"
+/v2/pets/findByStatus
 ----
 
 
@@ -342,9 +342,8 @@ __optional__|Tags to filter by|< string > array(multi)
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets/findByTags"
+/v2/pets/findByTags
 ----
 
 
@@ -443,9 +442,8 @@ __required__|Updated status of the pet|string
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets/string"
+/v2/pets/string
 ----
 
 
@@ -512,9 +510,8 @@ __required__|ID of the pet|integer(int64)
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets/0"
+/v2/pets/0
 ----
 
 
@@ -595,9 +592,8 @@ __required__|Pet id to delete|integer(int64)
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/pets/0"
+/v2/pets/0
 ----
 
 
@@ -649,9 +645,8 @@ __optional__|order placed for purchasing the pet|<<_order,Order>>
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/stores/order"
+/v2/stores/order
 ----
 
 
@@ -731,9 +726,8 @@ __required__|ID of pet that needs to be fetched|string
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/stores/order/string"
+/v2/stores/order/string
 ----
 
 
@@ -798,9 +792,8 @@ __required__|ID of the order that needs to be deleted|string
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/stores/order/string"
+/v2/stores/order/string
 ----
 
 
@@ -848,9 +841,8 @@ __optional__|Created user object|<<_user,User>>
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users"
+/v2/users
 ----
 
 
@@ -911,9 +903,8 @@ __optional__|List of user object|< <<_user,User>> > array
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/createWithArray"
+/v2/users/createWithArray
 ----
 
 
@@ -974,9 +965,8 @@ __optional__|List of user object|< <<_user,User>> > array
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/createWithList"
+/v2/users/createWithList
 ----
 
 
@@ -1040,9 +1030,8 @@ __optional__|The user name for login|string|`"testUser"`
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/login"
+/v2/users/login
 ----
 
 
@@ -1095,9 +1084,8 @@ GET /v2/users/logout
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/logout"
+/v2/users/logout
 ----
 
 
@@ -1143,9 +1131,8 @@ __required__|The name that needs to be fetched. Use user1 for testing.|string|`"
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/string"
+/v2/users/string
 ----
 
 
@@ -1215,9 +1202,8 @@ __optional__|Updated user object|<<_user,User>>
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/string"
+/v2/users/string
 ----
 
 
@@ -1283,9 +1269,8 @@ __required__|The name that needs to be deleted|string
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/v2/users/string"
+/v2/users/string
 ----
 
 
