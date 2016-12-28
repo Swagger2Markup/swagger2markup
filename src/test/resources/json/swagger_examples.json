@@ -70,7 +70,8 @@
                 "color": "Black",
                 "gender": "Female",
                 "breed": "Mixed"
-              }
+              },
+              "application/xml" : "<resource><name>Puma</name><type>22</type><color>Black</color><gender>Female</gender><breed>Mixed</breed></resource>"
             }
           }
         },

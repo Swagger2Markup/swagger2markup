@@ -36,6 +36,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.*;
 
@@ -330,39 +331,59 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
             buildSectionTitle(markupDocBuilder, operationSectionTitle);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
 
-                // Status tile, like Response 200
+                System.out.println("entry = " + entry);
+
+                // Example title, like "Response 200" or "Request Body"
                 buildExampleTitle(markupDocBuilder, sectionTitle + " " + entry.getKey());
 
-                try {
-                    JsonFactory factory = new JsonFactory();
-                    ObjectMapper mapper = new ObjectMapper(factory);
-                    JsonNode rootNode = mapper.readTree(Json.pretty(entry.getValue()));
+                if (NumberUtils.isNumber(entry.getKey())) {
+                    // Section header is an HTTP status code (numeric)
+                    try {
+                        JsonFactory factory = new JsonFactory();
+                        ObjectMapper mapper = new ObjectMapper(factory);
+                        JsonNode rootNode = mapper.readTree(Json.pretty(entry.getValue()));
 
-                    Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
-                    //FIXME: This does not pass all unit tests!
+                        Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
 
-                    while (fieldsIterator.hasNext()) {
-                        Map.Entry<String, JsonNode> field = fieldsIterator.next();
+                        while (fieldsIterator.hasNext()) {
+                            Map.Entry<String, JsonNode> field = fieldsIterator.next();
 
-                        System.out.println(field.getKey() + ": " + field.getValue().toString());
+                            if (field.getKey().equals("application/json")) {
 
-                        if (field.getKey().equals("application/json")) {
+                                String example = Json.pretty(field.getValue());
 
-                            String example = Json.pretty(field.getValue());
+                                markupDocBuilder.listingBlock(example, "json");
 
-                            markupDocBuilder.listingBlock(example, "json");
-                        } else if(field.getKey().equals("application/xml")) {
-                            String example = field.getValue().toString().replaceAll("^\"+", "") // Strip leading quotes
-                                    .replaceAll("\"+$", ""); // Strip trailing quotes
+                            } else if (field.getKey().equals("application/xml")) {
+                                String example = field.getValue().toString().replaceAll("^\"+", "") // Strip leading quotes
+                                        .replaceAll("\"+$", ""); // Strip trailing quotes
 
-                            example = StringEscapeUtils.unescapeJava(example);
+                                example = StringEscapeUtils.unescapeJava(example);
 
-                            markupDocBuilder.listingBlock(example, "xml");
+                                //TODO: pretty print XML
+
+                                markupDocBuilder.listingBlock(example, "xml");
+                            } else {
+                                //FIXME: This is called when example response is a $ref
+                                String example = field.getValue().toString().replaceAll("^\"+", "") // Strip leading quotes
+                                        .replaceAll("\"+$", ""); // Strip trailing quotes
+
+                                example = StringEscapeUtils.unescapeJava(example);
+
+                                System.out.println("example = " + example);
+
+                                markupDocBuilder.listingBlock(field.getKey() + " " + example);
+                            }
+                            //TODO: Print form data example
                         }
-                        //TODO: Generic example if neither json nor xml
+                    } catch (Exception ex) {
+                        //TODO: Actually handle exception
                     }
-                } catch (Exception ex) {
-                    //TODO: Actually handle exception
+                } else if (entry.getKey().equals("path")) {
+                    // Path shouldn't have quotes around it
+                    markupDocBuilder.listingBlock(entry.getValue().toString());
+                } else {
+                    markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
                 }
             }
         }
