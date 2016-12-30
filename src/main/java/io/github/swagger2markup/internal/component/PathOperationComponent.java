@@ -346,7 +346,10 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                         if (!fieldsIterator.hasNext()) {
                             // workaround for "array" example
                             //TODO: print $ref'd examples correctly instead of just "array"
-                            String example = Json.pretty(entry.getValue());
+                            String example = Json.pretty(entry.getValue())
+                                    .replaceAll("^\"+", "")  // Strip leading quotes
+                                    .replaceAll("\"+$", ""); // Strip trailing quotes
+                            example = Json.pretty(example);
                             markupDocBuilder.listingBlock(example, "json");
                         }
                         while (fieldsIterator.hasNext()) {
@@ -355,11 +358,15 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                             if (field.getKey().equals("application/json")) {
 
                                 String example = Json.pretty(field.getValue());
+                                example = StringEscapeUtils.unescapeJson(example)
+                                        .replaceAll("^\"+", "")  // Strip leading quotes
+                                        .replaceAll("\"+$", ""); // Strip trailing quotes
 
                                 markupDocBuilder.listingBlock(example, "json");
 
                             } else if (field.getKey().equals("application/xml")) {
-                                String example = field.getValue().toString().replaceAll("^\"+", "") // Strip leading quotes
+                                String example = field.getValue().toString()
+                                        .replaceAll("^\"+", "")  // Strip leading quotes
                                         .replaceAll("\"+$", ""); // Strip trailing quotes
 
                                 example = StringEscapeUtils.unescapeJava(example);
