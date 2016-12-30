@@ -331,8 +331,6 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
             buildSectionTitle(markupDocBuilder, operationSectionTitle);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
 
-                System.out.println("entry = " + entry);
-
                 // Example title, like "Response 200" or "Request Body"
                 buildExampleTitle(markupDocBuilder, sectionTitle + " " + entry.getKey());
 
@@ -345,6 +343,12 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
                         Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
 
+                        if (!fieldsIterator.hasNext()) {
+                            // workaround for "array" example
+                            //TODO: print $ref'd examples correctly instead of just "array"
+                            String example = Json.pretty(entry.getValue());
+                            markupDocBuilder.listingBlock(example, "json");
+                        }
                         while (fieldsIterator.hasNext()) {
                             Map.Entry<String, JsonNode> field = fieldsIterator.next();
 
@@ -364,17 +368,10 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
                                 markupDocBuilder.listingBlock(example, "xml");
                             } else {
-                                //FIXME: This is called when example response is a $ref
-                                String example = field.getValue().toString().replaceAll("^\"+", "") // Strip leading quotes
-                                        .replaceAll("\"+$", ""); // Strip trailing quotes
-
-                                example = StringEscapeUtils.unescapeJava(example);
-
-                                System.out.println("example = " + example);
-
-                                markupDocBuilder.listingBlock(field.getKey() + " " + example);
+                                String example = Json.pretty(entry.getValue());
+                                markupDocBuilder.listingBlock(example, "json");
+                                break; // No need to print the same example multiple times
                             }
-                            //TODO: Print form data example
                         }
                     } catch (Exception ex) {
                         //TODO: Actually handle exception
