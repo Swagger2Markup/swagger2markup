@@ -30,9 +30,8 @@ Returns the navigation as a tree
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/"
+/
 ----
 
 
@@ -89,9 +88,8 @@ __optional__|<<_navigationentry,NavigationEntry>>
 ==== Example HTTP request
 
 ===== Request path
-[source,json]
 ----
-"/"
+/
 ----
 
 
