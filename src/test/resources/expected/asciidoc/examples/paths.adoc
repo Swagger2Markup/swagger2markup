@@ -60,14 +60,17 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 [source,json]
 ----
 {
-  "application/json" : {
-    "name" : "Puma",
-    "type" : 22,
-    "color" : "Black",
-    "gender" : "Female",
-    "breed" : "Mixed"
-  }
+  "name" : "Puma",
+  "type" : 22,
+  "color" : "Black",
+  "gender" : "Female",
+  "breed" : "Mixed"
 }
+----
+
+[source,xml]
+----
+<resource><name>Puma</name><type>22</type><color>Black</color><gender>Female</gender><breed>Mixed</breed></resource>
 ----
 
 

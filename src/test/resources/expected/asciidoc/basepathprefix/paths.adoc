@@ -265,26 +265,7 @@ __optional__|Status values that need to be considered for filter|< string > arra
 ===== Response 200
 [source,json]
 ----
-[
-  {
-    "id" : 0,
-    "category" : {
-      "id" : 123,
-      "name" : "Canines"
-    },
-    "name" : "doggie",
-    "nicknames" : {
-      "string" : "string"
-    },
-    "photoUrls" : [ "string" ],
-    "tags" : [ {
-      "id" : 0,
-      "name" : "string"
-    } ],
-    "status" : "string",
-    "weight" : 0.0
-  }
-]
+"array"
 ----
 
 
@@ -361,26 +342,7 @@ __optional__|Tags to filter by|< string > array(multi)
 ===== Response 200
 [source,json]
 ----
-[
-  {
-    "id" : 0,
-    "category" : {
-      "id" : 123,
-      "name" : "Canines"
-    },
-    "name" : "doggie",
-    "nicknames" : {
-      "string" : "string"
-    },
-    "photoUrls" : [ "string" ],
-    "tags" : [ {
-      "id" : 0,
-      "name" : "string"
-    } ],
-    "status" : "string",
-    "weight" : 0.0
-  }
-]
+"array"
 ----
 
 
