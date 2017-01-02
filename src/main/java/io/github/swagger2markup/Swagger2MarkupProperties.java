@@ -25,10 +25,7 @@ import org.apache.commons.configuration2.MapConfiguration;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Swagger2MarkupProperties {
@@ -341,10 +338,15 @@ public class Swagger2MarkupProperties {
     }
 
     public List<PageBreakLocations> getPageBreakLocations(String key) {
-        return configuration.getList(PageBreakLocations.class, key);
+        List result = configuration.getList(PageBreakLocations.class, key);
+        if(result == null) result = new ArrayList<PageBreakLocations>();
+
+        return result;
     }
 
     public Pattern getHeaderPattern(String key) {
+        String pattern = configuration.getString(key);
+        if(pattern == null) return null;
         return Pattern.compile(configuration.getString(key));
     }
 }
