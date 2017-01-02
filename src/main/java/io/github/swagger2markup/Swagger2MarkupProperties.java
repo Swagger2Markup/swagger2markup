@@ -347,6 +347,6 @@ public class Swagger2MarkupProperties {
     public Pattern getHeaderPattern(String key) {
         String pattern = configuration.getString(key);
         if(pattern == null) return null;
-        return Pattern.compile(configuration.getString(key));
+        return Pattern.compile(pattern);
     }
 }
