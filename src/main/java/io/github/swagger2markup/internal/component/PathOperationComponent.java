@@ -336,7 +336,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
                 if (NumberUtils.isNumber(entry.getKey())) {
                     // Section header is an HTTP status code (numeric)
-                    JsonNode rootNode = parseExample(entry.getValue().toString());
+                    JsonNode rootNode = parseExample(entry.getValue());
                     Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
 
                     if (!fieldsIterator.hasNext()) {
@@ -394,11 +394,11 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     /**
      * Parse a JSON array
      *
-     * @param raw JSON string
+     * @param raw Object containing a JSON string
      * @return JsonNode[contentType, example]
      * @throws RuntimeException when the given JSON string cannot be parsed
      */
-    private JsonNode parseExample(String raw) throws RuntimeException {
+    private JsonNode parseExample(Object raw) throws RuntimeException {
         try {
             JsonFactory factory = new JsonFactory();
             ObjectMapper mapper = new ObjectMapper(factory);
