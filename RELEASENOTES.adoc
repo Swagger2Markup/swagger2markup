@@ -20,3 +20,6 @@
 
 == Version 1.1.0
 * Changed bold to ** and italic to __ so that special chars in the text are possible
+
+== Version 1.1.1
+* Added a method to add page breaks.

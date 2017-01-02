@@ -12,7 +12,7 @@ buildscript {
     }
 }
 description = 'A Markup (Markdown, AsciiDoc) document builder'
-version = '1.1.0'
+version = '1.1.1-SNAPSHOT'
 group = 'io.github.swagger2markup'
 
 apply plugin: 'java'
