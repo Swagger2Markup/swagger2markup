@@ -104,8 +104,8 @@ public class Swagger2MarkupConfigBuilder {
             config.lineSeparator = LineSeparator.valueOf(lineSeparator.get());
         }
 
-        config.pageBreakLocations = swagger2MarkupProperties.getPageBreakLocations(Swagger2MarkupProperties.PAGE_BREAK_LOCATIONS);
-        config.headerPattern = swagger2MarkupProperties.getHeaderPattern(Swagger2MarkupProperties.HEADER_REGEX);
+        config.pageBreakLocations = swagger2MarkupProperties.getPageBreakLocations(PAGE_BREAK_LOCATIONS);
+        config.headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
