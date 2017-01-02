@@ -336,52 +336,38 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
                 if (NumberUtils.isNumber(entry.getKey())) {
                     // Section header is an HTTP status code (numeric)
-                    try {
-                        JsonFactory factory = new JsonFactory();
-                        ObjectMapper mapper = new ObjectMapper(factory);
-                        JsonNode rootNode = mapper.readTree(Json.pretty(entry.getValue()));
+                    JsonNode rootNode = parseExample(entry.getValue().toString());
+                    Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
 
-                        Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
+                    if (!fieldsIterator.hasNext()) {
+                        // workaround for "array" example
+                        //TODO: print $ref'd examples correctly instead of just "array"
+                        String example = stripExampleQuotes(Json.pretty(entry.getValue()));
+                        example = Json.pretty(example);
+                        markupDocBuilder.listingBlock(example, "json");
+                    }
+                    while (fieldsIterator.hasNext()) {
+                        Map.Entry<String, JsonNode> field = fieldsIterator.next();
 
-                        if (!fieldsIterator.hasNext()) {
-                            // workaround for "array" example
-                            //TODO: print $ref'd examples correctly instead of just "array"
-                            String example = Json.pretty(entry.getValue())
-                                    .replaceAll("^\"+", "")  // Strip leading quotes
-                                    .replaceAll("\"+$", ""); // Strip trailing quotes
-                            example = Json.pretty(example);
+                        if (field.getKey().equals("application/json")) {
+                            String example = Json.pretty(field.getValue());
+                            example = stripExampleQuotes(StringEscapeUtils.unescapeJson(example));
+
                             markupDocBuilder.listingBlock(example, "json");
+
+                        } else if (field.getKey().equals("application/xml")) {
+
+                            String example = stripExampleQuotes(field.getValue().toString());
+                            example = StringEscapeUtils.unescapeJava(example);
+
+                            //TODO: pretty print XML
+
+                            markupDocBuilder.listingBlock(example, "xml");
+                        } else {
+                            String example = Json.pretty(entry.getValue());
+                            markupDocBuilder.listingBlock(example, "json");
+                            break; // No need to print the same example multiple times
                         }
-                        while (fieldsIterator.hasNext()) {
-                            Map.Entry<String, JsonNode> field = fieldsIterator.next();
-
-                            if (field.getKey().equals("application/json")) {
-
-                                String example = Json.pretty(field.getValue());
-                                example = StringEscapeUtils.unescapeJson(example)
-                                        .replaceAll("^\"+", "")  // Strip leading quotes
-                                        .replaceAll("\"+$", ""); // Strip trailing quotes
-
-                                markupDocBuilder.listingBlock(example, "json");
-
-                            } else if (field.getKey().equals("application/xml")) {
-                                String example = field.getValue().toString()
-                                        .replaceAll("^\"+", "")  // Strip leading quotes
-                                        .replaceAll("\"+$", ""); // Strip trailing quotes
-
-                                example = StringEscapeUtils.unescapeJava(example);
-
-                                //TODO: pretty print XML
-
-                                markupDocBuilder.listingBlock(example, "xml");
-                            } else {
-                                String example = Json.pretty(entry.getValue());
-                                markupDocBuilder.listingBlock(example, "json");
-                                break; // No need to print the same example multiple times
-                            }
-                        }
-                    } catch (Exception ex) {
-                        //TODO: Actually handle exception
                     }
                 } else if (entry.getKey().equals("path")) {
                     // Path shouldn't have quotes around it
@@ -390,6 +376,35 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
                 }
             }
+        }
+    }
+
+    /**
+     * Strip leading and trailing quotes from a string
+     *
+     * @param raw String containing leading or trailing quotes
+     * @return parsed String
+     */
+    private String stripExampleQuotes(String raw) {
+        return raw
+                .replaceAll("^\"+", "")  // Strip leading quotes
+                .replaceAll("\"+$", ""); // Strip trailing quotes
+    }
+
+    /**
+     * Parse a JSON array
+     *
+     * @param raw JSON string
+     * @return JsonNode[contentType, example]
+     * @throws RuntimeException when the given JSON string cannot be parsed
+     */
+    private JsonNode parseExample(String raw) throws RuntimeException {
+        try {
+            JsonFactory factory = new JsonFactory();
+            ObjectMapper mapper = new ObjectMapper(factory);
+            return mapper.readTree(Json.pretty(raw));
+        } catch (Exception ex) {
+            throw new RuntimeException("Failed to read example", ex);
         }
     }
 
