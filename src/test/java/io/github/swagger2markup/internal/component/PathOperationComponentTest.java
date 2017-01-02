@@ -30,6 +30,7 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -56,7 +57,7 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         markupDocBuilder = new PathOperationComponent(context,
                 new DefinitionDocumentResolverFromOperation(context),
                 new SecurityDocumentResolver(context)).
-                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0), new ArrayList<>()));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
@@ -86,7 +87,7 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         markupDocBuilder = new PathOperationComponent(context,
                 new DefinitionDocumentResolverFromOperation(context),
                 new SecurityDocumentResolver(context)).
-                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0), new ArrayList<>()));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 

@@ -30,10 +30,7 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -106,6 +103,8 @@ public class Swagger2MarkupConfigBuilder {
         if (lineSeparator.isPresent() && StringUtils.isNoneBlank(lineSeparator.get())) {
             config.lineSeparator = LineSeparator.valueOf(lineSeparator.get());
         }
+
+        config.pageBreakLocations = new ArrayList<>();
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
@@ -486,8 +485,20 @@ public class Swagger2MarkupConfigBuilder {
      * @return this builder
      */
     public Swagger2MarkupConfigBuilder withAnchorPrefix(String anchorPrefix) {
-        Validate.notNull(anchorPrefix, "%s must no be null", "anchorPrefix");
+        Validate.notNull(anchorPrefix, "%s must not be null", "anchorPrefix");
         config.anchorPrefix = anchorPrefix;
+        return this;
+    }
+
+    /**
+     * Set the page break locations
+     *
+     * @param locations List of locations to create new pages
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withPageBreaks(List<PageBreakLocations> locations) {
+        Validate.notNull(locations, "%s must not be null", "locations");
+        config.pageBreakLocations = locations;
         return this;
     }
 
@@ -539,6 +550,8 @@ public class Swagger2MarkupConfigBuilder {
         private String securityDocument;
         private String separatedOperationsFolder;
         private String separatedDefinitionsFolder;
+
+        private List<PageBreakLocations> pageBreakLocations;
 
         private Pattern headerPattern;
 
@@ -717,6 +730,11 @@ public class Swagger2MarkupConfigBuilder {
         @Override
         public boolean isBasePathPrefixEnabled() {
             return basePathPrefixEnabled;
+        }
+
+        @Override
+        public List<PageBreakLocations> getPageBreakLocations() {
+            return pageBreakLocations;
         }
     }
 }
