@@ -136,7 +136,7 @@ The following tables list all available properties of Swagger2Markup:
 |Name | Description |  Possible Values | Default
 |swagger2markup.markupLanguage| Specifies the markup language which should be used to generate the files. | ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP | ASCIIDOC
 |swagger2markup.swaggerMarkupLanguage| Specifies the markup language used in Swagger descriptions. | ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP | MARKDOWN
-|swagger2markup.pathsGroupedBy| Specifies how the paths should be grouped | AS_IS, TAGS | AS_IS
+|swagger2markup.pathsGroupedBy| Specifies how the paths should be grouped | AS_IS, TAGS, REGEX | AS_IS
 |swagger2markup.outputLanguage| Specifies the language of the labels | EN, DE, FR, RU | EN
 |swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | <System-dependent>
 |swagger2markup.generatedExamplesEnabled| Specifies if HTTP request and response examples should be generated | true, false | false
@@ -144,6 +144,7 @@ The following tables list all available properties of Swagger2Markup:
 |swagger2markup.pathSecuritySectionEnabled| Optionally disable the security section for path sections | true, false | true
 |swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness if you want to include generated documents into a global documentation | Any String |
 |swagger2markup.basePathPrefixEnabled| Prepend the basePath to all paths | true, false | false
+|swagger2markup.headerRegex | Regular expression to use when grouping by RegEx | Any valid RegEx pattern with at least one capture group |
 |===
 
 [options="header"]
@@ -191,6 +192,13 @@ The following tables list all available properties of Swagger2Markup:
 |===
 |Name | Description |  Possible Values | Default
 |swagger2markup.inlineSchemaEnabled| Enable inline object schema support | true, false | true
+|===
+
+[options="header"]
+.Properties which configure page breaking
+|===
+|Name | Description | Possible Values | Default
+|swagger2markup.pageBreakLocations | Specifies where page breaks should be inserted. | BEFORE_OPERATION, BEFORE_OPERATION_DESCRIPTION, BEFORE_OPERATION_PARAMETERS, BEFORE_OPERATION_RESPONSES, BEFORE_OPERATION_CONSUMES, BEFORE_OPERATION_PRODUCES, BEFORE_OPERATION_EXAMPLE_REQUEST, BEFORE_OPERATION_EXAMPLE_RESPONSE, BEFORE_DEFINITION, AFTER_OPERATION, AFTER_OPERATION_DESCRIPTION, AFTER_OPERATION_PARAMETERS, AFTER_OPERATION_RESPONSES, AFTER_OPERATION_CONSUMES, AFTER_OPERATION_PRODUCES, AFTER_OPERATION_EXAMPLE_REQUEST, AFTER_OPERATION_EXAMPLE_RESPONSE, AFTER_DEFINITION | empty
 |===
 
 === Logging

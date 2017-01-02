@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class Swagger2MarkupProperties {
 
@@ -65,6 +66,7 @@ public class Swagger2MarkupProperties {
     public static final String PROPERTY_ORDER_BY = PROPERTIES_PREFIX + ".propertyOrderBy";
     public static final String RESPONSE_ORDER_BY = PROPERTIES_PREFIX + ".responseOrderBy";
     public static final String LINE_SEPARATOR = PROPERTIES_PREFIX + ".lineSeparator";
+    public static final String PAGE_BREAK_LOCATIONS = PROPERTIES_PREFIX + ".pageBreakLocations";
 
     /**
      * Prefix for Swagger2Markup extension properties
@@ -336,5 +338,13 @@ public class Swagger2MarkupProperties {
      */
     public List<String> getKeys(String prefix) {
         return IteratorUtils.toList(configuration.getKeys(prefix));
+    }
+
+    public List<PageBreakLocations> getPageBreakLocations(String key) {
+        return configuration.getList(PageBreakLocations.class, key);
+    }
+
+    public Pattern getHeaderPattern(String key) {
+        return Pattern.compile(configuration.getString(key));
     }
 }
