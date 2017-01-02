@@ -29,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -772,7 +771,7 @@ public class AsciidocConverterTest {
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
                 .withoutInlineSchema()
-                .withPageBreaks(new ArrayList<>(Arrays.asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)

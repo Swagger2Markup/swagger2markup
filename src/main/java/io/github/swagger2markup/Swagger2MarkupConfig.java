@@ -224,7 +224,7 @@ public interface Swagger2MarkupConfig {
     /**
      * Returns the list of page break locations
      *
-     * @return List<PageBreakLocations>
+     * @return List of PageBreakLocations
      */
     List<PageBreakLocations> getPageBreakLocations();
 }
