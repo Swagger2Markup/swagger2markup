@@ -57,7 +57,7 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         markupDocBuilder = new PathOperationComponent(context,
                 new DefinitionDocumentResolverFromOperation(context),
                 new SecurityDocumentResolver(context)).
-                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0), new ArrayList<>()));
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 
@@ -87,7 +87,7 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         markupDocBuilder = new PathOperationComponent(context,
                 new DefinitionDocumentResolverFromOperation(context),
                 new SecurityDocumentResolver(context)).
-                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0), new ArrayList<>()));
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
 
         markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
 

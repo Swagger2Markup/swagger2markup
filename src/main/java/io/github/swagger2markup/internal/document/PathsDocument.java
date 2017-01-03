@@ -195,7 +195,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation, Swagger2MarkupConfig config) {
         if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
-            applyPathOperationComponent(pathDocBuilder, operation, config);
+            applyPathOperationComponent(pathDocBuilder, operation);
             java.nio.file.Path operationFile = context.getOutputPath().resolve(operationDocumentNameResolver.apply(operation));
             pathDocBuilder.writeToFileWithoutExtension(operationFile, StandardCharsets.UTF_8);
             if (logger.isDebugEnabled()) {
@@ -204,7 +204,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
             buildOperationRef(markupDocBuilder, operation);
 
         } else {
-            applyPathOperationComponent(markupDocBuilder, operation, config);
+            applyPathOperationComponent(markupDocBuilder, operation);
         }
 
         if (logger.isDebugEnabled()) {
@@ -218,9 +218,9 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @param markupDocBuilder the docbuilder do use for output
      * @param operation        the Swagger Operation
      */
-    private void applyPathOperationComponent(MarkupDocBuilder markupDocBuilder, PathOperation operation, Swagger2MarkupConfig config) {
+    private void applyPathOperationComponent(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (operation != null) {
-            pathOperationComponent.apply(markupDocBuilder, PathOperationComponent.parameters(operation, config.getPageBreakLocations()));
+            pathOperationComponent.apply(markupDocBuilder, PathOperationComponent.parameters(operation));
         }
     }
 

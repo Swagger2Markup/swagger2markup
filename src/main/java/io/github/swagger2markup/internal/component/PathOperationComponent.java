@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.PageBreakLocations;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
@@ -75,14 +76,14 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
         this.responseComponent = new ResponseComponent(context, definitionDocumentResolver);
     }
 
-    public static PathOperationComponent.Parameters parameters(PathOperation operation, List<PageBreakLocations> pageBreakLocations) {
-        return new PathOperationComponent.Parameters(operation, pageBreakLocations);
+    public static PathOperationComponent.Parameters parameters(PathOperation operation) {
+        return new PathOperationComponent.Parameters(operation);
     }
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         PathOperation operation = params.operation;
-        List<PageBreakLocations> locations = params.pageBreakLocations;
+        List<PageBreakLocations> locations = config.getPageBreakLocations();
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_BEFORE, markupDocBuilder, operation));
 
@@ -467,11 +468,9 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     public static class Parameters {
 
         private final PathOperation operation;
-        private final List<PageBreakLocations> pageBreakLocations;
 
-        public Parameters(PathOperation operation, List<PageBreakLocations> pagebreakLocations) {
+        public Parameters(PathOperation operation) {
             this.operation = Validate.notNull(operation, "PathOperation must not be null");
-            this.pageBreakLocations = pagebreakLocations;
         }
     }
 }
