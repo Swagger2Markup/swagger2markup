@@ -38,7 +38,7 @@ public class BasicType extends Type {
 
     public BasicType(String type, String name, String format) {
         super(name);
-        Validate.notBlank(type);
+        Validate.notBlank(type, "Type of parameter '%s' must not be blank", name);
         this.type = type;
         this.format = format;
     }
