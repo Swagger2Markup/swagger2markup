@@ -516,7 +516,7 @@ table.CodeRay td.code>pre{padding:0}
 <div class="details">
 <span id="author" class="author">Robert Winkler</span><br>
 <span id="revnumber">version 1.1.1,</span>
-<span id="revdate">2017-01-02</span>
+<span id="revdate">2017-01-03</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -1126,7 +1126,7 @@ The properties are considered in the following order:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.pathsGroupedBy</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Specifies how the paths should be grouped</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, TAGS</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS, TAGS, REGEX</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">AS_IS</p></td>
 </tr>
 <tr>
@@ -1170,6 +1170,12 @@ The properties are considered in the following order:</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Prepend the basePath to all paths</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">true, false</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.headerRegex</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Regular expression to use when grouping by RegEx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Any valid RegEx pattern with at least one capture group</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 </tbody>
 </table>
@@ -1370,6 +1376,31 @@ The properties are considered in the following order:</p>
 </tr>
 </tbody>
 </table>
+<table class="tableblock frame-all grid-all spread">
+<caption class="title">Table 7. Properties which configure page breaking</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Possible Values</th>
+<th class="tableblock halign-left valign-top">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">swagger2markup.pageBreakLocations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies where page breaks should be inserted.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">BEFORE_OPERATION, BEFORE_OPERATION_DESCRIPTION, BEFORE_OPERATION_PARAMETERS, BEFORE_OPERATION_RESPONSES, BEFORE_OPERATION_CONSUMES, BEFORE_OPERATION_PRODUCES, BEFORE_OPERATION_EXAMPLE_REQUEST, BEFORE_OPERATION_EXAMPLE_RESPONSE, BEFORE_DEFINITION, AFTER_OPERATION, AFTER_OPERATION_DESCRIPTION, AFTER_OPERATION_PARAMETERS, AFTER_OPERATION_RESPONSES, AFTER_OPERATION_CONSUMES, AFTER_OPERATION_PRODUCES, AFTER_OPERATION_EXAMPLE_REQUEST, AFTER_OPERATION_EXAMPLE_RESPONSE, AFTER_DEFINITION</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">empty</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -1520,7 +1551,7 @@ It&#8217;s recommended to use them in inline schemas so that they&#8217;ll be us
 <p>Swagger2Markup provides an Extension SPI to extend the functionality of Swagger2Markup. Five types of extension are available. An extension is an abstract class which must be implemented.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 7. Swagger2Markup extensions</caption>
+<caption class="title">Table 8. Swagger2Markup extensions</caption>
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -1994,7 +2025,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
 <p>Swagger2Markup provides some extensions which can be used out-of-the-box. You just have to add the extension to your classpath.</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 8. Swagger2Markup extensions</caption>
+<caption class="title">Table 9. Swagger2Markup extensions</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2030,7 +2061,7 @@ Extension content titles must always start from level <strong>1</strong>. The ti
     jCenter()
 }
 
-compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.1.2-SNAPSHOT"</code></pre>
+compile "io.github.swagger2markup:swagger2markup-import-files-ext:1.2.0"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2249,7 +2280,7 @@ definitions/Pet/definition-begin-description.adoc</pre>
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 9. Extension properties</caption>
+<caption class="title">Table 10. Extension properties</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2330,7 +2361,7 @@ definitions/Pet/definition-begin-description.adoc</pre>
     jCenter()
 }
 
-compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.1.2-SNAPSHOT"</code></pre>
+compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.2.0"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2410,7 +2441,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.1.2-SNAPS
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 10. Extension properties</caption>
+<caption class="title">Table 11. Extension properties</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2458,7 +2489,7 @@ compile "io.github.swagger2markup:swagger2markup-spring-restdocs-ext:1.1.2-SNAPS
     jCenter()
 }
 
-compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:1.1.2-SNAPSHOT"</code></pre>
+compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:1.2.0"</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -2474,7 +2505,7 @@ compile "io.github.swagger2markup:swagger2markup-import-schemas-ext:1.1.2-SNAPSH
 <p>The extension adds the following properties to Swagger2Markup which must be configured:</p>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 11. Extension properties</caption>
+<caption class="title">Table 12. Extension properties</caption>
 <colgroup>
 <col style="width: 33%;">
 <col style="width: 33%;">
@@ -2562,7 +2593,7 @@ apply plugin: 'io.github.swagger2markup'</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 12. Gradle Plugin properties</caption>
+<caption class="title">Table 13. Gradle Plugin properties</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -2701,7 +2732,7 @@ The Maven Plugin requires at least JDK 8.
 </div>
 </div>
 <table class="tableblock frame-all grid-all spread">
-<caption class="title">Table 13. Maven Plugin properties</caption>
+<caption class="title">Table 14. Maven Plugin properties</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -3081,7 +3112,7 @@ The Swagger JSON response can be converted using the <a href="#_gradle_plugin">G
 <div id="footer">
 <div id="footer-text">
 Version 1.1.1<br>
-Last updated 2017-01-02 12:47:45 UTC
+Last updated 2017-01-03 10:22:27 UTC
 </div>
 </div>
 </body>
