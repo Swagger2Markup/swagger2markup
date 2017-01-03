@@ -105,7 +105,10 @@ public class Swagger2MarkupConfigBuilder {
         }
 
         config.pageBreakLocations = swagger2MarkupProperties.getPageBreakLocations(PAGE_BREAK_LOCATIONS);
-        config.headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
+
+        Optional<Pattern> headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
+
+        config.headerPattern = headerPattern.orElse(null);
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
