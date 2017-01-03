@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.PageBreakLocations;
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
