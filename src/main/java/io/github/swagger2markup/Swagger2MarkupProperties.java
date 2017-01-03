@@ -25,10 +25,8 @@ import org.apache.commons.configuration2.MapConfiguration;
 import java.net.URI;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
+import java.util.regex.Pattern;
 
 public class Swagger2MarkupProperties {
 
@@ -65,6 +63,7 @@ public class Swagger2MarkupProperties {
     public static final String PROPERTY_ORDER_BY = PROPERTIES_PREFIX + ".propertyOrderBy";
     public static final String RESPONSE_ORDER_BY = PROPERTIES_PREFIX + ".responseOrderBy";
     public static final String LINE_SEPARATOR = PROPERTIES_PREFIX + ".lineSeparator";
+    public static final String PAGE_BREAK_LOCATIONS = PROPERTIES_PREFIX + ".pageBreakLocations";
 
     /**
      * Prefix for Swagger2Markup extension properties
@@ -336,5 +335,21 @@ public class Swagger2MarkupProperties {
      */
     public List<String> getKeys(String prefix) {
         return IteratorUtils.toList(configuration.getKeys(prefix));
+    }
+
+    public List<PageBreakLocations> getPageBreakLocations(String key) {
+        List result = configuration.getList(PageBreakLocations.class, key);
+        if(result == null) result = new ArrayList<PageBreakLocations>();
+
+        return result;
+    }
+
+    public Optional<Pattern> getHeaderPattern(String key) {
+        Optional<String> property = getString(key);
+        if (property.isPresent()) {
+            return Optional.of(Pattern.compile(property.get()));
+        } else {
+            return Optional.empty();
+        }
     }
 }

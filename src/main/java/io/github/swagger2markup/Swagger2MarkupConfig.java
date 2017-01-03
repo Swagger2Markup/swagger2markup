@@ -21,6 +21,7 @@ import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.parameters.Parameter;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -219,4 +220,11 @@ public interface Swagger2MarkupConfig {
      * @return the extension properties
      */
     Swagger2MarkupProperties getExtensionsProperties();
+
+    /**
+     * Returns the list of page break locations
+     *
+     * @return List of PageBreakLocations
+     */
+    List<PageBreakLocations> getPageBreakLocations();
 }

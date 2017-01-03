@@ -18,6 +18,7 @@ package io.github.swagger2markup.internal.document;
 import com.google.common.collect.Multimap;
 import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Labels;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.PathOperationComponent;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
@@ -68,22 +69,16 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         this.operationDocumentNameResolver = new OperationDocumentNameResolver(context);
         this.operationDocumentResolverDefault = new OperationDocumentResolverDefault(context);
 
-        if (config.isGeneratedExamplesEnabled()) {
-            if (logger.isDebugEnabled()) {
+        if (logger.isDebugEnabled()) {
+            if (config.isGeneratedExamplesEnabled()) {
                 logger.debug("Generate examples is enabled.");
-            }
-        } else {
-            if (logger.isDebugEnabled()) {
+            } else {
                 logger.debug("Generate examples is disabled.");
             }
-        }
 
-        if (config.isSeparatedOperationsEnabled()) {
-            if (logger.isDebugEnabled()) {
+            if (config.isSeparatedOperationsEnabled()) {
                 logger.debug("Create separated operation files is enabled.");
-            }
-        } else {
-            if (logger.isDebugEnabled()) {
+            } else {
                 logger.debug("Create separated operation files is disabled.");
             }
         }
@@ -121,7 +116,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         List<PathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getBasePath(), config.getOperationOrdering());
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-                pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation));
+                pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation, config));
             } else if (config.getPathsGroupedBy() == GroupBy.TAGS) {
                 Validate.notEmpty(context.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
                 // Group operations by tag
@@ -135,7 +130,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
                     if (StringUtils.isNotBlank(description)) {
                         markupDocBuilder.paragraph(description);
                     }
-                    operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(markupDocBuilder, operation));
+                    operationsGroupedByTag.get(tagName).forEach(operation -> buildOperation(markupDocBuilder, operation, config));
 
                 });
             } else if (config.getPathsGroupedBy() == GroupBy.REGEX) {
@@ -148,7 +143,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
 
                 for (String header : sortedHeaders) {
                     markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(header), header + "_resource");
-                    operationsGroupedByRegex.get(header).forEach(operation -> buildOperation(markupDocBuilder, operation));
+                    operationsGroupedByRegex.get(header).forEach(operation -> buildOperation(markupDocBuilder, operation, config));
                 }
             }
         }
@@ -197,7 +192,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      *
      * @param operation operation
      */
-    private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
+    private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation, Swagger2MarkupConfig config) {
         if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
             applyPathOperationComponent(pathDocBuilder, operation);

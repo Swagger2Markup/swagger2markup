@@ -20,6 +20,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.PageBreakLocations;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
@@ -41,6 +42,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.util.*;
 
 import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.PageBreakLocations.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
@@ -80,21 +82,46 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         PathOperation operation = params.operation;
+        List<PageBreakLocations> locations = config.getPageBreakLocations();
+
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_BEFORE, markupDocBuilder, operation));
+
+        if (locations.contains(BEFORE_OPERATION)) markupDocBuilder.pageBreak();
         buildOperationTitle(markupDocBuilder, operation);
+
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_BEGIN, markupDocBuilder, operation));
         buildDeprecatedSection(markupDocBuilder, operation);
+
+        if (locations.contains(BEFORE_OPERATION_DESCRIPTION)) markupDocBuilder.pageBreak();
         buildDescriptionSection(markupDocBuilder, operation);
+        if (locations.contains(AFTER_OPERATION_DESCRIPTION)) markupDocBuilder.pageBreak();
+
+        if (locations.contains(BEFORE_OPERATION_PARAMETERS)) markupDocBuilder.pageBreak();
         inlineDefinitions(markupDocBuilder, buildParametersSection(markupDocBuilder, operation), operation.getPath() + " " + operation.getMethod());
+        if (locations.contains(AFTER_OPERATION_PARAMETERS)) markupDocBuilder.pageBreak();
+
         inlineDefinitions(markupDocBuilder, buildBodyParameterSection(markupDocBuilder, operation), operation.getPath() + " " + operation.getMethod());
+
+        if (locations.contains(BEFORE_OPERATION_RESPONSES)) markupDocBuilder.pageBreak();
         inlineDefinitions(markupDocBuilder, buildResponsesSection(markupDocBuilder, operation), operation.getPath() + " " + operation.getMethod());
+        if (locations.contains(AFTER_OPERATION_RESPONSES)) markupDocBuilder.pageBreak();
+
+        if (locations.contains(BEFORE_OPERATION_CONSUMES)) markupDocBuilder.pageBreak();
         buildConsumesSection(markupDocBuilder, operation);
+        if (locations.contains(AFTER_OPERATION_CONSUMES)) markupDocBuilder.pageBreak();
+
+        if (locations.contains(BEFORE_OPERATION_PRODUCES)) markupDocBuilder.pageBreak();
         buildProducesSection(markupDocBuilder, operation);
+        if (locations.contains(AFTER_OPERATION_PRODUCES)) markupDocBuilder.pageBreak();
+
         buildTagsSection(markupDocBuilder, operation);
         buildSecuritySchemeSection(markupDocBuilder, operation);
-        buildExamplesSection(markupDocBuilder, operation);
+        buildExamplesSection(markupDocBuilder, operation, locations);
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_END, markupDocBuilder, operation));
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(Position.OPERATION_AFTER, markupDocBuilder, operation));
+
+        if (locations.contains(AFTER_OPERATION)) markupDocBuilder.pageBreak();
+
         return markupDocBuilder;
     }
 
@@ -317,17 +344,23 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
      *
      * @param operation the Swagger Operation
      */
-    private void buildExamplesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
+    private void buildExamplesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation, List<PageBreakLocations> locations) {
 
         Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
         Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
 
-        exampleMap(markupDocBuilder, generatedRequestExampleMap, labels.getLabel(EXAMPLE_REQUEST), labels.getLabel(REQUEST));
-        exampleMap(markupDocBuilder, generatedResponseExampleMap, labels.getLabel(EXAMPLE_RESPONSE), labels.getLabel(RESPONSE));
+        boolean beforeExampleRequestBreak = locations.contains(BEFORE_OPERATION_EXAMPLE_REQUEST);
+        boolean afterExampleRequestBreak = locations.contains(AFTER_OPERATION_EXAMPLE_REQUEST);
+        boolean beforeExampleResponseBreak = locations.contains(BEFORE_OPERATION_EXAMPLE_RESPONSE);
+        boolean afterExampleResponseBreak = locations.contains(AFTER_OPERATION_EXAMPLE_RESPONSE);
+
+        exampleMap(markupDocBuilder, generatedRequestExampleMap, labels.getLabel(EXAMPLE_REQUEST), labels.getLabel(REQUEST), beforeExampleRequestBreak, afterExampleRequestBreak);
+        exampleMap(markupDocBuilder, generatedResponseExampleMap, labels.getLabel(EXAMPLE_RESPONSE), labels.getLabel(RESPONSE), beforeExampleResponseBreak, afterExampleResponseBreak);
     }
 
-    private void exampleMap(MarkupDocBuilder markupDocBuilder, Map<String, Object> exampleMap, String operationSectionTitle, String sectionTitle) {
+    private void exampleMap(MarkupDocBuilder markupDocBuilder, Map<String, Object> exampleMap, String operationSectionTitle, String sectionTitle, boolean beforeBreak, boolean afterBreak) {
         if (exampleMap.size() > 0) {
+            if (beforeBreak) markupDocBuilder.pageBreak();
             buildSectionTitle(markupDocBuilder, operationSectionTitle);
             for (Map.Entry<String, Object> entry : exampleMap.entrySet()) {
 
@@ -376,6 +409,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
                 }
             }
+            if (afterBreak) markupDocBuilder.pageBreak();
         }
     }
 

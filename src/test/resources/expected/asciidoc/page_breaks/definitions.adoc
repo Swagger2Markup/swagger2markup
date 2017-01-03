@@ -1,0 +1,132 @@
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|**Example** : `123`|integer(int64)
+|**name** +
+__optional__|**Example** : `"Canines"`|string
+|===
+
+
+[[_complexobject]]
+=== ComplexObject
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**subObject** +
+__optional__|object
+|===
+
+
+[[_identified]]
+=== Identified
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer(int64)
+|===
+
+
+[[_order]]
+=== Order
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**complete** +
+__optional__||boolean
+|**id** +
+__optional__|**Example** : `77`|integer(int64)
+|**petId** +
+__optional__||integer(int64)
+|**quantity** +
+__optional__||integer(int32)
+|**shipDate** +
+__optional__||string(date-time)
+|**status** +
+__optional__|Order Status +
+**Example** : `"DONE"`|string
+|===
+
+
+[[_pet]]
+=== Pet
+Test description
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**category** +
+__optional__||<<_category,Category>>
+|**id** +
+__optional__||integer(int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**nicknames** +
+__optional__||< string, string > map
+|**photoUrls** +
+__required__||< string > array
+|**status** +
+__optional__|pet status in the store|string
+|**tags** +
+__optional__||< <<_tag,Tag>> > array
+|**weight** +
+__optional__|the weight of the pet|number
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^3,.^4"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer(int64)
+|**name** +
+__optional__|string
+|===
+
+
+[[_user]]
+=== User
+[%hardbreaks]
+__Polymorphism__ : Composition
+
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**email** +
+__optional__||string
+|**firstName** +
+__optional__||string
+|**id** +
+__optional__||integer(int64)
+|**lastName** +
+__optional__||string
+|**password** +
+__optional__||string
+|**phone** +
+__optional__||string
+|**pictures** +
+__optional__||< string(byte) > array
+|**userStatus** +
+__optional__|User Status|integer(int32)
+|**username** +
+__optional__||string
+|===
+
+
+
