@@ -11,13 +11,13 @@
 |===
 |Type|Name|Description|Schema
 |**Path**|**intParam** +
-__required__|test integer in path|integer(test)
+__required__|test integer in path|integer (test)
 |**Path**|**param** +
-__required__|test string in path|string(test)
+__required__|test string in path|string (test)
 |**Query**|**intQuery** +
-__required__|test integer in query|integer(test)
+__required__|test integer in query|integer (test)
 |**Query**|**stringQuery** +
-__required__|test string in query|string(test)
+__required__|test string in query|string (test)
 |===
 
 
@@ -26,10 +26,10 @@ __required__|test string in query|string(test)
 [options="header", cols=".^2,.^14,.^4"]
 |===
 |HTTP Code|Description|Schema
-|**200**|Result|string(test)
+|**200**|Result|string (test)
 |**201**|Result|<<_c_param_intparam_get_response_201,Response 201>>
 |**202**|Result|<<_c_param_intparam_get_response_202,Response 202>>
-|**203**|Result|integer(test)
+|**203**|Result|integer (test)
 |**204**|Result|<<_c_param_intparam_get_response_204,Response 204>>
 |**205**|Result|<<_c_param_intparam_get_response_205,Response 205>>
 |===
@@ -41,7 +41,7 @@ __required__|test string in query|string(test)
 |===
 |Name|Schema
 |**test** +
-__optional__|string(test)
+__optional__|string (test)
 |===
 
 [[_c_param_intparam_get_response_202]]
@@ -51,7 +51,7 @@ __optional__|string(test)
 |===
 |Name|Schema
 |**test** +
-__optional__|< string(test) > array
+__optional__|< string (test) > array
 |===
 
 [[_c_param_intparam_get_response_204]]
@@ -61,7 +61,7 @@ __optional__|< string(test) > array
 |===
 |Name|Schema
 |**test** +
-__optional__|integer(test)
+__optional__|integer (test)
 |===
 
 [[_c_param_intparam_get_response_205]]
@@ -71,7 +71,7 @@ __optional__|integer(test)
 |===
 |Name|Schema
 |**test** +
-__optional__|< integer(test) > array
+__optional__|< integer (test) > array
 |===
 
 
@@ -89,7 +89,7 @@ __optional__|< integer(test) > array
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|test integer str in body|< integer(test) > array
+__required__|test integer str in body|< integer (test) > array
 |===
 
 
@@ -117,7 +117,7 @@ __required__|test integer str in body|<<_integerobj_get_body,body>>
 |===
 |Name|Schema
 |**test** +
-__optional__|integer(test)
+__optional__|integer (test)
 |===
 
 
@@ -135,7 +135,7 @@ __optional__|integer(test)
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|test integer str in body|integer(test)
+__required__|test integer str in body|integer (test)
 |===
 
 
@@ -153,7 +153,7 @@ __required__|test integer str in body|integer(test)
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|test string str in body|< string(test) > array
+__required__|test string str in body|< string (test) > array
 |===
 
 
@@ -181,7 +181,7 @@ __required__|test string str in body|<<_stringobj_get_body,body>>
 |===
 |Name|Schema
 |**test** +
-__optional__|string(test)
+__optional__|string (test)
 |===
 
 
@@ -199,7 +199,7 @@ __optional__|string(test)
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__required__|test string str in body|string(test)
+__required__|test string str in body|string (test)
 |===
 
 

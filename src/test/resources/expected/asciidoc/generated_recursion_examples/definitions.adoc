@@ -12,7 +12,7 @@
 __optional__|**Example** : `[ "<<_navigationentry>>" ]`|< <<_navigationentry,NavigationEntry>> > array
 |**id** +
 __optional__|Primary key of this entry +
-**Example** : `0.0`|number(int64)
+**Example** : `0.0`|number (int64)
 |===
 
 

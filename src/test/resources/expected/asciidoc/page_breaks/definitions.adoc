@@ -9,7 +9,7 @@
 |===
 |Name|Description|Schema
 |**id** +
-__optional__|**Example** : `123`|integer(int64)
+__optional__|**Example** : `123`|integer (int64)
 |**name** +
 __optional__|**Example** : `"Canines"`|string
 |===
@@ -33,7 +33,7 @@ __optional__|object
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |===
 
 
@@ -46,13 +46,13 @@ __optional__|integer(int64)
 |**complete** +
 __optional__||boolean
 |**id** +
-__optional__|**Example** : `77`|integer(int64)
+__optional__|**Example** : `77`|integer (int64)
 |**petId** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**quantity** +
-__optional__||integer(int32)
+__optional__||integer (int32)
 |**shipDate** +
-__optional__||string(date-time)
+__optional__||string (date-time)
 |**status** +
 __optional__|Order Status +
 **Example** : `"DONE"`|string
@@ -70,7 +70,7 @@ Test description
 |**category** +
 __optional__||<<_category,Category>>
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**name** +
 __required__|**Example** : `"doggie"`|string
 |**nicknames** +
@@ -93,7 +93,7 @@ __optional__|the weight of the pet|number
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
@@ -113,7 +113,7 @@ __optional__||string
 |**firstName** +
 __optional__||string
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**lastName** +
 __optional__||string
 |**password** +
@@ -121,9 +121,9 @@ __optional__||string
 |**phone** +
 __optional__||string
 |**pictures** +
-__optional__||< string(byte) > array
+__optional__||< string (byte) > array
 |**userStatus** +
-__optional__|User Status|integer(int32)
+__optional__|User Status|integer (int32)
 |**username** +
 __optional__||string
 |===

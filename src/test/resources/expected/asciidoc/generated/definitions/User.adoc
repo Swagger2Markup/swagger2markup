@@ -10,7 +10,7 @@ _optional_||string
 |*firstName* +
 _optional_||string
 |*id* +
-_optional_||integer(int64)
+_optional_||integer (int64)
 |*lastName* +
 _optional_||string
 |*password* +
@@ -18,7 +18,7 @@ _optional_||string
 |*phone* +
 _optional_||string
 |*userStatus* +
-_optional_|User Status|integer(int32)
+_optional_|User Status|integer (int32)
 |*username* +
 _optional_||string
 |===

@@ -6,7 +6,7 @@
 |===
 |Name|Description|Schema
 |*id* +
-_optional_||integer(int64)
+_optional_||integer (int64)
 |*name* +
 _optional_|The name of the category +
 *Default* : `"DefaultCategory"` +

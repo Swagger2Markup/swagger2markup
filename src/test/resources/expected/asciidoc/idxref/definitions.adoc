@@ -9,7 +9,7 @@
 |===
 |Name|Description|Schema
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**name** +
 __optional__|The name of the category +
 **Default** : `"DefaultCategory"` +
@@ -28,16 +28,16 @@ __optional__|The name of the category +
 |**complete** +
 __optional__||boolean
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**petId** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**quantity** +
 __optional__|**Default** : `0` +
 **Minimum value** : `0` +
 **Maximum value** : `10000` +
-**Example** : `10`|integer(int32)
+**Example** : `10`|integer (int32)
 |**shipDate** +
-__optional__||string(date-time)
+__optional__||string (date-time)
 |**status** +
 __optional__|Order Status|enum (Ordered, Cancelled)
 |===
@@ -52,7 +52,7 @@ __optional__|Order Status|enum (Ordered, Cancelled)
 |**category** +
 __optional__||<<definitions.adoc#_category,Category>>
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**name** +
 __required__|**Example** : `"doggie"`|string
 |**photoUrls** +
@@ -71,7 +71,7 @@ __optional__||< <<definitions.adoc#_tag,Tag>> > array
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
@@ -88,7 +88,7 @@ __optional__||string
 |**firstName** +
 __optional__||string
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**lastName** +
 __optional__||string
 |**password** +
@@ -96,7 +96,7 @@ __optional__||string
 |**phone** +
 __optional__||string
 |**userStatus** +
-__optional__|User Status|integer(int32)
+__optional__|User Status|integer (int32)
 |**username** +
 __optional__||string
 |===

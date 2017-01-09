@@ -8,7 +8,7 @@
 |*category* +
 _optional_||<<_category,Category>>
 |*id* +
-_optional_||integer(int64)
+_optional_||integer (int64)
 |*name* +
 _required_|*Example* : `"doggie"`|string
 |*photoUrls* +

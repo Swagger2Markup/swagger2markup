@@ -338,7 +338,7 @@ public class Swagger2MarkupProperties {
     }
 
     public List<PageBreakLocations> getPageBreakLocations(String key) {
-        List result = configuration.getList(PageBreakLocations.class, key);
+        List<PageBreakLocations> result = configuration.getList(PageBreakLocations.class, key);
         if(result == null) result = new ArrayList<PageBreakLocations>();
 
         return result;

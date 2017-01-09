@@ -46,7 +46,7 @@ public class BasicType extends Type {
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
         if (isNotBlank(this.format))
-            return String.format("%s(%s)", this.type, this.format);
+            return String.format("%s (%s)", this.type, this.format);
         else
             return this.type;
     }

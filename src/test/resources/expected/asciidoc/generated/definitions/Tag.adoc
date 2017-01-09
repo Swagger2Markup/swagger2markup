@@ -6,7 +6,7 @@
 |===
 |Name|Schema
 |*id* +
-_optional_|integer(int64)
+_optional_|integer (int64)
 |*name* +
 _optional_|string
 |===

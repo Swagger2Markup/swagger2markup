@@ -8,16 +8,16 @@
 |*complete* +
 _optional_||boolean
 |*id* +
-_optional_||integer(int64)
+_optional_||integer (int64)
 |*petId* +
-_optional_||integer(int64)
+_optional_||integer (int64)
 |*quantity* +
 _optional_|*Default* : `0` +
 *Minimum value* : `0.0` +
 *Maximum value* : `10000.0` +
-*Example* : `10`|integer(int32)
+*Example* : `10`|integer (int32)
 |*shipDate* +
-_optional_||string(date-time)
+_optional_||string (date-time)
 |*status* +
 _optional_|Order Status|enum (Ordered, Cancelled)
 |===

@@ -75,7 +75,7 @@ __required__||string
 |**packSize** +
 __required__|the size of the pack the dog is from +
 **Default** : `0` +
-**Minimum value** : `0`|integer(int32)
+**Minimum value** : `0`|integer (int32)
 |**petType** +
 __required__||string
 |===

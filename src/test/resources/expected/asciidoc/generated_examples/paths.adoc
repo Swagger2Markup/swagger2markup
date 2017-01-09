@@ -433,7 +433,7 @@ Returns a pet when ID &lt; 10. ID &gt; 10 or nonintegers will simulate API error
 |===
 |Type|Name|Description|Schema
 |**Path**|**petId** +
-__required__|ID of the pet|integer(int64)
+__required__|ID of the pet|integer (int64)
 |===
 
 
@@ -518,7 +518,7 @@ DELETE /pets/{petId}
 |**Header**|**api_key** +
 __required__||string
 |**Path**|**petId** +
-__required__|Pet id to delete|integer(int64)
+__required__|Pet id to delete|integer (int64)
 |===
 
 
