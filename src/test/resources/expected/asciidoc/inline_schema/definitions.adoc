@@ -95,7 +95,7 @@ __optional__|Description p2-2-2-2|boolean
 |**category** +
 __optional__|<<_inlinepet_category,category>>
 |**id** +
-__required__|integer(int64)
+__required__|integer (int64)
 |**tags** +
 __optional__|< <<_inlinepet_tags,tags>> > array
 |===
@@ -107,7 +107,7 @@ __optional__|< <<_inlinepet_tags,tags>> > array
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
@@ -119,7 +119,7 @@ __optional__|string
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
@@ -134,7 +134,7 @@ __optional__|string
 |**category** +
 __optional__|<<_categorymodel,CategoryModel>>
 |**id** +
-__required__|integer(int64)
+__required__|integer (int64)
 |**tags** +
 __optional__|< <<_tagmodel,TagModel>> > array
 |===
@@ -146,7 +146,7 @@ __optional__|< <<_tagmodel,TagModel>> > array
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
@@ -158,7 +158,7 @@ __optional__|string
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===

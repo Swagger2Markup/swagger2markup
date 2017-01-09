@@ -243,7 +243,7 @@ Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error cond
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer(int64)|
+|**Path**|**petId**  <br>*required*|ID of pet that needs to be fetched|integer (int64)|
 
 
 #### Responses
@@ -286,7 +286,7 @@ DELETE /pets/{petId}
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Header**|**api_key**  <br>*required*||string|
-|**Path**|**petId**  <br>*required*|Pet id to delete|integer(int64)|
+|**Path**|**petId**  <br>*required*|Pet id to delete|integer (int64)|
 
 
 #### Responses

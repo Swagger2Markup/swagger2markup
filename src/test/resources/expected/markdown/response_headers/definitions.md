@@ -7,7 +7,7 @@
 
 |Name|Schema|
 |---|---|
-|**id**  <br>*optional*|integer(int64)|
+|**id**  <br>*optional*|integer (int64)|
 |**name**  <br>*optional*|string|
 
 
@@ -17,7 +17,7 @@
 |Name|Description|Schema|
 |---|---|---|
 |**category**  <br>*optional*||[Category](#category)|
-|**id**  <br>*optional*||integer(int64)|
+|**id**  <br>*optional*||integer (int64)|
 |**name**  <br>*required*|**Example** : `"doggie"`|string|
 |**photoUrls**  <br>*required*||< string > array|
 |**status**  <br>*optional*|pet status in the store,|enum (Dead, Alive)|
@@ -29,7 +29,7 @@
 
 |Name|Schema|
 |---|---|
-|**id**  <br>*optional*|integer(int64)|
+|**id**  <br>*optional*|integer (int64)|
 |**name**  <br>*optional*|string|
 
 

@@ -19,7 +19,7 @@ Returns integer metrics information for the application.
 |===
 |Type|Name|Description|Schema
 |**Body**|**body** +
-__optional__|String metrics|< string, integer(int32) > map
+__optional__|String metrics|< string, integer (int32) > map
 |===
 
 

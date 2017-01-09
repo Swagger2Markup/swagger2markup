@@ -9,7 +9,7 @@
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
@@ -24,7 +24,7 @@ __optional__|string
 |**category** +
 __optional__||<<_category,Category>>
 |**id** +
-__optional__||integer(int64)
+__optional__||integer (int64)
 |**name** +
 __required__|**Example** : `"doggie"`|string
 |**photoUrls** +
@@ -43,7 +43,7 @@ __optional__||< <<_tag,Tag>> > array
 |===
 |Name|Schema
 |**id** +
-__optional__|integer(int64)
+__optional__|integer (int64)
 |**name** +
 __optional__|string
 |===
