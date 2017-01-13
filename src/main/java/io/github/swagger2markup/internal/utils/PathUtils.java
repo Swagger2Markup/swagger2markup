@@ -62,7 +62,7 @@ public class PathUtils {
      * Converts the Swagger paths into a list of PathOperations.
      *
      * @param paths      the Swagger paths
-     * @param paths      the basePath of all paths
+     * @param basePath   the basePath of all paths
      * @param comparator the comparator to use.
      * @return the path operations
      */
@@ -74,7 +74,7 @@ public class PathUtils {
         paths.forEach((relativePath, path) ->
                 pathOperations.addAll(toPathOperationsList(basePath + relativePath, path)));
         if (comparator != null) {
-            Collections.sort(pathOperations, comparator);
+            pathOperations.sort(comparator);
         }
         return pathOperations;
     }
