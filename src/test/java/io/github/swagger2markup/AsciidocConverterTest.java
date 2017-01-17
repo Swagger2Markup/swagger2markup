@@ -785,4 +785,23 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/page_breaks").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithPageBreaks.html");
     }
+
+    @Test
+    public void testForIssue180() throws IOException, URISyntaxException {
+        // Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/issue180.json"));
+        Path outputDirectory = Paths.get("build/test/asciidoc/issue180");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        // When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withoutInlineSchema().withGeneratedExamples().build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build().toFolder(outputDirectory);
+
+        // Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/issue180").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testForIssue180.html");
+    }
 }
