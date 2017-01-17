@@ -1,0 +1,28 @@
+= API
+
+
+[[_overview]]
+== Overview
+
+=== Version information
+[%hardbreaks]
+__Version__ : 2.0.0
+
+
+=== URI scheme
+[%hardbreaks]
+__BasePath__ : /navigation
+__Schemes__ : HTTPS
+
+
+=== Consumes
+
+* `application/json`
+
+
+=== Produces
+
+* `application/json`
+
+
+
