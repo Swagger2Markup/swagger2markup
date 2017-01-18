@@ -82,12 +82,10 @@ public final class PropertyAdapter {
      * @return String example
      */
     private static Object generateArrayExample(ArrayProperty property, MarkupDocBuilder markupDocBuilder) {
-        // TODO: Fix example generation for arrays. See Issue #180
         Property itemProperty = property.getItems();
         List<Object> exampleArray = new ArrayList<>();
 
         exampleArray.add(generateExample(itemProperty, markupDocBuilder));
-//        ExamplesUtil.generateExampleForRefModel(true, itemProperty.getName(), /* TODO */, /* TODO */, markupDocBuilder, /* TODO */);
         return exampleArray;
     }
 

@@ -375,9 +375,9 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
 
 
                     if (!fieldsIterator.hasNext()) {
-                        // workaround for "array" example
-                        //TODO: print $ref'd examples correctly instead of just "array"
-                        String example = stripExampleQuotes(Json.pretty(rootNode));
+                        // rootNode contains a single example, no need to further iterate.
+                        String example = Json.pretty(rootNode);
+//                        String example = Json.pretty(stripExampleQuotes(rootNode.toString()));
 //                        example = Json.pretty(example);
                         markupDocBuilder.listingBlock(example, "json");
                     }
