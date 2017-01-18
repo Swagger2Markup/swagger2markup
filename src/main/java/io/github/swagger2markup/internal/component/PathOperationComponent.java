@@ -372,11 +372,13 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     JsonNode rootNode = parseExample(entry.getValue());
                     Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
 
+
+
                     if (!fieldsIterator.hasNext()) {
                         // workaround for "array" example
                         //TODO: print $ref'd examples correctly instead of just "array"
-                        String example = stripExampleQuotes(Json.pretty(entry.getValue()));
-                        example = Json.pretty(example);
+                        String example = stripExampleQuotes(Json.pretty(rootNode));
+//                        example = Json.pretty(example);
                         markupDocBuilder.listingBlock(example, "json");
                     }
                     while (fieldsIterator.hasNext()) {

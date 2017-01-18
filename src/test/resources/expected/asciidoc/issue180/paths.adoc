@@ -41,7 +41,6 @@ Returns the navigation as a tree
 ===== Response 123
 [source,json]
 ----
-{
   [ {
     "id" : 0.0,
     "childs" : [ {
@@ -49,7 +48,6 @@ Returns the navigation as a tree
       "childs" : [ "..." ]
     } ]
   } ]
-}
 ----
 
 
