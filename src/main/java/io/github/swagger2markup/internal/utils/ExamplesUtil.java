@@ -63,6 +63,9 @@ public class ExamplesUtil {
                             String simpleRef = ((RefProperty) schema).getSimpleRef();
                             example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                         }
+                        if (example == null && schema instanceof ArrayProperty && generateMissingExamples) {
+                            example = generateExampleForArrayProperty((ArrayProperty) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                        }
                         if (example == null && generateMissingExamples) {
                             example = PropertyAdapter.generateExample(schema, markupDocBuilder);
                         }

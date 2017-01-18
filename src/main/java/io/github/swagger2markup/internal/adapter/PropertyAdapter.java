@@ -65,9 +65,30 @@ public final class PropertyAdapter {
                 } else {
                     if (logger.isDebugEnabled()) logger.debug("generateExample for ref not RefProperty");
                 }
+            case "array":
+                if (property instanceof ArrayProperty) {
+                    return generateArrayExample((ArrayProperty) property, markupDocBuilder);
+                }
             default:
                 return property.getType();
         }
+    }
+
+    /**
+     * Generate example for an ArrayProperty
+     *
+     * @param property ArrayProperty to generate example for
+     * @param markupDocBuilder MarkupDocBuilder containing all associated settings
+     * @return String example
+     */
+    private static Object generateArrayExample(ArrayProperty property, MarkupDocBuilder markupDocBuilder) {
+        // TODO: Fix example generation for arrays. See Issue #180
+        Property itemProperty = property.getItems();
+        List<Object> exampleArray = new ArrayList<>();
+
+        exampleArray.add(generateExample(itemProperty, markupDocBuilder));
+//        ExamplesUtil.generateExampleForRefModel(true, itemProperty.getName(), /* TODO */, /* TODO */, markupDocBuilder, /* TODO */);
+        return exampleArray;
     }
 
     /**
