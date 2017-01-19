@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Robert Winkler
+ * Copyright 2017 Robert Winkler
  * Modified December 12 2016 by Cas Eliëns
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
