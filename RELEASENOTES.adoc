@@ -128,3 +128,4 @@
 * Updated javslang from 2.0.4 to 2.0.5
 * Updated paleo-core from 0.10.1 to 0.10.2
 * Updated swagger-parser from v1.0.23 to v1.0.25
+* Decimal numbers are formatted into locale-specific strings
