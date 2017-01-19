@@ -31,6 +31,7 @@ import org.apache.commons.lang3.Validate;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -164,9 +165,8 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     descriptionContent.boldText(labels.getLabel(PATTERN_COLUMN)).text(COLON).literalText(Json.pretty(optionalPattern.get()));
                 }
 
-                DecimalFormat numberFormatter = new DecimalFormat("#.##");
-                //NumberFormat numberFormatter = DecimalFormat.getInstance(config.getOutputLanguage().toLocale());
-                //numberFormatter.setMinimumFractionDigits(0);
+                DecimalFormat numberFormatter = new DecimalFormat("#.##",
+                        DecimalFormatSymbols.getInstance(config.getOutputLanguage().toLocale()));
 
                 if (optionalMinValue.isPresent()) {
                     if (isNotBlank(descriptionContent.toString())) {

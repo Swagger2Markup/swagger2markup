@@ -11,23 +11,23 @@
 |**sampleDoubleComplete** +
 __optional__|sample double with range 0.0-10.5 +
 **Minimum value** : `0` +
-**Maximum value** : `10,5`|number (double)
+**Maximum value** : `10.5`|number (double)
 |**sampleDoubleExclusiveBoth** +
 __optional__|sample double with range 0.0-10.5 (both exclusive) +
 **Minimum value (exclusive)** : `0` +
-**Maximum value (exclusive)** : `10,5`|number (double)
+**Maximum value (exclusive)** : `10.5`|number (double)
 |**sampleDoubleExclusiveMaximum** +
 __optional__|sample double with range to 10.5 (exclusive) +
-**Maximum value (exclusive)** : `10,5`|number (double)
+**Maximum value (exclusive)** : `10.5`|number (double)
 |**sampleDoubleExclusiveMinimum** +
 __optional__|sample double with range from 0.0 (exclusive) +
 **Minimum value (exclusive)** : `0`|number (double)
 |**sampleDoubleNoDescription** +
 __optional__|**Minimum value** : `0` +
-**Maximum value** : `10,5`|number (double)
+**Maximum value** : `10.5`|number (double)
 |**sampleDoubleOnlyMaximum** +
 __optional__|sample double with range to 10.5 +
-**Maximum value** : `10,5`|number (double)
+**Maximum value** : `10.5`|number (double)
 |**sampleDoubleOnlyMinimum** +
 __optional__|sample double with range from 0.0 +
 **Minimum value** : `0`|number (double)
