@@ -287,7 +287,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withoutInlineSchema()
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -311,7 +310,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withoutInlineSchema()
                 .withGeneratedExamples()
                 .build();
 
@@ -770,7 +768,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withoutInlineSchema()
                 .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .build();
 

@@ -116,10 +116,15 @@
 * Issue #207: Properties that start with an underscore are displayed correctly now
 * Refactored Swagger2Markup to use a Component-Based design. A document can be composed of components and components can be composed of other components.
 
-=== Version 1.2.ß
+== Version 1.2.0
 * Issue #214: Add page break locations
 * Issue #223: Improve example rendering
 * Issue #215: Add ability to group operations by RegEx
 * Added new configuration options: pageBreakLocations, headerRegex
 * Added new valid value for configuration headerRegex: REGEX
 * Updated markup-document-builder from 1.1.0 to 1.1.1
+
+=== Version 1.2.1
+* Updated javslang from 2.0.4 to 2.0.5
+* Updated paleo-core from 0.10.1 to 0.10.2
+* Updated swagger-parser from v1.0.23 to v1.0.25

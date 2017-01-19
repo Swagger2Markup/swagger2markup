@@ -193,7 +193,7 @@ public class ParameterAdapter {
      *
      * @return the default value of the parameter
      */
-    public Optional<String> getDefaultValue() {
+    public Optional<Object> getDefaultValue() {
         Validate.notNull(parameter, "parameter must not be null!");
         if (parameter instanceof AbstractSerializableParameter) {
             AbstractSerializableParameter serializableParameter = (AbstractSerializableParameter) parameter;

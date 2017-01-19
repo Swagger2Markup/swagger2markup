@@ -917,6 +917,7 @@
     "ComplexObject": {
       "properties": {
         "subObject": {
+          "title": "SubObject",
           "type": "object",
           "properties": {
             "id": {

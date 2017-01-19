@@ -239,7 +239,7 @@ the last 5 days. Can return mix of image and video types.
 |===
 |Type|Name|Description|Schema|Default
 |**Query**|**DISTANCE** +
-__optional__|Default is 1km (distance=1000), max distance is 5km.|integer|`"1000"`
+__optional__|Default is 1km (distance=1000), max distance is 5km.|integer|`1000`
 |**Query**|**LAT** +
 __optional__|Latitude of the center search coordinate. If used, lng is required.|number|
 |**Query**|**LNG** +

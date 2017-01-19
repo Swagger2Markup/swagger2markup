@@ -22,11 +22,14 @@ __optional__|**Example** : `"Canines"`|string
 |===
 |Name|Description|Schema
 |**subObject** +
-__optional__|**Example** : `"object"`|<<_complexobject_subobject,subObject>>
+__optional__|**Example** : `{
+  "id" : 99,
+  "value" : "an example value !"
+}`|<<_subobject,SubObject>>
 |===
 
-[[_complexobject_subobject]]
-**subObject**
+[[_subobject]]
+**SubObject**
 
 [options="header", cols=".^3,.^11,.^4"]
 |===

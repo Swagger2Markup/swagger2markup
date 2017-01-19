@@ -62,15 +62,15 @@
         "sampleDoubleComplete": {
           "type": "number",
           "format": "double",
-          "description": "sample double with range 0.0-10.0",
+          "description": "sample double with range 0.0-10.5",
           "minimum": 0.0,
-          "maximum": 10.0
+          "maximum": 10.5
         },
         "sampleDoubleNoDescription": {
           "type": "number",
           "format": "double",
           "minimum": 0.0,
-          "maximum": 10.0
+          "maximum": 10.5
         },
         "sampleDoubleOnlyMinimum": {
           "type": "number",
@@ -81,8 +81,8 @@
         "sampleDoubleOnlyMaximum": {
           "type": "number",
           "format": "double",
-          "description": "sample double with range to 10.0",
-          "maximum": 10.0
+          "description": "sample double with range to 10.5",
+          "maximum": 10.5
         },
         "sampleDoubleExclusiveMinimum": {
           "type": "number",
@@ -94,16 +94,16 @@
         "sampleDoubleExclusiveMaximum": {
           "type": "number",
           "format": "double",
-          "description": "sample double with range to 10.0 (exclusive)",
-          "maximum": 10.0,
+          "description": "sample double with range to 10.5 (exclusive)",
+          "maximum": 10.5,
           "exclusiveMaximum": true
         },
         "sampleDoubleExclusiveBoth": {
           "type": "number",
           "format": "double",
-          "description": "sample double with range 0.0-10.0 (both exclusive)",
+          "description": "sample double with range 0.0-10.5 (both exclusive)",
           "minimum": 0.0,
-          "maximum": 10.0,
+          "maximum": 10.5,
           "exclusiveMinimum": true,
           "exclusiveMaximum": true
         }

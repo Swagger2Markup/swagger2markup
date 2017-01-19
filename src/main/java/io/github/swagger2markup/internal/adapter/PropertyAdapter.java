@@ -26,6 +26,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -253,10 +254,10 @@ public final class PropertyAdapter {
      *
      * @return the minimum value of the property
      */
-    public Optional<Number> getMin() {
+    public Optional<BigDecimal> getMin() {
         if (property instanceof BaseIntegerProperty) {
             BaseIntegerProperty integerProperty = (BaseIntegerProperty) property;
-            return Optional.ofNullable(integerProperty.getMinimum() != null ? integerProperty.getMinimum().longValue() : null);
+            return Optional.ofNullable(integerProperty.getMinimum() != null ? integerProperty.getMinimum() : null);
         } else if (property instanceof AbstractNumericProperty) {
             AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
             return Optional.ofNullable(numericProperty.getMinimum());
@@ -282,10 +283,10 @@ public final class PropertyAdapter {
      *
      * @return the minimum value of the property
      */
-    public Optional<Number> getMax() {
+    public Optional<BigDecimal> getMax() {
         if (property instanceof BaseIntegerProperty) {
             BaseIntegerProperty integerProperty = (BaseIntegerProperty) property;
-            return Optional.ofNullable(integerProperty.getMaximum() != null ? integerProperty.getMaximum().longValue() : null);
+            return Optional.ofNullable(integerProperty.getMaximum() != null ? integerProperty.getMaximum() : null);
         } else if (property instanceof AbstractNumericProperty) {
             AbstractNumericProperty numericProperty = (AbstractNumericProperty) property;
             return Optional.ofNullable(numericProperty.getMaximum());

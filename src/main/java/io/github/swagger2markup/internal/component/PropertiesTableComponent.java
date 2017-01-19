@@ -29,6 +29,8 @@ import io.swagger.util.Json;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -94,9 +96,10 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                 Optional<Integer> optionalMaxLength = propertyAdapter.getMaxlength();
                 Optional<Integer> optionalMinLength = propertyAdapter.getMinlength();
                 Optional<String> optionalPattern = propertyAdapter.getPattern();
-                Optional<Number> optionalMinValue = propertyAdapter.getMin();
+
+                Optional<BigDecimal> optionalMinValue = propertyAdapter.getMin();
                 boolean exclusiveMin = propertyAdapter.getExclusiveMin();
-                Optional<Number> optionalMaxValue = propertyAdapter.getMax();
+                Optional<BigDecimal> optionalMaxValue = propertyAdapter.getMax();
                 boolean exclusiveMax = propertyAdapter.getExclusiveMax();
 
                 MarkupDocBuilder propertyNameContent = copyMarkupDocBuilder(markupDocBuilder);
@@ -161,12 +164,16 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     descriptionContent.boldText(labels.getLabel(PATTERN_COLUMN)).text(COLON).literalText(Json.pretty(optionalPattern.get()));
                 }
 
+                DecimalFormat numberFormatter = new DecimalFormat("#.##");
+                //NumberFormat numberFormatter = DecimalFormat.getInstance(config.getOutputLanguage().toLocale());
+                //numberFormatter.setMinimumFractionDigits(0);
+
                 if (optionalMinValue.isPresent()) {
                     if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
                     }
                     String minValueColumn = exclusiveMin ? labels.getLabel(MINVALUE_EXCLUSIVE_COLUMN) : labels.getLabel(MINVALUE_COLUMN);
-                    descriptionContent.boldText(minValueColumn).text(COLON).literalText(optionalMinValue.get().toString());
+                    descriptionContent.boldText(minValueColumn).text(COLON).literalText(numberFormatter.format(optionalMinValue.get()));
                 }
 
                 if (optionalMaxValue.isPresent()) {
@@ -174,7 +181,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                         descriptionContent.newLine(true);
                     }
                     String maxValueColumn = exclusiveMax ? labels.getLabel(MAXVALUE_EXCLUSIVE_COLUMN) : labels.getLabel(MAXVALUE_COLUMN);
-                    descriptionContent.boldText(maxValueColumn).text(COLON).literalText(optionalMaxValue.get().toString());
+                    descriptionContent.boldText(maxValueColumn).text(COLON).literalText(numberFormatter.format(optionalMaxValue.get()));
                 }
 
                 if (optionalExample.isPresent()) {

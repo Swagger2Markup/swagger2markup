@@ -22,7 +22,22 @@ __optional__|**Example** : `"Canines"`|string
 |===
 |Name|Description|Schema
 |**subObject** +
-__optional__|**Example** : `"object"`|object
+__optional__|**Example** : `{
+  "id" : 99,
+  "value" : "an example value !"
+}`|<<_subobject,SubObject>>
+|===
+
+[[_subobject]]
+**SubObject**
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|**Example** : `88`|integer (int64)
+|**value** +
+__optional__|**Example** : `"a value !"`|string
 |===
 
 
