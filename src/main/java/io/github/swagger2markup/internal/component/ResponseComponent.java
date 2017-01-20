@@ -103,7 +103,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
                         descriptionBuilder.newLine(true);
                         Property headerProperty = header.getValue();
                         PropertyAdapter headerPropertyAdapter = new PropertyAdapter(headerProperty);
-                        Type propertyType = headerPropertyAdapter.getType(null);
+                        Type propertyType = headerPropertyAdapter.getType(definitionDocumentResolver);
                         String headerDescription = markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, headerProperty.getDescription());
                         Optional<Object> optionalDefaultValue = headerPropertyAdapter.getDefaultValue();
 
