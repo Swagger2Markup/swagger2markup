@@ -17,15 +17,17 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
+
 import io.github.swagger2markup.*;
-import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.LineSeparator;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+
 import org.apache.commons.configuration2.*;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -109,6 +111,12 @@ public class Swagger2MarkupConfigBuilder {
         Optional<Pattern> headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
 
         config.headerPattern = headerPattern.orElse(null);
+
+        Optional<String> documentFolderSeparator = swagger2MarkupProperties.getString(DOCUMENT_FOLDER_SEPARATOR);
+        if (documentFolderSeparator.isPresent() && StringUtils.isNoneBlank(documentFolderSeparator.get()) && documentFolderSeparator.get().length() == 1) {
+            config.documentFolderSeparator = Character.valueOf(documentFolderSeparator.get().charAt(0));
+            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.documentFolderSeparator));
+        }
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
@@ -554,6 +562,7 @@ public class Swagger2MarkupConfigBuilder {
         private String securityDocument;
         private String separatedOperationsFolder;
         private String separatedDefinitionsFolder;
+        private Character documentFolderSeparator;
 
         private List<PageBreakLocations> pageBreakLocations;
 
@@ -724,6 +733,11 @@ public class Swagger2MarkupConfigBuilder {
         @Override
         public LineSeparator getLineSeparator() {
             return lineSeparator;
+        }
+
+        @Override
+        public Character getDocumentFolderSeparator() {
+            return documentFolderSeparator;
         }
 
         @Override

@@ -215,6 +215,12 @@ public interface Swagger2MarkupConfig {
     LineSeparator getLineSeparator();
 
     /**
+     * Specifies the array element separator to use for multi-valued properties.
+     * @return the folder separator if any.
+     */
+    Character getDocumentFolderSeparator();
+
+    /**
      * Returns properties for extensions.
      *
      * @return the extension properties

@@ -21,6 +21,7 @@ import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -35,6 +36,7 @@ public class Swagger2MarkupConfigBuilderTest {
         configMap.put(Swagger2MarkupProperties.MARKUP_LANGUAGE, MarkupLanguage.MARKDOWN.toString());
         configMap.put("swagger2markup.extensions.uniqueId1.customProperty1", "123");
         configMap.put("swagger2markup.extensions.uniqueId1.customProperty2", "123");
+        configMap.put("swagger2markup.extensions.uniqueId2.customPropertyList1", "123,456");
         configMap.put("swagger2markup.uniqueId1.customProperty1", "123");
         configMap.put("swagger2markup.uniqueId1.customProperty2", "123");
 
@@ -71,10 +73,14 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isFalse();
         assertThat(config.isSeparatedDefinitionsEnabled()).isFalse();
         assertThat(config.isSeparatedOperationsEnabled()).isFalse();
-        assertThat(config.getExtensionsProperties().getKeys()).hasSize(2)
-                .containsOnly("uniqueId1.customProperty1",
-                        "uniqueId1.customProperty2"
+        assertThat(config.getExtensionsProperties().getKeys()).hasSize(3)
+        .containsOnly("uniqueId1.customProperty1",
+                "uniqueId1.customProperty2",
+                "uniqueId2.customPropertyList1"
                 );
+        assertThat(config.getExtensionsProperties().getString("uniqueId1.customProperty1").get()).isEqualTo("123");
+        assertThat(config.getExtensionsProperties().getPathList("uniqueId2.customPropertyList1").get()).hasSize(1)
+        .containsOnly(Paths.get("123,456"));
     }
 
 
@@ -109,6 +115,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getSecurityDocument()).isEqualTo("securityTest");
         assertThat(config.getSeparatedDefinitionsFolder()).isEqualTo("definitionsTest");
         assertThat(config.getSeparatedOperationsFolder()).isEqualTo("operationsTest");
+        assertThat(config.getDocumentFolderSeparator()).isEqualTo(Character.valueOf(','));
         assertThat(config.getTagOrderBy()).isEqualTo(OrderBy.AS_IS);
         assertThat(config.getTagOrdering()).isNull();
         assertThat(config.isFlatBodyEnabled()).isTrue();
@@ -116,12 +123,15 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.isInterDocumentCrossReferencesEnabled()).isTrue();
         assertThat(config.isSeparatedDefinitionsEnabled()).isTrue();
         assertThat(config.isSeparatedOperationsEnabled()).isTrue();
-        assertThat(config.getExtensionsProperties().getKeys()).hasSize(4)
-                .containsOnly("uniqueId1.customProperty1",
-                        "uniqueId1.customProperty2",
-                        "uniqueId2.customProperty1",
-                        "uniqueId2.customProperty2"
+        assertThat(config.getExtensionsProperties().getKeys()).hasSize(5)
+        .containsOnly("uniqueId1.customProperty1",
+                "uniqueId1.customProperty2",
+                "uniqueId2.customProperty1",
+                "uniqueId2.customProperty2",
+                "uniqueId2.customPropertyList1"
                 );
+        assertThat(config.getExtensionsProperties().getPathList("uniqueId2.customPropertyList1").get()).hasSize(2)
+        .containsOnly(Paths.get("123"), Paths.get("456"));
     }
 
     @Test
