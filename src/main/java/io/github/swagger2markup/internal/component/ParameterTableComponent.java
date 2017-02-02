@@ -71,7 +71,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
                 .filter(this::filterParameter).collect(Collectors.toList());
 
         MarkupDocBuilder parametersBuilder = copyMarkupDocBuilder(markupDocBuilder);
-        applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_DESCRIPTION_BEGIN, parametersBuilder, operation));
+        applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_BEGIN, parametersBuilder, operation));
         if (CollectionUtils.isNotEmpty(filteredParameters)) {
             StringColumn.Builder typeColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(TYPE_COLUMN)))
                     .putMetaData(TableComponent.WIDTH_RATIO, "2");
@@ -107,7 +107,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
                     schemaColumnBuilder.build(),
                     defaultColumnBuilder.build()));
         }
-        applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_DESCRIPTION_END, parametersBuilder, operation));
+        applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_END, parametersBuilder, operation));
         String parametersContent = parametersBuilder.toString();
 
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_BEFORE, markupDocBuilder, operation));
