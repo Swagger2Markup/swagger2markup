@@ -111,11 +111,16 @@ public class Swagger2MarkupConfigBuilder {
         Optional<Pattern> headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
 
         config.headerPattern = headerPattern.orElse(null);
-
-        Optional<String> documentFolderSeparator = swagger2MarkupProperties.getString(DOCUMENT_FOLDER_SEPARATOR);
-        if (documentFolderSeparator.isPresent() && StringUtils.isNoneBlank(documentFolderSeparator.get()) && documentFolderSeparator.get().length() == 1) {
-            config.documentFolderSeparator = Character.valueOf(documentFolderSeparator.get().charAt(0));
-            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.documentFolderSeparator));
+        
+        config.listDelimiterEnabled = swagger2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
+        
+        Optional<String> listDelimiter = swagger2MarkupProperties.getString(LIST_DELIMITER);
+        if (listDelimiter.isPresent() && StringUtils.isNoneBlank(listDelimiter.get()) && listDelimiter.get().length() == 1) {
+            config.listDelimiter = Character.valueOf(listDelimiter.get().charAt(0));
+        }
+        
+        if (config.listDelimiterEnabled && config.listDelimiter != null && configuration instanceof AbstractConfiguration) {
+            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
         }
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
@@ -215,6 +220,28 @@ public class Swagger2MarkupConfigBuilder {
      */
     public Swagger2MarkupConfigBuilder withSeparatedOperations() {
         config.separatedOperationsEnabled = true;
+        return this;
+    }
+    
+    /**
+     * Allows properties to contain a list of elements delimited by a specified character.
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withListDelimiter() {
+        config.listDelimiterEnabled = true;
+        return this;
+    }
+    
+    /**
+     * Specifies the list delimiter which should be used.
+     * 
+     * @param delimiter the delimiter
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withListDelimiter(Character delimiter) {
+        Validate.notNull(delimiter, "%s must not be null", "delimiter");
+        config.listDelimiter = delimiter;
+        config.listDelimiterEnabled = true;
         return this;
     }
 
@@ -562,7 +589,8 @@ public class Swagger2MarkupConfigBuilder {
         private String securityDocument;
         private String separatedOperationsFolder;
         private String separatedDefinitionsFolder;
-        private Character documentFolderSeparator;
+        private Character listDelimiter;
+        private boolean listDelimiterEnabled;
 
         private List<PageBreakLocations> pageBreakLocations;
 
@@ -736,8 +764,13 @@ public class Swagger2MarkupConfigBuilder {
         }
 
         @Override
-        public Character getDocumentFolderSeparator() {
-            return documentFolderSeparator;
+        public Character getListDelimiter() {
+            return listDelimiter;
+        }
+        
+        @Override
+        public boolean isListDelimiterEnabled() {
+            return listDelimiterEnabled;
         }
 
         @Override

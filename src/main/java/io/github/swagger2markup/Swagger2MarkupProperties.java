@@ -52,7 +52,8 @@ public class Swagger2MarkupProperties {
     public static final String FLAT_BODY_ENABLED = PROPERTIES_PREFIX + ".flatBodyEnabled";
     public static final String PATH_SECURITY_SECTION_ENABLED = PROPERTIES_PREFIX + ".pathSecuritySectionEnabled";
     public static final String ANCHOR_PREFIX = PROPERTIES_PREFIX + ".anchorPrefix";
-    public static final String DOCUMENT_FOLDER_SEPARATOR = PROPERTIES_PREFIX + ".documentFolderSeparator";
+    public static final String LIST_DELIMITER = PROPERTIES_PREFIX + ".listDelimiter";
+    public static final String LIST_DELIMITER_ENABLED = PROPERTIES_PREFIX + ".listDelimiterEnabled";
     public static final String OVERVIEW_DOCUMENT = PROPERTIES_PREFIX + ".overviewDocument";
     public static final String PATHS_DOCUMENT = PROPERTIES_PREFIX + ".pathsDocument";
     public static final String DEFINITIONS_DOCUMENT = PROPERTIES_PREFIX + ".definitionsDocument";
@@ -229,7 +230,7 @@ public class Swagger2MarkupProperties {
      * @return The list of Path properties
      * @throws IllegalStateException if the value cannot be mapped to an array of strings
      */
-    public Optional<List<Path>> getPathList(String key) {
+    public List<Path> getPathList(String key) {
         List<Path> pathList = new ArrayList<Path>();
 
         try {
@@ -238,15 +239,11 @@ public class Swagger2MarkupProperties {
             for (String pathStr : stringList) {
                 pathList.add(Paths.get(pathStr));
             }
-
-            if (pathList.size() > 0) {
-                return Optional.of(pathList);
-            }
         } catch (ConversionException ce) {
             throw new IllegalStateException(String.format("requested key [%s] is not convertable to an array", key));
         }
 
-        return Optional.ofNullable((List<Path>)null);
+        return pathList;
     }
 
     /**
