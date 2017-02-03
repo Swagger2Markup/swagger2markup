@@ -17,15 +17,17 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
+
 import io.github.swagger2markup.*;
-import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.LineSeparator;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
+
 import org.apache.commons.configuration2.*;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
+import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -109,6 +111,16 @@ public class Swagger2MarkupConfigBuilder {
         Optional<Pattern> headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
 
         config.headerPattern = headerPattern.orElse(null);
+        
+        config.listDelimiterEnabled = swagger2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
+        OptionalInt delimiter = swagger2MarkupProperties.getString(LIST_DELIMITER, "").chars().findFirst();
+        if (delimiter.isPresent()) {
+            config.listDelimiter = Character.valueOf((char)delimiter.getAsInt());
+        }
+        
+        if (config.listDelimiterEnabled && config.listDelimiter != null && configuration instanceof AbstractConfiguration) {
+            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
+        }
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
@@ -207,6 +219,28 @@ public class Swagger2MarkupConfigBuilder {
      */
     public Swagger2MarkupConfigBuilder withSeparatedOperations() {
         config.separatedOperationsEnabled = true;
+        return this;
+    }
+    
+    /**
+     * Allows properties to contain a list of elements delimited by a specified character.
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withListDelimiter() {
+        config.listDelimiterEnabled = true;
+        return this;
+    }
+    
+    /**
+     * Specifies the list delimiter which should be used.
+     * 
+     * @param delimiter the delimiter
+     * @return this builder
+     */
+    public Swagger2MarkupConfigBuilder withListDelimiter(Character delimiter) {
+        Validate.notNull(delimiter, "%s must not be null", "delimiter");
+        config.listDelimiter = delimiter;
+        config.listDelimiterEnabled = true;
         return this;
     }
 
@@ -554,6 +588,8 @@ public class Swagger2MarkupConfigBuilder {
         private String securityDocument;
         private String separatedOperationsFolder;
         private String separatedDefinitionsFolder;
+        private Character listDelimiter;
+        private boolean listDelimiterEnabled;
 
         private List<PageBreakLocations> pageBreakLocations;
 
@@ -724,6 +760,16 @@ public class Swagger2MarkupConfigBuilder {
         @Override
         public LineSeparator getLineSeparator() {
             return lineSeparator;
+        }
+
+        @Override
+        public Character getListDelimiter() {
+            return listDelimiter;
+        }
+        
+        @Override
+        public boolean isListDelimiterEnabled() {
+            return listDelimiterEnabled;
         }
 
         @Override

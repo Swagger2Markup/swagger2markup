@@ -215,6 +215,19 @@ public interface Swagger2MarkupConfig {
     LineSeparator getLineSeparator();
 
     /**
+     * Specifies the array element delimiter to use for multi-valued properties.
+     * @return the element delimiter if any
+     */
+    Character getListDelimiter();
+    
+    /**
+     * Optionally allow lists in property values. Uses the {{@link #getListDelimiter()} to 
+     * delimit list values.
+     * @return whether lists are converted to arrays
+     */
+    boolean isListDelimiterEnabled();
+
+    /**
      * Returns properties for extensions.
      *
      * @return the extension properties

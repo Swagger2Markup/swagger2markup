@@ -17,10 +17,12 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.utils.URIUtils;
+
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.ConfigurationConverter;
 import org.apache.commons.configuration2.MapConfiguration;
+import org.apache.commons.configuration2.ex.ConversionException;
 
 import java.net.URI;
 import java.nio.file.Path;
@@ -50,6 +52,8 @@ public class Swagger2MarkupProperties {
     public static final String FLAT_BODY_ENABLED = PROPERTIES_PREFIX + ".flatBodyEnabled";
     public static final String PATH_SECURITY_SECTION_ENABLED = PROPERTIES_PREFIX + ".pathSecuritySectionEnabled";
     public static final String ANCHOR_PREFIX = PROPERTIES_PREFIX + ".anchorPrefix";
+    public static final String LIST_DELIMITER = PROPERTIES_PREFIX + ".listDelimiter";
+    public static final String LIST_DELIMITER_ENABLED = PROPERTIES_PREFIX + ".listDelimiterEnabled";
     public static final String OVERVIEW_DOCUMENT = PROPERTIES_PREFIX + ".overviewDocument";
     public static final String PATHS_DOCUMENT = PROPERTIES_PREFIX + ".pathsDocument";
     public static final String DEFINITIONS_DOCUMENT = PROPERTIES_PREFIX + ".definitionsDocument";
@@ -216,6 +220,30 @@ public class Swagger2MarkupProperties {
         } else {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Return a list of Path property values associated with the given key, 
+     * or {@code defaultValue} if the key cannot be resolved.
+     * 
+     * @param key the property name to resolve
+     * @return The list of Path properties
+     * @throws IllegalStateException if the value cannot be mapped to an array of strings
+     */
+    public List<Path> getPathList(String key) {
+        List<Path> pathList = new ArrayList<Path>();
+
+        try {
+            String[] stringList = configuration.getStringArray(key);
+
+            for (String pathStr : stringList) {
+                pathList.add(Paths.get(pathStr));
+            }
+        } catch (ConversionException ce) {
+            throw new IllegalStateException(String.format("requested key [%s] is not convertable to an array", key));
+        }
+
+        return pathList;
     }
 
     /**
