@@ -113,12 +113,9 @@ public class Swagger2MarkupConfigBuilder {
         config.headerPattern = headerPattern.orElse(null);
         
         config.listDelimiterEnabled = swagger2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
-        OptionalInt delimiter = swagger2MarkupProperties.getString(LIST_DELIMITER, "").chars().findFirst();
-        if (delimiter.isPresent()) {
-            config.listDelimiter = Character.valueOf((char)delimiter.getAsInt());
-        }
+        config.listDelimiter = swagger2MarkupProperties.getString(LIST_DELIMITER, ",").charAt(0);
         
-        if (config.listDelimiterEnabled && config.listDelimiter != null && configuration instanceof AbstractConfiguration) {
+        if (config.listDelimiterEnabled && configuration instanceof AbstractConfiguration) {
             ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
         }
 

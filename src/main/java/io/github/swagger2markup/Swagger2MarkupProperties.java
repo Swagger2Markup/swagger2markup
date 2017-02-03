@@ -231,7 +231,7 @@ public class Swagger2MarkupProperties {
      * @throws IllegalStateException if the value cannot be mapped to an array of strings
      */
     public List<Path> getPathList(String key) {
-        List<Path> pathList = new ArrayList<Path>();
+        List<Path> pathList = new ArrayList<>();
 
         try {
             String[] stringList = configuration.getStringArray(key);
