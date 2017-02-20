@@ -55,6 +55,7 @@ If you’d like an enhancement to be made to Swagger2Markup, pull requests are m
 * http://www.wescale.com[wescale]
 * http://taskassure.com[TaskAssure] 
 * https://www.isaac.nl[ISAAC]
+* https://www.spreadshirt.de[Spreadshirt]
 
 == License
 

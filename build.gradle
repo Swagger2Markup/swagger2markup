@@ -13,8 +13,8 @@ buildscript {
     }
 }
 description = 'swagger2markup Build'
-version = '1.3.0-SNAPSHOT'
-ext.releaseVersion = '1.2.0'
+version = '1.3.0'
+ext.releaseVersion = '1.3.0'
 group = 'io.github.swagger2markup'
 
 apply plugin: 'java'
