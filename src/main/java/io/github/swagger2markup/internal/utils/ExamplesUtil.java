@@ -125,7 +125,6 @@ public class ExamplesUtil {
                     Object abstractSerializableParameterExample;
                     abstractSerializableParameterExample = ((AbstractSerializableParameter) parameter).getExample();
                     if (abstractSerializableParameterExample == null) {
-                        Map<String, Object> kvs = parameter.getVendorExtensions();
                         abstractSerializableParameterExample = parameter.getVendorExtensions().get("x-example");
                     }
                     if (abstractSerializableParameterExample == null) {
