@@ -175,7 +175,7 @@ paths:
           required: true
           type: integer
           format: int64
-          x-exmaple: 30
+          x-example: 30
       responses:
         "404":
           description: Pet not found
