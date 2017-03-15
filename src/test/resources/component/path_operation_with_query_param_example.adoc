@@ -1,0 +1,96 @@
+
+[[_findpetsbytags]]
+=== Finds Pets by tags
+....
+GET /pets/findByTags
+....
+
+
+==== Description
+Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**tags** +
+__optional__|Tags to filter by|< string > array(multi)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|successful operation +
+**Headers** :  +
+`X-Rate-Limit-Limit` (integer) : The number of allowed requests in the current period. +
+`X-Rate-Limit-Remaining` (integer) : The number of remaining requests in the current period. +
+`X-Rate-Limit-Reset` (integer) : The number of seconds left in the current period.|< <<_pet,Pet>> > array
+|**400**|Invalid tag value|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+* `application/xml`
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
+|===
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/pets/findByTags
+----
+
+
+===== Request query
+[source,json]
+----
+{
+  "tags" : "adorable"
+}
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+[ {
+  "id" : 0,
+  "category" : {
+    "id" : 0,
+    "name" : "FoobarCategory"
+  },
+  "name" : "doggie",
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string"
+} ]
+----
+
+
+
