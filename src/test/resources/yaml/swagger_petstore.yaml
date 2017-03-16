@@ -134,6 +134,7 @@ paths:
           items:
             type: string
           collectionFormat: multi
+          x-example: adorable
       responses:
         "200":
           description: successful operation
@@ -174,6 +175,7 @@ paths:
           required: true
           type: integer
           format: int64
+          x-example: 30
       responses:
         "404":
           description: Pet not found

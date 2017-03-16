@@ -15,8 +15,10 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
@@ -30,7 +32,9 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class PathOperationComponentTest extends AbstractComponentTest {
@@ -96,5 +100,72 @@ public class PathOperationComponentTest extends AbstractComponentTest {
 
     }
 
+    @Test
+    public void testWithPathParamExample() throws URISyntaxException {
+        String COMPONENT_NAME = "path_operation_with_path_param_example";
+        Path outputDirectory = getOutputFile(COMPONENT_NAME);
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        Map<String, String> configMap = new HashMap<>();
+        configMap.put("swagger2markup.generatedExamplesEnabled", "true");  // enable example
+
+        //Given
+        Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap).build();
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config) .build();
+        Swagger swagger = converter.getContext().getSwagger();
+
+        io.swagger.models.Path path = swagger.getPaths().get("/pets/{petId}");
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/{petId}", path);
+
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
+
+        //When
+        markupDocBuilder = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(context),
+                new SecurityDocumentResolver(context)).
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
+
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
+
+        //Then
+        Path expectedFile = getExpectedFile(COMPONENT_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
+    }
+
+    @Test
+    public void testWithQueryParamExample() throws URISyntaxException {
+        String COMPONENT_NAME = "path_operation_with_query_param_example";
+        Path outputDirectory = getOutputFile(COMPONENT_NAME);
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        Map<String, String> configMap = new HashMap<>();
+        configMap.put("swagger2markup.generatedExamplesEnabled", "true");  // enable example
+
+        //Given
+        Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap).build();
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config) .build();
+        Swagger swagger = converter.getContext().getSwagger();
+
+        io.swagger.models.Path path = swagger.getPaths().get("/pets/findByTags");
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByTags", path);
+
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
+
+        //When
+        markupDocBuilder = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(context),
+                new SecurityDocumentResolver(context)).
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
+
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
+
+        //Then
+        Path expectedFile = getExpectedFile(COMPONENT_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
+    }
 
 }

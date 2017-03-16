@@ -125,6 +125,9 @@ public class ExamplesUtil {
                     Object abstractSerializableParameterExample;
                     abstractSerializableParameterExample = ((AbstractSerializableParameter) parameter).getExample();
                     if (abstractSerializableParameterExample == null) {
+                        abstractSerializableParameterExample = parameter.getVendorExtensions().get("x-example");
+                    }
+                    if (abstractSerializableParameterExample == null) {
                         Property item = ((AbstractSerializableParameter) parameter).getItems();
                         if (item != null) {
                             abstractSerializableParameterExample = item.getExample();
