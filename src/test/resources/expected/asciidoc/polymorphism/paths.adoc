@@ -29,7 +29,7 @@ Get collections
 
 ==== Produces
 
-* `*/*`
+* `\*/*`
 
 
 [[_getpets]]
@@ -59,7 +59,7 @@ Get pets
 
 ==== Produces
 
-* `*/*`
+* `\*/*`
 
 
 

@@ -51,7 +51,7 @@ __optional__|State value|enum (ADDED, REMOVED, CHANGED)
 
 ==== Produces
 
-* `*/*`
+* `\*/*`
 
 
 

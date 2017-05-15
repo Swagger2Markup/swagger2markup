@@ -31,21 +31,28 @@ public class MarkupDocBuilderUtils {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
-        return copyMarkupDocBuilder(markupDocBuilder).literalText(text).toString();
+        return copyMarkupDocBuilder(markupDocBuilder).literalText(escapeText(text)).toString();
+    }
+
+    private static String escapeText(String text) {
+        if(text.startsWith("*")){
+            text = "\\" + text;
+        }
+        return text;
     }
 
     public static String boldText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
-        return copyMarkupDocBuilder(markupDocBuilder).boldText(text).toString();
+        return copyMarkupDocBuilder(markupDocBuilder).boldText(escapeText(text)).toString();
     }
 
     public static String italicText(MarkupDocBuilder markupDocBuilder, String text) {
         if (StringUtils.isBlank(text)) {
             return StringUtils.EMPTY;
         }
-        return copyMarkupDocBuilder(markupDocBuilder).italicText(text).toString();
+        return copyMarkupDocBuilder(markupDocBuilder).italicText(escapeText(text)).toString();
     }
 
     public static String crossReference(MarkupDocBuilder markupDocBuilder, String document, String anchor, String text) {
