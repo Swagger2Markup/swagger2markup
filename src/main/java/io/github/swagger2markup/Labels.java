@@ -58,6 +58,9 @@ public class Labels {
     public static final String HOST = "host";
     public static final String BASE_PATH = "base_path";
     public static final String SCHEMES = "schemes";
+	public static final String EXTERNAL_DOCS = "external_docs";
+	public static final String EXTERNAL_DOCS_DESC = "external_docs_desc";
+	public static final String EXTERNAL_DOCS_URL = "external_docs_url";
 
     //Security Document
     public static final String SECURITY = "security";

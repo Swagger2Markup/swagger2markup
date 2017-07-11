@@ -20,10 +20,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
-import io.swagger.models.Contact;
-import io.swagger.models.Info;
-import io.swagger.models.Swagger;
-import io.swagger.models.Tag;
+import io.swagger.models.*;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
@@ -45,6 +42,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
     private final TagsComponent tagsComponent;
     private final ProducesComponent producesComponent;
     private final ConsumesComponent consumesComponent;
+    private final ExternalDocsComponent externalDocsComponent;
 
     public OverviewDocument(Swagger2MarkupConverter.Context context) {
         super(context);
@@ -55,6 +53,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         tagsComponent = new TagsComponent(context);
         producesComponent = new ProducesComponent(context);
         consumesComponent = new ConsumesComponent(context);
+	    externalDocsComponent = new ExternalDocsComponent((context));
     }
 
     public static OverviewDocument.Parameters parameters(Swagger swagger) {
@@ -82,6 +81,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         buildTagsSection(markupDocBuilder, swagger.getTags());
         buildConsumesSection(markupDocBuilder, swagger.getConsumes());
         buildProducesSection(markupDocBuilder, swagger.getProduces());
+        buildExternalDocsSection(markupDocBuilder, swagger.getExternalDocs());
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_END, markupDocBuilder));
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_AFTER, markupDocBuilder));
         return markupDocBuilder;
@@ -139,6 +139,12 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         if (isNotEmpty(produces)) {
             producesComponent.apply(markupDocBuilder, ProducesComponent.parameters(produces, SECTION_TITLE_LEVEL));
         }
+    }
+
+    private void buildExternalDocsSection(MarkupDocBuilder markupDocBuilder, ExternalDocs externalDocs) {
+	    if (externalDocs != null) {
+	    	externalDocsComponent.apply(markupDocBuilder, ExternalDocsComponent.parameters(externalDocs, SECTION_TITLE_LEVEL));
+	    }
     }
 
     /**
