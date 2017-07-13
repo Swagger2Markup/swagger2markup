@@ -21,6 +21,7 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
+import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
@@ -56,30 +57,30 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      */
     PropertiesTableComponent(Swagger2MarkupConverter.Context context,
-                             DocumentResolver definitionDocumentResolver) {
+      DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = definitionDocumentResolver;
         this.tableComponent = new TableComponent(context);
     }
 
     public static PropertiesTableComponent.Parameters parameters(Map<String, Property> properties,
-                                                                 String parameterName,
-                                                                 List<ObjectType> inlineDefinitions) {
+      String parameterName,
+      List<ObjectType> inlineDefinitions) {
         return new PropertiesTableComponent.Parameters(properties, parameterName, inlineDefinitions);
     }
 
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         //TODO: This method is too complex, split it up in smaller methods to increase readability
         StringColumn.Builder nameColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(NAME_COLUMN)))
-                .putMetaData(TableComponent.WIDTH_RATIO, "3");
+          .putMetaData(TableComponent.WIDTH_RATIO, "3");
 
         StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
-                .putMetaData(TableComponent.WIDTH_RATIO, "11")
-                .putMetaData(TableComponent.HEADER_COLUMN, "true");
+          .putMetaData(TableComponent.WIDTH_RATIO, "11")
+          .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
         StringColumn.Builder schemaColumnBuilder = StringColumn.builder(ColumnIds.StringColumnId.of(labels.getLabel(SCHEMA_COLUMN)))
-                .putMetaData(TableComponent.WIDTH_RATIO, "4")
-                .putMetaData(TableComponent.HEADER_COLUMN, "true");
+          .putMetaData(TableComponent.WIDTH_RATIO, "4")
+          .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
         Map<String, Property> properties = params.properties;
         if (MapUtils.isNotEmpty(properties)) {
@@ -166,7 +167,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                 }
 
                 DecimalFormat numberFormatter = new DecimalFormat("#.##",
-                        DecimalFormatSymbols.getInstance(config.getOutputLanguage().toLocale()));
+                  DecimalFormatSymbols.getInstance(config.getOutputLanguage().toLocale()));
 
                 if (optionalMinValue.isPresent()) {
                     if (isNotBlank(descriptionContent.toString())) {
@@ -188,7 +189,12 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                     if (isNotBlank(description) || optionalDefaultValue.isPresent()) {
                         descriptionContent.newLine(true);
                     }
-                    descriptionContent.boldText(labels.getLabel(EXAMPLE_COLUMN)).text(COLON).literalText(Json.pretty(optionalExample.get()));
+
+                    if(propertyType instanceof RefType) {
+                        descriptionContent.boldText(labels.getLabel(EXAMPLE_COLUMN)).text(COLON).crossReference(optionalExample.get().toString());
+                    } else {
+                        descriptionContent.boldText(labels.getLabel(EXAMPLE_COLUMN)).text(COLON).literalText(Json.pretty(optionalExample.get()));
+                    }
                 }
 
                 nameColumnBuilder.add(propertyNameContent.toString());
@@ -198,9 +204,9 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
         }
 
         return tableComponent.apply(markupDocBuilder, TableComponent.parameters(
-                nameColumnBuilder.build(),
-                descriptionColumnBuilder.build(),
-                schemaColumnBuilder.build()));
+          nameColumnBuilder.build(),
+          descriptionColumnBuilder.build(),
+          schemaColumnBuilder.build()));
     }
 
     public static class Parameters {
@@ -209,8 +215,8 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
         private final List<ObjectType> inlineDefinitions;
 
         public Parameters(Map<String, Property> properties,
-                          String parameterName,
-                          List<ObjectType> inlineDefinitions) {
+          String parameterName,
+          List<ObjectType> inlineDefinitions) {
 
             this.properties = Validate.notNull(properties, "Properties must not be null");
             this.parameterName = Validate.notBlank(parameterName, "ParameterName must not be blank");
