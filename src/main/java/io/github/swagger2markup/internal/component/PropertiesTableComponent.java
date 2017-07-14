@@ -190,7 +190,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                         descriptionContent.newLine(true);
                     }
 
-                    if(propertyType instanceof RefType) {
+                    if(propertyType instanceof RefType && isReferenceLink(optionalExample.get().toString())) {
                         descriptionContent.boldText(labels.getLabel(EXAMPLE_COLUMN)).text(COLON).crossReference(optionalExample.get().toString());
                     } else {
                         descriptionContent.boldText(labels.getLabel(EXAMPLE_COLUMN)).text(COLON).literalText(Json.pretty(optionalExample.get()));
@@ -207,6 +207,19 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
           nameColumnBuilder.build(),
           descriptionColumnBuilder.build(),
           schemaColumnBuilder.build()));
+    }
+
+    /*
+     * Check if a string is a link to a reference, format <<_referenceClass>>
+      *
+     * @param possibleAnchor String to check
+     * @return true if the string is a link to an anchor, false otherwise
+     */
+    private boolean isReferenceLink(String possibleAnchor) {
+        if(possibleAnchor == null) {
+            return false;
+        }
+        return possibleAnchor.startsWith("<<_") && possibleAnchor.endsWith(">>");
     }
 
     public static class Parameters {

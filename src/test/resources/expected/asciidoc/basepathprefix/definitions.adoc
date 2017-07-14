@@ -83,7 +83,7 @@ Test description
 |===
 |Name|Description|Schema
 |**category** +
-__optional__|**Example** : `"<<_category>>"`|<<_category,Category>>
+__optional__|**Example** : <<_category>>|<<_category,Category>>
 |**id** +
 __optional__|**Example** : `0`|integer (int64)
 |**name** +
