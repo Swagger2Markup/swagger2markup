@@ -216,9 +216,6 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
      * @return true if the string is a link to an anchor, false otherwise
      */
     private boolean isReferenceLink(String possibleAnchor) {
-        if(possibleAnchor == null) {
-            return false;
-        }
         return possibleAnchor.startsWith("<<_") && possibleAnchor.endsWith(">>");
     }
 
