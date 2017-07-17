@@ -41,4 +41,10 @@ __Schemes__ : HTTP
 * user : User resource
 
 
+=== External Docs
+[%hardbreaks]
+__Description__ : Find out more about Swagger
+__URL__ : http://swagger.io
+
+
 
