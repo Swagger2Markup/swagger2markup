@@ -147,6 +147,7 @@ public class ExamplesUtil {
                         example = abstractSerializableParameterExample;
                     }
                     if (parameter instanceof QueryParameter) {
+                        //TODO: #264 query parameters seem to be collected here
                         //noinspection unchecked
                         @SuppressWarnings("unchecked")
                         Map<String, Object> queryExampleMap = (Map<String, Object>) examples.get("query");
