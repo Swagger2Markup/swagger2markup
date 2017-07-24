@@ -1,0 +1,91 @@
+
+[[_paths]]
+== Paths
+
+[[_findpetsbystatus]]
+=== Finds Pets by status
+....
+GET /pet/findByStatus
+....
+
+
+==== Description
+Multiple status values can be provided with comma separated strings
+
+
+==== Parameters
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**status** +
+__required__|Status values that need to be considered for filter|< enum (available, pending, sold) > array(multi)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP Code|Description|Schema
+|**200**|successful operation|< <<_pet,Pet>> > array
+|**400**|Invalid status value|No Content
+|===
+
+
+==== Produces
+
+* `application/xml`
+* `application/json`
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^3,.^4,.^13"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write:pets,read:pets
+|===
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/pet/findByStatus?status=string
+----
+
+
+===== Request query
+
+|===
+|Name|Value
+|status|string
+|===
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+[ {
+  "id" : 0,
+  "category" : {
+    "id" : 0,
+    "name" : "string"
+  },
+  "name" : "doggie",
+  "photoUrls" : [ "string" ],
+  "tags" : [ {
+    "id" : 0,
+    "name" : "string"
+  } ],
+  "status" : "string"
+} ]
+----

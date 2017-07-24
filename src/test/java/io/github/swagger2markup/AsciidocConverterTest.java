@@ -782,4 +782,29 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/page_breaks").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithPageBreaks.html");
     }
+
+    @Test
+    public void testWithQueryParameters() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_query_params.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/query_params");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withGeneratedExamples()
+                .build();
+
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/query_params").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "textWithQueryParameters.html");
+    }
 }
