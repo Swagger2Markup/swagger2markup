@@ -100,63 +100,10 @@ public class ExamplesUtil {
         for (Parameter parameter : parameters) {
             Object example = null;
             if (parameter instanceof BodyParameter) {
-                example = ((BodyParameter) parameter).getExamples();
-                if (example == null) {
-                    Model schema = ((BodyParameter) parameter).getSchema();
-                    if (schema instanceof RefModel) {
-                        String simpleRef = ((RefModel) schema).getSimpleRef();
-                        example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
-                    } else if (generateMissingExamples) {
-                        if (schema instanceof ComposedModel) {
-                            //FIXME: getProperties() may throw NullPointerException
-                            example = exampleMapForProperties(((ObjectType) ModelUtils.getType(schema, definitions, definitionDocumentResolver)).getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
-                        } else if (schema instanceof ArrayModel) {
-                            example = generateExampleForArrayModel((ArrayModel) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
-                        } else {
-                            example = schema.getExample();
-                            if (example == null) {
-                                example = exampleMapForProperties(schema.getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
-                            }
-                        }
-                    }
-                }
+                example = generateBodyParameterExample(parameter, generateMissingExamples, definitions, definitionDocumentResolver, markupDocBuilder);
             } else if (parameter instanceof AbstractSerializableParameter) {
                 if (generateMissingExamples) {
-                    Object abstractSerializableParameterExample;
-                    abstractSerializableParameterExample = ((AbstractSerializableParameter) parameter).getExample();
-                    if (abstractSerializableParameterExample == null) {
-                        abstractSerializableParameterExample = parameter.getVendorExtensions().get("x-example");
-                    }
-                    if (abstractSerializableParameterExample == null) {
-                        Property item = ((AbstractSerializableParameter) parameter).getItems();
-                        if (item != null) {
-                            abstractSerializableParameterExample = item.getExample();
-                            if (abstractSerializableParameterExample == null) {
-                                abstractSerializableParameterExample = PropertyAdapter.generateExample(item, markupDocBuilder);
-                            }
-                        }
-                        if (abstractSerializableParameterExample == null) {
-                            abstractSerializableParameterExample = ParameterAdapter.generateExample((AbstractSerializableParameter) parameter);
-                        }
-                    }
-                    if (parameter instanceof PathParameter) {
-                        String pathExample = (String) examples.get("path");
-                        pathExample = pathExample.replace('{' + parameter.getName() + '}', String.valueOf(abstractSerializableParameterExample));
-                        example = pathExample;
-                    } else {
-                        example = abstractSerializableParameterExample;
-                    }
-                    if (parameter instanceof QueryParameter) {
-                        //TODO: #264 query parameters seem to be collected here
-                        //noinspection unchecked
-                        @SuppressWarnings("unchecked")
-                        Map<String, Object> queryExampleMap = (Map<String, Object>) examples.get("query");
-                        if (queryExampleMap == null) {
-                            queryExampleMap = new LinkedHashMap<>();
-                        }
-                        queryExampleMap.put(parameter.getName(), abstractSerializableParameterExample);
-                        example = queryExampleMap;
-                    }
+                    example = generateAbstractSerializableParameterExample(parameter, examples, markupDocBuilder);
                 }
             } else if (parameter instanceof RefParameter) {
                 String simpleRef = ((RefParameter) parameter).getSimpleRef();
@@ -168,6 +115,71 @@ public class ExamplesUtil {
         }
 
         return examples;
+    }
+
+    private static Object generateBodyParameterExample(Parameter parameter, Boolean generateMissingExamples, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
+        Object example = ((BodyParameter) parameter).getExamples();
+        if (example == null) {
+            Model schema = ((BodyParameter) parameter).getSchema();
+            if (schema instanceof RefModel) {
+                String simpleRef = ((RefModel) schema).getSimpleRef();
+                example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+            } else if (generateMissingExamples) {
+                if (schema instanceof ComposedModel) {
+                    //FIXME: getProperties() may throw NullPointerException
+                    example = exampleMapForProperties(((ObjectType) ModelUtils.getType(schema, definitions, definitionDocumentResolver)).getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                } else if (schema instanceof ArrayModel) {
+                    example = generateExampleForArrayModel((ArrayModel) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                } else {
+                    example = schema.getExample();
+                    if (example == null) {
+                        example = exampleMapForProperties(schema.getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                    }
+                }
+            }
+        }
+
+        return example;
+    }
+
+    private static Object generateAbstractSerializableParameterExample(Parameter parameter, Map<String, Object> examples, MarkupDocBuilder markupDocBuilder) {
+        Object abstractSerializableParameterExample;
+        Object example;
+        abstractSerializableParameterExample = ((AbstractSerializableParameter) parameter).getExample();
+        if (abstractSerializableParameterExample == null) {
+            abstractSerializableParameterExample = parameter.getVendorExtensions().get("x-example");
+        }
+        if (abstractSerializableParameterExample == null) {
+            Property item = ((AbstractSerializableParameter) parameter).getItems();
+            if (item != null) {
+                abstractSerializableParameterExample = item.getExample();
+                if (abstractSerializableParameterExample == null) {
+                    abstractSerializableParameterExample = PropertyAdapter.generateExample(item, markupDocBuilder);
+                }
+            }
+            if (abstractSerializableParameterExample == null) {
+                abstractSerializableParameterExample = ParameterAdapter.generateExample((AbstractSerializableParameter) parameter);
+            }
+        }
+        if (parameter instanceof PathParameter) {
+            String pathExample = (String) examples.get("path");
+            pathExample = pathExample.replace('{' + parameter.getName() + '}', String.valueOf(abstractSerializableParameterExample));
+            example = pathExample;
+        } else {
+            example = abstractSerializableParameterExample;
+        }
+        if (parameter instanceof QueryParameter) {
+            //TODO: #264 query parameters seem to be collected here
+            //noinspection unchecked
+            @SuppressWarnings("unchecked")
+            Map<String, Object> queryExampleMap = (Map<String, Object>) examples.get("query");
+            if (queryExampleMap == null) {
+                queryExampleMap = new LinkedHashMap<>();
+            }
+            queryExampleMap.put(parameter.getName(), abstractSerializableParameterExample);
+            example = queryExampleMap;
+        }
+        return example;
     }
 
     /**
