@@ -345,15 +345,17 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
      * @param operation the Swagger Operation
      */
     private void buildExamplesSection(MarkupDocBuilder markupDocBuilder, PathOperation operation, List<PageBreakLocations> locations) {
-
+        // Generate examples
         Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
         Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
 
+        // Get page break settings
         boolean beforeExampleRequestBreak = locations.contains(BEFORE_OPERATION_EXAMPLE_REQUEST);
         boolean afterExampleRequestBreak = locations.contains(AFTER_OPERATION_EXAMPLE_REQUEST);
         boolean beforeExampleResponseBreak = locations.contains(BEFORE_OPERATION_EXAMPLE_RESPONSE);
         boolean afterExampleResponseBreak = locations.contains(AFTER_OPERATION_EXAMPLE_RESPONSE);
 
+        // Write examples
         exampleMap(markupDocBuilder, generatedRequestExampleMap, labels.getLabel(EXAMPLE_REQUEST), labels.getLabel(REQUEST), beforeExampleRequestBreak, afterExampleRequestBreak);
         exampleMap(markupDocBuilder, generatedResponseExampleMap, labels.getLabel(EXAMPLE_RESPONSE), labels.getLabel(RESPONSE), beforeExampleResponseBreak, afterExampleResponseBreak);
     }
@@ -406,6 +408,10 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                 } else if (entry.getKey().equals("path")) {
                     // Path shouldn't have quotes around it
                     markupDocBuilder.listingBlock(entry.getValue().toString());
+                } else if (entry.getKey().equals("query")) {
+                    //TODO issue #264: print query parameters in table
+                    // markupDocBuilder.listingBlock(entry.getValue().toString());
+                    logger.debug("Skipping query parameter: " + entry.getValue().toString());
                 } else {
                     markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
                 }
