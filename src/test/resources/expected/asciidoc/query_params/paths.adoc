@@ -57,7 +57,7 @@ __required__|Status values that need to be considered for filter|< enum (availab
 
 ===== Request path
 ----
-/pet/findByStatus?status=string
+/pet/findByStatus
 ----
 
 
