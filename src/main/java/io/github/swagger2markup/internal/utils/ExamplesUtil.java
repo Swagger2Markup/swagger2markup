@@ -117,6 +117,16 @@ public class ExamplesUtil {
         return examples;
     }
 
+    /**
+     * Generates example for a body parameter
+     *
+     * @param parameter                  Body paramteter to generate example for
+     * @param generateMissingExamples    Should an example be generated if none is defined
+     * @param definitions                the map of definitions
+     * @param definitionDocumentResolver definitions document resolver
+     * @param markupDocBuilder           the markup builder
+     * @return Object containing example
+     */
     private static Object generateBodyParameterExample(Parameter parameter, Boolean generateMissingExamples, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
         Object example = ((BodyParameter) parameter).getExamples();
         if (example == null) {

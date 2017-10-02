@@ -373,7 +373,6 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
 
 
-
                     if (!fieldsIterator.hasNext()) {
                         // rootNode contains a single example, no need to further iterate.
                         String example = Json.pretty(rootNode);

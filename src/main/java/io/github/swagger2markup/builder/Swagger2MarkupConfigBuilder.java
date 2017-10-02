@@ -17,14 +17,12 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
-
 import io.github.swagger2markup.*;
 import io.github.swagger2markup.markup.builder.LineSeparator;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.parameters.Parameter;
-
 import org.apache.commons.configuration2.*;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
@@ -111,12 +109,12 @@ public class Swagger2MarkupConfigBuilder {
         Optional<Pattern> headerPattern = swagger2MarkupProperties.getHeaderPattern(HEADER_REGEX);
 
         config.headerPattern = headerPattern.orElse(null);
-        
+
         config.listDelimiterEnabled = swagger2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
         config.listDelimiter = swagger2MarkupProperties.getString(LIST_DELIMITER, ",").charAt(0);
-        
+
         if (config.listDelimiterEnabled && configuration instanceof AbstractConfiguration) {
-            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
+            ((AbstractConfiguration) configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
         }
 
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
@@ -218,19 +216,20 @@ public class Swagger2MarkupConfigBuilder {
         config.separatedOperationsEnabled = true;
         return this;
     }
-    
+
     /**
      * Allows properties to contain a list of elements delimited by a specified character.
+     *
      * @return this builder
      */
     public Swagger2MarkupConfigBuilder withListDelimiter() {
         config.listDelimiterEnabled = true;
         return this;
     }
-    
+
     /**
      * Specifies the list delimiter which should be used.
-     * 
+     *
      * @param delimiter the delimiter
      * @return this builder
      */
@@ -763,7 +762,7 @@ public class Swagger2MarkupConfigBuilder {
         public Character getListDelimiter() {
             return listDelimiter;
         }
-        
+
         @Override
         public boolean isListDelimiterEnabled() {
             return listDelimiterEnabled;
