@@ -10,7 +10,7 @@ __Flow__ : implicit
 __Token URL__ : https://instagram.com/oauth/authorize/?client_id=CLIENT-ID&redirect_uri=REDIRECT-URI&response_type=token
 
 
-[options="header", cols=".^3,.^17"]
+[options="header", cols=".^3a,.^17a"]
 |===
 |Name|Description
 |basic|to read any and all data related to a user (e.g. following/followed-by

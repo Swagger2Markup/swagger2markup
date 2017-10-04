@@ -24,7 +24,7 @@ __Type__ : < < string, <<_collectionparameters_post_version,Version>> > map > ar
 [[_collectionparameters_post_version]]
 **Version**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**key** +
@@ -36,7 +36,7 @@ __optional__|option value|string
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|Result|< < string, <<_collectionparameters_post_response_200,Response 200>> > map > array
@@ -45,7 +45,7 @@ __optional__|option value|string
 [[_collectionparameters_post_response_200]]
 **Response 200**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**key** +
@@ -73,7 +73,7 @@ Dummy description
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4"]
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**Option** +
@@ -91,7 +91,7 @@ __Name__ : LaunchCommandRequest
 __Flags__ : optional
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**Command** +
@@ -105,7 +105,7 @@ __optional__|Options k/v pairs|< <<_launchcommand_post_options,Options>> > array
 [[_launchcommand_post_command]]
 **Command**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**args** +
@@ -117,7 +117,7 @@ __optional__|Command path|string
 [[_launchcommand_post_options]]
 **Options**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**key** +
@@ -129,7 +129,7 @@ __optional__|option value|string
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|Result +
@@ -143,7 +143,7 @@ __optional__|option value|string
 [[_launchcommand_post_response_200]]
 **Response 200**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**Location** +
@@ -157,7 +157,7 @@ __optional__|<description>|string
 [[_launchcommand_post_options]]
 **Options**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**key** +
@@ -191,7 +191,7 @@ __Name__ : Version
 __Flags__ : optional
 
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myTable** +
@@ -201,7 +201,7 @@ __optional__|< <<_mixedparameters_post_mytable,myTable>> > array
 [[_mixedparameters_post_mytable]]
 **myTable**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myDict** +
@@ -211,7 +211,7 @@ __optional__|< string, <<_mixedparameters_post_mydict,myDict>> > map
 [[_mixedparameters_post_mydict]]
 **myDict**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**k** +
@@ -223,7 +223,7 @@ __optional__|string
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|Result|<<_mixedparameters_post_response_200,Response 200>>
@@ -232,7 +232,7 @@ __optional__|string
 [[_mixedparameters_post_response_200]]
 **Response 200**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myTable** +
@@ -242,7 +242,7 @@ __optional__|< <<_mixedparameters_post_mytable,myTable>> > array
 [[_mixedparameters_post_mytable]]
 **myTable**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myDict** +
@@ -252,7 +252,7 @@ __optional__|< string, <<_mixedparameters_post_mytable_mydict,myDict>> > map
 [[_mixedparameters_post_mytable_mydict]]
 **myDict**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**k** +
@@ -286,7 +286,7 @@ __Name__ : Version
 __Flags__ : optional
 
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myTable** +
@@ -296,7 +296,7 @@ __optional__|< <<_tablecontent,TableContent>> > array
 [[_tablecontent]]
 **TableContent**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myDict** +
@@ -306,7 +306,7 @@ __optional__|< string, <<_kvpair,KVPair>> > map
 [[_kvpair]]
 **KVPair**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**k** +
@@ -318,7 +318,7 @@ __optional__|string
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|Result|<<_result,Result>>
@@ -327,7 +327,7 @@ __optional__|string
 [[_result]]
 **Result**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myTable** +
@@ -337,7 +337,7 @@ __optional__|< <<_tablecontent,TableContent>> > array
 [[_tablecontent]]
 **TableContent**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**myDict** +
@@ -347,7 +347,7 @@ __optional__|< string, <<_kvpair,KVPair>> > map
 [[_kvpair]]
 **KVPair**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**k** +

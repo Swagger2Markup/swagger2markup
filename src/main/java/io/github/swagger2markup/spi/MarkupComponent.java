@@ -21,7 +21,7 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import javaslang.Function2;
+import io.vavr.Function2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

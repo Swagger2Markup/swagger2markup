@@ -2,7 +2,7 @@
 [[_tag]]
 === Tag
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |*id* +

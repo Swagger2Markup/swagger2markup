@@ -10,7 +10,7 @@ __Type__ : < integer (test) > array
 [[_integerobj]]
 === IntegerObj
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**test** +
@@ -31,7 +31,7 @@ __Type__ : < string (test) > array
 [[_stringobj]]
 === StringObj
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**test** +

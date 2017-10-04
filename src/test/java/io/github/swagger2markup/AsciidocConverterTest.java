@@ -17,6 +17,9 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.internal.component.ParameterTableComponentTest;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -520,6 +523,28 @@ public class AsciidocConverterTest {
         Path pathsDirectory = outputDirectory.resolve("operations");
         String[] paths = pathsDirectory.toFile().list();
         assertThat(paths).hasSize(18);
+    }
+
+    @Test
+    public void testWithAsciidocContentInTables() throws URISyntaxException {
+
+        //Given
+        Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore_with_adoc_content.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withSwaggerMarkupLanguage(MarkupLanguage.ASCIIDOC)
+                .build();
+
+        Swagger2MarkupConverter.from(file).withConfig(config).build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
     }
 
     @Test

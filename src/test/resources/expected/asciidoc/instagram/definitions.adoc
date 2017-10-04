@@ -5,7 +5,7 @@
 [[_comment]]
 === Comment
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**created_time** +
@@ -22,7 +22,7 @@ __optional__|string
 [[_image]]
 === Image
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**height** +
@@ -37,7 +37,7 @@ __optional__|integer
 [[_like]]
 === Like
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**first_name** +
@@ -56,7 +56,7 @@ __optional__|string
 [[_location]]
 === Location
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**id** +
@@ -73,7 +73,7 @@ __optional__|string
 [[_media]]
 === Media
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**comments:** +
@@ -105,7 +105,7 @@ __optional__||<<_media_videos,videos>>
 [[_media_comments]]
 **comments:**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**count** +
@@ -117,7 +117,7 @@ __optional__|< <<_comment,Comment>> > array
 [[_media_images]]
 **images**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**low_resolution** +
@@ -131,7 +131,7 @@ __optional__|<<_image,Image>>
 [[_media_likes]]
 **likes**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**count** +
@@ -143,7 +143,7 @@ __optional__|< <<_miniprofile,MiniProfile>> > array
 [[_media_videos]]
 **videos**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**low_resolution** +
@@ -158,7 +158,7 @@ __optional__|<<_image,Image>>
 A shorter version of User for likes array
 
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**full_name** +
@@ -175,7 +175,7 @@ __optional__|string
 [[_tag]]
 === Tag
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**media_count** +
@@ -188,7 +188,7 @@ __optional__|string
 [[_user]]
 === User
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**bio** +
@@ -210,7 +210,7 @@ __optional__|string
 [[_user_counts]]
 **counts**
 
-[options="header", cols=".^3,.^4"]
+[options="header", cols=".^3a,.^4a"]
 |===
 |Name|Schema
 |**follows** +

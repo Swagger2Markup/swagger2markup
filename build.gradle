@@ -1,15 +1,14 @@
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
     }
     dependencies {
-        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.3'
-        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.10.1'
+        classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.6'
+        classpath 'org.asciidoctor:asciidoctorj-pdf:1.5.0-alpha.16'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
-        classpath "org.ajoberstar:gradle-git:1.3.2"
+        classpath "org.ajoberstar:gradle-git:1.7.2"
     }
 }
 description = 'swagger2markup Build'
@@ -36,7 +35,6 @@ repositories {
         url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
     }
     jcenter()
-    mavenCentral()
     //mavenLocal()
 }
 
@@ -46,12 +44,12 @@ dependencies {
     compile 'org.apache.commons:commons-configuration2:2.1'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
     compile 'org.apache.commons:commons-collections4:4.1'
-    compile 'io.javaslang:javaslang:2.0.5'
-    compile 'ch.netzwerg:paleo-core:0.10.2'
+    compile 'io.vavr:vavr:0.9.1'
+    compile 'ch.netzwerg:paleo-core:0.11.0'
     testCompile 'junit:junit:4.11'
-    testCompile 'org.asciidoctor:asciidoctorj:1.5.4'
+    testCompile 'org.asciidoctor:asciidoctorj:1.5.6'
     testCompile 'ch.qos.logback:logback-classic:1.1.2'
-    testCompile 'org.assertj:assertj-core:3.5.2'
+    testCompile 'org.assertj:assertj-core:3.8.0'
     testCompile 'io.github.robwin:assertj-diff:0.1.1'
 }
 
@@ -66,5 +64,5 @@ test {
 
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '4.2'
 }

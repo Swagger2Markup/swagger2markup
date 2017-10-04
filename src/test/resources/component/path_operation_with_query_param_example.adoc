@@ -12,7 +12,7 @@ Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 
 
 ==== Parameters
 
-[options="header", cols=".^2,.^3,.^9,.^4"]
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
 |===
 |Type|Name|Description|Schema
 |**Query**|**tags** +
@@ -22,7 +22,7 @@ __optional__|Tags to filter by|< string > array(multi)
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|successful operation +
@@ -47,7 +47,7 @@ __optional__|Tags to filter by|< string > array(multi)
 
 ==== Security
 
-[options="header", cols=".^3,.^4,.^13"]
+[options="header", cols=".^3a,.^4a,.^13a"]
 |===
 |Type|Name|Scopes
 |**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets

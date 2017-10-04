@@ -1,7 +1,7 @@
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|successful operation +
