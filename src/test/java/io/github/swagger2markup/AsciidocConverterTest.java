@@ -17,9 +17,7 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.internal.component.ParameterTableComponentTest;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
