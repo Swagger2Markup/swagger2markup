@@ -984,8 +984,20 @@ __optional__||string
 [[_securityscheme]]
 == Security
 
+[[_api_key]]
+=== api_key
+This is another description
+
+[%hardbreaks]
+__Type__ : apiKey
+__Name__ : api_key
+__In__ : HEADER
+
+
 [[_petstore_auth]]
 === petstore_auth
+This is a standard oauth flow
+
 [%hardbreaks]
 __Type__ : oauth2
 __Flow__ : implicit
@@ -998,14 +1010,6 @@ __Token URL__ : http://petstore.swagger.io/api/oauth/dialog
 |write_pets|modify pets in your account
 |read_pets|read your pets
 |===
-
-
-[[_api_key]]
-=== api_key
-[%hardbreaks]
-__Type__ : apiKey
-__Name__ : api_key
-__In__ : HEADER
 
 
 
