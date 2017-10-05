@@ -1,6 +1,6 @@
 = MarkupDocBuilder
 :author: Robert Winkler
-:version: 1.0.0
+:version: 1.1.1
 :hardbreaks:
 
 image:https://travis-ci.org/Swagger2Markup/markup-document-builder.svg?branch=master["Build Status", link="https://travis-ci.org/Swagger2Markup/markup-document-builder"] image:https://coveralls.io/repos/Swagger2Markup/markup-document-builder/badge.svg["Coverage Status", link="https://coveralls.io/r/Swagger2Markup/markup-document-builder"] image:https://api.codacy.com/project/badge/grade/c56a372454164f21b1b2eec8eb48b370["Codacy code quality", link="https://www.codacy.com/app/robwin/markup-document-builder"] image:https://api.bintray.com/packages/swagger2markup/Maven/io.github.swagger2markup%3Amarkup-document-builder/images/download.svg[link="https://bintray.com/swagger2markup/Maven/io.github.swagger2markup%3Amarkup-document-builder/_latestVersion"] image:http://img.shields.io/badge/license-ASF2-blue.svg["Apache License 2", link="http://www.apache.org/licenses/LICENSE-2.0.txt"] image:https://img.shields.io/badge/Twitter-rbrtwnklr-blue.svg["Twitter", link="https://twitter.com/rbrtwnklr"]
@@ -29,9 +29,8 @@ The project is published in JCenter and Maven Central.
         <url>http://jcenter.bintray.com</url>
     </repository>
 </repositories>
-
 <dependency>
-    <groupId>io.github.robwin</groupId>
+    <groupId>io.github.swagger2markup</groupId>
     <artifactId>markup-document-builder</artifactId>
     <version>{version}</version>
 </dependency>
@@ -45,7 +44,7 @@ repositories {
     jcenter()
 }
 
-compile "io.github.robwin:markup-document-builder:{version}"
+compile "io.github.swagger2markup:markup-document-builder:{version}"
 ----
 
 === Using MarkupDocBuilder
