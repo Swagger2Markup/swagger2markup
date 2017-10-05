@@ -20,7 +20,7 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
-import javaslang.Function1;
+import io.vavr.Function1;
 
 /**
  * A functor to return the document part of an inter-document cross-references, depending on the context.

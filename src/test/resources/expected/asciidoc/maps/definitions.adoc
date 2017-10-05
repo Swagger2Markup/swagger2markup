@@ -7,7 +7,7 @@
 Information about a given HTTP mapping.
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**bean** +

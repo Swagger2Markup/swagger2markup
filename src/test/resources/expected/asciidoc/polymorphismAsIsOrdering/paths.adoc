@@ -15,7 +15,7 @@ Get collections
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|OK|<<_collection,Collection>>
@@ -45,7 +45,7 @@ Get pets
 
 ==== Responses
 
-[options="header", cols=".^2,.^14,.^4"]
+[options="header", cols=".^2a,.^14a,.^4a"]
 |===
 |HTTP Code|Description|Schema
 |**200**|OK|<<_pet,Pet>>

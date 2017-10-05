@@ -22,9 +22,9 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.markup.builder.MarkupTableColumn;
 import io.github.swagger2markup.spi.MarkupComponent;
-import javaslang.collection.Array;
-import javaslang.collection.IndexedSeq;
-import javaslang.collection.List;
+import io.vavr.collection.Array;
+import io.vavr.collection.IndexedSeq;
+import io.vavr.collection.List;
 import org.apache.commons.lang3.StringUtils;
 
 
@@ -53,7 +53,7 @@ public class TableComponent extends MarkupComponent<TableComponent.Parameters> {
                     return new MarkupTableColumn(column.getId().getName())
                             .withWidthRatio(widthRatio)
                             .withHeaderColumn(Boolean.parseBoolean(column.getMetaData().get(HEADER_COLUMN).getOrElse("false")))
-                            .withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^" + widthRatio);
+                            .withMarkupSpecifiers(MarkupLanguage.ASCIIDOC, ".^" + widthRatio + "a");
                 }
         ).toJavaList();
 

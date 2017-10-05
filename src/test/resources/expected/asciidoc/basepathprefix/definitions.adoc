@@ -5,7 +5,7 @@
 [[_category]]
 === Category
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -18,7 +18,7 @@ __optional__|**Example** : `"Canines"`|string
 [[_complexobject]]
 === ComplexObject
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**subObject** +
@@ -31,7 +31,7 @@ __optional__|**Example** : `{
 [[_subobject]]
 **SubObject**
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -44,7 +44,7 @@ __optional__|**Example** : `"a value !"`|string
 [[_identified]]
 === Identified
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -55,7 +55,7 @@ __optional__|**Example** : `0`|integer (int64)
 [[_order]]
 === Order
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**complete** +
@@ -79,7 +79,7 @@ __optional__|Order Status +
 Test description
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**category** +
@@ -108,7 +108,7 @@ __optional__|the weight of the pet +
 [[_tag]]
 === Tag
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**id** +
@@ -124,7 +124,7 @@ __optional__|**Example** : `"string"`|string
 __Polymorphism__ : Composition
 
 
-[options="header", cols=".^3,.^11,.^4"]
+[options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
 |**email** +

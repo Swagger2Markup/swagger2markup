@@ -7,7 +7,7 @@ __Flow__ : implicit
 __Token URL__ : http://petstore.swagger.io/api/oauth/dialog
 
 
-[options="header", cols=".^3,.^17"]
+[options="header", cols=".^3a,.^17a"]
 |===
 |Name|Description
 |write_pets|modify pets in your account

@@ -1,5 +1,5 @@
 
-[options="header", cols=".^0,.^0"]
+[options="header", cols=".^0a,.^0a"]
 |===
 |type|name
 |type1|name1

@@ -1,7 +1,7 @@
 
 ==== Security
 
-[options="header", cols=".^3,.^4,.^13"]
+[options="header", cols=".^3a,.^4a,.^13a"]
 |===
 |Type|Name|Scopes
 |**oauth2**|**<<_petstore_auth,petstore_auth>>**|write_pets,read_pets
