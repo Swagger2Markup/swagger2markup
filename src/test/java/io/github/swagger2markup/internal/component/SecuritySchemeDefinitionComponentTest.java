@@ -33,17 +33,21 @@ import java.nio.file.Paths;
 
 public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest {
 
-    private static final String COMPONENT_NAME = "security_scheme_definition";
-    private Path outputDirectory;
+    private static final String O_AUTH_NAME = "security_scheme_definition_oauth";
+    private static final String API_KEY_NAME = "security_scheme_definition_api_key";
+    private Path oauthOutputDirectory;
+    private Path apiKeyOutputDirectory;
 
     @Before
     public void setUp() {
-        outputDirectory = getOutputFile(COMPONENT_NAME);
-        FileUtils.deleteQuietly(outputDirectory.toFile());
+        oauthOutputDirectory = getOutputFile(O_AUTH_NAME);
+        apiKeyOutputDirectory = getOutputFile(API_KEY_NAME);
+        FileUtils.deleteQuietly(oauthOutputDirectory.toFile());
+        FileUtils.deleteQuietly(apiKeyOutputDirectory.toFile());
     }
 
     @Test
-    public void testSecuritySchemeDefinitionComponent() throws URISyntaxException {
+    public void testSecuritySchemeDefinitionComponentWithOAuth() throws URISyntaxException {
         //Given
         Path file = Paths.get(SecuritySchemeDefinitionComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
@@ -58,10 +62,35 @@ public class SecuritySchemeDefinitionComponentTest extends AbstractComponentTest
                 markupDocBuilder, SecuritySchemeDefinitionComponent.parameters("petstore_auth",
                         securitySchemeDefinition,
                         OverviewDocument.SECTION_TITLE_LEVEL));
-        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
+        markupDocBuilder.writeToFileWithoutExtension(oauthOutputDirectory, StandardCharsets.UTF_8);
 
-        Path expectedFile = getExpectedFile(COMPONENT_NAME);
-        DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
+        Path expectedFile = getExpectedFile(O_AUTH_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, oauthOutputDirectory, getReportName(O_AUTH_NAME));
 
     }
+
+    @Test
+    public void testSecuritySchemeDefinitionComponentWithApiKey() throws URISyntaxException {
+        //Given
+        Path file = Paths.get(SecuritySchemeDefinitionComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
+        Swagger swagger = converter.getContext().getSwagger();
+
+        SecuritySchemeDefinition securitySchemeDefinition = swagger.getSecurityDefinitions().get("api_key");
+
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
+
+        markupDocBuilder = new SecuritySchemeDefinitionComponent(context).apply(
+                markupDocBuilder, SecuritySchemeDefinitionComponent.parameters("api_key",
+                        securitySchemeDefinition,
+                        OverviewDocument.SECTION_TITLE_LEVEL));
+        markupDocBuilder.writeToFileWithoutExtension(apiKeyOutputDirectory, StandardCharsets.UTF_8);
+
+        Path expectedFile = getExpectedFile(API_KEY_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, apiKeyOutputDirectory, getReportName(API_KEY_NAME));
+
+    }
+
+
 }
