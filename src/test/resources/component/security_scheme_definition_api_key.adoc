@@ -1,0 +1,12 @@
+
+[[_api_key]]
+=== api_key
+This is another description
+
+[%hardbreaks]
+__Type__ : apiKey
+__Name__ : api_key
+__In__ : HEADER
+
+
+

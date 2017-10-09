@@ -2,6 +2,14 @@
 [[_securityscheme]]
 == Security
 
+[[_api_key]]
+=== api_key
+[%hardbreaks]
+__Type__ : apiKey
+__Name__ : api_key
+__In__ : HEADER
+
+
 [[_petstore_auth]]
 === petstore_auth
 [%hardbreaks]
@@ -16,14 +24,6 @@ __Token URL__ : http://petstore.swagger.wordnik.com/api/oauth/dialog
 |write_pets|modify pets in your account
 |read_pets|read your pets
 |===
-
-
-[[_api_key]]
-=== api_key
-[%hardbreaks]
-__Type__ : apiKey
-__Name__ : api_key
-__In__ : HEADER
 
 
 

@@ -40,13 +40,13 @@ repositories {
 
 dependencies {
     compile 'io.github.swagger2markup:markup-document-builder:1.1.1'
-    compile 'io.swagger:swagger-compat-spec-parser:1.0.25'
+    compile 'io.swagger:swagger-compat-spec-parser:1.0.31'
     compile 'org.apache.commons:commons-configuration2:2.1'
     compile 'commons-beanutils:commons-beanutils:1.9.2'
     compile 'org.apache.commons:commons-collections4:4.1'
     compile 'io.vavr:vavr:0.9.1'
     compile 'ch.netzwerg:paleo-core:0.11.0'
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
     testCompile 'org.asciidoctor:asciidoctorj:1.5.6'
     testCompile 'ch.qos.logback:logback-classic:1.1.2'
     testCompile 'org.assertj:assertj-core:3.8.0'

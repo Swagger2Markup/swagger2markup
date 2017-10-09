@@ -563,8 +563,10 @@ securityDefinitions:
     type: apiKey
     name: api_key
     in: header
+    description: "This is another description"
   petstore_auth:
     type: oauth2
+    description: "This is a standard oauth flow"
     authorizationUrl: http://petstore.swagger.io/api/oauth/dialog
     flow: implicit
     scopes:
