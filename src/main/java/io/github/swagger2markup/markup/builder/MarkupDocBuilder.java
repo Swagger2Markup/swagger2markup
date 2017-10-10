@@ -231,8 +231,8 @@ public interface MarkupDocBuilder {
     /**
      * Builds a text paragraph.<br>
      *
-     * @param text multi-line text
-     * @param hardbreaks force hardbreaks on all lines            
+     * @param text       multi-line text
+     * @param hardbreaks force hardbreaks on all lines
      * @return this builder
      */
     MarkupDocBuilder paragraph(String text, boolean hardbreaks);
@@ -256,24 +256,26 @@ public interface MarkupDocBuilder {
     /**
      * Builds a block of {@code text} with specified {@code style}.
      *
-     * @param text       text
-     * @param style      block style
-     * @param title      an optional title for the block. No title if null.
-     * @param admonition an optional admonition for the block. No admonition if null.
+     * @param text               text
+     * @param style              block style
+     * @param title              an optional title for the block. No title if null.
+     * @param admonition         an optional admonition for the block. No admonition if null.
      * @return this builder
      */
     MarkupDocBuilder block(String text, MarkupBlockStyle style, String title, MarkupAdmonition admonition);
+
 
     /**
      * Builds a block of {@code text} with specified {@code style}.<br>
      * This is an alias for {@link #block(String, MarkupBlockStyle, String, MarkupAdmonition) block(String, MarkupBlockStyle, null, null)}.
      *
-     * @param text  text
-     * @param style block style
+     * @param text               text
+     * @param style              block style
      * @return this builder
      */
     MarkupDocBuilder block(String text, MarkupBlockStyle style);
-    
+
+
     /**
      * Builds a source code block using the specified {@code language}.<br>
      * Line breaks are respected.
@@ -319,7 +321,7 @@ public interface MarkupDocBuilder {
      * @return this builder
      */
     MarkupDocBuilder literalText(String text);
-    
+
     /**
      * Builds a bold text line.<br>
      * This is an alias for {@link #boldTextLine(String, boolean) boldTextLine(text, false)}.
@@ -521,7 +523,7 @@ public interface MarkupDocBuilder {
      * If {@code markupLanguage} is different from current builder language, markupText is converted when supported, or conversion is just ignored.<br>
      * Currently supported conversions :
      * <ul>
-     *     <li> Markdown -&gt; AsciiDoc </li>
+     * <li> Markdown -&gt; AsciiDoc </li>
      * </ul>
      * Newlines are normalized in the process.
      *

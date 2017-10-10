@@ -83,7 +83,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         sectionTitleLevel(Markdown.TITLE, level, title);
         return this;
     }
-    
+
     @Override
     public MarkupDocBuilder sectionTitleWithAnchorLevel(int level, String title, String anchor) {
         sectionTitleWithAnchorLevel(Markdown.TITLE, level, title, anchor);
@@ -112,6 +112,8 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder block(String text, final MarkupBlockStyle style, String title, MarkupAdmonition admonition) {
+        boolean multiline = text.contains(newLine);
+
         if (admonition != null)
             documentBuilder.append(StringUtils.capitalize(admonition.name().toLowerCase()));
         if (title != null) {
@@ -122,18 +124,27 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         if (admonition != null || title != null)
             documentBuilder.append(" : ").append(newLine);
 
-        delimitedBlockText(new Markup() {
+        Markup m = new Markup() {
             public String toString() {
                 return BLOCK_STYLE.get(style);
             }
-        }, text);
+        };
+
+        if (style == MarkupBlockStyle.LISTING && multiline) {
+            delimitedBlockText(m, text, m, true);
+        } else {
+            delimitedBlockText(m, text, m);
+        }
+
         return this;
     }
 
     @Override
     public MarkupDocBuilder listingBlock(String text, String language) {
-        if (language != null)
-            text = language + " :" + newLine + text;
+        text = newLine + text;
+        if (language != null) {
+            text = language + text;
+        }
         block(text, MarkupBlockStyle.LISTING);
         return this;
     }
@@ -143,7 +154,7 @@ public class MarkdownBuilder extends AbstractMarkupDocBuilder {
         boldText(Markdown.LITERAL, text);
         return this;
     }
-    
+
     @Override
     public MarkupDocBuilder boldText(String text) {
         boldText(Markdown.BOLD, text);

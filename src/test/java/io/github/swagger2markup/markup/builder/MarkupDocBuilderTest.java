@@ -130,6 +130,19 @@ public class MarkupDocBuilderTest {
     }
 
     @Test
+    public void testMarkdownCodeBlock() throws IOException, URISyntaxException {
+        MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
+
+        builder = builder.listingBlock("$o = new Thing();", "php");
+        Path outputFile = Paths.get("build/test/markdown/test2");
+        builder.writeToFileWithoutExtension(builder.addFileExtension(outputFile), StandardCharsets.UTF_8);
+        builder.writeToFile(outputFile, StandardCharsets.UTF_8);
+
+        Path expectedFile = Paths.get(MarkupDocBuilderTest.class.getResource("/expected/markdown/test2.md").toURI());
+        DiffUtils.assertThatFileIsEqual(expectedFile, builder.addFileExtension(outputFile), "testMarkdown2.html");
+    }
+
+    @Test
     public void testMarkdown() throws IOException, URISyntaxException {
         MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN);
 

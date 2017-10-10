@@ -209,7 +209,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         documentBuilder.append(replaceNewLines(text));
         return this;
     }
-    
+
     @Override
     public MarkupDocBuilder paragraph(String text) {
         return paragraph(text, false);
@@ -227,13 +227,29 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
         return listingBlock(replaceNewLines(text), null);
     }
 
+    protected void delimitedBlockText(Markup begin, String text, Markup end, boolean skipLeadingNewline) {
+        Validate.notBlank(text, "text must not be blank");
+        if (!StringUtils.isBlank(begin.toString()))
+            documentBuilder.append(begin);
+        if (!skipLeadingNewline)
+            documentBuilder.append(newLine);
+
+        documentBuilder.append(replaceNewLines(text)).append(newLine);
+        if (!StringUtils.isBlank(end.toString()))
+            documentBuilder.append(end).append(newLine);
+        documentBuilder.append(newLine);
+
+    }
+
     protected void delimitedBlockText(Markup begin, String text, Markup end) {
         Validate.notBlank(text, "text must not be blank");
         if (!StringUtils.isBlank(begin.toString()))
             documentBuilder.append(begin).append(newLine);
+
         documentBuilder.append(replaceNewLines(text)).append(newLine);
         if (!StringUtils.isBlank(end.toString()))
             documentBuilder.append(end).append(newLine);
+
         documentBuilder.append(newLine);
     }
 
@@ -385,7 +401,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     }
 
     @Override
-    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage){
+    public MarkupDocBuilder importMarkup(Reader markupText, MarkupLanguage markupLanguage) {
         Validate.notNull(markupText, "markupText must not be null");
         Validate.notNull(markupLanguage, "markupLanguage must not be null");
         return importMarkup(markupText, markupLanguage, 0);

@@ -52,8 +52,7 @@ Line2
 Source code listing
 ```
 
-```
-java :
+```java
 MarkupDocBuilder builder = MarkupDocBuilders.documentBuilder(MarkupLanguage.MARKDOWN)
 ```
 
