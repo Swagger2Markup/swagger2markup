@@ -1,5 +1,5 @@
 apply plugin: 'org.asciidoctor.convert'
-apply plugin: 'org.ajoberstar.github-pages'
+apply plugin: 'org.ajoberstar.git-publish'
 
 asciidoctor {
     sources {
@@ -18,17 +18,23 @@ asciidoctor {
     ]
 }
 
-publishGhPages.dependsOn asciidoctor
+gitPublishCommit.dependsOn asciidoctor
 
-githubPages {
-    repoUri = 'https://github.com/Swagger2Markup/swagger2markup.git'
+gitPublish {
+    repoUri = 'git@github.com:Swagger2Markup/swagger2markup.git'
+    branch = 'gh-pages'
 
-    credentials {
-        username = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
-        password = project.hasProperty('githubPassword') ? project.githubPassword : System.getenv('GITHUB_PASSWORD')
-    }
+    // use ENV GRGIT_USER
+    // use ENV GRGIT_PASS
+    // or org.ajoberstar.grgit.auth.username system property
+    // org.ajoberstar.grgit.auth.password system property
+    // see http://ajoberstar.org/grgit/grgit-authentication.html for details
+    // credentials {
+        // username = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
+        // password = project.hasProperty('githubPassword') ? project.githubPassword : System.getenv('GITHUB_PASSWORD')
+    // }
 
-    pages {
+    contents {
         from file(asciidoctor.outputDir.path + '/html5')
         into project.releaseVersion
     }
