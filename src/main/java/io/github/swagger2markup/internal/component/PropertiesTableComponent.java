@@ -186,7 +186,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                 }
 
                 if (optionalExample.isPresent()) {
-                    if (isNotBlank(description) || optionalDefaultValue.isPresent()) {
+                    if (isNotBlank(descriptionContent.toString())) {
                         descriptionContent.newLine(true);
                     }
 
