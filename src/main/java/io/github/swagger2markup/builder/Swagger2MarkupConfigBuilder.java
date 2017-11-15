@@ -75,6 +75,13 @@ public class Swagger2MarkupConfigBuilder {
 
         Swagger2MarkupProperties swagger2MarkupProperties = new Swagger2MarkupProperties(compositeConfiguration);
 
+        config.listDelimiterEnabled = swagger2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
+        config.listDelimiter = swagger2MarkupProperties.getString(LIST_DELIMITER, ",").charAt(0);
+        
+        if (config.listDelimiterEnabled && configuration instanceof AbstractConfiguration) {
+            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
+        }
+
         config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
         config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
         config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
@@ -112,13 +119,6 @@ public class Swagger2MarkupConfigBuilder {
 
         config.headerPattern = headerPattern.orElse(null);
         
-        config.listDelimiterEnabled = swagger2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
-        config.listDelimiter = swagger2MarkupProperties.getString(LIST_DELIMITER, ",").charAt(0);
-        
-        if (config.listDelimiterEnabled && configuration instanceof AbstractConfiguration) {
-            ((AbstractConfiguration)configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
-        }
-
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
         config.extensionsProperties = new Swagger2MarkupProperties(extensionsConfiguration);
