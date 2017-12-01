@@ -1,0 +1,44 @@
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+[%hardbreaks]
+__Polymorphism__ : Composition
+
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int64)
+|===
+
+
+[[_identified]]
+=== Identified
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int64)
+|===
+
+
+[[_user]]
+=== User
+[%hardbreaks]
+__Polymorphism__ : Composition
+
+
+[options="header", cols=".^3a,.^4a"]
+|===
+|Name|Schema
+|**id** +
+__optional__|integer (int64)
+|===
+
+
+
