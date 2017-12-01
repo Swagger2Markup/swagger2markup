@@ -805,4 +805,28 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/page_breaks").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithPageBreaks.html");
     }
+
+    @Test
+    public void testWithEmptyTables() throws IOException, URISyntaxException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_empty_tables.json"));
+        Path outputDirectory = Paths.get("build/test/asciidoc/empty_tables");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/empty_tables").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithEmptyTables.html");
+    }
 }
