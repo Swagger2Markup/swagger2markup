@@ -26,6 +26,7 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
+import io.swagger.models.properties.Property;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -157,11 +158,14 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
             if (isNotBlank(typeInfosString))
                 markupDocBuilder.paragraph(typeInfosString, true);
 
-            propertiesTableComponent.apply(markupDocBuilder,
-                    PropertiesTableComponent.parameters(
-                            ((ObjectType) modelType).getProperties(),
-                            definitionName,
-                            inlineDefinitions));
+            Map<String, Property> properties = ((ObjectType) modelType).getProperties();
+            if (!properties.isEmpty()) {
+                propertiesTableComponent.apply(markupDocBuilder,
+                        PropertiesTableComponent.parameters(
+                                properties,
+                                definitionName,
+                                inlineDefinitions));
+            }
         } else if (modelType != null) {
             MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
             typeInfos.italicText(labels.getLabel(TYPE_COLUMN)).textLine(COLON + modelType.displaySchema(markupDocBuilder));

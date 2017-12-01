@@ -88,23 +88,29 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
             if (isNotBlank(oauth2Scheme.getTokenUrl())) {
                 paragraphBuilder.italicText(labels.getLabel(TOKEN_URL)).textLine(COLON + oauth2Scheme.getTokenUrl());
             }
-            StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(NAME_COLUMN)))
-                    .putMetaData(TableComponent.WIDTH_RATIO, "3")
-                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
-            StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
-                    .putMetaData(TableComponent.WIDTH_RATIO, "17")
-                    .putMetaData(TableComponent.HEADER_COLUMN, "true");
 
-            if (oauth2Scheme.getScopes() != null) {
+            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
+
+            if (oauth2Scheme.getScopes() != null && !oauth2Scheme.getScopes().isEmpty()) {
+                StringColumn.Builder nameColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(NAME_COLUMN)))
+                        .putMetaData(TableComponent.WIDTH_RATIO, "3")
+                        .putMetaData(TableComponent.HEADER_COLUMN, "true");
+                StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of(labels.getLabel(DESCRIPTION_COLUMN)))
+                        .putMetaData(TableComponent.WIDTH_RATIO, "17")
+                        .putMetaData(TableComponent.HEADER_COLUMN, "true");
+
                 for (Map.Entry<String, String> scope : oauth2Scheme.getScopes().entrySet()) {
                     nameColumnBuilder.add(scope.getKey());
                     descriptionColumnBuilder.add(scope.getValue());
                 }
+
+                return tableComponent.apply(markupDocBuilder, TableComponent.parameters(nameColumnBuilder.build(),
+                        descriptionColumnBuilder.build()));
+            } else {
+
+                return markupDocBuilder;
             }
 
-            markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
-            return tableComponent.apply(markupDocBuilder, TableComponent.parameters(nameColumnBuilder.build(),
-                    descriptionColumnBuilder.build()));
         } else {
             return markupDocBuilder.paragraph(paragraphBuilder.toString(), true);
         }
