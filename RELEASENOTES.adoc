@@ -132,3 +132,9 @@
 
 === Version 1.3.1
 * PR #247: Fix request path and query params example support.
+
+=== Version 1.3.2
+* PR #290: Fixed list parsing in properties file
+* PR #293: Fixed crash on empty tables
+* Updated markup-document-builder from 1.1.1 to 1.1.2
+
