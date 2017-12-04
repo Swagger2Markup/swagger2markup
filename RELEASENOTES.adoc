@@ -23,3 +23,7 @@
 
 == Version 1.1.1
 * Added a method to add page breaks.
+
+== Version 1.1.2
+* Improve code blocks in markdown
+
