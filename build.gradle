@@ -23,8 +23,8 @@ apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/documentation.gradle'
 
 tasks.withType(JavaCompile) {
-    sourceCompatibility = "1.9"
-    targetCompatibility = "1.9"
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
     options.deprecation = true
     options.encoding = 'UTF-8'
     options.compilerArgs << "-Xlint:unchecked"
