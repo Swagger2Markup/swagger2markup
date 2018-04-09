@@ -251,15 +251,6 @@ __optional__|Status values that need to be considered for filter|< string > arra
 ----
 
 
-===== Request query
-[source,json]
-----
-{
-  "status" : "string"
-}
-----
-
-
 ==== Example HTTP response
 
 ===== Response 200
@@ -342,15 +333,6 @@ __optional__|Tags to filter by|< string > array(multi)
 ===== Request path
 ----
 /pets/findByTags
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "tags" : "string"
-}
 ----
 
 
@@ -1028,16 +1010,6 @@ __optional__|The user name for login|string|`"testUser"`
 ===== Request path
 ----
 /users/login
-----
-
-
-===== Request query
-[source,json]
-----
-{
-  "password" : "string",
-  "username" : "string"
-}
 ----
 
 
