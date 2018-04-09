@@ -16,6 +16,11 @@
 
 package io.github.swagger2markup.internal.utils;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
@@ -28,11 +33,6 @@ import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
-
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ExamplesUtil {
 
@@ -143,18 +143,16 @@ public class ExamplesUtil {
                         String pathExample = (String) examples.get("path");
                         pathExample = pathExample.replace('{' + parameter.getName() + '}', String.valueOf(abstractSerializableParameterExample));
                         example = pathExample;
+                    } else if (parameter instanceof QueryParameter) {
+                        if (parameter.getRequired())
+                        {
+                            String path = (String) examples.get("path");
+                            String separator = path.contains("?") ? "&" : "?";
+                            String pathExample = path + separator + parameter.getName() + "=" + String.valueOf(abstractSerializableParameterExample);
+                            examples.put("path", pathExample);
+                        }
                     } else {
                         example = abstractSerializableParameterExample;
-                    }
-                    if (parameter instanceof QueryParameter) {
-                        //noinspection unchecked
-                        @SuppressWarnings("unchecked")
-                        Map<String, Object> queryExampleMap = (Map<String, Object>) examples.get("query");
-                        if (queryExampleMap == null) {
-                            queryExampleMap = new LinkedHashMap<>();
-                        }
-                        queryExampleMap.put(parameter.getName(), abstractSerializableParameterExample);
-                        example = queryExampleMap;
                     }
                 }
             } else if (parameter instanceof RefParameter) {
