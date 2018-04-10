@@ -1,0 +1,40 @@
+= Swagger Petstore
+
+
+[[_overview]]
+== Overview
+This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on http://swagger.io/irc/["irc.freenode.net, #swagger"]. For this sample, you can use the api key `special-key` to test the authorization filters.
+
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1.0.0
+
+
+=== Contact information
+[%hardbreaks]
+__Contact Email__ : apiteam@swagger.io
+
+
+=== License information
+[%hardbreaks]
+__License__ : Apache 2.0
+__License URL__ : http://www.apache.org/licenses/LICENSE-2.0.html
+__Terms of service__ : http://swagger.io/terms/
+
+
+=== URI scheme
+[%hardbreaks]
+__Host__ : petstore.swagger.io
+__BasePath__ : /v2
+__Schemes__ : HTTP
+
+
+=== Tags
+
+* pet : Everything about your Pets
+* store : Access to Petstore orders
+* user : Operations about user
+
+
+

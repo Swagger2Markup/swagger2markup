@@ -1,0 +1,53 @@
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**name** +
+__optional__|**Example** : `"string"`|string
+|===
+
+
+[[_pet]]
+=== Pet
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**category** +
+__optional__|**Example** : <<_category>>|<<_category,Category>>
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**photoUrls** +
+__required__|**Example** : `[ "string" ]`|< string > array
+|**status** +
+__optional__|pet status in the store +
+**Example** : `"string"`|enum (available, pending, sold)
+|**tags** +
+__optional__|**Example** : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**name** +
+__optional__|**Example** : `"string"`|string
+|===
+
+
+
