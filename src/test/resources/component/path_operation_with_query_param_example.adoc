@@ -62,15 +62,6 @@ __optional__|Tags to filter by|< string > array(multi)
 ----
 
 
-===== Request query
-[source,json]
-----
-{
-  "tags" : "adorable"
-}
-----
-
-
 ==== Example HTTP response
 
 ===== Response 200
