@@ -69,7 +69,9 @@ public final class ModelUtils {
                 objectType.getPolymorphism().setDiscriminator(modelImpl.getDiscriminator());
 
                 return objectType;
-            } else if (isNotBlank(modelImpl.getFormat()))
+            } else if (modelImpl.getType() == null)
+                return null;
+            else if (isNotBlank(modelImpl.getFormat()))
                 return new BasicType(modelImpl.getType(), modelImpl.getTitle(), modelImpl.getFormat());
             else
                 return new BasicType(modelImpl.getType(), modelImpl.getTitle());
@@ -84,7 +86,10 @@ public final class ModelUtils {
 
                 for (Model innerModel : composedModel.getAllOf()) {
                     Type innerModelType = resolveRefType(getType(innerModel, definitions, definitionDocumentResolver));
-                    name = innerModelType.getName();
+
+                    if (innerModelType != null) {
+                        name = innerModelType.getName();
+                    }
 
                     if (innerModelType instanceof ObjectType) {
 

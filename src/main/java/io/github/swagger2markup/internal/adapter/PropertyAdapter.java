@@ -161,7 +161,9 @@ public final class PropertyAdapter {
         } else if (property instanceof ObjectProperty) {
             type = new ObjectType(property.getTitle(), ((ObjectProperty) property).getProperties());
         } else {
-            if (isNotBlank(property.getFormat())) {
+            if (property.getType() == null) {
+                return null;
+            } else if (isNotBlank(property.getFormat())) {
                 type = new BasicType(property.getType(), property.getTitle(), property.getFormat());
             } else {
                 type = new BasicType(property.getType(), property.getTitle());
