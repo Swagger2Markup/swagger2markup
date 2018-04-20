@@ -139,8 +139,13 @@ public final class PropertyAdapter {
             Property items = arrayProperty.getItems();
             if (items == null)
                 type = new ArrayType(arrayProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
-            else
-                type = new ArrayType(arrayProperty.getTitle(), new PropertyAdapter(items).getType(definitionDocumentResolver));
+            else {
+                Type arrayType = new PropertyAdapter(items).getType(definitionDocumentResolver);
+                if (arrayType == null)
+                    type = new ArrayType(arrayProperty.getTitle(), new ObjectType(null, null)); // FIXME : Workaround for Swagger parser issue with composed models (https://github.com/Swagger2Markup/swagger2markup/issues/150)
+                else
+                    type = new ArrayType(arrayProperty.getTitle(), new PropertyAdapter(items).getType(definitionDocumentResolver));
+            }
         } else if (property instanceof MapProperty) {
             MapProperty mapProperty = (MapProperty) property;
             Property additionalProperties = mapProperty.getAdditionalProperties();
@@ -161,7 +166,9 @@ public final class PropertyAdapter {
         } else if (property instanceof ObjectProperty) {
             type = new ObjectType(property.getTitle(), ((ObjectProperty) property).getProperties());
         } else {
-            if (isNotBlank(property.getFormat())) {
+            if (property.getType() == null) {
+                return null;
+            } else if (isNotBlank(property.getFormat())) {
                 type = new BasicType(property.getType(), property.getTitle(), property.getFormat());
             } else {
                 type = new BasicType(property.getType(), property.getTitle());

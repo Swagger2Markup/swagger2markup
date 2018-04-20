@@ -33,6 +33,7 @@ import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.MapProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
+import io.swagger.models.utils.PropertyModelConverter;
 
 public class ExamplesUtil {
 
@@ -55,19 +56,22 @@ public class ExamplesUtil {
                 Response response = responseEntry.getValue();
                 Object example = response.getExamples();
                 if (example == null) {
-                    Property schema = response.getSchema();
-                    if (schema != null) {
-                        example = schema.getExample();
+                    Model model = response.getResponseSchema();
+                    if (model != null) {
+                        Property schema = new PropertyModelConverter().modelToProperty(model);
+                        if (schema != null) {
+                            example = schema.getExample();
 
-                        if (example == null && schema instanceof RefProperty) {
-                            String simpleRef = ((RefProperty) schema).getSimpleRef();
-                            example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
-                        }
-                        if (example == null && schema instanceof ArrayProperty && generateMissingExamples) {
-                            example = generateExampleForArrayProperty((ArrayProperty) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
-                        }
-                        if (example == null && generateMissingExamples) {
-                            example = PropertyAdapter.generateExample(schema, markupDocBuilder);
+                            if (example == null && schema instanceof RefProperty) {
+                                String simpleRef = ((RefProperty) schema).getSimpleRef();
+                                example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                            }
+                            if (example == null && schema instanceof ArrayProperty && generateMissingExamples) {
+                                example = generateExampleForArrayProperty((ArrayProperty) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                            }
+                            if (example == null && generateMissingExamples) {
+                                example = PropertyAdapter.generateExample(schema, markupDocBuilder);
+                            }
                         }
                     }
                 }
