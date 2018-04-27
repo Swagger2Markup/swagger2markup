@@ -138,3 +138,9 @@
 * PR #293: Fixed crash on empty tables
 * Updated markup-document-builder from 1.1.1 to 1.1.2
 
+=== Version 1.3.3
+* Updated swagger-parser from v1.0.25 to 1.0.35
+* PR #294: Examples always start with a newline if there is other content in the same cell
+* PR 307: Include required parameters in example request
+
+
