@@ -510,11 +510,15 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
      */
     @Override
     public void writeToFileWithoutExtension(Path file, Charset charset, OpenOption... options) {
-        try {
-            Files.createDirectories(file.getParent());
-        } catch (IOException e) {
-            throw new RuntimeException("Failed create directory", e);
+        // Support relative file names both of "filename" and "./filename"
+        if (file.getParent() != null) {
+            try {
+                Files.createDirectories(file.getParent());
+            } catch (IOException e) {
+                throw new RuntimeException("Failed create directory", e);
+            }
         }
+        
         try (BufferedWriter writer = Files.newBufferedWriter(file, charset, options)) {
             writer.write(toString());
             writer.write(newLine);
