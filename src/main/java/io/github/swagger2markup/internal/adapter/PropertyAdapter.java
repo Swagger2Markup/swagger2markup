@@ -50,6 +50,10 @@ public final class PropertyAdapter {
      */
     public static Object generateExample(Property property, MarkupDocBuilder markupDocBuilder) {
 
+        if (property.getType() == null) {
+            return "untyped";
+        }
+
         switch (property.getType()) {
             case "integer":
                 return 0;

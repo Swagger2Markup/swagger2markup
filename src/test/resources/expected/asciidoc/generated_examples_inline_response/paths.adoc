@@ -1,0 +1,273 @@
+
+[[_paths]]
+== Paths
+
+[[_pet-inline-object_id_get]]
+=== Finds Pets by id
+....
+GET /pet-inline-object/{id}
+....
+
+
+==== Description
+Locate pets by their unique identifier
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**id** +
+__required__|Unique id of the pet|integer
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|successful operation|<<_pet-inline-object_id_get_response_200,Response 200>>
+|**400**|Invalid status value|No Content
+|===
+
+[[_pet-inline-object_id_get_response_200]]
+**Response 200**
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**category** +
+__optional__|**Example** : <<_category>>|<<_category,Category>>
+|**id** +
+__required__|**Example** : `3`|integer (int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**status** +
+__optional__|pet status in the store +
+**Example** : `"string"`|enum (available, pending, sold)
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^3a,.^4a,.^13a"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write:pets,read:pets
+|===
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/pet-inline-object/{id}?id=3
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+{
+  "id" : 3,
+  "category" : {
+    "id" : 0,
+    "name" : "string"
+  },
+  "name" : "doggie",
+  "status" : "string"
+}
+----
+
+
+[[_pet-inline-titled-object_id_get]]
+=== Finds Pets by id
+....
+GET /pet-inline-titled-object/{id}
+....
+
+
+==== Description
+Locate pets by their unique identifier
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**id** +
+__required__|Unique id of the pet|integer
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|successful operation|<<_pet,pet>>
+|**400**|Invalid status value|No Content
+|===
+
+[[_pet]]
+**pet**
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**category** +
+__optional__|**Example** : <<_category>>|<<_category,Category>>
+|**id** +
+__required__|**Example** : `3`|integer (int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**status** +
+__optional__|pet status in the store +
+**Example** : `"string"`|enum (available, pending, sold)
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^3a,.^4a,.^13a"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write:pets,read:pets
+|===
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/pet-inline-titled-object/{id}?id=3
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+{
+  "id" : 3,
+  "category" : {
+    "id" : 0,
+    "name" : "string"
+  },
+  "name" : "doggie",
+  "status" : "string"
+}
+----
+
+
+[[_pet-inline-untyped_id_get]]
+=== Finds Pets by id
+....
+GET /pet-inline-untyped/{id}
+....
+
+
+==== Description
+Locate pets by their unique identifier
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Query**|**id** +
+__required__|Unique id of the pet|integer
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|successful operation|<<_pet-inline-untyped_id_get_response_200,Response 200>>
+|**400**|Invalid status value|No Content
+|===
+
+[[_pet-inline-untyped_id_get_response_200]]
+**Response 200**
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**category** +
+__optional__|**Example** : <<_category>>|<<_category,Category>>
+|**id** +
+__required__|**Example** : `3`|integer (int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**status** +
+__optional__|pet status in the store +
+**Example** : `"string"`|enum (available, pending, sold)
+|===
+
+
+==== Produces
+
+* `application/json`
+
+
+==== Tags
+
+* pet
+
+
+==== Security
+
+[options="header", cols=".^3a,.^4a,.^13a"]
+|===
+|Type|Name|Scopes
+|**oauth2**|**<<_petstore_auth,petstore_auth>>**|write:pets,read:pets
+|===
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/pet-inline-untyped/{id}?id=3
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+"untyped"
+----
+
+
+

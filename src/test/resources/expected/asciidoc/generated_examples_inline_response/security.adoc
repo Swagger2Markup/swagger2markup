@@ -1,0 +1,29 @@
+
+[[_securityscheme]]
+== Security
+
+[[_petstore_auth]]
+=== petstore_auth
+[%hardbreaks]
+__Type__ : oauth2
+__Flow__ : implicit
+__Token URL__ : http://petstore.swagger.io/oauth/dialog
+
+
+[options="header", cols=".^3a,.^17a"]
+|===
+|Name|Description
+|write:pets|modify pets in your account
+|read:pets|read your pets
+|===
+
+
+[[_api_key]]
+=== api_key
+[%hardbreaks]
+__Type__ : apiKey
+__Name__ : api_key
+__In__ : HEADER
+
+
+

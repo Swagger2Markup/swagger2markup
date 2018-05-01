@@ -372,6 +372,30 @@ public class AsciidocConverterTest {
     }
 
     @Test
+    public void testWithGeneratedInlineResponseExamples() throws IOException, URISyntaxException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_examples_inline_response.yaml"));
+        Path outputDirectory = Paths.get("build/test/asciidoc/generated_examples_inline_response");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+            .withGeneratedExamples()
+            .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+            .withConfig(config)
+            .build()
+            .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/generated_examples_inline_response").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithGeneratedInlineResponseExamples.html");
+    }
+
+    @Test
     public void testWithInlineSchema() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
