@@ -29,10 +29,7 @@ import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.*;
 import io.swagger.models.parameters.*;
-import io.swagger.models.properties.ArrayProperty;
-import io.swagger.models.properties.MapProperty;
-import io.swagger.models.properties.Property;
-import io.swagger.models.properties.RefProperty;
+import io.swagger.models.properties.*;
 import io.swagger.models.utils.PropertyModelConverter;
 
 public class ExamplesUtil {
@@ -68,6 +65,9 @@ public class ExamplesUtil {
                             }
                             if (example == null && schema instanceof ArrayProperty && generateMissingExamples) {
                                 example = generateExampleForArrayProperty((ArrayProperty) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                            }
+                            if (example == null && schema instanceof ObjectProperty && generateMissingExamples) {
+                                example = exampleMapForProperties(((ObjectProperty) schema).getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                             }
                             if (example == null && generateMissingExamples) {
                                 example = PropertyAdapter.generateExample(schema, markupDocBuilder);
