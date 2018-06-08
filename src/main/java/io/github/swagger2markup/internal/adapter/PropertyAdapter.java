@@ -62,6 +62,10 @@ public final class PropertyAdapter {
             case "boolean":
                 return true;
             case "string":
+                List<String> _enum = ((StringProperty) property).getEnum();
+                if (_enum != null && _enum.size() > 0) {
+                    return _enum.get(0);
+                }
                 return "string";
             case "ref":
                 if (property instanceof RefProperty) {
