@@ -62,7 +62,26 @@ public final class PropertyAdapter {
             case "boolean":
                 return true;
             case "string":
-                return "string";
+                if (property.getFormat() == null) {
+                    return "string";
+                } else {
+                    switch (property.getFormat()) {
+                        case "byte":
+                            return "Ynl0ZQ==";
+                        case "date":
+                            return "1970-01-01";
+                        case "date-time":
+                            return "1970-01-01T00:00:00Z";
+                        case "email":
+                            return "email@example.com";
+                        case "password":
+                            return "secret";
+                        case "uuid":
+                            return "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+                        default:
+                            return "string";
+                    }
+                }
             case "ref":
                 if (property instanceof RefProperty) {
                     if (logger.isDebugEnabled()) logger.debug("generateExample RefProperty for " + property.getName());

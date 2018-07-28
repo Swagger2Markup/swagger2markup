@@ -832,11 +832,11 @@ __optional__|Created user object|<<_user,User>>
   "username" : "string",
   "firstName" : "string",
   "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
+  "email" : "email@example.com",
+  "password" : "secret",
   "phone" : "string",
   "userStatus" : 0,
-  "pictures" : [ "string" ]
+  "pictures" : [ "Ynl0ZQ==" ]
 }
 ----
 
@@ -894,11 +894,11 @@ __optional__|List of user object|< <<_user,User>> > array
   "username" : "string",
   "firstName" : "string",
   "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
+  "email" : "email@example.com",
+  "password" : "secret",
   "phone" : "string",
   "userStatus" : 0,
-  "pictures" : [ "string" ]
+  "pictures" : [ "Ynl0ZQ==" ]
 } ]
 ----
 
@@ -956,11 +956,11 @@ __optional__|List of user object|< <<_user,User>> > array
   "username" : "string",
   "firstName" : "string",
   "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
+  "email" : "email@example.com",
+  "password" : "secret",
   "phone" : "string",
   "userStatus" : 0,
-  "pictures" : [ "string" ]
+  "pictures" : [ "Ynl0ZQ==" ]
 } ]
 ----
 
@@ -1114,11 +1114,11 @@ __required__|The name that needs to be fetched. Use user1 for testing.|string|`"
   "username" : "string",
   "firstName" : "string",
   "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
+  "email" : "email@example.com",
+  "password" : "secret",
   "phone" : "string",
   "userStatus" : 0,
-  "pictures" : [ "string" ]
+  "pictures" : [ "Ynl0ZQ==" ]
 }
 ----
 
@@ -1183,11 +1183,11 @@ __optional__|Updated user object|<<_user,User>>
   "username" : "string",
   "firstName" : "string",
   "lastName" : "string",
-  "email" : "string",
-  "password" : "string",
+  "email" : "email@example.com",
+  "password" : "secret",
   "phone" : "string",
   "userStatus" : 0,
-  "pictures" : [ "string" ]
+  "pictures" : [ "Ynl0ZQ==" ]
 }
 ----
 

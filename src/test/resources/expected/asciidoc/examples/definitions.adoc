@@ -124,7 +124,7 @@ __Polymorphism__ : Composition
 |===
 |Name|Description|Schema
 |**email** +
-__optional__||string
+__optional__||string (email)
 |**firstName** +
 __optional__||string
 |**id** +
@@ -132,7 +132,7 @@ __optional__||integer (int64)
 |**lastName** +
 __optional__||string
 |**password** +
-__optional__||string
+__optional__||string (password)
 |**phone** +
 __optional__||string
 |**pictures** +
