@@ -69,8 +69,7 @@ __optional__||integer (int32)
 |**shipDate** +
 __optional__||string (date-time)
 |**status** +
-__optional__|Order Status +
-**Example** : `"DONE"`|string
+__optional__|Order Status|enum (placed, approved, delivered)
 |===
 
 

@@ -46,7 +46,7 @@ __required__|**Example** : `3`|integer (int64)
 __required__|**Example** : `"doggie"`|string
 |**status** +
 __optional__|pet status in the store +
-**Example** : `"string"`|enum (available, pending, sold)
+**Example** : `"available"`|enum (available, pending, sold)
 |===
 
 
@@ -89,7 +89,7 @@ __optional__|pet status in the store +
     "name" : "string"
   },
   "name" : "doggie",
-  "status" : "string"
+  "status" : "available"
 }
 ----
 
@@ -138,7 +138,7 @@ __required__|**Example** : `3`|integer (int64)
 __required__|**Example** : `"doggie"`|string
 |**status** +
 __optional__|pet status in the store +
-**Example** : `"string"`|enum (available, pending, sold)
+**Example** : `"available"`|enum (available, pending, sold)
 |===
 
 
@@ -181,7 +181,7 @@ __optional__|pet status in the store +
     "name" : "string"
   },
   "name" : "doggie",
-  "status" : "string"
+  "status" : "available"
 }
 ----
 
@@ -230,7 +230,7 @@ __required__|**Example** : `3`|integer (int64)
 __required__|**Example** : `"doggie"`|string
 |**status** +
 __optional__|pet status in the store +
-**Example** : `"string"`|enum (available, pending, sold)
+**Example** : `"available"`|enum (available, pending, sold)
 |===
 
 

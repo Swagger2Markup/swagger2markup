@@ -70,7 +70,7 @@ __optional__|**Example** : `0`|integer (int32)
 __optional__|**Example** : `"1970-01-01T00:00:00Z"`|string (date-time)
 |**status** +
 __optional__|Order Status +
-**Example** : `"DONE"`|string
+**Example** : `"placed"`|enum (placed, approved, delivered)
 |===
 
 
