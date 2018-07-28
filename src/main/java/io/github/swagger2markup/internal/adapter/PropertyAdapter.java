@@ -17,6 +17,7 @@ package io.github.swagger2markup.internal.adapter;
 
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.swagger.models.properties.*;
 import io.swagger.models.refs.RefFormat;
@@ -62,16 +63,7 @@ public final class PropertyAdapter {
             case "boolean":
                 return true;
             case "string":
-                if (property instanceof StringProperty) {
-                    List<String> enumValues = ((StringProperty) property).getEnum();
-                    if (enumValues == null || enumValues.isEmpty()) {
-                        return generateStringExample(property);
-                    } else {
-                        return enumValues.get(0);
-                    }
-                } else {
-                    return generateStringExample(property);
-                }
+                return ExamplesUtil.generateStringExample(property.getFormat(), property instanceof StringProperty ? ((StringProperty) property).getEnum() : null);
             case "ref":
                 if (property instanceof RefProperty) {
                     if (logger.isDebugEnabled()) logger.debug("generateExample RefProperty for " + property.getName());
@@ -101,39 +93,6 @@ public final class PropertyAdapter {
 
         exampleArray.add(generateExample(itemProperty, markupDocBuilder));
         return exampleArray;
-    }
-
-    /**
-     * Generate example for a property with type string
-     *
-     * @param property {@link Property}
-     * @return String example
-     */
-    private static String generateStringExample(Property property) {
-        if(!property.getType().equals("string")) {
-            throw new IllegalArgumentException("Illegal property type: " + property.getType());
-        }
-
-        if (property.getFormat() == null) {
-            return "string";
-        } else {
-            switch (property.getFormat()) {
-                case "byte":
-                    return "Ynl0ZQ==";
-                case "date":
-                    return "1970-01-01";
-                case "date-time":
-                    return "1970-01-01T00:00:00Z";
-                case "email":
-                    return "email@example.com";
-                case "password":
-                    return "secret";
-                case "uuid":
-                    return "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
-                default:
-                    return "string";
-            }
-        }
     }
 
     /**

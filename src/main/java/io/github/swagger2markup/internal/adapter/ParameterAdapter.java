@@ -20,6 +20,7 @@ import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.internal.utils.InlineSchemaUtils;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
@@ -73,7 +74,7 @@ public class ParameterAdapter {
      * @param parameter parameter
      * @return a generated example for the parameter
      */
-    public static Object generateExample(AbstractSerializableParameter parameter) {
+    public static Object generateExample(AbstractSerializableParameter<?> parameter) {
         switch (parameter.getType()) {
             case "integer":
                 return 0;
@@ -82,7 +83,7 @@ public class ParameterAdapter {
             case "boolean":
                 return true;
             case "string":
-                return "string";
+                return ExamplesUtil.generateStringExample(parameter.getFormat(), parameter.getEnum());
             default:
                 return parameter.getType();
         }
