@@ -6,7 +6,7 @@ basePath: /v1
 schemes:
   - http
 paths:
-  "/{string}/{date}/{dateTime}/{email}/{password}/{byte}/{uuid}/{enum}":
+  "/{string}/{date}/{dateTime}/{email}/{password}/{byte}/{uuid}/{custom}/{enum}":
     get:
       operationId: path
       consumes:
@@ -48,6 +48,11 @@ paths:
           required: true
           type: string
           format: uuid
+        - in: path
+          name: custom
+          required: true
+          type: string
+          format: custom
         - in: path
           name: enum
           required: true
@@ -98,6 +103,11 @@ paths:
           required: true
           type: string
           format: uuid
+        - in: query
+          name: custom
+          required: true
+          type: string
+          format: custom
         - in: query
           name: enum
           required: true

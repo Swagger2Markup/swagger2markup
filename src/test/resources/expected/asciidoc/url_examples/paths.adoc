@@ -14,6 +14,8 @@
 |Type|Name|Schema
 |**Query**|**byte** +
 __required__|string (byte)
+|**Query**|**custom** +
+__required__|string (custom)
 |**Query**|**date** +
 __required__|string (date)
 |**Query**|**dateTime** +
@@ -56,14 +58,14 @@ __required__|string (uuid)
 
 ===== Request path
 ----
-/?byte=Ynl0ZQ%3D%3D&date=1970-01-01&dateTime=1970-01-01T00%3A00%3A00Z&email=email%40example.com&enum=value+1&password=secret&string=string&uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6
+/?byte=Ynl0ZQ%3D%3D&custom=string&date=1970-01-01&dateTime=1970-01-01T00%3A00%3A00Z&email=email%40example.com&enum=value+1&password=secret&string=string&uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6
 ----
 
 
 <<<
 
 [[_path]]
-=== GET /{string}/{date}/{dateTime}/{email}/{password}/{byte}/{uuid}/{enum}
+=== GET /{string}/{date}/{dateTime}/{email}/{password}/{byte}/{uuid}/{custom}/{enum}
 
 ==== Parameters
 
@@ -72,6 +74,8 @@ __required__|string (uuid)
 |Type|Name|Schema
 |**Path**|**byte** +
 __required__|string (byte)
+|**Path**|**custom** +
+__required__|string (custom)
 |**Path**|**date** +
 __required__|string (date)
 |**Path**|**dateTime** +
@@ -114,7 +118,7 @@ __required__|string (uuid)
 
 ===== Request path
 ----
-/string/1970-01-01/1970-01-01T00%3A00%3A00Z/email%40example.com/secret/Ynl0ZQ%3D%3D/f81d4fae-7dec-11d0-a765-00a0c91e6bf6/value+1
+/string/1970-01-01/1970-01-01T00%3A00%3A00Z/email%40example.com/secret/Ynl0ZQ%3D%3D/f81d4fae-7dec-11d0-a765-00a0c91e6bf6/string/value+1
 ----
 
 
