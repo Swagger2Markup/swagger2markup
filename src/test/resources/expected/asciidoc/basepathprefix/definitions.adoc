@@ -67,10 +67,10 @@ __optional__|**Example** : `0`|integer (int64)
 |**quantity** +
 __optional__|**Example** : `0`|integer (int32)
 |**shipDate** +
-__optional__|**Example** : `"string"`|string (date-time)
+__optional__|**Example** : `"1970-01-01T00:00:00Z"`|string (date-time)
 |**status** +
 __optional__|Order Status +
-**Example** : `"DONE"`|string
+**Example** : `"placed"`|enum (placed, approved, delivered)
 |===
 
 
@@ -128,7 +128,7 @@ __Polymorphism__ : Composition
 |===
 |Name|Description|Schema
 |**email** +
-__optional__|**Example** : `"string"`|string
+__optional__|**Example** : `"email@example.com"`|string (email)
 |**firstName** +
 __optional__|**Example** : `"string"`|string
 |**id** +
@@ -136,11 +136,11 @@ __optional__|**Example** : `0`|integer (int64)
 |**lastName** +
 __optional__|**Example** : `"string"`|string
 |**password** +
-__optional__|**Example** : `"string"`|string
+__optional__|**Example** : `"secret"`|string (password)
 |**phone** +
 __optional__|**Example** : `"string"`|string
 |**pictures** +
-__optional__|**Example** : `[ "string" ]`|< string (byte) > array
+__optional__|**Example** : `[ "Ynl0ZQ==" ]`|< string (byte) > array
 |**userStatus** +
 __optional__|User Status +
 **Example** : `0`|integer (int32)

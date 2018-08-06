@@ -57,7 +57,7 @@ __required__|Status values that need to be considered for filter|< enum (availab
 
 ===== Request path
 ----
-/pet/findByCategory?category=Herding&status=string
+/pet/findByCategory?category=Herding&status=available
 ----
 
 
@@ -78,7 +78,7 @@ __required__|Status values that need to be considered for filter|< enum (availab
     "id" : 0,
     "name" : "string"
   } ],
-  "status" : "string"
+  "status" : "available"
 } ]
 ----
 
@@ -157,7 +157,7 @@ __optional__|Optional filter parameter|integer
     "id" : 0,
     "name" : "string"
   } ],
-  "status" : "string"
+  "status" : "available"
 } ]
 ----
 
@@ -217,7 +217,7 @@ __required__|Status values that need to be considered for filter|< enum (availab
 
 ===== Request path
 ----
-/pet/findByStatus?status=string
+/pet/findByStatus?status=available
 ----
 
 
@@ -238,7 +238,7 @@ __required__|Status values that need to be considered for filter|< enum (availab
     "id" : 0,
     "name" : "string"
   } ],
-  "status" : "string"
+  "status" : "available"
 } ]
 ----
 

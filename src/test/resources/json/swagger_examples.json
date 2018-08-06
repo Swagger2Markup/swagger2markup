@@ -783,10 +783,12 @@
               "type": "string"
             },
             "email": {
-              "type": "string"
+              "type": "string",
+              "format": "email"
             },
             "password": {
-              "type": "string"
+              "type": "string",
+              "format": "password"
             },
             "phone": {
               "type": "string"
@@ -896,10 +898,14 @@
           "type": "string",
           "format": "date-time"
         },
-        "status": {
-          "type": "string",
-          "description": "Order Status",
-          "example": "DONE"
+        "status":{
+          "type":"string",
+          "description":"Order Status",
+          "enum":[
+            "placed",
+            "approved",
+            "delivered"
+          ]
         },
         "complete": {
           "type": "boolean"
@@ -910,7 +916,7 @@
         "petId": 122,
         "quantity": 2,
         "shipDate": "2016-02-22T23:02:05Z",
-        "status": "PENDING",
+        "status": "placed",
         "complete": true
       }
     },

@@ -452,7 +452,7 @@ __optional__|order placed for purchasing the pet|<<_order,Order>>
   "petId" : 122,
   "quantity" : 2,
   "shipDate" : "2016-02-22T23:02:05Z",
-  "status" : "PENDING",
+  "status" : "placed",
   "complete" : true
 }
 ----
@@ -468,7 +468,7 @@ __optional__|order placed for purchasing the pet|<<_order,Order>>
   "petId" : 122,
   "quantity" : 2,
   "shipDate" : "2016-02-22T23:02:05Z",
-  "status" : "PENDING",
+  "status" : "placed",
   "complete" : true
 }
 ----
@@ -529,7 +529,7 @@ __required__|ID of pet that needs to be fetched|string
   "petId" : 122,
   "quantity" : 2,
   "shipDate" : "2016-02-22T23:02:05Z",
-  "status" : "PENDING",
+  "status" : "placed",
   "complete" : true
 }
 ----

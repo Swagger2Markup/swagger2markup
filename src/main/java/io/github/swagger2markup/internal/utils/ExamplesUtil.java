@@ -16,11 +16,6 @@
 
 package io.github.swagger2markup.internal.utils;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
@@ -31,6 +26,13 @@ import io.swagger.models.*;
 import io.swagger.models.parameters.*;
 import io.swagger.models.properties.*;
 import io.swagger.models.utils.PropertyModelConverter;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ExamplesUtil {
 
@@ -145,14 +147,14 @@ public class ExamplesUtil {
                     }
                     if (parameter instanceof PathParameter) {
                         String pathExample = (String) examples.get("path");
-                        pathExample = pathExample.replace('{' + parameter.getName() + '}', String.valueOf(abstractSerializableParameterExample));
+                        pathExample = pathExample.replace('{' + parameter.getName() + '}', encodeExampleForUrl(abstractSerializableParameterExample));
                         example = pathExample;
                     } else if (parameter instanceof QueryParameter) {
                         if (parameter.getRequired())
                         {
                             String path = (String) examples.get("path");
                             String separator = path.contains("?") ? "&" : "?";
-                            String pathExample = path + separator + parameter.getName() + "=" + String.valueOf(abstractSerializableParameterExample);
+                            String pathExample = path + separator + parameter.getName() + "=" + encodeExampleForUrl(abstractSerializableParameterExample);
                             examples.put("path", pathExample);
                         }
                     } else {
@@ -169,6 +171,20 @@ public class ExamplesUtil {
         }
 
         return examples;
+    }
+
+    /**
+     * Encodes an example value for use in an URL
+     *
+     * @param example the example value
+     * @return encoded example value
+     */
+    private static String encodeExampleForUrl(Object example) {
+        try {
+            return URLEncoder.encode(String.valueOf(example), "UTF-8");
+        } catch (UnsupportedEncodingException exception) {
+            throw new RuntimeException(exception);
+        }
     }
 
     /**
@@ -329,6 +345,40 @@ public class ExamplesUtil {
             return new Object[]{generateExampleForRefModel(true, ((RefProperty) property).getSimpleRef(), definitions, definitionDocumentResolver, markupDocBuilder, refStack)};
         } else {
             return new Object[]{PropertyAdapter.generateExample(property, markupDocBuilder)};
+        }
+    }
+
+    /**
+     * Generates examples for string properties or parameters with given format
+     *
+     * @param format     the format of the string property
+     * @param enumValues the enum values
+     * @return example
+     */
+    public static String generateStringExample(String format, List<String> enumValues) {
+        if (enumValues == null || enumValues.isEmpty()) {
+            if (format == null) {
+                return "string";
+            } else {
+                switch (format) {
+                    case "byte":
+                        return "Ynl0ZQ==";
+                    case "date":
+                        return "1970-01-01";
+                    case "date-time":
+                        return "1970-01-01T00:00:00Z";
+                    case "email":
+                        return "email@example.com";
+                    case "password":
+                        return "secret";
+                    case "uuid":
+                        return "f81d4fae-7dec-11d0-a765-00a0c91e6bf6";
+                    default:
+                        return "string";
+                }
+            }
+        } else {
+            return enumValues.get(0);
         }
     }
 

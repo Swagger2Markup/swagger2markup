@@ -15,9 +15,13 @@
  */
 package io.github.swagger2markup;
 
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
-import static org.assertj.core.api.BDDAssertions.assertThat;
+import io.github.swagger2markup.assertions.DiffUtils;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,14 +32,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-
-import io.github.swagger2markup.assertions.DiffUtils;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
+import static org.assertj.core.api.BDDAssertions.assertThat;
 
 public class AsciidocConverterTest {
 
@@ -878,5 +877,30 @@ public class AsciidocConverterTest {
         assertThat(files).hasSize(4).containsAll(expectedFiles);
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/empty_tables").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithEmptyTables.html");
+    }
+
+    @Test
+    public void testExamplesInUrl() throws IOException, URISyntaxException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_url_examples.yaml"));
+        Path outputDirectory = Paths.get("build/test/asciidoc/url_examples");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withGeneratedExamples()
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/url_examples").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testExamplesInUrl.html");
     }
 }

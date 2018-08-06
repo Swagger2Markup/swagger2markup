@@ -1,0 +1,125 @@
+
+[[_paths]]
+== Paths
+
+<<<
+
+[[_query]]
+=== GET /
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^4a"]
+|===
+|Type|Name|Schema
+|**Query**|**byte** +
+__required__|string (byte)
+|**Query**|**custom** +
+__required__|string (custom)
+|**Query**|**date** +
+__required__|string (date)
+|**Query**|**dateTime** +
+__required__|string (date-time)
+|**Query**|**email** +
+__required__|string (email)
+|**Query**|**enum** +
+__required__|enum (value 1)
+|**Query**|**password** +
+__required__|string (password)
+|**Query**|**string** +
+__required__|string
+|**Query**|**uuid** +
+__required__|string (uuid)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Success|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+<<<
+
+==== Example HTTP request
+
+===== Request path
+----
+/?byte=Ynl0ZQ%3D%3D&custom=string&date=1970-01-01&dateTime=1970-01-01T00%3A00%3A00Z&email=email%40example.com&enum=value+1&password=secret&string=string&uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6
+----
+
+
+<<<
+
+[[_path]]
+=== GET /{string}/{date}/{dateTime}/{email}/{password}/{byte}/{uuid}/{custom}/{enum}
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^4a"]
+|===
+|Type|Name|Schema
+|**Path**|**byte** +
+__required__|string (byte)
+|**Path**|**custom** +
+__required__|string (custom)
+|**Path**|**date** +
+__required__|string (date)
+|**Path**|**dateTime** +
+__required__|string (date-time)
+|**Path**|**email** +
+__required__|string (email)
+|**Path**|**enum** +
+__required__|enum (value 1)
+|**Path**|**password** +
+__required__|string (password)
+|**Path**|**string** +
+__required__|string
+|**Path**|**uuid** +
+__required__|string (uuid)
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**200**|Success|No Content
+|===
+
+
+==== Consumes
+
+* `application/json`
+
+
+==== Produces
+
+* `application/json`
+
+
+<<<
+
+==== Example HTTP request
+
+===== Request path
+----
+/string/1970-01-01/1970-01-01T00%3A00%3A00Z/email%40example.com/secret/Ynl0ZQ%3D%3D/f81d4fae-7dec-11d0-a765-00a0c91e6bf6/string/value+1
+----
+
+
+

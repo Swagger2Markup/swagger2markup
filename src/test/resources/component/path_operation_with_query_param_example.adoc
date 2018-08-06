@@ -79,7 +79,7 @@ __optional__|Tags to filter by|< string > array(multi)
     "id" : 0,
     "name" : "string"
   } ],
-  "status" : "string"
+  "status" : "Dead"
 } ]
 ----
 

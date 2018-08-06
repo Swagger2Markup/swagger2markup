@@ -81,7 +81,7 @@ __required__|ID of pet that needs to be fetched|integer (int64)
     "id" : 0,
     "name" : "string"
   } ],
-  "status" : "string"
+  "status" : "Dead"
 }
 ----
 

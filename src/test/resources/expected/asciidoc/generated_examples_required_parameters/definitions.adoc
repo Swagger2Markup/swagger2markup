@@ -31,7 +31,7 @@ __required__|**Example** : `"doggie"`|string
 __required__|**Example** : `[ "string" ]`|< string > array
 |**status** +
 __optional__|pet status in the store +
-**Example** : `"string"`|enum (available, pending, sold)
+**Example** : `"available"`|enum (available, pending, sold)
 |**tags** +
 __optional__|**Example** : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
 |===

@@ -1,0 +1,118 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Generated examples in URLs
+basePath: /v1
+schemes:
+  - http
+paths:
+  "/{string}/{date}/{dateTime}/{email}/{password}/{byte}/{uuid}/{custom}/{enum}":
+    get:
+      operationId: path
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: string
+          required: true
+          type: string
+        - in: path
+          name: date
+          required: true
+          type: string
+          format: date
+        - in: path
+          name: dateTime
+          required: true
+          type: string
+          format: date-time
+        - in: path
+          name: email
+          required: true
+          type: string
+          format: email
+        - in: path
+          name: password
+          required: true
+          type: string
+          format: password
+        - in: path
+          name: byte
+          required: true
+          type: string
+          format: byte
+        - in: path
+          name: uuid
+          required: true
+          type: string
+          format: uuid
+        - in: path
+          name: custom
+          required: true
+          type: string
+          format: custom
+        - in: path
+          name: enum
+          required: true
+          type: string
+          enum: [ "value 1" ]
+      responses:
+        '200':
+          description: Success
+  "/":
+    get:
+      operationId: query
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: string
+          required: true
+          type: string
+        - in: query
+          name: date
+          required: true
+          type: string
+          format: date
+        - in: query
+          name: dateTime
+          required: true
+          type: string
+          format: date-time
+        - in: query
+          name: email
+          required: true
+          type: string
+          format: email
+        - in: query
+          name: password
+          required: true
+          type: string
+          format: password
+        - in: query
+          name: byte
+          required: true
+          type: string
+          format: byte
+        - in: query
+          name: uuid
+          required: true
+          type: string
+          format: uuid
+        - in: query
+          name: custom
+          required: true
+          type: string
+          format: custom
+        - in: query
+          name: enum
+          required: true
+          type: string
+          enum: [ "value 1" ]
+      responses:
+        '200':
+          description: Success
