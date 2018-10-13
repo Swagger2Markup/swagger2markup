@@ -91,6 +91,8 @@ paths:
           type: array
           items:
             type: string
+          minItems: 1
+          maxItems: 10
           collectionFormat: multi
       responses:
         "200":

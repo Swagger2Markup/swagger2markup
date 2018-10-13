@@ -19,7 +19,12 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
-import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.internal.type.ArrayType;
+import io.github.swagger2markup.internal.type.BasicType;
+import io.github.swagger2markup.internal.type.EnumType;
+import io.github.swagger2markup.internal.type.ObjectType;
+import io.github.swagger2markup.internal.type.RefType;
+import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.internal.utils.InlineSchemaUtils;
 import io.github.swagger2markup.internal.utils.ModelUtils;
@@ -30,6 +35,7 @@ import io.swagger.models.parameters.AbstractSerializableParameter;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.RefParameter;
+import io.swagger.models.parameters.SerializableParameter;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
@@ -40,7 +46,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.boldText;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.literalText;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 
 public class ParameterAdapter {
 
@@ -203,4 +211,19 @@ public class ParameterAdapter {
         return Optional.empty();
     }
 
+    public Optional<Integer> getMinItems() {
+        if (parameter instanceof SerializableParameter) {
+            Integer minItems = ((SerializableParameter) parameter).getMinItems();
+            return Optional.of(minItems);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<Integer> getMaxItems() {
+        if (parameter instanceof SerializableParameter) {
+            Integer maxItems = ((SerializableParameter) parameter).getMaxItems();
+            return Optional.of(maxItems);
+        }
+        return Optional.empty();
+    }
 }

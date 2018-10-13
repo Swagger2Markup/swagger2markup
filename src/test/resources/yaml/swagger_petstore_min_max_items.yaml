@@ -1,0 +1,199 @@
+swagger: "2.0"
+info:
+  description: |
+    This is a sample server Petstore server.
+
+    [Learn about Swagger](http://swagger.io) or join the IRC channel `#swagger` on irc.freenode.net.
+
+    For this sample, you can use the api key `special-key` to test the authorization filters
+  version: "1.0.0"
+  title: Swagger Petstore
+  termsOfService: http://helloreverb.com/terms/
+  contact:
+    name: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: petstore.swagger.io
+basePath: /v2
+schemes:
+  - http
+tags:
+  - name: pet
+    description: Pet resource
+paths:
+  /pets/findByStatus:
+    get:
+      tags:
+        - pet
+      summary: Finds Pets by status
+      description: Multiple status values can be provided with comma seperated strings
+      operationId: findPetsByStatus
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: query
+          name: status
+          description: Status values that need to be considered for filter
+          required: false
+          type: array
+          items:
+            type: string
+          minItems: 1
+          maxItems: 10
+          collectionFormat: multi
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Pet"
+            minItems: 2
+            maxItems: 5
+          headers:
+            X-Rate-Limit-Limit:
+              description: The number of allowed requests in the current period
+              type: integer
+            X-Rate-Limit-Remaining:
+              description: The number of remaining requests in the current period
+              type: integer
+            X-Rate-Limit-Reset:
+              description: The number of seconds left in the current period
+              type: integer
+        "400":
+          description: Invalid status value
+      security:
+        - petstore_auth:
+          - write_pets
+          - read_pets
+parameters:
+  PetBody:
+    in: body
+    name: body
+    description: Pet object that needs to be added to the store
+    required: false
+    schema:
+      $ref: "#/definitions/Pet"
+responses:
+  InvalidId:
+    description: Invalid ID supplied
+securityDefinitions:
+  api_key:
+    type: apiKey
+    name: api_key
+    in: header
+    description: "This is another description"
+  petstore_auth:
+    type: oauth2
+    description: "This is a standard oauth flow"
+    authorizationUrl: http://petstore.swagger.io/api/oauth/dialog
+    flow: implicit
+    scopes:
+      write_pets: modify pets in your account
+      read_pets: read your pets
+definitions:
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      username:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userStatus:
+        type: integer
+        format: int32
+        description: User Status
+  Category:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+        description: The name of the category
+        minLength: 0
+        maxLength: 255
+        pattern: "[A-Za-zäöüÄÖÜß]{0,255}"
+        default: DefaultCategory
+        example: FoobarCategory
+  Pet:
+    type: object
+    required:
+      - name
+      - photoUrls
+    properties:
+      id:
+        type: integer
+        format: int64
+      category:
+        $ref: "#/definitions/Category"
+      name:
+        type: string
+        example: doggie
+      photoUrls:
+        type: array
+        items:
+          type: string
+      tags:
+        type: array
+        items:
+          $ref: "#/definitions/Tag"
+      status:
+        type: string
+        description: pet status in the store,
+        enum:
+          - Dead
+          - Alive
+  Tag:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      name:
+        type: string
+  Order:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      petId:
+        type: integer
+        format: int64
+      quantity:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 10000.0
+        default: 0
+        example: 10
+      shipDate:
+        type: string
+        format: date-time
+      status:
+        type: string
+        description: Order Status
+        enum:
+          - Ordered
+          - Cancelled
+      complete:
+        type: boolean
+
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
