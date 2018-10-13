@@ -214,7 +214,7 @@ public class ParameterAdapter {
     public Optional<Integer> getMinItems() {
         if (parameter instanceof SerializableParameter) {
             Integer minItems = ((SerializableParameter) parameter).getMinItems();
-            return Optional.of(minItems);
+            return Optional.ofNullable(minItems);
         }
         return Optional.empty();
     }
@@ -222,7 +222,7 @@ public class ParameterAdapter {
     public Optional<Integer> getMaxItems() {
         if (parameter instanceof SerializableParameter) {
             Integer maxItems = ((SerializableParameter) parameter).getMaxItems();
-            return Optional.of(maxItems);
+            return Optional.ofNullable(maxItems);
         }
         return Optional.empty();
     }
