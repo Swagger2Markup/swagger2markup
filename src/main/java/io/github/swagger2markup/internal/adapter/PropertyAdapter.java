@@ -16,10 +16,29 @@
 package io.github.swagger2markup.internal.adapter;
 
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
-import io.github.swagger2markup.internal.type.*;
+import io.github.swagger2markup.internal.type.ArrayType;
+import io.github.swagger2markup.internal.type.BasicType;
+import io.github.swagger2markup.internal.type.EnumType;
+import io.github.swagger2markup.internal.type.MapType;
+import io.github.swagger2markup.internal.type.ObjectType;
+import io.github.swagger2markup.internal.type.RefType;
+import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.swagger.models.properties.*;
+import io.swagger.models.properties.AbstractNumericProperty;
+import io.swagger.models.properties.ArrayProperty;
+import io.swagger.models.properties.BaseIntegerProperty;
+import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.DoubleProperty;
+import io.swagger.models.properties.FloatProperty;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.MapProperty;
+import io.swagger.models.properties.ObjectProperty;
+import io.swagger.models.properties.Property;
+import io.swagger.models.properties.RefProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UUIDProperty;
 import io.swagger.models.refs.RefFormat;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
@@ -28,7 +47,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -57,7 +81,7 @@ public final class PropertyAdapter {
 
         switch (property.getType()) {
             case "integer":
-                return 0;
+                return ExamplesUtil.generateIntegerExample(property instanceof IntegerProperty ? ((IntegerProperty) property).getEnum() : null);
             case "number":
                 return 0.0;
             case "boolean":
@@ -170,6 +194,16 @@ public final class PropertyAdapter {
             }
         } else if (property instanceof ObjectProperty) {
             type = new ObjectType(property.getTitle(), ((ObjectProperty) property).getProperties());
+        } else if (property instanceof IntegerProperty) {
+            IntegerProperty integerProperty = (IntegerProperty) property;
+            List<Integer> enums = integerProperty.getEnum();
+            if (CollectionUtils.isNotEmpty(enums)) {
+                // first, convert integer enum values to strings
+                List<String> enumValuesAsString = enums.stream().map(String::valueOf).collect(Collectors.toList());
+                type = new EnumType(integerProperty.getTitle(), enumValuesAsString);
+            } else {
+                type = new BasicType(property.getType(), property.getTitle());
+            }
         } else {
             if (property.getType() == null) {
                 return null;

@@ -30,8 +30,11 @@ __optional__|State as enum in object|<<_createstate_statemodel,StateModel>>
 [options="header", cols=".^3a,.^11a,.^4a"]
 |===
 |Name|Description|Schema
+|**integerValue** +
+__optional__|**Example** : `2`|enum (2, 3, 4, 5, 6, 7, 11, 16)
 |**value** +
-__optional__|State value|enum (ADDED, REMOVED, CHANGED)
+__optional__|State value +
+**Example** : `"ADDED"`|enum (ADDED, REMOVED, CHANGED)
 |===
 
 
@@ -41,6 +44,7 @@ __optional__|State value|enum (ADDED, REMOVED, CHANGED)
 |===
 |HTTP Code|Description|Schema
 |**200**|OK|enum (ADDED, REMOVED, CHANGED)
+|**500**|Internal server error|enum (2, 3, 4, 5, 6, 7, 11, 16)
 |===
 
 
@@ -52,6 +56,40 @@ __optional__|State value|enum (ADDED, REMOVED, CHANGED)
 ==== Produces
 
 * `\*/*`
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/state
+----
+
+
+===== Request body
+[source,json]
+----
+{
+  "value" : "ADDED",
+  "integerValue" : 2
+}
+----
+
+
+==== Example HTTP response
+
+===== Response 200
+[source,json]
+----
+"ADDED"
+----
+
+
+===== Response 500
+[source,json]
+----
+2
+----
 
 
 

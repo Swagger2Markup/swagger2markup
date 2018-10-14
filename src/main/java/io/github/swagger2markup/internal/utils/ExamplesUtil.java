@@ -382,6 +382,20 @@ public class ExamplesUtil {
         }
     }
 
+    /**
+     * Generates examples for integer properties - if there are enums, it uses first enum value, returns 0 otherwise.
+     *
+     * @param enumValues the enum values
+     * @return example
+     */
+    public static Integer generateIntegerExample(List<Integer> enumValues) {
+        if (enumValues == null || enumValues.isEmpty()) {
+            return 0;
+        } else {
+            return enumValues.get(0);
+        }
+    }
+
     //TODO: Unused method, make sure this is never used and then remove it.
     //FIXME: getProperties() may throw NullPointerException
 
