@@ -201,6 +201,8 @@ public final class PropertyAdapter {
                 // first, convert integer enum values to strings
                 List<String> enumValuesAsString = enums.stream().map(String::valueOf).collect(Collectors.toList());
                 type = new EnumType(integerProperty.getTitle(), enumValuesAsString);
+            } else if (isNotBlank(integerProperty.getFormat())) {
+                type = new BasicType(integerProperty.getType(), integerProperty.getTitle(), integerProperty.getFormat());
             } else {
                 type = new BasicType(property.getType(), property.getTitle());
             }
