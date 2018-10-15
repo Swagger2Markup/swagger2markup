@@ -89,6 +89,8 @@ public class Labels {
     public static final String BODY_PARAMETER = "body_parameter";
     public static final String RESPONSES = "responses";
     public static final String HEADERS_COLUMN = "headers_column";
+    public static final String MIN_ITEMS = "min_items";
+    public static final String MAX_ITEMS = "max_items";
     public static final String EXAMPLE_REQUEST = "example_request";
     public static final String EXAMPLE_RESPONSE = "example_response";
     public static final String HTTP_CODE_COLUMN = "http_code_column";

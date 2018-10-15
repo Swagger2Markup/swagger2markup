@@ -144,6 +144,30 @@ public class MarkdownConverterTest {
     }
 
     @Test
+    public void testWithMinMaxItems() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_petstore_min_max_items.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/to_folder");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/markdown/min_max_items").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "min_max_items.html");
+    }
+
+    @Test
     public void testWithInterDocumentCrossReferences() throws IOException, URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());

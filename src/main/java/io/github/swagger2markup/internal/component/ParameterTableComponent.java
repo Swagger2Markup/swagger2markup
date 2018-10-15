@@ -95,7 +95,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
                 typeColumnBuilder.add(parameterAdapter.displayType(markupDocBuilder));
                 nameColumnBuilder.add(getParameterNameColumnContent(markupDocBuilder, parameterAdapter));
-                descriptionColumnBuilder.add(parameterAdapter.displayDescription(markupDocBuilder));
+                descriptionColumnBuilder.add(buildDescriptionForParameter(markupDocBuilder, parameterAdapter));
                 schemaColumnBuilder.add(parameterAdapter.displaySchema(markupDocBuilder));
                 defaultColumnBuilder.add(parameterAdapter.displayDefaultValue(markupDocBuilder));
             }
@@ -118,6 +118,20 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_PARAMETERS_AFTER, markupDocBuilder, operation));
 
         return markupDocBuilder;
+    }
+
+    private String buildDescriptionForParameter(MarkupDocBuilder markupDocBuilder, ParameterAdapter parameterAdapter) {
+        MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder(markupDocBuilder);
+        String basicDescription = parameterAdapter.displayDescription(descriptionBuilder);
+        descriptionBuilder.text(basicDescription);
+
+        if (parameterAdapter.getMinItems().isPresent()) {
+            descriptionBuilder.newLine(true).boldText(labels.getLabel(MIN_ITEMS)).text(COLON).text(String.valueOf(parameterAdapter.getMinItems().get()));
+        }
+        if (parameterAdapter.getMaxItems().isPresent()) {
+            descriptionBuilder.newLine().boldText(labels.getLabel(MAX_ITEMS)).text(COLON).text(String.valueOf(parameterAdapter.getMaxItems().get()));
+        }
+        return descriptionBuilder.toString();
     }
 
     private String getParameterNameColumnContent(MarkupDocBuilder markupDocBuilder, ParameterAdapter parameter) {
