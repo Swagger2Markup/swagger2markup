@@ -30,7 +30,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.failBecauseExceptionWasNotThrown;
@@ -675,8 +677,11 @@ public class AsciidocConverterTest {
         Path outputDirectory = Paths.get("build/test/asciidoc/enums");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
+        Map<String, String> configMap = new HashMap<>();
+        configMap.put("swagger2markup.generatedExamplesEnabled", "true");  // enable examples generation
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap)
+                .withMarkupLanguage(MarkupLanguage.ASCIIDOC)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
