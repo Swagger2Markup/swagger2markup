@@ -407,6 +407,9 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                 } else if (entry.getKey().equals("path")) {
                     // Path shouldn't have quotes around it
                     markupDocBuilder.listingBlock(entry.getValue().toString());
+                } else if (entry.getKey().equals("header")){
+                    // Header should have format: apikey:"string"
+                    markupDocBuilder.listingBlock(entry.getValue().toString(), "json");
                 } else {
                     markupDocBuilder.listingBlock(Json.pretty(entry.getValue()), "json");
                 }
