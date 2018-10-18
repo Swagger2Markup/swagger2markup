@@ -578,7 +578,7 @@ __required__|Pet id to delete|integer (int64)
 ===== Request header
 [source,json]
 ----
-"string"
+api_key:"string"
 ----
 
 

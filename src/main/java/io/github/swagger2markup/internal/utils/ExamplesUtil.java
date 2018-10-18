@@ -145,7 +145,9 @@ public class ExamplesUtil {
                             abstractSerializableParameterExample = ParameterAdapter.generateExample((AbstractSerializableParameter) parameter);
                         }
                     }
-                    if (parameter instanceof PathParameter) {
+                    if (parameter instanceof HeaderParameter){
+                        example = parameter.getName() +":\"" +((HeaderParameter) parameter).getType()+ "\"";
+                    } else if (parameter instanceof PathParameter) {
                         String pathExample = (String) examples.get("path");
                         pathExample = pathExample.replace('{' + parameter.getName() + '}', encodeExampleForUrl(abstractSerializableParameterExample));
                         example = pathExample;
