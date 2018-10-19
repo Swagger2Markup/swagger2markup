@@ -1,0 +1,11 @@
+swagger: "2.0"
+info:
+  title: API
+  version: "1.1"
+
+paths: {}
+definitions:
+  FreeForm:
+    description: A freeform record Schema
+    type: object
+    additionalProperties: {}
