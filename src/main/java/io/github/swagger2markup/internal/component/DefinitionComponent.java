@@ -30,9 +30,17 @@ import io.swagger.models.properties.Property;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.Labels.POLYMORPHISM_COLUMN;
+import static io.github.swagger2markup.Labels.POLYMORPHISM_DISCRIMINATOR_COLUMN;
+import static io.github.swagger2markup.Labels.POLYMORPHISM_NATURE_COMPOSITION;
+import static io.github.swagger2markup.Labels.POLYMORPHISM_NATURE_INHERITANCE;
+import static io.github.swagger2markup.Labels.TYPE_COLUMN;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
@@ -70,9 +78,11 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         String definitionName = params.definitionName;
+        String definitionTitle = determineDefinitionTitle(params);
+
         Model model = params.model;
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_BEFORE, markupDocBuilder, definitionName, model));
-        markupDocBuilder.sectionTitleWithAnchorLevel(params.titleLevel, definitionName, definitionName);
+        markupDocBuilder.sectionTitleWithAnchorLevel(params.titleLevel, definitionTitle, definitionName);
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, model));
         String description = model.getDescription();
         if (isNotBlank(description)) {
@@ -83,6 +93,20 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
         applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_AFTER, markupDocBuilder, definitionName, model));
 
         return markupDocBuilder;
+    }
+
+    /**
+     * Determines title for definition. If title is present, it is used, definitionName is returned otherwise.
+     *
+     * @param params      params object for this definition
+     * @return Definition title - value from title tag if present, definitionName otherwise
+     */
+    private String determineDefinitionTitle(Parameters params) {
+       if (params.model.getTitle() != null) {
+            return params.model.getTitle();
+        } else {
+            return params.definitionName;
+        }
     }
 
     /**
