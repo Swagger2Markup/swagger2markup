@@ -318,7 +318,7 @@ definitions:
   TitledSchema:
     description: mixed collections and objects
     type: object
-    title: Request
+    title: Titled Schema Title
     properties:
       myTable:
         type: array
