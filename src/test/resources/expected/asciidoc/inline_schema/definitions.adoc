@@ -230,7 +230,7 @@ __optional__|option value|string
 
 
 [[_titledschema]]
-=== TitledSchema
+=== Titled Schema Title
 mixed collections and objects
 
 
