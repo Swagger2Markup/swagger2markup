@@ -106,7 +106,7 @@ public class ExamplesUtil {
         for (Parameter parameter : parameters) {
             Object example = null;
             if (parameter instanceof BodyParameter) {
-                example = ((BodyParameter) parameter).getExamples();
+                example = getExamplesFromBodyParameter(parameter);
                 if (example == null) {
                     Model schema = ((BodyParameter) parameter).getSchema();
                     if (schema instanceof RefModel) {
@@ -172,6 +172,19 @@ public class ExamplesUtil {
                 examples.put(parameter.getIn(), example);
         }
 
+        return examples;
+    }
+
+    /**
+     * Retrieves example payloads for body parameter either from examples or from vendor extensions.
+     * @param parameter parameter to get the examples for 
+     * @return examples if found otherwise null
+     */
+    private static Object getExamplesFromBodyParameter(Parameter parameter) {
+        Object examples = ((BodyParameter) parameter).getExamples();
+        if (examples == null) {
+            examples = parameter.getVendorExtensions().get("x-examples");
+        }
         return examples;
     }
 
