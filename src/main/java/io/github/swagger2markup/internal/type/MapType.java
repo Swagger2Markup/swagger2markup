@@ -34,7 +34,8 @@ public class MapType extends Type {
     @Override
     public String displaySchema(MarkupDocBuilder docBuilder) {
         String keyTypeDisplay = keyType.displaySchema(docBuilder);
-        return String.format("< %s, %s > map", keyTypeDisplay, valueType.displaySchema(docBuilder));
+        // Display MapType with null valueType as object to fix https://github.com/swagger-api/swagger-parser/issues/346
+        return valueType == null ? "object" : String.format("< %s, %s > map", keyTypeDisplay, valueType.displaySchema(docBuilder));
     }
 
     public Type getKeyType() {

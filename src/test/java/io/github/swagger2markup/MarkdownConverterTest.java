@@ -274,4 +274,31 @@ public class MarkdownConverterTest {
         );
 
     }
+
+    @Test
+    public void testFreeFormWithEmptyCurlyBracket() throws IOException, URISyntaxException {
+        //Given
+        Path file = Paths.get(MarkdownConverterTest.class.getResource("/yaml/swagger_freeform_with_emtpy_curly_brackets.yaml").toURI());
+        Path outputDirectory = Paths.get("build/test/markdown/freeform");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .withSeparatedDefinitions()
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+                .build();
+        Swagger2MarkupConverter.from(file)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        // Then
+        String[] files = outputDirectory.toFile().list();
+        expectedFiles.add("definitions");
+        assertThat(files).hasSize(5).containsAll(expectedFiles);
+
+        Path expectedFilesDirectory = Paths.get(MarkdownConverterTest.class.getResource("/expected/markdown/freeform").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "freeform.html");
+
+    }
 }
