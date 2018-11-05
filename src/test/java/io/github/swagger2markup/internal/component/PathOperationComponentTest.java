@@ -167,5 +167,39 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         Path expectedFile = getExpectedFile(COMPONENT_NAME);
         DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
     }
+    
+    @Test
+    public void testWithBodyParamExample() throws URISyntaxException {
+        String COMPONENT_NAME = "path_operation_with_body_param_example";
+        Path outputDirectory = getOutputFile(COMPONENT_NAME);
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        Map<String, String> configMap = new HashMap<>();
+        configMap.put("swagger2markup.generatedExamplesEnabled", "true");  // enable example
+
+        //Given
+        Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore_body_examples.yaml").toURI());
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap).build();
+        Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config) .build();
+        Swagger swagger = converter.getContext().getSwagger();
+
+        io.swagger.models.Path path = swagger.getPaths().get("/users");
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/users", path);
+
+        Swagger2MarkupConverter.Context context = converter.getContext();
+        MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
+
+        //When
+        markupDocBuilder = new PathOperationComponent(context,
+                new DefinitionDocumentResolverFromOperation(context),
+                new SecurityDocumentResolver(context)).
+                apply(markupDocBuilder, PathOperationComponent.parameters(pathOperations.get(0)));
+
+        markupDocBuilder.writeToFileWithoutExtension(outputDirectory, StandardCharsets.UTF_8);
+
+        //Then
+        Path expectedFile = getExpectedFile(COMPONENT_NAME);
+        DiffUtils.assertThatFileIsEqual(expectedFile, outputDirectory, getReportName(COMPONENT_NAME));
+    }
 
 }

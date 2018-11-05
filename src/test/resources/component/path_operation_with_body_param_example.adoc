@@ -1,0 +1,63 @@
+
+[[_createuser]]
+=== Create user
+....
+POST /users
+....
+
+
+==== Description
+This can only be done by the logged in user.
+
+
+==== Parameters
+
+[options="header", cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+|Type|Name|Description|Schema
+|**Body**|**body** +
+__optional__|Created user object|<<_user,User>>
+|===
+
+
+==== Responses
+
+[options="header", cols=".^2a,.^14a,.^4a"]
+|===
+|HTTP Code|Description|Schema
+|**default**|successful operation|No Content
+|===
+
+
+==== Produces
+
+* `application/json`
+* `application/xml`
+
+
+==== Tags
+
+* user
+
+
+==== Example HTTP request
+
+===== Request path
+----
+/users
+----
+
+
+===== Request body
+[source,json]
+----
+{ "id" : 0, "username" : "string" }
+----
+
+[source,xml]
+----
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?><user><id>0</id><username>string</username></user>
+----
+
+
+
