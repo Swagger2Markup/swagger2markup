@@ -122,6 +122,7 @@ public class Swagger2MarkupConfigBuilder {
         Configuration swagger2markupConfiguration = compositeConfiguration.subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
         config.extensionsProperties = new Swagger2MarkupProperties(extensionsConfiguration);
+        config.asciidocPegdownTimeoutMillis = swagger2MarkupProperties.getRequiredInt(ASCIIDOC_PEGDOWN_TIMEOUT);
     }
 
     /**
@@ -587,6 +588,7 @@ public class Swagger2MarkupConfigBuilder {
         private String separatedDefinitionsFolder;
         private Character listDelimiter;
         private boolean listDelimiterEnabled;
+        private int asciidocPegdownTimeoutMillis;
 
         private List<PageBreakLocations> pageBreakLocations;
 
@@ -782,6 +784,11 @@ public class Swagger2MarkupConfigBuilder {
         @Override
         public List<PageBreakLocations> getPageBreakLocations() {
             return pageBreakLocations;
+        }
+
+        @Override
+        public int getAsciidocPegdownTimeoutMillis() {
+            return asciidocPegdownTimeoutMillis;
         }
     }
 }

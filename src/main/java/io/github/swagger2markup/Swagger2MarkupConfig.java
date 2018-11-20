@@ -240,4 +240,11 @@ public interface Swagger2MarkupConfig {
      * @return List of PageBreakLocations
      */
     List<PageBreakLocations> getPageBreakLocations();
+
+    /**
+     * Returns custom timeout value.
+     *
+     * @return custom timeout value
+     */
+    int getAsciidocPegdownTimeoutMillis();
 }
