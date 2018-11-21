@@ -50,8 +50,16 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
         super();
     }
 
+    public AsciiDocBuilder(int asciidocPegdownTimeoutMillis) {
+        super(System.getProperty("line.separator"), asciidocPegdownTimeoutMillis);
+    }
+
     public AsciiDocBuilder(String newLine) {
         super(newLine);
+    }
+
+    public AsciiDocBuilder(String newLine, int asciidocPegdownTimeoutMillis) {
+        super(newLine, asciidocPegdownTimeoutMillis);
     }
 
     protected MarkupLanguage getMarkupLanguage() {
@@ -60,7 +68,7 @@ public class AsciiDocBuilder extends AbstractMarkupDocBuilder {
 
     @Override
     public MarkupDocBuilder copy(boolean copyBuffer) {
-        AsciiDocBuilder builder = new AsciiDocBuilder(newLine);
+        AsciiDocBuilder builder = new AsciiDocBuilder(newLine, asciidocPegdownTimeoutMillis);
 
         if (copyBuffer)
             builder.documentBuilder = new StringBuilder(this.documentBuilder);

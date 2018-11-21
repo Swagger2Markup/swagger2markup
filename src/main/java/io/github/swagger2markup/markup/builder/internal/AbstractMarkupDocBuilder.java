@@ -18,16 +18,6 @@
  */
 package io.github.swagger2markup.markup.builder.internal;
 
-import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
-import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
-import nl.jworks.markdown_to_asciidoc.Converter;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -40,6 +30,17 @@ import java.text.Normalizer;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
+import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.markup.builder.internal.asciidoc.AsciiDocConverterExtension;
 
 import static org.apache.commons.lang3.StringUtils.defaultString;
 
@@ -59,19 +60,26 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected static final int MAX_TITLE_LEVEL = 5;
     protected static final String NEW_LINES = "\\r\\n|\\r|\\n";
     protected static final String WHITESPACE = " ";
+    protected static final int ASCIIDOC_PEGDOWN_DEFUALT_MILLIS = 2000;
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine;
+    protected int asciidocPegdownTimeoutMillis;
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected String anchorPrefix = null;
 
     public AbstractMarkupDocBuilder() {
-        this(System.getProperty("line.separator"));
+        this(System.getProperty("line.separator"), ASCIIDOC_PEGDOWN_DEFUALT_MILLIS);
     }
 
     public AbstractMarkupDocBuilder(String newLine) {
+        this(newLine, ASCIIDOC_PEGDOWN_DEFUALT_MILLIS);
+    }
+
+    public AbstractMarkupDocBuilder(String newLine, int asciidocPegdownTimeoutMillis) {
         this.newLine = newLine;
+        this.asciidocPegdownTimeoutMillis = asciidocPegdownTimeoutMillis;
     }
 
     protected abstract MarkupLanguage getMarkupLanguage();
@@ -412,7 +420,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             return markupText;
         else {
             if (markupLanguage == MarkupLanguage.MARKDOWN && getMarkupLanguage() == MarkupLanguage.ASCIIDOC) {
-                return Converter.convertMarkdownToAsciiDoc(markupText) + newLine;
+                return AsciiDocConverterExtension.convertMarkdownToAsciiDoc(markupText, asciidocPegdownTimeoutMillis) + newLine;
             } else {
                 return markupText;
             }

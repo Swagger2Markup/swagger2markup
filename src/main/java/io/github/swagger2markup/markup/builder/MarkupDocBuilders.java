@@ -78,4 +78,38 @@ public final class MarkupDocBuilders {
                 throw new IllegalArgumentException(String.format("Unsupported markup language %s", markupLanguage));
         }
     }
+
+
+    /**
+     * Creates a MarkupDocBuilder which uses a custom line separator.
+     * If the custom line separator is null, it uses the system line separator.
+     * There is a possibility asciidoc generator pegdown (<a href="https://github.com/sirthias/pegdown#parsing-timeouts">optional</a>) can
+     * take more time. The default is set to two seconds. To override pass value greater than two seconds.
+     *
+     * @param markupLanguage the markup language which is used to generate the files
+     * @param lineSeparator the line separator which should be used
+     * @param asciidocPegdownTimeoutMillis asciidoc generator timeout
+     * @return a MarkupDocBuilder
+     */
+    public static MarkupDocBuilder documentBuilder(MarkupLanguage markupLanguage, LineSeparator lineSeparator, int asciidocPegdownTimeoutMillis) {
+        switch (markupLanguage) {
+            case MARKDOWN:
+                if (lineSeparator == null)
+                    return new MarkdownBuilder();
+                else
+                    return new MarkdownBuilder(lineSeparator.toString());
+            case ASCIIDOC:
+                if (lineSeparator == null)
+                    return new AsciiDocBuilder(asciidocPegdownTimeoutMillis);
+                else
+                    return new AsciiDocBuilder(lineSeparator.toString(), asciidocPegdownTimeoutMillis);
+            case CONFLUENCE_MARKUP:
+                if (lineSeparator == null)
+                    return new ConfluenceMarkupBuilder();
+                else
+                    return new ConfluenceMarkupBuilder(lineSeparator.toString());
+            default:
+                throw new IllegalArgumentException(String.format("Unsupported markup language %s", markupLanguage));
+        }
+    }
 }
