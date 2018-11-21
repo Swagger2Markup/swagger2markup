@@ -68,6 +68,7 @@ public class Swagger2MarkupProperties {
     public static final String RESPONSE_ORDER_BY = PROPERTIES_PREFIX + ".responseOrderBy";
     public static final String LINE_SEPARATOR = PROPERTIES_PREFIX + ".lineSeparator";
     public static final String PAGE_BREAK_LOCATIONS = PROPERTIES_PREFIX + ".pageBreakLocations";
+    public static final String ASCIIDOC_PEGDOWN_TIMEOUT = PROPERTIES_PREFIX + ".asciidoc.pegdown.timeoutMillis";
 
     /**
      * Prefix for Swagger2Markup extension properties
