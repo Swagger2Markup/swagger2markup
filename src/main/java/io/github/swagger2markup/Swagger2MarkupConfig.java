@@ -45,6 +45,9 @@ public interface Swagger2MarkupConfig {
      */
     boolean isGeneratedExamplesEnabled();
 
+    /**
+     * Prepend the hostname to all paths.
+     */
     boolean isHostnameEnabled();
     /**
      * Prepend the base path to all paths.

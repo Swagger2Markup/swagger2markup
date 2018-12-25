@@ -163,7 +163,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     }
 
     /**
-     * Returns the basePath which should be prepended to the relative path
+     * Returns the hostname which should be prepended to the relative path
      *
      * @return either the relative or the full path
      */
