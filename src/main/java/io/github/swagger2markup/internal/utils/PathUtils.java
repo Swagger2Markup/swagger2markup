@@ -67,12 +67,13 @@ public class PathUtils {
      * @return the path operations
      */
     public static List<PathOperation> toPathOperationsList(Map<String, Path> paths,
+                                                           String host,
                                                            String basePath,
                                                            Comparator<PathOperation> comparator) {
         List<PathOperation> pathOperations = new ArrayList<>();
 
         paths.forEach((relativePath, path) ->
-                pathOperations.addAll(toPathOperationsList(basePath + relativePath, path)));
+                pathOperations.addAll(toPathOperationsList(host + basePath + relativePath, path)));
         if (comparator != null) {
             pathOperations.sort(comparator);
         }

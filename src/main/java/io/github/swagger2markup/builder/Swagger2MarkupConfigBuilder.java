@@ -85,6 +85,7 @@ public class Swagger2MarkupConfigBuilder {
         config.markupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
         config.swaggerMarkupLanguage = swagger2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
         config.generatedExamplesEnabled = swagger2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
+        config.hostnameEnabled = swagger2MarkupProperties.getRequiredBoolean(HOSTNAME_ENABLED);
         config.basePathPrefixEnabled = swagger2MarkupProperties.getRequiredBoolean(BASE_PATH_PREFIX_ENABLED);
         config.separatedDefinitionsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_DEFINITIONS_ENABLED);
         config.separatedOperationsEnabled = swagger2MarkupProperties.getRequiredBoolean(SEPARATED_OPERATIONS_ENABLED);
@@ -555,6 +556,7 @@ public class Swagger2MarkupConfigBuilder {
         private MarkupLanguage markupLanguage;
         private MarkupLanguage swaggerMarkupLanguage;
         private boolean generatedExamplesEnabled;
+        private boolean hostnameEnabled;
         private boolean basePathPrefixEnabled;
         private boolean separatedDefinitionsEnabled;
         private boolean separatedOperationsEnabled;
@@ -774,6 +776,11 @@ public class Swagger2MarkupConfigBuilder {
         @Override
         public Swagger2MarkupProperties getExtensionsProperties() {
             return extensionsProperties;
+        }
+
+        @Override
+        public boolean isHostnameEnabled() {
+            return hostnameEnabled;
         }
 
         @Override
