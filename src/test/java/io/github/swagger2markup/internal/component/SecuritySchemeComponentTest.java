@@ -51,7 +51,7 @@ public class SecuritySchemeComponentTest extends AbstractComponentTest {
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
         Swagger swagger = converter.getContext().getSwagger();
 
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(swagger.getPaths(), "",
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(swagger.getPaths(), "", "",
                 converter.getContext().getConfig().getOperationOrdering());
 
         Swagger2MarkupConverter.Context context = converter.getContext();

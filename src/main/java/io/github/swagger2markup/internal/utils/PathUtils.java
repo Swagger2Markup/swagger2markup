@@ -62,17 +62,19 @@ public class PathUtils {
      * Converts the Swagger paths into a list of PathOperations.
      *
      * @param paths      the Swagger paths
+     * @param host       the host of all paths
      * @param basePath   the basePath of all paths
      * @param comparator the comparator to use.
      * @return the path operations
      */
     public static List<PathOperation> toPathOperationsList(Map<String, Path> paths,
+                                                           String host,
                                                            String basePath,
                                                            Comparator<PathOperation> comparator) {
         List<PathOperation> pathOperations = new ArrayList<>();
 
         paths.forEach((relativePath, path) ->
-                pathOperations.addAll(toPathOperationsList(basePath + relativePath, path)));
+                pathOperations.addAll(toPathOperationsList(host + basePath + relativePath, path)));
         if (comparator != null) {
             pathOperations.sort(comparator);
         }

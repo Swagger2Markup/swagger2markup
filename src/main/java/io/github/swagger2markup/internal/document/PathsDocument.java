@@ -113,7 +113,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @param paths the Swagger paths
      */
     private void buildsPathsSection(MarkupDocBuilder markupDocBuilder, Map<String, Path> paths) {
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getBasePath(), config.getOperationOrdering());
+        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getHostname(), getBasePath(), config.getOperationOrdering());
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation, config));
@@ -160,6 +160,18 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
         } else {
             buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.RESOURCES));
         }
+    }
+
+    /**
+     * Returns the hostname which should be prepended to the relative path
+     *
+     * @return either the relative or the full path
+     */
+    private String getHostname() {
+        if (config.isHostnameEnabled()) {
+            return StringUtils.defaultString(context.getSwagger().getHost());
+        }
+        return "";
     }
 
     /**

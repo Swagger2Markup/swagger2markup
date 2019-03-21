@@ -97,6 +97,7 @@ public class Swagger2MarkupConfigBuilderTest {
         assertThat(config.getDefinitionOrdering()).isNull();
         assertThat(config.getDefinitionsDocument()).isEqualTo("definitionsTest");
         assertThat(config.isGeneratedExamplesEnabled()).isTrue();
+        assertThat(config.isHostnameEnabled()).isEqualTo(false);
         assertThat(config.isInlineSchemaEnabled()).isEqualTo(false);
         assertThat(config.getInterDocumentCrossReferencesPrefix()).isEqualTo("xrefPrefix");
         assertThat(config.getMarkupLanguage()).isEqualTo(MarkupLanguage.MARKDOWN);
