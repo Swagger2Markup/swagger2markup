@@ -160,7 +160,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
      */
     private void buildDeprecatedSection(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
         if (BooleanUtils.isTrue(operation.getOperation().isDeprecated())) {
-            markupDocBuilder.block(DEPRECATED_OPERATION, MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.CAUTION);
+            markupDocBuilder.block(labels.getLabel(DEPRECATED_OPERATION), MarkupBlockStyle.EXAMPLE, null, MarkupAdmonition.CAUTION);
         }
     }
 
