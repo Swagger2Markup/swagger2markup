@@ -7,6 +7,17 @@ image:https://travis-ci.org/Swagger2Markup/swagger2markup.svg?branch=master["Bui
 
 == Overview
 
+
+NOTE: Dear community,
+unfortunately I can't maintain Swagger2Markup alone anymore. There are many interesting new topics:
+1) Swagger v3 support
+2) Fixing bugs
+2) Merge Swagger2Markup repositories and create a new multi-module repository.
+Any help is welcome.
+Kind regards,
+Robert
+
+
 The primary goal of this project is to *simplify the generation of an up-to-date RESTful API documentation by combining documentation that's been hand-written with auto-generated API documentation* produced by https://github.com/swagger-api[Swagger]. The result is intended to be an *up-to-date, easy-to-read, on- and offline user guide*, comparable to https://developer.github.com/v3/[GitHub's API documentation]. The output of Swagger2Markup can be used as an alternative to https://github.com/swagger-api/swagger-ui[swagger-ui] and can be served as static content.
 NOTE: The Swagger Specification has been donated to to the https://openapis.org/[Open API Initiative (OAI)] and has been renamed to the https://github.com/OAI/OpenAPI-Specification[OpenAPI Specification].
 
