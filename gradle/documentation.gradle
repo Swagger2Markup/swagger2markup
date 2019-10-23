@@ -14,7 +14,7 @@ asciidoctor {
             sectlinks: '',
             sectanchors: '',
             hardbreaks: '',
-            'release-version': project.version
+            'release-version': project.releaseVersion
     ]
 }
 
@@ -35,6 +35,6 @@ githubPages  {
 
     pages  {
         from file(asciidoctor.outputDir.path + '/html5')
-        into project.version
+        into project.releaseVersion
     }
 }
