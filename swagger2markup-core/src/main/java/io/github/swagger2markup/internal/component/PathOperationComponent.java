@@ -35,9 +35,9 @@ import io.swagger.models.Model;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.BooleanUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -368,12 +368,10 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                 // Example title, like "Response 200" or "Request Body"
                 buildExampleTitle(markupDocBuilder, sectionTitle + " " + entry.getKey());
 
-                if (NumberUtils.isNumber(entry.getKey())) {
+                if (NumberUtils.isCreatable(entry.getKey())) {
                     // Section header is an HTTP status code (numeric)
                     JsonNode rootNode = parseExample(entry.getValue());
                     Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
-
-
 
                     if (!fieldsIterator.hasNext()) {
                         // rootNode contains a single example, no need to further iterate.
@@ -429,7 +427,7 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
     
                             } else if (entryByType.getKey().equals("application/xml")) {
     
-                                String example = stripExampleQuotes(entryByType.getValue().toString());
+                                String example = stripExampleQuotes(entryByType.getValue());
                                 example = StringEscapeUtils.unescapeJava(example);
     
                                 //TODO: pretty print XML

@@ -56,6 +56,11 @@ configure(project.coreProjects) {
     jmh {
         duplicateClassesStrategy = 'warn'
     }
+    configurations.all {
+        resolutionStrategy {
+            failOnVersionConflict()
+        }
+    }
 }
 
 sonarqube {

@@ -25,6 +25,8 @@ public class MapUtils {
     /**
      * Returns the the Map either ordered or as-is, if the comparator is null.
      *
+     * @param <K>        the type of keys maintained by the map parameter
+     * @param <V>        the type of mapped values
      * @param map        the Map
      * @param comparator the comparator to use.
      * @return the keySet of the Map

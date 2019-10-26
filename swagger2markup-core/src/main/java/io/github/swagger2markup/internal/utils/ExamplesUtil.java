@@ -41,10 +41,11 @@ public class ExamplesUtil {
     /**
      * Generates a Map of response examples
      *
-     * @param generateMissingExamples specifies the missing examples should be generated
-     * @param operation               the Swagger Operation
-     * @param definitions             the map of definitions
-     * @param markupDocBuilder        the markup builder
+     * @param definitionDocumentResolver DocumentResolver
+     * @param generateMissingExamples    specifies the missing examples should be generated
+     * @param operation                  the Swagger Operation
+     * @param definitions                the map of definitions
+     * @param markupDocBuilder           the markup builder
      * @return map containing response examples.
      */
     public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, PathOperation operation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
@@ -89,10 +90,11 @@ public class ExamplesUtil {
     /**
      * Generates examples for request
      *
-     * @param generateMissingExamples specifies the missing examples should be generated
-     * @param pathOperation           the Swagger Operation
-     * @param definitions             the map of definitions
-     * @param markupDocBuilder        the markup builder
+     * @param definitionDocumentResolver DocumentResolver
+     * @param generateMissingExamples    specifies the missing examples should be generated
+     * @param pathOperation              the Swagger Operation
+     * @param definitions                the map of definitions
+     * @param markupDocBuilder           the markup builder
      * @return an Optional with the example content
      */
     public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, PathOperation pathOperation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
@@ -145,15 +147,14 @@ public class ExamplesUtil {
                             abstractSerializableParameterExample = ParameterAdapter.generateExample((AbstractSerializableParameter) parameter);
                         }
                     }
-                    if (parameter instanceof HeaderParameter){
-                        example = parameter.getName() +":\"" +((HeaderParameter) parameter).getType()+ "\"";
+                    if (parameter instanceof HeaderParameter) {
+                        example = parameter.getName() + ":\"" + ((HeaderParameter) parameter).getType() + "\"";
                     } else if (parameter instanceof PathParameter) {
                         String pathExample = (String) examples.get("path");
                         pathExample = pathExample.replace('{' + parameter.getName() + '}', encodeExampleForUrl(abstractSerializableParameterExample));
                         example = pathExample;
                     } else if (parameter instanceof QueryParameter) {
-                        if (parameter.getRequired())
-                        {
+                        if (parameter.getRequired()) {
                             String path = (String) examples.get("path");
                             String separator = path.contains("?") ? "&" : "?";
                             String pathExample = path + separator + parameter.getName() + "=" + encodeExampleForUrl(abstractSerializableParameterExample);
@@ -177,7 +178,8 @@ public class ExamplesUtil {
 
     /**
      * Retrieves example payloads for body parameter either from examples or from vendor extensions.
-     * @param parameter parameter to get the examples for 
+     *
+     * @param parameter parameter to get the examples for
      * @return examples if found otherwise null
      */
     private static Object getExamplesFromBodyParameter(Parameter parameter) {
