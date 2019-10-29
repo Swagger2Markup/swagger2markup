@@ -50,6 +50,7 @@ public final class ModelUtils {
     /**
      * Retrieves the type of a model, or otherwise null
      *
+     * @param definitions                a map of RefModel name keys to models
      * @param model                      the model
      * @param definitionDocumentResolver the definition document resolver
      * @return the type of the model, or otherwise null

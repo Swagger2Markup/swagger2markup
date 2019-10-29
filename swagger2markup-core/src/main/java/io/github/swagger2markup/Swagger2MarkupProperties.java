@@ -137,6 +137,7 @@ public class Swagger2MarkupProperties {
     /**
      * Return the int property value associated with the given key (never {@code null}).
      *
+     * @param key the property name to resolve
      * @return The int property
      * @throws IllegalStateException if the key cannot be
      */
@@ -151,6 +152,7 @@ public class Swagger2MarkupProperties {
     /**
      * Return the boolean property value associated with the given key (never {@code null}).
      *
+     * @param key the property name to resolve
      * @return The boolean property
      * @throws IllegalStateException if the key cannot be resolved
      */
@@ -185,16 +187,13 @@ public class Swagger2MarkupProperties {
      */
     public Optional<URI> getURI(String key) {
         Optional<String> property = getString(key);
-        if (property.isPresent()) {
-            return Optional.of(URIUtils.create(property.get()));
-        } else {
-            return Optional.empty();
-        }
+        return property.map(URIUtils::create);
     }
 
     /**
      * Return the URI property value associated with the given key (never {@code null}).
      *
+     * @param key the property name to resolve
      * @return The URI property
      * @throws IllegalStateException if the key cannot be resolved
      */
@@ -217,17 +216,13 @@ public class Swagger2MarkupProperties {
      */
     public Optional<Path> getPath(String key) {
         Optional<String> property = getString(key);
-        if (property.isPresent()) {
-            return Optional.of(Paths.get(property.get()));
-        } else {
-            return Optional.empty();
-        }
+        return property.map(s -> Paths.get(s));
     }
 
     /**
-     * Return a list of Path property values associated with the given key, 
+     * Return a list of Path property values associated with the given key,
      * or {@code defaultValue} if the key cannot be resolved.
-     * 
+     *
      * @param key the property name to resolve
      * @return The list of Path properties
      * @throws IllegalStateException if the value cannot be mapped to an array of strings
@@ -251,6 +246,7 @@ public class Swagger2MarkupProperties {
     /**
      * Return the Path property value associated with the given key (never {@code null}).
      *
+     * @param key the property name to resolve
      * @return The Path property
      * @throws IllegalStateException if the key cannot be resolved
      */
@@ -272,16 +268,13 @@ public class Swagger2MarkupProperties {
      */
     public Optional<MarkupLanguage> getMarkupLanguage(String key) {
         Optional<String> property = getString(key);
-        if (property.isPresent()) {
-            return Optional.of(MarkupLanguage.valueOf(property.get()));
-        } else {
-            return Optional.empty();
-        }
+        return property.map(MarkupLanguage::valueOf);
     }
 
     /**
      * Return the MarkupLanguage property value associated with the given key (never {@code null}).
      *
+     * @param key the property name to resolve
      * @return The MarkupLanguage property
      * @throws IllegalStateException if the key cannot be resolved
      */
@@ -327,6 +320,7 @@ public class Swagger2MarkupProperties {
     /**
      * Return the String property value associated with the given key (never {@code null}).
      *
+     * @param key the property name to resolve
      * @return The String property
      * @throws IllegalStateException if the key cannot be resolved
      */
@@ -369,17 +363,13 @@ public class Swagger2MarkupProperties {
 
     public List<PageBreakLocations> getPageBreakLocations(String key) {
         List<PageBreakLocations> result = configuration.getList(PageBreakLocations.class, key);
-        if(result == null) result = new ArrayList<PageBreakLocations>();
+        if (result == null) result = new ArrayList<>();
 
         return result;
     }
 
     public Optional<Pattern> getHeaderPattern(String key) {
         Optional<String> property = getString(key);
-        if (property.isPresent()) {
-            return Optional.of(Pattern.compile(property.get()));
-        } else {
-            return Optional.empty();
-        }
+        return property.map(Pattern::compile);
     }
 }
