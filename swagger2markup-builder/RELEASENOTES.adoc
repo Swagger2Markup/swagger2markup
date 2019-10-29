@@ -1,0 +1,29 @@
+= Release Notes
+
+== Version 0.1.0
+* Initial version with support for AsciiDoc and Markdown
+
+=== Version 0.1.1
+* Signed jar files
+
+=== Version 0.1.2
+* Removed logback from compile dependency
+
+=== Version 0.1.3
+* Removed commons.io from compile dependency
+
+=== Version 0.1.4
+* Fixed SECTION_TITLE_LEVEL3 in Markdown enum
+
+=== Version 0.1.5
+* Added SECTION_TITLE_LEVEL4
+
+== Version 1.1.0
+* Changed bold to ** and italic to __ so that special chars in the text are possible
+
+== Version 1.1.1
+* Added a method to add page breaks.
+
+== Version 1.1.2
+* Improve code blocks in markdown
+

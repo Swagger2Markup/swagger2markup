@@ -1,0 +1,70 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'org.asciidoctor', name: 'asciidoctor-gradle-plugin', version: '1.6.1'
+        classpath group: 'org.asciidoctor', name: 'asciidoctorj-pdf', version: '1.5.0-beta.6'
+        classpath group: 'org.kt3k.gradle.plugin', name: 'coveralls-gradle-plugin', version: '2.8.3'
+        classpath group: 'com.jfrog.bintray.gradle', name: 'gradle-bintray-plugin', version: '1.8.4'
+        classpath group: 'org.jfrog.buildinfo', name: 'build-info-extractor-gradle', version: '4.10.0'
+    }
+}
+
+plugins {
+    id 'java'
+    id 'org.asciidoctor.convert' version '2.3.0'
+}
+apply from: 'gradle/publishing.gradle'
+apply from: 'gradle/coverage.gradle'
+
+description = 'A Markup (Markdown, AsciiDoc) document builder'
+version = '1.1.3-SNAPSHOT'
+group = 'io.github.swagger2markup'
+
+tasks.withType(JavaCompile) {
+    sourceCompatibility = "1.8"
+    targetCompatibility = "1.8"
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:unchecked', '-Xdoclint:none']
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.28'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.9'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.6'
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.13'
+    implementation group: 'nl.jworks.markdown_to_asciidoc', name: 'markdown_to_asciidoc', version: '1.1'
+    implementation group: 'org.pegdown', name: 'pegdown', version: '1.6.0'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'io.github.robwin', name: 'assertj-diff', version: '0.1.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    testImplementation group: 'io.github.robwin', name: 'assertj-diff', version: '0.1.1'
+}
+
+asciidoctor {
+    backends = ['html5', 'pdf']
+    attributes = [
+            doctype: 'book',
+            toc: 'left',
+            toclevels: '2',
+            numbered: ''
+    ]
+    sourceDir "build/tmp"
+}
+
+tasks.asciidoctor {
+    dependsOn 'check'
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
+}
