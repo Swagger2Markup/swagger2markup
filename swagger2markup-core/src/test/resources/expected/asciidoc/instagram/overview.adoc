@@ -57,20 +57,22 @@ DELETE respectively.
 
 Every response is contained by an envelope. That is, each response has a
 predictable set of keys with which you can expect to interact:
-`json
+
+[source,json]
+----
 {
-    &quot;meta&quot;: {
-        &quot;code&quot;: 200
+    "meta": {
+        "code": 200
     },
-    &quot;data&quot;: {
+    "data": {
         ...
     },
-    &quot;pagination&quot;: {
-        &quot;next_url&quot;: &quot;...&quot;,
-        &quot;next_max_id&quot;: &quot;13872296&quot;
+    "pagination": {
+        "next_url": "...",
+        "next_max_id": "13872296"
     }
 }
-`
+----
 
 ==== META
 
@@ -78,15 +80,17 @@ The meta key is used to communicate extra information about the response to
 the developer. If all goes well, you'll only ever see a code key with value
 200. However, sometimes things go wrong, and in that case you might see a
 response like:
-`json
+
+[source,json]
+----
 {
-    &quot;meta&quot;: {
-        &quot;error_type&quot;: &quot;OAuthException&quot;,
-        &quot;code&quot;: 400,
-        &quot;error_message&quot;: &quot;...&quot;
+    "meta": {
+        "error_type": "OAuthException",
+        "code": 400,
+        "error_message": "..."
     }
 }
-`
+----
 
 ==== DATA
 
@@ -99,15 +103,18 @@ Sometimes you just can't get enough. For this reason, we've provided a
 convenient way to access more data in any request for sequential data.
 Simply call the url in the next_url parameter and we'll respond with the
 next set of data.
-`json
+
+[source,json]
+----
 {
     ...
-    &quot;pagination&quot;: {
-        &quot;next_url&quot;: &quot;https://api.instagram.com/v1/tags/puppy/media/recent?access_token=fb2e77d.47a0479900504cb3ab4a1f626d174d2d&amp;max_id=13872296&quot;,
-        &quot;next_max_id&quot;: &quot;13872296&quot;
+    "pagination": {
+        "next_url": "https://api.instagram.com/v1/tags/puppy/media/recent?access_token=fb2e77d.47a0479900504cb3ab4a1f626d174d2d&max_id=13872296",
+        "next_max_id": "13872296"
     }
 }
-`
+----
+
 On views where pagination is present, we also support the "count" parameter.
 Simply set this to the number of items you'd like to receive. Note that the
 default values should be fine for most applications - but if you decide to
@@ -118,15 +125,19 @@ increase this number there is a maximum value defined on each endpoint.
 If you're writing an AJAX application, and you'd like to wrap our response
 with a callback, all you have to do is specify a callback parameter with
 any API call:
-`
-https://api.instagram.com/v1/tags/coffee/media/recent?access_token=fb2e77d.47a0479900504cb3ab4a1f626d174d2d&amp;callback=callbackFunction
-`
+
+----
+https://api.instagram.com/v1/tags/coffee/media/recent?access_token=fb2e77d.47a0479900504cb3ab4a1f626d174d2d&callback=callbackFunction
+----
+
 Would respond with:
-`js
+
+[source,js]
+----
 callbackFunction({
     ...
 });
-`
+----
 
 
 === Version information
