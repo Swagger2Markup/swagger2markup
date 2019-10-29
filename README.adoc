@@ -33,9 +33,9 @@ The project requires at least JDK 8.
 
 == Example
 
-image::src/docs/asciidoc/images/Swagger2Markup.PNG[]
+image::swagger2markup-documentation/src/docs/asciidoc/images/Swagger2Markup.PNG[]
 
-image::src/docs/asciidoc/images/Swagger2Markup_definitions.PNG[]
+image::swagger2markup-documentation/src/docs/asciidoc/images/Swagger2Markup_definitions.PNG[]
 
 == Reference documentation
 - http://swagger2markup.github.io/swagger2markup/1.3.3/[Reference Documentation]
