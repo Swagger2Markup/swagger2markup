@@ -1,9 +1,10 @@
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'org.ajoberstar.github-pages'
 
-ext {
-    releaseVersion = '1.3.3'
-}
+artifactoryPublish.skip=true
+sonarqube.skipProject=true
+
+asciidoctor.dependsOn test
 
 asciidoctor {
     sources {
@@ -18,7 +19,7 @@ asciidoctor {
             sectlinks: '',
             sectanchors: '',
             hardbreaks: '',
-            'release-version': project.ext.releaseVersion
+            'release-version': project.releaseVersion
     ]
 }
 
@@ -35,10 +36,10 @@ githubPages  {
     credentials {
         username = project.hasProperty('githubUser') ? project.githubUser : System.getenv('GITHUB_USER')
         password = project.hasProperty('githubPassword') ? project.githubPassword : System.getenv('GITHUB_PASSWORD')
-    }
+        }
 
     pages  {
         from file(asciidoctor.outputDir.path + '/html5')
-        into project.ext.releaseVersion
+        into project.releaseVersion
     }
 }
