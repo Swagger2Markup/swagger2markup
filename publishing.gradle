@@ -1,0 +1,119 @@
+import java.text.SimpleDateFormat
+
+Date buildTimeAndDate = new Date()
+ext {
+    buildDate = new SimpleDateFormat('yyyy-MM-dd').format(buildTimeAndDate)
+    buildTime = new SimpleDateFormat('HH:mm:ss.SSSZ').format(buildTimeAndDate)
+    licenseUrl = 'https://github.com/Swagger2Markup/swagger2markup/blob/master/LICENSE.txt'
+    scmUrl = 'https://github.com/Swagger2Markup/swagger2markup.git'
+}
+
+def projectArtifactId = 'swagger2markup'
+def projectUrl = 'https://github.com/Swagger2Markup/swagger2markup'
+def licenseUrl = 'https://github.com/Swagger2Markup/swagger2markup/blob/master/LICENSE.txt'
+def scmUrl = 'https://github.com/Swagger2Markup/swagger2markup.git'
+def issuesUrl = 'https://github.com/Swagger2Markup/swagger2markup/issues'
+
+jar {
+    manifest {
+        attributes(
+                'Built-By': 'Robert Winkler',
+                'Created-By': System.properties['java.version'] + " (" + System.properties['java.vendor'] + " " + System.properties['java.vm.version'] + ")",
+                'Build-Date': project.buildDate,
+                'Build-Time': project.buildTime,
+                'Specification-Title': projectArtifactId,
+                'Specification-Version': project.version,
+                'Implementation-Title': projectArtifactId,
+                'Implementation-Version': project.version
+        )
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    archiveClassifier = 'sources'
+}
+
+task javadocJar(type: Jar) {
+    from javadoc
+    archiveClassifier = 'javadoc'
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+bintray {
+    user = project.hasProperty('bintrayUsername') ? project.property('bintrayUsername') : ''
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : ''
+    dryRun = false //Whether to run this as dry-run, without deploying
+    publish = true //If version should be auto published after an upload
+    publications = ['mavenJava']
+    pkg {
+        repo = 'Maven'
+        name = "${projectArtifactId}"
+        userOrg = "${projectArtifactId}"
+        websiteUrl = "${projectUrl}"
+        issueTrackerUrl = issuesUrl
+        vcsUrl = scmUrl
+        desc =  project.description
+        licenses = ['Apache-2.0']
+        version {
+            name = project.version
+            vcsTag = "v${project.version}"
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                //Optional. The passphrase for GPG signing'
+                passphrase = project.hasProperty('gpgPassphrase') ? project.property('gpgPassphrase') : ''
+            }
+            mavenCentralSync {
+                sync = true //Optional (true by default). Determines whether to sync the version to Maven Central.
+                user = project.hasProperty('ossUser') ? project.property('ossUser') : '' //OSS user token
+                password = project.hasProperty('ossPassword') ? project.property('ossPassword') : '' //OSS user password
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            pom.withXml {
+                def devs = ['RobWin': 'Robert Winkler',
+                            'austek': 'Ali Ustek']
+                def root = asNode()
+
+                root.dependencies.'*'.findAll() {
+                    it.scope.text() == 'runtime' && project.configurations.compile.allDependencies.find { dep ->
+                        dep.name == it.artifactId.text()
+                    }
+                }.each() {
+                    it.scope*.value = 'compile'
+                }
+
+                root.appendNode('name', projectArtifactId)
+                root.appendNode('packaging', 'jar')
+                root.appendNode('url', projectUrl)
+                root.appendNode('description', project.description)
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'Apache-2.0')
+                license.appendNode('url', licenseUrl)
+                license.appendNode('distribution', 'repo')
+
+                root.appendNode('scm').appendNode('url', scmUrl)
+
+                def developers = root.appendNode('developers')
+                devs.each {
+                    def d = developers.appendNode('developer')
+                    d.appendNode('id', it.key)
+                    d.appendNode('name', it.value)
+                }
+            }
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}

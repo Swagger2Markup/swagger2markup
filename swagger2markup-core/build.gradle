@@ -1,0 +1,16 @@
+ext.moduleName='io.github.swagger2markup.core'
+
+dependencies {
+    implementation group: 'io.github.swagger2markup', name: 'markup-document-builder', version: '1.1.3-SNAPSHOT'
+    implementation group: 'io.swagger', name: 'swagger-compat-spec-parser', version: '1.0.35'
+    implementation group: 'org.apache.commons', name: 'commons-configuration2', version: '2.1'
+    implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.2'
+    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
+    implementation group: 'io.vavr', name: 'vavr', version: '0.9.1'
+    implementation group: 'ch.netzwerg', name: 'paleo-core', version: '0.11.0'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'org.asciidoctor', name: 'asciidoctorj', version: '1.5.6'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
+    testImplementation group: 'io.github.robwin', name: 'assertj-diff', version: '0.1.1'
+}
