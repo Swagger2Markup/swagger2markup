@@ -1,0 +1,47 @@
+// Allows centralized definition of the version of artifacts to
+// use.  In that respect it serves a role similar to <dependencyManagement> in Maven
+ext {
+    implLibraries = [:]
+    testLibraries = [:]
+    dependencyOverrides = [:]
+}
+implLibraries = [
+        commonsBeanUtils   : "commons-beanutils:commons-beanutils:1.9.4",
+        commonsCodec       : "commons-codec:commons-codec:1.13",
+        commonsCollections4: "org.apache.commons:commons-collections4:4.4",
+        commonsConf2       : "org.apache.commons:commons-configuration2:2.6",
+        commonsLang3       : "org.apache.commons:commons-lang3:3.9",
+        commonsIO          : "commons-io:commons-io:2.6",
+        commonsText        : "org.apache.commons:commons-text:1.8",
+        mark2Ascii         : "nl.jworks.markdown_to_asciidoc:markdown_to_asciidoc:1.1",
+        paleo              : "ch.netzwerg:paleo-core:0.14.0",
+        pegdown            : "org.pegdown:pegdown:1.6.0",
+        slf4j              : "org.slf4j:slf4j-api:1.7.28",
+        swaggerConverterV2 : "io.swagger.parser.v3:swagger-parser-v2-converter:2.0.15",
+        vavr               : "io.vavr:vavr:0.10.2"
+]
+
+testLibraries = [
+        asciiDocJ  : "org.asciidoctor:asciidoctorj:2.1.0",
+        assertj    : "org.assertj:assertj-core:3.13.2",
+        assertjDiff: "io.github.robwin:assertj-diff:0.1.1",
+        junit      : "junit:junit:4.12",
+        logback    : "ch.qos.logback:logback-classic:1.2.3",
+        mockito    : "org.mockito:mockito-core:3.1.0"
+]
+
+dependencyOverrides = [
+        assertj        : testLibraries.assertj,
+        commonsCodec   : implLibraries.commonsCodec,
+        commonsIO      : implLibraries.commonsIO,
+        commonsLang3   : implLibraries.commonsLang3,
+        findBugs       : 'com.google.code.findbugs:jsr305:3.0.2',
+        guava          : 'com.google.guava:guava:27.0.1-android',
+        jaksonCore     : 'com.github.fge:jackson-coreutils:1.8',
+        jacksonDatabind: 'com.fasterxml.jackson.core:jackson-databind:2.9.10',
+        jnrConstants   : 'com.github.jnr:jnr-constants:0.9.12',
+        jnrEnxio       : 'com.github.jnr:jnr-enxio:0.19',
+        jnrPosix       : 'com.github.jnr:jnr-posix:3.0.49',
+        jodaTime       : 'joda-time:joda-time:2.9.9',
+        slf4j          : implLibraries.slf4j,
+]
