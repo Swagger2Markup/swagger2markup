@@ -3,27 +3,31 @@ ext.moduleName='io.github.swagger2markup.core'
 dependencies {
     configurations.all {
         resolutionStrategy.force dependencyOverrides.commonsCodec
-        resolutionStrategy.force dependencyOverrides.commonsLang3
         resolutionStrategy.force dependencyOverrides.commonsIO
-        resolutionStrategy.force dependencyOverrides.slf4j
-        resolutionStrategy.force dependencyOverrides.jacksonDatabind
-        resolutionStrategy.force dependencyOverrides.guava
+        resolutionStrategy.force dependencyOverrides.commonsLang3
         resolutionStrategy.force dependencyOverrides.findBugs
+        resolutionStrategy.force dependencyOverrides.guava
         resolutionStrategy.force dependencyOverrides.jaksonCore
+        resolutionStrategy.force dependencyOverrides.jacksonDatabind
+        resolutionStrategy.force dependencyOverrides.slf4j
         // Test dependencies
         resolutionStrategy.force dependencyOverrides.assertj
-        resolutionStrategy.force dependencyOverrides.jodaTime
         resolutionStrategy.force dependencyOverrides.jnrConstants
         resolutionStrategy.force dependencyOverrides.jnrEnxio
         resolutionStrategy.force dependencyOverrides.jnrPosix
+        resolutionStrategy.force dependencyOverrides.jodaTime
     }
     compile project(':swagger2markup-builder')
     implementation implLibraries.commonsBeanUtils
     implementation implLibraries.commonsCollections4
     implementation implLibraries.commonsConf2
+    implementation implLibraries.commonsIO
     implementation implLibraries.commonsText
+    implementation implLibraries.jacksonDatabind
+    implementation implLibraries.guava
     implementation implLibraries.paleo
-    implementation implLibraries.swaggerConverterV2
+    implementation implLibraries.slf4j
+//    implementation implLibraries.swaggerV3
     implementation implLibraries.vavr
     testImplementation testLibraries.asciiDocJ
     testImplementation testLibraries.assertj
