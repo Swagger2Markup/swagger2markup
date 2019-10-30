@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,7 +49,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testToString() throws IOException, URISyntaxException {
+    public void testToString() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
 
@@ -61,7 +61,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testToFolder() throws IOException, URISyntaxException {
+    public void testToFolder() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/to_folder");
@@ -80,7 +80,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testToFileWithoutExtension() throws IOException, URISyntaxException {
+    public void testToFileWithoutExtension() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputFile = Paths.get("build/test/asciidoc/to_file/swagger.adoc");
@@ -97,7 +97,7 @@ public class AsciidocConverterTest {
 
     @Test(expected = NullPointerException.class)
     // Not working atm. See https://github.com/Swagger2Markup/swagger2markup/issues/212
-    public void testModularizedSwaggerSpec() throws IOException, URISyntaxException {
+    public void testModularizedSwaggerSpec() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/modules/swagger_petstore.yaml").toURI());
         Path outputFile = Paths.get("build/test/asciidoc/modularized_swagger/swagger.adoc");
@@ -113,7 +113,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testOrderByAsIs() throws IOException, URISyntaxException {
+    public void testOrderByAsIs() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_ordering.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/ordering_asis");
@@ -140,7 +140,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testOrderByNatural() throws IOException, URISyntaxException {
+    public void testOrderByNatural() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_ordering.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/ordering_natural");
@@ -166,7 +166,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testOrderByRegex() throws IOException, URISyntaxException {
+    public void testOrderByRegex() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_ordering_regex.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/ordering_regex");
@@ -193,7 +193,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testMarkupRenderingInInstagram() throws IOException, URISyntaxException {
+    public void testMarkupRenderingInInstagram() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_instagram.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/instagram");
@@ -216,7 +216,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testInterDocumentCrossReferences() throws IOException, URISyntaxException {
+    public void testInterDocumentCrossReferences() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/idxref");
@@ -239,7 +239,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithBasePathPrefix() throws IOException, URISyntaxException {
+    public void testWithBasePathPrefix() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_examples.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/basepathprefix");
@@ -265,7 +265,7 @@ public class AsciidocConverterTest {
     @Test
     public void testSwagger2AsciiDocConversionFromString() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore.yaml"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/to_folder");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -284,7 +284,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithExamples() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/examples");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -307,7 +307,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithGeneratedExamples() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/generated_examples");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -331,7 +331,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithGeneratedRecursiveExamples() throws IOException, URISyntaxException {
         // Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_recursion.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_recursion.json"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/generated_recursion_examples");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -351,7 +351,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithGeneratedExamplesAndRequiredQueryParameters() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_examples_required_parameters.yaml"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_examples_required_parameters.yaml"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/generated_examples_required_parameters");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -375,7 +375,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithGeneratedInlineResponseExamples() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_examples_inline_response.yaml"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_examples_inline_response.yaml"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/generated_examples_inline_response");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -397,7 +397,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithInlineSchema() throws IOException, URISyntaxException {
+    public void testWithInlineSchema() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/inline_schema");
@@ -419,7 +419,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithInlineSchemaAndFlatBody() throws IOException, URISyntaxException {
+    public void testWithInlineSchemaAndFlatBody() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/inline_schema_flat_body");
@@ -442,7 +442,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testGroupedByTags() throws IOException, URISyntaxException {
+    public void testGroupedByTags() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/group_by_tags");
@@ -464,7 +464,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testByTagsWithMissingTag() throws IOException, URISyntaxException {
+    public void testByTagsWithMissingTag() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_missing_tag.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/generated");
@@ -551,7 +551,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithSeparatedOperations() throws IOException, URISyntaxException {
+    public void testWithSeparatedOperations() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/generated");
@@ -642,12 +642,12 @@ public class AsciidocConverterTest {
                 .toFolder(outputDirectory);
 
         //Then
-        assertThat(new String(Files.readAllBytes(outputDirectory.resolve(outputFilename)), Charset.forName("UTF-8")))
+        assertThat(new String(Files.readAllBytes(outputDirectory.resolve(outputFilename)), StandardCharsets.UTF_8))
                 .contains(expected);
     }
 
     @Test
-    public void testWithMaps() throws IOException, URISyntaxException {
+    public void testWithMaps() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_maps.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/maps");
@@ -671,7 +671,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithEnums() throws IOException, URISyntaxException {
+    public void testWithEnums() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_enums.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/enums");
@@ -698,7 +698,7 @@ public class AsciidocConverterTest {
 
 
     @Test
-    public void testWithValidators() throws IOException, URISyntaxException {
+    public void testWithValidators() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_validators.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/validators");
@@ -721,7 +721,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithPolymorphism() throws IOException, URISyntaxException {
+    public void testWithPolymorphism() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_polymorphism.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/polymorphism");
@@ -744,7 +744,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithPolymorphismAsIsOrdering() throws IOException, URISyntaxException {
+    public void testWithPolymorphismAsIsOrdering() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_polymorphism.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/polymorphismAsIsOrdering");
@@ -768,7 +768,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithResponseHeaders() throws IOException, URISyntaxException {
+    public void testWithResponseHeaders() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_response_headers.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/response_headers");
@@ -791,7 +791,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithEmptyContactUsingJSON() throws IOException, URISyntaxException {
+    public void testWithEmptyContactUsingJSON() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/json/swagger_emptycontact.json").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/emptycontact");
@@ -814,7 +814,7 @@ public class AsciidocConverterTest {
     }
 
     @Test
-    public void testWithFormat() throws IOException, URISyntaxException {
+    public void testWithFormat() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_format.yaml").toURI());
         Path outputDirectory = Paths.get("build/test/asciidoc/format");
@@ -839,7 +839,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithPageBreaks() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples.json"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/page_breaks");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -863,7 +863,7 @@ public class AsciidocConverterTest {
     @Test
     public void testWithEmptyTables() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_empty_tables.json"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_empty_tables.json"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/empty_tables");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
@@ -887,7 +887,7 @@ public class AsciidocConverterTest {
     @Test
     public void testExamplesInUrl() throws IOException, URISyntaxException {
         //Given
-        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_url_examples.yaml"));
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_url_examples.yaml"), StandardCharsets.UTF_8);
         Path outputDirectory = Paths.get("build/test/asciidoc/url_examples");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 

@@ -22,7 +22,7 @@ To create a custom extension, you have to create a class (e.g. `io.myname.MyExte
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/builder/MyExtension.java[tags=MyExtension]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/builder/MyExtension.java[tags=MyExtension]
 ----
 1. You can retrieve extension properties from the config to configure the extension.
 2. You can retrieve a `MarkupDocBuilder` from the `Context`.
@@ -47,7 +47,7 @@ To register your extension manually, you have to use the `Swagger2MarkupExtensio
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupExtensionRegistryBuilder]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupExtensionRegistryBuilder]
 ----
 1. Create a ``Swagger2MarkupExtensionRegistryBuilder`` using the default constructor
 2. Register your custom extension
@@ -142,7 +142,7 @@ Example:
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/builder/MySwaggerModelExtension.java[tags=MySwaggerModelExtension]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/builder/MySwaggerModelExtension.java[tags=MySwaggerModelExtension]
 ----
 1. You can change any Swagger model property
 2. You could even remove elements from the Swagger model

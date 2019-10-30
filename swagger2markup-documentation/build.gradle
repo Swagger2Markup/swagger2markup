@@ -19,7 +19,8 @@ asciidoctor {
             sectlinks: '',
             sectanchors: '',
             hardbreaks: '',
-            'release-version': project.releaseVersion
+            'release-version': project.releaseVersion,
+            'coreProjectDir': project(':swagger2markup-core').projectDir
     ]
 }
 

@@ -11,7 +11,7 @@ The entry point of the Swagger2Markup API is the ``Swagger2MarkupConverter`` cla
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=localSwaggerSpec]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=localSwaggerSpec]
 ----
 
 1.  Create a ``Swagger2MarkupConverter.Builder`` by specifying the Path to the local file 
@@ -26,7 +26,7 @@ You can convert a remote Swagger specification which must be accessible via HTTP
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=remoteSwaggerSpec]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=remoteSwaggerSpec]
 ----
 
 1.  Create a ``Swagger2MarkupConverter.Builder`` by specifying the URL to the remote file
@@ -40,7 +40,7 @@ You can convert the Swagger specification into a file.
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoOneFile]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoOneFile]
 ----
 
 ==== Conversion to a String
@@ -50,7 +50,7 @@ You can convert the Swagger specification to a String.
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoString]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=convertIntoString]
 ----
 
 === Configuration
@@ -69,7 +69,7 @@ You can configure the Swagger2MarkupConverter by using the `Swagger2MarkupConfig
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigBuilder]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigBuilder]
 ----
 
 1. Create a `Swagger2MarkupConfigBuilder` using the default constructor.
@@ -85,7 +85,7 @@ You can also create a `Swagger2MarkupConfig` from a Properties file, a `Map` or 
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromProperties]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromProperties]
 ----
 1. Load a `Properties` file from the classpath or local filesystem.
 2. Create a `Swagger2MarkupConfigBuilder` using the proper constructor.
@@ -94,7 +94,7 @@ include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=sw
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromMap]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromMap]
 ----
 
 1. Create a `Map` and configure the `Swagger2MarkupProperties`.
@@ -113,7 +113,7 @@ Configuration parameters may be loaded from the following sources using Apache C
 
 [source,java,indent=0]
 ----
-include::../../test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromCommonsConfiguration]
+include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=swagger2MarkupConfigFromCommonsConfiguration]
 ----
 
 1. Create an Apache Commons `Configuration` object using the proper ConfigurationBuilder.

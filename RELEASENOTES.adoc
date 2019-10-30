@@ -3,6 +3,21 @@
 == Version 0.1.0
 * Initial version with support for AsciiDoc and Markdown
 
+=== Version 0.1.1
+* Signed jar files
+
+=== Version 0.1.2
+* Removed logback from compile dependency
+
+=== Version 0.1.3
+* Removed commons.io from compile dependency
+
+=== Version 0.1.4
+* Fixed SECTION_TITLE_LEVEL3 in Markdown enum
+
+=== Version 0.1.5
+* Added SECTION_TITLE_LEVEL4
+
 == Version 0.2.0
 * This version is not downward compatible. This version supports includes of example files and JSON/XML Schema files. See documentation.
 
@@ -102,6 +117,7 @@
 * PR #190: Add support for Spanish language
 * PR #192: Updated min/max value to format correctly based on the data type
 * PR #193: Added support for exclusiveMin and exclusiveMax
+* Changed bold to ** and italic to __ so that special chars in the text are possible
 
 === Version 1.1.1
 * Issue #194: Added a config parameter which allows to prepend the basePath to all paths.
@@ -115,6 +131,10 @@
 * Issue #198: Chinese chinese language encoding
 * Issue #207: Properties that start with an underscore are displayed correctly now
 * Refactored Swagger2Markup to use a Component-Based design. A document can be composed of components and components can be composed of other components.
+* Added a method to add page breaks.
+
+== Version 1.1.2
+* Improve code blocks in markdown
 
 == Version 1.2.0
 * Issue #214: Add page break locations
