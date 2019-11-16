@@ -20,7 +20,7 @@ asciidoctor {
             sectanchors: '',
             hardbreaks: '',
             'release-version': project.releaseVersion,
-            'coreProjectDir': project(':swagger2markup-core').projectDir
+            'coreProjectDir': project(':swagger2markup-swagger-v2').projectDir
     ]
 }
 

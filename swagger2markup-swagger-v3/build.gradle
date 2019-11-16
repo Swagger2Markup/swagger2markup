@@ -1,0 +1,15 @@
+ext.moduleName="io.github.swagger2markup.swagger-v3"
+
+dependencies {
+    configurations.all {
+        resolutionStrategy.force dependencyOverrides.commonsLang3
+        resolutionStrategy.force dependencyOverrides.slf4j
+        resolutionStrategy.force dependencyOverrides.jacksonDatabind
+        resolutionStrategy.force dependencyOverrides.guava
+        resolutionStrategy.force dependencyOverrides.findBugs
+        resolutionStrategy.force dependencyOverrides.jaksonCore
+    }
+    implementation implLibraries.swaggerV2Converter
+    implementation implLibraries.swaggerV3
+    testImplementation testLibraries.junit
+}
