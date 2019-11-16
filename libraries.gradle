@@ -20,6 +20,7 @@ implLibraries = [
         pegdown            : "org.pegdown:pegdown:1.6.0",
         slf4j              : "org.slf4j:slf4j-api:1.7.28",
         swaggerV2          : "io.swagger:swagger-parser:1.0.47",
+        swaggerV2Converter : "io.swagger.parser.v3:swagger-parser-v2-converter:2.0.15",
         swaggerV3          : "io.swagger.parser.v3:swagger-parser:2.0.15",
         vavr               : "io.vavr:vavr:0.10.2"
 ]
