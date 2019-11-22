@@ -1,0 +1,32 @@
+= Document Title
+:tip-caption: Tip
+:appendix-caption: Appendix
+:appendix-refsig: Appendix
+:toc-title: Table of Contents
+:iconsdir: ./images/icons
+:warning-caption: Warning
+:figure-caption: Figure
+:attribute-missing: skip
+:section-refsig: Section
+:toc-placement: auto
+:important-caption: Important
+:note-caption: Note
+:stylesdir: .
+:untitled-label: Untitled
+:max-include-depth: 64
+:caution-caption: Caution
+:user-home: .
+:max-attribute-value-size: 4096
+:safe-mode-level: 20
+:safe-mode-name: secure
+:table-caption: Table
+:part-refsig: Part
+:authorcount: 0
+:example-caption: Example
+:version-label: Version
+:last-update-label: Last updated
+:doctype: article
+:chapter-refsig: Chapter
+:attribute-undefined: drop-line
+
+sample {content}

@@ -6,6 +6,7 @@ ext {
     dependencyOverrides = [:]
 }
 implLibraries = [
+        asciiDocJ  : "org.asciidoctor:asciidoctorj:2.1.0",
         commonsBeanUtils   : "commons-beanutils:commons-beanutils:1.9.4",
         commonsCodec       : "commons-codec:commons-codec:1.13",
         commonsCollections4: "org.apache.commons:commons-collections4:4.4",
