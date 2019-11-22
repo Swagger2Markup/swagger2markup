@@ -1,7 +1,9 @@
 rootProject.name = 'swagger2markup'
 
+include 'swagger2markup-asciidoc'
 include 'swagger2markup-bom'
 include 'swagger2markup-builder'
 include 'swagger2markup-documentation'
 include 'swagger2markup-swagger-v2'
 include 'swagger2markup-swagger-v3'
+

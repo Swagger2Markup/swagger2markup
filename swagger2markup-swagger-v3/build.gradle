@@ -2,7 +2,13 @@ ext.moduleName="io.github.swagger2markup.swagger-v3"
 
 dependencies {
     configurations.all {
+        resolutionStrategy.force dependencyOverrides.commonsCodec
+        resolutionStrategy.force dependencyOverrides.commonsIO
         resolutionStrategy.force dependencyOverrides.commonsLang3
+        resolutionStrategy.force dependencyOverrides.jnrConstants
+        resolutionStrategy.force dependencyOverrides.jnrEnxio
+        resolutionStrategy.force dependencyOverrides.jnrPosix
+        resolutionStrategy.force dependencyOverrides.jodaTime
         resolutionStrategy.force dependencyOverrides.slf4j
         resolutionStrategy.force dependencyOverrides.jacksonDatabind
         resolutionStrategy.force dependencyOverrides.guava
