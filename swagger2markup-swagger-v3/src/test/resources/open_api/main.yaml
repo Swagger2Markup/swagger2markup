@@ -1,0 +1,20 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://myhost.com/testpath'
+info:
+  title: Tests
+  description: Tests
+  version: beta
+paths:
+  pets:
+    get:
+      summary: null
+      description: null
+      operationId: list
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: './Pet.yaml#/Pet'

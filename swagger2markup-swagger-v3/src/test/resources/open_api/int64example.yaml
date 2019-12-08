@@ -1,0 +1,21 @@
+openapi: 3.0.0
+info:
+  version: 0.0.0
+  title: int64 mocking test
+paths:
+  /foo:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date:
+                    type: integer
+                    format: int64
+                    example: 1516042231144
+                required:
+                  - date

@@ -1,0 +1,18 @@
+---
+openapi: 3.0.0
+servers:
+- url: http://swagger.io/show-bug
+info:
+  title: Test API
+  version: 1.0.0
+paths:
+  "/tests":
+    get:
+      operationId: listTests
+      responses:
+        '200':
+          description: Returns results.
+          content:
+            application/json:
+              schema:
+                "$ref": "./globals.yaml#/components/schemas/result"

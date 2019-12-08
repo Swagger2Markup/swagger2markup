@@ -1,0 +1,62 @@
+openapi: 3.0.0
+info:
+  version: 0.0.0
+  title: apa
+
+components:
+  schemas:
+    Pet:
+      required:
+        - name
+        - petType
+      properties:
+        name:
+          type: string
+        petType:
+          type: string
+    Cat:
+      allOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            huntingSkill:
+              type: string
+              default: lazy
+              enum:
+                - lazy
+                - aggressive
+          required:
+            - huntingSkill
+    Dog:
+      allOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            packSize:
+              description: The size of the pack the dog is from
+              type: integer
+          required:
+            - packSize
+    Lion:
+      oneOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            huntingSkill:
+              type: string
+              default: lazy
+              enum:
+                - lazy
+                - aggressive
+          required:
+            - huntingSkill
+    Bear:
+      anyOf:
+        - $ref: '#/components/schemas/Pet'
+        - type: object
+          properties:
+            packSize:
+              description: The size of the pack the dog is from
+              type: integer
+          required:
+            - packSize

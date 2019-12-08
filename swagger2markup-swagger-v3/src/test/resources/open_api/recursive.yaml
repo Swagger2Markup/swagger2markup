@@ -1,0 +1,33 @@
+openapi: 3.0.0
+info:
+  version: "0.0.2"
+paths:
+  /myPath:
+    get:
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Outer"
+            application/xml:
+              schema:
+                $ref: "#/components/schemas/Test"
+components:
+  schemas:
+    Outer:
+      allOf:
+      - $ref: "#/components/schemas/Inner"
+    Inner:
+      properties:
+        myProp:
+          type: array
+          items:
+            $ref: "#/components/schemas/Inner"
+    Test:
+      properties:
+        myProp:
+          type: array
+          items:
+            $ref: "#/components/schemas/Inner"

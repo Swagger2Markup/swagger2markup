@@ -1,0 +1,22 @@
+openapi: 3.0.0
+servers: []
+paths:
+  /newPerson:
+    post:
+      summary: Create new person
+      description: Create new person
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CustomerType'
+info:
+  version: ''
+  title: ''
+components:
+  schemas:
+    CustomerType:
+      type: string
+      example: NoQuotePlease

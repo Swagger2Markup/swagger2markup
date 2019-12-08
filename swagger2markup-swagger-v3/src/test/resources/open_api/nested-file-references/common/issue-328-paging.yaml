@@ -1,0 +1,6 @@
+Paging:
+  properties:
+    total_items:
+      type: integer
+    foobar:
+      $ref: 'http://localhost:8080/resources/swagger/common/common2/issue-328-bar.yaml#/Foobar'

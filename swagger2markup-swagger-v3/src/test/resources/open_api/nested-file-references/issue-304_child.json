@@ -1,0 +1,44 @@
+{
+  "components": {
+    "schemas": {
+      "Inheritance": {
+        "allOf": [
+          {
+            "$ref": "./issue-304.json#/components/schemas/BaseEntityDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "addressId": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "Composition": {
+        "type": "object",
+        "properties": {
+          "addressId": {
+            "$ref": "./issue-304.json#/components/schemas/BaseEntityDto"
+          }
+        }
+      },
+      "InheritanceAndComposition": {
+        "allOf": [
+          {
+            "$ref": "./issue-304.json#/components/schemas/BaseEntityDto"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "addressId": {
+                "$ref": "./issue-304.json#/components/schemas/BaseEntityDto"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

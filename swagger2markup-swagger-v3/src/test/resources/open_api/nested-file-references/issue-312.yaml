@@ -1,0 +1,16 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://example.com/api/v1'
+info:
+  title: Test API
+  version: '1'
+paths:
+  /events:
+    $ref: './events.yaml'
+
+components:
+  schemas:
+    StatusResponse:
+      properties:
+        http_code:
+          type: integer

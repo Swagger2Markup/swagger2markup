@@ -1,0 +1,6 @@
+in: query
+description: Status values that need to be considered for filter
+required: true
+schema:
+  type: integer
+  "$ref": "http://localhost:${dynamicPort}/remote/schema#/components/schemas/User"

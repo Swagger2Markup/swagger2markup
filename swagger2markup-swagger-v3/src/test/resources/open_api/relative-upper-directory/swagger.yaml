@@ -1,0 +1,11 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://paeshin-w7/SwaggerTest'
+  - url: 'https://paeshin-w7/SwaggerTest'
+info:
+  version: v1
+  title: SwaggerTest
+  description: Service for Swagger and JSON schema testing
+paths:
+  /api/Address:
+    $ref: "Paths/Address.yaml"

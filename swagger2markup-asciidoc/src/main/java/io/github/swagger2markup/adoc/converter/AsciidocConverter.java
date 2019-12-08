@@ -28,7 +28,6 @@ public class AsciidocConverter extends StringConverter {
     private final Pattern emptyLineOrStartWith = Pattern.compile("(?m)^\\s*(?:\\r?\\n)|(?m)^\\s+");
     private final Pattern coListItemIdPattern = Pattern.compile(".*-(\\d+)");
     private final Pattern tableColumnsStylePattern = Pattern.compile("((\\d+)\\*)?([<^>])?(\\.[<^>])?(\\d+)?([adehlmsv])?");
-    private final Pattern cellStylePattern = Pattern.compile("((\\d+)[+*])?(\\.(\\d+)\\+)?([<^>])?(\\.[<^>])?([adehlmsv])?");
 
     private static final java.util.List<String> attributeToExclude = Arrays.asList(
             "localtime",
@@ -106,6 +105,7 @@ public class AsciidocConverter extends StringConverter {
             case "colist":
                 return convertCoList((List) node);
             case "embedded":
+            case "document":
                 return convertEmbedded((Document) node);
             case "example":
                 return convertExample((Block) node);
@@ -149,8 +149,6 @@ public class AsciidocConverter extends StringConverter {
                 return convertVerse((StructuralNode) node);
             case "video":
                 return convertVideo(node);
-            case "document":
-                return convertDocument(node);
             case "toc":
                 return convertToc(node);
             case "pass":
@@ -293,22 +291,22 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private String convertInlineButton(ContentNode node) {
-        logger.debug("convertInlineButton");
+        logger.debug("convertInlineButton: name" + node.getNodeName());
         return "convertInlineButton";
     }
 
     private String convertInlineCallout(ContentNode node) {
-        logger.debug("convertInlineCallout");
+        logger.debug("convertInlineCallout: name" + node.getNodeName());
         return "convertInlineCallout";
     }
 
     private String convertInlineBreak(ContentNode node) {
-        logger.debug("convertInlineBreak");
+        logger.debug("convertInlineBreak: name" + node.getNodeName());
         return "convertInlineBreak";
     }
 
     private String convertInlineFootnote(ContentNode node) {
-        logger.debug("convertInlineFootnote");
+        logger.debug("convertInlineFootnote: name" + node.getNodeName());
         return "convertInlineFootnote";
     }
 
@@ -322,17 +320,17 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private String convertInlineIndexTerm(ContentNode node) {
-        logger.debug("convertInlineIndexTerm");
+        logger.debug("convertInlineIndexTerm: name" + node.getNodeName());
         return "convertInlineIndexTerm";
     }
 
     private String convertInlineKbd(ContentNode node) {
-        logger.debug("convertInlineKbd");
+        logger.debug("convertInlineKbd: name" + node.getNodeName());
         return "convertInlineKbd";
     }
 
     private String convertInlineMenu(ContentNode node) {
-        logger.debug("convertInlineMenu");
+        logger.debug("convertInlineMenu: name" + node.getNodeName());
         return "convertInlineMenu";
     }
 
@@ -357,7 +355,7 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private String convertPageBreak(ContentNode node) {
-        logger.debug("convertPageBreak");
+        logger.debug("convertPageBreak: name" + node.getNodeName());
         return DELIMITER_PAGE_BREAK + LINE_SEPARATOR;
     }
 
@@ -394,12 +392,12 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private String convertStem(ContentNode node) {
-        logger.debug("convertStem");
+        logger.debug("convertStem: name" + node.getNodeName());
         return "convertStem";
     }
 
     private String convertThematicBreak(ContentNode node) {
-        logger.debug("convertThematicBreak");
+        logger.debug("convertThematicBreak: name" + node.getNodeName());
         return DELIMITER_THEMATIC_BREAK + LINE_SEPARATOR;
     }
 
@@ -429,44 +427,23 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private String convertVideo(ContentNode node) {
-        logger.debug("convertVideo");
+        logger.debug("convertVideo: name" + node.getNodeName());
         return "convertVideo";
     }
 
-    private String convertDocument(ContentNode node) {
-        logger.debug("convertDocument");
-        return "convertDocument";
-    }
-
     private String convertToc(ContentNode node) {
-        logger.debug("convertToc");
+        logger.debug("convertToc: name" + node.getNodeName());
         return "convertToc";
     }
 
     private String convertPass(ContentNode node) {
-        logger.debug("convertPass");
+        logger.debug("convertPass: name" + node.getNodeName());
         return "convertPass";
     }
 
     private String convertAudio(ContentNode node) {
-        logger.debug("convertAudio");
+        logger.debug("convertAudio: name" + node.getNodeName());
         return "convertAudio";
-    }
-
-    private String convertPhraseNode(PhraseNode node) {
-        logger.debug("convertPhraseNode");
-        StringBuilder sb = new StringBuilder();
-        String target = node.getTarget();
-        if (node.getType().equals("link")) {
-            if (StringUtils.startsWithAny(target, supportedUrlSchemes)) {
-                sb.append(target).append(ATTRIBUTES_BEGIN).append(node.getReftext()).append(ATTRIBUTES_END);
-            } else {
-                sb.append("include::").append(node.getText()).append(ATTRIBUTES_BEGIN).append(ATTRIBUTES_END).append(LINE_SEPARATOR);
-            }
-        } else {
-            logger.debug("Dont know type: " + node.getType());
-        }
-        return sb.toString();
     }
 
     private String convertCell(Cell node) {
@@ -564,9 +541,7 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private void appendRows(java.util.List<Row> rows, StringBuilder sb, java.util.List<TableCellStyle> columnStyles) {
-        rows.forEach(row -> {
-            sb.append(convertRow(row, columnStyles)).append(LINE_SEPARATOR);
-        });
+        rows.forEach(row -> sb.append(convertRow(row, columnStyles)).append(LINE_SEPARATOR));
     }
 
     private String convertDescriptionList(DescriptionList node) {
@@ -610,12 +585,10 @@ public class AsciidocConverter extends StringConverter {
         logger.debug("convertListing");
         StringBuilder sb = new StringBuilder();
         appendTitle(node, sb);
-        switch (node.getStyle()) {
-            case STYLE_SOURCE:
-                sb.append(new SourceNode(node).toAsciiDocContent());
-                break;
-            default:
-                sb.append(new BlockListingNode(node).toAsciiDocContent());
+        if (STYLE_SOURCE.equals(node.getStyle())) {
+            sb.append(new SourceNode(node).toAsciiDocContent());
+        } else {
+            sb.append(new BlockListingNode(node).toAsciiDocContent());
         }
         return sb.toString();
     }
@@ -694,7 +667,15 @@ public class AsciidocConverter extends StringConverter {
 
     private String convertPreamble(StructuralNode node) {
         logger.debug("convertPreamble");
-        return node.getContent().toString();
+        StringBuilder sb = new StringBuilder();
+//        appendTitle(node, sb);
+//        appendId(node, sb);
+//        appendStyle(node, sb);
+//        appendRoles(node, sb);
+//        appendSource((Block) node, sb);
+        sb.append(new ParagraphAttributes(node).toAsciiDocContent());
+        appendChildBlocks(node, sb);
+        return sb.toString();
     }
 
     private String convertImage(StructuralNode node) {
@@ -792,6 +773,13 @@ public class AsciidocConverter extends StringConverter {
         String title = node.getTitle();
         if (StringUtils.isNotBlank(title)) {
             sb.append(".").append(unescapeContent(title)).append(LINE_SEPARATOR);
+        }
+    }
+
+    private void appendSource(Block node, StringBuilder sb) {
+        String source = node.getSource();
+        if (StringUtils.isNotBlank(source)) {
+            sb.append(unescapeContent(source)).append(LINE_SEPARATOR);
         }
     }
 

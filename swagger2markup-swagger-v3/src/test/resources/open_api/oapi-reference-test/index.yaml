@@ -1,0 +1,22 @@
+---
+openapi: "3.0.0"
+externalDocs:
+  description: Test
+  url: http://test.com/test
+info:
+  version: 0.0.1
+  title: Test
+  license:
+    name: Test
+    url: http://test.com/test
+servers:
+  - url: http://test.com/test
+paths:
+  /:
+    get:
+      description: Test
+      summary: Test
+      operationId: getTest
+      responses:
+        200:
+          $ref: "./components/response-with-reference.yaml"

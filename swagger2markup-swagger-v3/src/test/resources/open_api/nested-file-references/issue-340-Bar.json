@@ -1,0 +1,75 @@
+{
+  "bar": {
+    "post": {
+      "description": "posts stuff",
+      "deprecated": true,
+      "operationId": "enrollInBar",
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BarData"
+              }
+            }
+          }
+        },
+        "default": {
+          "description": "Default response"
+        }
+      },
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BarSettingsRequest"
+            }
+          }
+        },
+        "description": "The request body containing the amount",
+        "required": true
+      }
+    }
+
+  },
+  "components": {
+    "schemas": {
+      "BarSettingsRequest": {
+        "properties": {
+          "stuff": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "stuff"
+        ]
+      },
+      "BarData": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "BazData": {
+        "properties": {
+          "enabled": {
+            "description": "am i broken",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}

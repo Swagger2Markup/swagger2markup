@@ -1,0 +1,13 @@
+openapi: 3.0.1
+paths:
+  "/newPerson":
+    post:
+      summary: Create new person
+      description: Create new person
+      responses:
+        '200':
+          description: ok
+          content:
+            "*/*":
+              schema:
+                "$ref": "./ref-without-component/b.yaml#/components/schemas/CustomerType"

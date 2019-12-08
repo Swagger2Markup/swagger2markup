@@ -1,0 +1,37 @@
+= Simple Inventory API
+ <you@your-company.com>
+v1.0.0
+
+:tip-caption: Tip
+:appendix-caption: Appendix
+:appendix-refsig: Appendix
+:toc-title: Table of Contents
+:iconsdir: ./images/icons
+:warning-caption: Warning
+:figure-caption: Figure
+:attribute-missing: skip
+:section-refsig: Section
+:toc-placement: auto
+:important-caption: Important
+:authors:  <you@your-company.com>
+:note-caption: Note
+:stylesdir: .
+:untitled-label: Untitled
+:max-include-depth: 64
+:caution-caption: Caution
+:user-home: .
+:max-attribute-value-size: 4096
+:safe-mode-level: 20
+:safe-mode-name: secure
+:table-caption: Table
+:part-refsig: Part
+:example-caption: Example
+:version-label: Version
+:revnumber: 1.0.0
+:last-update-label: Last updated
+:doctype: article
+:chapter-refsig: Chapter
+:attribute-undefined: drop-line
+
+.Overview
+.This is a simple API

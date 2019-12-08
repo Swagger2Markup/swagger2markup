@@ -1,0 +1,7 @@
+description: The example model
+type: object
+properties:
+  foo:
+    type: string
+  bar:
+    type: integer

@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "title":"title",
+  "description":"A book title resource",
+  "properties": {
+    "id" : {
+      "type": "integer",
+      "format": "int64",
+      "description": "Id for the title"
+    },
+    "isbn": {
+      "type": "string",
+      "description": "ISBN for the title"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title for title."
+    },
+    "review": {
+      "type": "string",
+      "description": "Review for the title."
+    },
+    "authors": {
+      "type": "array",
+      "description": "List of authors for this title",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reservation" : {
+      "$ref": "./issue-336-reservation.json"
+    },
+    "copies": {
+      "type": "array",
+      "description": "List of copies for this title",
+      "items": {
+        "$ref": "../title/issue-336-copy.json"
+      }
+    },
+    "reservations": {
+      "type": "array",
+      "description": "List of copies for this title",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "$ref": "../title/issue-336-reservation.json"
+      }
+    },
+    "datatypes": {
+      "type": "array",
+      "description": "List of copies for this title",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "$ref": "../title/issue-336-datatypes.json"
+      }
+    }
+  },
+  "required" : [ "id" ]
+}

@@ -1,0 +1,19 @@
+openapi: '3.0.0'
+components:
+  schemas:
+    Animal:
+      required:
+        - id
+      properties:
+        id:
+          type: string
+        categories:
+          $ref: './components/entities.yaml#/components/schemas/Category'
+    Inventory:
+      properties:
+        book:
+          $ref: './book.yaml'
+    Orders:
+      properties:
+        book:
+          $ref: 'book.yaml'

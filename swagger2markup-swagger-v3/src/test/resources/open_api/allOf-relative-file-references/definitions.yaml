@@ -1,0 +1,22 @@
+components:
+  schemas:
+    PrintInfo:
+      type: object
+      description: "Print info of the shipping info"
+      required:
+        - B
+      properties:
+        B:
+          type: boolean
+    ShippingInfo:
+      type: object
+      description: "Information about the shipping for a device"
+      allOf:
+        - $ref: "#/components/schemas/PrintInfo"
+        - type: object
+          required:
+            - A
+          properties:
+            A:
+              type: integer
+              format: int64

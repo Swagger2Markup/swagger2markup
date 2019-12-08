@@ -1,0 +1,31 @@
+openapi: 3.0.0
+servers: []
+info:
+  title: foo
+  version: ''
+paths:
+  /bar:
+    patch:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SamplePayload'
+        required: true
+      responses:
+        default:
+          description: Default response
+components:
+  schemas:
+    SamplePayload:
+      type: array
+      items:
+        type: object
+        example:
+          op: replace
+          path: /s
+          v: w
+      example:
+        - op: replace
+          path: /s
+          v: w

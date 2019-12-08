@@ -1,0 +1,24 @@
+{
+  "type":"object",
+  "title":"Error Details",
+  "description":"Details about a specific error.",
+  "properties":{
+    "field":{
+      "type":"string",
+      "description":"Field that caused the error."
+    },
+    "value":{
+      "type":"string",
+      "description":"Value of the field that caused the error."
+    },
+    "location":{
+      "type":"string",
+      "description":"Location of the field that caused the error. Possible values are body (default), path and query"
+    },
+    "issue":{
+      "type":"string",
+      "description":"Reason for the error."
+    }
+  },
+  "required" : ["issue"]
+}

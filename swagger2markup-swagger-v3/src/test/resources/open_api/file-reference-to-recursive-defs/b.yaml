@@ -1,0 +1,19 @@
+---
+openapi: "3.0.0"
+info:
+  title: test
+  version: '0.0.0'
+paths: {}
+components:
+  schemas:
+    x:
+      $ref: "./a.yaml#/components/schemas/y"
+    v:
+      type: object
+      properties:
+        name:
+          type: string
+        children:
+          type: array
+          items:
+            $ref: "#/components/schemas/v"

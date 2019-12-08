@@ -1,0 +1,13 @@
+openapi: 3.0.1
+servers: []
+info:
+  version: ''
+  title: ''
+paths: {}
+components:
+  schemas:
+    PersonObj:
+      properties:
+        location:
+          type: string
+          example: referred

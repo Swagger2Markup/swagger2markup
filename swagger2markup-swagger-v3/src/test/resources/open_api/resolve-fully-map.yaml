@@ -1,0 +1,31 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:8080/sample'
+info:
+  description: A simple API to learn how to write OpenAPI Specification
+  version: 1.0.1
+  title: Simple API
+paths:
+  /sample:
+    get:
+      tags:
+        - Sample
+      operationId: getSample
+      responses:
+        '200':
+          description: Sample
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MyModelMap'
+components:
+  schemas:
+    MyModel:
+      type: object
+      properties:
+        name:
+          type: string
+    MyModelMap:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/MyModel"

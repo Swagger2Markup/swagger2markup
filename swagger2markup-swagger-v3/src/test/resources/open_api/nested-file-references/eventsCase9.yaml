@@ -1,0 +1,13 @@
+get:
+  description: A list of events
+  operationId: getEvents
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json; charset=utf-8:
+          schema:
+            type: object
+            properties:
+              paging:
+                $ref: './common/pagingWithFolderRef.yaml#/Paging'

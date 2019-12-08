@@ -1,0 +1,36 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:com:issinc:odin:display:CreatePlan",
+  "properties" : {
+    "createPlanEvents" : {
+      "type" : "object",
+      "id" : "urn:jsonschema:com:issinc:odin:display:CreatePlanEvents",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        },
+        "events" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "createPlanSensors" : {
+      "type" : "object",
+      "id" : "urn:jsonschema:com:issinc:odin:display:CreatePlanSensors",
+      "properties" : {
+        "sensors" : {
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }
+      }
+    }
+  }
+}

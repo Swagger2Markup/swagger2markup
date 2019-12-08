@@ -1,0 +1,15 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://example.com/api/v1'
+info:
+  title: Test API
+  version: '1'
+paths:
+  /events:
+    $ref: 'http://localhost:8080/resources/swagger/issue-328-events.yaml'
+components:
+  schemas:
+    StatusResponse:
+      properties:
+        http_code:
+          type: integer

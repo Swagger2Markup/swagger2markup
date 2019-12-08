@@ -1,0 +1,108 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://petstore.swagger.io/api'
+info:
+  version: 1.0.0
+  title: Swagger Petstore (Simple)
+  description: >-
+    A sample API that uses a petstore as an example to demonstrate features in
+    the swagger-2.0 specification
+  termsOfService: 'http://helloreverb.com/terms/'
+  contact:
+    name: Swagger API team
+    email: foo@example.com
+    url: 'http://swagger.io'
+  license:
+    name: MIT
+    url: 'http://opensource.org/licenses/MIT'
+paths:
+  /pets:
+    get:
+      description: Returns all pets from the system that the user has access to
+      operationId: findPets
+      parameters:
+        - name: tags
+          in: query
+          description: tags to filter by
+          required: false
+          style: form
+          schema:
+            type: array
+            items:
+              type: string
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/ShippingInfo'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/ShippingInfo'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/ShippingInfo'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/ShippingInfo'
+  /pots:
+    get:
+      description: Returns all pets from the system that the user has access to
+      operationId: findPots
+      parameters:
+        - name: tags
+          in: query
+          description: tags to filter by
+          required: false
+          style: form
+          schema:
+            type: array
+            items:
+              type: string
+        - name: limit
+          in: query
+          description: maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: pet response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/MoreInfo'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/MoreInfo'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/MoreInfo'
+            text/html:
+              schema:
+                type: array
+                items:
+                  $ref: './definitions.yaml#/components/schemas/MoreInfo'

@@ -1,0 +1,46 @@
+openapi: 3.0.0
+servers: []
+paths:
+  /health:
+    $ref: ./paths/healthPath.yaml
+info:
+  version: ""
+  title: ""
+components:
+  schemas:
+    refInDefinitions:
+      $ref: ./models/example.yaml
+    arrayModel:
+      type: array
+      items:
+        $ref: ./models/foo.yaml
+    composedCat:
+      allOf:
+      - $ref: ./models/pet.yaml
+      - $ref: ./models/conflict.yaml#/foo
+      - properties:
+          huntingSkill:
+            type: string
+            description: The measured skill for hunting
+            default: lazy
+            enum:
+            - clueless
+            - lazy
+            - adventurous
+            - aggressive
+          prop2:
+            $ref: ./models/foo.yaml
+          reflexes:
+            type: array
+            items:
+              $ref: ./models/reflex.yaml
+          reflexMap:
+            type: object
+            additionalProperties:
+              $ref: ./models/reflex.yaml
+        required:
+        - huntingSkill
+    externalArray:
+      $ref: ./models/localreference.yaml#/localArray
+    externalObject:
+      $ref: ./models/localreference.yaml#/localObject

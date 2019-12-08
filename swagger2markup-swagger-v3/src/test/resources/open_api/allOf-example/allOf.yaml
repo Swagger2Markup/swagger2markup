@@ -1,0 +1,56 @@
+openapi: 3.0.0
+servers:
+  - url: /subscribed_products/v1.0.1
+info:
+  description: >-
+    API to get information on services currently subscribed by a specific user
+    or phone number.
+  version: 1.0.1
+  title: Products API definition for the 4th Platform
+  termsOfService: 'https://www.telefonica.es/es/'
+  contact:
+    name: 4th Platform Team
+    email: 4pf@tid.es
+x-fp-apiPrefix: /subscribed_products
+tags:
+  - name: subscribed_products
+    description: Operations available with products subscribed by a user
+paths:
+  '/users/{user_id}/description':
+    get:
+      operationId: description
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DescriptionUrl'
+components:
+  parameters:
+    UserId:
+      name: user_id
+      description: Unique identifier of a user
+      in: path
+      required: true
+      schema:
+        type: string
+  schemas:
+    Description:
+      type: object
+      description: Information about de product
+      properties:
+        text:
+          type: string
+    DescriptionUrl:
+      allOf:
+        - type: object
+          required:
+            - url
+          properties:
+            url:
+              type: string
+              description: Url with information or picture of the product
+        - $ref: '#/components/schemas/Description'

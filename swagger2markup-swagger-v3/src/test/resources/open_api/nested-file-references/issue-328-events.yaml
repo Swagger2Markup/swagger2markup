@@ -1,0 +1,13 @@
+get:
+  description: A list of events
+  operationId: getEvents
+  responses:
+    200:
+      description: OK
+      content:
+        "*/*":
+          schema:
+            type: object
+            properties:
+              paging:
+                $ref: 'http://localhost:8080/resources/swagger/common/issue-328-paging.yaml#/Paging'

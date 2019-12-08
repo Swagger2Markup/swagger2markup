@@ -1,0 +1,6 @@
+Paging:
+  properties:
+    total_items:
+      type: integer
+    foobar:
+      $ref: './common2/bar.yaml#/Foobar'

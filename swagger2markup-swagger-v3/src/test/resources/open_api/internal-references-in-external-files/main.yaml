@@ -1,0 +1,29 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: API
+paths:
+  /:
+    post:
+      summary: Create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/create'
+      responses:
+        '200':
+          description: Successful response
+components:
+  schemas:
+    create:
+      type: object
+      properties:
+        attribute:
+          type: string
+        direct:
+          $ref: "./external.yaml#/common"
+        referenced:
+          type: array
+          items:
+            $ref: "./external.yaml#/common"

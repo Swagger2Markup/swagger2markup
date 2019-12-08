@@ -1,0 +1,22 @@
+components:
+  schemas:
+    link-object:
+      type: object
+      additionalProperties:
+        "$ref": "#/components/schemas/rel-data"
+    rel-data:
+      type: object
+      required:
+      - href
+      properties:
+        href:
+          type: string
+        note:
+          type: string
+    result:
+      type: object
+      properties:
+        name:
+          type: string
+        _links:
+          "$ref": "#/components/schemas/link-object"

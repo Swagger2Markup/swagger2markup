@@ -1,0 +1,7 @@
+---
+type: object
+properties:
+  reference_array:
+    type: array
+    items:
+      $ref: "./referent.yaml"

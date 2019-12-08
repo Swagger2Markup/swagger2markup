@@ -1,0 +1,279 @@
+openapi: 3.0.0
+servers:
+  - url: /sonos
+info:
+  description: A REST API for the Sonos platform
+  version: 1.0.0
+  title: Sonos API
+paths:
+  '/{playerId}/back':
+    post:
+      description: move to previous track
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: previousTrack
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+  '/{playerId}/volume/{volume}':
+    post:
+      description: sets player volume
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: setPlayerVolume
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: volume
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 100
+      responses:
+        '200':
+          description: ok
+  '/{playerId}/incrementVolume/{updown}':
+    post:
+      description: incremental player volume
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: incrementVolume
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: updown
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            enum:
+              - '-1'
+              - '1'
+      responses:
+        '200':
+          description: ok
+  '/{playerId}/resume':
+    post:
+      description: resume a player
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: resumePlayer
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+  '/{playerId}/next':
+    post:
+      description: move to next track
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: nextTrack
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+  /:
+    get:
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: soundSummary
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoundSummary'
+  '/{playerId}/volume':
+    get:
+      description: gets player volume
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: getPlayerVolume
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32
+  '/{playerId}':
+    get:
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: playerStatus
+      parameters:
+        - $ref: '#/components/parameters/playerId'
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SoundZoneStatus'
+  '/{playerId}/pause':
+    post:
+      description: pause a player
+      x-swagger-router-controller: Sound
+      tags:
+        - sound
+      operationId: pausePlayer
+      parameters:
+        - name: playerId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ok
+components:
+  parameters:
+    playerId:
+      name: playerId
+      in: path
+      required: true
+      schema:
+        type: string
+    volume:
+      name: volume
+      in: path
+      required: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 0
+        maximum: 100
+  schemas:
+    SoundSummary:
+      properties:
+        zones:
+          type: array
+          items:
+            $ref: '#/components/schemas/SoundZone'
+    SoundZone:
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        description:
+          type: string
+        address:
+          type: string
+        zoneType:
+          type: integer
+          format: int32
+    SoundZoneStatus:
+      properties:
+        currentTrack:
+          $ref: '#/components/schemas/ActiveTrack'
+        nextTrack:
+          $ref: '#/components/schemas/Track'
+        relTime:
+          type: integer
+          format: int32
+        stateTime:
+          type: integer
+          format: int64
+        volume:
+          type: integer
+          format: int32
+        mute:
+          type: boolean
+        trackNo:
+          type: integer
+          format: int32
+        currentState:
+          type: string
+      description: status of a single sound zone
+    ActiveTrack:
+      required:
+        - artist
+        - title
+        - album
+        - albumArtURI
+        - duration
+        - type
+      properties:
+        artist:
+          type: string
+        uri:
+          type: string
+        streamInfo:
+          type: string
+        album:
+          type: string
+        duration:
+          type: integer
+          format: int32
+        title:
+          type: string
+        albumArtURI:
+          type: string
+          format: URI
+        type:
+          type: string
+        radioShowMeta:
+          type: string
+    Track:
+      required:
+        - title
+        - uri
+        - albumArtURI
+        - artist
+        - album
+      properties:
+        title:
+          type: string
+        uri:
+          type: string
+        albumArtURI:
+          type: string
+          format: URI
+        artist:
+          type: string
+        album:
+          type: string

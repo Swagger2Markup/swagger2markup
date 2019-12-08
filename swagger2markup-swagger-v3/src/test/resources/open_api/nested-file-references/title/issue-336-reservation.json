@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "title":"reservation",
+  "description":"Copy of a title",
+  "properties": {
+    "when_made": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of this title"
+    },
+    "when_expires": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when title expires"
+    },
+    "required": ["when_made", "when_expires"]
+  }
+}

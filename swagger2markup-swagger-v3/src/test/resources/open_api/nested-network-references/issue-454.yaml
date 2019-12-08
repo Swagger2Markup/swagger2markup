@@ -1,0 +1,33 @@
+openapi: 3.0.0
+servers:
+  - url: /v1
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: Simple Inventory API
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /inventory:
+    get:
+      summary: searches inventory test
+      operationId: searchInventory
+      responses:
+        '200':
+          description: search results matching criteria
+        default:
+          $ref: 'https://remote-components.com/issue-454-components#/components/responses/GeneralError'
+components:
+  schemas:
+    ModelWithNestedProperties:
+      properties:
+        remoteProperty:
+          $ref: 'https://remote-components.com/issue-454-components#/components/schemas/RemoteComponent'

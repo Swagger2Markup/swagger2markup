@@ -1,0 +1,43 @@
+openapi: 3.0.0
+info:
+  version: 0.0.0
+  title: oneOf and anyOf
+
+paths:
+  /oneOf:
+    get:
+      responses:
+        '200':
+          description: One of Cat or Dog
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: './refComponents.yaml#/components/schemas/Cat'
+                  - $ref: './refComponents.yaml#/components/schemas/Dog'
+                  - $ref: './refComponents.yaml#/components/schemas/Lion'
+  /anyOf:
+    get:
+      responses:
+        '200':
+          description: Any of Cat or Dog
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: './refComponents.yaml#/components/schemas/Cat'
+                  - $ref: './refComponents.yaml#/components/schemas/Dog'
+                  - $ref: './refComponents.yaml#/components/schemas/Bear'
+  /path:
+      get:
+        responses:
+          '200':
+            description: Any of Cat or Dog
+            content:
+              application/json:
+                schema:
+                  oneOf:
+                    - $ref: './refComponents.yaml#/components/schemas/Cat'
+                    - $ref: './refComponents.yaml#/components/schemas/Dog'
+                  allOf:
+                    - $ref: './refComponents.yaml#/components/schemas/Lion'

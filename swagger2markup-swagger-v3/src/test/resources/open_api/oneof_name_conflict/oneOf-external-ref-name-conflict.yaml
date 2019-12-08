@@ -1,0 +1,93 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://petstore.swagger.io/v2'
+info:
+  description: >-
+    This is a sample server Petstore server.  You can find out more about
+    Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net,
+    #swagger](http://swagger.io/irc/).  For this sample, you can use the api key
+    `special-key` to test the authorization filters.
+  version: 1.0.0
+  title: Swagger Petstore
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: apiteam@swagger.io
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /pet/findByStatus:
+    get:
+      tags:
+        - pet
+      summary: Finds Pets by status
+      description: Multiple status values can be provided with comma separated strings
+      operationId: findPetsByStatus
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: true
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+              enum:
+                - available
+                - pending
+                - sold
+              default: available
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pets:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Pet'
+        '400':
+          description: Invalid status value
+components:
+  schemas:
+    Pet:
+      type: object
+      required:
+      - pet_type
+      properties:
+        pet_type:
+          type: string
+      oneOf:
+      - $ref: './oneof_name_conflict/relative_ref/OtherPets.yaml#/components/schemas/Cat'
+      - $ref: '#/components/schemas/Dog'
+      - $ref: '#/components/schemas/Lizard'
+      discriminator:
+        propertyName: pet_type
+    Cat:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      # all other properties specific to a `Cat`
+      type: object
+      properties:
+        name:
+          type: string
+    Dog:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      # all other properties specific to a `Dog`
+      type: object
+      properties:
+        bark:
+          type: string
+    Lizard:
+      allOf:
+      - $ref: '#/components/schemas/Pet'
+      # all other properties specific to a `Lizard`
+      type: object
+      properties:
+        lovesRocks:
+          type: boolean

@@ -1,0 +1,4 @@
+operationId: cancelHookCallback
+parameters:
+  id: $response.body#/hookId
+x-link: link extension

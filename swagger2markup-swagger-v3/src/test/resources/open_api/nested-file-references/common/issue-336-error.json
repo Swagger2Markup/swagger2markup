@@ -1,0 +1,38 @@
+{
+  "type":"object",
+  "title":"error",
+  "description":"Details of an Error",
+  "properties":{
+    "name":{
+      "type":"string",
+      "description":"Human readable, unique name of the error."
+    },
+    "debug_id":{
+      "type":"string",
+      "description":"Used for correlation purposes."
+    },
+    "message":{
+      "type":"string",
+      "description":"Message describing the error."
+    },
+    "information_link":{
+      "type":"string",
+      "description":"URI for detailed information related to this error for the developer."
+    },
+    "details":{
+      "type":"array",
+      "description":"Additional details of the error",
+      "items":{
+        "$ref":"../common/issue-336-error_details.json"
+      }
+    },
+    "links":{
+      "type":"array",
+      "description":"Error context specific HATEOAS links",
+      "items":{
+        "$ref":"../common/issue-336-link_description.json"
+      }
+    }
+  },
+  "required" : [ "name", "debug_id", "message"]
+}

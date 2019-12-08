@@ -1,0 +1,16 @@
+---
+do_xyz:
+  get:
+    description: do xyz stuff
+    operationId: doXyz
+    produces:
+    - application/json
+    parameters: []
+    responses:
+      '200': {}
+      default: {}
+definitions:
+  XYZResponse:
+    properties:
+      foo:
+        type: string

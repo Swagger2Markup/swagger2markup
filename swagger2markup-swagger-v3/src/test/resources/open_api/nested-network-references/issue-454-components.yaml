@@ -1,0 +1,28 @@
+components:
+  schemas:
+    ErrorModel:
+      required:
+        - "code"
+        - "message"
+      properties:
+        code:
+          type: "integer"
+          format: "int32"
+        message:
+          type: "string"
+    RemoteComponent:
+      properties:
+        nestedProperty:
+          $ref: '#/components/schemas/NestedProperty'
+    NestedProperty:
+      properties:
+        name:
+          type: string
+
+  responses:
+    GeneralError:
+      description: General Error
+      content:
+        "*/*":
+          schema:
+            $ref: '#/components/schemas/ErrorModel'

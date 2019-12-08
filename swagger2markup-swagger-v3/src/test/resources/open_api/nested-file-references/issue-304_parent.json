@@ -1,0 +1,16 @@
+{
+  "components": {
+    "schemas": {
+      "BaseEntity": {
+        "type": "object",
+        "discriminator": "baseEntity",
+        "properties": {
+          "entityId": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      }
+    }
+  }
+}

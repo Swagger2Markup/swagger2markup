@@ -1,0 +1,26 @@
+openapi: 3.0.0
+servers: []
+info:
+  version: 1.0.0
+  title: Very simple
+paths:
+  /pets:
+    get:
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+      responses:
+        '200':
+          description: Returns all the pets
+components:
+  schemas:
+    Cat:
+      x-extension-here: 'yes'
+      properties:
+        id:
+          type: integer
+          format: int64

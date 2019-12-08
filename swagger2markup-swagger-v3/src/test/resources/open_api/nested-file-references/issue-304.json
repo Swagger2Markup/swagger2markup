@@ -1,0 +1,29 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "test",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "empty": null
+  },
+  "components": {
+    "schemas": {
+      "BaseEntityDto": {
+        "$ref": "./issue-304_parent.json#/components/schemas/BaseEntity"
+      },
+      "InheritanceDto": {
+        "$ref": "./issue-304_child.json#/components/schemas/Inheritance"
+      },
+      "CompositionDto": {
+        "$ref": "./issue-304_child.json#/components/schemas/Composition"
+      },
+      "InheritanceAndCompositionDto": {
+        "$ref": "./issue-304_child.json#/components/schemas/InheritanceAndComposition"
+      },
+      "ReferenceToTheSameFile": {
+        "$ref": "./issue-304.json#/components/schemas/InheritanceAndCompositionDto"
+      }
+    }
+  }
+}

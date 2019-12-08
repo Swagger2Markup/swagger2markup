@@ -1,0 +1,7 @@
+type: object
+title: the user
+properties:
+  name:
+    type: string
+  address:
+    $ref: 'http://server2/resources/common/entities.yaml#/components/schemas/Address'

@@ -1,0 +1,10 @@
+openapi: 3.0.0
+servers:
+  - url: /
+info:
+  description: It works.
+  version: 1.0.0
+  title: My API
+paths:
+  /samplePath:
+    $ref: '/test2.yaml'

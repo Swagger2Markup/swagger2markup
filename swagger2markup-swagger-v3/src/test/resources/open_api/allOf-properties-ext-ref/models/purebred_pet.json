@@ -1,0 +1,25 @@
+{
+  "allOf": [
+    {
+      "$ref": "pet.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "breed": {
+          "type": "string",
+          "sample": "Labrador"
+        },
+        "mother": {
+          "$ref": "pet.json"
+        },
+        "siblings": {
+          "type": "array",
+          "items": {
+            "$ref": "pet.json"
+          }
+        }
+      }
+    }
+  ]
+}

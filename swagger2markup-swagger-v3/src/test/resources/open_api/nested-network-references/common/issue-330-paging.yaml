@@ -1,0 +1,6 @@
+Paging:
+  properties:
+    total_items:
+      type: integer
+    user:
+      $ref: './users.yaml'

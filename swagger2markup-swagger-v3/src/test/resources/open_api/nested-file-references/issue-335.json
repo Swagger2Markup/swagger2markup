@@ -1,0 +1,25 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://api.foo.com/"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "FooAPI",
+    "description": "API for all accesses to the Foo server system",
+    "termsOfService": "TBD",
+    "contact": {
+      "name": "Foo API Team"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "paths": {
+    "/bar": {
+      "$ref": "./Bar.json#/bar"
+    }
+  }
+}

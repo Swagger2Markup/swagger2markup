@@ -1,0 +1,50 @@
+{
+	"parameters": [
+		{
+			"$ref": "../parameters/params.json#/param1"
+		},
+		{
+			"$ref": "../parameters/params.json#/param2"
+		}
+	],
+	"get": {
+		"summary": "Returns server health information",
+		"operationId": "getHealth",
+		"parameters": [
+			{
+				"$ref": "../parameters/params.json#/param3"
+			},
+			{
+				"$ref": "../parameters/params.json#/param4"
+			}
+		],
+		"requestBody": {
+			"required": true,
+			"content": {
+				"application/json": {
+					"schema": {
+						"$ref": "../models/health.json"
+					}
+				}
+			}
+		},
+		"responses": {
+			"200": {
+				"description": "Health information from the server",
+				"content": {
+					"application/json": {
+						"schema": {
+							"$ref": "../models/health.json"
+						}
+					}
+				}
+			},
+			"400": {
+				"$ref": "../responses/errorResponses.json#/bad-request"
+			},
+			"500": {
+				"$ref": "../responses/errorResponses.json#/internal-server-error"
+			}
+		}
+	}
+}

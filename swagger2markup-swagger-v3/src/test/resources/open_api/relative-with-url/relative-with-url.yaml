@@ -1,0 +1,7 @@
+relative-with-url:
+  properties:
+    Foo:
+      $ref: https://my.example.remote.url.com/globals.yaml#/components/schemas/link-object
+    Bar:
+      $ref: relative-with-local.yaml#/relative-same-file
+

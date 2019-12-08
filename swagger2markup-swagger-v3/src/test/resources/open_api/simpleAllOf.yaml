@@ -1,0 +1,41 @@
+openapi: 3.0.0
+info:
+  version: "1.0.0"
+paths:
+  /foo:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/FirstType'
+                - $ref: '#/components/schemas/SecondType'
+  /bar:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/FirstType'
+                - $ref: '#/components/schemas/SecondType'
+                example:
+                  someProperty: ABC
+                  someOtherProperty: 42
+components:
+  schemas:
+    FirstType:
+      type: object
+      properties:
+        someProperty:
+          type: string
+          example: abc
+    SecondType:
+      type: object
+      properties:
+        someOtherProperty:
+          type: integer
+          example: 10

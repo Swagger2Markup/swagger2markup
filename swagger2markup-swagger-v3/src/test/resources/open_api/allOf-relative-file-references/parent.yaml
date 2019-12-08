@@ -1,0 +1,60 @@
+openapi: 3.0.0
+servers:
+  - url: /v3
+info:
+  description: >-
+    Issue #616. This is a modified Petstore server where we have two pet
+    definitions  1. pet and 2. fancy_pet which inherits pet using allOf.
+  title: ''
+  version: ''
+paths:
+  /pet:
+    get:
+      operationId: getPetById
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "./models/pet.json"
+  /fancy-pet:
+    get:
+      operationId: getFancyPetById
+      parameters:
+        - name: fancyPetId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "./models/fancy_pet.json"
+components:
+  schemas:
+    DomesticPet:
+      allOf:
+        - $ref: "./models/pet.json"
+        - properties:
+            description:
+              type: string
+              example: friendly
+    DancingPet:
+      allOf:
+        - $ref: "./models/fancy_pet.json"
+        - properties:
+            style:
+              type: string
+              example: salsa

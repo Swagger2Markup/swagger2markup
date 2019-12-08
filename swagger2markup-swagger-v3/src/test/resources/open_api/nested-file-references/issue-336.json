@@ -1,0 +1,209 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "/v1/library"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "Abhi service",
+    "description": "A sample application to test out integration of swagger",
+    "contact": {
+      "email": "abhi.predator@gmail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "Titles",
+      "description": "Description"
+    }
+  ],
+  "paths": {
+    "/titles": {
+      "get": {
+        "description": "Gets titles as part of Raptor 3 training",
+        "tags": [
+          "Titles"
+        ],
+        "summary": "Get all titles",
+        "operationId": "findTitles",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "multiple_type",
+            "description": "multipletypes",
+            "required": false,
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 0,
+              "maxItems": 3
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "./title/issue-336-title.json"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./common/issue-336-error.json"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "description": "Creating a new title",
+        "tags": [
+          "Titles"
+        ],
+        "summary": "Create a new title",
+        "operationId": "createTitle",
+        "responses": {
+          "201": {
+            "description": "Successfully created"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "./common/issue-336-error.json"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./title/issue-336-title.json"
+              }
+            }
+          },
+          "description": "Title for creation",
+          "required": true
+        }
+      }
+    },
+    "/titles/{id}": {
+      "get": {
+        "summary": "Get a title",
+        "tags": [
+          "Titles"
+        ],
+        "description": "",
+        "operationId": "getTitle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Get title for given id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Title not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a title",
+        "tags": [
+          "Titles"
+        ],
+        "description": "",
+        "operationId": "updateTitle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Update a title",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Title not found"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "./title/issue-336-title.json"
+              }
+            }
+          },
+          "description": "Title for update",
+          "required": true
+        }
+      },
+      "delete": {
+        "summary": "Deletes a title",
+        "tags": [
+          "Titles"
+        ],
+        "description": "",
+        "operationId": "deleteTitle",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Title id to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
+          },
+          "404": {
+            "description": "Title not found"
+          }
+        }
+      }
+    }
+  }
+}
+
+

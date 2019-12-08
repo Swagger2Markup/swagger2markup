@@ -1,0 +1,4 @@
+Paging:
+  properties:
+    total_items:
+      type: integer

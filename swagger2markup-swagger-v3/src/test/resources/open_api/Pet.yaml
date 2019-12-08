@@ -1,0 +1,8 @@
+Pet:
+  type: object
+  properties:
+    name:
+      type: string
+    id:
+      type: integer
+      format: int64

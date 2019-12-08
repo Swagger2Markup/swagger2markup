@@ -1,0 +1,85 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Test
+paths:
+  /test:
+    post:
+      operationId: test
+      parameters:
+        - name: status
+          in: query
+          description: Status values that need to be considered for filter
+          required: false
+          style: pipeDelimited
+          schema:
+            anyOf:
+              - type: string
+              - type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/Test1'
+                - type: object
+      responses:
+        default:
+          description: response...
+    get:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    title:
+                      type: string
+                    authors:
+                      type: array
+                      items:
+                        type: string
+                    isbn:
+                      type: string
+                  required:
+                    - title
+                  example:
+                    title: The Hitchhiker's Guide to the Galaxy
+                    authors:
+                      - Douglas Adams
+                    isbn: 0-330-25864-8
+                - type: object
+                  properties:
+                    title:
+                      type: string
+                    directors:
+                      type: array
+                      items:
+                        type: string
+                    year:
+                      type: integer
+                  required:
+                    - year
+                  example:
+                    title: Blade Runner
+                    directors:
+                      - Ridley Scott
+                    year: 1982
+      responses:
+        '200':
+          description: An array containing strings and/or integers
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - type: string
+                  - type: integer
+components:
+  schemas:
+    Test1:
+      type: object
+    Test2:
+      type: object

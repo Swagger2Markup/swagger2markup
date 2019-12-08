@@ -1,0 +1,771 @@
+---
+openapi: 3.0
+info:
+  title: Test Service
+  description: description
+  termsOfService: terms
+  contact:
+    name: API Team
+    url: http://swagger.io
+    email: apiteam@swagger.io
+  license:
+    name: MIT
+    url: http://opensource.org/licenses/MIT
+  version: 0.0.0
+basePath: /api
+paths:
+  "/producesTest":
+    get:
+      parameters: []
+      responses:
+        '200':
+          description: it works
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+  "/fileUpload":
+    post:
+      x-swagger-router-controller: TestController
+      operationId: uploadFile
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                theFile:
+                  type: string
+                  format: binary
+                stringMetadata:
+                  type: string
+                intMetadata:
+                  type: integer
+      responses:
+        '200':
+          description: the stringMetadata passed in
+          content:
+            "*/*":
+              schema:
+                type: string
+  "/primitiveBody/inline":
+    post:
+      operationId: inlineRequiredBody
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: ok!
+  "/primitiveBody/string":
+    post:
+      operationId: stringBody
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: string
+        required: false
+      responses:
+        '200':
+          description: ok!
+  "/primitiveBody/integer":
+    post:
+      operationId: integerBody
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: integer
+              format: int32
+        required: false
+      responses:
+        '200':
+          description: ok!
+  "/primitiveBody/binary":
+    post:
+      operationId: binaryBody
+      requestBody:
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+
+        required: false
+      responses:
+        '200':
+          description: ok!
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+
+  "/hidden":
+    get:
+      responses:
+        default:
+          description: ok
+  "/arrayInputTest":
+    get:
+      operationId: arrayInputTest
+      parameters:
+        - name: users
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: success!
+  "/formTest":
+    post:
+      operationId: formTest
+      requestBody:
+        content:
+          x-www-form-urlencoded:
+            schema:
+              properties:
+                user:
+                  type: string
+      responses:
+        '200':
+          description: success!
+  "/mockResponses":
+    get:
+      parameters:
+        - name: user
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+  "/mockResponses/primitiveFloatResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: number
+
+  "/mockResponses/primitiveDoubleResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: number
+
+  "/mockResponses/primitiveStringResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: string
+  "/mockResponses/primitiveStringResponseWithExample":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: string
+  "/mockResponses/responseWithExamples":
+    get:
+      responses:
+        '200':
+          description: success!
+  "/mockResponses/primitiveDateResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: string
+                format: date
+  "/mockResponses/primitiveDateTimeResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: string
+                format: date-time
+  "/mockResponses/primitiveBigDecimalResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: number
+  "/mockResponses/primitiveEmailResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: string
+                format: email
+  "/mockResponses/primitiveUUIDResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: string
+                format: uuid
+  "/mockResponses/primitiveMapResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+  "/mockResponses/complexResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Address"
+  "/mockResponses/complexResponseWithExample":
+    get:
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+  "/mockResponses/complexArrayResponse":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: array
+  "/mockResponses/complexArrayResponseWithExample":
+    get:
+      parameters:
+        - name: user
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                type: array
+  "/issue-125":
+    get:
+      responses:
+        '200':
+          description: int16
+          content:
+            "*/*":
+              schema:
+                type: integer
+               
+  "/issue-128":
+    get:
+      responses:
+        '303':
+          description: issue 128
+          content:
+            "*/*":
+              schema:
+                type: string
+                format: url
+  "/issue-130":
+    get:
+      responses:
+        '200':
+          description: issue 130
+          content:
+            "*/*":
+              schema:
+                type: object
+                properties:
+                  aStringArray:
+                    type: array
+                  anIntegerArray:
+                    type: array
+                description: an object with array properties
+  "/issue-132":
+    get:
+      responses:
+        '303':
+          description: issue 132
+  "/issue-132.2":
+    get:
+      responses:
+        '303':
+          description: issue 133, alternate example
+  "/form":
+    post:
+      operationId: postFormData
+      requestBody:
+        content: {}
+      responses:
+        '200':
+          description: ok
+  "/goodbye":
+    get:
+      operationId: goodbye
+      parameters:
+        - name: happy
+          in: query
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+  "/hello":
+    get:
+      operationId: testMe
+      parameters:
+        - name: limit
+          in: query
+          required: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+        - name: min
+          in: query
+          required: true
+          schema:
+            minimum: 10
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: fun!
+          content:
+            application/json:
+              schema:
+                type: string
+  "/withModelArray/{id}":
+    post:
+      operationId: withModelArray
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: array
+        required: true
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Animal"
+  "/withModel/{id}":
+    get:
+      operationId: withModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Animal"
+    post:
+      operationId: withModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              "$ref": "#/components/schemas/Address"
+        required: false
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Address"
+  "/withInvalidComposedModel":
+    post:
+      operationId: withInvalidComposedModel
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              "$ref": "#/components/schemas/ExtendedAddress"
+        required: false
+      responses:
+        '200':
+          description: success!
+  "/withValidComposedModel":
+    post:
+      operationId: withValidComposedModel
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              "$ref": "#/components/schemas/ExtendedAddress"
+        required: false
+      responses:
+        '200':
+          description: success!
+  "/withInvalidComposedModelArray":
+    post:
+      operationId: withInvalidComposedModelArray
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: array
+        required: false
+      responses:
+        '200':
+          description: success!
+  "/unmappedWithModel/{id}":
+    post:
+      operationId: unmappedWithModelInput
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              "$ref": "#/components/schemas/Address"
+        required: false
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Address"
+  "/mappedWithDefinedModel/{id}":
+    post:
+      operationId: mappedWithDefinedModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              "$ref": "#/components/schemas/Dog"
+        required: false
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/Dog"
+  "/unmappedWithUndefinedModel/{id}":
+    post:
+      operationId: unmappedWithUndefinedModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              "$ref": "#/components/schemas/UnmappedModel"
+        required: false
+      responses:
+        '200':
+          description: success!
+  "/withPath/{id}":
+    get:
+      operationId: withPath
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/User"
+  "/withDate/{date}":
+    get:
+      operationId: withDateTime
+      parameters:
+        - name: date
+          in: path
+          required: true
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/User"
+  "/withIntegerEnum/{stage}":
+    get:
+      operationId: withDateTime
+      parameters:
+        - name: stage
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+            enum:
+              - 1
+              - 2
+              - 3
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/User"
+  "/overloaded":
+    get:
+      operationId: overloadedResponse
+      parameters:
+        - name: arg1
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: success!
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/User"
+  "/throwApiException":
+    get:
+      operationId: throwApiException
+      responses:
+        '200':
+          description: success!
+  "/throwApiExceptionAsCause":
+    get:
+      operationId: throwApiExceptionAsCause
+      responses:
+        '200':
+          description: success!
+  "/throwNonApiException":
+    get:
+      operationId: throwNonApiException
+      responses:
+        '200':
+          description: success!
+  "/returnNonRfc2616Status":
+    get:
+      operationId: returnNonRfc2616Status
+      responses:
+        '200':
+          description: success!
+  "/responseHeaders":
+    get:
+      operationId: returnWithResponseHeaders
+      responses:
+        '200':
+          description: success
+components:
+  schemas:
+    Water:
+      properties:
+        clear:
+          type: boolean
+        name:
+          type: string
+        prices:
+          type: array
+        id:
+          type: string
+          format: uuid
+    ExtendedAddress: {}
+    User:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+      description: the name!
+    Address:
+      required:
+        - street
+      type: object
+      properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+    UnmappedModel:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Animal:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        address:
+          "$ref": "#/components/schemas/Address"
+      description: the name!
+    Dog:
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        dogType:
+          type: string

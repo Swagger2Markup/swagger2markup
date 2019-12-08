@@ -1,0 +1,155 @@
+openapi: 3.0.0
+servers: []
+info:
+  version: '1.0'
+  title: Extensions everywhere!
+  x-apis-json:
+    image: >-
+      https://s3.amazonaws.com/kinlane-productions/api-evangelist/t-shirts/KL_InApiWeTrust-1000.png
+    humanURL: 'http://developer.apievangelist.com'
+    baseURL: 'http://api.apievangelist.com/definitions/Analysis'
+    tags:
+      - blog
+      - industry
+      - analysis
+      - new
+      - API
+      - Application Programming Interface
+    properties:
+      - type: X-signup
+        url: 'https://apievangelist.3scale.net/'
+      - type: X-blog
+        url: 'http://developer.apievangelist.com/blog/'
+      - type: X-apicommonsmanifest
+        url: >-
+          https://raw.githubusercontent.com/kinlane/analysis-api/master/api-commons-manifest.json
+  contact:
+    name: Developer
+    x-contact-extension: Support not available on weekends
+  license:
+    name: Apache 2.0
+    x-notes: hello
+externalDocs:
+  description: Learn more about this API
+  url: 'http://example.com/api-docs'
+  x-docs-extension: something something
+tags:
+  - name: pets
+    x-tag-extension: fooooo
+    externalDocs:
+      description: Learn more about pet operations
+      url: 'http://example.com/api-docs'
+      x-tag-docs-extension: Yeah
+x-definitions:
+  DayOfWeek:
+    type: integer
+    format: int32
+    minimum: 0
+    maximum: 6
+paths:
+  /post:
+    post:
+      responses:
+        '200':
+          description: OK
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+              required:
+                - status
+          application/xml:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+              required:
+                - status
+        required: true
+  x-paths-extension: value
+  /something:
+    x-path-item-extension: true
+    get:
+      x-version: 1.1
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: array
+            items:
+              type: integer
+              x-example: 2
+      externalDocs:
+        description: Learn more about this operation
+        url: 'http://example.com/api-docs'
+        x-operation-docs-extension: foo bar
+      responses:
+        '200':
+          description: OK
+          x-response-extension: OK?!
+          headers:
+            X-Rate-Limit:
+              x-example: 200
+              schema:
+                type: integer
+        x-responses-extension: hello
+security:
+  - BasicAuth: []
+  - APIKeyHeader: []
+    APIKeyQueryParam: []
+  - OAuth2Implicit:
+      - 'read:pets'
+      - 'write:pets'
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      description: Basic authentication using login and password
+      scheme: basic
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    APIKeyQueryParam:
+      type: apiKey
+      in: query
+      name: api_key
+    OAuth2Implicit:
+      type: oauth2
+      x-auth-extension: hello
+      flows:
+        implicit:
+          authorizationUrl: 'http://swagger.io/api/oauth/dialog'
+          scopes:
+            'write:pets': modify pets in your account
+            'read:pets': read your pets
+            x-scope-extension: hello
+  schemas:
+    String:
+      type: string
+      nullable: true
+    ArrayOfInt:
+      type: array
+      items:
+        type: integer
+        nullable: true
+      nullable: true
+    User:
+      type: object
+      xml:
+        name: USER
+        x-xml-extension: something
+    Dictionary:
+      type: object
+      additionalProperties:
+        type: integer
+        x-extension: Foo bar
+      externalDocs:
+        description: Learn more about dictionaries
+        url: 'http://api.example.com/docs'
+        x-extension: Yeah

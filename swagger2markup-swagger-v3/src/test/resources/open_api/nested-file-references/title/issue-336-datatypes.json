@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "title":"datatypes",
+  "description":"JSON to verify all datatypes behavior",
+  "properties": {
+    "integer_32_type" : {
+      "type": "integer",
+      "format": "int32",
+      "minimum": 0,
+      "maximum": 10,
+      "exclusiveMaximum": true,
+      "exclusiveMinimum": true,
+      "description": "Integer 32 bit"
+    },
+    "integer_64_type": {
+      "type": "integer",
+      "format": "int64",
+      "minimum": 0,
+      "maximum": 11,
+      "description": "Integer 64 bit"
+    },
+    "float_type": {
+      "type": "number",
+      "format": "float",
+      "minimum": 0,
+      "maximum": 12,
+      "description": "Float type"
+    },
+    "double_type": {
+      "type": "number",
+      "format": "double",
+      "minimum": 0,
+      "maximum": 13,
+      "description": "Double type"
+    },
+    "byte_type": {
+      "type": "string",
+      "format": "byte",
+      "description": "base64 encoded chars"
+    },
+    "binary_type": {
+      "type": "string",
+      "format": "binary",
+      "description": "Binary type"
+    },
+    "boolean_type": {
+      "type": "boolean",
+      "description": "Boolean type"
+    },
+    "date_type": {
+      "type": "string",
+      "format": "date",
+      "description": "date type"
+    },
+    "date_time_type": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date time type"
+    },
+    "password_type": {
+      "type": "string",
+      "format": "password",
+      "description": "password type"
+    }
+  },
+  "required" : [ "integer_32_type", "integer_64_type", "float_type", "double_type", "byte_type", "binary_type", "boolean_type", "date_type", "date_time_type", "password_type" ]
+}

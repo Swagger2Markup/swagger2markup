@@ -1,0 +1,6 @@
+---
+description: Response with schema containing reference
+content:
+  application/json:
+    schema:
+      $ref: "./schema-with-reference.yaml"

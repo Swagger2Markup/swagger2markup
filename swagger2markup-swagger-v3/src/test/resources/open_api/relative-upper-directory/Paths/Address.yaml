@@ -1,0 +1,66 @@
+get:
+  tags:
+    - Address
+  operationId: Address_Get
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+        text/json:
+          schema:
+            type: array
+            items:
+              $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+        application/xml:
+          schema:
+            type: array
+            items:
+              $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+        text/xml:
+          schema:
+            type: array
+            items:
+              $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+post:
+  tags:
+    - Address
+  operationId: Address_Post
+  responses:
+    '200':
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+        text/json:
+          schema:
+            $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+        application/xml:
+          schema:
+            $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+        text/xml:
+          schema:
+            $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+      text/json:
+        schema:
+          $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+      application/xml:
+        schema:
+          $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+      text/xml:
+        schema:
+          $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+      application/x-www-form-urlencoded:
+        schema:
+          $ref: "../Schemas/schema.yaml#/definitions/AddressEx"
+    required: true

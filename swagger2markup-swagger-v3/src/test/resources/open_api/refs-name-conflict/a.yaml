@@ -1,0 +1,47 @@
+openapi: 3.0.1
+servers: []
+info:
+  version: 1.0.0
+  title: Person
+  description: Maintain Person data
+paths:
+  /newPerson:
+    post:
+      summary: Create new person
+      description: Create new person
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PersonObj'
+  /oldPerson:
+    post:
+      summary: Create old person
+      description: Create old person
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: './refs-name-conflict/b.yaml#/components/schemas/PersonObj'
+  /yetAnotherPerson:
+    post:
+      summary: Create yet another person
+      description: Create yet another person
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: './refs-name-conflict/b.yaml#/components/schemas/PersonObj'
+components:
+  schemas:
+    PersonObj:
+      properties:
+        location:
+          type: string
+          example: local

@@ -1,0 +1,128 @@
+openapi: 3.0.0
+servers:
+  - url: /sample
+info:
+  version: 1.0.0
+  title: references in property test
+  description: |
+    demo of how references are not handled in model property definitoins
+paths:
+  /things:
+    x-handler: things
+    get:
+      operationId: search
+      summary: Find things
+      responses:
+        '200':
+          description: |
+            A list of things matching the search criteria.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ThingSummary'
+      description: |
+        Search for a Thing given the parameters included in the query string.
+  '/things/{id}':
+    x-handler: things
+    parameters:
+      - $ref: '#/components/parameters/PathId'
+    get:
+      operationId: getById
+      summary: Get Existing Thing
+      responses:
+        '200':
+          description: |
+            The requested Thing.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Thing'
+        '404':
+          $ref: '#/components/responses/NotFound'
+      description: |
+        Get details of a particular Thing given the Thing `id`. 
+components:
+  parameters:
+    PathId:
+      name: id
+      in: path
+      required: true
+      description: The ID of the resource to which the call applies.
+      schema:
+        type: string
+  responses:
+    NotFound:
+      description: |
+        **Not Found**
+
+        The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ApiError'
+  schemas:
+    Address:
+      required:
+        - street
+        - city
+        - state
+        - zip
+      properties:
+        street:
+          type: string
+        street2:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+          description: |
+            State, province, mailing division, as applicable for the country.
+        zip:
+          type: string
+          description: |
+            U.S. zip code, foreign postal code, as applicable.
+        country:
+          type: string
+      description: |
+        Real-world address of property or for post.
+    ApiError:
+      required:
+        - message
+        - status
+      properties:
+        message:
+          type: string
+          description: Additional diagnostic information about the error.
+        status:
+          type: integer
+          description: HTTP status code for the error.
+        type:
+          type: string
+          description: A type name for the error.
+    Thing:
+      allOf:
+        - $ref: '#/components/schemas/ThingSummary'
+        - type: object
+          properties:
+            stuff:
+              type: object
+              properties:
+                name:
+                  type: string
+                source:
+                  type: string
+              description: |
+                The stuff about the thing.
+    ThingSummary:
+      required:
+        - ThingNumber
+        - address
+      properties:
+        ThingNumber:
+          type: string
+          description: The unique identifier of this Thing.
+        address:
+          $ref: '#/components/schemas/Address'

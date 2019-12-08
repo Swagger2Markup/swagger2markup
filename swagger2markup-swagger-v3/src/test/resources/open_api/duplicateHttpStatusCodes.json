@@ -1,0 +1,35 @@
+{
+  "openapi": "3.0.1",
+  "servers": [
+    {
+      "description": "An absolute path",
+      "url": "https://api.absolute.org/v2"
+    }
+  ],
+  "info": {
+    "description": "This is a sample server",
+    "version": "1.0.0",
+    "title": "title",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "paths": {
+    "/whatever": {
+      "get": {
+        "summary": "Some operation",
+        "description": "Some operation",
+        "operationId": "doWhatever",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "200": {
+            "description": "duplicate HTTP status code"
+          }
+        }
+      }
+    }
+  }
+}

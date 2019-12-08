@@ -1,0 +1,41 @@
+pathItems:
+  health:
+    get:
+      parameters: []
+      responses:
+        200:
+          description: all good
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Success'
+parameters:
+  skip:
+    in: query
+    name: skip
+    schema:
+      type: integer
+      format: int32
+responses:
+  Success:
+    description: it worked!
+    content:
+      "*/*":
+        schema:
+          type: string
+          description: something helpful
+components:
+  schemas:
+    Success:
+      type: object
+      properties:
+        message:
+          type: string
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32

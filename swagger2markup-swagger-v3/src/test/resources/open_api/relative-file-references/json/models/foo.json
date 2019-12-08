@@ -1,0 +1,12 @@
+{
+  "description": "Just another model",
+  "type": "object",
+  "properties": {
+    "hello": {
+      "type": "string"
+    },
+    "world": {
+      "type": "integer"
+    }
+  }
+}

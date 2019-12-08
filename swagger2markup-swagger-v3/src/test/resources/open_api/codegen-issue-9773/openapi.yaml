@@ -1,0 +1,12 @@
+openapi: 3.0.2
+info:
+  title: 'Codegen test: requestBody with an external $ref'
+  version: 0.0.0
+paths:
+  /foo:
+    post:
+      requestBody:
+        $ref: './domain.yaml#/components/requestBodies/RequestBody1'
+      responses:
+        '200':
+          description: OK

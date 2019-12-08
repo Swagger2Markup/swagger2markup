@@ -1,0 +1,33 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI Test
+  description: Simple test
+  license:
+    name: Apache-2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:9999/v2
+paths:
+  /ping:
+    post:
+      tags:
+      - someTag
+      summary: test
+      description: test it
+      operationId: pingOp
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SomeObj'
+        required: true
+      responses:
+        200:
+          description: OK
+          content: {}
+components:
+  schemas:
+    SomeObj:
+      type: string
+      pattern: ^[A-Z]+$

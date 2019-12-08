@@ -1,0 +1,32 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://example.com/api/v1'
+info:
+  title: Test API
+  version: '1'
+paths:
+  /events:
+    get:
+      description: A list of events
+      operationId: getEvents
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json; charset=utf-8:
+              schema:
+                required:
+                  - paging
+                  - items
+                type: object
+                properties:
+                  paging:
+                    $ref: './paging.yaml#/Paging'
+                  items:
+                    $ref: '#/components/schemas/StatusResponse'
+components:
+  schemas:
+    StatusResponse:
+      properties:
+        http_code:
+          type: integer

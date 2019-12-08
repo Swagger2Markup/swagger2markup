@@ -1,0 +1,100 @@
+openapi: 3.0.0
+servers:
+  - url: 'https://example.com/api/v1'
+info:
+  title: Test API
+  version: '1'
+paths:
+  '/pet/{petId}':
+    get:
+      tags:
+        - pet
+      summary: Find pet by ID
+      description: Returns a single pet
+      operationId: getPetById
+      parameters:
+        - $ref: './common/issue-421-parms.yaml#/petIdParam'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: './common/issue-421-defns.yaml#/components/schemas/Pet'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+    post:
+      tags:
+        - pet
+      summary: Updates a pet in the store with form data
+      description: ''
+      operationId: updatePetWithForm
+      parameters:
+        - $ref: './common/issue-421-parms.yaml#/petIdParam'
+      requestBody:
+        $ref: '#/components/requestBodies/requestBody'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '405':
+          description: Invalid input
+  /store/order:
+    post:
+      tags:
+        - store
+      summary: Place an order for a pet
+      description: ''
+      operationId: placeOrder
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: './petstore.yaml#/components/schemas/Order'
+            application/json:
+              schema:
+                $ref: './petstore.yaml#/components/schemas/Order'
+        '400':
+          description: Invalid Order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './petstore.yaml#/components/schemas/Order'
+        description: order placed for purchasing the pet
+        required: true
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    requestBody:
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            properties:
+              name:
+                description: Updated name of the pet
+                type: string
+              status:
+                description: Updated status of the pet
+                type: string

@@ -1,0 +1,71 @@
+{"openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Boolean `additionProperties` example"
+  },
+  "paths": {
+    "/someResource": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Fetching of some resource successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/someObject"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "someObject": {
+        "type": "object",
+        "required": [
+          "innerObject"
+        ],
+        "additionalProperties": {
+          "type": "string"
+        },
+        "properties": {
+          "innerObject": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "stringProperty": {
+                "type": "string"
+              },
+              "objectProperty": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "firstPossibleProperty": {
+                    "type": "integer"
+                  },
+                  "secondPossibleProperty": {
+                    "type": "string"
+                  }
+                }
+              },
+              "objectAdditionalProperties": {
+                "type": "object",
+                "properties": {
+                  "integerProperty": {
+                    "type": "integer"
+                  }
+                },
+                "additionalProperties": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

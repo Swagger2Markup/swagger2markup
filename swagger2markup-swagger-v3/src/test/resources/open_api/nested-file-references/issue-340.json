@@ -1,0 +1,38 @@
+{
+  "openapi": "3.0.0",
+  "servers": [
+    {
+      "url": "https://api.foo.com/"
+    }
+  ],
+  "info": {
+    "version": "1.0.0",
+    "title": "FooAPI",
+    "description": "API for all accesses to the Foo server system",
+    "termsOfService": "TBD",
+    "contact": {
+      "name": "Foo API Team"
+    },
+    "license": {
+      "name": "MIT"
+    }
+  },
+  "paths": {
+    "/bar": {
+      "$ref": "./issue-340-Bar.json#/bar"
+    }
+  },
+  "components": {
+    "schemas": {
+      "BarSettingsRequest": {
+        "$ref": "./issue-340-Bar.json#/components/schemas/BarSettingsRequest"
+      },
+      "BarData": {
+        "$ref": "./issue-340-Bar.json#/components/schemas/BarData"
+      },
+      "BazData": {
+        "$ref": "./issue-340-Bar.json#/components/schemas/BazData"
+      }
+    }
+  }
+}

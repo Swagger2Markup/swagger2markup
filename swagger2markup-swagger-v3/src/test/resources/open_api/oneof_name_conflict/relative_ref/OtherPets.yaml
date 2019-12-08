@@ -1,0 +1,11 @@
+components:
+  schemas:
+    Cat:
+      type: object
+      required:
+      - pet_type
+      properties:
+        pet_type:
+          type: string
+        name:
+          type: string

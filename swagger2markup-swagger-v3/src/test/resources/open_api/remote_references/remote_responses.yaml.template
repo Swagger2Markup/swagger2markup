@@ -1,0 +1,15 @@
+responses:
+  RemoteResponse:
+    description: Remote Description
+    content:
+      application/json:
+        schema:
+          $ref: 'http://localhost:${dynamicPort}/remote/schema#/components/schemas/ExtendedErrorModel'
+  IllegalInput:
+      description: Illegal input for operation.
+  GeneralError:
+    description: General Error
+    content:
+      application/json:
+        schema:
+          $ref: 'http://localhost:${dynamicPort}/remote/schema#/components/schemas/ExtendedErrorModel'

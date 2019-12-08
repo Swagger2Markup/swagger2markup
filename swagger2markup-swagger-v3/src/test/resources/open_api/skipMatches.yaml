@@ -1,0 +1,48 @@
+openapi: "3.0.0"
+paths:
+  /operationAlpha:
+    get:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              title: "operationAlphaRequest"
+              properties:
+                in:
+                  type: "object"
+                  title: "operationAlphaIn"
+                  properties:
+                    asset:
+                      type: "object"
+                      title: "operationAlphaInAsset"
+                      properties:
+                        id1:
+                          type: "integer"
+                          format: "int32"
+                        id2:
+                          type: "integer"
+                          format: "int32"
+  /operationBeta:
+    get:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: "object"
+              title: "operationBetaRequest"
+              properties:
+                in:
+                  type: "object"
+                  title: "operationBetaIn"
+                  properties:
+                    asset:
+                      type: "object"
+                      title: "operationBetaInAsset"
+                      properties:
+                        id1:
+                          type: "integer"
+                          format: "int32"
+                        id2:
+                          type: "integer"
+                          format: "int32"

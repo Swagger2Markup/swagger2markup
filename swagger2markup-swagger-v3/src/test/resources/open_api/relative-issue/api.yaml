@@ -1,0 +1,13 @@
+openapi: 3.0.0
+info:
+  version: '0.0.1'
+  title: 'Parser debug'
+  description: 'Parser debug'
+paths:
+  /scans:
+    get:
+      responses:
+        200:
+          description: Yay
+        500:
+          $ref: './subfolder/domain.yaml#/components/responses/ErrorResponse'

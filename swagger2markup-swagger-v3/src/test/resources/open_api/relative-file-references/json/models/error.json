@@ -1,0 +1,12 @@
+{
+  "description": "The error model",
+  "type": "object",
+  "properties": {
+    "code": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    }
+  }
+}

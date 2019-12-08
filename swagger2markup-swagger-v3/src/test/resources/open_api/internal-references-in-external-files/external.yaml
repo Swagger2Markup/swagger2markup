@@ -1,0 +1,27 @@
+common:
+  allOf:
+  - $ref: "#/core"
+  - type: object
+    properties:
+      attribute:
+        type: string
+      direct:
+        $ref: "#/core"
+      referenced:
+        type: array
+        items:
+          $ref: "#/core"
+
+core:
+  type: object
+  properties:
+    coreAttribute:
+      type: string
+    inner:
+      $ref: "#/innerCore"
+
+innerCore:
+  type: object
+  properties:
+    innerCoreAttribute:
+      type: string

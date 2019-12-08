@@ -1,0 +1,39 @@
+openapi: 3.0.0
+servers: []
+info:
+  version: 1.0.0
+  title: Pets Store
+paths:
+  /pets:
+    parameters:
+      - name: query-param-int32
+        in: query
+        schema:
+          type: integer
+          format: int32
+          uniqueItems: true
+          enum:
+            - 1
+            - 2
+            - 7
+      - name: query-param-invalid-format
+        in: query
+        schema:
+          type: integer
+          format: invalid
+          enum:
+            - 1
+            - 2
+            - 7
+      - name: query-param-collection-format-and-uniqueItems
+        in: query
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+          uniqueItems: true
+    get:
+      responses:
+        '200':
+          description: Returns all the pets

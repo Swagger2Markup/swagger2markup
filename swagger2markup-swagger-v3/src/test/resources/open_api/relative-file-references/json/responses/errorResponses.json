@@ -1,0 +1,22 @@
+{
+	"bad-request": {
+		"description": "Your request was not valid",
+		"content": {
+			"*/*": {
+				"schema": {
+					"$ref": "../models/error.json"
+				}
+			}
+		}
+	},
+	"internal-server-error": {
+		"description": "An unexpected error occur during processing",
+		"content": {
+			"*/*": {
+				"schema": {
+					"$ref": "../models/error.json"
+				}
+			}
+		}
+	}
+}

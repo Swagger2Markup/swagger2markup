@@ -1,0 +1,28 @@
+openapi: 3.0.0
+servers: []
+info:
+  title: test
+  version: 0.0.0
+paths: {}
+components:
+  schemas:
+    'y':
+      type: object
+      properties:
+        zs:
+          type: array
+          items:
+            $ref: '#/components/schemas/z'
+    z:
+      type: object
+      properties:
+        ws:
+          type: object
+          additionalProperties:
+            type: array
+            $ref: '#/components/schemas/w'
+    w:
+      type: object
+      properties:
+        name:
+          type: string

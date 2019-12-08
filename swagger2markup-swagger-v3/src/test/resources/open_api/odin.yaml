@@ -1,0 +1,32 @@
+#https://mermade.org.uk/openapi-converter
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:8080'
+info:
+  version: '3.0'
+  title: Odin API
+  description: ODIN UI Services API
+paths:
+  /JTasker/startRun:
+    post:
+      tags:
+        - JTasker
+      summary: Start JTasker Run
+      operationId: JTasker_startRun
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: './resources/urn_jsonschema_com_issinc_odin_display_CreatePlan.json'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '500':
+          description: Server Error

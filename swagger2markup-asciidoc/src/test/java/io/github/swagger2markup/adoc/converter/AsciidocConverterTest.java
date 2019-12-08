@@ -18,7 +18,7 @@ public class AsciidocConverterTest {
 
     private Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Run {index}: file={0}")
     public static Iterable<?> data() {
         return Arrays.asList(
                 "arrows-and-boxes-example.ad",

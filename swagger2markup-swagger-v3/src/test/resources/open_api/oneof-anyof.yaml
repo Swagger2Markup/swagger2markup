@@ -1,0 +1,82 @@
+openapi: 3.0.1
+info:
+  version: 0.0.0
+  title: test
+
+paths:
+  /oneOf:
+    get:
+      responses:
+        '200':
+          description: A book or movie object
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/Book'
+                  - $ref: '#/components/schemas/Movie'
+
+  /anyOf:
+    get:
+      responses:
+        '200':
+          description: A book or movie object
+          content:
+            application/json:
+              schema:
+                anyOf:
+                  - $ref: '#/components/schemas/Movie'
+                  - $ref: '#/components/schemas/Book'
+
+  /mixed-array:
+    get:
+      responses:
+        '200':
+          description: An array containing strings and/or integers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - type: string
+                    - type: integer
+
+components:
+  schemas:
+    Book:
+      type: object
+      properties:
+        title:
+          type: string
+        authors:
+          type: array
+          items:
+            type: string
+        isbn:
+          type: string
+      required:
+        - title
+      example:
+        title: The Hitchhiker's Guide to the Galaxy
+        authors:
+          - Douglas Adams
+        isbn: 0-330-25864-8
+    Movie:
+      type: object
+      properties:
+        title:
+          type: string
+        directors:
+          type: array
+          items:
+            type: string
+        year:
+          type: integer
+      required:
+        - title
+      example:
+        title: Blade Runner
+        directors:
+          - Ridley Scott
+        year: 1982

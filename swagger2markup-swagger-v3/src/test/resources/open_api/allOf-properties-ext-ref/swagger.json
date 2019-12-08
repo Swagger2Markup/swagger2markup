@@ -1,0 +1,14 @@
+{
+	"openapi": "3.0.0",
+	"info": {
+		"title": "flat",
+		"version": "1.0.0"
+	},
+	"components": {
+		"schemas": {
+			"record": {
+				"$ref": "models/purebred_pet.json"
+			}
+		}
+	}
+}

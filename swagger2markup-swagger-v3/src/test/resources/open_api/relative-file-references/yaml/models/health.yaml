@@ -1,0 +1,7 @@
+description: The health model
+type: object
+properties:
+  status:
+    type: string
+  cpuUtilization:
+    type: integer

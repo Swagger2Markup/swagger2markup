@@ -1,0 +1,48 @@
+ components: 
+  schemas:
+    PrintInfo:
+      type: object
+      description: "Print info of the shipping info"
+      required:
+        - B
+      properties:
+        B:
+          type: boolean
+    AnotherObject:
+      type: object
+      description: "Some description"
+      required:
+        - C
+      properties:
+        C:
+          type: boolean
+    MoreInfo:
+      type: object
+      description: "Information about the shipping for a device"
+      allOf:
+        - $ref: "#/components/schemas/PrintInfo"
+        - type: object
+          required:
+            - A
+          properties:
+            A:
+              type: array
+              items:
+                $ref: "#/components/schemas/AnotherObject"
+    SomeEnum:
+      type: string
+      enum:
+        - lol1
+        - lol2
+        - lol3
+    ShippingInfo:
+      type: object
+      description: "Information about the shipping for a device"
+      allOf:
+        - $ref: "#/components/schemas/PrintInfo"
+        - type: object
+          required:
+            - A
+          properties:
+            A:
+              $ref: "#/components/schemas/SomeEnum"

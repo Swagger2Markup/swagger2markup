@@ -1,0 +1,10 @@
+get:
+  responses:
+    '200':
+      description: It works
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+    required: true

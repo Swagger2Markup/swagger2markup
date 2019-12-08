@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "title":"copy",
+  "description":"Copy of a title",
+  "properties": {
+    "barcode": {
+      "type": "string",
+      "pattern": "^[0-9]{1,38}$",
+      "description": "Barcode for the title"
+    },
+    "qr_code": {
+      "type": "string",
+      "description": "QR code for the title"
+    },
+    "known_defect": {
+      "type": "string",
+      "description": "Known defects"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+parameters:
+- $ref: ../parameters/params.yaml#/param1
+- $ref: ../parameters/params.yaml#/param2
+get:
+  summary: Returns server health information
+  operationId: getHealth
+  parameters:
+  - $ref: ../parameters/params.yaml#/param3
+  - $ref: ../parameters/params.yaml#/param4
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: ../models/health.yaml
+  responses:
+    "200":
+      description: Health information from the server
+      content:
+        application/json:
+          schema:
+            $ref: ../models/health.yaml
+    "400":
+      $ref: ../responses/errorResponses.yaml#/bad-request
+    "500":
+      $ref: ../responses/errorResponses.yaml#/internal-server-error

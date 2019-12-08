@@ -1,0 +1,13 @@
+components:
+  schemas:
+    Address:
+      title: the address
+      properties:
+        street:
+          type: string
+        phone:
+          $ref: '#/components/schemas/Phone'
+    Phone:
+      title: the phone number
+      type: string
+      example: '408-867-5309'

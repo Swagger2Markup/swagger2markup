@@ -1,0 +1,15 @@
+{
+  "allOf": [
+    {
+      "$ref": "./pet.json"
+    },
+    {
+      "properties": {
+        "breed": {
+          "type": "string",
+          "example": "Labrador"
+        }
+      }
+    }
+  ]
+}
