@@ -57,7 +57,6 @@ v1.0, 2014-01-01
 
 [abstract]
 {description}
-
 == It’s a City Under Siege
 
 This journey begins one late Monday afternoon at {uri-devoxx}[((Devoxx))].

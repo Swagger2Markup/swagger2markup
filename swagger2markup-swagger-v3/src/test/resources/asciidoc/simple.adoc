@@ -7,6 +7,7 @@ v1.0.0
 :appendix-refsig: Appendix
 :toc-title: Table of Contents
 :iconsdir: ./images/icons
+:openapi: 3.0.0
 :warning-caption: Warning
 :figure-caption: Figure
 :attribute-missing: skip
@@ -33,5 +34,13 @@ v1.0.0
 :chapter-refsig: Chapter
 :attribute-undefined: drop-line
 
-.Overview
-.This is a simple API
+== Overview
+
+This is a simple API
+
+=== License
+
+[%hardbreaks]
+http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
+
+

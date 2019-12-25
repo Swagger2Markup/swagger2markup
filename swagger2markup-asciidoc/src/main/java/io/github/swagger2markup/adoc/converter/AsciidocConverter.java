@@ -667,15 +667,7 @@ public class AsciidocConverter extends StringConverter {
 
     private String convertPreamble(StructuralNode node) {
         logger.debug("convertPreamble");
-        StringBuilder sb = new StringBuilder();
-//        appendTitle(node, sb);
-//        appendId(node, sb);
-//        appendStyle(node, sb);
-//        appendRoles(node, sb);
-//        appendSource((Block) node, sb);
-        sb.append(new ParagraphAttributes(node).toAsciiDocContent());
-        appendChildBlocks(node, sb);
-        return sb.toString();
+        return node.getContent().toString();
     }
 
     private String convertImage(StructuralNode node) {
@@ -773,13 +765,6 @@ public class AsciidocConverter extends StringConverter {
         String title = node.getTitle();
         if (StringUtils.isNotBlank(title)) {
             sb.append(".").append(unescapeContent(title)).append(LINE_SEPARATOR);
-        }
-    }
-
-    private void appendSource(Block node, StringBuilder sb) {
-        String source = node.getSource();
-        if (StringUtils.isNotBlank(source)) {
-            sb.append(unescapeContent(source)).append(LINE_SEPARATOR);
         }
     }
 
