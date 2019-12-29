@@ -44,3 +44,30 @@ This is a simple API
 http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 
 
+== Servers
+* https://{username}.gigantic-server.com:{port}/{basePath}
++
+The production API server
++
+.Variables
+username:: *this* __value__ is assigned by the service provider, in this example `gigantic-server.com`
++
+[%hardbreaks]
+__Possible Values__ : Any
+__Default__ : demo
+
+port::
++
+[%hardbreaks]
+__Possible Values__ :
++
+- 8443
+- 443
+
+__Default__ : 8443
+
+basePath::
++
+[%hardbreaks]
+__Possible Values__ : Any
+__Default__ : v2
