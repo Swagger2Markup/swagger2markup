@@ -67,54 +67,38 @@ public class OpenApi2AsciiDoc {
 //                    put("cols", "<,a,<,a");
 //                }});
                 if (!variables.isEmpty()) {
-                    Table tmpTable = processor.createTable(listItem);
-//                    Row tableRow = processor.createTableRow(tmpTable);
-                    Column nameColumn = processor.createTableColumn(tmpTable, 0);
-                    Column possibleValuesColumn = processor.createTableColumn(tmpTable, 1);
-                    Column defaultValueColumn = processor.createTableColumn(tmpTable, 2);
-                    Column descriptionColumn = processor.createTableColumn(tmpTable, 3);
-
-
-                    Table variablesTable = processor.createTable(listItem);
-                    variablesTable.setCaption("Variables");
-
-                    Cell nameHeader = processor.createTableCell(nameColumn, "Name");
-                    Cell possibleValuesHeader = processor.createTableCell(possibleValuesColumn, "Possible Values");
-                    Cell defaultValueHeader = processor.createTableCell(defaultValueColumn, "Default");
-                    Cell descriptionHeader = processor.createTableCell(descriptionColumn, "Description");
-
-                    java.util.List<Cell> headerRow = Arrays.asList(nameHeader, possibleValuesHeader, defaultValueHeader, descriptionHeader);
-
+                    DescriptionList variablesList = createDefinitionList(listItem, new HashMap<>(), new HashMap<>());
+                    variablesList.setCaption("Variables");
 
                     variables.forEach((name, variable) -> {
-                        processor.createTableCell(nameColumn, name);
+                        processor.createListItem(variablesList, name);
 
-                        java.util.List<String> possibleValues = variable.getEnum();
-                        if(null != possibleValues && !possibleValues.isEmpty()){
-                            Document possibleValuesDocument = processor.createDocument(document);
-                            List possibleValuesList = createList(possibleValuesDocument, "ulist", new HashMap<>(), new HashMap<>());
-                            possibleValues.forEach(possibleValue -> {
-                                ListItem possibleValueItem = processor.createListItem(possibleValuesList, possibleValue);
-                                possibleValuesList.append(possibleValueItem);
-                            });
-                            processor.createTableCell(possibleValuesColumn, possibleValuesDocument);
-                        } else {
-                            processor.createTableCell(possibleValuesColumn, "");
-                        }
-
-                        processor.createTableCell(defaultValueColumn, variable.getDefault());
-
-                        String description = variable.getDescription();
-                        if (StringUtils.isNotBlank(description)) {
-                            Document cellDocument = processor.createDocument(document);
-                            appendDescription(cellDocument, variable.getDescription());
-                            processor.createTableCell(descriptionColumn, cellDocument);
-                        } else {
-                            processor.createTableCell(descriptionColumn, "");
-                        }
+//                        java.util.List<String> possibleValues = variable.getEnum();
+//                        if(null != possibleValues && !possibleValues.isEmpty()){
+//                            Document possibleValuesDocument = processor.createDocument(document);
+//                            List possibleValuesList = createList(possibleValuesDocument, "ulist", new HashMap<>(), new HashMap<>());
+//                            possibleValues.forEach(possibleValue -> {
+//                                ListItem possibleValueItem = processor.createListItem(possibleValuesList, possibleValue);
+//                                possibleValuesList.append(possibleValueItem);
+//                            });
+//                            processor.createTableCell(possibleValuesColumn, possibleValuesDocument);
+//                        } else {
+//                            processor.createTableCell(possibleValuesColumn, "");
+//                        }
+//
+//                        processor.createTableCell(defaultValueColumn, variable.getDefault());
+//
+//                        String description = variable.getDescription();
+//                        if (StringUtils.isNotBlank(description)) {
+//                            Document cellDocument = processor.createDocument(document);
+//                            appendDescription(cellDocument, variable.getDescription());
+//                            processor.createTableCell(descriptionColumn, cellDocument);
+//                        } else {
+//                            processor.createTableCell(descriptionColumn, "");
+//                        }
                     });
 
-                    listItem.append(variablesTable);
+                    listItem.append(variablesList);
                 }
                 uList.append(listItem);
             });
@@ -164,7 +148,7 @@ public class OpenApi2AsciiDoc {
 
         appendDescription(overviewDoc, info.getDescription());
         addLicenseInfo(overviewDoc, info);
-        addTermsOfServiceInfo(document, overviewDoc, info);
+        addTermsOfServiceInfo(overviewDoc, info);
         document.append(overviewDoc);
     }
 
@@ -190,7 +174,7 @@ public class OpenApi2AsciiDoc {
         }
     }
 
-    private void addTermsOfServiceInfo(Document document, Section overviewDoc, Info info) {
+    private void addTermsOfServiceInfo(Section overviewDoc, Info info) {
         String termsOfService = info.getTermsOfService();
         if (StringUtils.isNotBlank(termsOfService)) {
             Block paragraph = processor.createBlock(overviewDoc, "paragraph", termsOfService);
@@ -217,5 +201,19 @@ public class OpenApi2AsciiDoc {
                 RubyUtils.toSymbol(rubyRuntime, context),
                 convertedOptions};
         return (List) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_CLASS, parameters);
+    }
+
+    public DescriptionList createDefinitionList(ContentNode parent, Map<String, Object> attributes, Map<String, Object> options) {
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
+
+        RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
+
+        IRubyObject[] parameters = {
+                ((ContentNodeImpl) parent).getRubyObject(),
+                RubyUtils.toSymbol(rubyRuntime, "dlist"),
+                convertedOptions};
+        return (DescriptionList) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.DEFINITIONLIST_CLASS, parameters);
     }
 }

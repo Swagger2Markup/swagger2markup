@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.*;
@@ -312,7 +313,7 @@ public class AsciidocConverter extends StringConverter {
 
     private String convertInlineImage(PhraseNode node) {
         logger.debug("convertInlineImage");
-        if(node.getType().equals("icon")){
+        if (node.getType().equals("icon")) {
             return (new IconNode(node)).toAsciiDocContent();
         } else {
             return (new BlockImageNode(node)).toAsciiDocContent();
@@ -472,7 +473,7 @@ public class AsciidocConverter extends StringConverter {
             boolean hAlignmentAdded = false;
             TableCellHorizontalAlignment hAlignment = TableCellHorizontalAlignment.fromName(cell.getHorizontalAlignment().name());
             if ((null != hAlignment) && (null == tableCellStyle || hAlignment != tableCellStyle.horizontalAlignment)) {
-                hAlignmentAdded  = true;
+                hAlignmentAdded = true;
                 addNewLine = true;
                 sb.append(hAlignment.getDelimiter());
             }
@@ -575,8 +576,11 @@ public class AsciidocConverter extends StringConverter {
             if (descriptionOnNewLine) {
                 result.append(LINE_SEPARATOR);
             }
-            result.append(Optional.ofNullable(description.getSource()).orElse(""));
-            appendChildBlocks(description, result);
+            String desc = Optional.ofNullable(description.getSource()).orElse("");
+            if(StringUtils.isNotBlank(desc)) {
+                result.append(desc).append(LINE_SEPARATOR);
+            }
+            appendChildBlocks(description, result, true);
         }
         return result.toString();
     }
@@ -656,7 +660,7 @@ public class AsciidocConverter extends StringConverter {
 
         result.append(Optional.ofNullable(node.getSource()).orElse(""));
         result.append(LINE_SEPARATOR);
-        appendChildBlocks(node, result);
+        appendChildBlocks(node, result, true);
         return result.toString();
     }
 
@@ -687,17 +691,20 @@ public class AsciidocConverter extends StringConverter {
 
     private String convertParagraph(StructuralNode node) {
         logger.debug("convertParagraph");
-        return new ParagraphAttributes(node).toAsciiDocContent() +
-                ((Block) node).getSource() + LINE_SEPARATOR;
+        StringBuilder sb = new StringBuilder();
+        sb.append(new ParagraphAttributes(node).toAsciiDocContent());
+        appendSource((Block) node, sb);
+        appendTrailingNewLine(sb);
+        return sb.toString();
     }
 
     private String convertSection(Section node) {
         logger.debug("convertSection");
         StringBuilder sb = new StringBuilder();
         sb.append(new DelimitedBlockNode(node).toAsciiDocContent()).append(StringUtils.repeat(TITLE, node.getLevel() + 1))
-                .append(" ").append(unescapeContent(node.getTitle())).append(LINE_SEPARATOR).append(LINE_SEPARATOR);
+                .append(" ").append(unescapeContent(node.getTitle())).append(LINE_SEPARATOR);
         appendChildBlocks(node, sb);
-
+        appendTrailingNewLine(sb);
         return sb.toString();
     }
 
@@ -705,13 +712,24 @@ public class AsciidocConverter extends StringConverter {
         logger.debug("convertEmbedded");
         StringBuilder sb = new StringBuilder();
 
-        sb.append(DOCUMENT_TITLE).append(unescapeContent(node.getDoctitle()));
+        sb.append(DOCUMENT_TITLE).append(unescapeContent(node.getDoctitle())).append(LINE_SEPARATOR);
         Map<String, Object> attributes = node.getAttributes();
-        String authors = attributes.getOrDefault("authors", "").toString();
-        if (!authors.isEmpty()) {
-            sb.append(LINE_SEPARATOR).append(authors).append(LINE_SEPARATOR);
-        }
+        appendAuthors(sb, attributes);
+        appendRevisionDetails(sb, attributes);
+        appendDocumentAttributes(sb, attributes);
+        sb.append(LINE_SEPARATOR);
+        appendChildBlocks(node, sb);
+        return sb.toString();
+    }
 
+    private void appendDocumentAttributes(StringBuilder sb, Map<String, Object> attributes) {
+        attributes.forEach((k, v) -> {
+            if (!attributeToExclude.contains(k) && v != null && !v.toString().isEmpty())
+                sb.append(COLON).append(k).append(COLON).append(" ").append(v).append(LINE_SEPARATOR);
+        });
+    }
+
+    private void appendRevisionDetails(StringBuilder sb, Map<String, Object> attributes) {
         String revDetails = Stream.of(attributes.get("revnumber"), attributes.get("revdate")).filter(Objects::nonNull)
                 .filter(o -> !o.toString().isEmpty()).map(Object::toString)
                 .collect(Collectors.joining(", "));
@@ -719,16 +737,34 @@ public class AsciidocConverter extends StringConverter {
         if (!revDetails.isEmpty()) {
             sb.append("v").append(revDetails).append(LINE_SEPARATOR);
         }
+    }
 
-        attributes.forEach((k, v) -> {
-            if (!attributeToExclude.contains(k) && v != null && !v.toString().isEmpty())
-                sb.append(LINE_SEPARATOR).append(COLON).append(k).append(COLON).append(" ").append(v);
-        });
-        String content = node.getContent().toString();
-        if (StringUtils.isNotBlank(content)) {
-            sb.append(LINE_SEPARATOR).append(LINE_SEPARATOR).append(content);
+    private void appendAuthors(StringBuilder sb, Map<String, Object> attributes) {
+        Long authorCount = (Long) attributes.getOrDefault("authorcount", 0L);
+        if (authorCount == 1) {
+            String author = getAuthorDetail(attributes, "author", "email");
+            if (StringUtils.isNotBlank(author)) {
+                sb.append(author).append(LINE_SEPARATOR);
+            }
+        } else if (authorCount > 1) {
+            String authors = LongStream.rangeClosed(1, authorCount).mapToObj(i -> {
+                return getAuthorDetail(attributes, "author_" + i, "email_" + i);
+            }).collect(Collectors.joining("; "));
+
+            if (StringUtils.isNotBlank(authors)) {
+                sb.append(authors).append(LINE_SEPARATOR);
+            }
         }
-        return sb.toString();
+    }
+
+    private String getAuthorDetail(Map<String, Object> attributes, String authorKey, String emailKey) {
+        String author = attributes.getOrDefault(authorKey, "").toString();
+        String email = attributes.getOrDefault(emailKey, "").toString();
+        if (StringUtils.isNotBlank(email)) {
+            email = " <" + email + ">";
+        }
+
+        return (author + email).trim();
     }
 
     private String unescapeContent(String content) {
@@ -758,7 +794,36 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private void appendChildBlocks(StructuralNode node, StringBuilder sb) {
-        node.getBlocks().forEach(block -> sb.append(block.convert()).append(LINE_SEPARATOR));
+        appendChildBlocks(node, sb, false);
+    }
+
+    private void appendChildBlocks(StructuralNode parentNode, StringBuilder sb, boolean join) {
+        final boolean isParentAListItem = parentNode instanceof ListItem || parentNode instanceof DescriptionListEntry;
+        parentNode.getBlocks().forEach(childNode -> {
+            String childNodeValue = childNode.convert();
+            if (StringUtils.isNotBlank(childNodeValue)) {
+                if (isParentAListItem && (sb.toString().contains("+" + LINE_SEPARATOR) || !(childNode instanceof List || childNode instanceof DescriptionList))) {
+                    sb.append('+').append(LINE_SEPARATOR);
+                }
+                sb.append(childNodeValue);
+                if (!StringUtils.endsWith(childNodeValue, LINE_SEPARATOR)) {
+                    sb.append(LINE_SEPARATOR);
+                }
+            }
+        });
+    }
+
+    private void appendTrailingNewLine(StringBuilder sb){
+        if(!sb.toString().endsWith(LINE_SEPARATOR + LINE_SEPARATOR)){
+            sb.append(LINE_SEPARATOR);
+        }
+    }
+
+    private void appendSource(Block node, StringBuilder sb) {
+        String source = node.getSource();
+        if (StringUtils.isNotBlank(source)) {
+            sb.append(source).append(LINE_SEPARATOR);
+        }
     }
 
     private void appendTitle(StructuralNode node, StringBuilder sb) {
