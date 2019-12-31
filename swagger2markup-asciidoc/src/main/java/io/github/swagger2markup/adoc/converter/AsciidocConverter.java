@@ -161,8 +161,6 @@ public class AsciidocConverter extends StringConverter {
                 return convertList((List) node);
             case "list_item":
                 return convertListItem((ListItem) node);
-            case "descriptionListEntry":
-                return convertDescriptionListEntry((DescriptionListEntry) node, true);
             default:
                 logger.debug("Don't know how to convert: " + transform);
                 return null;
@@ -547,30 +545,30 @@ public class AsciidocConverter extends StringConverter {
 
     private String convertDescriptionList(DescriptionList node) {
         logger.debug("convertDescriptionList");
-        StringBuilder result = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
 
-        appendTitle(node, result);
+        appendTitle(node, sb);
         String style = Optional.ofNullable(node.getStyle()).orElse("");
         switch (style) {
             case STYLE_HORIZONTAL:
-                result.append(ATTRIBUTES_BEGIN).append(STYLE_HORIZONTAL).append(ATTRIBUTES_END).append(LINE_SEPARATOR);
-                node.getItems().forEach(item -> result.append(convertDescriptionListEntry(item, false)).append(LINE_SEPARATOR));
+                sb.append(ATTRIBUTES_BEGIN).append(STYLE_HORIZONTAL).append(ATTRIBUTES_END).append(LINE_SEPARATOR);
+                node.getItems().forEach(item -> sb.append(convertDescriptionListEntry(item, node.getLevel(), false)).append(LINE_SEPARATOR));
                 break;
             case STYLE_Q_AND_A:
-                result.append(ATTRIBUTES_BEGIN).append(STYLE_Q_AND_A).append(ATTRIBUTES_END).append(LINE_SEPARATOR);
+                sb.append(ATTRIBUTES_BEGIN).append(STYLE_Q_AND_A).append(ATTRIBUTES_END).append(LINE_SEPARATOR);
             default:
-                node.getItems().forEach(item -> result.append(convertDescriptionListEntry(item, true)).append(LINE_SEPARATOR));
+                node.getItems().forEach(item -> sb.append(convertDescriptionListEntry(item, node.getLevel(), true)).append(LINE_SEPARATOR));
                 break;
         }
-        result.append(LINE_SEPARATOR);
+        sb.append(LINE_SEPARATOR);
 
-        return result.toString();
+        return sb.toString();
     }
 
-    private String convertDescriptionListEntry(DescriptionListEntry node, Boolean descriptionOnNewLine) {
+    private String convertDescriptionListEntry(DescriptionListEntry node, int level, Boolean descriptionOnNewLine) {
         logger.debug("convertDescriptionListEntry");
         StringBuilder result = new StringBuilder();
-        node.getTerms().forEach(term -> result.append(Optional.ofNullable(term.getSource()).orElse("")).append(MARKER_D_LIST_ITEM).append(LINE_SEPARATOR));
+        node.getTerms().forEach(term -> result.append(Optional.ofNullable(term.getSource()).orElse("")).append(repeat(level + 1, MARKER_D_LIST_ITEM)).append(LINE_SEPARATOR));
         ListItem description = node.getDescription();
         if (null != description) {
             if (descriptionOnNewLine) {

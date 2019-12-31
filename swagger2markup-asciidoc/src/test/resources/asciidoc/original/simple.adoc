@@ -1,0 +1,28 @@
+= Simple Inventory API
+You <you@your-company.com>
+v1.0.0
+
+== Overview
+This is a simple API
+
+=== License
+[%hardbreaks]
+http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
+
+== Servers
+* https://{username}.gigantic-server.com:{port}/{basePath}
++
+The production API server
++
+.Variables
+username:: *this* __value__ is assigned by the service provider, in this example `gigantic-server.com`
+  Possible Values::: Any
+  Default::: demo
+port::
+  Possible Values:::
+  - 8443
+  - 443
+  Default::: 8443
+basePath::
+  Possible Values::: Any
+  Default::: v2

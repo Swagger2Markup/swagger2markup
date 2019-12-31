@@ -16,7 +16,7 @@ public class Delimiters {
     public static final String DOCUMENT_TITLE = "= ";
     public static final String LINE_SEPARATOR = "\n";
     public static final String MARKER_LIST_ITEM = "*";
-    public static final String MARKER_D_LIST_ITEM = "::";
+    public static final String MARKER_D_LIST_ITEM = ":";
     public static final String STYLE_HORIZONTAL = "horizontal";
     public static final String STYLE_Q_AND_A = "qanda";
     public static final String STYLE_SOURCE = "source";

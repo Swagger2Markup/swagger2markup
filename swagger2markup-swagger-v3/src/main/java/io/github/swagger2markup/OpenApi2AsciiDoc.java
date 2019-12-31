@@ -11,12 +11,15 @@ import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
 import org.asciidoctor.jruby.ast.impl.ContentNodeImpl;
+import org.asciidoctor.jruby.ast.impl.DescriptionListEntryImpl;
+import org.asciidoctor.jruby.ast.impl.DescriptionListImpl;
 import org.asciidoctor.jruby.ast.impl.NodeConverter;
 import org.asciidoctor.jruby.extension.internal.JRubyProcessor;
 import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
 import org.asciidoctor.jruby.internal.RubyHashUtil;
 import org.asciidoctor.jruby.internal.RubyUtils;
 import org.jruby.Ruby;
+import org.jruby.RubyArray;
 import org.jruby.RubyHash;
 import org.jruby.runtime.builtin.IRubyObject;
 
@@ -67,11 +70,14 @@ public class OpenApi2AsciiDoc {
 //                    put("cols", "<,a,<,a");
 //                }});
                 if (!variables.isEmpty()) {
-                    DescriptionList variablesList = createDefinitionList(listItem, new HashMap<>(), new HashMap<>());
+                    DescriptionListImpl variablesList = createDefinitionList(listItem, new HashMap<>(), new HashMap<>());
                     variablesList.setCaption("Variables");
+                    RubyArray terms = JRubyRuntimeContext.get(variablesList).newArray();
 
                     variables.forEach((name, variable) -> {
-                        processor.createListItem(variablesList, name);
+//                        DescriptionListEntryImpl variableName = createDescriptionListEntry(variablesList, name);
+                        ListItem variableName = processor.createListItem(variablesList, name);
+                        terms.add(variableName);
 
 //                        java.util.List<String> possibleValues = variable.getEnum();
 //                        if(null != possibleValues && !possibleValues.isEmpty()){
@@ -97,7 +103,8 @@ public class OpenApi2AsciiDoc {
 //                            processor.createTableCell(descriptionColumn, "");
 //                        }
                     });
-
+                    DescriptionListEntryImpl variablesListEntry = new DescriptionListEntryImpl(terms);
+                    variablesList.append(variablesListEntry);
                     listItem.append(variablesList);
                 }
                 uList.append(listItem);
@@ -189,7 +196,7 @@ public class OpenApi2AsciiDoc {
         }
     }
 
-    public List createList(ContentNode parent, String context, Map<String, Object> attributes, Map<String, Object> options) {
+    private List createList(ContentNode parent, String context, Map<String, Object> attributes, Map<String, Object> options) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
@@ -203,7 +210,7 @@ public class OpenApi2AsciiDoc {
         return (List) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_CLASS, parameters);
     }
 
-    public DescriptionList createDefinitionList(ContentNode parent, Map<String, Object> attributes, Map<String, Object> options) {
+    private DescriptionListImpl createDefinitionList(ContentNode parent, Map<String, Object> attributes, Map<String, Object> options) {
         Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
 
         options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
@@ -214,6 +221,12 @@ public class OpenApi2AsciiDoc {
                 ((ContentNodeImpl) parent).getRubyObject(),
                 RubyUtils.toSymbol(rubyRuntime, "dlist"),
                 convertedOptions};
-        return (DescriptionList) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.DEFINITIONLIST_CLASS, parameters);
+        return (DescriptionListImpl) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.DEFINITIONLIST_CLASS, parameters);
+    }
+
+    private DescriptionListEntryImpl createDescriptionListEntry(final org.asciidoctor.ast.DescriptionList parent, final String text) {
+        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
+
+        return (DescriptionListEntryImpl) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.DEFINITIONLIST_ITEM_CLASS, ((DescriptionListImpl) parent).getRubyObject());
     }
 }

@@ -206,12 +206,12 @@ It's time for a top 5 list, made using the `reversed` option on an ordered list!
 How about a list with some terms?
 
 * Fruits
-Apple::
+Apple::::
 
 The round fruit of a tree of the rose family, which typically has thin red or green skin and crisp flesh.
 Yes, I said _flesh_.
 
-Pear::
+Pear::::
 
 A yellowish- or brownish-green edible fruit that is typically narrow at the stalk and wider toward the base, with sweet, slightly gritty flesh.
 More flesh.
@@ -219,7 +219,7 @@ Mmmmm.
 
 
 * Vegetables
-Carrot::
+Carrot::::
 
 An orange-colored root eaten as a vegetable.
 Beware, it's a favorite of the Wolpertinger.
@@ -410,17 +410,17 @@ Wait.
 What?
 Where is this story going?
 
-`<span>`::
+`<span>`:::
 
 an html tag that makes me crazy
 
-align::
+align:::
 
 something I never get going in the right direction.
 Also has to do with my poor verbal communication skills
 
-float::
-style::
+float:::
+style:::
 
 don't make me laugh
 

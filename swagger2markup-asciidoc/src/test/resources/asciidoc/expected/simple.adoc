@@ -1,21 +1,22 @@
 = Simple Inventory API
- <you@your-company.com>
+You <you@your-company.com>
 v1.0.0
-
 :tip-caption: Tip
 :appendix-caption: Appendix
 :appendix-refsig: Appendix
+:authorinitials: Y
 :toc-title: Table of Contents
 :iconsdir: ./images/icons
-:openapi: 3.0.0
+:author: You
 :warning-caption: Warning
 :figure-caption: Figure
 :attribute-missing: skip
 :section-refsig: Section
 :toc-placement: auto
 :important-caption: Important
-:authors:  <you@your-company.com>
+:authors: You
 :note-caption: Note
+:firstname: You
 :stylesdir: .
 :untitled-label: Untitled
 :max-include-depth: 64
@@ -26,7 +27,9 @@ v1.0.0
 :safe-mode-name: secure
 :table-caption: Table
 :part-refsig: Part
+:authorcount: 1
 :example-caption: Example
+:email: you@your-company.com
 :version-label: Version
 :revnumber: 1.0.0
 :last-update-label: Last updated
@@ -42,7 +45,7 @@ This is a simple API
 http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 
 == Servers
-* __URL__: https://{username}.gigantic-server.com:{port}/{basePath}
+* https://{username}.gigantic-server.com:{port}/{basePath}
 +
 The production API server
 
@@ -84,7 +87,6 @@ Any
 Default::
 
 v2
-
 
 
 
