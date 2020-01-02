@@ -22,7 +22,7 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     }
 
     public DocumentImpl(Document parent, String context, Map<String, Object> attributes, List<String> roles,
-                        List<String> options, Object content, List<StructuralNode> blocks, String contentModel,
+                        Object content, List<StructuralNode> blocks, String contentModel,
                         List<String> subs) {
         super(parent, context, attributes, roles, content, blocks, contentModel, subs);
     }

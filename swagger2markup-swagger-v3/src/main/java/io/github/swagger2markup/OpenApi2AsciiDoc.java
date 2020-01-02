@@ -30,7 +30,7 @@ public class OpenApi2AsciiDoc {
         if (!openAPI.getServers().isEmpty()) {
             Section serversSection = new SectionImpl(document);
             serversSection.setTitle(TITLE_SERVERS);
-            List uList = new ListImpl(serversSection, "ulist", null, new ArrayList<>());
+            List uList = new ListImpl(serversSection, "ulist");
 
             openAPI.getServers().forEach(server -> {
                 ListItem listItem = new ListItemImpl(uList, "__URL__: " + server.getUrl());
@@ -38,37 +38,45 @@ public class OpenApi2AsciiDoc {
                 ServerVariables variables = server.getVariables();
                 if (!variables.isEmpty()) {
                     java.util.List<DescriptionListEntry> items = new ArrayList<>();
-                    DescriptionListImpl variablesList = new DescriptionListImpl(listItem, "dlist", null, items);
+                    DescriptionListImpl variablesList = new DescriptionListImpl(listItem, items);
                     variablesList.setTitle("Variables");
 
                     variables.forEach((name, variable) -> {
-                        DescriptionListEntryImpl variableName = new DescriptionListEntryImpl(variablesList);
-                        variableName.setDescription(new ListItemImpl(variableName, name));
+                        DescriptionListEntryImpl variableNameEntry = new DescriptionListEntryImpl(variablesList);
+                        variableNameEntry.addTerm(new ListItemImpl(variableNameEntry, name));
+
+                        ListItemImpl variableDescription = new ListItemImpl(variableNameEntry, "");
+                        appendDescription(variableDescription, Optional.ofNullable(variable.getDescription()).orElse(""));
+                        variableNameEntry.setDescription(variableDescription);
+
+                        java.util.List<DescriptionListEntry> variableValueItems = new ArrayList<>();
+                        DescriptionListImpl variableValueList = new DescriptionListImpl(variablesList, variableValueItems);
+                        DescriptionListEntryImpl possibleValuesEntry = new DescriptionListEntryImpl(variableValueList);
+                        possibleValuesEntry.addTerm(new ListItemImpl(possibleValuesEntry, "Possible Values"));
 
                         java.util.List<String> possibleValues = variable.getEnum();
-//                        if(null != possibleValues && !possibleValues.isEmpty()){
-//                            Document possibleValuesDocument = processor.createDocument(document);
-//                            List possibleValuesList = createList(possibleValuesDocument, "ulist", new HashMap<>(), new HashMap<>());
-//                            possibleValues.forEach(possibleValue -> {
-//                                ListItem possibleValueItem = processor.createListItem(possibleValuesList, possibleValue);
-//                                possibleValuesList.append(possibleValueItem);
-//                            });
-//                            processor.createTableCell(possibleValuesColumn, possibleValuesDocument);
-//                        } else {
-//                            processor.createTableCell(possibleValuesColumn, "");
-//                        }
-//
-//                        processor.createTableCell(defaultValueColumn, variable.getDefault());
-//
-//                        String description = variable.getDescription();
-//                        if (StringUtils.isNotBlank(description)) {
-//                            Document cellDocument = processor.createDocument(document);
-//                            appendDescription(cellDocument, variable.getDescription());
-//                            processor.createTableCell(descriptionColumn, cellDocument);
-//                        } else {
-//                            processor.createTableCell(descriptionColumn, "");
-//                        }
-                        items.add(variableName);
+                        if(null != possibleValues && !possibleValues.isEmpty()){
+                            List possibleValuesList = new ListImpl(possibleValuesEntry, "ulist");
+                            possibleValues.forEach(possibleValue -> {
+                                ListItem possibleValueItem =new ListItemImpl(possibleValuesList, possibleValue);
+                                possibleValuesList.append(possibleValueItem);
+                            });
+                            ListItemImpl possibleValuesEntries = new ListItemImpl(possibleValuesEntry, "");
+                            possibleValuesEntries.append(possibleValuesList);
+                            possibleValuesEntry.setDescription(possibleValuesEntries);
+                        } else {
+                            possibleValuesEntry.setDescription(new ListItemImpl(possibleValuesEntry, "Any"));
+                        }
+
+                        DescriptionListEntryImpl defaultEntry = new DescriptionListEntryImpl(variableValueList);
+                        defaultEntry.addTerm(new ListItemImpl(defaultEntry, "Default"));
+                        defaultEntry.setDescription(new ListItemImpl(defaultEntry, variable.getDefault()));
+
+                        variableValueItems.add(possibleValuesEntry);
+                        variableValueItems.add(defaultEntry);
+
+                        variableDescription.append(variableValueList);
+                        items.add(variableNameEntry);
                     });
                     listItem.append(variablesList);
                 }

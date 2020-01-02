@@ -4,6 +4,8 @@ import org.asciidoctor.ast.DescriptionList;
 import org.asciidoctor.ast.DescriptionListEntry;
 import org.asciidoctor.ast.StructuralNode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,29 +13,29 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
 
     private List<DescriptionListEntry> items;
 
-    public DescriptionListImpl(StructuralNode parent, String context, Object content, List<DescriptionListEntry> items) {
-        super(parent, context, content);
-        this.items = items;
+    public DescriptionListImpl(StructuralNode parent) {
+        this(parent, new ArrayList<>());
     }
 
-    public DescriptionListImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
-                               List<String> options, Object content, List<StructuralNode> blocks, String contentModel,
+    public DescriptionListImpl(StructuralNode parent, List<DescriptionListEntry> items) {
+        this(parent, null, items);
+    }
+
+    public DescriptionListImpl(StructuralNode parent, Object content, List<DescriptionListEntry> items) {
+        this(parent, new HashMap<>(), new ArrayList<>(), content, new ArrayList<>(), "", new ArrayList<>(), items);
+    }
+
+    public DescriptionListImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles,
+                               Object content, List<StructuralNode> blocks, String contentModel,
                                List<String> subs, List<DescriptionListEntry> items) {
-        super(parent, context, attributes, roles, content, blocks, contentModel, subs);
-        this.items = items;
+        this(parent, attributes, roles, content, blocks, calculateLevel(parent), contentModel, subs, items);
     }
 
-    public DescriptionListImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
-                               List<String> options, Object content, List<StructuralNode> blocks, Integer level,
+    public DescriptionListImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles,
+                               Object content, List<StructuralNode> blocks, Integer level,
                                String contentModel, List<String> subs, List<DescriptionListEntry> items) {
-        super(parent, context, attributes, roles, content, blocks, level, contentModel, subs);
+        super(parent, "dlist", attributes, roles, content, blocks, level, contentModel, subs);
         this.items = items;
-    }
-
-    public DescriptionListImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
-                               List<String> options, Object content, List<StructuralNode> blocks,
-                               int level, String contentModel, List<String> subs) {
-        super(parent, context, attributes, roles, content, blocks, level, contentModel, subs);
     }
 
     @Override
@@ -52,4 +54,10 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
         return convert();
     }
 
+    private static Integer calculateLevel(StructuralNode parent) {
+        int level = 1;
+        if (parent instanceof DescriptionList)
+            level = parent.getLevel() + 1;
+        return level;
+    }
 }
