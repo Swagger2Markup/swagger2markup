@@ -37,18 +37,11 @@ For a detailed view of what has changed, refer to the https://github.com/asciido
 
 == 0.1.4 (2013-09-05) - @mojavelinux
 Performance::
-
 * 15% increase in speed compared to 0.1.3
 
-
 Enhancements::
-
 * updated xref inline macro to support inter-document references (#417)
 
-
 Bug Fixes::
-
 * lowercase attribute names passed to API (#508)
-
-
 

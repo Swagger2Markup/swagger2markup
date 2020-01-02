@@ -20,7 +20,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(Parameterized.class)
 public class OpenApi2AsciiDocTest {
 
-    private OpenApi2AsciiDoc openApi2AsciiDoc = new OpenApi2AsciiDoc(Asciidoctor.Factory.create());
+    private OpenApi2AsciiDoc openApi2AsciiDoc = new OpenApi2AsciiDoc();
     final private String openApiFile;
     final private String expectedAsciiDoc;
 

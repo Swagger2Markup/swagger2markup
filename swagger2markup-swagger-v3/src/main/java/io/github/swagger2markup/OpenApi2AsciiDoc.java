@@ -1,31 +1,16 @@
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.adoc.converter.AsciidocConverter;
+import io.github.swagger2markup.adoc.ast.impl.*;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.servers.ServerVariables;
 import org.apache.commons.lang3.StringUtils;
-import org.asciidoctor.Asciidoctor;
-import org.asciidoctor.Options;
 import org.asciidoctor.ast.*;
-import org.asciidoctor.jruby.ast.impl.ContentNodeImpl;
-import org.asciidoctor.jruby.ast.impl.DescriptionListEntryImpl;
-import org.asciidoctor.jruby.ast.impl.DescriptionListImpl;
-import org.asciidoctor.jruby.ast.impl.NodeConverter;
-import org.asciidoctor.jruby.extension.internal.JRubyProcessor;
-import org.asciidoctor.jruby.internal.JRubyRuntimeContext;
-import org.asciidoctor.jruby.internal.RubyHashUtil;
-import org.asciidoctor.jruby.internal.RubyUtils;
-import org.jruby.Ruby;
-import org.jruby.RubyArray;
-import org.jruby.RubyHash;
-import org.jruby.runtime.builtin.IRubyObject;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class OpenApi2AsciiDoc {
@@ -33,53 +18,34 @@ public class OpenApi2AsciiDoc {
     public static final String TITLE_LICENSE = "License";
     public static final String TITLE_SERVERS = "Servers";
     public static final String TITLE_OVERVIEW = "Overview";
-    private final Asciidoctor asciidoctor;
-    private final AsciidocConverter converter;
-    private final HashMap<String, Object> asciiDocOpts;
-    private final JRubyProcessor processor;
-
-    public OpenApi2AsciiDoc(Asciidoctor asciidoctor) {
-        asciiDocOpts = new HashMap<String, Object>() {{
-            put("backend", AsciidocConverter.NAME);
-        }};
-        this.asciidoctor = asciidoctor;
-        this.asciidoctor.javaConverterRegistry().register(AsciidocConverter.class, AsciidocConverter.NAME);
-        converter = new AsciidocConverter(AsciidocConverter.NAME, new HashMap<>());
-        processor = new JRubyProcessor();
-    }
 
     public String translate(OpenAPI openAPI) {
-        Document rootDocument = asciidoctor.load("", asciiDocOpts);
+        Document rootDocument = new DocumentImpl();
         addInfoSection(rootDocument, openAPI);
         addServersSection(rootDocument, openAPI);
-        return converter.convert(rootDocument, "document", new HashMap<>());
+        return rootDocument.convert();
     }
 
     private void addServersSection(Document document, OpenAPI openAPI) {
         if (!openAPI.getServers().isEmpty()) {
-            Section serversSection = processor.createSection(document);
+            Section serversSection = new SectionImpl(document);
             serversSection.setTitle(TITLE_SERVERS);
-            processor.parseContent(serversSection, new java.util.ArrayList<>());
-            List uList = createList(serversSection, "ulist", new HashMap<>(), new HashMap<>());
+            List uList = new ListImpl(serversSection, "ulist", null, new ArrayList<>());
 
             openAPI.getServers().forEach(server -> {
-                ListItem listItem = processor.createListItem(uList, "__URL__: " + server.getUrl());
+                ListItem listItem = new ListItemImpl(uList, "__URL__: " + server.getUrl());
                 appendDescription(listItem, server.getDescription());
                 ServerVariables variables = server.getVariables();
-//                Table table = processor.createTable(listItem, new HashMap<String, Object>(){{
-//                    put("cols", "<,a,<,a");
-//                }});
                 if (!variables.isEmpty()) {
-                    DescriptionListImpl variablesList = createDefinitionList(listItem, new HashMap<>(), new HashMap<>());
-                    variablesList.setCaption("Variables");
-                    RubyArray terms = JRubyRuntimeContext.get(variablesList).newArray();
+                    java.util.List<DescriptionListEntry> items = new ArrayList<>();
+                    DescriptionListImpl variablesList = new DescriptionListImpl(listItem, "dlist", null, items);
+                    variablesList.setTitle("Variables");
 
                     variables.forEach((name, variable) -> {
-//                        DescriptionListEntryImpl variableName = createDescriptionListEntry(variablesList, name);
-                        ListItem variableName = processor.createListItem(variablesList, name);
-                        terms.add(variableName);
+                        DescriptionListEntryImpl variableName = new DescriptionListEntryImpl(variablesList);
+                        variableName.setDescription(new ListItemImpl(variableName, name));
 
-//                        java.util.List<String> possibleValues = variable.getEnum();
+                        java.util.List<String> possibleValues = variable.getEnum();
 //                        if(null != possibleValues && !possibleValues.isEmpty()){
 //                            Document possibleValuesDocument = processor.createDocument(document);
 //                            List possibleValuesList = createList(possibleValuesDocument, "ulist", new HashMap<>(), new HashMap<>());
@@ -102,9 +68,8 @@ public class OpenApi2AsciiDoc {
 //                        } else {
 //                            processor.createTableCell(descriptionColumn, "");
 //                        }
+                        items.add(variableName);
                     });
-                    DescriptionListEntryImpl variablesListEntry = new DescriptionListEntryImpl(terms);
-                    variablesList.append(variablesListEntry);
                     listItem.append(variablesList);
                 }
                 uList.append(listItem);
@@ -143,14 +108,15 @@ public class OpenApi2AsciiDoc {
             String author = Optional.ofNullable(contact.getName()).orElse("");
             String email = contact.getEmail();
             if (StringUtils.isNotBlank(email)) {
-                author += " <" + email + ">";
+                rootDocument.setAttribute("email", email, true);
             }
-            rootDocument.setAttribute("authors", author, true);
+            rootDocument.setAttribute("author", author, true);
+            rootDocument.setAttribute("authorcount", 1L, true);
         }
     }
 
     private void addOverview(Document document, Info info) {
-        Section overviewDoc = processor.createSection(document);
+        Section overviewDoc = new SectionImpl(document);
         overviewDoc.setTitle(TITLE_OVERVIEW);
 
         appendDescription(overviewDoc, info.getDescription());
@@ -162,8 +128,7 @@ public class OpenApi2AsciiDoc {
     private void addLicenseInfo(Section overviewDoc, Info info) {
         License license = info.getLicense();
         if (null != license) {
-            Map<Object, Object> options = new HashMap<>();
-            Section licenseInfo = processor.createSection(overviewDoc, options);
+            Section licenseInfo = new SectionImpl(overviewDoc);
             licenseInfo.setTitle(TITLE_LICENSE);
             StringBuilder sb = new StringBuilder();
             if (StringUtils.isNotBlank(license.getUrl())) {
@@ -173,10 +138,12 @@ public class OpenApi2AsciiDoc {
             if (StringUtils.isNotBlank(license.getUrl())) {
                 sb.append("]");
             }
-            licenseInfo.append(processor.createBlock(licenseInfo, "paragraph", sb.toString(),
+            BlockImpl paragraph = new BlockImpl(licenseInfo, "paragraph",
                     new HashMap<String, Object>() {{
                         put("hardbreaks-option", "");
-                    }}, options));
+                    }});
+            paragraph.setSource(sb.toString());
+            licenseInfo.append(paragraph);
             overviewDoc.append(licenseInfo);
         }
     }
@@ -184,49 +151,17 @@ public class OpenApi2AsciiDoc {
     private void addTermsOfServiceInfo(Section overviewDoc, Info info) {
         String termsOfService = info.getTermsOfService();
         if (StringUtils.isNotBlank(termsOfService)) {
-            Block paragraph = processor.createBlock(overviewDoc, "paragraph", termsOfService);
+            Block paragraph = new BlockImpl(overviewDoc, "paragraph");
+            paragraph.setSource(termsOfService);
             overviewDoc.append(paragraph);
         }
     }
 
     private void appendDescription(StructuralNode node, String description) {
         if (StringUtils.isNotBlank(description)) {
-            Block paragraph = processor.createBlock(node, "paragraph", description);
+            Block paragraph = new BlockImpl(node, "paragraph");
+            paragraph.setSource(description);
             node.append(paragraph);
         }
-    }
-
-    private List createList(ContentNode parent, String context, Map<String, Object> attributes, Map<String, Object> options) {
-        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
-
-        options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
-
-        RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-
-        IRubyObject[] parameters = {
-                ((ContentNodeImpl) parent).getRubyObject(),
-                RubyUtils.toSymbol(rubyRuntime, context),
-                convertedOptions};
-        return (List) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.LIST_CLASS, parameters);
-    }
-
-    private DescriptionListImpl createDefinitionList(ContentNode parent, Map<String, Object> attributes, Map<String, Object> options) {
-        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
-
-        options.put(Options.ATTRIBUTES, RubyHashUtil.convertMapToRubyHashWithStrings(rubyRuntime, attributes));
-
-        RubyHash convertedOptions = RubyHashUtil.convertMapToRubyHashWithSymbols(rubyRuntime, options);
-
-        IRubyObject[] parameters = {
-                ((ContentNodeImpl) parent).getRubyObject(),
-                RubyUtils.toSymbol(rubyRuntime, "dlist"),
-                convertedOptions};
-        return (DescriptionListImpl) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.DEFINITIONLIST_CLASS, parameters);
-    }
-
-    private DescriptionListEntryImpl createDescriptionListEntry(final org.asciidoctor.ast.DescriptionList parent, final String text) {
-        Ruby rubyRuntime = JRubyRuntimeContext.get(parent);
-
-        return (DescriptionListEntryImpl) NodeConverter.createASTNode(rubyRuntime, NodeConverter.NodeType.DEFINITIONLIST_ITEM_CLASS, ((DescriptionListImpl) parent).getRubyObject());
     }
 }

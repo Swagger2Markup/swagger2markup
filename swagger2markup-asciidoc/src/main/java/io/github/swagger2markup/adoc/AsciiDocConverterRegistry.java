@@ -1,4 +1,4 @@
-package io.github.swagger2markup.adoc.converter;
+package io.github.swagger2markup.adoc;
 
 import org.asciidoctor.Asciidoctor;
 import org.asciidoctor.jruby.converter.spi.ConverterRegistry;

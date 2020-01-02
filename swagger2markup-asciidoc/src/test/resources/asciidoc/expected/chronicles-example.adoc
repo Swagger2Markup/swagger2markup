@@ -122,13 +122,11 @@ This potion for a sample document contains the following ingredients, which are 
 ** syntax highlighted source code
 *** non-syntax highlighted source code or just a listing block
 
-
 * quote block
 ** verse block
 *** table with some cell formatting
 **** sequential paragraphs
 ***** admonition blocks, but use them sparingly
-
 
 *** bullet list with nesting
 
@@ -136,16 +134,11 @@ This potion for a sample document contains the following ingredients, which are 
 ** definition list
 *** sidebar
 
-
 * example block
 ** block image (no inline images)
 *** inline formatting in a paragraph
 **** two fresh Burdockian leaves
 ***** They must be harvested by the light of the teal moons.
-
-
-
-
 
 Are you square?
 
@@ -166,15 +159,11 @@ What is there to do?
 .. Sneeze
 ... Sneeze some more
 
-
 . Find section on Burdockian
 .. Review its characteristics
 ... Take a picture of the diagram of its leaves
 .... Don't rip out the picture like a troglodyte
 ..... Don't do it, I'm watching you
-
-
-
 
 . Put on your hiking boots
 . Freeze your butt off on the side of a mountain at midnight
@@ -189,8 +178,6 @@ Let's skip a few steps and start counting from 10.
 ... lowerroman (iii)
 ... lowerroman (iv)
 .... upperalpha (A)
-
-
 
 . arabic (11)
 
@@ -207,24 +194,17 @@ How about a list with some terms?
 
 * Fruits
 Apple::::
-
 The round fruit of a tree of the rose family, which typically has thin red or green skin and crisp flesh.
 Yes, I said _flesh_.
-
 Pear::::
-
 A yellowish- or brownish-green edible fruit that is typically narrow at the stalk and wider toward the base, with sweet, slightly gritty flesh.
 More flesh.
 Mmmmm.
 
-
 * Vegetables
 Carrot::::
-
 An orange-colored root eaten as a vegetable.
 Beware, it's a favorite of the Wolpertinger.
-
-
 
 ===== Are You Still Here?
 .Move, move, move!
@@ -411,19 +391,13 @@ What?
 Where is this story going?
 
 `<span>`:::
-
 an html tag that makes me crazy
-
 align:::
-
 something I never get going in the right direction.
 Also has to do with my poor verbal communication skills
-
 float:::
 style:::
-
 don't make me laugh
-
 
 Does anyone have the time?
 

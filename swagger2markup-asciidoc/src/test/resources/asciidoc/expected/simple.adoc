@@ -52,43 +52,23 @@ The production API server
 +
 .Variables
 username::
-
 *this* __value__ is assigned by the service provider, in this example `gigantic-server.com`
 Possible Values::
-
 Any
-
 Default::
-
 demo
 
-
-
 port::
-
 Possible Values::
-
 - 8443
 - 443
 
-
 Default::
-
 8443
 
-
-
 basePath::
-
 Possible Values::
-
 Any
-
 Default::
-
 v2
-
-
-
-
 
