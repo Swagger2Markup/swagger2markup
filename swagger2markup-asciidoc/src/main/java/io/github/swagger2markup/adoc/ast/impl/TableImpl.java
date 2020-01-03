@@ -1,13 +1,11 @@
 package io.github.swagger2markup.adoc.ast.impl;
 
-import org.asciidoctor.ast.Column;
-import org.asciidoctor.ast.Row;
-import org.asciidoctor.ast.StructuralNode;
-import org.asciidoctor.ast.Table;
+import org.asciidoctor.ast.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.List;
 
 public class TableImpl extends StructuralNodeImpl implements Table {
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -16,11 +14,30 @@ public class TableImpl extends StructuralNodeImpl implements Table {
 
     private static final String GRID_ATTR = "grid";
 
-    private Rows rows;
+    private RowList headerRows;
+    private RowList bodyRows;
+    private RowList footerRows;
+
+    private List<Column> columns = new ArrayList<>();
+
+    public TableImpl(StructuralNode parent) {
+        this(parent, "table", new HashMap<>(), new ArrayList<>(), null, new ArrayList<>(), calculateLevel(parent), "", new ArrayList<>());
+    }
+
+    public TableImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles) {
+        this(parent, "table", attributes, roles, null, new ArrayList<>(), calculateLevel(parent), "", new ArrayList<>());
+    }
+
+    public TableImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles, Integer level) {
+        this(parent, "table", attributes, roles, null, new ArrayList<>(), level, "", new ArrayList<>());
+    }
 
     public TableImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
-                     Object content, List<StructuralNode> blocks, int level, String contentModel, List<String> subs) {
+                     Object content, List<StructuralNode> blocks, Integer level, String contentModel, List<String> subs) {
         super(parent, context, attributes, roles, content, blocks, level, contentModel, subs);
+        this.headerRows = new RowList(new ArrayList<>());
+        this.bodyRows = new RowList(new ArrayList<>());
+        this.footerRows = new RowList(new ArrayList<>());
     }
 
     @Override
@@ -50,61 +67,117 @@ public class TableImpl extends StructuralNodeImpl implements Table {
 
     @Override
     public List<Column> getColumns() {
-        throw new UnsupportedOperationException("Not implemented, yet");
-    }
-
-    @Override
-    public List<Row> getFooter() {
-        return rows.getFooter();
-    }
-
-    @Override
-    public List<Row> getBody() {
-        return rows.getBody();
+        return columns;
     }
 
     @Override
     public List<Row> getHeader() {
-        return rows.getHeader();
+        return headerRows;
     }
 
-    private class Rows {
-
-        private final RowList headerRows;
-        private final RowList bodyRows;
-        private RowList footerRows;
-
-        private Rows(RowList headerRows, RowList bodyRows) {
-            this.headerRows = headerRows;
-            this.bodyRows = bodyRows;
-            this.footerRows = new RowList(new ArrayList<>());
-        }
-
-        private Rows(RowList headerRows, RowList bodyRows, RowList footerRows) {
-            this.headerRows = headerRows;
-            this.bodyRows = bodyRows;
-            this.footerRows = footerRows;
-        }
-
-        private RowList getHeader() {
-            return headerRows;
-        }
-
-        private RowList getBody() {
-            return bodyRows;
-        }
-
-        private RowList getFooter() {
-            return footerRows;
-        }
-
-        private void setFooterRow(Row row) {
-            footerRows.clear();
-            footerRows.add(row);
-        }
-
+    public void setHeaderRow(Row row) {
+        headerRows.clear();
+        headerRows.add(row);
+        scanRowForColumns(row);
     }
 
+    public void setHeaderRow(List<Cell> cells) {
+        setHeaderRow(new RowImpl(cells));
+    }
+
+    public void setHeaderRow(String... documentContents) {
+        headerRows.clear();
+        headerRows.add(generateRow(documentContents));
+    }
+
+    private RowImpl generateRow(String[] documentContents) {
+        List<Cell> cells = new ArrayList<>();
+        for (int i = 0; i < documentContents.length; i++) {
+
+            Column column = null;
+            try {
+                column = columns.get(i);
+            } catch (Exception ignored){}
+
+            if (null == column) {
+                ColumnImpl newColumn = new ColumnImpl(this);
+                newColumn.setColumnNumber(i + 1);
+                column = newColumn;
+                addColumnAt(column, i);
+            }
+
+            Document innerDoc = new DocumentImpl();
+            Block paragraph = new BlockImpl(innerDoc, "paragraph");
+            paragraph.setSource(documentContents[i]);
+            innerDoc.append(paragraph);
+            cells.add(new CellImpl(column, innerDoc));
+
+        }
+        return new RowImpl(cells);
+    }
+
+    @Override
+    public List<Row> getBody() {
+        return bodyRows;
+    }
+
+    public void setBodyRows(List<Row> rows) {
+        bodyRows.clear();
+        bodyRows.addAll(rows);
+        bodyRows.forEach(this::scanRowForColumns);
+    }
+
+    public void addRow(Row row) {
+        bodyRows.add(row);
+        scanRowForColumns(row);
+    }
+
+    public void addRow(List<Cell> cells) {
+        bodyRows.add(new RowImpl(cells));
+    }
+
+    public void addRow(String... documentContents) {
+        bodyRows.add(generateRow(documentContents));
+    }
+
+    @Override
+    public List<Row> getFooter() {
+        return footerRows;
+    }
+
+    public void setFooterRow(Row row) {
+        footerRows.clear();
+        footerRows.add(row);
+        scanRowForColumns(row);
+    }
+
+    public void setFooterRow(String... documentContents) {
+        footerRows.clear();
+        footerRows.add(generateRow(documentContents));
+    }
+
+    private void scanRowForColumns(Row row) {
+        row.getCells().forEach(cell -> {
+            Column column = cell.getColumn();
+            int i = column.getColumnNumber() - 1;
+            addColumnAt(column, i);
+        });
+    }
+
+    private void addColumnAt(Column column, int i) {
+        if (columns.size() >= i) {
+            columns.add(i, column);
+        } else {
+            while (columns.size() < i) {
+                columns.add(columns.size(), null);
+            }
+            columns.add(column);
+        }
+    }
+
+    public void setFooterRow(List<Cell> cells) {
+        setFooterRow(new RowImpl(cells));
+    }
 
     class RowList extends AbstractList<Row> {
 
@@ -136,7 +209,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
                 changed = rubyArray.add(row);
                 setAttribute("rowcount", size(), true);
             } catch (Exception e) {
-                logger.debug("Couldn't add row",e);
+                logger.debug("Couldn't add row", e);
             }
             return changed;
         }
@@ -151,7 +224,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
                 setAttribute("rowcount", size(), true);
                 return changed;
             } catch (Exception e) {
-                logger.debug("Couldn't add row",e);
+                logger.debug("Couldn't add row", e);
                 return false;
             }
         }
@@ -207,5 +280,12 @@ public class TableImpl extends StructuralNodeImpl implements Table {
             }
             return rubyArray.lastIndexOf(o);
         }
+    }
+
+    private static Integer calculateLevel(StructuralNode parent) {
+        int level = 1;
+        if (parent instanceof Table)
+            level = parent.getLevel() + 1;
+        return level;
     }
 }

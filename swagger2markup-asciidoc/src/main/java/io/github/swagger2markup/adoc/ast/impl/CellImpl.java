@@ -5,6 +5,8 @@ import org.asciidoctor.ast.Column;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Table;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +18,17 @@ public class CellImpl extends ContentNodeImpl implements Cell {
     private String style;
     private Document innerDocument;
 
-    public CellImpl(Column parent, String context, Map<String, Object> attributes, List<String> roles,
-                    int colspan, int rowspan) {
+    public CellImpl(Column parent, String text) {
+        this(parent, "table_cell", new HashMap<>(), new ArrayList<>(), 0, 0);
+        this.text = text;
+    }
+
+    public CellImpl(Column parent, Document innerDocument) {
+        this(parent, "table_cell", new HashMap<>(), new ArrayList<>(), 0, 0);
+        this.innerDocument = innerDocument;
+    }
+
+    public CellImpl(Column parent, String context, Map<String, Object> attributes, List<String> roles, int colspan, int rowspan) {
         super(parent, context, attributes, roles);
         this.colspan = colspan;
         this.rowspan = rowspan;

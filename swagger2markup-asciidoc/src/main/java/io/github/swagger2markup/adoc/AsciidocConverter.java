@@ -171,7 +171,9 @@ public class AsciidocConverter extends StringConverter {
         logger.debug("convertEmbedded");
         StringBuilder sb = new StringBuilder();
 
-        sb.append(DOCUMENT_TITLE).append(StringEscapeUtils.unescapeHtml4(node.getDoctitle())).append(LINE_SEPARATOR);
+        if(StringUtils.isNotBlank(node.getDoctitle())) {
+            sb.append(DOCUMENT_TITLE).append(StringEscapeUtils.unescapeHtml4(node.getDoctitle())).append(LINE_SEPARATOR);
+        }
         Map<String, Object> attributes = node.getAttributes();
         appendAuthors(sb, attributes);
         appendRevisionDetails(sb, attributes);
@@ -506,7 +508,16 @@ public class AsciidocConverter extends StringConverter {
 
     private String convertCell(Cell node) {
         logger.debug("convertCell");
-        return node.getSource();
+        StringBuilder sb = new StringBuilder();
+        String source = node.getSource();
+        if(StringUtils.isNotBlank(source)){
+            sb.append(source);
+        }
+        Document innerDocument = node.getInnerDocument();
+        if(null != innerDocument) {
+            appendChildBlocks(innerDocument, sb, false);
+        }
+        return sb.toString();
     }
 
     private String convertRow(Row node, java.util.List<TableCellStyle> columnStyles) {
@@ -791,6 +802,10 @@ public class AsciidocConverter extends StringConverter {
     }
 
     private void appendChildBlocks(StructuralNode parentNode, StringBuilder sb) {
+        appendChildBlocks(parentNode, sb, true);
+    }
+
+    private void appendChildBlocks(StructuralNode parentNode, StringBuilder sb, boolean addTrailingLineSeparator) {
         final boolean isParentAListItem = parentNode instanceof ListItem || parentNode instanceof DescriptionListEntry;
         parentNode.getBlocks().forEach(childNode -> {
             String childNodeValue = childNode.convert();
@@ -799,7 +814,7 @@ public class AsciidocConverter extends StringConverter {
                     sb.append('+').append(LINE_SEPARATOR);
                 }
                 sb.append(childNodeValue);
-                if (!StringUtils.endsWith(childNodeValue, LINE_SEPARATOR)) {
+                if (addTrailingLineSeparator && !StringUtils.endsWith(childNodeValue, LINE_SEPARATOR)) {
                     sb.append(LINE_SEPARATOR);
                 }
             }

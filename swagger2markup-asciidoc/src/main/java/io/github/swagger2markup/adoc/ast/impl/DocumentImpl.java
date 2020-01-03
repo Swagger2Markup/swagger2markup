@@ -4,6 +4,8 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Title;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,13 +20,13 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
     }
 
     public DocumentImpl(Document parent, String context, Object content) {
-        super(parent, context, content);
+        this(parent, context, new HashMap<>(), new ArrayList<>(), content, new ArrayList<>(), "", new ArrayList<>());
     }
 
     public DocumentImpl(Document parent, String context, Map<String, Object> attributes, List<String> roles,
                         Object content, List<StructuralNode> blocks, String contentModel,
                         List<String> subs) {
-        super(parent, context, attributes, roles, content, blocks, contentModel, subs);
+        this(parent, context, attributes, roles, content, blocks, null != parent ? parent.getLevel() + 1 : 0, contentModel, subs);
     }
 
     public DocumentImpl(Document parent, String context, Map<String, Object> attributes, List<String> roles,

@@ -14,33 +14,62 @@ This is a simple API
 http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 
 == Servers
-* __URL__: https://{username}.gigantic-server.com:{port}/{basePath}
-+
+=== __Server__: https://{username}.gigantic-server.com:{port}/{basePath}
 The production API server
 
-+
-.Variables
-username::
-+
-this value is assigned by the service provider, in this example `gigantic-server.com`
+.Server Variables
+[%header,cols=".^2a,.^9a,.^3a,.^4a"]
+|===
+<.<|Variable
 
-+
-Possible Values:::
-Any
-Default:::
-demo
 
-port::
-Possible Values:::
-* 8443
-* 443
+<.<|Description
 
-Default:::
-8443
 
-basePath::
-Possible Values:::
-Any
-Default:::
-v2
+<.<|Possible Values
+
+
+<.<|Default
+
+
+
+<.<|username
+
+
+<.<|this value is assigned by the service provider, in this example `gigantic-server.com`
+
+
+<.<|Any
+
+
+<.<|demo
+
+
+
+<.<|port
+
+
+<.<|
+<.<|8443, 443
+
+
+<.<|8443
+
+
+
+<.<|basePath
+
+
+<.<|
+<.<|Any
+
+
+<.<|v2
+
+
+
+|===
+
+== Paths
+=== /inventory
 

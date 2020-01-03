@@ -23,12 +23,14 @@ public class SourceNode extends BlockListingNode {
         String source = pop("1", "style");
         String language = pop("2", "language");
         StringBuilder options = new StringBuilder();
+        List<String> toRemove = new ArrayList<>();
         attributes.forEach((k, v) -> {
             if (k.endsWith(OPTION_SUFFIX)) {
-                attributes.remove(k);
+                toRemove.add(k);
                 options.append('%').append(k.replace(OPTION_SUFFIX, ""));
             }
         });
+        toRemove.forEach(attributes::remove);
         source += options.toString();
 
         if (StringUtils.isNotBlank(source)) {
