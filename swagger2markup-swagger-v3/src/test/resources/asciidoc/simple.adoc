@@ -22,54 +22,108 @@ The production API server
 |===
 <.<|Variable
 
-
 <.<|Description
 
-
 <.<|Possible Values
-
 
 <.<|Default
 
 
-
 <.<|username
-
 
 <.<|this value is assigned by the service provider, in this example `gigantic-server.com`
 
-
 <.<|Any
-
 
 <.<|demo
 
 
-
 <.<|port
-
 
 <.<|
 <.<|8443, 443
 
-
 <.<|8443
-
 
 
 <.<|basePath
 
-
 <.<|
 <.<|Any
 
-
 <.<|v2
-
 
 
 |===
 
 == Paths
-=== /inventory
+=== __GET__ `/inventory` searches inventory
+By passing in the appropriate options, you can search for
+available inventory in the system
+
+.Parameters
+[%header,caption=,cols=".^2a,.^3a,.^9a,.^4a"]
+|===
+<.<|Type
+
+<.<|Name
+
+<.<|Description
+
+<.<|Schema
+
+
+<.<|**query**
+
+<.<|**searchString** +
+__optional__
+
+<.<|pass an optional search string for looking up inventory
+
+<.<|type: string
+
+
+<.<|**query**
+
+<.<|**skip** +
+__optional__
+
+<.<|number of records to skip for pagination
+
+<.<|minimum: 0 +
+type: integer +
+format: int32
+
+
+<.<|**query**
+
+<.<|**limit** +
+__optional__
+
+<.<|maximum number of records to return
+
+<.<|minimum: 0 +
+type: integer +
+maximum: 50 +
+format: int32
+
+
+|===
+
+
+[%header,caption=,cols=".^2a,.^14a,.^4a"]
+.Responses
+|===
+|HTTP Code|Description|Schema
+|**201**|Requested risk category is customized for the given context. +
+**Headers** :  +
+`location` (string) : Relative location of the newly created risk category.|No Content
+|===
+
+.Tags
+* risk_categories
+
+
+=== __POST__ `/inventory` adds an inventory item
+Adds an item to the system
 

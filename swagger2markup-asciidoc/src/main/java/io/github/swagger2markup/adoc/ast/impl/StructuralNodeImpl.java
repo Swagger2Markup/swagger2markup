@@ -36,7 +36,7 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
 
     public StructuralNodeImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
                               Object content, List<StructuralNode> blocks, String contentModel, List<String> subs) {
-        this(parent, context, attributes, roles, content, blocks, null != parent ? parent.getLevel() + 1 : 0, contentModel, subs);
+        this(parent, context, attributes, roles, content, blocks, calculateLevel(parent), contentModel, subs);
     }
 
     public StructuralNodeImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
@@ -170,6 +170,10 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     @Override
     public List<StructuralNode> findBy(Map<Object, Object> selector) {
         throw new UnsupportedOperationException("Not implemented, yet");
+    }
+
+    protected static Integer calculateLevel(StructuralNode parent) {
+        return null != parent ? parent.getLevel() + 1 : 0;
     }
 
 }

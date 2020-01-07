@@ -6,14 +6,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TableImpl extends StructuralNodeImpl implements Table {
+    public static final String OPTION_UNBREAKABLE = "unbreakable";
+    public static final String OPTION_BREAKABLE = "breakable";
     private Logger logger = LoggerFactory.getLogger(getClass());
-
+    public static final String CONTEXT = "table";
     private static final String FRAME_ATTR = "frame";
-
     private static final String GRID_ATTR = "grid";
-
     private RowList headerRows;
     private RowList bodyRows;
     private RowList footerRows;
@@ -21,20 +22,20 @@ public class TableImpl extends StructuralNodeImpl implements Table {
     private List<Column> columns = new ArrayList<>();
 
     public TableImpl(StructuralNode parent) {
-        this(parent, "table", new HashMap<>(), new ArrayList<>(), null, new ArrayList<>(), calculateLevel(parent), "", new ArrayList<>());
+        this(parent, new HashMap<>(), new ArrayList<>());
     }
 
     public TableImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles) {
-        this(parent, "table", attributes, roles, null, new ArrayList<>(), calculateLevel(parent), "", new ArrayList<>());
+        this(parent, attributes, roles, calculateLevel(parent));
     }
 
     public TableImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles, Integer level) {
-        this(parent, "table", attributes, roles, null, new ArrayList<>(), level, "", new ArrayList<>());
+        this(parent, attributes, roles, null, new ArrayList<>(), level, "", new ArrayList<>());
     }
 
-    public TableImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
+    public TableImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles,
                      Object content, List<StructuralNode> blocks, Integer level, String contentModel, List<String> subs) {
-        super(parent, context, attributes, roles, content, blocks, level, contentModel, subs);
+        super(parent, CONTEXT, attributes, roles, content, blocks, level, contentModel, subs);
         this.headerRows = new RowList(new ArrayList<>());
         this.bodyRows = new RowList(new ArrayList<>());
         this.footerRows = new RowList(new ArrayList<>());
@@ -90,14 +91,15 @@ public class TableImpl extends StructuralNodeImpl implements Table {
         headerRows.add(generateRow(documentContents));
     }
 
-    private RowImpl generateRow(String[] documentContents) {
+    public RowImpl generateRow(Document... innerDocs) {
         List<Cell> cells = new ArrayList<>();
-        for (int i = 0; i < documentContents.length; i++) {
+        for (int i = 0; i < innerDocs.length; i++) {
 
             Column column = null;
             try {
                 column = columns.get(i);
-            } catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
 
             if (null == column) {
                 ColumnImpl newColumn = new ColumnImpl(this);
@@ -105,15 +107,21 @@ public class TableImpl extends StructuralNodeImpl implements Table {
                 column = newColumn;
                 addColumnAt(column, i);
             }
-
-            Document innerDoc = new DocumentImpl();
-            Block paragraph = new BlockImpl(innerDoc, "paragraph");
-            paragraph.setSource(documentContents[i]);
-            innerDoc.append(paragraph);
-            cells.add(new CellImpl(column, innerDoc));
+            cells.add(new CellImpl(column, innerDocs[i]));
 
         }
         return new RowImpl(cells);
+    }
+
+    public RowImpl generateRow(String... documentContents) {
+        Document[] documents = Arrays.stream(documentContents).map(documentContent -> {
+            Document innerDoc = new DocumentImpl();
+            Block paragraph = new ParagraphBlockImpl(innerDoc);
+            paragraph.setSource(documentContent);
+            innerDoc.append(paragraph);
+            return innerDoc;
+        }).toArray(Document[]::new);
+        return generateRow(documents);
     }
 
     @Override
@@ -136,8 +144,16 @@ public class TableImpl extends StructuralNodeImpl implements Table {
         bodyRows.add(new RowImpl(cells));
     }
 
-    public void addRow(String... documentContents) {
-        bodyRows.add(generateRow(documentContents));
+    public RowImpl addRow(Document... documentContents) {
+        RowImpl row = generateRow(documentContents);
+        bodyRows.add(row);
+        return row;
+    }
+
+    public RowImpl addRow(String... documentContents) {
+        RowImpl row = generateRow(documentContents);
+        bodyRows.add(row);
+        return row;
     }
 
     @Override
@@ -282,7 +298,7 @@ public class TableImpl extends StructuralNodeImpl implements Table {
         }
     }
 
-    private static Integer calculateLevel(StructuralNode parent) {
+    protected static Integer calculateLevel(StructuralNode parent) {
         int level = 1;
         if (parent instanceof Table)
             level = parent.getLevel() + 1;

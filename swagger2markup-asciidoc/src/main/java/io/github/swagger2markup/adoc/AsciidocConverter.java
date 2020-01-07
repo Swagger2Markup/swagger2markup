@@ -171,7 +171,7 @@ public class AsciidocConverter extends StringConverter {
         logger.debug("convertEmbedded");
         StringBuilder sb = new StringBuilder();
 
-        if(StringUtils.isNotBlank(node.getDoctitle())) {
+        if (StringUtils.isNotBlank(node.getDoctitle())) {
             sb.append(DOCUMENT_TITLE).append(StringEscapeUtils.unescapeHtml4(node.getDoctitle())).append(LINE_SEPARATOR);
         }
         Map<String, Object> attributes = node.getAttributes();
@@ -510,14 +510,14 @@ public class AsciidocConverter extends StringConverter {
         logger.debug("convertCell");
         StringBuilder sb = new StringBuilder();
         String source = node.getSource();
-        if(StringUtils.isNotBlank(source)){
+        if (StringUtils.isNotBlank(source)) {
             sb.append(source);
         }
         Document innerDocument = node.getInnerDocument();
-        if(null != innerDocument) {
+        if (null != innerDocument) {
             appendChildBlocks(innerDocument, sb, false);
         }
-        return sb.toString();
+        return sb.toString().replaceAll(LINE_SEPARATOR + "+", LINE_SEPARATOR);
     }
 
     private String convertRow(Row node, java.util.List<TableCellStyle> columnStyles) {
@@ -649,7 +649,7 @@ public class AsciidocConverter extends StringConverter {
                 sb.append(LINE_SEPARATOR);
             }
             String desc = Optional.ofNullable(description.getSource()).orElse("");
-            if(StringUtils.isNotBlank(desc)) {
+            if (StringUtils.isNotBlank(desc)) {
                 sb.append(desc).append(LINE_SEPARATOR);
             }
             appendChildBlocks(description, sb);
@@ -821,8 +821,8 @@ public class AsciidocConverter extends StringConverter {
         });
     }
 
-    private void appendTrailingNewLine(StringBuilder sb){
-        if(!sb.toString().endsWith(LINE_SEPARATOR + LINE_SEPARATOR)){
+    private void appendTrailingNewLine(StringBuilder sb) {
+        if (!sb.toString().endsWith(LINE_SEPARATOR + LINE_SEPARATOR)) {
             sb.append(LINE_SEPARATOR);
         }
     }

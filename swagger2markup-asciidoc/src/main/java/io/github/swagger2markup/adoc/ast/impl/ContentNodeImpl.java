@@ -204,14 +204,30 @@ public abstract class ContentNodeImpl implements ContentNode {
         }
     }
 
+    public Object removeAttribute(String name){
+        return attributes.remove(name);
+    }
+
+    public boolean removeAttribute(String name, Object value){
+        return attributes.remove(name, value);
+    }
+
     @Override
     public boolean isOption(Object name) {
         try {
-            Object o = attributes.get(name);
+            Object o = attributes.get(name + "-option");
             return null != o && o.toString().equals("");
         }catch (Exception ignored){
             return false;
         }
+    }
+
+    public boolean setOption(String name){
+        return setAttribute(name + "-option", "", true);
+    }
+
+    public Object removeOption(String name){
+        return removeAttribute(name + "-option");
     }
 
     @Override

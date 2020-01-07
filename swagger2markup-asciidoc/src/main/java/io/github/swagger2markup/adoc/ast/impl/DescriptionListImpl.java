@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class DescriptionListImpl extends StructuralNodeImpl implements DescriptionList {
 
+    public static final String CONTEXT = "dlist";
     private List<DescriptionListEntry> items;
 
     public DescriptionListImpl(StructuralNode parent) {
@@ -34,7 +35,7 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
     public DescriptionListImpl(StructuralNode parent, Map<String, Object> attributes, List<String> roles,
                                Object content, List<StructuralNode> blocks, Integer level,
                                String contentModel, List<String> subs, List<DescriptionListEntry> items) {
-        super(parent, "dlist", attributes, roles, content, blocks, level, contentModel, subs);
+        super(parent, CONTEXT, attributes, roles, content, blocks, level, contentModel, subs);
         this.items = items;
     }
 
@@ -54,7 +55,7 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
         return convert();
     }
 
-    private static Integer calculateLevel(StructuralNode parent) {
+    protected static Integer calculateLevel(StructuralNode parent) {
         int level = 1;
         if (parent instanceof DescriptionList)
             level = parent.getLevel() + 1;

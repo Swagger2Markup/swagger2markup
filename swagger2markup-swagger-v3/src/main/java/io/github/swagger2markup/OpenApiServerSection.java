@@ -4,25 +4,17 @@ import io.github.swagger2markup.adoc.ast.impl.*;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.servers.ServerVariables;
 import org.asciidoctor.ast.*;
-import org.asciidoctor.ast.List;
 
 import java.util.*;
 
-import static io.github.swagger2markup.OpenApiHelpers.appendDescription;
+import static io.github.swagger2markup.OpenApiHelpers.*;
 
 public class OpenApiServerSection {
-
-    public static final String HEADING_DEFAULT = "Default";
-    public static final String HEADING_DESCRIPTION = "Description";
-    public static final String HEADING_POSSIBLE_VALUES = "Possible Values";
-    public static final String HEADING_VARIABLE = "Variable";
-    public static final String TITLE_SERVERS = "Servers";
-    public static final String TITLE_SERVER_VARIABLES = "Server Variables";
 
     public static void addServersSection(Document document, OpenAPI openAPI) {
         if (!openAPI.getServers().isEmpty()) {
             Section serversSection = new SectionImpl(document);
-            serversSection.setTitle(TITLE_SERVERS);
+            serversSection.setTitle(SECTION_TITLE_SERVERS);
 
             openAPI.getServers().forEach(server -> {
                 Section serverSection = new SectionImpl(serversSection);
@@ -35,9 +27,9 @@ public class OpenApiServerSection {
                         put("header-option", "");
                         put("cols", ".^2a,.^9a,.^3a,.^4a");
                     }}, new ArrayList<>());
-                    serverVariables.setTitle(TITLE_SERVER_VARIABLES);
+                    serverVariables.setTitle(TABLE_TITLE_SERVER_VARIABLES);
 
-                    serverVariables.setHeaderRow(HEADING_VARIABLE, HEADING_DESCRIPTION, HEADING_POSSIBLE_VALUES, HEADING_DEFAULT);
+                    serverVariables.setHeaderRow(TABLE_HEADER_VARIABLE, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_POSSIBLE_VALUES, TABLE_HEADER_DEFAULT);
 
                     variables.forEach((name, variable) -> {
                         String possibleValues = String.join(", ", Optional.ofNullable(variable.getEnum()).orElse(Collections.singletonList("Any")));

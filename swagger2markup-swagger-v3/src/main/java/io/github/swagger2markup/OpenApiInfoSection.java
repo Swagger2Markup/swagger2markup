@@ -1,6 +1,7 @@
 package io.github.swagger2markup;
 
 import io.github.swagger2markup.adoc.ast.impl.BlockImpl;
+import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
 import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
@@ -79,7 +80,7 @@ public class OpenApiInfoSection {
             if (StringUtils.isNotBlank(license.getUrl())) {
                 sb.append("]");
             }
-            BlockImpl paragraph = new BlockImpl(licenseInfo, "paragraph",
+            BlockImpl paragraph = new ParagraphBlockImpl(licenseInfo,
                     new HashMap<String, Object>() {{
                         put("hardbreaks-option", "");
                     }});
@@ -92,7 +93,7 @@ public class OpenApiInfoSection {
     public static void addTermsOfServiceInfo(Section overviewDoc, Info info) {
         String termsOfService = info.getTermsOfService();
         if (StringUtils.isNotBlank(termsOfService)) {
-            Block paragraph = new BlockImpl(overviewDoc, "paragraph");
+            Block paragraph = new ParagraphBlockImpl(overviewDoc);
             paragraph.setSource(termsOfService);
             overviewDoc.append(paragraph);
         }

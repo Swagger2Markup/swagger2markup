@@ -3,43 +3,35 @@ package io.github.swagger2markup.adoc.ast.impl;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.StructuralNode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class BlockImpl extends StructuralNodeImpl implements Block {
 
     private List<String> lines;
 
     public BlockImpl(StructuralNode parent, String context) {
-        super(parent, context);
-        this.lines = new ArrayList<>();
+        this(parent, context, "");
     }
 
     public BlockImpl(StructuralNode parent, String context, Object content) {
-        super(parent, context, content);
-        this.lines = new ArrayList<>();
+        this(parent, context, new HashMap<>(), content);
     }
 
     public BlockImpl(StructuralNode parent, String context, Map<String, Object> attributes) {
-        super(parent, context, attributes);
-        this.lines = new ArrayList<>();
+        this(parent, context, attributes, "");
     }
 
-    public BlockImpl(StructuralNode parent, String context, Object content, Map<String, Object> attributes) {
-        super(parent, context, content, attributes);
-        this.lines = new ArrayList<>();
+    public BlockImpl(StructuralNode parent, String context, Map<String, Object> attributes, Object content) {
+        this(parent, context, attributes, new ArrayList<>(), content, new ArrayList<>(), "", new ArrayList<>());
     }
 
     public BlockImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
                      Object content, List<StructuralNode> blocks, String contentModel, List<String> subs) {
-        super(parent, context, attributes, roles, content, blocks, contentModel, subs);
-        this.lines = new ArrayList<>();
+        this(parent, context, attributes, roles, content, blocks, calculateLevel(parent), contentModel, subs);
     }
 
     public BlockImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
-                        Object content, List<StructuralNode> blocks, int level, String contentModel, List<String> subs) {
+                        Object content, List<StructuralNode> blocks, Integer level, String contentModel, List<String> subs) {
         super(parent, context, attributes, roles, content, blocks, level, contentModel, subs);
         this.lines = new ArrayList<>();
     }
