@@ -5,12 +5,14 @@ public class Delimiters {
     public static final String ATTRIBUTES_END = "]";
     public static final String COLON = ":";
     public static final String DELIMITER_BLOCK = "----";
-    public static final String DELIMITER_CELL = "|";
     public static final String DELIMITER_EXAMPLE = "====";
+    public static final String DELIMITER_INNER_TABLE_CELL = "!";
+    public static final String DELIMITER_INNER_TABLE = "!===";
     public static final String DELIMITER_PAGE_BREAK = "<<<";
     public static final String DELIMITER_OPEN_BLOCK = "--";
     public static final String DELIMITER_SIDEBAR = "****";
     public static final String DELIMITER_TABLE = "|===";
+    public static final String DELIMITER_TABLE_CELL = "|";
     public static final String DELIMITER_THEMATIC_BREAK = "'''";
     public static final String DELIMITER_VERSE = "____";
     public static final String DOCUMENT_TITLE = "= ";

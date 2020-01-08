@@ -15,21 +15,21 @@ public class DocumentImpl extends StructuralNodeImpl implements Document {
         this(null);
     }
 
-    public DocumentImpl(Document parent) {
+    public DocumentImpl(StructuralNode parent) {
         this(parent, "document", "");
     }
 
-    public DocumentImpl(Document parent, String context, Object content) {
+    public DocumentImpl(StructuralNode parent, String context, Object content) {
         this(parent, context, new HashMap<>(), new ArrayList<>(), content, new ArrayList<>(), "", new ArrayList<>());
     }
 
-    public DocumentImpl(Document parent, String context, Map<String, Object> attributes, List<String> roles,
+    public DocumentImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
                         Object content, List<StructuralNode> blocks, String contentModel,
                         List<String> subs) {
         this(parent, context, attributes, roles, content, blocks, null != parent ? parent.getLevel() + 1 : 0, contentModel, subs);
     }
 
-    public DocumentImpl(Document parent, String context, Map<String, Object> attributes, List<String> roles,
+    public DocumentImpl(StructuralNode parent, String context, Map<String, Object> attributes, List<String> roles,
                         Object content, List<StructuralNode> blocks, Integer level, String contentModel,
                         List<String> subs) {
         super(parent, context, attributes, roles, content, blocks, level, contentModel, subs);

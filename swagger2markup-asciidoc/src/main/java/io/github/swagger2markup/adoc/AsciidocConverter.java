@@ -517,10 +517,10 @@ public class AsciidocConverter extends StringConverter {
         if (null != innerDocument) {
             appendChildBlocks(innerDocument, sb, false);
         }
-        return sb.toString().replaceAll(LINE_SEPARATOR + "+", LINE_SEPARATOR);
+        return sb.toString().replaceAll(LINE_SEPARATOR + LINE_SEPARATOR + "+", LINE_SEPARATOR + LINE_SEPARATOR);
     }
 
-    private String convertRow(Row node, java.util.List<TableCellStyle> columnStyles) {
+    private String convertRow(Row node, java.util.List<TableCellStyle> columnStyles, String delimiterTableCell) {
         logger.debug("convertRow");
         StringBuilder sb = new StringBuilder();
         node.getCells().forEach(cell -> {
@@ -557,7 +557,7 @@ public class AsciidocConverter extends StringConverter {
                 addNewLine = true;
                 sb.append(style.getShortHand());
             }
-            sb.append(DELIMITER_CELL).append(convertCell(cell));
+            sb.append(delimiterTableCell).append(convertCell(cell));
             if (addNewLine) {
                 sb.append(LINE_SEPARATOR);
             } else {
@@ -601,16 +601,29 @@ public class AsciidocConverter extends StringConverter {
         StringBuilder sb = new StringBuilder();
         appendTitle(node, sb);
         sb.append(new TableNode(node).toAsciiDocContent());
-        sb.append(DELIMITER_TABLE).append(LINE_SEPARATOR);
-        appendRows(node.getHeader(), sb, columnStyles);
-        appendRows(node.getBody(), sb, columnStyles);
-        appendRows(node.getFooter(), sb, columnStyles);
-        sb.append(DELIMITER_TABLE).append(LINE_SEPARATOR);
+        boolean innerTable = isInnerTable(node);
+        String tableDelimiter = innerTable ? DELIMITER_INNER_TABLE : DELIMITER_TABLE;
+        String cellDelimiter = innerTable ? DELIMITER_INNER_TABLE_CELL : DELIMITER_TABLE_CELL;
+        sb.append(tableDelimiter).append(LINE_SEPARATOR);
+        appendRows(node.getHeader(), sb, columnStyles, cellDelimiter);
+        appendRows(node.getBody(), sb, columnStyles, cellDelimiter);
+        appendRows(node.getFooter(), sb, columnStyles, cellDelimiter);
+        sb.append(tableDelimiter).append(LINE_SEPARATOR);
         return sb.toString();
     }
 
-    private void appendRows(java.util.List<Row> rows, StringBuilder sb, java.util.List<TableCellStyle> columnStyles) {
-        rows.forEach(row -> sb.append(convertRow(row, columnStyles)).append(LINE_SEPARATOR));
+    private boolean isInnerTable(ContentNode node) {
+        if(null != node) {
+            ContentNode parent = node.getParent();
+            if (null != parent) {
+                return parent instanceof Table || isInnerTable(parent);
+            }
+        }
+        return false;
+    }
+
+    private void appendRows(java.util.List<Row> rows, StringBuilder sb, java.util.List<TableCellStyle> columnStyles, String delimiterTableCell) {
+        rows.forEach(row -> sb.append(convertRow(row, columnStyles, delimiterTableCell)).append(LINE_SEPARATOR));
     }
 
     private String convertDescriptionList(DescriptionList node) {

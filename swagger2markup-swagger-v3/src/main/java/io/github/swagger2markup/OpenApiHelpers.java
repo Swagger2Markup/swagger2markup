@@ -44,12 +44,16 @@ public class OpenApiHelpers {
     public static final String SECTION_TITLE_SERVERS = "Servers";
     public static final String TABLE_HEADER_DEFAULT = "Default";
     public static final String TABLE_HEADER_DESCRIPTION = "Description";
+    public static final String TABLE_HEADER_HTTP_CODE = "Code";
+    public static final String TABLE_HEADER_LINKS = "Links";
     public static final String TABLE_HEADER_NAME = "Name";
     public static final String TABLE_HEADER_POSSIBLE_VALUES = "Possible Values";
     public static final String TABLE_HEADER_SCHEMA = "Schema";
     public static final String TABLE_HEADER_TYPE = "Type";
     public static final String TABLE_HEADER_VARIABLE = "Variable";
+    public static final String TABLE_TITLE_HEADERS = "Headers";
     public static final String TABLE_TITLE_PARAMETERS = "Parameters";
+    public static final String TABLE_TITLE_RESPONSES = "Responses";
     public static final String TABLE_TITLE_SERVER_VARIABLES = "Server Variables";
 
     public static void appendDescription(StructuralNode node, String description) {
@@ -60,9 +64,8 @@ public class OpenApiHelpers {
         }
     }
 
-    public static Document generateSchemaDocument(Parameter parameter) {
-        Document schemaDocument = new DocumentImpl();
-        Schema schema = parameter.getSchema();
+    public static Document generateSchemaDocument(StructuralNode parent, Schema schema) {
+        Document schemaDocument = new DocumentImpl(parent);
         if (null == schema) return schemaDocument;
 
         StringBuilder sb = new StringBuilder();

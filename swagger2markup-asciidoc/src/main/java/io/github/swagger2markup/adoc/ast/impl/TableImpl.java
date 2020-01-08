@@ -4,9 +4,8 @@ import org.asciidoctor.ast.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class TableImpl extends StructuralNodeImpl implements Table {
     public static final String OPTION_UNBREAKABLE = "unbreakable";
