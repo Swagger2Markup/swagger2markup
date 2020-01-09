@@ -25,7 +25,8 @@ public class OpenApiPathsSection {
         apiPaths.forEach((name, pathItem) -> {
             pathItem.readOperationsMap().forEach(((httpMethod, operation) -> {
                 SectionImpl operationSection = new SectionImpl(allPathsSection);
-                operationSection.setTitle(italicUnconstrained(httpMethod.name().toUpperCase()) + " " + monospaced(name) + " " + operation.getSummary());
+                String summary = Optional.ofNullable(operation.getSummary()).orElse("");
+                operationSection.setTitle((italicUnconstrained(httpMethod.name().toUpperCase()) + " " + monospaced(name) + " " + summary).trim());
                 appendDescription(operationSection, operation.getDescription());
 
                 appendPathParameters(operationSection, operation.getParameters());
@@ -63,17 +64,15 @@ public class OpenApiPathsSection {
         TableImpl pathResponsesTable = new TableImpl(serverSection, new HashMap<>(), new ArrayList<>());
         pathResponsesTable.setOption("header");
         pathResponsesTable.setAttribute("caption", "", true);
-        pathResponsesTable.setAttribute("cols", ".^2a,.^10a,.^4a,.^4a", true);
+        pathResponsesTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
         pathResponsesTable.setTitle(TABLE_TITLE_RESPONSES);
-        pathResponsesTable.setHeaderRow(TABLE_HEADER_HTTP_CODE, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_SCHEMA, TABLE_HEADER_LINKS);
+        pathResponsesTable.setHeaderRow(TABLE_HEADER_HTTP_CODE, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_LINKS);
 
         apiResponses.forEach((httpCode, apiResponse) -> {
-            apiResponse.getLinks();
             pathResponsesTable.addRow(
                     generateInnerDoc(pathResponsesTable, httpCode),
                     getResponseDescriptionColumnDocument(pathResponsesTable, apiResponse),
-                    generateInnerDoc(pathResponsesTable, TABLE_HEADER_SCHEMA),
-                    generateInnerDoc(pathResponsesTable, "No Links")
+                    generateLinksDocument(pathResponsesTable, apiResponse.getLinks())
             );
         });
         serverSection.append(pathResponsesTable);
@@ -90,14 +89,11 @@ public class OpenApiPathsSection {
             responseHeadersTable.setTitle(TABLE_TITLE_HEADERS);
             responseHeadersTable.setHeaderRow(TABLE_HEADER_NAME, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_SCHEMA);
             headers.forEach((name, header) ->
-                    responseHeadersTable.generateRow(
+                    responseHeadersTable.addRow(
                             generateInnerDoc(responseHeadersTable, name),
                             generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
                             generateSchemaDocument(responseHeadersTable, header.getSchema())
                     ));
-            ParagraphBlockImpl emptyParagraph = new ParagraphBlockImpl(document);
-            emptyParagraph.setSource(" ");
-            document.append(emptyParagraph);
             document.append(responseHeadersTable);
         }
         return document;

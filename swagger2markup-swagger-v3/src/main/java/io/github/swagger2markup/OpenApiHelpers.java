@@ -2,6 +2,7 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
+import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import org.apache.commons.lang3.StringUtils;
@@ -32,9 +33,12 @@ public class OpenApiHelpers {
     public static final String LABEL_MIN_LENGTH = "Minimum Length";
     public static final String LABEL_MIN_PROPERTIES = "Minimum Properties";
     public static final String LABEL_MULTIPLE_OF = "Multiple Of";
+    public static final String LABEL_NO_LINKS = "No Links";
     public static final String LABEL_NULLABLE = "Nullable";
+    public static final String LABEL_PARAMETERS = "Parameters";
     public static final String LABEL_READ_ONLY = "Read Only";
     public static final String LABEL_REQUIRED = "Required";
+    public static final String LABEL_OPERATION = "Operation";
     public static final String LABEL_OPTIONAL = "Optional";
     public static final String LABEL_TITLE = "Title";
     public static final String LABEL_TYPE = "Type";
@@ -62,6 +66,31 @@ public class OpenApiHelpers {
             paragraph.setSource(description);
             node.append(paragraph);
         }
+    }
+
+    public static Document generateLinksDocument(StructuralNode parent, java.util.Map<String, Link> links) {
+        DocumentImpl linksDocument = new DocumentImpl(parent);
+        ParagraphBlockImpl linkParagraph = new ParagraphBlockImpl(linksDocument);
+        if (null == links || links.isEmpty()) {
+            linkParagraph.setSource(LABEL_NO_LINKS);
+        } else {
+            StringBuilder sb = new StringBuilder();
+            links.forEach((name, link) -> {
+                sb.append(name).append(" +").append(LINE_SEPARATOR);
+                sb.append(italicUnconstrained(LABEL_OPERATION)).append(' ').append(italicUnconstrained(link.getOperationId())).append(" +").append(LINE_SEPARATOR);
+                Map<String, String> parameters = link.getParameters();
+                if(null != parameters && !parameters.isEmpty()) {
+                    sb.append(italicUnconstrained(LABEL_PARAMETERS)).append(" {").append(" +").append(LINE_SEPARATOR);
+                    parameters.forEach((param, value) -> {
+                        sb.append('"').append(param).append("\": \"").append(value).append('"').append(" +").append(LINE_SEPARATOR);
+                    });
+                    sb.append('}').append(" +").append(LINE_SEPARATOR);
+                }
+            });
+            linkParagraph.setSource(sb.toString());
+        }
+        linksDocument.append(linkParagraph);
+        return linksDocument;
     }
 
     public static Document generateSchemaDocument(StructuralNode parent, Schema schema) {
@@ -101,7 +130,7 @@ public class OpenApiHelpers {
                 .filter(e -> null != e.getValue() && e.getValue())
                 .map(e -> italicUnconstrained(e.getKey().toLowerCase()));
         Stream<String> schemaValueStream = schemasValueProperties.entrySet().stream()
-            .filter(e -> null != e.getValue() && StringUtils.isNotBlank(e.getValue().toString()))
+                .filter(e -> null != e.getValue() && StringUtils.isNotBlank(e.getValue().toString()))
                 .map(e -> e.getKey().toLowerCase() + ": " + e.getValue());
 
         ParagraphBlockImpl paragraphBlock = new ParagraphBlockImpl(schemaDocument);

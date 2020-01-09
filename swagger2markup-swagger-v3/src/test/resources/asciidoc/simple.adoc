@@ -140,15 +140,12 @@ format: int32
 
 |===
 .Responses
-[%header,caption=,cols=".^2a,.^10a,.^4a,.^4a"]
+[%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
 <.<|Code
 
 
 <.<|Description
-
-
-<.<|Schema
 
 
 <.<|Links
@@ -169,12 +166,32 @@ format: int32
 
 <.<!Schema
 
+<.<!X-Rate-Limit
+
+<.<!calls per hour allowed by the user
+
+<.<!type: integer +
+format: int32
+
+<.<!X-Expires-After
+
+<.<!date in UTC when token expires
+
+<.<!type: string +
+format: date-time
+
 !===
 
-<.<|Schema
-
-
-<.<|No Links
+<.<|address +
+__Operation__ __getUserAddress__ +
+__Parameters__ { +
+"userId": "$request.path.id" +
+} +
+name +
+__Operation__ __getUserName__ +
+__Parameters__ { +
+"userName": "$request.path.user" +
+} +
 
 
 
@@ -184,7 +201,61 @@ format: int32
 <.<|bad input parameter
 
 
+<.<|No Links
+
+
+
+|===
+
+=== __GET__ `/users/{userid}/address`
+.Parameters
+[%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Description
+
+
 <.<|Schema
+
+
+
+<.<|**path**
+
+
+<.<|**userid** +
+__required__
+
+
+<.<|the user identifier, as userId
+
+
+<.<|type: string
+
+
+
+|===
+.Responses
+[%header,caption=,cols=".^2a,.^14a,.^4a"]
+|===
+<.<|Code
+
+
+<.<|Description
+
+
+<.<|Links
+
+
+
+<.<|200
+
+
+<.<|the user's address
 
 
 <.<|No Links
@@ -193,19 +264,47 @@ format: int32
 
 |===
 
-=== __POST__ `/inventory` adds an inventory item
+=== __POST__ `/users/{userid}/address` adds an inventory item
 Adds an item to the system
 
-.Responses
-[%header,caption=,cols=".^2a,.^10a,.^4a,.^4a"]
+.Parameters
+[%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
 |===
-<.<|Code
+<.<|Type
+
+
+<.<|Name
 
 
 <.<|Description
 
 
 <.<|Schema
+
+
+
+<.<|**path**
+
+
+<.<|**userid** +
+__required__
+
+
+<.<|the user identifier, as userId
+
+
+<.<|type: string
+
+
+
+|===
+.Responses
+[%header,caption=,cols=".^2a,.^14a,.^4a"]
+|===
+<.<|Code
+
+
+<.<|Description
 
 
 <.<|Links
@@ -218,9 +317,6 @@ Adds an item to the system
 <.<|item created
 
 
-<.<|Schema
-
-
 <.<|No Links
 
 
@@ -231,9 +327,6 @@ Adds an item to the system
 <.<|invalid input, object invalid
 
 
-<.<|Schema
-
-
 <.<|No Links
 
 
@@ -242,9 +335,6 @@ Adds an item to the system
 
 
 <.<|an existing item already exists
-
-
-<.<|Schema
 
 
 <.<|No Links

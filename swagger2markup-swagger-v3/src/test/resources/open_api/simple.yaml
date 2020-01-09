@@ -81,8 +81,35 @@ paths:
               schema:
                 type: string
                 format: date-time
+          links:
+            address:
+              # the target link operationId
+              operationId: getUserAddress
+              parameters:
+                # get the `id` field from the request path parameter named `id`
+                userId: $request.path.id
+            name:
+              # the target link operationId
+              operationId: getUserName
+              parameters:
+                userName: $request.path.user
         '400':
           description: bad input parameter
+  # the path item of the linked operation
+  /users/{userid}/address:
+    parameters:
+        - name: userid
+          in: path
+          required: true
+          description: the user identifier, as userId
+          schema:
+            type: string
+    # linked operation
+    get:
+      operationId: getUserAddress
+      responses:
+        '200':
+          description: the user's address
     post:
       tags:
       - admins
