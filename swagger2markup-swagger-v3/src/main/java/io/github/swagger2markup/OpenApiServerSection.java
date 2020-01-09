@@ -18,7 +18,7 @@ public class OpenApiServerSection {
 
             openAPI.getServers().forEach(server -> {
                 Section serverSection = new SectionImpl(serversSection);
-                serverSection.setTitle("__Server__: " + server.getUrl());
+                serverSection.setTitle(italicUnconstrained(LABEL_SERVER) + ": " + server.getUrl());
 
                 appendDescription(serverSection, server.getDescription());
                 ServerVariables variables = server.getVariables();

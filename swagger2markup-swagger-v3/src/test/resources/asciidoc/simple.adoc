@@ -13,6 +13,12 @@ This is a simple API
 [%hardbreaks]
 http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 
+== Tags
+admins::
+Secured Admin-only calls
+developers::
+Operations available to regular developers
+
 == Servers
 === __Server__: https://{username}.gigantic-server.com:{port}/{basePath}
 The production API server

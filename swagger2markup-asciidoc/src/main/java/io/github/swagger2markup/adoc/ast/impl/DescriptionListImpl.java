@@ -44,6 +44,14 @@ public class DescriptionListImpl extends StructuralNodeImpl implements Descripti
         return items;
     }
 
+    public void setItems(List<DescriptionListEntry> items) {
+        this.items = items;
+    }
+
+    public void addEntry(DescriptionListEntry entry) {
+        this.items.add(entry);
+    }
+
     @Override
     public boolean hasItems() {
         return !items.isEmpty();
