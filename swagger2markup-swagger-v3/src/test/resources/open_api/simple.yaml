@@ -137,7 +137,6 @@ components:
       - id
       - name
       - manufacturer
-      - releaseDate
       properties:
         id:
           type: string

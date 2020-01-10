@@ -170,9 +170,9 @@ public class AsciidocConverter extends StringConverter {
     String convertEmbedded(Document node) {
         logger.debug("convertEmbedded");
         StringBuilder sb = new StringBuilder();
-
+        appendId(node, sb);
         if (StringUtils.isNotBlank(node.getDoctitle())) {
-            sb.append(DOCUMENT_TITLE).append(StringEscapeUtils.unescapeHtml4(node.getDoctitle())).append(LINE_SEPARATOR);
+            sb.append(repeat(node.getLevel() + 1,DOCUMENT_TITLE)).append(' ').append(StringEscapeUtils.unescapeHtml4(node.getDoctitle())).append(LINE_SEPARATOR);
         }
         Map<String, Object> attributes = node.getAttributes();
         appendAuthors(sb, attributes);
@@ -786,6 +786,7 @@ public class AsciidocConverter extends StringConverter {
     private String convertSection(Section node) {
         logger.debug("convertSection");
         StringBuilder sb = new StringBuilder();
+        appendId(node, sb);
         sb.append(new DelimitedBlockNode(node).toAsciiDocContent()).append(StringUtils.repeat(TITLE, node.getLevel() + 1))
                 .append(" ").append(StringEscapeUtils.unescapeHtml4(node.getTitle())).append(LINE_SEPARATOR);
         appendChildBlocks(node, sb);
@@ -837,6 +838,13 @@ public class AsciidocConverter extends StringConverter {
     private void appendTrailingNewLine(StringBuilder sb) {
         if (!sb.toString().endsWith(LINE_SEPARATOR + LINE_SEPARATOR)) {
             sb.append(LINE_SEPARATOR);
+        }
+    }
+
+    private void appendId(StructuralNode node, StringBuilder sb) {
+        String id = node.getId();
+        if (StringUtils.isNotBlank(id)) {
+            sb.append("[[").append(id).append("]]").append(LINE_SEPARATOR);
         }
     }
 

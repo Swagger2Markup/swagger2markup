@@ -41,7 +41,7 @@ public abstract class ContentNodeImpl implements ContentNode {
 
     @Override
     public void setId(String id) {
-        this.id = id;
+        this.id = id.toLowerCase().replaceAll("\\s+", "_");
     }
 
     @Override

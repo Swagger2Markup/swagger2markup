@@ -2,16 +2,17 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
+import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
-import io.swagger.v3.oas.models.parameters.Parameter;
 import org.apache.commons.lang3.StringUtils;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -45,7 +46,9 @@ public class OpenApiHelpers {
     public static final String LABEL_TYPE = "Type";
     public static final String LABEL_UNIQUE_ITEMS = "Unique Items";
     public static final String LABEL_WRITE_ONLY = "Write Only";
+    public static final String SECTION_TITLE_COMPONENTS = "Components";
     public static final String SECTION_TITLE_PATHS = "Paths";
+    public static final String SECTION_TITLE_SCHEMAS = "Schemas";
     public static final String SECTION_TITLE_SERVERS = "Servers";
     public static final String SECTION_TITLE_TAGS = "Tags";
     public static final String TABLE_HEADER_DEFAULT = "Default";
@@ -59,6 +62,7 @@ public class OpenApiHelpers {
     public static final String TABLE_HEADER_VARIABLE = "Variable";
     public static final String TABLE_TITLE_HEADERS = "Headers";
     public static final String TABLE_TITLE_PARAMETERS = "Parameters";
+    public static final String TABLE_TITLE_PROPERTIES = "Properties";
     public static final String TABLE_TITLE_RESPONSES = "Responses";
     public static final String TABLE_TITLE_SERVER_VARIABLES = "Server Variables";
 
@@ -81,7 +85,7 @@ public class OpenApiHelpers {
                 sb.append(name).append(" +").append(LINE_SEPARATOR);
                 sb.append(italicUnconstrained(LABEL_OPERATION)).append(' ').append(italicUnconstrained(link.getOperationId())).append(" +").append(LINE_SEPARATOR);
                 Map<String, String> parameters = link.getParameters();
-                if(null != parameters && !parameters.isEmpty()) {
+                if (null != parameters && !parameters.isEmpty()) {
                     sb.append(italicUnconstrained(LABEL_PARAMETERS)).append(" {").append(" +").append(LINE_SEPARATOR);
                     parameters.forEach((param, value) -> {
                         sb.append('"').append(param).append("\": \"").append(value).append('"').append(" +").append(LINE_SEPARATOR);
@@ -95,13 +99,21 @@ public class OpenApiHelpers {
         return linksDocument;
     }
 
-    public static Document generateSchemaDocument(StructuralNode parent, Schema schema) {
+    public static Document generateSchemaDocument(StructuralNode parent, @SuppressWarnings("rawtypes") Schema schema) {
         Document schemaDocument = new DocumentImpl(parent);
         if (null == schema) return schemaDocument;
 
-        StringBuilder sb = new StringBuilder();
-
         appendDescription(schemaDocument, schema.getDescription());
+
+        Map<String, Boolean> schemasBooleanProperties = new HashMap<String, Boolean>() {{
+            put(LABEL_DEPRECATED, schema.getDeprecated());
+            put(LABEL_NULLABLE, schema.getNullable());
+            put(LABEL_READ_ONLY, schema.getReadOnly());
+            put(LABEL_WRITE_ONLY, schema.getWriteOnly());
+            put(LABEL_UNIQUE_ITEMS, schema.getUniqueItems());
+            put(LABEL_EXCLUSIVE_MAXIMUM, schema.getExclusiveMaximum());
+            put(LABEL_EXCLUSIVE_MINIMUM, schema.getExclusiveMinimum());
+        }};
 
         Map<String, Object> schemasValueProperties = new HashMap<String, Object>() {{
             put(LABEL_TITLE, schema.getTitle());
@@ -118,15 +130,6 @@ public class OpenApiHelpers {
             put(LABEL_MIN_PROPERTIES, schema.getMinProperties());
             put(LABEL_MULTIPLE_OF, schema.getMultipleOf());
         }};
-        Map<String, Boolean> schemasBooleanProperties = new HashMap<String, Boolean>() {{
-            put(LABEL_DEPRECATED, schema.getDeprecated());
-            put(LABEL_NULLABLE, schema.getNullable());
-            put(LABEL_READ_ONLY, schema.getReadOnly());
-            put(LABEL_WRITE_ONLY, schema.getWriteOnly());
-            put(LABEL_UNIQUE_ITEMS, schema.getUniqueItems());
-            put(LABEL_EXCLUSIVE_MAXIMUM, schema.getExclusiveMaximum());
-            put(LABEL_EXCLUSIVE_MINIMUM, schema.getExclusiveMinimum());
-        }};
 
         Stream<String> schemaBooleanStream = schemasBooleanProperties.entrySet().stream()
                 .filter(e -> null != e.getValue() && e.getValue())
@@ -136,9 +139,73 @@ public class OpenApiHelpers {
                 .map(e -> e.getKey().toLowerCase() + ": " + e.getValue());
 
         ParagraphBlockImpl paragraphBlock = new ParagraphBlockImpl(schemaDocument);
-        paragraphBlock.setSource(Stream.concat(schemaBooleanStream, schemaValueStream).collect(Collectors.joining(" +" + LINE_SEPARATOR)));
+        String source = Stream.concat(schemaBooleanStream, schemaValueStream).collect(Collectors.joining(" +" + LINE_SEPARATOR));
+        String ref = schema.get$ref();
+        if (StringUtils.isNotBlank(ref)) {
+            String alt = ref.substring(ref.lastIndexOf('/') + 1);
+            String anchor = ref.replaceFirst("#", "").replaceAll("/", "_");
+            source += "<<" + anchor + "," + alt + ">>" + LINE_SEPARATOR;
+        }
+        paragraphBlock.setSource(source);
+
         schemaDocument.append(paragraphBlock);
+        appendPropertiesTable(schemaDocument, schema.getProperties(), schema.getRequired());
         return schemaDocument;
+    }
+
+    public static void appendPropertiesTable(StructuralNode parent, @SuppressWarnings("rawtypes") Map<String, Schema> properties, List<String> schemaRequired) {
+        if (null == properties || properties.isEmpty()) return;
+
+        List<String> finalSchemaRequired = (null == schemaRequired) ? new ArrayList<>() : schemaRequired;
+
+        TableImpl propertiesTable = new TableImpl(parent, new HashMap<>(), new ArrayList<>());
+        propertiesTable.setOption("header");
+        propertiesTable.setAttribute("caption", "", true);
+        propertiesTable.setAttribute("cols", ".^4a,.^16a", true);
+        propertiesTable.setTitle(TABLE_TITLE_PROPERTIES);
+        propertiesTable.setHeaderRow(TABLE_HEADER_NAME, TABLE_HEADER_SCHEMA);
+
+        properties.forEach((name, schema) -> {
+            propertiesTable.addRow(
+                    generateInnerDoc(propertiesTable, name + (finalSchemaRequired.contains(name) ? superScript("*") : "")),
+                    generateSchemaDocument(propertiesTable, schema)
+            );
+        });
+        parent.append(propertiesTable);
+    }
+
+    public static void appendHeadersTable(Map<String, Header> headers, Document document) {
+        if (null == headers || headers.isEmpty()) return;
+
+        TableImpl responseHeadersTable = new TableImpl(document, new HashMap<>(), new ArrayList<>());
+        responseHeadersTable.setOption("header");
+        responseHeadersTable.setAttribute("caption", "", true);
+        responseHeadersTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
+        responseHeadersTable.setTitle(TABLE_TITLE_HEADERS);
+        responseHeadersTable.setHeaderRow(TABLE_HEADER_NAME, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_SCHEMA);
+        headers.forEach((name, header) ->
+                responseHeadersTable.addRow(
+                        generateInnerDoc(responseHeadersTable, name),
+                        generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
+                        generateSchemaDocument(responseHeadersTable, header.getSchema())
+                ));
+        document.append(responseHeadersTable);
+    }
+
+    public static Document generateInnerDoc(Table table, String documentContent) {
+        Document innerDoc = new DocumentImpl(table);
+        Block paragraph = new ParagraphBlockImpl(innerDoc);
+        paragraph.setSource(documentContent);
+        innerDoc.append(paragraph);
+        return innerDoc;
+    }
+
+    public static String superScript(String str) {
+        return "^" + str + "^";
+    }
+
+    public static String subScript(String str) {
+        return "~" + str + "~";
     }
 
     public static String italicUnconstrained(String str) {

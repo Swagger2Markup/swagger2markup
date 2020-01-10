@@ -56,6 +56,7 @@ v1.0, 2014-01-01
 
 [abstract]
 {description}
+[[_its_a_city_under_siege]]
 == It’s a City Under Siege
 This journey begins one late Monday afternoon at {uri-devoxx}[((Devoxx))].
 Our team needs coffee, _desperately_, but none of us dare open the theater doors...
@@ -80,12 +81,14 @@ Quick, hit kbd:[Ctrl,Alt,Backspace] or select menu:File[Quit] and let's bail out
 WARNING: Working with DefOps{empty}footnote:defops[] werewolves leads to howling and trying to train aggressive regular expressions with Pavlovian reinforcement.
 _Weak light from the hallway trickled across the theater, chased by a distant scream._
 
+[[_rendezvous_point]]
 === Rendezvous Point
 Come on, [[bier-central,Bier Central]]_Bier Central_, of course!
 Did you have to ask?
 If you beat me there, order me a {uri-stbernardusabt12}[St. Bernardus Abt 12].
 Here's some &#x20ac;.
 
+[[ravages]]
 [#ravages]
 == The Ravages of Writing
 Crystalline XML tags relentlessly bombarded the theater.
@@ -114,6 +117,7 @@ I want my mum -- and an extra-large double macchiato, please.
 ====
 Unfortunately, Lazarus and I had both come to the conclusion that we weren't going to get out of this without corrupted hardrives if we didn't locate caffeine within the next few hours.
 
+[[_a_recipe_for_potion_that_will_ensure_you_win_the_hearts_of_developers]]
 === A Recipe for Potion That Will Ensure You Win the Hearts of Developers
 This potion for a sample document contains the following ingredients, which are listed in a very random, chaotically nested order.
 
@@ -153,6 +157,7 @@ What is there to do?
 * [ ] Next
 * Who's counting?
 
+[[_searching_for_burdockian]]
 ==== Searching for Burdockian
 .Steps for finding and preparing Burdockian leaves
 . Locate dusty botany
@@ -206,6 +211,7 @@ Carrot::::
 An orange-colored root eaten as a vegetable.
 Beware, it's a favorite of the Wolpertinger.
 
+[[_are_you_still_here]]
 ===== Are You Still Here?
 .Move, move, move!
 [CAUTION]
@@ -214,9 +220,11 @@ The Wolpertingers can smell your procrastination.
 It's not their fault you can't find your boots.
 
 ====
+[[_sigh]]
 ====== Sigh…​
 TIP: Your boots are in your closet.
 
+[[_dawn_on_the_plateau]]
 == Dawn on the Plateau
 Lazarus was hanging from the bottom limb of a Burdockian tree, licking the bark.
 
@@ -239,6 +247,7 @@ We'd retrieved the leaves, but we'd obviously lost our minds in the process.
 Roses are +++<span style="color: #FF0000">red</span>+++.
 Violets are +++<span style="color: #0000FF">blue</span>+++__-ish__.
 
+[[_words_seasoned_with_power]]
 == Words Seasoned with Power
 To _tame_ the [.wild]#wild# wolpertingers, we needed to build a *charm*.
 But **ul**timate victory could only be won if we divined the *_true name_* of the __war__lock.
@@ -251,6 +260,7 @@ Kizmet shrugged. "`The note from Olaf's desk says '`wormwood and licorice,`' but
 "`Wait!`" Indigo plucked a small vial from her desk's top drawer and held it toward us.
 The vial's label read '```e = mc^2^ *_the scent of science_* _smells like a genius_```'.
 
+[[_can_i_get_some_code]]
 === Can I Get Some `Code`?
 [%hardbreaks]
 Sure.
@@ -406,6 +416,7 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumj.
 
+[[_keeping_it_together]]
 == Keeping It Together
 On this page we have nested "`keep together`" logic.
 The combined block will be shifted to the next page if there isn't room available on this one.
@@ -496,6 +507,7 @@ Here's some content inside an open block.
 
 --
 
+[[_credits]]
 [appendix]
 == Credits
 .Brought to you with icon:heart[set=fas,role=love] by OpenDevise
@@ -517,6 +529,7 @@ Here's some content inside an open block.
 
 |===
 
+[[_index]]
 [index]
 == Index
 

@@ -37,13 +37,16 @@ v1.0.0
 :chapter-refsig: Chapter
 :attribute-undefined: drop-line
 
+[[_overview]]
 == Overview
 This is a simple API
 
+[[_license]]
 === License
 [%hardbreaks]
 http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 
+[[_servers]]
 == Servers
 * https://{username}.gigantic-server.com:{port}/{basePath}
 +

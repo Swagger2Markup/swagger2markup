@@ -349,3 +349,90 @@ __required__
 
 |===
 
+[[_components]]
+== Components
+[[_components_schemas_inventoryitem]]
+=== InventoryItem
+
+type: object
+
+.Properties
+[%header,caption=,cols=".^4a,.^16a"]
+|===
+<.<|Name
+
+
+<.<|Schema
+
+
+
+<.<|id^*^
+
+
+<.<|type: string +
+format: uuid
+
+
+
+<.<|name^*^
+
+
+<.<|type: string
+
+
+
+<.<|releaseDate
+
+
+<.<|type: string +
+format: date-time
+
+
+
+<.<|manufacturer^*^
+
+
+<.<|<<_components_schemas_Manufacturer,Manufacturer>>
+
+
+
+|===
+[[_components_schemas_manufacturer]]
+=== Manufacturer
+
+type: object
+
+.Properties
+[%header,caption=,cols=".^4a,.^16a"]
+|===
+<.<|Name
+
+
+<.<|Schema
+
+
+
+<.<|name^*^
+
+
+<.<|type: string
+
+
+
+<.<|homePage
+
+
+<.<|type: string +
+format: url
+
+
+
+<.<|phone
+
+
+<.<|type: string
+
+
+
+|===
+

@@ -1,24 +1,28 @@
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.adoc.ast.impl.*;
-import io.swagger.v3.oas.models.OpenAPI;
+import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
+import io.github.swagger2markup.adoc.ast.impl.TableImpl;
 import io.swagger.v3.oas.models.Paths;
-import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
-import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.StructuralNode;
+import org.asciidoctor.ast.Table;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 import static io.github.swagger2markup.OpenApiHelpers.*;
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
 
 public class OpenApiPathsSection {
 
-    public static void appendPathSection(Document document, OpenAPI openAPI) {
-        Paths apiPaths = openAPI.getPaths();
+    public static void appendPathSection(Document document, Paths apiPaths) {
+        if(null == apiPaths || apiPaths.isEmpty()) return;
+
         SectionImpl allPathsSection = new SectionImpl(document);
         allPathsSection.setTitle(SECTION_TITLE_PATHS);
 
@@ -80,22 +84,7 @@ public class OpenApiPathsSection {
 
     private static Document getResponseDescriptionColumnDocument(Table table, ApiResponse apiResponse) {
         Document document = generateInnerDoc(table, Optional.ofNullable(apiResponse.getDescription()).orElse(""));
-        Map<String, Header> headers = apiResponse.getHeaders();
-        if (null != headers && !headers.isEmpty()) {
-            TableImpl responseHeadersTable = new TableImpl(document, new HashMap<>(), new ArrayList<>());
-            responseHeadersTable.setOption("header");
-            responseHeadersTable.setAttribute("caption", "", true);
-            responseHeadersTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
-            responseHeadersTable.setTitle(TABLE_TITLE_HEADERS);
-            responseHeadersTable.setHeaderRow(TABLE_HEADER_NAME, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_SCHEMA);
-            headers.forEach((name, header) ->
-                    responseHeadersTable.addRow(
-                            generateInnerDoc(responseHeadersTable, name),
-                            generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
-                            generateSchemaDocument(responseHeadersTable, header.getSchema())
-                    ));
-            document.append(responseHeadersTable);
-        }
+        appendHeadersTable(apiResponse.getHeaders(), document);
         return document;
     }
 
@@ -103,13 +92,5 @@ public class OpenApiPathsSection {
         String documentContent = boldUnconstrained(parameter.getName()) + " +" + LINE_SEPARATOR +
                 italicUnconstrained(parameter.getRequired() ? LABEL_REQUIRED : LABEL_OPTIONAL).toLowerCase();
         return generateInnerDoc(table, documentContent);
-    }
-
-    private static Document generateInnerDoc(Table table, String documentContent) {
-        Document innerDoc = new DocumentImpl(table);
-        Block paragraph = new ParagraphBlockImpl(innerDoc);
-        paragraph.setSource(documentContent);
-        innerDoc.append(paragraph);
-        return innerDoc;
     }
 }

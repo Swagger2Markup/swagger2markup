@@ -1,9 +1,11 @@
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.adoc.ast.impl.*;
-import io.swagger.v3.oas.models.OpenAPI;
+import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
+import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariables;
-import org.asciidoctor.ast.*;
+import org.asciidoctor.ast.Document;
+import org.asciidoctor.ast.Section;
 
 import java.util.*;
 
@@ -11,12 +13,13 @@ import static io.github.swagger2markup.OpenApiHelpers.*;
 
 public class OpenApiServerSection {
 
-    public static void addServersSection(Document document, OpenAPI openAPI) {
-        if (!openAPI.getServers().isEmpty()) {
-            Section serversSection = new SectionImpl(document);
-            serversSection.setTitle(SECTION_TITLE_SERVERS);
+    public static void addServersSection(Document document, List<Server> servers) {
+        if (null == servers || servers.isEmpty()) return;
 
-            openAPI.getServers().forEach(server -> {
+        Section serversSection = new SectionImpl(document);
+        serversSection.setTitle(SECTION_TITLE_SERVERS);
+
+        servers.forEach(server -> {
                 Section serverSection = new SectionImpl(serversSection);
                 serverSection.setTitle(italicUnconstrained(LABEL_SERVER) + ": " + server.getUrl());
 
@@ -40,7 +43,6 @@ public class OpenApiServerSection {
                 }
                 serversSection.append(serverSection);
             });
-            document.append(serversSection);
-        }
+        document.append(serversSection);
     }
 }
