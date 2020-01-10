@@ -20,61 +20,7 @@ developers::
 Operations available to regular developers
 
 == Servers
-=== __Server__: https://{username}.gigantic-server.com:{port}/{basePath}
-The production API server
-
-.Server Variables
-[%header,cols=".^2a,.^9a,.^3a,.^4a"]
-|===
-<.<|Variable
-
-
-<.<|Description
-
-
-<.<|Possible Values
-
-
-<.<|Default
-
-
-
-<.<|username
-
-
-<.<|this value is assigned by the service provider, in this example `gigantic-server.com`
-
-
-<.<|Any
-
-
-<.<|demo
-
-
-
-<.<|port
-
-
-<.<|
-<.<|8443, 443
-
-
-<.<|8443
-
-
-
-<.<|basePath
-
-
-<.<|
-<.<|Any
-
-
-<.<|v2
-
-
-
-|===
+=== __Server__: /
 
 == Paths
 === __GET__ `/inventory` searches inventory
@@ -114,22 +60,6 @@ __optional__
 <.<|**query**
 
 
-<.<|**skip** +
-__optional__
-
-
-<.<|number of records to skip for pagination
-
-
-<.<|minimum: 0 +
-type: integer +
-format: int32
-
-
-
-<.<|**query**
-
-
 <.<|**limit** +
 __optional__
 
@@ -140,6 +70,22 @@ __optional__
 <.<|minimum: 0 +
 type: integer +
 maximum: 50 +
+format: int32
+
+
+
+<.<|**query**
+
+
+<.<|**skip** +
+__optional__
+
+
+<.<|number of records to skip for pagination
+
+
+<.<|minimum: 0 +
+type: integer +
 format: int32
 
 
@@ -163,41 +109,8 @@ format: int32
 
 <.<|search results matching criteria
 
-.Headers
-[%header,caption=,cols=".^2a,.^14a,.^4a"]
-!===
-<.<!Name
 
-<.<!Description
-
-<.<!Schema
-
-<.<!X-Rate-Limit
-
-<.<!calls per hour allowed by the user
-
-<.<!type: integer +
-format: int32
-
-<.<!X-Expires-After
-
-<.<!date in UTC when token expires
-
-<.<!type: string +
-format: date-time
-
-!===
-
-<.<|address +
-__Operation__ __getUserAddress__ +
-__Parameters__ { +
-"userId": "$request.path.id" +
-} +
-name +
-__Operation__ __getUserName__ +
-__Parameters__ { +
-"userName": "$request.path.user" +
-} +
+<.<|No Links
 
 
 
@@ -213,97 +126,9 @@ __Parameters__ { +
 
 |===
 
-=== __GET__ `/users/{userid}/address`
-.Parameters
-[%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
-|===
-<.<|Type
-
-
-<.<|Name
-
-
-<.<|Description
-
-
-<.<|Schema
-
-
-
-<.<|**path**
-
-
-<.<|**userid** +
-__required__
-
-
-<.<|the user identifier, as userId
-
-
-<.<|type: string
-
-
-
-|===
-.Responses
-[%header,caption=,cols=".^2a,.^14a,.^4a"]
-|===
-<.<|Code
-
-
-<.<|Description
-
-
-<.<|Links
-
-
-
-<.<|200
-
-
-<.<|the user's address
-
-
-<.<|No Links
-
-
-
-|===
-
-=== __POST__ `/users/{userid}/address` adds an inventory item
+=== __POST__ `/inventory` adds an inventory item
 Adds an item to the system
 
-.Parameters
-[%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
-|===
-<.<|Type
-
-
-<.<|Name
-
-
-<.<|Description
-
-
-<.<|Schema
-
-
-
-<.<|**path**
-
-
-<.<|**userid** +
-__required__
-
-
-<.<|the user identifier, as userId
-
-
-<.<|type: string
-
-
-
-|===
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -351,8 +176,10 @@ __required__
 
 [[_components]]
 == Components
+[[_components_schemas]]
+=== Schemas
 [[_components_schemas_inventoryitem]]
-=== InventoryItem
+==== InventoryItem
 
 type: object
 
@@ -366,7 +193,8 @@ type: object
 
 
 
-<.<|id^*^
+<.<|id
+__required__
 
 
 <.<|type: string +
@@ -374,7 +202,8 @@ format: uuid
 
 
 
-<.<|name^*^
+<.<|name
+__required__
 
 
 <.<|type: string
@@ -382,6 +211,7 @@ format: uuid
 
 
 <.<|releaseDate
+__required__
 
 
 <.<|type: string +
@@ -389,7 +219,8 @@ format: date-time
 
 
 
-<.<|manufacturer^*^
+<.<|manufacturer
+__required__
 
 
 <.<|<<_components_schemas_Manufacturer,Manufacturer>>
@@ -398,7 +229,7 @@ format: date-time
 
 |===
 [[_components_schemas_manufacturer]]
-=== Manufacturer
+==== Manufacturer
 
 type: object
 
@@ -412,7 +243,8 @@ type: object
 
 
 
-<.<|name^*^
+<.<|name
+__required__
 
 
 <.<|type: string
@@ -420,6 +252,7 @@ type: object
 
 
 <.<|homePage
+__optional__
 
 
 <.<|type: string +
@@ -428,6 +261,7 @@ format: url
 
 
 <.<|phone
+__optional__
 
 
 <.<|type: string

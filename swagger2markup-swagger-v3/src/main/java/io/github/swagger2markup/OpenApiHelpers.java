@@ -6,6 +6,7 @@ import io.github.swagger2markup.adoc.ast.impl.TableImpl;
 import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.parameters.Parameter;
 import org.apache.commons.lang3.StringUtils;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
@@ -47,6 +48,7 @@ public class OpenApiHelpers {
     public static final String LABEL_UNIQUE_ITEMS = "Unique Items";
     public static final String LABEL_WRITE_ONLY = "Write Only";
     public static final String SECTION_TITLE_COMPONENTS = "Components";
+    public static final String SECTION_TITLE_PARAMETERS = "Parameters";
     public static final String SECTION_TITLE_PATHS = "Paths";
     public static final String SECTION_TITLE_SCHEMAS = "Schemas";
     public static final String SECTION_TITLE_SERVERS = "Servers";
@@ -167,7 +169,7 @@ public class OpenApiHelpers {
 
         properties.forEach((name, schema) -> {
             propertiesTable.addRow(
-                    generateInnerDoc(propertiesTable, name + (finalSchemaRequired.contains(name) ? superScript("*") : "")),
+                    generateInnerDoc(propertiesTable, name + LINE_SEPARATOR + requiredIndicator(finalSchemaRequired.contains(name))),
                     generateSchemaDocument(propertiesTable, schema)
             );
         });
@@ -192,12 +194,55 @@ public class OpenApiHelpers {
         document.append(responseHeadersTable);
     }
 
+    static void appendParameters(StructuralNode parent, Map<String, Parameter> parameters) {
+        if (null == parameters || parameters.isEmpty()) return;
+
+        TableImpl pathParametersTable = new TableImpl(parent, new HashMap<>(), new ArrayList<>());
+        pathParametersTable.setOption("header");
+        pathParametersTable.setAttribute("caption", "", true);
+        pathParametersTable.setAttribute("cols", ".^2a,.^3a,.^10a,.^5a", true);
+        pathParametersTable.setTitle(TABLE_TITLE_PARAMETERS);
+        pathParametersTable.setHeaderRow(TABLE_HEADER_TYPE, TABLE_HEADER_NAME, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_SCHEMA);
+
+        parameters.forEach((alt, parameter) ->
+                pathParametersTable.addRow(
+                        generateInnerDoc(pathParametersTable, boldUnconstrained(parameter.getIn()), alt),
+                        getParameterNameDocument(pathParametersTable, parameter),
+                        generateInnerDoc(pathParametersTable, Optional.ofNullable(parameter.getDescription()).orElse("")),
+                        generateSchemaDocument(pathParametersTable, parameter.getSchema())
+                ));
+        parent.append(pathParametersTable);
+    }
+
+    static void appendParameters(StructuralNode serverSection, List<Parameter> parameters) {
+        if (null == parameters || parameters.isEmpty()) return;
+        
+        appendParameters(serverSection, parameters.stream().collect(Collectors.toMap(Parameter::getName, parameter -> parameter)));
+    }
+
+    private static Document getParameterNameDocument(Table table, Parameter parameter) {
+        String documentContent = boldUnconstrained(parameter.getName()) + " +" + LINE_SEPARATOR + requiredIndicator(parameter.getRequired());
+        return generateInnerDoc(table, documentContent);
+    }
+
     public static Document generateInnerDoc(Table table, String documentContent) {
+        return generateInnerDoc(table, documentContent, "");
+    }
+
+    public static Document generateInnerDoc(Table table, String documentContent, String id) {
         Document innerDoc = new DocumentImpl(table);
+        if (StringUtils.isNotBlank(id)) {
+            innerDoc.setId(id);
+        }
+
         Block paragraph = new ParagraphBlockImpl(innerDoc);
         paragraph.setSource(documentContent);
         innerDoc.append(paragraph);
         return innerDoc;
+    }
+
+    public static String requiredIndicator(boolean isRequired) {
+        return italicUnconstrained(isRequired ? LABEL_REQUIRED : LABEL_OPTIONAL).toLowerCase();
     }
 
     public static String superScript(String str) {

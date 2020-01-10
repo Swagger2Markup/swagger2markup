@@ -8,59 +8,43 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-servers:
-  - url: https://{username}.gigantic-server.com:{port}/{basePath}
-    description: The production API server
-    variables:
-      username:
-        # note! no enum here means it is an open value
-        default: demo
-        description: this value is assigned by the service provider, in this example `gigantic-server.com`
-      port:
-        enum:
-          - '8443'
-          - '443'
-        default: '8443'
-      basePath:
-        # open meaning there is the opportunity to use special base paths as assigned by the provider, default is `v2`
-        default: v2
 tags:
-- name: admins
-  description: Secured Admin-only calls
-- name: developers
-  description: Operations available to regular developers
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
 paths:
   /inventory:
     get:
       tags:
-      - developers
+        - developers
       summary: searches inventory
       operationId: searchInventory
       description: |
         By passing in the appropriate options, you can search for
         available inventory in the system
       parameters:
-      - in: query
-        name: searchString
-        description: pass an optional search string for looking up inventory
-        required: false
-        schema:
-          type: string
-      - in: query
-        name: skip
-        description: number of records to skip for pagination
-        schema:
-          type: integer
-          format: int32
-          minimum: 0
-      - in: query
-        name: limit
-        description: maximum number of records to return
-        schema:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 50
+        - in: query
+          name: searchString
+          description: pass an optional search string for looking up inventory
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: skip
+          description: number of records to skip for pagination
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
       responses:
         '200':
           description: search results matching criteria
@@ -70,49 +54,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/InventoryItem'
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              description: date in UTC when token expires
-              schema:
-                type: string
-                format: date-time
-          links:
-            address:
-              # the target link operationId
-              operationId: getUserAddress
-              parameters:
-                # get the `id` field from the request path parameter named `id`
-                userId: $request.path.id
-            name:
-              # the target link operationId
-              operationId: getUserName
-              parameters:
-                userName: $request.path.user
         '400':
           description: bad input parameter
-  # the path item of the linked operation
-  /users/{userid}/address:
-    parameters:
-        - name: userid
-          in: path
-          required: true
-          description: the user identifier, as userId
-          schema:
-            type: string
-    # linked operation
-    get:
-      operationId: getUserAddress
-      responses:
-        '200':
-          description: the user's address
     post:
       tags:
-      - admins
+        - admins
       summary: adds an inventory item
       operationId: addInventory
       description: Adds an item to the system
@@ -134,9 +80,10 @@ components:
     InventoryItem:
       type: object
       required:
-      - id
-      - name
-      - manufacturer
+        - id
+        - name
+        - manufacturer
+        - releaseDate
       properties:
         id:
           type: string
@@ -153,7 +100,7 @@ components:
           $ref: '#/components/schemas/Manufacturer'
     Manufacturer:
       required:
-      - name
+        - name
       properties:
         name:
           type: string
