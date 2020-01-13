@@ -12,14 +12,11 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 
-import java.util.HashMap;
 import java.util.Optional;
 
-import static io.github.swagger2markup.OpenApiHelpers.appendDescription;
+import static io.github.swagger2markup.OpenApiHelpers.*;
 
 public class OpenApiInfoSection {
-    public static final String TITLE_LICENSE = "License";
-    public static final String TITLE_OVERVIEW = "Overview";
 
     public static void addInfoSection(Document rootDocument, OpenAPI openAPI) {
         Info apiInfo = openAPI.getInfo();
@@ -27,7 +24,8 @@ public class OpenApiInfoSection {
         addDocumentTitle(rootDocument, apiInfo);
         addAuthorInfo(rootDocument, apiInfo);
         addVersionInfo(rootDocument, apiInfo);
-        addOverview(rootDocument, apiInfo);
+        appendOverview(rootDocument, apiInfo);
+        appendExternalDoc(rootDocument, openAPI.getExternalDocs());
     }
 
     public static void addDocumentTitle(Document rootDocument, Info apiInfo) {
@@ -57,21 +55,19 @@ public class OpenApiInfoSection {
         }
     }
 
-    public static void addOverview(Document document, Info info) {
+    public static void appendOverview(Document document, Info info) {
         Section overviewDoc = new SectionImpl(document);
-        overviewDoc.setTitle(TITLE_OVERVIEW);
+        overviewDoc.setTitle(SECTION_TITLE_OVERVIEW);
 
         appendDescription(overviewDoc, info.getDescription());
-        addLicenseInfo(overviewDoc, info);
-        addTermsOfServiceInfo(overviewDoc, info);
+        appendTermsOfServiceInfo(overviewDoc, info);
+        appendLicenseInfo(overviewDoc, info);
         document.append(overviewDoc);
     }
 
-    public static void addLicenseInfo(Section overviewDoc, Info info) {
+    public static void appendLicenseInfo(Section overviewDoc, Info info) {
         License license = info.getLicense();
         if (null != license) {
-            Section licenseInfo = new SectionImpl(overviewDoc);
-            licenseInfo.setTitle(TITLE_LICENSE);
             StringBuilder sb = new StringBuilder();
             if (StringUtils.isNotBlank(license.getUrl())) {
                 sb.append(license.getUrl()).append("[");
@@ -80,21 +76,17 @@ public class OpenApiInfoSection {
             if (StringUtils.isNotBlank(license.getUrl())) {
                 sb.append("]");
             }
-            BlockImpl paragraph = new ParagraphBlockImpl(licenseInfo,
-                    new HashMap<String, Object>() {{
-                        put("hardbreaks-option", "");
-                    }});
+            BlockImpl paragraph = new ParagraphBlockImpl(overviewDoc);
             paragraph.setSource(sb.toString());
-            licenseInfo.append(paragraph);
-            overviewDoc.append(licenseInfo);
+            overviewDoc.append(paragraph);
         }
     }
 
-    public static void addTermsOfServiceInfo(Section overviewDoc, Info info) {
+    public static void appendTermsOfServiceInfo(Section overviewDoc, Info info) {
         String termsOfService = info.getTermsOfService();
         if (StringUtils.isNotBlank(termsOfService)) {
             Block paragraph = new ParagraphBlockImpl(overviewDoc);
-            paragraph.setSource(termsOfService);
+            paragraph.setSource(termsOfService + "[" + LABEL_TERMS_OF_SERVICE + "]");
             overviewDoc.append(paragraph);
         }
     }

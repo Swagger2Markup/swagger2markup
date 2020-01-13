@@ -4,8 +4,8 @@ import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
 import io.swagger.v3.oas.models.servers.Server;
 import io.swagger.v3.oas.models.servers.ServerVariables;
-import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
 
 import java.util.*;
 
@@ -13,10 +13,10 @@ import static io.github.swagger2markup.OpenApiHelpers.*;
 
 public class OpenApiServerSection {
 
-    public static void addServersSection(Document document, List<Server> servers) {
+    public static void addServersSection(StructuralNode node, List<Server> servers) {
         if (null == servers || servers.isEmpty()) return;
 
-        Section serversSection = new SectionImpl(document);
+        Section serversSection = new SectionImpl(node);
         serversSection.setTitle(SECTION_TITLE_SERVERS);
 
         servers.forEach(server -> {
@@ -28,7 +28,7 @@ public class OpenApiServerSection {
             appendVariables(serverSection, variables);
             serversSection.append(serverSection);
         });
-        document.append(serversSection);
+        node.append(serversSection);
     }
 
     private static void appendVariables(Section serverSection, ServerVariables variables) {

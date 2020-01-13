@@ -450,7 +450,6 @@ paths:
       summary: Logs user into the system
       description: ''
       operationId: loginUser
-      security: []
       parameters:
         - name: username
           in: query
@@ -498,7 +497,7 @@ paths:
       parameters:
         - name: username
           in: path
-          description: 'The name that needs to be fetched. Use user1 for testing. '
+          description: 'The name that needs to be fetched. Use user1 for testing.'
           required: true
           schema:
             type: string

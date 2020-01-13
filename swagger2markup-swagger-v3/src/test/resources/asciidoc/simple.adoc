@@ -9,8 +9,6 @@ v1.0.0
 == Overview
 This is a simple API
 
-=== License
-[%hardbreaks]
 http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 
 == Tags

@@ -12,7 +12,7 @@ import org.asciidoctor.ast.Section;
 import java.util.Collections;
 import java.util.List;
 
-import static io.github.swagger2markup.OpenApiHelpers.SECTION_TITLE_TAGS;
+import static io.github.swagger2markup.OpenApiHelpers.*;
 
 public class OpenApiTagsSection {
 
@@ -29,6 +29,7 @@ public class OpenApiTagsSection {
             if(StringUtils.isNotBlank(description)){
                 ListItemImpl tagDesc = new ListItemImpl(tagEntry, "");
                 tagDesc.setSource(description);
+                appendExternalDoc(tagDesc, tag.getExternalDocs());
                 tagEntry.setDescription(tagDesc);
             }
             tagsList.addEntry(tagEntry);

@@ -32,7 +32,8 @@ public class OpenApi2AsciiDocTest {
     @Parameterized.Parameters(name = "Run {index}: open api={0}, asciidoc={1}")
     public static Iterable<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {"simple.yaml", "simple.adoc"}
+                {"simple.yaml", "simple.adoc"},
+                {"petstore.yaml", "petstore.adoc"}
         });
     }
 

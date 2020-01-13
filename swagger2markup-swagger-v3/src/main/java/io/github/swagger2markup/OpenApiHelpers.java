@@ -3,6 +3,7 @@ package io.github.swagger2markup;
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
@@ -43,6 +44,7 @@ public class OpenApiHelpers {
     public static final String LABEL_READ_ONLY = "Read Only";
     public static final String LABEL_REQUIRED = "Required";
     public static final String LABEL_SERVER = "Server";
+    public static final String LABEL_TERMS_OF_SERVICE = "Terms Of Service";
     public static final String LABEL_TITLE = "Title";
     public static final String LABEL_TYPE = "Type";
     public static final String LABEL_UNIQUE_ITEMS = "Unique Items";
@@ -52,6 +54,7 @@ public class OpenApiHelpers {
     public static final String SECTION_TITLE_PATHS = "Paths";
     public static final String SECTION_TITLE_SCHEMAS = "Schemas";
     public static final String SECTION_TITLE_SERVERS = "Servers";
+    public static final String SECTION_TITLE_OVERVIEW = "Overview";
     public static final String SECTION_TITLE_TAGS = "Tags";
     public static final String TABLE_HEADER_DEFAULT = "Default";
     public static final String TABLE_HEADER_DESCRIPTION = "Description";
@@ -216,7 +219,7 @@ public class OpenApiHelpers {
 
     static void appendParameters(StructuralNode serverSection, List<Parameter> parameters) {
         if (null == parameters || parameters.isEmpty()) return;
-        
+
         appendParameters(serverSection, parameters.stream().collect(Collectors.toMap(Parameter::getName, parameter -> parameter)));
     }
 
@@ -243,6 +246,18 @@ public class OpenApiHelpers {
 
     public static String requiredIndicator(boolean isRequired) {
         return italicUnconstrained(isRequired ? LABEL_REQUIRED : LABEL_OPTIONAL).toLowerCase();
+    }
+
+    public static void appendExternalDoc(StructuralNode node, ExternalDocumentation extDoc){
+        if (extDoc == null) return;
+
+        String url = extDoc.getUrl();
+        if (StringUtils.isNotBlank(url)) {
+            Block paragraph = new ParagraphBlockImpl(node);
+            String desc = extDoc.getDescription();
+            paragraph.setSource(url + (StringUtils.isNotBlank(desc) ? "[" + desc + "]" : ""));
+            node.append(paragraph);
+        }
     }
 
     public static String superScript(String str) {

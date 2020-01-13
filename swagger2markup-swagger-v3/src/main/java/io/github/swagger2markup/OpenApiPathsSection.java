@@ -27,7 +27,7 @@ public class OpenApiPathsSection {
                 String summary = Optional.ofNullable(operation.getSummary()).orElse("");
                 operationSection.setTitle((italicUnconstrained(httpMethod.name().toUpperCase()) + " " + monospaced(name) + " " + summary).trim());
                 appendDescription(operationSection, operation.getDescription());
-
+                appendExternalDoc(operationSection, operation.getExternalDocs());
                 appendParameters(operationSection, operation.getParameters());
                 appendPathResponses(operationSection, operation.getResponses());
 
