@@ -25,6 +25,7 @@ public class OpenApiComponentsSection {
         appendComponentsParameters(componentsSection, componentSectionId, components.getParameters());
         appendResponses(componentsSection, components.getResponses());
         appendHeadersTable(componentsSection, components.getHeaders());
+        generateLinksDocument(componentsSection, components.getLinks());
 
         document.append(componentsSection);
     }
