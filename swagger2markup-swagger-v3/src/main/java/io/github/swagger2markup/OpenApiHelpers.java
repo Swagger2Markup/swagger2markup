@@ -8,6 +8,8 @@ import io.swagger.v3.oas.models.headers.Header;
 import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.parameters.RequestBody;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
@@ -217,10 +219,39 @@ public class OpenApiHelpers {
         parent.append(pathParametersTable);
     }
 
-    static void appendParameters(StructuralNode serverSection, List<Parameter> parameters) {
+    static void appendParameters(StructuralNode node, List<Parameter> parameters) {
         if (null == parameters || parameters.isEmpty()) return;
 
-        appendParameters(serverSection, parameters.stream().collect(Collectors.toMap(Parameter::getName, parameter -> parameter)));
+        appendParameters(node, parameters.stream().collect(Collectors.toMap(Parameter::getName, parameter -> parameter)));
+    }
+
+    static void appendRequestBody(StructuralNode node, RequestBody requestBody){
+        if(null == requestBody) return;
+    }
+
+    static void appendResponses(StructuralNode serverSection, Map<String, ApiResponse> apiResponses) {
+        if (null == apiResponses || apiResponses.isEmpty()) return;
+        TableImpl pathResponsesTable = new TableImpl(serverSection, new HashMap<>(), new ArrayList<>());
+        pathResponsesTable.setOption("header");
+        pathResponsesTable.setAttribute("caption", "", true);
+        pathResponsesTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
+        pathResponsesTable.setTitle(TABLE_TITLE_RESPONSES);
+        pathResponsesTable.setHeaderRow(TABLE_HEADER_HTTP_CODE, TABLE_HEADER_DESCRIPTION, TABLE_HEADER_LINKS);
+
+        apiResponses.forEach((httpCode, apiResponse) -> {
+            pathResponsesTable.addRow(
+                    generateInnerDoc(pathResponsesTable, httpCode),
+                    getResponseDescriptionColumnDocument(pathResponsesTable, apiResponse),
+                    generateLinksDocument(pathResponsesTable, apiResponse.getLinks())
+            );
+        });
+        serverSection.append(pathResponsesTable);
+    }
+
+    static Document getResponseDescriptionColumnDocument(Table table, ApiResponse apiResponse) {
+        Document document = generateInnerDoc(table, Optional.ofNullable(apiResponse.getDescription()).orElse(""));
+        appendHeadersTable(apiResponse.getHeaders(), document);
+        return document;
     }
 
     private static Document getParameterNameDocument(Table table, Parameter parameter) {

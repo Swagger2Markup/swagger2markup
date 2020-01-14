@@ -1429,3 +1429,28 @@ __optional__
 
 type: array
 
+.Responses
+[%header,caption=,cols=".^2a,.^14a,.^4a"]
+|===
+<.<|Code
+
+
+<.<|Description
+
+
+<.<|Links
+
+
+
+<.<|veryBad
+
+
+<.<|failed
+
+
+<.<|No Links
+
+
+
+|===
+

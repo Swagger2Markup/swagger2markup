@@ -13,7 +13,7 @@ import static io.github.swagger2markup.OpenApiHelpers.*;
 
 public class OpenApiServerSection {
 
-    public static void addServersSection(StructuralNode node, List<Server> servers) {
+    public static void appendServersSection(StructuralNode node, List<Server> servers) {
         if (null == servers || servers.isEmpty()) return;
 
         Section serversSection = new SectionImpl(node);

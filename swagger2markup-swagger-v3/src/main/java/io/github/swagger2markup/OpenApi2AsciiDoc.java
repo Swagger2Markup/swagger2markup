@@ -11,7 +11,7 @@ public class OpenApi2AsciiDoc {
         Document rootDocument = new DocumentImpl();
         OpenApiInfoSection.addInfoSection(rootDocument, openAPI);
         OpenApiTagsSection.appendTagsSection(rootDocument, openAPI.getTags());
-        OpenApiServerSection.addServersSection(rootDocument, openAPI.getServers());
+        OpenApiServerSection.appendServersSection(rootDocument, openAPI.getServers());
         OpenApiPathsSection.appendPathSection(rootDocument, openAPI.getPaths());
         OpenApiComponentsSection.appendComponentsSection(rootDocument, openAPI.getComponents());
         return rootDocument.convert();

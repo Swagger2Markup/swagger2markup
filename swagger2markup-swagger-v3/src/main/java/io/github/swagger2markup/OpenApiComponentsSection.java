@@ -23,6 +23,7 @@ public class OpenApiComponentsSection {
 
         appendComponentsSchemasSection(componentsSection, componentSectionId, components.getSchemas());
         appendComponentsParameters(componentsSection, componentSectionId, components.getParameters());
+        appendResponses(componentsSection, components.getResponses());
 
         document.append(componentsSection);
     }
