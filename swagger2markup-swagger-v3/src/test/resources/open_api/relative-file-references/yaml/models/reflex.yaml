@@ -1,6 +1,0 @@
-type: object
-properties:
-  name:
-    type: string
-  speedInMilliseconds:
-    type: integer

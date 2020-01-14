@@ -1,6 +1,0 @@
-components:
-  schemas:
-    Category:
-      properties:
-        name:
-          type: string

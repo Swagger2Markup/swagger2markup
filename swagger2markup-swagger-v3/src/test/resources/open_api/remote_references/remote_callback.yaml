@@ -1,7 +1,0 @@
-'$response.body#/successUrl':
-  post:
-    requestBody:
-      $ref: '#/components/requestBodies/requestBody1'
-    responses:
-      '200':
-        description: Consumer acknowledged the callback

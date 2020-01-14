@@ -1,5 +1,0 @@
-Paging:
-  type: object
-  properties:
-    total_items:
-      type: integer

@@ -1,6 +1,0 @@
-{
-    "description": "Currency code",
-    "type": "string",
-    "minLength": 3,
-    "maxLength": 3
-}

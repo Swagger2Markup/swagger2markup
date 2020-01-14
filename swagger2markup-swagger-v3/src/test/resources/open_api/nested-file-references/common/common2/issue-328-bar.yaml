@@ -1,4 +1,0 @@
-Foobar:
-  properties:
-    message:
-      type: string

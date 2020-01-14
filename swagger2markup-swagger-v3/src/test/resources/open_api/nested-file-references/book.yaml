@@ -1,9 +1,0 @@
-description: A book entity
-properties:
-  name:
-    type: string
-  title:
-    type: string
-  pages:
-    type: integer
-    format: int32
