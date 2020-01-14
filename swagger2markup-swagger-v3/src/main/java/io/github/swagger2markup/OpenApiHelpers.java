@@ -181,10 +181,10 @@ public class OpenApiHelpers {
         parent.append(propertiesTable);
     }
 
-    public static void appendHeadersTable(Map<String, Header> headers, Document document) {
+    public static void appendHeadersTable(StructuralNode node, Map<String, Header> headers) {
         if (null == headers || headers.isEmpty()) return;
 
-        TableImpl responseHeadersTable = new TableImpl(document, new HashMap<>(), new ArrayList<>());
+        TableImpl responseHeadersTable = new TableImpl(node, new HashMap<>(), new ArrayList<>());
         responseHeadersTable.setOption("header");
         responseHeadersTable.setAttribute("caption", "", true);
         responseHeadersTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
@@ -196,7 +196,7 @@ public class OpenApiHelpers {
                         generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
                         generateSchemaDocument(responseHeadersTable, header.getSchema())
                 ));
-        document.append(responseHeadersTable);
+        node.append(responseHeadersTable);
     }
 
     static void appendParameters(StructuralNode parent, Map<String, Parameter> parameters) {
@@ -250,7 +250,7 @@ public class OpenApiHelpers {
 
     static Document getResponseDescriptionColumnDocument(Table table, ApiResponse apiResponse) {
         Document document = generateInnerDoc(table, Optional.ofNullable(apiResponse.getDescription()).orElse(""));
-        appendHeadersTable(apiResponse.getHeaders(), document);
+        appendHeadersTable(document, apiResponse.getHeaders());
         return document;
     }
 
