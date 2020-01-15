@@ -15,7 +15,12 @@ dependencies {
         resolutionStrategy.force dependencyOverrides.findBugs
         resolutionStrategy.force dependencyOverrides.jaksonCore
     }
-    implementation implLibraries.swaggerV2Converter
+//    implementation implLibraries.swaggerV2Converter
+    compile project(':swagger2markup-asciidoc')
+    implementation implLibraries.asciiDocJApi
+    implementation implLibraries.commonsText
+    implementation implLibraries.slf4j
     implementation implLibraries.swaggerV3
     testImplementation testLibraries.junit
+    testImplementation testLibraries.logback
 }

@@ -15,10 +15,11 @@ dependencies {
 //        resolutionStrategy.force dependencyOverrides.findBugs
 //        resolutionStrategy.force dependencyOverrides.jaksonCore
     }
-    implementation implLibraries.asciiDocJ
+    implementation implLibraries.asciiDocJApi
     implementation implLibraries.commonsText
     implementation implLibraries.slf4j
     testImplementation implLibraries.commonsIO
+    testImplementation testLibraries.asciiDocJ
     testImplementation testLibraries.junit
     testImplementation testLibraries.logback
 }

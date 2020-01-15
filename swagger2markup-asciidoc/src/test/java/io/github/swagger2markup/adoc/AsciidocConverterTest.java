@@ -1,4 +1,4 @@
-package io.github.swagger2markup.adoc.converter;
+package io.github.swagger2markup.adoc;
 
 import org.apache.commons.io.IOUtils;
 import org.asciidoctor.Asciidoctor;
@@ -18,9 +18,10 @@ public class AsciidocConverterTest {
 
     private Asciidoctor asciidoctor = Asciidoctor.Factory.create();
 
-    @Parameterized.Parameters
+    @Parameterized.Parameters(name = "Run {index}: file={0}")
     public static Iterable<?> data() {
         return Arrays.asList(
+                "simple.adoc",
                 "arrows-and-boxes-example.ad",
                 "brokeninclude.asciidoc",
                 "changeattribute.adoc",
