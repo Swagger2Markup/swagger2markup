@@ -17,7 +17,7 @@ dependencies {
     }
 //    implementation implLibraries.swaggerV2Converter
     compile project(':swagger2markup-asciidoc')
-    implementation implLibraries.asciiDocJ
+    implementation implLibraries.asciiDocJApi
     implementation implLibraries.commonsText
     implementation implLibraries.slf4j
     implementation implLibraries.swaggerV3

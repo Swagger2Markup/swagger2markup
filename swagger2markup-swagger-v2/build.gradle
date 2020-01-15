@@ -29,7 +29,6 @@ dependencies {
     implementation implLibraries.slf4j
     implementation implLibraries.swaggerV2
     implementation implLibraries.vavr
-    testImplementation testLibraries.asciiDocJ
     testImplementation testLibraries.assertj
     testImplementation testLibraries.assertjDiff
     testImplementation testLibraries.junit
