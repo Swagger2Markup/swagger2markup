@@ -1,7 +1,6 @@
 = The Dangerous & _Thrilling_ Documentation Chronicles: Based on True Events
-Kismet Caméléon, Lazarus het Draeke
+Kismet Caméléon; Lazarus het Draeke
 v1.0, 2014-01-01
-
 :tip-caption: Tip
 :appendix-caption: Appendix
 :toclevels: 3
@@ -57,8 +56,8 @@ v1.0, 2014-01-01
 
 [abstract]
 {description}
+[[_its_a_city_under_siege]]
 == It’s a City Under Siege
-
 This journey begins one late Monday afternoon at {uri-devoxx}[((Devoxx))].
 Our team needs coffee, _desperately_, but none of us dare open the theater doors...
 
@@ -82,18 +81,16 @@ Quick, hit kbd:[Ctrl,Alt,Backspace] or select menu:File[Quit] and let's bail out
 WARNING: Working with DefOps{empty}footnote:defops[] werewolves leads to howling and trying to train aggressive regular expressions with Pavlovian reinforcement.
 _Weak light from the hallway trickled across the theater, chased by a distant scream._
 
+[[_rendezvous_point]]
 === Rendezvous Point
-
 Come on, [[bier-central,Bier Central]]_Bier Central_, of course!
 Did you have to ask?
 If you beat me there, order me a {uri-stbernardusabt12}[St. Bernardus Abt 12].
 Here's some &#x20ac;.
 
-
-
+[[ravages]]
 [#ravages]
 == The Ravages of Writing
-
 Crystalline XML tags relentlessly bombarded the theater.
 
 .XML tags
@@ -107,7 +104,6 @@ Crystalline XML tags relentlessly bombarded the theater.
   </personname>
 </author>
 ----
-
 Despite the assault, we continued our pursuit to draft a DefOps{empty}footnote:defops[] plan.
 
 .DefOps Plan
@@ -119,11 +115,10 @@ Somebody please save us now!
 I want my mum -- and an extra-large double macchiato, please.
 
 ====
+Unfortunately, Lazarus and I had both come to the conclusion that we weren't going to get out of this without corrupted hardrives if we didn't locate caffeine within the next few hours.
 
-Unfortunaly, Lazarus and I had both come to the conclusion that we weren't going to get out of this without corrupted hardrives if we didn't locate caffeine within the next few hours.
-
+[[_a_recipe_for_potion_that_will_ensure_you_win_the_hearts_of_developers]]
 === A Recipe for Potion That Will Ensure You Win the Hearts of Developers
-
 This potion for a sample document contains the following ingredients, which are listed in a very random, chaotically nested order.
 
 .Ingredients for Potion that Demystifies Documents
@@ -131,39 +126,17 @@ This potion for a sample document contains the following ingredients, which are 
 ** syntax highlighted source code
 *** non-syntax highlighted source code or just a listing block
 
-
-
-
-
-
-
 * quote block
 ** verse block
 *** table with some cell formatting
 **** sequential paragraphs
 ***** admonition blocks, but use them sparingly
 
-
-
-
-
-
-
 *** bullet list with nesting
 
-
-
-
 ** numbered list with nesting
-
 ** definition list
 *** sidebar
-
-
-
-
-
-
 
 * example block
 ** block image (no inline images)
@@ -171,53 +144,25 @@ This potion for a sample document contains the following ingredients, which are 
 **** two fresh Burdockian leaves
 ***** They must be harvested by the light of the teal moons.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Are you square?
 
 [square]
 * one
-
 * two
-
 * three
-
-
 
 What is there to do?
 
 * [x] Done
-
 * [ ] Next
-
 * Who's counting?
 
-
-
+[[_searching_for_burdockian]]
 ==== Searching for Burdockian
-
 .Steps for finding and preparing Burdockian leaves
 . Locate dusty botany
 .. Sneeze
 ... Sneeze some more
-
-
-
-
-
-
 
 . Find section on Burdockian
 .. Review its characteristics
@@ -225,23 +170,8 @@ What is there to do?
 .... Don't rip out the picture like a troglodyte
 ..... Don't do it, I'm watching you
 
-
-
-
-
-
-
-
-
-
-
-
-
 . Put on your hiking boots
-
 . Freeze your butt off on the side of a mountain at midnight
-
-
 
 Let's skip a few steps and start counting from 10.
 
@@ -249,69 +179,40 @@ Let's skip a few steps and start counting from 10.
 . arabic (10)
 .. loweralpha (a)
 ... lowerroman (i)
-
 ... lowerroman (ii)
-
 ... lowerroman (iii)
-
 ... lowerroman (iv)
 .... upperalpha (A)
 
-
-
-
-
-
-
-
-
-
 . arabic (11)
-
-
 
 It's time for a top 5 list, made using the `reversed` option on an ordered list!
 
 [%reversed]
 . Stone Imperial Russian Stout
-
 . Pliny the Elder
-
 . Chimay Grande Réserve (Blue)
-
 . St. Bernardus Abt 12
-
 . Westvleteren 12 (XII)
-
-
 
 How about a list with some terms?
 
 * Fruits
-Apple::
-
+Apple::::
 The round fruit of a tree of the rose family, which typically has thin red or green skin and crisp flesh.
 Yes, I said _flesh_.
-Pear::
-
+Pear::::
 A yellowish- or brownish-green edible fruit that is typically narrow at the stalk and wider toward the base, with sweet, slightly gritty flesh.
 More flesh.
 Mmmmm.
 
-
-
 * Vegetables
-Carrot::
-
+Carrot::::
 An orange-colored root eaten as a vegetable.
 Beware, it's a favorite of the Wolpertinger.
 
-
-
-
-
+[[_are_you_still_here]]
 ===== Are You Still Here?
-
 .Move, move, move!
 [CAUTION]
 ====
@@ -319,17 +220,12 @@ The Wolpertingers can smell your procrastination.
 It's not their fault you can't find your boots.
 
 ====
-
+[[_sigh]]
 ====== Sigh…​
-
 TIP: Your boots are in your closet.
 
-
-
-
-
+[[_dawn_on_the_plateau]]
 == Dawn on the Plateau
-
 Lazarus was hanging from the bottom limb of a Burdockian tree, licking the bark.
 
 [quote,Mark Tobey]
@@ -345,16 +241,14 @@ No bark was harmed in the making of this potion.
 
      Crap, I smell an injunction.
 ____
-
 We'd retrieved the leaves, but we'd obviously lost our minds in the process.
 
 [verse]
 Roses are +++<span style="color: #FF0000">red</span>+++.
 Violets are +++<span style="color: #0000FF">blue</span>+++__-ish__.
 
-
+[[_words_seasoned_with_power]]
 == Words Seasoned with Power
-
 To _tame_ the [.wild]#wild# wolpertingers, we needed to build a *charm*.
 But **ul**timate victory could only be won if we divined the *_true name_* of the __war__lock.
 
@@ -366,8 +260,8 @@ Kizmet shrugged. "`The note from Olaf's desk says '`wormwood and licorice,`' but
 "`Wait!`" Indigo plucked a small vial from her desk's top drawer and held it toward us.
 The vial's label read '```e = mc^2^ *_the scent of science_* _smells like a genius_```'.
 
+[[_can_i_get_some_code]]
 === Can I Get Some `Code`?
-
 [%hardbreaks]
 Sure.
 Have a listing block.
@@ -378,7 +272,6 @@ Have a listing block.
 This is an example of a listing block.
 The content inside is rendered as <pre> text.
 ----
-
 But I'm not giving you any highlighting shazam just yet.
 
 .What is a listing block?
@@ -387,16 +280,13 @@ Listing block content is rendered as `<pre>` text.
 
 The `listing` style is applied to an element, such as a paragraph, by setting the `listing` attribute on that element.
 
-
 Let's get our #((highlighting))# on!
 
 <<<
-
 Install Prawn:
 
 [literal]
 $ gem install prawn
-
 Then create your first PDF document in Ruby!
 
 .Generates a basic PDF document using Prawn
@@ -409,14 +299,9 @@ Prawn::Document.generate 'output.pdf' do # <3>
   text 'Hello, World!' # <2>
 end
 ----
-
 <1> Imports Prawn library
-
 <3> Adds text “Hello, World!” to first page
-
 <2> Writes PDF to [file]_output.pdf_ after executing all statements
-
-
 How about some source code that styles code? So meta!
 
 [source,css]
@@ -432,7 +317,6 @@ code {
   border-radius: 4px;
 }
 ----
-
 Where could we go without some Java(TM)?
 Naturally, some autosizing is necessary.
 
@@ -493,7 +377,6 @@ public class GreetingReceiver implements EventReceiver, Serializable {
 
 }
 ----
-
 We already showed you an XML example in <<ravages>>, a language we often rant about over beers at <<bier-central>>.
 
 I'll trade you a little table for some of that bark.
@@ -513,23 +396,18 @@ I'll trade you a little table for some of that bark.
 4+^.<e|This content spans all four columns (`4{plus}`) and is centered horizontally (`{caret}`) within the cell.
 
 |===
-
 Wait.
 What?
 Where is this story going?
 
-`<span>`::
-
+`<span>`:::
 an html tag that makes me crazy
-align::
-
+align:::
 something I never get going in the right direction.
 Also has to do with my poor verbal communication skills
-float::
-style::
-
+float:::
+style:::
 don't make me laugh
-
 
 Does anyone have the time?
 
@@ -538,10 +416,8 @@ Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliqu
 Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumj.
 
-
-
+[[_keeping_it_together]]
 == Keeping It Together
-
 On this page we have nested "`keep together`" logic.
 The combined block will be shifted to the next page if there isn't room available on this one.
 
@@ -565,7 +441,6 @@ to
 its
 breaking
 point.
-
 .What happens if there is both a field and a method with the same name?
 [NOTE]
 ====
@@ -583,7 +458,6 @@ public class Foo {
   }
 }
 ----
-
 *Golo resolves methods first, fields last.*
 Hence, the following Golo code will resolve the `bar()` method, not the `bar` field:
 
@@ -597,59 +471,45 @@ foo: bar("baz") # <1>
 
 println(foo: bar()) # <2>
 ----
-
 <1> Writes the field
-
 <2> Calls the `bar()` method
-
-
 ====
-
 <<<
-
 Here's a preview of how each heading level is rendered.
 
 [discrete]
 = Heading 1 (Level 0)
-
 filler content
 
 [discrete]
 == Heading 2 (Level 1)
-
 filler content
 
 [discrete]
 === Heading 3 (Level 2)
-
 filler content
 
 [discrete]
 ==== Heading 4 (Level 3)
-
 filler content
 
 [discrete]
 ===== Heading 5 (Level 4)
-
 filler content
 
 [discrete]
 ====== Heading 6 (Level 5)
-
 filler content
 
 '''
-
 --
 Here's some content inside an open block.
 
 --
 
-
+[[_credits]]
 [appendix]
 == Credits
-
 .Brought to you with icon:heart[set=fas,role=love] by OpenDevise
 [table%footer%header,grid=rows,width=75%,cols="2,2s,^4",frame=topbot]
 |===
@@ -669,7 +529,7 @@ Here's some content inside an open block.
 
 |===
 
-
+[[_index]]
 [index]
 == Index
 

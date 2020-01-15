@@ -6,6 +6,8 @@
         </encoder>
     </appender>
 
+    <logger name="io.github.swagger2markup" level="DEBUG"/>
+
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
     </root>

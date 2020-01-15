@@ -1,0 +1,77 @@
+= Simple Inventory API
+You <you@your-company.com>
+v1.0.0
+:tip-caption: Tip
+:appendix-caption: Appendix
+:appendix-refsig: Appendix
+:authorinitials: Y
+:toc-title: Table of Contents
+:iconsdir: ./images/icons
+:author: You
+:warning-caption: Warning
+:figure-caption: Figure
+:attribute-missing: skip
+:section-refsig: Section
+:toc-placement: auto
+:important-caption: Important
+:authors: You
+:note-caption: Note
+:firstname: You
+:stylesdir: .
+:untitled-label: Untitled
+:max-include-depth: 64
+:caution-caption: Caution
+:user-home: .
+:max-attribute-value-size: 4096
+:safe-mode-level: 20
+:safe-mode-name: secure
+:table-caption: Table
+:part-refsig: Part
+:authorcount: 1
+:example-caption: Example
+:email: you@your-company.com
+:version-label: Version
+:revnumber: 1.0.0
+:last-update-label: Last updated
+:doctype: article
+:chapter-refsig: Chapter
+:attribute-undefined: drop-line
+
+[[_overview]]
+== Overview
+This is a simple API
+
+[[_license]]
+=== License
+[%hardbreaks]
+http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
+
+[[_servers]]
+== Servers
+* https://{username}.gigantic-server.com:{port}/{basePath}
++
+The production API server
+
++
+.Variables
+username::
+*this* __value__ is assigned by the service provider, in this example `gigantic-server.com`
+Possible Values::
+Any
+Default::
+demo
+
+port::
+Possible Values::
+- 8443
+- 443
+
+Default::
+8443
+
+basePath::
+Possible Values::
+Any
+Default::
+v2
+
