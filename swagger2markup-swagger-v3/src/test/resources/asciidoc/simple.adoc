@@ -107,6 +107,12 @@ format: int32
 
 <.<|search results matching criteria
 
+.Content
+application/json::
++
+
+type: array
+
 
 <.<|No Links
 

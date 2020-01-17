@@ -34,6 +34,13 @@ paths:
       description: ''
       operationId: createPet
       responses:
+        '200':
+          description: This is a sample
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: 'whoa!'
         '405':
           description: Invalid input
       security:
@@ -409,6 +416,22 @@ paths:
       description: This can only be done by the logged in user.
       operationId: createUser
       responses:
+        200:
+          content:
+            'application/json':
+              schema:
+                type: object
+                properties:
+                  id:
+                    # default is text/plain
+                    type: string
+                    format: text
+              examples:
+                foo:
+                  value: {"foo": "bar"}
+                bar:
+                  summary: A bar example
+                  value: {"bar": "baz"}
         default:
           description: successful operation
       requestBody:

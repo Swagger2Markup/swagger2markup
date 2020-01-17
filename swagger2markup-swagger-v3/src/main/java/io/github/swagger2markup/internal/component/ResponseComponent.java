@@ -33,11 +33,13 @@ public class ResponseComponent extends MarkupComponent<StructuralNode, ResponseC
 
     private final HeadersComponent headersComponent;
     private final LinkComponent linkComponent;
+    private final MediaContentComponent mediaContentComponent;
 
     public ResponseComponent(OpenAPI2MarkupConverter.OpenAPIContext context) {
         super(context);
         this.headersComponent = new HeadersComponent(context);
         this.linkComponent = new LinkComponent(context);
+        this.mediaContentComponent = new MediaContentComponent(context);
     }
 
     public static Parameters parameters(Map<String, ApiResponse> apiResponses) {
@@ -74,6 +76,7 @@ public class ResponseComponent extends MarkupComponent<StructuralNode, ResponseC
     private Document getResponseDescriptionColumnDocument(Table table, ApiResponse apiResponse) {
         Document document = OpenApiHelpers.generateInnerDoc(table, Optional.ofNullable(apiResponse.getDescription()).orElse(""));
         headersComponent.apply(document, apiResponse.getHeaders());
+        mediaContentComponent.apply(document, apiResponse.getContent());
         return document;
     }
 
