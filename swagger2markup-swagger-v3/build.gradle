@@ -17,10 +17,15 @@ dependencies {
     }
 //    implementation implLibraries.swaggerV2Converter
     compile project(':swagger2markup-asciidoc')
+    compile project(':swagger2markup-core')
     implementation implLibraries.asciiDocJApi
     implementation implLibraries.commonsText
+    implementation implLibraries.commonsBeanUtils
     implementation implLibraries.slf4j
     implementation implLibraries.swaggerV3
+    implementation implLibraries.commonsCollections4
+    implementation implLibraries.commonsConf2
+    implementation implLibraries.vavr
     testImplementation testLibraries.junit
     testImplementation testLibraries.logback
 }

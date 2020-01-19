@@ -22,7 +22,7 @@ import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.parameters.Parameter;
@@ -30,11 +30,12 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -44,7 +45,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
     private final DocumentResolver definitionDocumentResolver;
     private final TableComponent tableComponent;
 
-    ParameterTableComponent(Swagger2MarkupConverter.Context context,
+    ParameterTableComponent(Swagger2MarkupConverter.SwaggerContext context,
                             DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
@@ -52,7 +53,7 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
     }
 
-    public static ParameterTableComponent.Parameters parameters(PathOperation operation,
+    public static ParameterTableComponent.Parameters parameters(SwaggerPathOperation operation,
                                                                 List<ObjectType> inlineDefinitions,
                                                                 int titleLevel) {
         return new ParameterTableComponent.Parameters(operation, inlineDefinitions, titleLevel);
@@ -60,11 +61,17 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        PathOperation operation = params.operation;
+        SwaggerPathOperation operation = params.operation;
         List<ObjectType> inlineDefinitions = params.inlineDefinitions;
         List<Parameter> parameters = operation.getOperation().getParameters();
-        if (config.getParameterOrdering() != null)
-            parameters.sort(config.getParameterOrdering());
+        if (config.getParameterOrdering() != null) {
+            Comparator<io.github.swagger2markup.model.Parameter> parameterOrdering = config.getParameterOrdering();
+            parameters.sort((o1, o2) -> {
+                io.github.swagger2markup.model.Parameter p1 = new io.github.swagger2markup.model.Parameter(o1.getName(), o1.getIn());
+                io.github.swagger2markup.model.Parameter p2 = new io.github.swagger2markup.model.Parameter(o2.getName(), o2.getIn());
+                return parameterOrdering.compare(p1, p2);
+            });
+        }
 
         // Filter parameters to display in parameters section
         List<Parameter> filteredParameters = parameters.stream()
@@ -165,11 +172,11 @@ public class ParameterTableComponent extends MarkupComponent<ParameterTableCompo
     }
 
     public static class Parameters {
-        private final PathOperation operation;
+        private final SwaggerPathOperation operation;
         private final int titleLevel;
         private final List<ObjectType> inlineDefinitions;
 
-        public Parameters(PathOperation operation,
+        public Parameters(SwaggerPathOperation operation,
                           List<ObjectType> inlineDefinitions,
                           int titleLevel) {
             this.operation = Validate.notNull(operation, "PathOperation must not be null");

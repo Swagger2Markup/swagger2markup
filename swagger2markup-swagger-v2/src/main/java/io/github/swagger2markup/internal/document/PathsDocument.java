@@ -16,10 +16,10 @@
 package io.github.swagger2markup.internal.document;
 
 import com.google.common.collect.Multimap;
-import io.github.swagger2markup.GroupBy;
-import io.github.swagger2markup.Labels;
-import io.github.swagger2markup.Swagger2MarkupConfig;
-import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupConverter.SwaggerContext;
+import io.github.swagger2markup.SwaggerLabels;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
+import io.github.swagger2markup.config.GroupBy;
 import io.github.swagger2markup.internal.component.PathOperationComponent;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.resolver.OperationDocumentNameResolver;
@@ -30,7 +30,10 @@ import io.github.swagger2markup.internal.utils.RegexUtils;
 import io.github.swagger2markup.internal.utils.TagUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
+import io.github.swagger2markup.spi.PathsDocumentExtension.Context;
+import io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import io.swagger.models.Path;
 import io.swagger.models.Tag;
 import org.apache.commons.collections4.CollectionUtils;
@@ -47,8 +50,6 @@ import java.util.regex.Pattern;
 
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.crossReference;
-import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
-import static io.github.swagger2markup.spi.PathsDocumentExtension.Position;
 import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 
 /**
@@ -61,7 +62,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
     private final OperationDocumentNameResolver operationDocumentNameResolver;
     private final OperationDocumentResolverDefault operationDocumentResolverDefault;
 
-    public PathsDocument(Swagger2MarkupConverter.Context context) {
+    public PathsDocument(SwaggerContext context) {
         super(context);
         this.pathOperationComponent = new PathOperationComponent(context,
                 new DefinitionDocumentResolverFromOperation(context),
@@ -113,16 +114,16 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @param paths the Swagger paths
      */
     private void buildsPathsSection(MarkupDocBuilder markupDocBuilder, Map<String, Path> paths) {
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getHostname(), getBasePath(), config.getOperationOrdering());
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList(paths, getHostname(), getBasePath(), config.getOperationOrdering());
         if (CollectionUtils.isNotEmpty(pathOperations)) {
             if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
                 pathOperations.forEach(operation -> buildOperation(markupDocBuilder, operation, config));
             } else if (config.getPathsGroupedBy() == GroupBy.TAGS) {
-                Validate.notEmpty(context.getSwagger().getTags(), "Tags must not be empty, when operations are grouped by tags");
+                Validate.notEmpty(context.getSchema().getTags(), "Tags must not be empty, when operations are grouped by tags");
                 // Group operations by tag
-                Multimap<String, PathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getOperationOrdering());
+                Multimap<String, SwaggerPathOperation> operationsGroupedByTag = TagUtils.groupOperationsByTag(pathOperations, config.getOperationOrdering());
 
-                Map<String, Tag> tagsMap = TagUtils.toSortedMap(context.getSwagger().getTags(), config.getTagOrdering());
+                Map<String, Tag> tagsMap = TagUtils.toSortedMap(context.getSchema().getTags(), config.getTagOrdering());
 
                 tagsMap.forEach((String tagName, Tag tag) -> {
                     markupDocBuilder.sectionTitleWithAnchorLevel2(WordUtils.capitalize(tagName), tagName + "_resource");
@@ -137,7 +138,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
                 Validate.notNull(config.getHeaderPattern(), "Header regex pattern must not be empty when operations are grouped using regex");
 
                 Pattern headerPattern = config.getHeaderPattern();
-                Multimap<String, PathOperation> operationsGroupedByRegex = RegexUtils.groupOperationsByRegex(pathOperations, headerPattern);
+                Multimap<String, SwaggerPathOperation> operationsGroupedByRegex = RegexUtils.groupOperationsByRegex(pathOperations, headerPattern);
                 Set<String> keys = operationsGroupedByRegex.keySet();
                 String[] sortedHeaders = RegexUtils.toSortedArray(keys);
 
@@ -154,11 +155,11 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      */
     private void buildPathsTitle(MarkupDocBuilder markupDocBuilder) {
         if (config.getPathsGroupedBy() == GroupBy.AS_IS) {
-            buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.PATHS));
+            buildPathsTitle(markupDocBuilder, labels.getLabel(SwaggerLabels.PATHS));
         } else if (config.getPathsGroupedBy() == GroupBy.REGEX) {
-            buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.OPERATIONS));
+            buildPathsTitle(markupDocBuilder, labels.getLabel(SwaggerLabels.OPERATIONS));
         } else {
-            buildPathsTitle(markupDocBuilder, labels.getLabel(Labels.RESOURCES));
+            buildPathsTitle(markupDocBuilder, labels.getLabel(SwaggerLabels.RESOURCES));
         }
     }
 
@@ -169,7 +170,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      */
     private String getHostname() {
         if (config.isHostnameEnabled()) {
-            return StringUtils.defaultString(context.getSwagger().getHost());
+            return StringUtils.defaultString(context.getSchema().getHost());
         }
         return "";
     }
@@ -181,7 +182,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      */
     private String getBasePath() {
         if (config.isBasePathPrefixEnabled()) {
-            return StringUtils.defaultString(context.getSwagger().getBasePath());
+            return StringUtils.defaultString(context.getSchema().getBasePath());
         }
         return "";
     }
@@ -204,7 +205,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      *
      * @param operation operation
      */
-    private void buildOperation(MarkupDocBuilder markupDocBuilder, PathOperation operation, Swagger2MarkupConfig config) {
+    private void buildOperation(MarkupDocBuilder markupDocBuilder, SwaggerPathOperation operation, Swagger2MarkupConfig config) {
         if (config.isSeparatedOperationsEnabled()) {
             MarkupDocBuilder pathDocBuilder = copyMarkupDocBuilder(markupDocBuilder);
             applyPathOperationComponent(pathDocBuilder, operation);
@@ -230,7 +231,7 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @param markupDocBuilder the docbuilder do use for output
      * @param operation        the Swagger Operation
      */
-    private void applyPathOperationComponent(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
+    private void applyPathOperationComponent(MarkupDocBuilder markupDocBuilder, SwaggerPathOperation operation) {
         if (operation != null) {
             pathOperationComponent.apply(markupDocBuilder, PathOperationComponent.parameters(operation));
         }
@@ -243,7 +244,8 @@ public class PathsDocument extends MarkupComponent<PathsDocument.Parameters> {
      * @param operation        the Swagger Operation
      */
     private void buildOperationRef(MarkupDocBuilder markupDocBuilder, PathOperation operation) {
-        buildOperationTitle(markupDocBuilder, crossReference(markupDocBuilder, operationDocumentResolverDefault.apply(operation), operation.getId(), operation.getTitle()), "ref-" + operation.getId());
+        buildOperationTitle(markupDocBuilder, crossReference(markupDocBuilder, operationDocumentResolverDefault.apply(operation),
+                operation.getId(), operation.getTitle()), "ref-" + operation.getId());
     }
 
     /**

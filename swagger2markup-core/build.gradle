@@ -1,0 +1,25 @@
+ext.moduleName="io.github.swagger2markup.swagger-core"
+
+dependencies {
+    configurations.all {
+        resolutionStrategy.force dependencyOverrides.commonsCodec
+        resolutionStrategy.force dependencyOverrides.commonsIO
+        resolutionStrategy.force dependencyOverrides.commonsLang3
+        resolutionStrategy.force dependencyOverrides.jnrConstants
+        resolutionStrategy.force dependencyOverrides.jnrEnxio
+        resolutionStrategy.force dependencyOverrides.jnrPosix
+        resolutionStrategy.force dependencyOverrides.jodaTime
+        resolutionStrategy.force dependencyOverrides.slf4j
+        resolutionStrategy.force dependencyOverrides.jacksonDatabind
+        resolutionStrategy.force dependencyOverrides.guava
+        resolutionStrategy.force dependencyOverrides.findBugs
+        resolutionStrategy.force dependencyOverrides.jaksonCore
+    }
+    implementation implLibraries.commonsText
+    implementation implLibraries.slf4j
+    implementation implLibraries.commonsCollections4
+    implementation implLibraries.commonsConf2
+    implementation implLibraries.guava
+    testImplementation testLibraries.junit
+    testImplementation testLibraries.logback
+}

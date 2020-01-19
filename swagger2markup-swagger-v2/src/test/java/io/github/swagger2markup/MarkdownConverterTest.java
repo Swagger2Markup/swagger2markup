@@ -21,7 +21,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
+import io.github.swagger2markup.config.MarkupLanguage;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -127,8 +128,8 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -151,8 +152,8 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -175,7 +176,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .withInterDocumentCrossReferences()
                 .build();
@@ -199,7 +200,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
@@ -227,7 +228,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -251,7 +252,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
@@ -283,7 +284,7 @@ public class MarkdownConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();

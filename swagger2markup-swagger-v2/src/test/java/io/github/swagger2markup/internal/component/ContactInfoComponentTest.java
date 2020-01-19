@@ -46,7 +46,7 @@ public class ContactInfoComponentTest extends AbstractComponentTest {
     public void testVersionInfoComponent() throws URISyntaxException {
         Contact contact = new Contact().name("TestName").email("test@test.de");
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new ContactInfoComponent(context).apply(markupDocBuilder, ContactInfoComponent.parameters(

@@ -16,26 +16,18 @@
 package io.github.swagger2markup.internal.adapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.swagger2markup.Swagger2MarkupConfig;
-import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupConverter.SwaggerContext;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
-import io.github.swagger2markup.internal.type.ArrayType;
-import io.github.swagger2markup.internal.type.BasicType;
-import io.github.swagger2markup.internal.type.EnumType;
-import io.github.swagger2markup.internal.type.ObjectType;
-import io.github.swagger2markup.internal.type.RefType;
-import io.github.swagger2markup.internal.type.Type;
+import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
 import io.github.swagger2markup.internal.utils.InlineSchemaUtils;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.model.PathOperation;
 import io.swagger.models.Model;
-import io.swagger.models.parameters.AbstractSerializableParameter;
-import io.swagger.models.parameters.BodyParameter;
-import io.swagger.models.parameters.Parameter;
-import io.swagger.models.parameters.RefParameter;
-import io.swagger.models.parameters.SerializableParameter;
+import io.swagger.models.parameters.*;
 import io.swagger.util.Json;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
@@ -46,9 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.boldText;
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.literalText;
-import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
+import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
 
 public class ParameterAdapter {
 
@@ -57,13 +47,13 @@ public class ParameterAdapter {
     private final Swagger2MarkupConfig config;
     private Type type;
 
-    public ParameterAdapter(Swagger2MarkupConverter.Context context,
+    public ParameterAdapter(SwaggerContext context,
                             PathOperation operation,
                             Parameter parameter,
                             DocumentResolver definitionDocumentResolver) {
         Validate.notNull(parameter, "parameter must not be null");
         this.parameter = parameter;
-        type = getType(context.getSwagger().getDefinitions(), definitionDocumentResolver);
+        type = getType(context.getSchema().getDefinitions(), definitionDocumentResolver);
         config = context.getConfig();
         if (config.isInlineSchemaEnabled()) {
             if (config.isFlatBodyEnabled()) {
@@ -119,7 +109,8 @@ public class ParameterAdapter {
     }
 
     public String displayDescription(MarkupDocBuilder markupDocBuilder) {
-        return markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, getDescription());
+        io.github.swagger2markup.config.MarkupLanguage schemaMarkupLanguage = config.getSchemaMarkupLanguage();
+        return markupDescription(MarkupLanguage.valueOf(schemaMarkupLanguage.name()), markupDocBuilder, getDescription());
     }
 
     public String displayType(MarkupDocBuilder markupDocBuilder) {

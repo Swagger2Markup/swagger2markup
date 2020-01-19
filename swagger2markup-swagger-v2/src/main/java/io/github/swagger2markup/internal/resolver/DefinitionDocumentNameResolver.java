@@ -24,7 +24,7 @@ import static io.github.swagger2markup.utils.IOUtils.normalizeName;
 
 public class DefinitionDocumentNameResolver extends DocumentResolver {
 
-    public DefinitionDocumentNameResolver(Swagger2MarkupConverter.Context context) {
+    public DefinitionDocumentNameResolver(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 

@@ -23,7 +23,7 @@ import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.PathUtils;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.Swagger;
 import io.swagger.models.parameters.Parameter;
 import org.junit.Test;
@@ -42,13 +42,13 @@ public class ParameterAdapterTest {
         //Given
         Path file = Paths.get(ParameterAdapterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-        Swagger2MarkupConverter.Context context = converter.getContext();
-        Swagger swagger = context.getSwagger();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
+        Swagger swagger = context.getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/LaunchCommand");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
 
-        PathOperation operation = pathOperations.get(0);
+        SwaggerPathOperation operation = pathOperations.get(0);
         List<Parameter> parameters = operation.getOperation().getParameters();
         DefinitionDocumentResolverFromOperation resolverFromOperation = new DefinitionDocumentResolverFromOperation(context);
 

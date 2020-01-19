@@ -18,6 +18,7 @@ dependencies {
         resolutionStrategy.force dependencyOverrides.jodaTime
     }
     compile project(':swagger2markup-builder')
+    compile project(':swagger2markup-core')
     implementation implLibraries.commonsBeanUtils
     implementation implLibraries.commonsCollections4
     implementation implLibraries.commonsConf2

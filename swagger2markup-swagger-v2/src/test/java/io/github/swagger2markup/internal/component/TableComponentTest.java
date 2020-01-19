@@ -52,7 +52,7 @@ public class TableComponentTest extends AbstractComponentTest {
         StringColumn.Builder descriptionColumnBuilder = StringColumn.builder(StringColumnId.of("description"));
         descriptionColumnBuilder.add("").add("").add("");
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new TableComponent(context).apply(markupDocBuilder,

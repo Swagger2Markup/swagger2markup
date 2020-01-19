@@ -12,7 +12,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public class DefinitionDocumentResolverFromOperation extends DefinitionDocumentResolverDefault {
 
-    public DefinitionDocumentResolverFromOperation(Swagger2MarkupConverter.Context context) {
+    public DefinitionDocumentResolverFromOperation(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 

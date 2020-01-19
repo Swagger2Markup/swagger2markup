@@ -19,8 +19,8 @@ package io.github.swagger2markup.internal.component;
 import ch.netzwerg.paleo.StringColumn;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.spi.MarkupComponent;
-import io.github.swagger2markup.spi.SecurityDocumentExtension;
 import io.swagger.models.auth.ApiKeyAuthDefinition;
 import io.swagger.models.auth.OAuth2Definition;
 import io.swagger.models.auth.SecuritySchemeDefinition;
@@ -29,9 +29,10 @@ import org.apache.commons.lang3.Validate;
 import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
+import static io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -39,7 +40,7 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
 
     private final TableComponent tableComponent;
 
-    public SecuritySchemeDefinitionComponent(Swagger2MarkupConverter.Context context) {
+    public SecuritySchemeDefinitionComponent(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
         this.tableComponent = new TableComponent(context);
     }
@@ -54,16 +55,17 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
         String securitySchemeDefinitionName = params.securitySchemeDefinitionName;
         SecuritySchemeDefinition securitySchemeDefinition = params.securitySchemeDefinition;
-        applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_BEFORE, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
+        applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEFORE, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
         markupDocBuilder.sectionTitleWithAnchorLevel(params.titleLevel, securitySchemeDefinitionName);
-        applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_BEGIN, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
+        applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_BEGIN, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
         String description = securitySchemeDefinition.getDescription();
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
+            markupDocBuilder.paragraph(markupDescription(MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name()),
+                    markupDocBuilder, description));
         }
         buildSecurityScheme(markupDocBuilder, securitySchemeDefinition);
-        applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_END, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
-        applySecurityDocumentExtension(new SecurityDocumentExtension.Context(Position.SECURITY_SCHEME_AFTER, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
+        applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_END, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
+        applySecurityDocumentExtension(new Context(Position.SECURITY_SCHEME_AFTER, markupDocBuilder, securitySchemeDefinitionName, securitySchemeDefinition));
         return markupDocBuilder;
     }
 
@@ -121,7 +123,7 @@ public class SecuritySchemeDefinitionComponent extends MarkupComponent<SecurityS
      *
      * @param context context
      */
-    private void applySecurityDocumentExtension(SecurityDocumentExtension.Context context) {
+    private void applySecurityDocumentExtension(Context context) {
         extensionRegistry.getSecurityDocumentExtensions().forEach(extension -> extension.apply(context));
     }
 

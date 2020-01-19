@@ -26,7 +26,7 @@ public class DefinitionDocumentResolverDefault extends DocumentResolver {
 
     private final DefinitionDocumentNameResolver definitionDocumentNameResolver;
 
-    public DefinitionDocumentResolverDefault(Swagger2MarkupConverter.Context context) {
+    public DefinitionDocumentResolverDefault(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
         this.definitionDocumentNameResolver = new DefinitionDocumentNameResolver(context);
     }

@@ -50,7 +50,7 @@ public class LicenseInfoComponentTest extends AbstractComponentTest {
                 .license(new License().name("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0"))
                 .termsOfService("Bla bla bla");
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new LicenseInfoComponent(context).apply(markupDocBuilder, LicenseInfoComponent.parameters(info, OverviewDocument.SECTION_TITLE_LEVEL));

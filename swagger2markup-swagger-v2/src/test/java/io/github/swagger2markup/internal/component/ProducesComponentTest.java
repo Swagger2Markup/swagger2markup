@@ -49,7 +49,7 @@ public class ProducesComponentTest extends AbstractComponentTest {
         produces.add("application/json");
         produces.add("application/xml");
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new ProducesComponent(context)

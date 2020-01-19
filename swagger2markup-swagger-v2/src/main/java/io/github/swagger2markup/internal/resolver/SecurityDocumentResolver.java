@@ -21,7 +21,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
 
 public class SecurityDocumentResolver extends DocumentResolver {
 
-    public SecurityDocumentResolver(Swagger2MarkupConverter.Context context) {
+    public SecurityDocumentResolver(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 

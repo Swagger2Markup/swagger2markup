@@ -21,7 +21,7 @@ import com.google.common.base.Joiner;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.auth.SecuritySchemeDefinition;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -42,22 +42,22 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
     private final DocumentResolver securityDocumentResolver;
     private final TableComponent tableComponent;
 
-    public SecuritySchemeComponent(Swagger2MarkupConverter.Context context,
+    public SecuritySchemeComponent(Swagger2MarkupConverter.SwaggerContext context,
                                    DocumentResolver securityDocumentResolver) {
         super(context);
-        this.securityDefinitions = context.getSwagger().getSecurityDefinitions();
+        this.securityDefinitions = context.getSchema().getSecurityDefinitions();
         this.securityDocumentResolver = Validate.notNull(securityDocumentResolver, "SecurityDocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
     }
 
-    public static SecuritySchemeComponent.Parameters parameters(PathOperation operation,
+    public static SecuritySchemeComponent.Parameters parameters(SwaggerPathOperation operation,
                                                                 int titleLevel) {
         return new SecuritySchemeComponent.Parameters(operation, titleLevel);
     }
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        PathOperation operation = params.operation;
+        SwaggerPathOperation operation = params.operation;
         MarkupDocBuilder securityBuilder = copyMarkupDocBuilder(markupDocBuilder);
         List<Map<String, List<String>>> securitySchemes = operation.getOperation().getSecurity();
         applyPathsDocumentExtension(new PathsDocumentExtension.Context(PathsDocumentExtension.Position.OPERATION_SECURITY_BEGIN, securityBuilder, operation));
@@ -111,10 +111,10 @@ public class SecuritySchemeComponent extends MarkupComponent<SecuritySchemeCompo
     }
 
     public static class Parameters {
-        private final PathOperation operation;
+        private final SwaggerPathOperation operation;
         private final int titleLevel;
 
-        public Parameters(PathOperation operation,
+        public Parameters(SwaggerPathOperation operation,
                           int titleLevel) {
             this.operation = Validate.notNull(operation, "PathOperation must not be null");
             this.titleLevel = titleLevel;

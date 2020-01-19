@@ -27,7 +27,7 @@ public class OperationDocumentResolverDefault extends OperationDocumentResolver 
 
     private final OperationDocumentNameResolver operationDocumentNameResolver;
 
-    public OperationDocumentResolverDefault(Swagger2MarkupConverter.Context context) {
+    public OperationDocumentResolverDefault(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
         this.operationDocumentNameResolver = new OperationDocumentNameResolver(context);
     }

@@ -24,6 +24,7 @@ import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.RefType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.properties.Property;
 import io.swagger.util.Json;
@@ -37,7 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
@@ -56,7 +57,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
      *
      * @param definitionDocumentResolver definition document resolver to apply to property type cross-reference
      */
-    PropertiesTableComponent(Swagger2MarkupConverter.Context context,
+    PropertiesTableComponent(Swagger2MarkupConverter.SwaggerContext context,
       DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = definitionDocumentResolver;
@@ -116,7 +117,8 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                 }
 
                 MarkupDocBuilder descriptionContent = copyMarkupDocBuilder(markupDocBuilder);
-                String description = markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, property.getDescription());
+                String description = markupDescription(MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name()),
+                        markupDocBuilder, property.getDescription());
                 if (isNotBlank(description))
                     descriptionContent.text(description);
 
@@ -167,7 +169,7 @@ public class PropertiesTableComponent extends MarkupComponent<PropertiesTableCom
                 }
 
                 DecimalFormat numberFormatter = new DecimalFormat("#.##",
-                  DecimalFormatSymbols.getInstance(config.getOutputLanguage().toLocale()));
+                  DecimalFormatSymbols.getInstance(config.getLanguage().toLocale()));
 
                 if (optionalMinValue.isPresent()) {
                     if (isNotBlank(descriptionContent.toString())) {
