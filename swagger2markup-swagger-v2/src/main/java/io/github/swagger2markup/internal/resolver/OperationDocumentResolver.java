@@ -16,8 +16,8 @@
 
 package io.github.swagger2markup.internal.resolver;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.PathOperation;
 import io.vavr.Function1;
@@ -31,7 +31,7 @@ public abstract class OperationDocumentResolver implements Function1<PathOperati
     MarkupDocBuilder markupDocBuilder;
     Swagger2MarkupConfig config;
 
-    public OperationDocumentResolver(Swagger2MarkupConverter.Context context) {
+    public OperationDocumentResolver(Swagger2MarkupConverter.SwaggerContext context) {
         this.context = context;
         this.markupDocBuilder = context.createMarkupDocBuilder();
         this.config = context.getConfig();

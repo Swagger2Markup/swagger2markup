@@ -19,6 +19,7 @@ import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.Tag;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -56,15 +57,15 @@ public class TagUtils {
      * @param operationOrdering comparator for operations, for a given tag
      * @return Operations grouped by Tag
      */
-    public static Multimap<String, PathOperation> groupOperationsByTag(List<PathOperation> allOperations, Comparator<PathOperation> operationOrdering) {
+    public static Multimap<String, SwaggerPathOperation> groupOperationsByTag(List<SwaggerPathOperation> allOperations, Comparator<PathOperation> operationOrdering) {
 
-        Multimap<String, PathOperation> operationsGroupedByTag;
+        Multimap<String, SwaggerPathOperation> operationsGroupedByTag;
         if (operationOrdering == null) {
             operationsGroupedByTag = LinkedHashMultimap.create();
         } else {
             operationsGroupedByTag = MultimapBuilder.linkedHashKeys().treeSetValues(operationOrdering).build();
         }
-        for (PathOperation operation : allOperations) {
+        for (SwaggerPathOperation operation : allOperations) {
             List<String> tags = operation.getOperation().getTags();
 
             Validate.notEmpty(tags, "Can't GroupBy.TAGS. Operation '%s' has no tags", operation);

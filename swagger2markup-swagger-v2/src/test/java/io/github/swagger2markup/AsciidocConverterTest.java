@@ -17,7 +17,11 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
+import io.github.swagger2markup.config.GroupBy;
+import io.github.swagger2markup.config.Language;
+import io.github.swagger2markup.config.MarkupLanguage;
+import io.github.swagger2markup.config.OrderBy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -120,7 +124,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withTagOrdering(OrderBy.AS_IS)
                 .withParameterOrdering(OrderBy.AS_IS)
                 .withOperationOrdering(OrderBy.AS_IS)
@@ -146,7 +150,7 @@ public class AsciidocConverterTest {
         Path outputDirectory = Paths.get("build/test/asciidoc/ordering_natural");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withTagOrdering(OrderBy.NATURAL)
                 .withParameterOrdering(OrderBy.NATURAL)
                 .withOperationOrdering(OrderBy.NATURAL)
@@ -172,7 +176,7 @@ public class AsciidocConverterTest {
         Path outputDirectory = Paths.get("build/test/asciidoc/ordering_regex");
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withTagOrdering(OrderBy.NATURAL)
                 .withParameterOrdering(OrderBy.NATURAL)
                 .withOperationOrdering(OrderBy.NATURAL)
@@ -200,7 +204,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withTagOrdering(OrderBy.AS_IS)
                 .build();
 
@@ -223,7 +227,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
 
@@ -246,7 +250,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withBasePathPrefix()
                 .withGeneratedExamples()
                 .build();
@@ -312,7 +316,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withGeneratedExamples()
                 .build();
 
@@ -336,7 +340,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         // When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withoutInlineSchema().withGeneratedExamples().build();
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder().withoutInlineSchema().withGeneratedExamples().build();
 
         Swagger2MarkupConverter.from(swaggerJsonString).withConfig(config).build().toFolder(outputDirectory);
 
@@ -356,7 +360,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
             .withGeneratedExamples()
             .build();
 
@@ -380,7 +384,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
             .withGeneratedExamples()
             .build();
 
@@ -426,7 +430,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withFlatBody()
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -448,7 +452,7 @@ public class AsciidocConverterTest {
         Path outputDirectory = Paths.get("build/test/asciidoc/group_by_tags");
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withPathsGroupedBy(GroupBy.TAGS)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -471,7 +475,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
         //When
         try {
-            Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+            Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                     .withPathsGroupedBy(GroupBy.TAGS)
                     .build();
 
@@ -533,7 +537,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .build();
         Swagger2MarkupConverter.from(file).withConfig(config).build()
@@ -558,7 +562,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedOperations()
                 .build();
         Swagger2MarkupConverter.from(file).withConfig(config).build()
@@ -583,8 +587,8 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withSwaggerMarkupLanguage(MarkupLanguage.ASCIIDOC)
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withSwaggerMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.ASCIIDOC)
                 .build();
 
         Swagger2MarkupConverter.from(file).withConfig(config).build()
@@ -633,7 +637,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withOutputLanguage(language)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -654,7 +658,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withTagOrdering(OrderBy.AS_IS)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -680,7 +684,7 @@ public class AsciidocConverterTest {
         Map<String, String> configMap = new HashMap<>();
         configMap.put("swagger2markup.generatedExamplesEnabled", "true");  // enable examples generation
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap)
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder(configMap)
                 .withMarkupLanguage(MarkupLanguage.ASCIIDOC)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -751,7 +755,7 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withPropertyOrdering(OrderBy.AS_IS)
                 .build();
         Swagger2MarkupConverter.from(file)
@@ -844,8 +848,8 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -868,8 +872,8 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -892,8 +896,8 @@ public class AsciidocConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .withGeneratedExamples()
                 .build();
 

@@ -16,14 +16,15 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.config.GroupBy;
 import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.parameters.Parameter;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +35,7 @@ import org.apache.commons.lang3.Validate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -44,21 +45,21 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
     private final DocumentResolver definitionDocumentResolver;
     private final PropertiesTableComponent propertiesTableComponent;
 
-    public BodyParameterComponent(Swagger2MarkupConverter.Context context,
+    public BodyParameterComponent(Swagger2MarkupConverter.SwaggerContext context,
                                   DocumentResolver definitionDocumentResolver) {
         super(context);
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.propertiesTableComponent = new PropertiesTableComponent(context, definitionDocumentResolver);
     }
 
-    public static BodyParameterComponent.Parameters parameters(PathOperation operation,
+    public static BodyParameterComponent.Parameters parameters(SwaggerPathOperation operation,
                                                                List<ObjectType> inlineDefinitions) {
         return new BodyParameterComponent.Parameters(operation, inlineDefinitions);
     }
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        PathOperation operation = params.operation;
+        SwaggerPathOperation operation = params.operation;
         List<ObjectType> inlineDefinitions = params.inlineDefinitions;
         if (config.isFlatBodyEnabled()) {
             List<Parameter> parameters = operation.getOperation().getParameters();
@@ -74,7 +75,8 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
                         buildSectionTitle(markupDocBuilder, labels.getLabel(BODY_PARAMETER));
                         String description = parameter.getDescription();
                         if (isNotBlank(description)) {
-                            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
+                            MarkupLanguage markupLanguage = MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name());
+                            markupDocBuilder.paragraph(markupDescription(markupLanguage, markupDocBuilder, description));
                         }
 
                         MarkupDocBuilder typeInfos = copyMarkupDocBuilder(markupDocBuilder);
@@ -115,9 +117,9 @@ public class BodyParameterComponent extends MarkupComponent<BodyParameterCompone
 
     public static class Parameters {
         private final List<ObjectType> inlineDefinitions;
-        private PathOperation operation;
+        private SwaggerPathOperation operation;
 
-        public Parameters(PathOperation operation,
+        public Parameters(SwaggerPathOperation operation,
                           List<ObjectType> inlineDefinitions) {
             Validate.notNull(operation, "Operation must not be null");
             this.operation = operation;

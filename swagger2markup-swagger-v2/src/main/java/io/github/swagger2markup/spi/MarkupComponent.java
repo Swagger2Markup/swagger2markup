@@ -16,10 +16,9 @@
 
 package io.github.swagger2markup.spi;
 
-import io.github.swagger2markup.Labels;
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
+import io.github.swagger2markup.config.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.vavr.Function2;
 import org.slf4j.Logger;
@@ -29,12 +28,12 @@ public abstract class MarkupComponent<T> implements Function2<MarkupDocBuilder, 
 
     protected static final String COLON = " : ";
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    protected Swagger2MarkupConverter.Context context;
+    protected Swagger2MarkupConverter.SwaggerContext context;
     protected Labels labels;
     protected Swagger2MarkupConfig config;
     protected Swagger2MarkupExtensionRegistry extensionRegistry;
 
-    public MarkupComponent(Swagger2MarkupConverter.Context context) {
+    public MarkupComponent(Swagger2MarkupConverter.SwaggerContext context) {
         this.context = context;
         this.config = context.getConfig();
         this.extensionRegistry = context.getExtensionRegistry();

@@ -50,7 +50,7 @@ public class UriSchemeComponentTest extends AbstractComponentTest {
         swagger.addScheme(Scheme.HTTP);
         swagger.addScheme(Scheme.HTTPS);
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new UriSchemeComponent(context).apply(markupDocBuilder, UriSchemeComponent.parameters(swagger, OverviewDocument.SECTION_TITLE_LEVEL));

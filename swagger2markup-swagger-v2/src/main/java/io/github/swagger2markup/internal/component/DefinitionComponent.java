@@ -23,27 +23,20 @@ import io.github.swagger2markup.internal.type.ObjectTypePolymorphism;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import io.swagger.models.properties.Property;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static io.github.swagger2markup.Labels.POLYMORPHISM_COLUMN;
-import static io.github.swagger2markup.Labels.POLYMORPHISM_DISCRIMINATOR_COLUMN;
-import static io.github.swagger2markup.Labels.POLYMORPHISM_NATURE_COMPOSITION;
-import static io.github.swagger2markup.Labels.POLYMORPHISM_NATURE_INHERITANCE;
-import static io.github.swagger2markup.Labels.TYPE_COLUMN;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
+import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -57,10 +50,10 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
     private final DocumentResolver definitionsDocumentResolver;
     private PropertiesTableComponent propertiesTableComponent;
 
-    public DefinitionComponent(Swagger2MarkupConverter.Context context,
+    public DefinitionComponent(Swagger2MarkupConverter.SwaggerContext context,
                                DocumentResolver definitionsDocumentResolver) {
         super(context);
-        this.definitions = context.getSwagger().getDefinitions();
+        this.definitions = context.getSchema().getDefinitions();
         this.definitionsDocumentResolver = definitionsDocumentResolver;
         POLYMORPHISM_NATURE = new HashMap<ObjectTypePolymorphism.Nature, String>() {{
             put(ObjectTypePolymorphism.Nature.COMPOSITION, labels.getLabel(POLYMORPHISM_NATURE_COMPOSITION));
@@ -81,16 +74,17 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
         String definitionTitle = determineDefinitionTitle(params);
 
         Model model = params.model;
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_BEFORE, markupDocBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEFORE, markupDocBuilder, definitionName, model));
         markupDocBuilder.sectionTitleWithAnchorLevel(params.titleLevel, definitionTitle, definitionName);
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_BEGIN, markupDocBuilder, definitionName, model));
         String description = model.getDescription();
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
+            markupDocBuilder.paragraph(markupDescription(MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name()),
+                    markupDocBuilder, description));
         }
         inlineDefinitions(markupDocBuilder, typeSection(markupDocBuilder, definitionName, model), definitionName);
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_END, markupDocBuilder, definitionName, model));
-        applyDefinitionsDocumentExtension(new DefinitionsDocumentExtension.Context(Position.DEFINITION_AFTER, markupDocBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_END, markupDocBuilder, definitionName, model));
+        applyDefinitionsDocumentExtension(new Context(Position.DEFINITION_AFTER, markupDocBuilder, definitionName, model));
 
         return markupDocBuilder;
     }
@@ -205,7 +199,7 @@ public class DefinitionComponent extends MarkupComponent<DefinitionComponent.Par
      *
      * @param context context
      */
-    private void applyDefinitionsDocumentExtension(DefinitionsDocumentExtension.Context context) {
+    private void applyDefinitionsDocumentExtension(Context context) {
         extensionRegistry.getDefinitionsDocumentExtensions().forEach(extension -> extension.apply(context));
     }
 

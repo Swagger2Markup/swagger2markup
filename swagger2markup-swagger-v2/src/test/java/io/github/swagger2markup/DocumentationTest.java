@@ -17,8 +17,12 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.builder.MyExtension;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
+import io.github.swagger2markup.config.GroupBy;
+import io.github.swagger2markup.config.Language;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.spi.Swagger2MarkupExtensionRegistry;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
@@ -84,8 +88,8 @@ public class DocumentationTest {
         Path localSwaggerFile = Paths.get("/path/to/swagger.yaml");
 
         // tag::swagger2MarkupConfigBuilder[]
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder() //<1>
-                .withMarkupLanguage(MarkupLanguage.MARKDOWN) //<2>
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder() //<1>
+                .withMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.MARKDOWN) //<2>
                 .withOutputLanguage(Language.DE) //<3>
                 .withPathsGroupedBy(GroupBy.TAGS) //<4>
                 .build(); //<5>

@@ -19,14 +19,14 @@ import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.internal.component.SecuritySchemeDefinitionComponent;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
+import io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import io.swagger.models.auth.SecuritySchemeDefinition;
 import org.apache.commons.collections4.MapUtils;
 
 import java.util.Map;
 
-import static io.github.swagger2markup.Labels.SECURITY;
+import static io.github.swagger2markup.SwaggerLabels.SECURITY;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
-import static io.github.swagger2markup.spi.SecurityDocumentExtension.Context;
 import static io.github.swagger2markup.spi.SecurityDocumentExtension.Position;
 
 /**
@@ -37,7 +37,7 @@ public class SecurityDocument extends MarkupComponent<SecurityDocument.Parameter
     private static final String SECURITY_ANCHOR = "securityScheme";
     private final SecuritySchemeDefinitionComponent securitySchemeDefinitionComponent;
 
-    public SecurityDocument(Swagger2MarkupConverter.Context context) {
+    public SecurityDocument(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
         this.securitySchemeDefinitionComponent = new SecuritySchemeDefinitionComponent(context);
     }

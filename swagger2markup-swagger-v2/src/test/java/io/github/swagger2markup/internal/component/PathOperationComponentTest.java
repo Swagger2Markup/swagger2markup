@@ -15,15 +15,15 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -48,12 +48,12 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         //Given
         Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/pets");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
@@ -78,12 +78,12 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         //Given
         Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/LaunchCommand");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/LaunchCommand", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
@@ -113,12 +113,12 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap).build();
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config) .build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/pets/{petId}");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/{petId}", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/{petId}", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
@@ -147,12 +147,12 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap).build();
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config) .build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/pets/findByTags");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByTags", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByTags", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When
@@ -181,12 +181,12 @@ public class PathOperationComponentTest extends AbstractComponentTest {
         Path file = Paths.get(PathOperationComponentTest.class.getResource("/yaml/swagger_petstore_body_examples.yaml").toURI());
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap).build();
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config) .build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/users");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/users", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/users", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When

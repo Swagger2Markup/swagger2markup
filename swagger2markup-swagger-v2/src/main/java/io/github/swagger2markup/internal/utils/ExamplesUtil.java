@@ -21,7 +21,7 @@ import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.*;
 import io.swagger.models.parameters.*;
 import io.swagger.models.properties.*;
@@ -48,7 +48,7 @@ public class ExamplesUtil {
      * @param markupDocBuilder           the markup builder
      * @return map containing response examples.
      */
-    public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, PathOperation operation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
+    public static Map<String, Object> generateResponseExampleMap(boolean generateMissingExamples, SwaggerPathOperation operation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
         Map<String, Object> examples = new LinkedHashMap<>();
         Map<String, Response> responses = operation.getOperation().getResponses();
         if (responses != null)
@@ -97,7 +97,7 @@ public class ExamplesUtil {
      * @param markupDocBuilder           the markup builder
      * @return an Optional with the example content
      */
-    public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, PathOperation pathOperation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
+    public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, SwaggerPathOperation pathOperation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
         Operation operation = pathOperation.getOperation();
         List<Parameter> parameters = operation.getParameters();
         Map<String, Object> examples = new LinkedHashMap<>();

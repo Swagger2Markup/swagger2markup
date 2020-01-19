@@ -48,12 +48,12 @@ public class ExternalDocsComponentTest extends AbstractComponentTest {
 	    //Given
 	    Path file = Paths.get(DefinitionComponentTest.class.getResource("/yaml/swagger_petstore_20160612.yaml").toURI());
 	    Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-	    Swagger swagger = converter.getContext().getSwagger();
+	    Swagger swagger = converter.getContext().getSchema();
 
 	    ExternalDocs externalDocs = swagger.getExternalDocs();
 	    Assert.assertNotNull(externalDocs);
 
-	    Swagger2MarkupConverter.Context context = converter.getContext();
+	    Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
 	    MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
 	    //When

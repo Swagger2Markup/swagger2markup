@@ -15,7 +15,7 @@
  */
 package io.github.swagger2markup.builder;
 
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.spi.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.spi.SwaggerModelExtension;
 import io.swagger.models.Swagger;
 import org.junit.Test;

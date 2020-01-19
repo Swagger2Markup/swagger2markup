@@ -20,7 +20,7 @@ import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -49,12 +49,12 @@ public class SecuritySchemeComponentTest extends AbstractComponentTest {
         //Given
         Path file = Paths.get(SecuritySchemeComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList(swagger.getPaths(), "", "",
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList(swagger.getPaths(), "", "",
                 converter.getContext().getConfig().getOperationOrdering());
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When

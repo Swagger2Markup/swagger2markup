@@ -27,7 +27,7 @@ import static org.apache.commons.lang3.StringUtils.defaultString;
  */
 public class DefinitionDocumentResolverFromDefinition extends DefinitionDocumentResolverDefault {
 
-    public DefinitionDocumentResolverFromDefinition(Swagger2MarkupConverter.Context context) {
+    public DefinitionDocumentResolverFromDefinition(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 

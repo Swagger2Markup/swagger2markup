@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.SwaggerLabels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import org.apache.commons.lang3.Validate;
@@ -30,7 +30,7 @@ import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.lite
 public class ProducesComponent extends MarkupComponent<ProducesComponent.Parameters> {
 
 
-    public ProducesComponent(Swagger2MarkupConverter.Context context) {
+    public ProducesComponent(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 
@@ -41,7 +41,7 @@ public class ProducesComponent extends MarkupComponent<ProducesComponent.Paramet
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.PRODUCES));
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(SwaggerLabels.PRODUCES));
         markupDocBuilder.unorderedList(params.produces.stream()
                 .map(value -> literalText(markupDocBuilder, value)).collect(Collectors.toList()));
         return markupDocBuilder;

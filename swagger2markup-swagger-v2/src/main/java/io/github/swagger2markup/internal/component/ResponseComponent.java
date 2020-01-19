@@ -25,7 +25,8 @@ import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.type.Type;
 import io.github.swagger2markup.internal.utils.ModelUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.github.swagger2markup.spi.PathsDocumentExtension;
 import io.swagger.models.Model;
@@ -40,7 +41,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static ch.netzwerg.paleo.ColumnIds.StringColumnId;
-import static io.github.swagger2markup.Labels.*;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.InlineSchemaUtils.createInlineType;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.*;
@@ -52,15 +53,15 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
     private final Map<String, Model> definitions;
     private final DocumentResolver definitionDocumentResolver;
 
-    ResponseComponent(Swagger2MarkupConverter.Context context,
+    ResponseComponent(Swagger2MarkupConverter.SwaggerContext context,
                       DocumentResolver definitionDocumentResolver) {
         super(context);
-        this.definitions = context.getSwagger().getDefinitions();
+        this.definitions = context.getSchema().getDefinitions();
         this.definitionDocumentResolver = Validate.notNull(definitionDocumentResolver, "DocumentResolver must not be null");
         this.tableComponent = new TableComponent(context);
     }
 
-    public static ResponseComponent.Parameters parameters(PathOperation operation,
+    public static ResponseComponent.Parameters parameters(SwaggerPathOperation operation,
                                                           int titleLevel,
                                                           List<ObjectType> inlineDefinitions) {
         return new ResponseComponent.Parameters(operation, titleLevel, inlineDefinitions);
@@ -68,7 +69,7 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        PathOperation operation = params.operation;
+        SwaggerPathOperation operation = params.operation;
         Map<String, Response> responses = operation.getOperation().getResponses();
 
         MarkupDocBuilder responsesBuilder = copyMarkupDocBuilder(markupDocBuilder);
@@ -105,7 +106,8 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
 
                 MarkupDocBuilder descriptionBuilder = copyMarkupDocBuilder(markupDocBuilder);
 
-                descriptionBuilder.text(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, response.getDescription()));
+                descriptionBuilder.text(markupDescription(MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name()),
+                        markupDocBuilder, response.getDescription()));
 
                 Map<String, Property> headers = response.getHeaders();
                 if (MapUtils.isNotEmpty(headers)) {
@@ -115,7 +117,8 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
                         Property headerProperty = header.getValue();
                         PropertyAdapter headerPropertyAdapter = new PropertyAdapter(headerProperty);
                         Type propertyType = headerPropertyAdapter.getType(definitionDocumentResolver);
-                        String headerDescription = markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, headerProperty.getDescription());
+                        String headerDescription = markupDescription(MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name()),
+                                markupDocBuilder, headerProperty.getDescription());
                         Optional<Object> optionalDefaultValue = headerPropertyAdapter.getDefaultValue();
 
                         descriptionBuilder
@@ -168,11 +171,11 @@ public class ResponseComponent extends MarkupComponent<ResponseComponent.Paramet
     }
 
     public static class Parameters {
-        private final PathOperation operation;
+        private final SwaggerPathOperation operation;
         private final int titleLevel;
         private final List<ObjectType> inlineDefinitions;
 
-        public Parameters(PathOperation operation,
+        public Parameters(SwaggerPathOperation operation,
                           int titleLevel,
                           List<ObjectType> inlineDefinitions) {
 

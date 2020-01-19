@@ -15,8 +15,8 @@
  */
 package io.github.swagger2markup.builder;
 
+import io.github.swagger2markup.Schema2MarkupProperties;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.spi.DefinitionsDocumentExtension;
@@ -32,11 +32,11 @@ public class MyExtension extends DefinitionsDocumentExtension {
     private String extensionProperty;
 
     @Override
-    public void init(Swagger2MarkupConverter.Context globalContext) {
+    public void init(Swagger2MarkupConverter.SwaggerContext globalContext) {
         // init is executed once
-        Swagger2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties(); //<1>
+        Schema2MarkupProperties extensionProperties = globalContext.getConfig().getExtensionsProperties(); //<1>
         extensionProperty = extensionProperties.getRequiredString(EXTENSION_ID + ".propertyName");
-        Swagger model = globalContext.getSwagger();
+        Swagger model = globalContext.getSchema();
     }
 
     @Override

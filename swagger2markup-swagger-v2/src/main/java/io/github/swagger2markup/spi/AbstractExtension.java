@@ -16,21 +16,21 @@
 
 package io.github.swagger2markup.spi;
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
+import static io.github.swagger2markup.Swagger2MarkupConverter.SwaggerContext;
 
 /**
  * An abstract extension which must be extended by an extension
  */
 abstract class AbstractExtension implements Extension {
 
-    protected Swagger2MarkupConverter.Context globalContext;
+    public SwaggerContext globalContext;
 
     /**
      * Global context lazy initialization
      *
      * @param globalContext Global context
      */
-    public void setGlobalContext(Swagger2MarkupConverter.Context globalContext) {
+    public void setGlobalContext(SwaggerContext globalContext) {
         this.globalContext = globalContext;
         init(globalContext);
     }
@@ -40,8 +40,7 @@ abstract class AbstractExtension implements Extension {
      *
      * @param globalContext Global context
      */
-    public void init(Swagger2MarkupConverter.Context globalContext) {
+    public void init(SwaggerContext globalContext) {
         /* must be left empty */
     }
-
 }

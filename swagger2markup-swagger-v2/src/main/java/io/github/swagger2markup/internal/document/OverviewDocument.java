@@ -15,18 +15,19 @@
  */
 package io.github.swagger2markup.internal.document;
 
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.SwaggerLabels;
 import io.github.swagger2markup.internal.component.*;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import io.github.swagger2markup.spi.MarkupComponent;
+import io.github.swagger2markup.spi.OverviewDocumentExtension.Context;
 import io.swagger.models.*;
 import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
-import static io.github.swagger2markup.spi.OverviewDocumentExtension.Context;
 import static io.github.swagger2markup.spi.OverviewDocumentExtension.Position;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -44,7 +45,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
     private final ConsumesComponent consumesComponent;
     private final ExternalDocsComponent externalDocsComponent;
 
-    public OverviewDocument(Swagger2MarkupConverter.Context context) {
+    public OverviewDocument(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
         versionInfoComponent = new VersionInfoComponent(context);
         contactInfoComponent = new ContactInfoComponent(context);
@@ -71,7 +72,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         Info info = swagger.getInfo();
         buildDocumentTitle(markupDocBuilder, info.getTitle());
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
-        buildOverviewTitle(markupDocBuilder, labels.getLabel(Labels.OVERVIEW));
+        buildOverviewTitle(markupDocBuilder, labels.getLabel(SwaggerLabels.OVERVIEW));
         applyOverviewDocumentExtension(new Context(Position.DOCUMENT_BEGIN, markupDocBuilder));
         buildDescriptionParagraph(markupDocBuilder, info.getDescription());
         buildVersionInfoSection(markupDocBuilder, info);
@@ -97,7 +98,8 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
 
     void buildDescriptionParagraph(MarkupDocBuilder markupDocBuilder, String description) {
         if (isNotBlank(description)) {
-            markupDocBuilder.paragraph(markupDescription(config.getSwaggerMarkupLanguage(), markupDocBuilder, description));
+            markupDocBuilder.paragraph(markupDescription(MarkupLanguage.valueOf(config.getSchemaMarkupLanguage().name()),
+                    markupDocBuilder, description));
         }
     }
 

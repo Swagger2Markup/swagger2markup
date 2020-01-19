@@ -49,7 +49,7 @@ public class ConsumesComponentTest extends AbstractComponentTest {
         consumes.add("application/json");
         consumes.add("application/xml");
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new ConsumesComponent(context).apply(markupDocBuilder, ConsumesComponent.parameters(
