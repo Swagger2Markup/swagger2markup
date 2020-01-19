@@ -41,6 +41,7 @@ public class OpenApiHelpers {
     public static final String SECTION_TITLE_PARAMETERS = "Parameters";
     public static final String SECTION_TITLE_PATHS = "Paths";
     public static final String SECTION_TITLE_SCHEMAS = "Schemas";
+    public static final String SECTION_TITLE_SECURITY = "Security";
     public static final String SECTION_TITLE_SERVERS = "Servers";
     public static final String SECTION_TITLE_OVERVIEW = "Overview";
     public static final String SECTION_TITLE_TAGS = "Tags";
@@ -51,12 +52,14 @@ public class OpenApiHelpers {
     public static final String TABLE_HEADER_NAME = "Name";
     public static final String TABLE_HEADER_POSSIBLE_VALUES = "Possible Values";
     public static final String TABLE_HEADER_SCHEMA = "Schema";
+    public static final String TABLE_HEADER_SCOPES = "Scopes";
     public static final String TABLE_HEADER_TYPE = "Type";
     public static final String TABLE_HEADER_VARIABLE = "Variable";
     public static final String TABLE_TITLE_HEADERS = "Headers";
     public static final String TABLE_TITLE_PARAMETERS = "Parameters";
     public static final String TABLE_TITLE_PROPERTIES = "Properties";
     public static final String TABLE_TITLE_RESPONSES = "Responses";
+    public static final String TABLE_TITLE_SECURITY = "Security";
     public static final String TABLE_TITLE_SERVER_VARIABLES = "Server Variables";
 
     public static void appendDescription(StructuralNode node, String description) {
