@@ -1,4 +1,4 @@
-ext.moduleName="io.github.swagger2markup.swagger-core"
+ext.moduleName="io.github.swagger2markup.core"
 
 dependencies {
     configurations.all {
