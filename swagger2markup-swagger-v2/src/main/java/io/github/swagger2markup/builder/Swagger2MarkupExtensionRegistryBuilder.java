@@ -16,7 +16,6 @@
 
 package io.github.swagger2markup.builder;
 
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.spi.*;
 
 import java.util.List;
@@ -107,17 +106,17 @@ public class Swagger2MarkupExtensionRegistryBuilder {
     }
 
     private static class Context {
-        public final List<SwaggerModelExtension> swaggerModelExtensions;
-        public final List<OverviewDocumentExtension> overviewDocumentExtensions;
-        public final List<DefinitionsDocumentExtension> definitionsDocumentExtensions;
-        public final List<PathsDocumentExtension> pathsDocumentExtensions;
-        public final List<SecurityDocumentExtension> securityDocumentExtensions;
+        final List<SwaggerModelExtension> swaggerModelExtensions;
+        final List<OverviewDocumentExtension> overviewDocumentExtensions;
+        final List<DefinitionsDocumentExtension> definitionsDocumentExtensions;
+        final List<PathsDocumentExtension> pathsDocumentExtensions;
+        final List<SecurityDocumentExtension> securityDocumentExtensions;
 
-        public Context(List<SwaggerModelExtension> swaggerModelExtensions,
-                       List<OverviewDocumentExtension> overviewDocumentExtensions,
-                       List<DefinitionsDocumentExtension> definitionsDocumentExtensions,
-                       List<PathsDocumentExtension> pathsDocumentExtensions,
-                       List<SecurityDocumentExtension> securityDocumentExtensions) {
+        Context(List<SwaggerModelExtension> swaggerModelExtensions,
+                List<OverviewDocumentExtension> overviewDocumentExtensions,
+                List<DefinitionsDocumentExtension> definitionsDocumentExtensions,
+                List<PathsDocumentExtension> pathsDocumentExtensions,
+                List<SecurityDocumentExtension> securityDocumentExtensions) {
             this.swaggerModelExtensions = swaggerModelExtensions;
             this.overviewDocumentExtensions = overviewDocumentExtensions;
             this.definitionsDocumentExtensions = definitionsDocumentExtensions;

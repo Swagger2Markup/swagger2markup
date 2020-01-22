@@ -16,11 +16,14 @@
 package io.github.swagger2markup.internal.utils;
 
 import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
 
 import java.util.*;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class PathUtils {
 
@@ -67,11 +70,11 @@ public class PathUtils {
      * @param comparator the comparator to use.
      * @return the path operations
      */
-    public static List<PathOperation> toPathOperationsList(Map<String, Path> paths,
-                                                           String host,
-                                                           String basePath,
-                                                           Comparator<PathOperation> comparator) {
-        List<PathOperation> pathOperations = new ArrayList<>();
+    public static List<SwaggerPathOperation> toPathOperationsList(Map<String, Path> paths,
+                                                                  String host,
+                                                                  String basePath,
+                                                                  Comparator<PathOperation> comparator) {
+        List<SwaggerPathOperation> pathOperations = new ArrayList<>();
 
         paths.forEach((relativePath, path) ->
                 pathOperations.addAll(toPathOperationsList(host + basePath + relativePath, path)));
@@ -88,10 +91,19 @@ public class PathUtils {
      * @param pathModel the Swagger Path model
      * @return the path operations
      */
-    public static List<PathOperation> toPathOperationsList(String path, Path pathModel) {
-        List<PathOperation> pathOperations = new ArrayList<>();
-        getOperationMap(pathModel).forEach((httpMethod, operation) ->
-                pathOperations.add(new PathOperation(httpMethod, path, operation)));
+    public static List<SwaggerPathOperation> toPathOperationsList(String path, Path pathModel) {
+        List<SwaggerPathOperation> pathOperations = new ArrayList<>();
+        getOperationMap(pathModel).forEach((httpMethod, operation) -> {
+            String id = operation.getOperationId();
+            if (id == null)
+                id = path + " " + httpMethod.toString().toLowerCase();
+
+            String operationName = operation.getSummary();
+            if (isBlank(operationName)) {
+                operationName = httpMethod.toString() + " " + path;
+            }
+            pathOperations.add(new SwaggerPathOperation(httpMethod.name(), path, id, operationName, operation));
+        });
         return pathOperations;
     }
 }

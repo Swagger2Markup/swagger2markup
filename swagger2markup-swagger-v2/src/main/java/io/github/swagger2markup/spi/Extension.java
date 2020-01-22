@@ -16,7 +16,7 @@
 
 package io.github.swagger2markup.spi;
 
-import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.Swagger2MarkupConverter.SwaggerContext;
 
 /**
  * A marker interface which must be implemented by an extension
@@ -28,6 +28,6 @@ interface Extension {
      *
      * @param globalContext Global context
      */
-    void setGlobalContext(Swagger2MarkupConverter.Context globalContext);
+    void setGlobalContext(SwaggerContext globalContext);
 
 }

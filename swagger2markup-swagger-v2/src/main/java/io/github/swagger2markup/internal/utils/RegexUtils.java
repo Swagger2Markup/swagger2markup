@@ -18,7 +18,7 @@ package io.github.swagger2markup.internal.utils;
 
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,12 +55,12 @@ public class RegexUtils {
      * @param headerPattern regex pattern used for determining headers
      * @return Operations grouped by regex
      */
-    public static Multimap<String, PathOperation> groupOperationsByRegex(List<PathOperation> allOperations, Pattern headerPattern) {
+    public static Multimap<String, SwaggerPathOperation> groupOperationsByRegex(List<SwaggerPathOperation> allOperations, Pattern headerPattern) {
 
-        Multimap<String, PathOperation> operationsGroupedByRegex = LinkedHashMultimap.create();
+        Multimap<String, SwaggerPathOperation> operationsGroupedByRegex = LinkedHashMultimap.create();
 
 
-        for (PathOperation operation : allOperations) {
+        for (SwaggerPathOperation operation : allOperations) {
             String path = operation.getPath();
             Matcher m = headerPattern.matcher(path);
 

@@ -16,13 +16,18 @@
 package io.github.swagger2markup;
 
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
+import io.github.swagger2markup.config.Labels;
 import io.github.swagger2markup.internal.document.DefinitionsDocument;
 import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.internal.document.PathsDocument;
 import io.github.swagger2markup.internal.document.SecurityDocument;
+import io.github.swagger2markup.markup.builder.LineSeparator;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilders;
+import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.spi.Swagger2MarkupExtensionRegistry;
 import io.github.swagger2markup.utils.URIUtils;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -46,20 +51,20 @@ import java.nio.file.StandardOpenOption;
 /**
  * @author Robert Winkler
  */
-public class Swagger2MarkupConverter {
-
-    private final Context context;
+public class Swagger2MarkupConverter extends AbstractSchema2MarkupConverter<Swagger> {
     private final OverviewDocument overviewDocument;
     private final PathsDocument pathsDocument;
     private final DefinitionsDocument definitionsDocument;
     private final SecurityDocument securityDocument;
+    private final SwaggerContext swaggerContext;
 
-    public Swagger2MarkupConverter(Context context) {
-        this.context = context;
-        this.overviewDocument = new OverviewDocument(context);
-        this.pathsDocument = new PathsDocument(context);
-        this.definitionsDocument = new DefinitionsDocument(context);
-        this.securityDocument = new SecurityDocument(context);
+    public Swagger2MarkupConverter(SwaggerContext swaggerContext) {
+        super(swaggerContext);
+        this.swaggerContext = swaggerContext;
+        this.overviewDocument = new OverviewDocument(swaggerContext);
+        this.pathsDocument = new PathsDocument(swaggerContext);
+        this.definitionsDocument = new DefinitionsDocument(swaggerContext);
+        this.securityDocument = new SecurityDocument(swaggerContext);
     }
 
     /**
@@ -163,8 +168,8 @@ public class Swagger2MarkupConverter {
      *
      * @return the global Context
      */
-    public Context getContext() {
-        return context;
+    public SwaggerContext getContext() {
+        return swaggerContext;
     }
 
     /**
@@ -175,40 +180,40 @@ public class Swagger2MarkupConverter {
     public void toFolder(Path outputDirectory) {
         Validate.notNull(outputDirectory, "outputDirectory must not be null");
 
-        context.setOutputPath(outputDirectory);
+        swaggerContext.setOutputPath(outputDirectory);
 
         applyOverviewDocument()
-                .writeToFile(outputDirectory.resolve(context.config.getOverviewDocument()), StandardCharsets.UTF_8);
+                .writeToFile(outputDirectory.resolve(swaggerContext.config.getOverviewDocument()), StandardCharsets.UTF_8);
         applyPathsDocument()
-                .writeToFile(outputDirectory.resolve(context.config.getPathsDocument()), StandardCharsets.UTF_8);
+                .writeToFile(outputDirectory.resolve(swaggerContext.config.getPathsDocument()), StandardCharsets.UTF_8);
         applyDefinitionsDocument()
-                .writeToFile(outputDirectory.resolve(context.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
+                .writeToFile(outputDirectory.resolve(swaggerContext.config.getDefinitionsDocument()), StandardCharsets.UTF_8);
         applySecurityDocument()
-                .writeToFile(outputDirectory.resolve(context.config.getSecurityDocument()), StandardCharsets.UTF_8);
+                .writeToFile(outputDirectory.resolve(swaggerContext.config.getSecurityDocument()), StandardCharsets.UTF_8);
     }
 
     private MarkupDocBuilder applyOverviewDocument() {
         return overviewDocument.apply(
-                context.createMarkupDocBuilder(),
-                OverviewDocument.parameters(context.getSwagger()));
+                swaggerContext.createMarkupDocBuilder(),
+                OverviewDocument.parameters(swaggerContext.getSchema()));
     }
 
     private MarkupDocBuilder applyPathsDocument() {
         return pathsDocument.apply(
-                context.createMarkupDocBuilder(),
-                PathsDocument.parameters(context.getSwagger().getPaths()));
+                swaggerContext.createMarkupDocBuilder(),
+                PathsDocument.parameters(swaggerContext.getSchema().getPaths()));
     }
 
     private MarkupDocBuilder applyDefinitionsDocument() {
         return definitionsDocument.apply(
-                context.createMarkupDocBuilder(),
-                DefinitionsDocument.parameters(context.getSwagger().getDefinitions()));
+                swaggerContext.createMarkupDocBuilder(),
+                DefinitionsDocument.parameters(swaggerContext.getSchema().getDefinitions()));
     }
 
     private MarkupDocBuilder applySecurityDocument() {
         return securityDocument.apply(
-                context.createMarkupDocBuilder(),
-                SecurityDocument.parameters(context.getSwagger().getSecurityDefinitions()));
+                swaggerContext.createMarkupDocBuilder(),
+                SecurityDocument.parameters(swaggerContext.getSchema().getSecurityDefinitions()));
     }
 
     /**
@@ -343,8 +348,8 @@ public class Swagger2MarkupConverter {
 
             if (extensionRegistry == null)
                 extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
-
-            Context context = new Context(config, extensionRegistry, swagger, swaggerLocation);
+            SwaggerLabels swaggerLabels = new SwaggerLabels(config);
+            SwaggerContext context = new SwaggerContext(config, extensionRegistry, swagger, swaggerLocation, swaggerLabels);
 
             initExtensions(context);
 
@@ -353,7 +358,7 @@ public class Swagger2MarkupConverter {
             return new Swagger2MarkupConverter(context);
         }
 
-        private void initExtensions(Context context) {
+        private void initExtensions(SwaggerContext context) {
             extensionRegistry.getSwaggerModelExtensions().forEach(extension -> extension.setGlobalContext(context));
             extensionRegistry.getOverviewDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
             extensionRegistry.getDefinitionsDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
@@ -361,61 +366,44 @@ public class Swagger2MarkupConverter {
             extensionRegistry.getSecurityDocumentExtensions().forEach(extension -> extension.setGlobalContext(context));
         }
 
-        private void applySwaggerExtensions(Context context) {
-            extensionRegistry.getSwaggerModelExtensions().forEach(extension -> extension.apply(context.getSwagger()));
+        private void applySwaggerExtensions(SwaggerContext context) {
+            extensionRegistry.getSwaggerModelExtensions().forEach(extension -> extension.apply(context.getSchema()));
         }
     }
 
-    public static class Context {
-        private final Swagger2MarkupConfig config;
-        private final Swagger swagger;
-        private final URI swaggerLocation;
-        private final Swagger2MarkupExtensionRegistry extensionRegistry;
-        private final Labels labels;
-        private Path outputPath;
+    public static class SwaggerContext extends Context<Swagger> {
+        private Swagger2MarkupConfig config;
+        private Swagger2MarkupExtensionRegistry extensionRegistry;
 
-        public Context(Swagger2MarkupConfig config,
-                       Swagger2MarkupExtensionRegistry extensionRegistry,
-                       Swagger swagger,
-                       URI swaggerLocation) {
+        public SwaggerContext(Swagger2MarkupConfig config,
+                              Swagger2MarkupExtensionRegistry extensionRegistry,
+                              Swagger schema, URI swaggerLocation, Labels labels) {
+            super(config, extensionRegistry, schema, swaggerLocation, labels);
             this.config = config;
             this.extensionRegistry = extensionRegistry;
-            this.swagger = swagger;
-            this.swaggerLocation = swaggerLocation;
-            this.labels = new Labels(config);
         }
 
+        @Override
         public Swagger2MarkupConfig getConfig() {
             return config;
         }
 
-        public Swagger getSwagger() {
-            return swagger;
-        }
-
-        public URI getSwaggerLocation() {
-            return swaggerLocation;
-        }
-
+        @Override
         public Swagger2MarkupExtensionRegistry getExtensionRegistry() {
             return extensionRegistry;
         }
 
-        public Labels getLabels() {
-            return labels;
-        }
-
         public MarkupDocBuilder createMarkupDocBuilder() {
-            return MarkupDocBuilders.documentBuilder(config.getMarkupLanguage(),
-                    config.getLineSeparator(), config.getAsciidocPegdownTimeoutMillis()).withAnchorPrefix(config.getAnchorPrefix());
-        }
-
-        public Path getOutputPath() {
-            return outputPath;
-        }
-
-        public void setOutputPath(Path outputPath) {
-            this.outputPath = outputPath;
+            MarkupLanguage markupLanguage = null;
+            if (config.getMarkupLanguage() != null) {
+                markupLanguage = MarkupLanguage.valueOf(config.getMarkupLanguage().name());
+            }
+            LineSeparator lineSeparator = null;
+            if (config.getLineSeparator() != null) {
+                lineSeparator = LineSeparator.valueOf(config.getLineSeparator().name());
+            }
+            return MarkupDocBuilders.documentBuilder(markupLanguage, lineSeparator,
+                    config.getAsciidocPegdownTimeoutMillis()).withAnchorPrefix(config.getAnchorPrefix());
         }
     }
 

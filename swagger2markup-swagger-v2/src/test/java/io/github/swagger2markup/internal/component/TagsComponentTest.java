@@ -50,7 +50,7 @@ public class TagsComponentTest extends AbstractComponentTest {
         tags.add(new Tag().name("Tag1").description("description"));
         tags.add(new Tag().name("Tag2"));
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new TagsComponent(context).apply(markupDocBuilder, TagsComponent.parameters(tags, OverviewDocument.SECTION_TITLE_LEVEL));

@@ -20,7 +20,7 @@ import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -50,12 +50,12 @@ public class ResponsesComponentTest extends AbstractComponentTest {
         //Given
         Path file = Paths.get(ResponsesComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/pets/findByStatus");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByStatus", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/pets/findByStatus", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When

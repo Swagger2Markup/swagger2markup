@@ -47,11 +47,11 @@ public class DefinitionComponentTest extends AbstractComponentTest {
         //Given
         Path file = Paths.get(DefinitionComponentTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         Model petModel = swagger.getDefinitions().get("Pet");
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When

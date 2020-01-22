@@ -16,14 +16,13 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.AsciidocConverterTest;
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.utils.PathUtils;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
-import io.github.swagger2markup.model.PathOperation;
+import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.Swagger;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
@@ -52,14 +51,14 @@ public class BodyParameterComponentTest extends AbstractComponentTest {
     public void testBodyParameterComponent() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withFlatBody().build();
+        Swagger2MarkupConfigBuilder.Swagger2MarkupConfig config = (Swagger2MarkupConfigBuilder.Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder().withFlatBody().build();
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config).build();
-        Swagger swagger = converter.getContext().getSwagger();
+        Swagger swagger = converter.getContext().getSchema();
 
         io.swagger.models.Path path = swagger.getPaths().get("/pets");
-        List<PathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
+        List<SwaggerPathOperation> pathOperations = PathUtils.toPathOperationsList("/pets", path);
 
-        Swagger2MarkupConverter.Context context = converter.getContext();
+        Swagger2MarkupConverter.SwaggerContext context = converter.getContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         //When

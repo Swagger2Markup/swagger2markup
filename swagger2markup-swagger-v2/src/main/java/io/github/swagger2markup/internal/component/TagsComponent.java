@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.SwaggerLabels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Tag;
@@ -31,7 +31,7 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class TagsComponent extends MarkupComponent<TagsComponent.Parameters> {
 
-    public TagsComponent(Swagger2MarkupConverter.Context context) {
+    public TagsComponent(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 
@@ -42,7 +42,7 @@ public class TagsComponent extends MarkupComponent<TagsComponent.Parameters> {
 
     @Override
     public MarkupDocBuilder apply(MarkupDocBuilder markupDocBuilder, Parameters params) {
-        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(Labels.TAGS));
+        markupDocBuilder.sectionTitleLevel(params.titleLevel, labels.getLabel(SwaggerLabels.TAGS));
 
         List<String> tagsList = params.tags.stream()
                 .map(this::mapToString).collect(Collectors.toList());

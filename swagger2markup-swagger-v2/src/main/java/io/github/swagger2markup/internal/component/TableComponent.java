@@ -33,7 +33,7 @@ public class TableComponent extends MarkupComponent<TableComponent.Parameters> {
     public static final String WIDTH_RATIO = "widthRatio";
     public static final String HEADER_COLUMN = "headerColumn";
 
-    public TableComponent(Swagger2MarkupConverter.Context context) {
+    public TableComponent(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 

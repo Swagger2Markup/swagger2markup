@@ -47,7 +47,7 @@ public class VersionInfoComponentTest extends AbstractComponentTest {
 
         Info info = new Info().version("1.0");
 
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
         MarkupDocBuilder markupDocBuilder = context.createMarkupDocBuilder();
 
         markupDocBuilder = new VersionInfoComponent(context).apply(markupDocBuilder, VersionInfoComponent.parameters(info, OverviewDocument.SECTION_TITLE_LEVEL));

@@ -21,15 +21,13 @@ import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.ExternalDocs;
 import org.apache.commons.lang3.Validate;
 
-import static io.github.swagger2markup.Labels.EXTERNAL_DOCS;
-import static io.github.swagger2markup.Labels.EXTERNAL_DOCS_DESC;
-import static io.github.swagger2markup.Labels.EXTERNAL_DOCS_URL;
+import static io.github.swagger2markup.SwaggerLabels.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class ExternalDocsComponent extends MarkupComponent<ExternalDocsComponent.Parameters> {
 
-    public ExternalDocsComponent(Swagger2MarkupConverter.Context context) {
+    public ExternalDocsComponent(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
     }
 

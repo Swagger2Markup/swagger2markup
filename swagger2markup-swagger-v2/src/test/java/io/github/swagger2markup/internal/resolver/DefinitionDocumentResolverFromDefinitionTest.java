@@ -15,10 +15,10 @@
  */
 package io.github.swagger2markup.internal.resolver;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.markup.builder.MarkupLanguage;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
+import io.github.swagger2markup.config.MarkupLanguage;
 import org.junit.Test;
 
 import java.nio.file.Paths;
@@ -30,28 +30,28 @@ public class DefinitionDocumentResolverFromDefinitionTest {
 
     @Test
     public void testDefault() {
-        Swagger2MarkupConverter.Context context = createContext();
+        Swagger2MarkupConverter.SwaggerContext context = createContext();
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName")).isNull();
     }
 
     @Test
     public void testWithSeparatedDefinitions() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .build();
-        Swagger2MarkupConverter.Context context = createContext(config);
+        Swagger2MarkupConverter.SwaggerContext context = createContext(config);
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName")).isNull();
     }
 
     @Test
     public void testWithSeparatedDefinitionsAndInterDocumentCrossReferences() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withSeparatedDefinitions()
                 .withInterDocumentCrossReferences()
                 .build();
-        Swagger2MarkupConverter.Context context = createContext(config);
+        Swagger2MarkupConverter.SwaggerContext context = createContext(config);
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName"))
@@ -60,10 +60,10 @@ public class DefinitionDocumentResolverFromDefinitionTest {
 
     @Test
     public void testWithInterDocumentCrossReferences() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
-        Swagger2MarkupConverter.Context context = createContext(config);
+        Swagger2MarkupConverter.SwaggerContext context = createContext(config);
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName"))
@@ -72,10 +72,10 @@ public class DefinitionDocumentResolverFromDefinitionTest {
 
     @Test
     public void testWithInterDocumentCrossReferencesAndNoOutputPath() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .build();
-        Swagger2MarkupConverter.Context context = createContext(config);
+        Swagger2MarkupConverter.SwaggerContext context = createContext(config);
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName"))
                 .isNull();
@@ -83,10 +83,10 @@ public class DefinitionDocumentResolverFromDefinitionTest {
 
     @Test
     public void testWithInterDocumentCrossReferencesAndPrefix() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences("prefix_")
                 .build();
-        Swagger2MarkupConverter.Context context = createContext(config);
+        Swagger2MarkupConverter.SwaggerContext context = createContext(config);
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName"))
@@ -95,11 +95,11 @@ public class DefinitionDocumentResolverFromDefinitionTest {
 
     @Test
     public void testWithInterDocumentCrossReferencesAndMarkdown() {
-        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
                 .withInterDocumentCrossReferences()
                 .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
-        Swagger2MarkupConverter.Context context = createContext(config);
+        Swagger2MarkupConverter.SwaggerContext context = createContext(config);
         context.setOutputPath(Paths.get("/tmp"));
 
         assertThat(new DefinitionDocumentResolverFromDefinition(context).apply("DefinitionName"))

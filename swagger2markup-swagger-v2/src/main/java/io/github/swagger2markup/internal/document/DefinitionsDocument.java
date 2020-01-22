@@ -15,13 +15,14 @@
  */
 package io.github.swagger2markup.internal.document;
 
-import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.Swagger2MarkupConverter;
+import io.github.swagger2markup.SwaggerLabels;
 import io.github.swagger2markup.internal.component.DefinitionComponent;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentNameResolver;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverDefault;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromDefinition;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
+import io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import io.github.swagger2markup.spi.MarkupComponent;
 import io.swagger.models.Model;
 import org.apache.commons.collections4.MapUtils;
@@ -35,7 +36,6 @@ import java.util.Map;
 import static io.github.swagger2markup.internal.utils.MapUtils.toSortedMap;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.crossReference;
-import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Context;
 import static io.github.swagger2markup.spi.DefinitionsDocumentExtension.Position;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
@@ -51,7 +51,7 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
     private final DefinitionDocumentResolverDefault definitionDocumentResolverDefault;
     private final DefinitionDocumentNameResolver definitionDocumentNameResolver;
 
-    public DefinitionsDocument(Swagger2MarkupConverter.Context context) {
+    public DefinitionsDocument(Swagger2MarkupConverter.SwaggerContext context) {
         super(context);
         if (config.isSeparatedDefinitionsEnabled()) {
             if (logger.isDebugEnabled()) {
@@ -81,7 +81,7 @@ public class DefinitionsDocument extends MarkupComponent<DefinitionsDocument.Par
         Map<String, Model> definitions = params.definitions;
         if (MapUtils.isNotEmpty(definitions)) {
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEFORE, markupDocBuilder));
-            buildDefinitionsTitle(markupDocBuilder, labels.getLabel(Labels.DEFINITIONS));
+            buildDefinitionsTitle(markupDocBuilder, labels.getLabel(SwaggerLabels.DEFINITIONS));
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_BEGIN, markupDocBuilder));
             buildDefinitionsSection(markupDocBuilder, definitions);
             applyDefinitionsDocumentExtension(new Context(Position.DOCUMENT_END, markupDocBuilder));

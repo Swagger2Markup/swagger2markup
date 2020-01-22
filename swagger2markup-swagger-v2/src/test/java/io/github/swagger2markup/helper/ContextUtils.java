@@ -15,28 +15,29 @@
  */
 package io.github.swagger2markup.helper;
 
-import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.Swagger2MarkupExtensionRegistry;
+import io.github.swagger2markup.SwaggerLabels;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
+import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
+import io.github.swagger2markup.spi.Swagger2MarkupExtensionRegistry;
 import io.swagger.models.Swagger;
 
 public class ContextUtils {
 
-    public static Swagger2MarkupConverter.Context createContext() {
+    public static Swagger2MarkupConverter.SwaggerContext createContext() {
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().build();
         Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
-        return new Swagger2MarkupConverter.Context(config, extensionRegistry, null, null);
+        return new Swagger2MarkupConverter.SwaggerContext(config, extensionRegistry, null, null, new SwaggerLabels(config));
     }
 
-    public static Swagger2MarkupConverter.Context createContext(Swagger2MarkupConfig config) {
+    public static Swagger2MarkupConverter.SwaggerContext createContext(Swagger2MarkupConfig config) {
         Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
-        return new Swagger2MarkupConverter.Context(config, extensionRegistry, null, null);
+        return new Swagger2MarkupConverter.SwaggerContext(config, extensionRegistry, null, null, new SwaggerLabels(config));
     }
 
-    public static Swagger2MarkupConverter.Context createContext(Swagger2MarkupConfig config, Swagger swagger) {
+    public static Swagger2MarkupConverter.SwaggerContext createContext(Swagger2MarkupConfig config, Swagger swagger) {
         Swagger2MarkupExtensionRegistry extensionRegistry = new Swagger2MarkupExtensionRegistryBuilder().build();
-        return new Swagger2MarkupConverter.Context(config, extensionRegistry, swagger, null);
+        return new Swagger2MarkupConverter.SwaggerContext(config, extensionRegistry, swagger, null, new SwaggerLabels(config));
     }
 }
