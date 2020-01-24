@@ -15,17 +15,17 @@
  */
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
-import io.github.swagger2markup.config.Labels;
-import io.github.swagger2markup.config.MarkupLanguage;
 import io.github.swagger2markup.config.OpenAPILabels;
 import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 import io.github.swagger2markup.extension.OpenAPI2MarkupExtensionRegistry;
 import io.github.swagger2markup.extension.builder.OpenAPI2MarkupExtensionRegistryBuilder;
-import io.github.swagger2markup.internal.DefinitionsDocument;
-import io.github.swagger2markup.internal.OverviewDocument;
-import io.github.swagger2markup.internal.PathsDocument;
-import io.github.swagger2markup.internal.SecurityDocument;
+import io.github.swagger2markup.internal.document.ComponentsDocument;
+import io.github.swagger2markup.internal.document.OverviewDocument;
+import io.github.swagger2markup.internal.document.PathsDocument;
+import io.github.swagger2markup.internal.document.SecurityDocument;
+import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
+import io.github.swagger2markup.config.Labels;
+import io.github.swagger2markup.config.MarkupLanguage;
 import io.github.swagger2markup.utils.URIUtils;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
@@ -46,12 +46,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import static io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig;
-
 public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<OpenAPI> {
     private final OverviewDocument overviewDocument;
     private final PathsDocument pathsDocument;
-    private final DefinitionsDocument definitionsDocument;
+    private final ComponentsDocument componentsDocument;
     private final SecurityDocument securityDocument;
     private final OpenAPIContext openAPIContext;
 
@@ -61,7 +59,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
         this.openAPIContext = context;
         this.overviewDocument = new OverviewDocument(context);
         this.pathsDocument = new PathsDocument(context);
-        this.definitionsDocument = new DefinitionsDocument(context);
+        this.componentsDocument = new ComponentsDocument(context);
         this.securityDocument = new SecurityDocument(context);
     }
 
@@ -170,7 +168,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
         openAPIContext.setOutputPath(outputDirectory);
         writeToFile(applyOverviewDocument(), outputDirectory.resolve(openAPIContext.config.getOverviewDocument()));
         writeToFile(applyPathsDocument(), outputDirectory.resolve(openAPIContext.config.getPathsDocument()));
-        writeToFile(applyDefinitionsDocument(), outputDirectory.resolve(openAPIContext.config.getDefinitionsDocument()));
+        writeToFile(applyComponentsDocument(), outputDirectory.resolve(openAPIContext.config.getDefinitionsDocument()));
         writeToFile(applySecurityDocument(), outputDirectory.resolve(openAPIContext.config.getSecurityDocument()));
     }
 
@@ -180,7 +178,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
 
         writeToFile(applyOverviewDocument(), outputFile);
         writeToFile(applyPathsDocument(), outputFile);
-        writeToFile(applyDefinitionsDocument(), outputFile);
+        writeToFile(applyComponentsDocument(), outputFile);
         writeToFile(applySecurityDocument(), outputFile);
     }
 
@@ -190,18 +188,16 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
 
         writeToFileWithoutExtension(applyOverviewDocument(), outputFile);
         writeToFileWithoutExtension(applyPathsDocument(), outputFile);
-        writeToFileWithoutExtension(applyDefinitionsDocument(), outputFile);
+        writeToFileWithoutExtension(applyComponentsDocument(), outputFile);
         writeToFileWithoutExtension(applySecurityDocument(), outputFile);
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(applyOverviewDocument().toString());
-        sb.append(applyPathsDocument().toString());
-        sb.append(applyDefinitionsDocument().toString());
-        sb.append(applySecurityDocument().toString());
-        return sb.toString();
+        return applyOverviewDocument().toString() +
+                applyPathsDocument().toString() +
+                applyComponentsDocument().toString() +
+                applySecurityDocument().toString();
     }
 
     private Document applyOverviewDocument() {
@@ -216,10 +212,10 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
                 PathsDocument.parameters(openAPIContext.getSchema()));
     }
 
-    private Document applyDefinitionsDocument() {
-        return definitionsDocument.apply(
+    private Document applyComponentsDocument() {
+        return componentsDocument.apply(
                 openAPIContext.createDocument(),
-                DefinitionsDocument.parameters(openAPIContext.getSchema()));
+                ComponentsDocument.parameters(openAPIContext.getSchema().getComponents()));
     }
 
     private Document applySecurityDocument() {
@@ -239,10 +235,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
     }
 
     private boolean isMarkupLanguageSupported(MarkupLanguage markupLanguage) {
-        if(markupLanguage != MarkupLanguage.ASCIIDOC) {
-            return false;
-        }
-        return true;
+        return markupLanguage == MarkupLanguage.ASCIIDOC;
     }
 
     private void writeToFileWithoutExtension(Document document, Path file) {
@@ -264,10 +257,10 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
     }
 
     public static class OpenAPIContext extends Context<OpenAPI> {
-        private OpenSchema2MarkupConfig config;
+        private OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config;
         private OpenAPI2MarkupExtensionRegistry extensionRegistry;
 
-        public OpenAPIContext(OpenSchema2MarkupConfig config,
+        public OpenAPIContext(OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config,
                               OpenAPI2MarkupExtensionRegistry extensionRegistry,
                               OpenAPI schema, URI swaggerLocation, Labels labels) {
             super(config, extensionRegistry, schema, swaggerLocation, labels);
@@ -276,7 +269,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
         }
 
         @Override
-        public OpenSchema2MarkupConfig getConfig() {
+        public OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig getConfig() {
             return config;
         }
 
@@ -293,7 +286,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
     public static class Builder {
         private final OpenAPI openAPI;
         private final URI schemaLocation;
-        private OpenSchema2MarkupConfig config;
+        private OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config;
         private OpenAPI2MarkupExtensionRegistry extensionRegistry;
 
         /**
@@ -344,7 +337,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
             return openAPI;
         }
 
-        public Builder withConfig(OpenSchema2MarkupConfig config) {
+        public Builder withConfig(OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config) {
             Validate.notNull(config, "config must not be null");
             this.config = config;
             return this;

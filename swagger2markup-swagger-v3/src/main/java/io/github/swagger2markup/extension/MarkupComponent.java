@@ -16,21 +16,20 @@
 
 package io.github.swagger2markup.extension;
 
+import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
 import io.github.swagger2markup.config.Labels;
+import io.swagger.v3.oas.models.OpenAPI;
 import io.vavr.Function2;
-import org.asciidoctor.ast.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig;
-
-public abstract class MarkupComponent<T> implements Function2<Document, T, Document> {
+public abstract class MarkupComponent<D, T, R> implements Function2<D, T, R> {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
-    protected OpenAPI2MarkupConverter.Context context;
+    protected OpenAPI2MarkupConverter.Context<OpenAPI> context;
     protected Labels labels;
-    protected OpenSchema2MarkupConfig config;
+    protected OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config;
     protected OpenAPI2MarkupExtensionRegistry extensionRegistry;
 
     public MarkupComponent(OpenAPI2MarkupConverter.OpenAPIContext context) {
