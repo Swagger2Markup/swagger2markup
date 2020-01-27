@@ -1,12 +1,15 @@
-package io.github.swagger2markup.internal;
+package io.github.swagger2markup.internal.document;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
+import io.github.swagger2markup.extension.MarkupComponent;
+import io.github.swagger2markup.extension.OverviewDocumentExtension;
+import io.github.swagger2markup.internal.component.ExternalDocumentationComponent;
+import io.github.swagger2markup.internal.component.TagsComponent;
+import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.BlockImpl;
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
 import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.extension.OverviewDocumentExtension;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -20,11 +23,15 @@ import org.asciidoctor.ast.Section;
 import java.util.Optional;
 
 import static io.github.swagger2markup.extension.OverviewDocumentExtension.Context;
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
 
-public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameters> {
+public class OverviewDocument extends MarkupComponent<Document, OverviewDocument.Parameters, Document> {
+    private final TagsComponent tagsComponent;
+    private final ExternalDocumentationComponent externalDocumentationComponent;
+
     public OverviewDocument(OpenAPI2MarkupConverter.OpenAPIContext context) {
         super(context);
+        tagsComponent = new TagsComponent(context);
+        this.externalDocumentationComponent = new ExternalDocumentationComponent(context);
     }
 
     public static OverviewDocument.Parameters parameters(OpenAPI schema) {
@@ -43,16 +50,17 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         Document subDocument = new DocumentImpl(document);
         Section overviewDoc = new SectionImpl(subDocument);
         applyOverviewDocumentExtension(new Context(OverviewDocumentExtension.Position.DOCUMENT_BEGIN, subDocument));
-        overviewDoc.setTitle(SECTION_TITLE_OVERVIEW);
+        overviewDoc.setTitle(OpenApiHelpers.SECTION_TITLE_OVERVIEW);
 
-        appendDescription(overviewDoc, apiInfo.getDescription());
+        OpenApiHelpers.appendDescription(overviewDoc, apiInfo.getDescription());
         appendTermsOfServiceInfo(overviewDoc, apiInfo);
         appendLicenseInfo(overviewDoc, apiInfo);
         subDocument.append(overviewDoc);
         applyOverviewDocumentExtension(new Context(OverviewDocumentExtension.Position.DOCUMENT_END, subDocument));
         document.append(subDocument);
 
-        appendExternalDoc(document, parameters.openAPI.getExternalDocs());
+        externalDocumentationComponent.apply(document, parameters.openAPI.getExternalDocs());
+        tagsComponent.apply(document, parameters.openAPI.getTags());
         applyOverviewDocumentExtension(new Context(OverviewDocumentExtension.Position.DOCUMENT_AFTER, document));
         return document;
     }
@@ -109,7 +117,7 @@ public class OverviewDocument extends MarkupComponent<OverviewDocument.Parameter
         String termsOfService = info.getTermsOfService();
         if (StringUtils.isNotBlank(termsOfService)) {
             Block paragraph = new ParagraphBlockImpl(overviewDoc);
-            paragraph.setSource(termsOfService + "[" + LABEL_TERMS_OF_SERVICE + "]");
+            paragraph.setSource(termsOfService + "[" + OpenApiHelpers.LABEL_TERMS_OF_SERVICE + "]");
             overviewDoc.append(paragraph);
         }
     }
