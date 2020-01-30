@@ -53,6 +53,30 @@ All about the Users
 
 
 |===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
+
+
+
+|===
 
 === __PUT__ `/pet` Update an existing pet
 .Responses
@@ -99,6 +123,30 @@ All about the Users
 
 
 |===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
+
+
+
+|===
 
 === __POST__ `/pet` Add a new pet to the store
 .Responses
@@ -121,6 +169,30 @@ All about the Users
 
 
 <.<|No Links
+
+
+
+|===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
 
 
 
@@ -194,6 +266,30 @@ __optional__
 
 
 |===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
+
+
+
+|===
 
 === __GET__ `/pet/findByTags` Finds Pets by tags
 Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
@@ -259,6 +355,30 @@ __optional__
 
 
 <.<|No Links
+
+
+
+|===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
 
 
 
@@ -343,6 +463,38 @@ format: int64
 
 
 |===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**apiKey**
+
+
+<.<|api_key
+
+
+<.<|
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
+
+
+
+|===
 
 === __POST__ `/pet/{petId}` Updates a pet in the store with form data
 .Parameters
@@ -396,6 +548,30 @@ __required__
 
 
 <.<|No Links
+
+
+
+|===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
 
 
 
@@ -470,6 +646,30 @@ __optional__
 
 
 |===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
+
+
+
+|===
 
 === __POST__ `/pet/{petId}/uploadImage` uploads an image
 .Parameters
@@ -528,6 +728,30 @@ format: int64
 
 
 |===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|petstore_auth
+
+
+<.<|write:pets, read:pets
+
+
+
+|===
 
 === __GET__ `/store/inventory` Returns pet inventories by status
 Returns a map of status codes to quantities
@@ -554,6 +778,28 @@ Returns a map of status codes to quantities
 <.<|No Links
 
 
+
+|===
+.Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**apiKey**
+
+
+<.<|api_key
+
+
+<.<|
 
 |===
 
@@ -1449,6 +1695,41 @@ type: array
 
 
 <.<|No Links
+
+
+
+|===
+
+== Security
+[%header,caption=,cols=".^3a,.^4a,.^13a"]
+|===
+<.<|Type
+
+
+<.<|Name
+
+
+<.<|Scopes
+
+
+
+<.<|**oauth2**
+
+
+<.<|foo
+
+
+<.<|bar, baz
+
+
+
+<.<|**oauth2**
+
+
+<.<|a
+
+
+<.<|b, c
 
 
 

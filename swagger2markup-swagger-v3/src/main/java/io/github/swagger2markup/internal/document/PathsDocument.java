@@ -1,5 +1,6 @@
 package io.github.swagger2markup.internal.document;
 
+import io.github.swagger2markup.internal.component.SecurityRequirementTableComponent;
 import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
 import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
@@ -23,12 +24,14 @@ public class PathsDocument extends MarkupComponent<Document, PathsDocument.Param
     private final ParametersComponent parametersComponent;
     private final ExternalDocumentationComponent externalDocumentationComponent;
     private final ResponseComponent responseComponent;
+    private final SecurityRequirementTableComponent securityRequirementTableComponent;
 
     public PathsDocument(OpenAPI2MarkupConverter.OpenAPIContext context) {
         super(context);
         this.parametersComponent = new ParametersComponent(context);
         this.externalDocumentationComponent = new ExternalDocumentationComponent(context);
         this.responseComponent = new ResponseComponent(context);
+        this.securityRequirementTableComponent = new SecurityRequirementTableComponent(context);
     }
 
     public static Parameters parameters(OpenAPI schema) {
@@ -54,6 +57,7 @@ public class PathsDocument extends MarkupComponent<Document, PathsDocument.Param
                     parametersComponent.apply(operationSection, operation.getParameters());
                     responseComponent.apply(operationSection, operation.getResponses());
                     appendServersSection(operationSection, operation.getServers());
+                    securityRequirementTableComponent.apply(operationSection, operation.getSecurity(), false);
                     allPathsSection.append(operationSection);
                 })));
 
@@ -88,7 +92,9 @@ public class PathsDocument extends MarkupComponent<Document, PathsDocument.Param
         }}, new ArrayList<>());
         serverVariables.setTitle(OpenApiHelpers.TABLE_TITLE_SERVER_VARIABLES);
 
-        serverVariables.setHeaderRow(OpenApiHelpers.TABLE_HEADER_VARIABLE, OpenApiHelpers.TABLE_HEADER_DESCRIPTION, OpenApiHelpers.TABLE_HEADER_POSSIBLE_VALUES, OpenApiHelpers.TABLE_HEADER_DEFAULT);
+        serverVariables.setHeaderRow(OpenApiHelpers.TABLE_HEADER_VARIABLE, OpenApiHelpers.TABLE_HEADER_DESCRIPTION,
+                OpenApiHelpers.TABLE_HEADER_POSSIBLE_VALUES, OpenApiHelpers.TABLE_HEADER_DEFAULT
+        );
 
         variables.forEach((name, variable) -> {
             String possibleValues = String.join(", ", Optional.ofNullable(variable.getEnum()).orElse(Collections.singletonList("Any")));
