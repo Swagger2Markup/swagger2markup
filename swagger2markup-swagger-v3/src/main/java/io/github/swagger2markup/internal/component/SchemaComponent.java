@@ -93,12 +93,7 @@ public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaCompo
 
         ParagraphBlockImpl paragraphBlock = new ParagraphBlockImpl(schemaDocument);
         String source = Stream.concat(schemaBooleanStream, schemaValueStream).collect(Collectors.joining(" +" + LINE_SEPARATOR));
-        String ref = schema.get$ref();
-        if (StringUtils.isNotBlank(ref)) {
-            String alt = ref.substring(ref.lastIndexOf('/') + 1);
-            String anchor = ref.replaceFirst("#", "").replaceAll("/", "_");
-            source += "<<" + anchor + "," + alt + ">>" + LINE_SEPARATOR;
-        }
+        source = generateRefLink(source, schema.get$ref());
         paragraphBlock.setSource(source);
 
         schemaDocument.append(paragraphBlock);
@@ -110,6 +105,14 @@ public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaCompo
         }
 
         return schemaDocument;
+    }
+
+    private String generateRefLink(String source, String ref) {
+        if (StringUtils.isNotBlank(ref)) {
+            String anchor = ref.replaceFirst("#", "").replaceAll("/", "_");
+            source += "<<" + anchor + ">>" + LINE_SEPARATOR;
+        }
+        return source;
     }
 
     @SuppressWarnings("rawtypes")

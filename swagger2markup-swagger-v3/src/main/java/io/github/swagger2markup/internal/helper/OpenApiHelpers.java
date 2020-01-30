@@ -2,6 +2,7 @@ package io.github.swagger2markup.internal.helper;
 
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
+import io.swagger.v3.oas.models.ExternalDocumentation;
 import org.apache.commons.lang3.StringUtils;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
@@ -10,10 +11,14 @@ import org.asciidoctor.ast.Table;
 
 public class OpenApiHelpers {
 
+    public static final String LABEL_CONTENT = "Content";
     public static final String LABEL_DEFAULT = "Default";
     public static final String LABEL_DEPRECATED = "Deprecated";
+    public static final String LABEL_EXAMPLE = "Example";
+    public static final String LABEL_EXAMPLES = "Examples";
     public static final String LABEL_EXCLUSIVE_MAXIMUM = "Exclusive Maximum";
     public static final String LABEL_EXCLUSIVE_MINIMUM = "Exclusive Minimum";
+    public static final String LABEL_EXTERNAL_VALUE = "External Value";
     public static final String LABEL_FORMAT = "Format";
     public static final String LABEL_MAXIMUM = "Maximum";
     public static final String LABEL_MAX_ITEMS = "Maximum Items";
@@ -88,6 +93,18 @@ public class OpenApiHelpers {
 
     public static String requiredIndicator(boolean isRequired) {
         return italicUnconstrained(isRequired ? LABEL_REQUIRED : LABEL_OPTIONAL).toLowerCase();
+    }
+
+    public static void appendExternalDoc(StructuralNode node, ExternalDocumentation extDoc) {
+        if (extDoc == null) return;
+
+        String url = extDoc.getUrl();
+        if (StringUtils.isNotBlank(url)) {
+            Block paragraph = new ParagraphBlockImpl(node);
+            String desc = extDoc.getDescription();
+            paragraph.setSource(url + (StringUtils.isNotBlank(desc) ? "[" + desc + "]" : ""));
+            node.append(paragraph);
+        }
     }
 
     public static String superScript(String str) {
