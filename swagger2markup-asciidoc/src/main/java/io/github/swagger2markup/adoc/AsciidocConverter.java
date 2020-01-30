@@ -777,6 +777,7 @@ public class AsciidocConverter extends StringConverter {
     private String convertParagraph(StructuralNode node) {
         logger.debug("convertParagraph");
         StringBuilder sb = new StringBuilder();
+        appendTitle(node, sb);
         sb.append(new ParagraphAttributes(node).toAsciiDocContent());
         appendSource((Block) node, sb);
         appendTrailingNewLine(sb);
