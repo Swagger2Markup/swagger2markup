@@ -227,8 +227,8 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
     private void writeToFile(Document document, Path path) {
         MarkupLanguage markupLanguage = openAPIContext.config.getMarkupLanguage();
         if (isMarkupLanguageSupported(markupLanguage)) {
-            String fileExtenstion = markupLanguage.getFileNameExtensions().get(0);
-            writeToFileWithoutExtension(document, path.resolveSibling(path.getFileName().toString() + fileExtenstion));
+            String fileExtension = markupLanguage.getFileNameExtensions().get(0);
+            writeToFileWithoutExtension(document, path.resolveSibling(path.getFileName().toString() + fileExtension));
         } else {
             throw new RuntimeException("Given Markup language '"+markupLanguage+"' is not supported by "+getClass().getName());
         }

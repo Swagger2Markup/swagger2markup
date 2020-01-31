@@ -15,10 +15,9 @@
  */
 package io.github.swagger2markup.internal.component;
 
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
@@ -28,6 +27,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.generateInnerDoc;
 
 public class ResponseComponent extends MarkupComponent<StructuralNode, ResponseComponent.Parameters, StructuralNode> {
 
@@ -60,12 +62,15 @@ public class ResponseComponent extends MarkupComponent<StructuralNode, ResponseC
         pathResponsesTable.setOption("header");
         pathResponsesTable.setAttribute("caption", "", true);
         pathResponsesTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
-        pathResponsesTable.setTitle(OpenApiHelpers.TABLE_TITLE_RESPONSES);
-        pathResponsesTable.setHeaderRow(OpenApiHelpers.TABLE_HEADER_HTTP_CODE, OpenApiHelpers.TABLE_HEADER_DESCRIPTION, OpenApiHelpers.TABLE_HEADER_LINKS);
+        pathResponsesTable.setTitle(labels.getLabel(TABLE_TITLE_RESPONSES));
+        pathResponsesTable.setHeaderRow(
+                labels.getLabel(TABLE_HEADER_HTTP_CODE),
+                labels.getLabel(TABLE_HEADER_DESCRIPTION),
+                labels.getLabel(TABLE_HEADER_LINKS));
 
         apiResponses.forEach((httpCode, apiResponse) ->
                 pathResponsesTable.addRow(
-                        OpenApiHelpers.generateInnerDoc(pathResponsesTable, httpCode),
+                        generateInnerDoc(pathResponsesTable, httpCode),
                         getResponseDescriptionColumnDocument(pathResponsesTable, apiResponse),
                         linkComponent.apply(pathResponsesTable, apiResponse.getLinks())
                 ));
@@ -74,7 +79,7 @@ public class ResponseComponent extends MarkupComponent<StructuralNode, ResponseC
     }
 
     private Document getResponseDescriptionColumnDocument(Table table, ApiResponse apiResponse) {
-        Document document = OpenApiHelpers.generateInnerDoc(table, Optional.ofNullable(apiResponse.getDescription()).orElse(""));
+        Document document = generateInnerDoc(table, Optional.ofNullable(apiResponse.getDescription()).orElse(""));
         headersComponent.apply(document, apiResponse.getHeaders());
         mediaContentComponent.apply(document, apiResponse.getContent());
         return document;

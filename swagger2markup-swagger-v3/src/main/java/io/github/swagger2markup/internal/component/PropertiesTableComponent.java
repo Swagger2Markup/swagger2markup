@@ -16,9 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
 import io.swagger.v3.oas.models.media.Schema;
 import org.asciidoctor.ast.StructuralNode;
 
@@ -28,6 +27,9 @@ import java.util.List;
 import java.util.Map;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
+import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.generateInnerDoc;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.requiredIndicator;
 
 public class PropertiesTableComponent extends MarkupComponent<StructuralNode, PropertiesTableComponent.Parameters, StructuralNode> {
 
@@ -58,11 +60,14 @@ public class PropertiesTableComponent extends MarkupComponent<StructuralNode, Pr
         propertiesTable.setOption("header");
         propertiesTable.setAttribute("caption", "", true);
         propertiesTable.setAttribute("cols", ".^4a,.^16a", true);
-        propertiesTable.setTitle(OpenApiHelpers.TABLE_TITLE_PROPERTIES);
-        propertiesTable.setHeaderRow(OpenApiHelpers.TABLE_HEADER_NAME, OpenApiHelpers.TABLE_HEADER_SCHEMA);
+        propertiesTable.setTitle(labels.getLabel(TABLE_TITLE_PROPERTIES));
+        propertiesTable.setHeaderRow(
+                labels.getLabel(TABLE_HEADER_NAME),
+                labels.getLabel(TABLE_HEADER_SCHEMA));
 
         properties.forEach((name, schema) -> propertiesTable.addRow(
-                    OpenApiHelpers.generateInnerDoc(propertiesTable, name + LINE_SEPARATOR + OpenApiHelpers.requiredIndicator(finalSchemaRequired.contains(name))),
+                    generateInnerDoc(propertiesTable, name + LINE_SEPARATOR + requiredIndicator(finalSchemaRequired.contains(name),
+                            labels.getLabel(LABEL_REQUIRED), labels.getLabel(LABEL_OPTIONAL))),
                     schemaComponent.apply(propertiesTable, schema)
             ));
         parent.append(propertiesTable);

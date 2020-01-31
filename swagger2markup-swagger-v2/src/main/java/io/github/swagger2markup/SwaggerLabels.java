@@ -100,8 +100,6 @@ public class SwaggerLabels extends Labels {
     public static final String DEPRECATED_OPERATION = "operation.deprecated";
     public static final String UNKNOWN = "unknown";
 
-    private ResourceBundle resourceBundle;
-
     public SwaggerLabels(Swagger2MarkupConfig config) {
         super(ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getLanguage().toLocale()));
     }

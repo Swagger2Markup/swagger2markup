@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.LABEL_EXAMPLES;
+import static io.github.swagger2markup.config.OpenAPILabels.LABEL_EXAMPLES;
 import static io.github.swagger2markup.internal.helper.OpenApiHelpers.italicUnconstrained;
 
 public class EncodingComponent extends MarkupComponent<StructuralNode, EncodingComponent.Parameters, StructuralNode> {
@@ -55,7 +55,7 @@ public class EncodingComponent extends MarkupComponent<StructuralNode, EncodingC
         if (encodings == null || encodings.isEmpty()) return node;
 
         DescriptionListImpl encodingList = new DescriptionListImpl(node);
-        encodingList.setTitle(LABEL_EXAMPLES);
+        encodingList.setTitle(labels.getLabel(LABEL_EXAMPLES));
 
         encodings.forEach((name, encoding) -> {
             DescriptionListEntryImpl encodingEntry = new DescriptionListEntryImpl(encodingList, Collections.singletonList(new ListItemImpl(encodingList, name)));

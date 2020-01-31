@@ -12,7 +12,7 @@ import org.asciidoctor.ast.Section;
 
 import java.util.List;
 
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.SECTION_TITLE_SECURITY;
+import static io.github.swagger2markup.config.OpenAPILabels.SECTION_TITLE_SECURITY;
 
 public class SecurityDocument extends MarkupComponent<Document, SecurityDocument.Parameters, Document> {
     private final SecurityRequirementTableComponent securityRequirementTableComponent;
@@ -32,7 +32,7 @@ public class SecurityDocument extends MarkupComponent<Document, SecurityDocument
         if (null == securityRequirements || securityRequirements.isEmpty()) return document;
 
         Section securityRequirementsSection = new SectionImpl(document);
-        securityRequirementsSection.setTitle(SECTION_TITLE_SECURITY);
+        securityRequirementsSection.setTitle(labels.getLabel(SECTION_TITLE_SECURITY));
         securityRequirementTableComponent.apply(securityRequirementsSection, securityRequirements, false);
         document.append(securityRequirementsSection);
 

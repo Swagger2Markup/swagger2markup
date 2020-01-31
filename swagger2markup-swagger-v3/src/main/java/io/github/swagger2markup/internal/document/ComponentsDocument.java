@@ -1,10 +1,9 @@
 package io.github.swagger2markup.internal.document;
 
-import io.github.swagger2markup.internal.component.*;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
 import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
 import io.github.swagger2markup.extension.MarkupComponent;
+import io.github.swagger2markup.internal.component.*;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
@@ -13,6 +12,8 @@ import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 
 import java.util.Map;
+
+import static io.github.swagger2markup.config.OpenAPILabels.*;
 
 public class ComponentsDocument extends MarkupComponent<Document, ComponentsDocument.Parameters, Document> {
 
@@ -55,7 +56,7 @@ public class ComponentsDocument extends MarkupComponent<Document, ComponentsDocu
         if (null == components) return;
 
         Section componentsSection = new SectionImpl(document);
-        componentsSection.setTitle(OpenApiHelpers.SECTION_TITLE_COMPONENTS);
+        componentsSection.setTitle(labels.getLabel(SECTION_TITLE_COMPONENTS));
         String componentSectionId = "_components";
         componentsSection.setId(componentSectionId);
 
@@ -75,7 +76,7 @@ public class ComponentsDocument extends MarkupComponent<Document, ComponentsDocu
 
         SectionImpl schemasSection = new SectionImpl(componentsSection);
         String schemasSectionId = componentSectionId + "_schemas";
-        schemasSection.setTitle(OpenApiHelpers.SECTION_TITLE_SCHEMAS);
+        schemasSection.setTitle(labels.getLabel(SECTION_TITLE_SCHEMAS));
         schemasSection.setId(schemasSectionId);
         schemas.forEach((name, schema) -> {
             String schemaDocumentId = schemasSectionId + "_" + name;
@@ -93,7 +94,7 @@ public class ComponentsDocument extends MarkupComponent<Document, ComponentsDocu
 
         SectionImpl parametersSection = new SectionImpl(componentsSection);
         String parametersSectionId = componentSectionId + "_parameters";
-        parametersSection.setTitle(OpenApiHelpers.SECTION_TITLE_PARAMETERS);
+        parametersSection.setTitle(labels.getLabel(SECTION_TITLE_PARAMETERS));
         parametersSection.setId(parametersSectionId);
         parametersComponent.apply(parametersSection, parameters);
     }

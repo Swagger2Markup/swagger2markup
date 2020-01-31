@@ -1,7 +1,5 @@
 package io.github.swagger2markup.internal.document;
 
-import io.github.swagger2markup.internal.component.SecurityRequirementTableComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
 import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
@@ -9,6 +7,7 @@ import io.github.swagger2markup.extension.MarkupComponent;
 import io.github.swagger2markup.internal.component.ExternalDocumentationComponent;
 import io.github.swagger2markup.internal.component.ParametersComponent;
 import io.github.swagger2markup.internal.component.ResponseComponent;
+import io.github.swagger2markup.internal.component.SecurityRequirementTableComponent;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.servers.Server;
@@ -19,6 +18,9 @@ import org.asciidoctor.ast.Section;
 import org.asciidoctor.ast.StructuralNode;
 
 import java.util.*;
+
+import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
 
 public class PathsDocument extends MarkupComponent<Document, PathsDocument.Parameters, Document> {
     private final ParametersComponent parametersComponent;
@@ -45,14 +47,14 @@ public class PathsDocument extends MarkupComponent<Document, PathsDocument.Param
         if (null == apiPaths || apiPaths.isEmpty()) return document;
 
         SectionImpl allPathsSection = new SectionImpl(document);
-        allPathsSection.setTitle(OpenApiHelpers.SECTION_TITLE_PATHS);
+        allPathsSection.setTitle(labels.getLabel(SECTION_TITLE_PATHS));
 
         apiPaths.forEach((name, pathItem) ->
                 pathItem.readOperationsMap().forEach(((httpMethod, operation) -> {
                     SectionImpl operationSection = new SectionImpl(allPathsSection);
                     String summary = Optional.ofNullable(operation.getSummary()).orElse("");
-                    operationSection.setTitle((OpenApiHelpers.italicUnconstrained(httpMethod.name().toUpperCase()) + " " + OpenApiHelpers.monospaced(name) + " " + summary).trim());
-                    OpenApiHelpers.appendDescription(operationSection, operation.getDescription());
+                    operationSection.setTitle((italicUnconstrained(httpMethod.name().toUpperCase()) + " " + monospaced(name) + " " + summary).trim());
+                    appendDescription(operationSection, operation.getDescription());
                     externalDocumentationComponent.apply(operationSection, operation.getExternalDocs());
                     parametersComponent.apply(operationSection, operation.getParameters());
                     responseComponent.apply(operationSection, operation.getResponses());
@@ -69,13 +71,13 @@ public class PathsDocument extends MarkupComponent<Document, PathsDocument.Param
         if (null == servers || servers.isEmpty()) return;
 
         Section serversSection = new SectionImpl(node);
-        serversSection.setTitle(OpenApiHelpers.SECTION_TITLE_SERVERS);
+        serversSection.setTitle(labels.getLabel(SECTION_TITLE_SERVERS));
 
         servers.forEach(server -> {
             Section serverSection = new SectionImpl(serversSection);
-            serverSection.setTitle(OpenApiHelpers.italicUnconstrained(OpenApiHelpers.LABEL_SERVER) + ": " + server.getUrl());
+            serverSection.setTitle(italicUnconstrained(labels.getLabel(LABEL_SERVER)) + ": " + server.getUrl());
 
-            OpenApiHelpers.appendDescription(serverSection, server.getDescription());
+            appendDescription(serverSection, server.getDescription());
             ServerVariables variables = server.getVariables();
             appendVariables(serverSection, variables);
             serversSection.append(serverSection);
@@ -90,10 +92,10 @@ public class PathsDocument extends MarkupComponent<Document, PathsDocument.Param
             put("header-option", "");
             put("cols", ".^2a,.^9a,.^3a,.^4a");
         }}, new ArrayList<>());
-        serverVariables.setTitle(OpenApiHelpers.TABLE_TITLE_SERVER_VARIABLES);
+        serverVariables.setTitle(labels.getLabel(TABLE_TITLE_SERVER_VARIABLES));
 
-        serverVariables.setHeaderRow(OpenApiHelpers.TABLE_HEADER_VARIABLE, OpenApiHelpers.TABLE_HEADER_DESCRIPTION,
-                OpenApiHelpers.TABLE_HEADER_POSSIBLE_VALUES, OpenApiHelpers.TABLE_HEADER_DEFAULT
+        serverVariables.setHeaderRow(labels.getLabel(TABLE_HEADER_VARIABLE), labels.getLabel(TABLE_HEADER_DESCRIPTION),
+                labels.getLabel(TABLE_HEADER_POSSIBLE_VALUES), labels.getLabel(TABLE_HEADER_DEFAULT)
         );
 
         variables.forEach((name, variable) -> {
