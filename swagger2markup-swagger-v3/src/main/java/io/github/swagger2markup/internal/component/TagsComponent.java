@@ -29,7 +29,8 @@ import org.asciidoctor.ast.Section;
 import java.util.Collections;
 import java.util.List;
 
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.SECTION_TITLE_TAGS;
+import static io.github.swagger2markup.config.OpenAPILabels.SECTION_TITLE_TAGS;
+
 
 public class TagsComponent extends MarkupComponent<Document, TagsComponent.Parameters, Document> {
 
@@ -54,7 +55,7 @@ public class TagsComponent extends MarkupComponent<Document, TagsComponent.Param
         if (null == openAPITags || openAPITags.isEmpty()) return document;
 
         Section tagsSection = new SectionImpl(document);
-        tagsSection.setTitle(SECTION_TITLE_TAGS);
+        tagsSection.setTitle(labels.getLabel(SECTION_TITLE_TAGS));
 
         DescriptionListImpl tagsList = new DescriptionListImpl(tagsSection);
         openAPITags.forEach(tag -> {

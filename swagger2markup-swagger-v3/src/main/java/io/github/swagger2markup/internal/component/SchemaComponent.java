@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
+import static io.github.swagger2markup.config.OpenAPILabels.*;
 
 public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaComponent.Parameters, StructuralNode> {
 
@@ -59,29 +60,29 @@ public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaCompo
         OpenApiHelpers.appendDescription(schemaDocument, schema.getDescription());
 
         Map<String, Boolean> schemasBooleanProperties = new HashMap<String, Boolean>() {{
-            put(OpenApiHelpers.LABEL_DEPRECATED, schema.getDeprecated());
-            put(OpenApiHelpers.LABEL_NULLABLE, schema.getNullable());
-            put(OpenApiHelpers.LABEL_READ_ONLY, schema.getReadOnly());
-            put(OpenApiHelpers.LABEL_WRITE_ONLY, schema.getWriteOnly());
-            put(OpenApiHelpers.LABEL_UNIQUE_ITEMS, schema.getUniqueItems());
-            put(OpenApiHelpers.LABEL_EXCLUSIVE_MAXIMUM, schema.getExclusiveMaximum());
-            put(OpenApiHelpers.LABEL_EXCLUSIVE_MINIMUM, schema.getExclusiveMinimum());
+            put(labels.getLabel(LABEL_DEPRECATED), schema.getDeprecated());
+            put(labels.getLabel(LABEL_NULLABLE), schema.getNullable());
+            put(labels.getLabel(LABEL_READ_ONLY), schema.getReadOnly());
+            put(labels.getLabel(LABEL_WRITE_ONLY), schema.getWriteOnly());
+            put(labels.getLabel(LABEL_UNIQUE_ITEMS), schema.getUniqueItems());
+            put(labels.getLabel(LABEL_EXCLUSIVE_MAXIMUM), schema.getExclusiveMaximum());
+            put(labels.getLabel(LABEL_EXCLUSIVE_MINIMUM), schema.getExclusiveMinimum());
         }};
 
         Map<String, Object> schemasValueProperties = new HashMap<String, Object>() {{
-            put(OpenApiHelpers.LABEL_TITLE, schema.getTitle());
-            put(OpenApiHelpers.LABEL_TYPE, schema.getType());
-            put(OpenApiHelpers.LABEL_DEFAULT, schema.getDefault());
-            put(OpenApiHelpers.LABEL_FORMAT, schema.getFormat());
-            put(OpenApiHelpers.LABEL_MAXIMUM, schema.getMaximum());
-            put(OpenApiHelpers.LABEL_MINIMUM, schema.getMinimum());
-            put(OpenApiHelpers.LABEL_MAX_LENGTH, schema.getMaxLength());
-            put(OpenApiHelpers.LABEL_MIN_LENGTH, schema.getMinLength());
-            put(OpenApiHelpers.LABEL_MAX_ITEMS, schema.getMaxItems());
-            put(OpenApiHelpers.LABEL_MIN_ITEMS, schema.getMinItems());
-            put(OpenApiHelpers.LABEL_MAX_PROPERTIES, schema.getMaxProperties());
-            put(OpenApiHelpers.LABEL_MIN_PROPERTIES, schema.getMinProperties());
-            put(OpenApiHelpers.LABEL_MULTIPLE_OF, schema.getMultipleOf());
+            put(labels.getLabel(LABEL_TITLE), schema.getTitle());
+            put(labels.getLabel(LABEL_TYPE), schema.getType());
+            put(labels.getLabel(LABEL_DEFAULT), schema.getDefault());
+            put(labels.getLabel(LABEL_FORMAT), schema.getFormat());
+            put(labels.getLabel(LABEL_MAXIMUM), schema.getMaximum());
+            put(labels.getLabel(LABEL_MINIMUM), schema.getMinimum());
+            put(labels.getLabel(LABEL_MAX_LENGTH), schema.getMaxLength());
+            put(labels.getLabel(LABEL_MIN_LENGTH), schema.getMinLength());
+            put(labels.getLabel(LABEL_MAX_ITEMS), schema.getMaxItems());
+            put(labels.getLabel(LABEL_MIN_ITEMS), schema.getMinItems());
+            put(labels.getLabel(LABEL_MAX_PROPERTIES), schema.getMaxProperties());
+            put(labels.getLabel(LABEL_MIN_PROPERTIES), schema.getMinProperties());
+            put(labels.getLabel(LABEL_MULTIPLE_OF), schema.getMultipleOf());
         }};
 
         Stream<String> schemaBooleanStream = schemasBooleanProperties.entrySet().stream()

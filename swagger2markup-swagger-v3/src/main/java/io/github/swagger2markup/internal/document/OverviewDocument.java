@@ -22,7 +22,10 @@ import org.asciidoctor.ast.Section;
 
 import java.util.Optional;
 
+import static io.github.swagger2markup.config.OpenAPILabels.LABEL_TERMS_OF_SERVICE;
+import static io.github.swagger2markup.config.OpenAPILabels.SECTION_TITLE_OVERVIEW;
 import static io.github.swagger2markup.extension.OverviewDocumentExtension.Context;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.appendDescription;
 
 public class OverviewDocument extends MarkupComponent<Document, OverviewDocument.Parameters, Document> {
     private final TagsComponent tagsComponent;
@@ -50,9 +53,9 @@ public class OverviewDocument extends MarkupComponent<Document, OverviewDocument
         Document subDocument = new DocumentImpl(document);
         Section overviewDoc = new SectionImpl(subDocument);
         applyOverviewDocumentExtension(new Context(OverviewDocumentExtension.Position.DOCUMENT_BEGIN, subDocument));
-        overviewDoc.setTitle(OpenApiHelpers.SECTION_TITLE_OVERVIEW);
+        overviewDoc.setTitle(labels.getLabel(SECTION_TITLE_OVERVIEW));
 
-        OpenApiHelpers.appendDescription(overviewDoc, apiInfo.getDescription());
+        appendDescription(overviewDoc, apiInfo.getDescription());
         appendTermsOfServiceInfo(overviewDoc, apiInfo);
         appendLicenseInfo(overviewDoc, apiInfo);
         subDocument.append(overviewDoc);
@@ -117,7 +120,7 @@ public class OverviewDocument extends MarkupComponent<Document, OverviewDocument
         String termsOfService = info.getTermsOfService();
         if (StringUtils.isNotBlank(termsOfService)) {
             Block paragraph = new ParagraphBlockImpl(overviewDoc);
-            paragraph.setSource(termsOfService + "[" + OpenApiHelpers.LABEL_TERMS_OF_SERVICE + "]");
+            paragraph.setSource(termsOfService + "[" + labels.getLabel(LABEL_TERMS_OF_SERVICE) + "]");
             overviewDoc.append(paragraph);
         }
     }
