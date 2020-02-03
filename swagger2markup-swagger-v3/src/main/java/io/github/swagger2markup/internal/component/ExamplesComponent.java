@@ -29,7 +29,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
+import static io.github.swagger2markup.config.OpenAPILabels.LABEL_EXAMPLES;
+import static io.github.swagger2markup.config.OpenAPILabels.LABEL_EXTERNAL_VALUE;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.appendDescription;
 
 public class ExamplesComponent extends MarkupComponent<StructuralNode, ExamplesComponent.Parameters, StructuralNode> {
 
@@ -54,7 +56,7 @@ public class ExamplesComponent extends MarkupComponent<StructuralNode, ExamplesC
         if (examples == null || examples.isEmpty()) return node;
 
         DescriptionListImpl examplesList = new DescriptionListImpl(node);
-        examplesList.setTitle(LABEL_EXAMPLES);
+        examplesList.setTitle(labels.getLabel(LABEL_EXAMPLES));
 
         examples.forEach((name, example) -> {
             DescriptionListEntryImpl exampleEntry = new DescriptionListEntryImpl(examplesList, Collections.singletonList(new ListItemImpl(examplesList, name)));
@@ -68,7 +70,7 @@ public class ExamplesComponent extends MarkupComponent<StructuralNode, ExamplesC
 
             ParagraphBlockImpl paragraphBlock = new ParagraphBlockImpl(tagDesc);
             String source = "";
-            generateRefLink(source, example.getExternalValue(), LABEL_EXTERNAL_VALUE);
+            generateRefLink(source, example.getExternalValue(), labels.getLabel(LABEL_EXTERNAL_VALUE));
             generateRefLink(source, example.get$ref(), "");
             if(StringUtils.isNotBlank(source)){
                 paragraphBlock.setSource(source);
@@ -94,7 +96,6 @@ public class ExamplesComponent extends MarkupComponent<StructuralNode, ExamplesC
         }
         return source;
     }
-
 
     public static class Parameters {
 

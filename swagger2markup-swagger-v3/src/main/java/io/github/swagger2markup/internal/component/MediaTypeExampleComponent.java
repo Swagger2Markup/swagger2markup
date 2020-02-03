@@ -23,7 +23,7 @@ import org.asciidoctor.ast.StructuralNode;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.DELIMITER_BLOCK;
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.LABEL_EXAMPLE;
+import static io.github.swagger2markup.config.OpenAPILabels.LABEL_EXAMPLE;
 
 public class MediaTypeExampleComponent extends MarkupComponent<StructuralNode, MediaTypeExampleComponent.Parameters, StructuralNode> {
 
@@ -45,7 +45,7 @@ public class MediaTypeExampleComponent extends MarkupComponent<StructuralNode, M
         if (example == null || StringUtils.isBlank(example.toString())) return node;
 
         ParagraphBlockImpl sourceBlock = new ParagraphBlockImpl(node);
-        sourceBlock.setTitle(LABEL_EXAMPLE);
+        sourceBlock.setTitle(labels.getLabel(LABEL_EXAMPLE));
         sourceBlock.setAttribute("style", "source", true);
         sourceBlock.setSource(DELIMITER_BLOCK + LINE_SEPARATOR + example + LINE_SEPARATOR + DELIMITER_BLOCK);
         node.append(sourceBlock);

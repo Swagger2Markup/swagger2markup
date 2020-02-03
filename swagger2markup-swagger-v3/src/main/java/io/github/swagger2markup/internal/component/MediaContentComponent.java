@@ -26,7 +26,7 @@ import org.asciidoctor.ast.StructuralNode;
 
 import java.util.Collections;
 
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
+import static io.github.swagger2markup.config.OpenAPILabels.LABEL_CONTENT;
 
 public class MediaContentComponent extends MarkupComponent<StructuralNode, MediaContentComponent.Parameters, StructuralNode> {
 
@@ -57,7 +57,7 @@ public class MediaContentComponent extends MarkupComponent<StructuralNode, Media
         if (content == null || content.isEmpty()) return node;
 
         DescriptionListImpl mediaContentList = new DescriptionListImpl(node);
-        mediaContentList.setTitle(LABEL_CONTENT);
+        mediaContentList.setTitle(labels.getLabel(LABEL_CONTENT));
 
         content.forEach((type, mediaType) -> {
             DescriptionListEntryImpl tagEntry = new DescriptionListEntryImpl(mediaContentList, Collections.singletonList(new ListItemImpl(mediaContentList, type)));

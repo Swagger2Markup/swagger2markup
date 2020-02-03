@@ -16,9 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
 import io.swagger.v3.oas.models.headers.Header;
 import org.asciidoctor.ast.StructuralNode;
 
@@ -26,6 +25,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.generateInnerDoc;
 
 public class HeadersComponent extends MarkupComponent<StructuralNode, HeadersComponent.Parameters, StructuralNode> {
 
@@ -53,12 +55,12 @@ public class HeadersComponent extends MarkupComponent<StructuralNode, HeadersCom
         responseHeadersTable.setOption("header");
         responseHeadersTable.setAttribute("caption", "", true);
         responseHeadersTable.setAttribute("cols", ".^2a,.^14a,.^4a", true);
-        responseHeadersTable.setTitle(OpenApiHelpers.TABLE_TITLE_HEADERS);
-        responseHeadersTable.setHeaderRow(OpenApiHelpers.TABLE_HEADER_NAME, OpenApiHelpers.TABLE_HEADER_DESCRIPTION, OpenApiHelpers.TABLE_HEADER_SCHEMA);
+        responseHeadersTable.setTitle(labels.getLabel(TABLE_TITLE_HEADERS));
+        responseHeadersTable.setHeaderRow(labels.getLabel(TABLE_HEADER_NAME), labels.getLabel(TABLE_HEADER_DESCRIPTION), labels.getLabel(TABLE_HEADER_SCHEMA));
         headers.forEach((name, header) ->
                 responseHeadersTable.addRow(
-                        OpenApiHelpers.generateInnerDoc(responseHeadersTable, name),
-                        OpenApiHelpers.generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
+                        generateInnerDoc(responseHeadersTable, name),
+                        generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
                         schemaComponent.apply(responseHeadersTable, header.getSchema())
                 ));
         node.append(responseHeadersTable);

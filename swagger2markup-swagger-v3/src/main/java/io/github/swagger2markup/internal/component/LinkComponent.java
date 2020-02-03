@@ -16,10 +16,9 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
 import io.swagger.v3.oas.models.links.Link;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
@@ -27,6 +26,8 @@ import org.asciidoctor.ast.StructuralNode;
 import java.util.Map;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
+import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.italicUnconstrained;
 
 public class LinkComponent extends MarkupComponent<StructuralNode, LinkComponent.Parameters, Document> {
 
@@ -49,16 +50,16 @@ public class LinkComponent extends MarkupComponent<StructuralNode, LinkComponent
 
         Map<String, Link> links = parameters.links;
         if (null == links || links.isEmpty()) {
-            linkParagraph.setSource(OpenApiHelpers.LABEL_NO_LINKS);
+            linkParagraph.setSource(labels.getLabel(LABEL_NO_LINKS));
         } else {
             StringBuilder sb = new StringBuilder();
             links.forEach((name, link) -> {
                 sb.append(name).append(" +").append(LINE_SEPARATOR);
-                sb.append(OpenApiHelpers.italicUnconstrained(OpenApiHelpers.LABEL_OPERATION)).append(' ')
-                        .append(OpenApiHelpers.italicUnconstrained(link.getOperationId())).append(" +").append(LINE_SEPARATOR);
+                sb.append(italicUnconstrained(labels.getLabel(LABEL_OPERATION))).append(' ')
+                        .append(italicUnconstrained(link.getOperationId())).append(" +").append(LINE_SEPARATOR);
                 Map<String, String> linkParameters = link.getParameters();
                 if (null != linkParameters && !linkParameters.isEmpty()) {
-                    sb.append(OpenApiHelpers.italicUnconstrained(OpenApiHelpers.LABEL_PARAMETERS)).append(" {").append(" +").append(LINE_SEPARATOR);
+                    sb.append(italicUnconstrained(labels.getLabel(LABEL_PARAMETERS))).append(" {").append(" +").append(LINE_SEPARATOR);
                     linkParameters.forEach((param, value) ->
                             sb.append('"').append(param).append("\": \"").append(value).append('"').append(" +").append(LINE_SEPARATOR)
                     );

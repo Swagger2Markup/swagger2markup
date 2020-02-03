@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static io.github.swagger2markup.config.OpenAPILabels.*;
 import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
 
 public class SecurityRequirementTableComponent extends MarkupComponent<StructuralNode, SecurityRequirementTableComponent.Parameters, StructuralNode> {
@@ -52,9 +53,12 @@ public class SecurityRequirementTableComponent extends MarkupComponent<Structura
         securityRequirementsTable.setAttribute("caption", "", true);
         securityRequirementsTable.setAttribute("cols", ".^3a,.^4a,.^13a", true);
         if (parameters.addTitle) {
-            securityRequirementsTable.setTitle(TABLE_TITLE_SECURITY);
+            securityRequirementsTable.setTitle(labels.getLabel(TABLE_TITLE_SECURITY));
         }
-        securityRequirementsTable.setHeaderRow(TABLE_HEADER_TYPE, TABLE_HEADER_NAME, TABLE_HEADER_SCOPES);
+        securityRequirementsTable.setHeaderRow(
+                labels.getLabel(TABLE_HEADER_TYPE),
+                labels.getLabel(TABLE_HEADER_NAME),
+                labels.getLabel(TABLE_HEADER_SCOPES));
 
         securityRequirements.forEach(securityRequirement ->
                 securityRequirement.forEach((name, scopes) ->

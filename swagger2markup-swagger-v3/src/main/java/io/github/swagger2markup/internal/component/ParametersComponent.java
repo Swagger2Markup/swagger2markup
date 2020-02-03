@@ -16,9 +16,8 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.TableImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
 import io.swagger.v3.oas.models.parameters.Parameter;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
@@ -28,6 +27,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
+import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
 
 public class ParametersComponent extends MarkupComponent<StructuralNode, ParametersComponent.Parameters, StructuralNode> {
 
@@ -66,14 +67,18 @@ public class ParametersComponent extends MarkupComponent<StructuralNode, Paramet
         pathParametersTable.setOption("header");
         pathParametersTable.setAttribute("caption", "", true);
         pathParametersTable.setAttribute("cols", ".^2a,.^3a,.^10a,.^5a", true);
-        pathParametersTable.setTitle(OpenApiHelpers.TABLE_TITLE_PARAMETERS);
-        pathParametersTable.setHeaderRow(OpenApiHelpers.TABLE_HEADER_TYPE, OpenApiHelpers.TABLE_HEADER_NAME, OpenApiHelpers.TABLE_HEADER_DESCRIPTION, OpenApiHelpers.TABLE_HEADER_SCHEMA);
+        pathParametersTable.setTitle(labels.getLabel(TABLE_TITLE_PARAMETERS));
+        pathParametersTable.setHeaderRow(
+                labels.getLabel(TABLE_HEADER_TYPE),
+                labels.getLabel(TABLE_HEADER_NAME),
+                labels.getLabel(TABLE_HEADER_DESCRIPTION),
+                labels.getLabel(TABLE_HEADER_SCHEMA));
 
         parameters.forEach((alt, parameter) ->
                 pathParametersTable.addRow(
-                        OpenApiHelpers.generateInnerDoc(pathParametersTable, OpenApiHelpers.boldUnconstrained(parameter.getIn()), alt),
+                        generateInnerDoc(pathParametersTable, boldUnconstrained(parameter.getIn()), alt),
                         getParameterNameDocument(pathParametersTable, parameter),
-                        OpenApiHelpers.generateInnerDoc(pathParametersTable, Optional.ofNullable(parameter.getDescription()).orElse("")),
+                        generateInnerDoc(pathParametersTable, Optional.ofNullable(parameter.getDescription()).orElse("")),
                         schemaComponent.apply(pathParametersTable, parameter.getSchema())
                 ));
         parent.append(pathParametersTable);
@@ -82,8 +87,9 @@ public class ParametersComponent extends MarkupComponent<StructuralNode, Paramet
     }
 
     private Document getParameterNameDocument(Table table, Parameter parameter) {
-        String documentContent = OpenApiHelpers.boldUnconstrained(parameter.getName()) + " +" + LINE_SEPARATOR + OpenApiHelpers.requiredIndicator(parameter.getRequired());
-        return OpenApiHelpers.generateInnerDoc(table, documentContent);
+        String documentContent = boldUnconstrained(parameter.getName()) + " +" + LINE_SEPARATOR + requiredIndicator(parameter.getRequired(),
+                labels.getLabel(LABEL_REQUIRED), labels.getLabel(LABEL_OPTIONAL));
+        return generateInnerDoc(table, documentContent);
     }
 
     public static class Parameters {
