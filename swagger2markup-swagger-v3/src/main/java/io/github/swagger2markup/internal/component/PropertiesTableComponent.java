@@ -28,8 +28,7 @@ import java.util.Map;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
 import static io.github.swagger2markup.config.OpenAPILabels.*;
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.generateInnerDoc;
-import static io.github.swagger2markup.internal.helper.OpenApiHelpers.requiredIndicator;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.*;
 
 public class PropertiesTableComponent extends MarkupComponent<StructuralNode, PropertiesTableComponent.Parameters, StructuralNode> {
 
@@ -59,16 +58,18 @@ public class PropertiesTableComponent extends MarkupComponent<StructuralNode, Pr
         TableImpl propertiesTable = new TableImpl(parent, new HashMap<>(), new ArrayList<>());
         propertiesTable.setOption("header");
         propertiesTable.setAttribute("caption", "", true);
-        propertiesTable.setAttribute("cols", ".^4a,.^16a", true);
+        propertiesTable.setAttribute("cols", ".^4a,.^16a,.^4a", true);
         propertiesTable.setTitle(labels.getLabel(TABLE_TITLE_PROPERTIES));
         propertiesTable.setHeaderRow(
                 labels.getLabel(TABLE_HEADER_NAME),
+                labels.getLabel(TABLE_HEADER_DESCRIPTION),
                 labels.getLabel(TABLE_HEADER_SCHEMA));
 
         properties.forEach((name, schema) -> propertiesTable.addRow(
                     generateInnerDoc(propertiesTable, name + LINE_SEPARATOR + requiredIndicator(finalSchemaRequired.contains(name),
                             labels.getLabel(LABEL_REQUIRED), labels.getLabel(LABEL_OPTIONAL))),
-                    schemaComponent.apply(propertiesTable, schema)
+                schemaComponent.apply(propertiesTable, schema),
+                generateInnerDoc(propertiesTable, getSchemaTypeAsString(schema))
             ));
         parent.append(propertiesTable);
         return parent;

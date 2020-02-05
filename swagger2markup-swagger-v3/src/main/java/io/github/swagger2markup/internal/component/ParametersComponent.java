@@ -79,7 +79,7 @@ public class ParametersComponent extends MarkupComponent<StructuralNode, Paramet
                         generateInnerDoc(pathParametersTable, boldUnconstrained(parameter.getIn()), alt),
                         getParameterNameDocument(pathParametersTable, parameter),
                         generateInnerDoc(pathParametersTable, Optional.ofNullable(parameter.getDescription()).orElse("")),
-                        schemaComponent.apply(pathParametersTable, parameter.getSchema())
+                        generateInnerDoc(pathParametersTable, getSchemaTypeAsString(parameter.getSchema()))
                 ));
         parent.append(pathParametersTable);
 

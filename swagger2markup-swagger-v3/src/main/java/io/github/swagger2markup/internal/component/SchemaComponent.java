@@ -16,10 +16,10 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
+import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.asciidoctor.ast.Document;
@@ -32,6 +32,7 @@ import java.util.stream.Stream;
 
 import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
 import static io.github.swagger2markup.config.OpenAPILabels.*;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.boldUnconstrained;
 
 public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaComponent.Parameters, StructuralNode> {
 
@@ -71,9 +72,7 @@ public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaCompo
 
         Map<String, Object> schemasValueProperties = new HashMap<String, Object>() {{
             put(labels.getLabel(LABEL_TITLE), schema.getTitle());
-            put(labels.getLabel(LABEL_TYPE), schema.getType());
             put(labels.getLabel(LABEL_DEFAULT), schema.getDefault());
-            put(labels.getLabel(LABEL_FORMAT), schema.getFormat());
             put(labels.getLabel(LABEL_MAXIMUM), schema.getMaximum());
             put(labels.getLabel(LABEL_MINIMUM), schema.getMinimum());
             put(labels.getLabel(LABEL_MAX_LENGTH), schema.getMaxLength());
@@ -90,11 +89,10 @@ public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaCompo
                 .map(e -> OpenApiHelpers.italicUnconstrained(e.getKey().toLowerCase()));
         Stream<String> schemaValueStream = schemasValueProperties.entrySet().stream()
                 .filter(e -> null != e.getValue() && StringUtils.isNotBlank(e.getValue().toString()))
-                .map(e -> e.getKey().toLowerCase() + ": " + e.getValue());
+                .map(e -> boldUnconstrained(e.getKey()) + ": " + e.getValue());
 
         ParagraphBlockImpl paragraphBlock = new ParagraphBlockImpl(schemaDocument);
         String source = Stream.concat(schemaBooleanStream, schemaValueStream).collect(Collectors.joining(" +" + LINE_SEPARATOR));
-        source = generateRefLink(source, schema.get$ref());
         paragraphBlock.setSource(source);
 
         schemaDocument.append(paragraphBlock);
@@ -106,14 +104,6 @@ public class SchemaComponent extends MarkupComponent<StructuralNode, SchemaCompo
         }
 
         return schemaDocument;
-    }
-
-    private String generateRefLink(String source, String ref) {
-        if (StringUtils.isNotBlank(ref)) {
-            String anchor = ref.replaceFirst("#", "").replaceAll("/", "_");
-            source += "<<" + anchor + ">>" + LINE_SEPARATOR;
-        }
-        return source;
     }
 
     @SuppressWarnings("rawtypes")

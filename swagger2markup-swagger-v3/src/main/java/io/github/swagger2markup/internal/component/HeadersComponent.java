@@ -28,6 +28,7 @@ import java.util.Optional;
 
 import static io.github.swagger2markup.config.OpenAPILabels.*;
 import static io.github.swagger2markup.internal.helper.OpenApiHelpers.generateInnerDoc;
+import static io.github.swagger2markup.internal.helper.OpenApiHelpers.getSchemaTypeAsString;
 
 public class HeadersComponent extends MarkupComponent<StructuralNode, HeadersComponent.Parameters, StructuralNode> {
 
@@ -61,7 +62,7 @@ public class HeadersComponent extends MarkupComponent<StructuralNode, HeadersCom
                 responseHeadersTable.addRow(
                         generateInnerDoc(responseHeadersTable, name),
                         generateInnerDoc(responseHeadersTable, Optional.ofNullable(header.getDescription()).orElse("")),
-                        schemaComponent.apply(responseHeadersTable, header.getSchema())
+                        generateInnerDoc(responseHeadersTable, getSchemaTypeAsString(header.getSchema()))
                 ));
         node.append(responseHeadersTable);
         return node;
