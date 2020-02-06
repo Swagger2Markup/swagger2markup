@@ -6,8 +6,8 @@ v1.0.0
 :author: apiteam@swagger.io
 :authorcount: 1
 
-=== Overview
 
+=== Overview
 This is a sample server Petstore server.
 
 [Learn about Swagger](http://swagger.io) or join the IRC channel `#swagger` on irc.freenode.net.
@@ -21,7 +21,6 @@ http://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0]
 http://swagger.io[Find out more about Swagger]
 
 == Tags
-
 pet::
 Pet resource
 store::

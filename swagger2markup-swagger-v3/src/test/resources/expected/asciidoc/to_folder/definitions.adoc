@@ -1,9 +1,8 @@
+
 [[_components]]
 == Components
-
 [[_components_schemas]]
 === Schemas
-
 [[_components_schemas_user]]
 ==== User
 
@@ -95,7 +94,6 @@ __optional__
 
 
 |===
-
 [[_components_schemas_category]]
 ==== Category
 
@@ -137,7 +135,6 @@ __optional__
 
 
 |===
-
 [[_components_schemas_pet]]
 ==== Pet
 
@@ -196,7 +193,7 @@ __optional__
 
 <.<|
 <.<|< <<_components_schemas_tag>>
-> array
+ > array
 
 
 
@@ -212,7 +209,6 @@ __optional__
 
 
 |===
-
 [[_components_schemas_tag]]
 ==== Tag
 
@@ -248,7 +244,6 @@ __optional__
 
 
 |===
-
 [[_components_schemas_order]]
 ==== Order
 
@@ -329,7 +324,6 @@ __optional__
 
 [[_components_parameters]]
 === Responses
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===

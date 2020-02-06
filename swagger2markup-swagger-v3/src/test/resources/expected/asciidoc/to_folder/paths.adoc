@@ -1,7 +1,6 @@
+
 == Paths
-
 === __PUT__ `/pets` Update an existing pet
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -46,7 +45,6 @@
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -72,7 +70,6 @@
 |===
 
 === __POST__ `/pets` Add a new pet to the store
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -97,7 +94,6 @@
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -123,7 +119,6 @@
 |===
 
 === __GET__ `/pets/findByStatus` Finds Pets by status
-
 Multiple status values can be provided with comma seperated strings
 
 .Parameters
@@ -157,7 +152,6 @@ __optional__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -224,7 +218,6 @@ application/xml::
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -250,9 +243,7 @@ application/xml::
 |===
 
 === __GET__ `/pets/findByTags` Finds Pets by tags
-
-Muliple tags can be provided with comma seperated strings.
-Use tag1, tag2, tag3 for testing.
+Muliple tags can be provided with comma seperated strings. Use tag1, tag2, tag3 for testing.
 
 .Parameters
 [%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
@@ -285,7 +276,6 @@ __optional__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -352,7 +342,6 @@ application/xml::
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -378,8 +367,7 @@ application/xml::
 |===
 
 === __GET__ `/pets/{petId}` Find pet by ID
-
-Returns a pet when ID < 10. ID > 10 or nonintegers will simulate API error conditions
+Returns a pet when ID < 10.  ID > 10 or nonintegers will simulate API error conditions
 
 .Parameters
 [%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
@@ -412,7 +400,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -489,7 +476,6 @@ application/xml::
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -523,7 +509,6 @@ application/xml::
 |===
 
 === __POST__ `/pets/{petId}` Updates a pet in the store with form data
-
 .Parameters
 [%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
 |===
@@ -555,7 +540,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -580,7 +564,6 @@ __required__
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -606,7 +589,6 @@ __required__
 |===
 
 === __DELETE__ `/pets/{petId}` Deletes a pet
-
 .Parameters
 [%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
 |===
@@ -650,7 +632,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -675,7 +656,6 @@ __required__
 
 
 |===
-
 [%header,caption=,cols=".^3a,.^4a,.^13a"]
 |===
 <.<|Type
@@ -701,7 +681,6 @@ __required__
 |===
 
 === __POST__ `/stores/order` Place an order for a pet
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -770,7 +749,6 @@ application/xml::
 |===
 
 === __GET__ `/stores/order/{orderId}` Find purchase order by ID
-
 For valid response try integer IDs with value <= 5 or > 10. Other values will generated exceptions
 
 .Parameters
@@ -804,7 +782,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -883,7 +860,6 @@ application/xml::
 |===
 
 === __DELETE__ `/stores/order/{orderId}` Delete purchase order by ID
-
 For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors
 
 .Parameters
@@ -917,7 +893,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -954,7 +929,6 @@ __required__
 |===
 
 === __POST__ `/users` Create user
-
 This can only be done by the logged in user.
 
 .Responses
@@ -983,7 +957,6 @@ This can only be done by the logged in user.
 |===
 
 === __POST__ `/users/createWithArray` Creates list of users with given input array
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -1010,7 +983,6 @@ This can only be done by the logged in user.
 |===
 
 === __POST__ `/users/createWithList` Creates list of users with given input array
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -1037,7 +1009,6 @@ This can only be done by the logged in user.
 |===
 
 === __GET__ `/users/login` Logs user into the system
-
 .Parameters
 [%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
 |===
@@ -1083,7 +1054,6 @@ __optional__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -1152,7 +1122,6 @@ application/xml::
 |===
 
 === __GET__ `/users/logout` Logs out current logged in user session
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -1179,7 +1148,6 @@ application/xml::
 |===
 
 === __GET__ `/users/{username}` Get user by user name
-
 .Parameters
 [%header,caption=,cols=".^2a,.^3a,.^10a,.^5a"]
 |===
@@ -1211,7 +1179,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -1290,7 +1257,6 @@ application/xml::
 |===
 
 === __PUT__ `/users/{username}` Updated user
-
 This can only be done by the logged in user.
 
 .Parameters
@@ -1324,7 +1290,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
@@ -1361,7 +1326,6 @@ __required__
 |===
 
 === __DELETE__ `/users/{username}` Delete user
-
 This can only be done by the logged in user.
 
 .Parameters
@@ -1395,7 +1359,6 @@ __required__
 
 
 |===
-
 .Responses
 [%header,caption=,cols=".^2a,.^14a,.^4a"]
 |===
