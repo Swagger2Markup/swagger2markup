@@ -29,7 +29,7 @@ import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_S
 import static io.github.swagger2markup.config.OpenAPILabels.*;
 import static io.github.swagger2markup.internal.helper.OpenApiHelpers.italicUnconstrained;
 
-public class LinkComponent extends MarkupComponent<StructuralNode, LinkComponent.Parameters, Document> {
+public class LinkComponent extends MarkupComponent<StructuralNode, LinkComponent.Parameters, StructuralNode> {
 
     public LinkComponent(OpenAPI2MarkupConverter.OpenAPIContext context) {
         super(context);

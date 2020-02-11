@@ -2,11 +2,17 @@ package io.github.swagger2markup.internal.helper;
 
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
+import io.swagger.v3.oas.models.media.ArraySchema;
+import io.swagger.v3.oas.models.media.Schema;
 import org.apache.commons.lang3.StringUtils;
 import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.StructuralNode;
 import org.asciidoctor.ast.Table;
+
+import java.util.List;
+
+import static io.github.swagger2markup.adoc.converter.internal.Delimiters.LINE_SEPARATOR;
 
 public class OpenApiHelpers {
 
@@ -56,5 +62,54 @@ public class OpenApiHelpers {
 
     public static String monospaced(String str) {
         return "`" + str + "`";
+    }
+
+    public static String getSchemaTypeAsString(Schema schema) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (schema instanceof ArraySchema) {
+            stringBuilder.append("< ");
+            Schema<?> items = ((ArraySchema) schema).getItems();
+            stringBuilder.append(getSchemaType(items));
+            stringBuilder.append(" > ");
+            stringBuilder.append(schema.getType());
+        } else {
+            List enumList = schema.getEnum();
+            if (enumList != null) {
+                stringBuilder.append("enum (");
+                for (Object value : enumList) {
+                    stringBuilder.append(value.toString());
+                    stringBuilder.append(",");
+                }
+                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                stringBuilder.append(')');
+            } else {
+                stringBuilder.append(getSchemaType(schema));
+                String format = schema.getFormat();
+                if (format != null) {
+                    stringBuilder.append(' ');
+                    stringBuilder.append('(');
+                    stringBuilder.append(format);
+                    stringBuilder.append(')');
+                }
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String getSchemaType(Schema<?> schema) {
+        String type = schema.getType();
+        if (StringUtils.isNotEmpty(type)) {
+            return type;
+        } else {
+            return generateRefLink(schema.get$ref());
+        }
+    }
+
+    private static String generateRefLink(String ref) {
+        if (StringUtils.isNotBlank(ref)) {
+            String anchor = ref.toLowerCase().replaceFirst("#", "").replaceAll("/", "_");
+            return "<<" + anchor + ">>" + LINE_SEPARATOR;
+        }
+        return "";
     }
 }

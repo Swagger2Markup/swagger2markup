@@ -45,6 +45,9 @@ public class OpenAPILabels extends Labels {
     public static final String SECTION_TITLE_SERVERS = "section_title_servers";
     public static final String SECTION_TITLE_OVERVIEW = "section_title_overview";
     public static final String SECTION_TITLE_TAGS = "section_title_tags";
+    public static final String SECTION_TITLE_RESPONSES = "section_title_responses";
+    public static final String SECTION_TITLE_HEADERS = "section_title_headers";
+    public static final String SECTION_TITLE_LINKS = "section_title_links";
     public static final String TABLE_HEADER_DEFAULT = "table_header_default";
     public static final String TABLE_HEADER_DESCRIPTION = "table_header_description";
     public static final String TABLE_HEADER_HTTP_CODE = "table_header_http_code";
