@@ -5,11 +5,15 @@ import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
 import io.github.swagger2markup.extension.MarkupComponent;
 import io.github.swagger2markup.internal.component.*;
 import io.swagger.v3.oas.models.Components;
+import io.swagger.v3.oas.models.headers.Header;
+import io.swagger.v3.oas.models.links.Link;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.parameters.Parameter;
+import io.swagger.v3.oas.models.responses.ApiResponse;
 import org.apache.commons.lang3.Validate;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
+import org.asciidoctor.ast.StructuralNode;
 
 import java.util.Map;
 
@@ -61,11 +65,26 @@ public class ComponentsDocument extends MarkupComponent<Document, ComponentsDocu
         componentsSection.setId(componentSectionId);
 
         appendComponentsSchemasSection(componentsSection, componentSectionId, components.getSchemas());
-        appendComponentsParameters(componentsSection, componentSectionId, components.getParameters());
-        responseComponent.apply(componentsSection, components.getResponses());
-        headersComponent.apply(componentsSection, components.getHeaders());
-        linkComponent.apply(componentsSection, components.getLinks());
-
+        Map<String, Parameter> parameters = components.getParameters();
+        if (null != parameters && !parameters.isEmpty()) {
+            appendSubSection(componentsSection, componentSectionId, parametersComponent, SECTION_TITLE_PARAMETERS,
+                    new ParametersComponent.Parameters(parameters));
+        }
+        Map<String, ApiResponse> responses = components.getResponses();
+        if (null != responses && !responses.isEmpty()) {
+            appendSubSection(componentsSection, componentSectionId, responseComponent, SECTION_TITLE_RESPONSES,
+                    new ResponseComponent.Parameters(responses));
+        }
+        Map<String, Header> headers = components.getHeaders();
+        if (null != headers && !headers.isEmpty()) {
+            appendSubSection(componentsSection, componentSectionId, headersComponent, SECTION_TITLE_HEADERS,
+                    new HeadersComponent.Parameters(headers));
+        }
+        Map<String, Link> links = components.getLinks();
+        if (null != links && !links.isEmpty()) {
+            appendSubSection(componentsSection, componentSectionId, linkComponent, SECTION_TITLE_LINKS,
+                    new LinkComponent.Parameters(links));
+        }
         document.append(componentsSection);
     }
 
@@ -85,18 +104,18 @@ public class ComponentsDocument extends MarkupComponent<Document, ComponentsDocu
             schemaDocument.setId(schemaDocumentId);
             schemasSection.append(schemaDocument);
         });
-
         componentsSection.append(schemasSection);
     }
 
-    private void appendComponentsParameters(Section componentsSection, String componentSectionId, Map<String, Parameter> parameters) {
-        if (null == parameters || parameters.isEmpty()) return;
-
+    private <T> void appendSubSection(Section componentsSection, String componentSectionId,
+                                      MarkupComponent<StructuralNode, T, StructuralNode> markupComponent,
+                                      String sectionLabel, T parameters) {
         SectionImpl parametersSection = new SectionImpl(componentsSection);
         String parametersSectionId = componentSectionId + "_parameters";
-        parametersSection.setTitle(labels.getLabel(SECTION_TITLE_PARAMETERS));
+        parametersSection.setTitle(labels.getLabel(sectionLabel));
         parametersSection.setId(parametersSectionId);
-        parametersComponent.apply(parametersSection, parameters);
+        markupComponent.apply(parametersSection, parameters);
+        componentsSection.append(parametersSection);
     }
 }
 

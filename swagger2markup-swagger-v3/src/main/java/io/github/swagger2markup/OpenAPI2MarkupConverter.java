@@ -15,6 +15,9 @@
  */
 package io.github.swagger2markup;
 
+import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
+import io.github.swagger2markup.config.Labels;
+import io.github.swagger2markup.config.MarkupLanguage;
 import io.github.swagger2markup.config.OpenAPILabels;
 import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 import io.github.swagger2markup.extension.OpenAPI2MarkupExtensionRegistry;
@@ -23,9 +26,6 @@ import io.github.swagger2markup.internal.document.ComponentsDocument;
 import io.github.swagger2markup.internal.document.OverviewDocument;
 import io.github.swagger2markup.internal.document.PathsDocument;
 import io.github.swagger2markup.internal.document.SecurityDocument;
-import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
-import io.github.swagger2markup.config.Labels;
-import io.github.swagger2markup.config.MarkupLanguage;
 import io.github.swagger2markup.utils.URIUtils;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.parser.OpenAPIV3Parser;
@@ -194,10 +194,10 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
 
     @Override
     public String toString() {
-        return applyOverviewDocument().toString() +
-                applyPathsDocument().toString() +
-                applyComponentsDocument().toString() +
-                applySecurityDocument().toString();
+        return applyOverviewDocument().convert() +
+                applyPathsDocument().convert() +
+                applyComponentsDocument().convert() +
+                applySecurityDocument().convert();
     }
 
     private Document applyOverviewDocument() {
