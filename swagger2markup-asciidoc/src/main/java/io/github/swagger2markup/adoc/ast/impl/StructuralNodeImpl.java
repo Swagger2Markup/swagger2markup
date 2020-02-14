@@ -19,18 +19,18 @@ public class StructuralNodeImpl extends ContentNodeImpl implements StructuralNod
     private final AsciidocConverter converter = new AsciidocConverter(AsciidocConverter.NAME, new HashMap<>());
 
     public StructuralNodeImpl(StructuralNode parent, String context) {
-        this(parent, context, new HashMap<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", new ArrayList<>());
+        this(parent, context, new HashMap<>());
     }
 
     public StructuralNodeImpl(StructuralNode parent, String context, Map<String, Object> attributes) {
-        this(parent, context, attributes, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), "", new ArrayList<>());
+        this(parent, context, attributes, null);
     }
 
     public StructuralNodeImpl(StructuralNode parent, String context, Object content) {
-        this(parent, context, new HashMap<>(), new ArrayList<>(), content, new ArrayList<>(), "", new ArrayList<>());
+        this(parent, context, new HashMap<>(), content);
     }
 
-    public StructuralNodeImpl(StructuralNode parent, String context, Object content, Map<String, Object> attributes) {
+    public StructuralNodeImpl(StructuralNode parent, String context, Map<String, Object> attributes, Object content) {
         this(parent, context, attributes, new ArrayList<>(), content, new ArrayList<>(), "", new ArrayList<>());
     }
 

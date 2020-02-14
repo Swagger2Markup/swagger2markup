@@ -1,15 +1,14 @@
 package io.github.swagger2markup.internal.document;
 
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.extension.MarkupComponent;
-import io.github.swagger2markup.extension.OverviewDocumentExtension;
-import io.github.swagger2markup.internal.component.ExternalDocumentationComponent;
-import io.github.swagger2markup.internal.component.TagsComponent;
-import io.github.swagger2markup.internal.helper.OpenApiHelpers;
 import io.github.swagger2markup.adoc.ast.impl.BlockImpl;
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
 import io.github.swagger2markup.adoc.ast.impl.ParagraphBlockImpl;
 import io.github.swagger2markup.adoc.ast.impl.SectionImpl;
+import io.github.swagger2markup.extension.MarkupComponent;
+import io.github.swagger2markup.extension.OverviewDocumentExtension;
+import io.github.swagger2markup.internal.component.ExternalDocumentationComponent;
+import io.github.swagger2markup.internal.component.TagsComponent;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
@@ -20,6 +19,8 @@ import org.asciidoctor.ast.Block;
 import org.asciidoctor.ast.Document;
 import org.asciidoctor.ast.Section;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static io.github.swagger2markup.config.OpenAPILabels.LABEL_TERMS_OF_SERVICE;
@@ -51,7 +52,9 @@ public class OverviewDocument extends MarkupComponent<Document, OverviewDocument
 
         applyOverviewDocumentExtension(new Context(OverviewDocumentExtension.Position.DOCUMENT_BEFORE, document));
         Document subDocument = new DocumentImpl(document);
-        Section overviewDoc = new SectionImpl(subDocument);
+        Section overviewDoc = new SectionImpl(subDocument, "section", new HashMap<>(), new ArrayList<>(),
+                null, new ArrayList<>(), 1, "", new ArrayList<>(),
+                null, null, "", "", false, false);
         applyOverviewDocumentExtension(new Context(OverviewDocumentExtension.Position.DOCUMENT_BEGIN, subDocument));
         overviewDoc.setTitle(labels.getLabel(SECTION_TITLE_OVERVIEW));
 
