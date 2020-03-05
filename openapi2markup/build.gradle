@@ -1,34 +1,31 @@
-ext.moduleName='io.github.swagger2markup.swagger-v2'
+ext.moduleName="io.github.swagger2markup.openapi2markup"
 
 dependencies {
     configurations.all {
         resolutionStrategy.force dependencyOverrides.commonsCodec
         resolutionStrategy.force dependencyOverrides.commonsIO
         resolutionStrategy.force dependencyOverrides.commonsLang3
-        resolutionStrategy.force dependencyOverrides.findBugs
-        resolutionStrategy.force dependencyOverrides.guava
-        resolutionStrategy.force dependencyOverrides.jaksonCore
-        resolutionStrategy.force dependencyOverrides.jacksonDatabind
-        resolutionStrategy.force dependencyOverrides.slf4j
-        // Test dependencies
-        resolutionStrategy.force dependencyOverrides.assertj
         resolutionStrategy.force dependencyOverrides.jnrConstants
         resolutionStrategy.force dependencyOverrides.jnrEnxio
         resolutionStrategy.force dependencyOverrides.jnrPosix
         resolutionStrategy.force dependencyOverrides.jodaTime
+        resolutionStrategy.force dependencyOverrides.slf4j
+        resolutionStrategy.force dependencyOverrides.jacksonDatabind
+        resolutionStrategy.force dependencyOverrides.guava
+        resolutionStrategy.force dependencyOverrides.findBugs
+        resolutionStrategy.force dependencyOverrides.jaksonCore
+        resolutionStrategy.force dependencyOverrides.assertj
     }
-    compile project(':swagger2markup-builder')
+//    implementation implLibraries.swaggerV2Converter
+    compile project(':swagger2markup-asciidoc')
     compile project(':swagger2markup-core')
+    implementation implLibraries.asciiDocJApi
+    implementation implLibraries.commonsText
     implementation implLibraries.commonsBeanUtils
+    implementation implLibraries.slf4j
+    implementation implLibraries.swaggerV3
     implementation implLibraries.commonsCollections4
     implementation implLibraries.commonsConf2
-    implementation implLibraries.commonsIO
-    implementation implLibraries.commonsText
-    implementation implLibraries.jacksonDatabind
-    implementation implLibraries.guava
-    implementation implLibraries.paleo
-    implementation implLibraries.slf4j
-    implementation implLibraries.swaggerV2
     implementation implLibraries.vavr
     testImplementation testLibraries.assertj
     testImplementation testLibraries.assertjDiff
