@@ -491,7 +491,7 @@ public class MarkupDocBuilderTest {
 
         builder = builder.tableWithColumnSpecs(cols, cells);
         builder.writeToFileWithoutExtension(outputFile, StandardCharsets.UTF_8);
-
+        
         DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/asciidoc/tableFormat.adoc").toURI()), outputFile, "tableFormatAsciiDoc.html");
     }
 
@@ -534,5 +534,5 @@ public class MarkupDocBuilderTest {
 
         DiffUtils.assertThatFileIsEqual(Paths.get(MarkupDocBuilderTest.class.getResource("/expected/confluenceMarkup/tableFormat.txt").toURI()), outputFile, "tableFormatConfluenceMarkup.html");
     }
-
+    
 }

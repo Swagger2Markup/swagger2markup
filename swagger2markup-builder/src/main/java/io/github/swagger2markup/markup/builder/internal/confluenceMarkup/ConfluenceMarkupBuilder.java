@@ -115,7 +115,7 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
             anchor = title;
         documentBuilder.append(" ");
         anchor(replaceNewLinesWithWhiteSpace(anchor));
-
+        
         documentBuilder.append(newLine);
 
         return this;
@@ -138,21 +138,6 @@ public final class ConfluenceMarkupBuilder extends AbstractMarkupDocBuilder {
     @Override
     public MarkupDocBuilder pageBreak() {
         documentBuilder.append(newLine).append("<div style='page-break-before:always;'></div>").append(newLine);
-
-        return this;
-    }
-
-    @Override
-    public MarkupDocBuilder paragraph(String text, boolean hardbreaks) {
-        Validate.notBlank(text, "text must not be null");
-
-        text = text.trim();
-        if (hardbreaks)
-            text = replaceNewLines(text, ConfluenceMarkup.LINE_BREAK + newLine);
-        else
-            text = replaceNewLines(text);
-        documentBuilder.append(text).append(newLine).append(newLine);
-
         return this;
     }
 

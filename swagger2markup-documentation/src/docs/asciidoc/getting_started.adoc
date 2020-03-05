@@ -16,7 +16,7 @@ WARNING: The *groupId* has been changed from *io.github.robwin* to *io.github.sw
 [source,groovy, subs="attributes"]
 ----
 repositories {
-    jcenter()
+    jCenter()
 }
 
 compile "io.github.swagger2markup:swagger2markup:{release-version}"

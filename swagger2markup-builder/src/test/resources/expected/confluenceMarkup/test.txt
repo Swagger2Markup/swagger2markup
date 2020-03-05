@@ -35,7 +35,7 @@ Paragraph with long text bla bla bla bla bla
 Line1
 Line2
 
-Line1\\
+Line1\\ 
 Line2
 
 {code}
@@ -62,7 +62,7 @@ Example
 Listing
 {code}
 
-Note :
+Note : 
 {noformat}
 Literal
 {noformat}
@@ -71,7 +71,7 @@ Literal
 Sidebar
 {tip}
 
-Warning :
+Warning : 
 {html}
 Passthrough
 {html}
@@ -91,11 +91,11 @@ Passthrough
 h2. Section Level 1b
 
 h3. Section Level 2b
-text line\\
-{noformat}Literal text line{noformat}\\
-*Bold text line*\\
-_Italic text line_\\
-*bold*_italic_regular\\
+text line\\ 
+{noformat}Literal text line{noformat}\\ 
+*Bold text line*\\ 
+_Italic text line_\\ 
+*bold*_italic_regular\\ 
 
 * Entry1
 * Entry2
@@ -104,9 +104,9 @@ _Italic text line_\\
 {anchor:anchor}
 {anchor:simple_anchor}
 {anchor:8be261a9de7ce958fe46548a62609aeb}
-[text|./document.txt#anchor]\\
-[#  ɀ µ&|ù This .:/-_  ]\\
-[text|./document.txt#anchor]\\
-[#8be261a9de7ce958fe46548a62609aeb]\\
+[text|./document.txt#anchor]\\ 
+[#  ɀ µ&|ù This .:/-_  ]\\ 
+[text|./document.txt#anchor]\\ 
+[#8be261a9de7ce958fe46548a62609aeb]\\ 
 
 
