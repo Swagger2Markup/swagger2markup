@@ -54,6 +54,9 @@ configure(project.coreProjects) {
         options.encoding = 'UTF-8'
         options.compilerArgs += ["-Xlint:unchecked", "-parameters"]
     }
+    tasks.withType(Javadoc){
+        options.encoding = 'UTF-8'
+    }
     jmh {
         duplicateClassesStrategy = 'warn'
     }

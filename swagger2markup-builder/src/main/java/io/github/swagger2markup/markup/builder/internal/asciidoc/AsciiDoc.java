@@ -25,6 +25,7 @@ import io.github.swagger2markup.markup.builder.internal.Markup;
  * @author Robert Winkler
  */
 public enum AsciiDoc implements Markup {
+    ATTRIBUTE(":"),
     TABLE("|==="),
     TABLE_COLUMN_DELIMITER("|"),
     TITLE("="),
