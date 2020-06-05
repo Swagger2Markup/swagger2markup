@@ -69,6 +69,13 @@ public abstract class Schema2MarkupConfigBuilder {
             ((AbstractConfiguration) configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
         }
 
+        config.requestExamplesFormat = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_FORMAT);
+        config.requestExamplesSourceFormat = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_SOURCE_FORMAT);
+        config.requestExamplesHost = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_HOST);
+        config.requestExamplesSchema = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_SCHEMA);
+        config.requestExamplesHideBasePath = schema2MarkupProperties.getRequiredBoolean(REQUEST_EXAMPLES_HIDE_BASE_PATH);
+        config.requestExamplesQueryArrayStyle = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_QUERY_ARRAY_STYLE);
+        config.requestExamplesIncludeAllQueryParams = schema2MarkupProperties.getRequiredBoolean(REQUEST_EXAMPLES_INCLUDE_ALL_QUERY_PARAMS);
         config.markupLanguage = schema2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
         config.schemaMarkupLanguage = schema2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
         config.generatedExamplesEnabled = schema2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
@@ -552,6 +559,15 @@ public abstract class Schema2MarkupConfigBuilder {
         private MarkupLanguage markupLanguage;
         private MarkupLanguage schemaMarkupLanguage;
         private boolean generatedExamplesEnabled;
+
+        private String requestExamplesFormat;
+        private String requestExamplesSourceFormat;
+        private String requestExamplesHost;
+        private String requestExamplesSchema;
+        private boolean requestExamplesHideBasePath;
+        private boolean requestExamplesIncludeAllQueryParams;
+        private String requestExamplesQueryArrayStyle;
+
         private boolean hostnameEnabled;
         private boolean basePathPrefixEnabled;
         private boolean separatedDefinitionsEnabled;
@@ -792,6 +808,40 @@ public abstract class Schema2MarkupConfigBuilder {
         @Override
         public int getAsciidocPegdownTimeoutMillis() {
             return asciidocPegdownTimeoutMillis;
+        }
+
+        @Override
+        public String getRequestExamplesFormat() {
+            return requestExamplesFormat;
+        }
+
+        @Override
+        public String getRequestExamplesSourceFormat() {
+            return requestExamplesSourceFormat;
+        }
+
+        @Override
+        public boolean getRequestExamplesIncludeAllQueryParams() {
+            return requestExamplesIncludeAllQueryParams;
+        }
+
+        @Override
+        public String getRequestExamplesQueryArrayStyle() {
+            return requestExamplesQueryArrayStyle;
+        }
+
+        @Override
+        public String getRequestExamplesHost() {
+            return requestExamplesHost;
+        }
+
+        @Override
+        public String getRequestExamplesSchema() {
+            return requestExamplesSchema;
+        }
+        @Override
+        public boolean getRequestExamplesHideBasePath() {
+            return requestExamplesHideBasePath;
         }
     }
 }

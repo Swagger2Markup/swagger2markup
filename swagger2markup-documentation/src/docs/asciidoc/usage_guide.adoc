@@ -7,14 +7,14 @@ Swagger2Markup converts a Swagger JSON or YAML specification into either **Ascii
 
 ==== Conversion of a local Swagger file
 
-The entry point of the Swagger2Markup API is the ``Swagger2MarkupConverter`` class. This class provides static factory methods to create a `Swagger2MarkupConverter.Builder`. 
+The entry point of the Swagger2Markup API is the ``Swagger2MarkupConverter`` class. This class provides static factory methods to create a `Swagger2MarkupConverter.Builder`.
 
 [source,java,indent=0]
 ----
 include::{coreProjectDir}/src/test/java/io/github/swagger2markup/DocumentationTest.java[tags=localSwaggerSpec]
 ----
 
-1.  Create a ``Swagger2MarkupConverter.Builder`` by specifying the Path to the local file 
+1.  Create a ``Swagger2MarkupConverter.Builder`` by specifying the Path to the local file
 2.  Build an instance of the ``Swagger2MarkupConverter``
 3.  Invoke ``toFolder`` by specifying the output directory
 
@@ -139,7 +139,6 @@ The following tables list all available properties of Swagger2Markup:
 |swagger2markup.pathsGroupedBy| Specifies how the paths should be grouped | AS_IS, TAGS, REGEX | AS_IS
 |swagger2markup.outputLanguage| Specifies the language of the labels | EN, DE, FR, RU | EN
 |swagger2markup.lineSeparator| Specifies the line separator which should be used | UNIX, WINDOWS, MAC | <System-dependent>
-|swagger2markup.generatedExamplesEnabled| Specifies if HTTP request and response examples should be generated | true, false | false
 |swagger2markup.flatBodyEnabled| Optionally isolate the body parameter, if any, from other parameters | true, false | false
 |swagger2markup.pathSecuritySectionEnabled| Optionally disable the security section for path sections | true, false | true
 |swagger2markup.anchorPrefix| Optionally prefix all anchors for uniqueness if you want to include generated documents into a global documentation | Any String |
@@ -184,7 +183,7 @@ The following tables list all available properties of Swagger2Markup:
 |===
 |Name | Description |  Possible Values | Default
 |swagger2markup.interDocumentCrossReferencesEnabled| Enable use of inter-document cross-references when needed | true, false | false
-|swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references for advanced usage | Any String | 
+|swagger2markup.interDocumentCrossReferencesPrefix| Specifies a prefix for all inter-document cross-references for advanced usage | Any String |
 |===
 
 [options="header"]
@@ -199,6 +198,59 @@ The following tables list all available properties of Swagger2Markup:
 |===
 |Name | Description | Possible Values | Default
 |swagger2markup.pageBreakLocations | Specifies where page breaks should be inserted. | BEFORE_OPERATION, BEFORE_OPERATION_DESCRIPTION, BEFORE_OPERATION_PARAMETERS, BEFORE_OPERATION_RESPONSES, BEFORE_OPERATION_CONSUMES, BEFORE_OPERATION_PRODUCES, BEFORE_OPERATION_EXAMPLE_REQUEST, BEFORE_OPERATION_EXAMPLE_RESPONSE, BEFORE_DEFINITION, AFTER_OPERATION, AFTER_OPERATION_DESCRIPTION, AFTER_OPERATION_PARAMETERS, AFTER_OPERATION_RESPONSES, AFTER_OPERATION_CONSUMES, AFTER_OPERATION_PRODUCES, AFTER_OPERATION_EXAMPLE_REQUEST, AFTER_OPERATION_EXAMPLE_RESPONSE, AFTER_DEFINITION | empty
+|===
+
+
+[options="header"]
+.Properties which configure examples generation
+|===
+|Name |Description |Possible Values |Default
+
+|swagger2markup.generatedExamplesEnabled
+| Specifies if HTTP request and response examples should be generated
+| true, false
+| false
+
+|swagger2markup.requestExamplesFormat
+| Specifies if `Request path` contents in `Example HTTP request` section should contain popular example utility
+invocation, e.g. `curl`
+a|
+* `basic` — example will have only endpoint and query params
+* `curl` — example with `curl` utility
+* `invoke-webrequest` — example with `Invoke-WebRequest` command of `powershell`
+| basic
+
+|swagger2markup.requestExamplesSourceFormat
+|`Request path` source block code style format
+| `default` or any suppordet by asciidoc
+| none for `basic`, `bash` for `curl` and `powershell` for `WebRequest`
+
+|swagger2markup.requestExamplesIncludeAllQueryParams
+|Specifies if `Request path` should contain required and optional params (if true) or only required (if false)
+|true, false
+|false
+
+|swagger2markup.requestExamplesHost
+|Should we hide, inherit or override hostname (e.g. with google.com) from  yml file
+|`hide`, `inherit` or string with hostname to be used in request example
+| hide
+
+|swagger2markup.requestExamplesSchema
+|Should we hide, inherit or override schema (http, https name it) from yml file
+|`hide`, `inherit` or string with schema name to be used in request example
+| hide
+
+|swagger2markup.requestExamplesHideBasePath
+|Should we hide or show base path in example request endpoint address
+|true, false
+|true
+
+|swagger2markup.requestExamplesQueryArrayStyle
+|How we should output array query params
+|`single` —  single time (similar to basic types), `commaSeparated` — single time with multiple comma separated values, `multiple` times with same param name and different values, `multiple[]` times with array brackets as param name suffix.
+|single
+
+
 |===
 
 === Logging
