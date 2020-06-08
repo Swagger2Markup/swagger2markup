@@ -401,6 +401,29 @@ public class AsciidocConverterTest {
     }
 
     @Test
+    public void testWithExamplesAndMimeTypesSuffix() throws IOException, URISyntaxException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/json/swagger_examples_suffix.json"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/asciidoc/examples_suffix");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/examples_suffix").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testWithExamples.html");
+    }
+
+    @Test
     public void testWithInlineSchema() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_inlineSchema.yaml").toURI());

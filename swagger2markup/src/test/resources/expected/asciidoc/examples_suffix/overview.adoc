@@ -1,0 +1,44 @@
+= Swagger Petstore API
+
+
+[[_overview]]
+== Overview
+This is a sample server Petstore server.
+
+http://swagger.wordnik.com[Learn about Swagger] or join the IRC channel `#swagger` on irc.freenode.net.
+
+For this sample, you can use the api key `special-key` to test the authorization filters
+
+
+=== Version information
+[%hardbreaks]
+__Version__ : 1.0.0
+
+
+=== Contact information
+[%hardbreaks]
+__Contact__ : apiteam@wordnik.com
+
+
+=== License information
+[%hardbreaks]
+__License__ : Apache 2.0
+__License URL__ : http://www.apache.org/licenses/LICENSE-2.0.html
+__Terms of service__ : http://helloreverb.com/terms/
+
+
+=== URI scheme
+[%hardbreaks]
+__Host__ : petstore.swagger.wordnik.com
+__BasePath__ : /v2
+__Schemes__ : HTTP
+
+
+=== Tags
+
+* pet : Pet resource
+* store : Store resource
+* user : User resource
+
+
+

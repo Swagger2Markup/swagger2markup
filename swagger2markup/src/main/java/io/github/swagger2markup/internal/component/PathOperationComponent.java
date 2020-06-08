@@ -384,13 +384,13 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     while (fieldsIterator.hasNext()) {
                         Map.Entry<String, JsonNode> field = fieldsIterator.next();
 
-                        if (field.getKey().equals("application/json")) {
+                        if (field.getKey().equals("application/json") || field.getKey().contains("+json")) {
                             String example = Json.pretty(field.getValue());
                             example = stripExampleQuotes(StringEscapeUtils.unescapeJson(example));
 
                             markupDocBuilder.listingBlock(example, "json");
 
-                        } else if (field.getKey().equals("application/xml")) {
+                        } else if (field.getKey().equals("application/xml") || field.getKey().contains("+xml")) {
 
                             String example = stripExampleQuotes(field.getValue().toString());
                             example = StringEscapeUtils.unescapeJava(example);
