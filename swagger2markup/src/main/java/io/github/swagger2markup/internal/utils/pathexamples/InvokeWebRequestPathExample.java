@@ -31,9 +31,9 @@ public class InvokeWebRequestPathExample extends UtilityPathExample {
 
     @Override
     protected void generateRequest(String data, Map<String, String> headers) {
-        prefix = "Invoke-WebRequest -Method " + operation.getHttpMethod() + " ";
+        prefix = "Invoke-WebRequest -Method " + operation.getHttpMethod();
 
-        path = " -uri \"" + path + "\" ";
+        requestString = " -uri \"" + path + query + "\" ";
 
         if (headers != null && !headers.isEmpty()) {
             StringBuilder headerBuilder = new StringBuilder();

@@ -30,9 +30,9 @@ public class CurlPathExample extends UtilityPathExample {
     protected void generateRequest(String data, Map<String, String> headers) {
         prefix = "curl -s -S ";
 
-        path =  "-X " +
+        requestString =  "-X " +
                 operation.getHttpMethod() +
-                " " + path + " ";
+                " \"" + path + query + "\" ";
 
         if (headers != null && !headers.isEmpty()) {
             StringBuilder headerBuilder = new StringBuilder();

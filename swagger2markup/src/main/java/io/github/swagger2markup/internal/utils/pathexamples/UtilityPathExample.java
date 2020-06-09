@@ -21,6 +21,11 @@ import java.util.stream.Collectors;
  * @author Klaus Schwartz <mailto:klaus@eraga.net>
  */
 abstract public class UtilityPathExample extends BasicPathExample {
+
+    protected String requestString;
+    protected String data = null;
+    protected Map<String, String> headerParameters;
+
     /**
      * @param context                    to get configurations and to use in ParameterAdapter
      * @param definitionDocumentResolver to use in ParameterAdapter
@@ -31,7 +36,7 @@ abstract public class UtilityPathExample extends BasicPathExample {
                               SwaggerPathOperation operation) {
         super(context, definitionDocumentResolver, operation);
 
-        String data = null;
+
         List<Parameter> bodyParameters = operation
                 .getOperation()
                 .getParameters()
@@ -49,7 +54,7 @@ abstract public class UtilityPathExample extends BasicPathExample {
 //
 //        });
 
-        Map<String, String> headerParameters = operation
+        headerParameters = operation
                 .getOperation()
                 .getParameters()
                 .stream()
@@ -67,11 +72,6 @@ abstract public class UtilityPathExample extends BasicPathExample {
         if (consumes != null && consumes.contains("application/json")) {
             headerParameters.put("ContentType", "application/json");
         }
-
-        generateRequest(
-                data,
-                headerParameters
-        );
     }
 
     abstract protected void generateRequest(
@@ -79,13 +79,23 @@ abstract public class UtilityPathExample extends BasicPathExample {
             Map<String, String> headerParameters);
 
     @Override
+    public String getRequestString() {
+        generateRequest(
+                data,
+                headerParameters
+        );
+
+        return prefix + requestString + body;
+    }
+
+    @Override
     public void updateBodyParameterValue(Parameter parameter, Object example) {
         if (example == null)
             return;
 
         try {
-            body = StringUtils.replace(
-                    body,
+            data = StringUtils.replace(
+                    data,
                     '{' + parameter.getName() + '}',
                     Json.mapper().writeValueAsString(example).replace("\"", "\\\"").trim()
             );

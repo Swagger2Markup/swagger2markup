@@ -94,7 +94,8 @@ public class BasicPathExample implements PathExample {
 
         pathBuilder.append(operation.getPath());
 
-        path = pathBuilder.toString();
+        path = pathBuilder.toString().trim();
+
 
         StringBuilder queryBuilder = new StringBuilder();
         if (!queryParameters.isEmpty()) {
@@ -196,7 +197,7 @@ public class BasicPathExample implements PathExample {
     }
 
     @Override
-    public final String getPath() {
+    public String getRequestString() {
         return prefix + header + path + query + body;
     }
 

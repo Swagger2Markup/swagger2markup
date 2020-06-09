@@ -544,6 +544,91 @@ public abstract class Schema2MarkupConfigBuilder {
         return this;
     }
 
+    /**
+     * Specifies the request examples format to use.
+     *
+     * @param requestExamplesFormat `basic`, `curl` or `invoke-webrequest`
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesFormat(String requestExamplesFormat) {
+        Validate.notNull(requestExamplesFormat, "%s must not be null", requestExamplesFormat);
+        config.requestExamplesFormat = requestExamplesFormat;
+        return this;
+    }
+
+    /**
+     * format name which should be used to highlight source block with request example string
+     *
+     * @param requestExamplesSourceFormat any string or `default`
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesSourceFormat(String requestExamplesSourceFormat) {
+        Validate.notNull(requestExamplesSourceFormat, "%s must not be null", requestExamplesSourceFormat);
+        config.requestExamplesSourceFormat = requestExamplesSourceFormat;
+        return this;
+    }
+
+    /**
+     * Should we hide, inherit or override hostname (e.g. with google.com) from  yml file
+     *
+     * @param requestExamplesHost  `hide`, `inherit` or string with hostname to be used in request example
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesHost(String requestExamplesHost) {
+        Validate.notNull(requestExamplesHost, "%s must not ber null", requestExamplesHost);
+        config.requestExamplesHost = requestExamplesHost;
+        return this;
+    }
+
+    /**
+     * Should we hide, inherit or override schema (http, https name it) from yml file
+     *
+     * @param requestExamplesSchema `hide`, `inherit` or string with schema name to be used in request example
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesSchema(String requestExamplesSchema) {
+        Validate.notNull(requestExamplesSchema, "%s must not be null", requestExamplesSchema);
+        config.requestExamplesSchema = requestExamplesSchema;
+        return this;
+    }
+
+    /**
+     * Should we hide or show base path in example request endpoint address
+     *
+     * @param requestExamplesHideBasePath true or false
+     * @return this builder
+     * @throws PatternSyntaxException when pattern cannot be compiled
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesHideBasePath(boolean requestExamplesHideBasePath) {
+        config.requestExamplesHideBasePath = requestExamplesHideBasePath;
+        return this;
+    }
+
+    /**
+     * Should we output optional query params in source block with request example string
+     *
+     * @param requestExamplesIncludeAllQueryParams false if example request should contain only required params
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesIncludeAllQueryParams(boolean requestExamplesIncludeAllQueryParams) {
+        config.requestExamplesIncludeAllQueryParams = requestExamplesIncludeAllQueryParams;
+        return this;
+    }
+
+    /**
+     * How we should output array query params
+     *
+     * @param requestExamplesQueryArrayStyle `single` —  single time (similar to basic types), `commaSeparated` — single time with multiple comma
+     *      separated values, `multiple` times with same param name and different values, `multiple[]` times with array
+     *      brackets as param name suffix.
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesQueryArrayStyle(String requestExamplesQueryArrayStyle) {
+        Validate.notNull(requestExamplesQueryArrayStyle, "%s must not be null", requestExamplesQueryArrayStyle);
+        config.requestExamplesQueryArrayStyle = requestExamplesQueryArrayStyle;
+        return this;
+    }
+
     protected static CompositeConfiguration getCompositeConfiguration(Configuration configuration) {
         CompositeConfiguration compositeConfiguration = new CompositeConfiguration();
         compositeConfiguration.addConfiguration(new SystemConfiguration());

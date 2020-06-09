@@ -12,7 +12,7 @@ import io.swagger.models.parameters.Parameter;
  * @author Klaus Schwartz <mailto:klaus@eraga.net>
  */
 public interface PathExample {
-    String getPath();
+    String getRequestString();
     String getAsciidocCodeLanguage();
     void updateHeaderParameterValue(Parameter parameter, Object example);
     void updatePathParameterValue(Parameter parameter, Object example);
