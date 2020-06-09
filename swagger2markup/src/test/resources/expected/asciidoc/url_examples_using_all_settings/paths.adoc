@@ -63,7 +63,7 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 ===== Request path
 [source,console]
 ----
-curl -s -S -X POST "https://example.com/v2/pets" -d "{\"id\":0,\"category\":{\"id\":0,\"name\":\"FoobarCategory\"},\"name\":\"doggie\",\"photoUrls\":[\"string\"],\"tags\":[{\"id\":0,\"name\":\"string\"}],\"status\":\"Dead\"}"
+curl -s -S -H "Content-Type: application/json" -X POST "https://example.com/v2/pets" -d "{\"id\":0,\"category\":{\"id\":0,\"name\":\"FoobarCategory\"},\"name\":\"doggie\",\"photoUrls\":[\"string\"],\"tags\":[{\"id\":0,\"name\":\"string\"}],\"status\":\"Dead\"}"
 ----
 
 
@@ -150,7 +150,7 @@ __optional__|Pet object that needs to be added to the store|<<_pet,Pet>>
 ===== Request path
 [source,console]
 ----
-curl -s -S -X PUT "https://example.com/v2/pets" -d "{\"id\":0,\"category\":{\"id\":0,\"name\":\"FoobarCategory\"},\"name\":\"doggie\",\"photoUrls\":[\"string\"],\"tags\":[{\"id\":0,\"name\":\"string\"}],\"status\":\"Dead\"}"
+curl -s -S -H "Content-Type: application/json" -X PUT "https://example.com/v2/pets" -d "{\"id\":0,\"category\":{\"id\":0,\"name\":\"FoobarCategory\"},\"name\":\"doggie\",\"photoUrls\":[\"string\"],\"tags\":[{\"id\":0,\"name\":\"string\"}],\"status\":\"Dead\"}"
 ----
 
 
@@ -578,7 +578,7 @@ __required__|Pet id to delete|integer (int64)
 ===== Request path
 [source,console]
 ----
-curl -s -S -X DELETE "https://example.com/v2/pets/0" 
+curl -s -S -H "api_key: string" -X DELETE "https://example.com/v2/pets/0" 
 ----
 
 

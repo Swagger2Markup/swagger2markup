@@ -8,6 +8,8 @@ import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.util.Json;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  * @author Klaus Schwartz <mailto:klaus@eraga.net>
  */
 abstract public class UtilityPathExample extends BasicPathExample {
+    Logger log = LoggerFactory.getLogger(this.getClass());
 
     protected String requestString;
     protected String data = null;
@@ -68,10 +71,7 @@ abstract public class UtilityPathExample extends BasicPathExample {
                         ))
                 .collect(Collectors.toMap(ParameterAdapter::getName, it -> "{" + it.getName() + "}"));
 
-        List<String> consumes = operation.getOperation().getConsumes();
-        if (consumes != null && consumes.contains("application/json")) {
-            headerParameters.put("ContentType", "application/json");
-        }
+
     }
 
     abstract protected void generateRequest(
@@ -85,7 +85,7 @@ abstract public class UtilityPathExample extends BasicPathExample {
                 headerParameters
         );
 
-        return prefix + requestString + body;
+        return prefix + header + requestString + body;
     }
 
     @Override
@@ -99,6 +99,19 @@ abstract public class UtilityPathExample extends BasicPathExample {
                     '{' + parameter.getName() + '}',
                     Json.mapper().writeValueAsString(example).replace("\"", "\\\"").trim()
             );
+            if(!data.isEmpty()) {
+                List<String> consumes = operation.getOperation().getConsumes();
+                if (consumes != null && consumes.contains("application/json")) {
+                    headerParameters.put("Content-Type", "application/json");
+                } else {
+                    log.warn(
+                            "Skipping 'Content-Type' header for path \"{}\" (title: \"{}\"). It has body arg that is rendered " +
+                            "as JSON but there is either no consumes section or application/json is not supported",
+                            operation.getPath(),
+                            operation.getTitle()
+                    );
+                }
+            }
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -106,12 +119,11 @@ abstract public class UtilityPathExample extends BasicPathExample {
 
     @Override
     public void updateHeaderParameterValue(Parameter parameter, Object example) {
-        if (example == null)
+        if (example == null && headerParameters.containsKey(parameter.getName()))
             return;
 
-        header = StringUtils.replace(
-                header,
-                '{' + parameter.getName() + '}',
+        headerParameters.put(
+                parameter.getName(),
                 String.valueOf(example).replace("\"", "\\\"").trim()
         );
     }
