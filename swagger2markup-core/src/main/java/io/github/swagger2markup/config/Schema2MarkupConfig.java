@@ -309,4 +309,55 @@ public interface Schema2MarkupConfig {
      * @return custom timeout value
      */
     int getAsciidocPegdownTimeoutMillis();
+
+    /**
+     * Returns format name which should be used to format request example string.
+     *
+     * @return `basic`, `curl` or `invoke-webrequest`
+     */
+    String getRequestExamplesFormat();
+
+    /**
+     * Returns format name which should be used to highlight source block with request example string
+     *
+     * @return any string or `default`
+     */
+    String getRequestExamplesSourceFormat();
+
+    /**
+     * Should we output optional query params in source block with request example string
+     *
+     * @return false if example request should contain only required params
+     */
+    boolean getRequestExamplesIncludeAllQueryParams();
+
+    /**
+     * How we should output array query params:
+     *
+     * @return `single` —  single time (similar to basic types), `commaSeparated` — single time with multiple comma
+     * separated values, `multiple` times with same param name and different values, `multiple[]` times with array
+     * brackets as param name suffix.
+     */
+    String getRequestExamplesQueryArrayStyle();
+
+    /**
+     * Should we hide, inherit or override hostname (e.g. with google.com) from  yml file
+     *
+     * @return `hide`, `inherit` or string with hostname to be used in request example
+     */
+    String getRequestExamplesHost();
+
+    /**
+     * Should we hide, inherit or override schema (http, https name it) from yml file
+     *
+     * @return `hide`, `inherit` or string with schema name to be used in request example
+     */
+    String getRequestExamplesSchema();
+
+    /**
+     * Should we hide or show base path in example request endpoint address
+     *
+     * @return true or false
+     */
+    boolean getRequestExamplesHideBasePath();
 }

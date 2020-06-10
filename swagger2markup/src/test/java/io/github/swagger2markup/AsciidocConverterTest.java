@@ -935,4 +935,88 @@ public class AsciidocConverterTest {
         Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/url_examples").toURI());
         DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testExamplesInUrl.html");
     }
+
+    @Test
+    public void testRequestExamplesWithCurl() throws IOException, URISyntaxException  {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_url_examples.yaml"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/asciidoc/url_examples_using_curl");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withRequestExamplesFormat("curl")
+                .withGeneratedExamples()
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/url_examples_using_curl").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testExamplesInUrlUsingCurl.html");
+    }
+
+    @Test
+    public void testRequestExamplesWithInvokeWebRequest() throws IOException, URISyntaxException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_url_examples.yaml"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/asciidoc/url_examples_using_invoke_webrequest");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withRequestExamplesFormat("invoke-webrequest")
+                .withGeneratedExamples()
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/url_examples_using_invoke_webrequest").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testRequestExamplesWithInvokeWebRequest.html");
+    }
+
+    @Test
+    public void testRequestExamplesWithAllSettings() throws IOException, URISyntaxException {
+        //Given
+        String swaggerJsonString = IOUtils.toString(getClass().getResourceAsStream("/yaml/swagger_petstore_body_examples.yaml"), StandardCharsets.UTF_8);
+        Path outputDirectory = Paths.get("build/test/asciidoc/url_examples_using_all_settings");
+        FileUtils.deleteQuietly(outputDirectory.toFile());
+
+        //When
+        Swagger2MarkupConfig config = (Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder()
+                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withGeneratedExamples()
+                .withRequestExamplesFormat("curl")
+                .withRequestExamplesHideBasePath(false)
+                .withRequestExamplesIncludeAllQueryParams(true)
+                .withRequestExamplesSourceFormat("console")
+                .withRequestExamplesHost("example.com")
+                .withRequestExamplesSchema("HTTPS")
+                .withRequestExamplesQueryArrayStyle("multiple[]")
+                .build();
+
+        Swagger2MarkupConverter.from(swaggerJsonString)
+                .withConfig(config)
+                .build()
+                .toFolder(outputDirectory);
+
+        //Then
+        String[] files = outputDirectory.toFile().list();
+        assertThat(files).hasSize(4).containsAll(expectedFiles);
+        Path expectedFilesDirectory = Paths.get(AsciidocConverterTest.class.getResource("/expected/asciidoc/url_examples_using_all_settings").toURI());
+        DiffUtils.assertThatAllFilesAreEqual(expectedFilesDirectory, outputDirectory, "testRequestExamplesWithAllSettings.html");
+    }
 }

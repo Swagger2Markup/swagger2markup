@@ -36,6 +36,13 @@ public class Schema2MarkupProperties {
      */
     public static final String PROPERTIES_PREFIX = "swagger2markup";
 
+    public static final String REQUEST_EXAMPLES_FORMAT = PROPERTIES_PREFIX + ".requestExamplesFormat";
+    public static final String REQUEST_EXAMPLES_SOURCE_FORMAT = PROPERTIES_PREFIX + ".requestExamplesSourceFormat";
+    public static final String REQUEST_EXAMPLES_HOST = PROPERTIES_PREFIX + ".requestExamplesHost";
+    public static final String REQUEST_EXAMPLES_SCHEMA = PROPERTIES_PREFIX + ".requestExamplesSchema";
+    public static final String REQUEST_EXAMPLES_HIDE_BASE_PATH = PROPERTIES_PREFIX + ".requestExamplesHideBasePath";
+    public static final String REQUEST_EXAMPLES_QUERY_ARRAY_STYLE = PROPERTIES_PREFIX +".requestExamplesQueryArrayStyle";
+    public static final String REQUEST_EXAMPLES_INCLUDE_ALL_QUERY_PARAMS = PROPERTIES_PREFIX + ".requestExamplesIncludeAllQueryParams";
     public static final String MARKUP_LANGUAGE = PROPERTIES_PREFIX + ".markupLanguage";
     public static final String SWAGGER_MARKUP_LANGUAGE = PROPERTIES_PREFIX + ".swaggerMarkupLanguage";
     public static final String GENERATED_EXAMPLES_ENABLED = PROPERTIES_PREFIX + ".generatedExamplesEnabled";

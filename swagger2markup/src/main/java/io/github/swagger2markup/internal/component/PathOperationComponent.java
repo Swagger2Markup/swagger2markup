@@ -25,6 +25,10 @@ import io.github.swagger2markup.config.PageBreakLocations;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;
+import io.github.swagger2markup.internal.utils.pathexamples.BasicPathExample;
+import io.github.swagger2markup.internal.utils.pathexamples.CurlPathExample;
+import io.github.swagger2markup.internal.utils.pathexamples.PathExample;
+import io.github.swagger2markup.internal.utils.pathexamples.InvokeWebRequestPathExample;
 import io.github.swagger2markup.markup.builder.MarkupAdmonition;
 import io.github.swagger2markup.markup.builder.MarkupBlockStyle;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
@@ -347,8 +351,25 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
      * @param operation the Swagger Operation
      */
     private void buildExamplesSection(MarkupDocBuilder markupDocBuilder, SwaggerPathOperation operation, List<PageBreakLocations> locations) {
+        PathExample pathGenerator;
+        switch (config.getRequestExamplesFormat().toLowerCase()) {
+            case "curl":
+                pathGenerator = new CurlPathExample(context, definitionDocumentResolver, operation);
+                break;
+            case "invoke-webrequest":
+                pathGenerator = new InvokeWebRequestPathExample(context, definitionDocumentResolver, operation);
+                break;
+            case "basic":
+                pathGenerator = new BasicPathExample(context, definitionDocumentResolver, operation);
+                break;
+            default:
+                logger.warn(
+                        "Unknown format name '{}' for requestExamplesFormat config parameter, falling back to 'basic'",
+                        config.getRequestExamplesFormat());
+                pathGenerator = new BasicPathExample(context, definitionDocumentResolver, operation);
+        }
 
-        Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
+        Map<String, Object> generatedRequestExampleMap = ExamplesUtil.generateRequestExampleMap(pathGenerator, definitions, markupDocBuilder);
         Map<String, Object> generatedResponseExampleMap = ExamplesUtil.generateResponseExampleMap(config.isGeneratedExamplesEnabled(), operation, definitions, definitionDocumentResolver, markupDocBuilder);
 
         boolean beforeExampleRequestBreak = locations.contains(BEFORE_OPERATION_EXAMPLE_REQUEST);
@@ -406,33 +427,34 @@ public class PathOperationComponent extends MarkupComponent<PathOperationCompone
                     }
                 } else if (entry.getKey().equals("path")) {
                     // Path shouldn't have quotes around it
-                    markupDocBuilder.listingBlock(entry.getValue().toString());
-                } else if (entry.getKey().equals("header")){
+                    PathExample pathGenerator = ((PathExample) entry.getValue());
+                    markupDocBuilder.listingBlock(pathGenerator.getRequestString(), pathGenerator.getAsciidocCodeLanguage());
+                } else if (entry.getKey().equals("header")) {
                     // Header should have format: apikey:"string"
                     markupDocBuilder.listingBlock(entry.getValue().toString(), "json");
                 } else {
-                    
+
                     Object value = entry.getValue();
-                    
+
                     if (value instanceof Map) {
-                        
+
                         @SuppressWarnings("unchecked")
                         Map<String, String> examplesByContentType = (Map<String, String>) value;
-                        
+
                         for (Entry<String, String> entryByType : examplesByContentType.entrySet()) {
                             if (entryByType.getKey().equals("application/json")) {
                                 String example = Json.pretty(entryByType.getValue());
                                 example = stripExampleQuotes(StringEscapeUtils.unescapeJson(example));
-    
+
                                 markupDocBuilder.listingBlock(example, "json");
-    
+
                             } else if (entryByType.getKey().equals("application/xml")) {
-    
+
                                 String example = stripExampleQuotes(entryByType.getValue());
                                 example = StringEscapeUtils.unescapeJava(example);
-    
+
                                 //TODO: pretty print XML
-    
+
                                 markupDocBuilder.listingBlock(example, "xml");
                             } else {
                                 String example = Json.pretty(entry.getValue());
