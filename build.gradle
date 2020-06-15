@@ -18,7 +18,7 @@ allprojects {
     apply plugin: 'me.champeau.gradle.jmh'
     apply plugin: 'com.jfrog.artifactory'
 
-    version = '1.3.4-SNAPSHOT'
+    version = '2.0.0-SNAPSHOT'
     group 'io.github.swagger2markup'
     description = 'swagger2markup Build'
 
