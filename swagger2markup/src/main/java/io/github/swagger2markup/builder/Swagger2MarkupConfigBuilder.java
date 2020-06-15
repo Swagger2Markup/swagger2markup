@@ -1,6 +1,7 @@
 package io.github.swagger2markup.builder;
 
 import io.github.swagger2markup.Schema2MarkupProperties;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.config.builder.Schema2MarkupConfigBuilder;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.ConfigurationConverter;
@@ -30,7 +31,7 @@ public class Swagger2MarkupConfigBuilder extends Schema2MarkupConfigBuilder {
     }
 
     @Override
-    public DefaultSchema2MarkupConfig createConfigInstance() {
+    protected DefaultSchema2MarkupConfig createConfigInstance() {
         if(config == null) {
             config = new Swagger2MarkupConfig();
         }
@@ -41,12 +42,5 @@ public class Swagger2MarkupConfigBuilder extends Schema2MarkupConfigBuilder {
     public Swagger2MarkupConfig build() {
         buildNaturalOrdering();
         return config;
-    }
-
-    /**
-     * Swagger specific implementation of {@link io.github.swagger2markup.config.Schema2MarkupConfig}
-     */
-    public static class Swagger2MarkupConfig extends DefaultSchema2MarkupConfig {
-
     }
 }

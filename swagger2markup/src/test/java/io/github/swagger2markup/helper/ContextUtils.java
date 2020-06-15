@@ -15,10 +15,10 @@
  */
 package io.github.swagger2markup.helper;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.SwaggerLabels;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.builder.Swagger2MarkupExtensionRegistryBuilder;
 import io.github.swagger2markup.spi.Swagger2MarkupExtensionRegistry;
 import io.swagger.models.Swagger;

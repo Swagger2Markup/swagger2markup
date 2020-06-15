@@ -142,7 +142,7 @@ public abstract class Schema2MarkupConfigBuilder {
             config.responseOrdering = Ordering.natural();
     }
 
-    public abstract DefaultSchema2MarkupConfig createConfigInstance();
+    protected abstract DefaultSchema2MarkupConfig createConfigInstance();
 
     /**
      * Builds the OpenApi2MarkupConfig.
