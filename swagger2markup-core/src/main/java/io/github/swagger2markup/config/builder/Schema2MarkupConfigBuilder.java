@@ -69,6 +69,13 @@ public abstract class Schema2MarkupConfigBuilder {
             ((AbstractConfiguration) configuration).setListDelimiterHandler(new DefaultListDelimiterHandler(config.listDelimiter));
         }
 
+        config.requestExamplesFormat = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_FORMAT);
+        config.requestExamplesSourceFormat = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_SOURCE_FORMAT);
+        config.requestExamplesHost = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_HOST);
+        config.requestExamplesSchema = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_SCHEMA);
+        config.requestExamplesHideBasePath = schema2MarkupProperties.getRequiredBoolean(REQUEST_EXAMPLES_HIDE_BASE_PATH);
+        config.requestExamplesQueryArrayStyle = schema2MarkupProperties.getRequiredString(REQUEST_EXAMPLES_QUERY_ARRAY_STYLE);
+        config.requestExamplesIncludeAllQueryParams = schema2MarkupProperties.getRequiredBoolean(REQUEST_EXAMPLES_INCLUDE_ALL_QUERY_PARAMS);
         config.markupLanguage = schema2MarkupProperties.getRequiredMarkupLanguage(MARKUP_LANGUAGE);
         config.schemaMarkupLanguage = schema2MarkupProperties.getRequiredMarkupLanguage(SWAGGER_MARKUP_LANGUAGE);
         config.generatedExamplesEnabled = schema2MarkupProperties.getRequiredBoolean(GENERATED_EXAMPLES_ENABLED);
@@ -537,6 +544,91 @@ public abstract class Schema2MarkupConfigBuilder {
         return this;
     }
 
+    /**
+     * Specifies the request examples format to use.
+     *
+     * @param requestExamplesFormat `basic`, `curl` or `invoke-webrequest`
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesFormat(String requestExamplesFormat) {
+        Validate.notNull(requestExamplesFormat, "%s must not be null", requestExamplesFormat);
+        config.requestExamplesFormat = requestExamplesFormat;
+        return this;
+    }
+
+    /**
+     * format name which should be used to highlight source block with request example string
+     *
+     * @param requestExamplesSourceFormat any string or `default`
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesSourceFormat(String requestExamplesSourceFormat) {
+        Validate.notNull(requestExamplesSourceFormat, "%s must not be null", requestExamplesSourceFormat);
+        config.requestExamplesSourceFormat = requestExamplesSourceFormat;
+        return this;
+    }
+
+    /**
+     * Should we hide, inherit or override hostname (e.g. with google.com) from  yml file
+     *
+     * @param requestExamplesHost  `hide`, `inherit` or string with hostname to be used in request example
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesHost(String requestExamplesHost) {
+        Validate.notNull(requestExamplesHost, "%s must not ber null", requestExamplesHost);
+        config.requestExamplesHost = requestExamplesHost;
+        return this;
+    }
+
+    /**
+     * Should we hide, inherit or override schema (http, https name it) from yml file
+     *
+     * @param requestExamplesSchema `hide`, `inherit` or string with schema name to be used in request example
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesSchema(String requestExamplesSchema) {
+        Validate.notNull(requestExamplesSchema, "%s must not be null", requestExamplesSchema);
+        config.requestExamplesSchema = requestExamplesSchema;
+        return this;
+    }
+
+    /**
+     * Should we hide or show base path in example request endpoint address
+     *
+     * @param requestExamplesHideBasePath true or false
+     * @return this builder
+     * @throws PatternSyntaxException when pattern cannot be compiled
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesHideBasePath(boolean requestExamplesHideBasePath) {
+        config.requestExamplesHideBasePath = requestExamplesHideBasePath;
+        return this;
+    }
+
+    /**
+     * Should we output optional query params in source block with request example string
+     *
+     * @param requestExamplesIncludeAllQueryParams false if example request should contain only required params
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesIncludeAllQueryParams(boolean requestExamplesIncludeAllQueryParams) {
+        config.requestExamplesIncludeAllQueryParams = requestExamplesIncludeAllQueryParams;
+        return this;
+    }
+
+    /**
+     * How we should output array query params
+     *
+     * @param requestExamplesQueryArrayStyle `single` —  single time (similar to basic types), `commaSeparated` — single time with multiple comma
+     *      separated values, `multiple` times with same param name and different values, `multiple[]` times with array
+     *      brackets as param name suffix.
+     * @return this builder
+     */
+    public Schema2MarkupConfigBuilder withRequestExamplesQueryArrayStyle(String requestExamplesQueryArrayStyle) {
+        Validate.notNull(requestExamplesQueryArrayStyle, "%s must not be null", requestExamplesQueryArrayStyle);
+        config.requestExamplesQueryArrayStyle = requestExamplesQueryArrayStyle;
+        return this;
+    }
+
     protected static CompositeConfiguration getCompositeConfiguration(Configuration configuration) {
         CompositeConfiguration compositeConfiguration = new CompositeConfiguration();
         compositeConfiguration.addConfiguration(new SystemConfiguration());
@@ -552,6 +644,15 @@ public abstract class Schema2MarkupConfigBuilder {
         private MarkupLanguage markupLanguage;
         private MarkupLanguage schemaMarkupLanguage;
         private boolean generatedExamplesEnabled;
+
+        private String requestExamplesFormat;
+        private String requestExamplesSourceFormat;
+        private String requestExamplesHost;
+        private String requestExamplesSchema;
+        private boolean requestExamplesHideBasePath;
+        private boolean requestExamplesIncludeAllQueryParams;
+        private String requestExamplesQueryArrayStyle;
+
         private boolean hostnameEnabled;
         private boolean basePathPrefixEnabled;
         private boolean separatedDefinitionsEnabled;
@@ -792,6 +893,40 @@ public abstract class Schema2MarkupConfigBuilder {
         @Override
         public int getAsciidocPegdownTimeoutMillis() {
             return asciidocPegdownTimeoutMillis;
+        }
+
+        @Override
+        public String getRequestExamplesFormat() {
+            return requestExamplesFormat;
+        }
+
+        @Override
+        public String getRequestExamplesSourceFormat() {
+            return requestExamplesSourceFormat;
+        }
+
+        @Override
+        public boolean getRequestExamplesIncludeAllQueryParams() {
+            return requestExamplesIncludeAllQueryParams;
+        }
+
+        @Override
+        public String getRequestExamplesQueryArrayStyle() {
+            return requestExamplesQueryArrayStyle;
+        }
+
+        @Override
+        public String getRequestExamplesHost() {
+            return requestExamplesHost;
+        }
+
+        @Override
+        public String getRequestExamplesSchema() {
+            return requestExamplesSchema;
+        }
+        @Override
+        public boolean getRequestExamplesHideBasePath() {
+            return requestExamplesHideBasePath;
         }
     }
 }

@@ -20,6 +20,8 @@ import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.adapter.PropertyAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;
+import io.github.swagger2markup.internal.utils.pathexamples.BasicPathExample;
+import io.github.swagger2markup.internal.utils.pathexamples.PathExample;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.github.swagger2markup.model.SwaggerPathOperation;
 import io.swagger.models.*;
@@ -90,21 +92,28 @@ public class ExamplesUtil {
     /**
      * Generates examples for request
      *
-     * @param definitionDocumentResolver DocumentResolver
-     * @param generateMissingExamples    specifies the missing examples should be generated
-     * @param pathOperation              the Swagger Operation
-     * @param definitions                the map of definitions
-     * @param markupDocBuilder           the markup builder
+     * @param requestPathGenerator contains context, definitionDocumentResolver, operation and generates path
+     *                             for example request
+     * @param definitions          the map of definitions
+     * @param markupDocBuilder     the markup builder
      * @return an Optional with the example content
      */
-    public static Map<String, Object> generateRequestExampleMap(boolean generateMissingExamples, SwaggerPathOperation pathOperation, Map<String, Model> definitions, DocumentResolver definitionDocumentResolver, MarkupDocBuilder markupDocBuilder) {
-        Operation operation = pathOperation.getOperation();
+    public static Map<String, Object> generateRequestExampleMap(
+            PathExample requestPathGenerator,
+            Map<String, Model> definitions,
+            MarkupDocBuilder markupDocBuilder) {
+        boolean generateMissingExamples = requestPathGenerator.getContext().getConfig().isGeneratedExamplesEnabled();
+        DocumentResolver definitionDocumentResolver = requestPathGenerator.getDefinitionDocumentResolver();
+
+        Operation operation = requestPathGenerator.getOperation().getOperation();
         List<Parameter> parameters = operation.getParameters();
         Map<String, Object> examples = new LinkedHashMap<>();
 
         // Path example should always be included (if generateMissingExamples):
-        if (generateMissingExamples)
-            examples.put("path", pathOperation.getPath());
+        if (generateMissingExamples) {
+            examples.put("path", requestPathGenerator);
+        }
+
         for (Parameter parameter : parameters) {
             Object example = null;
             if (parameter instanceof BodyParameter) {
@@ -116,8 +125,16 @@ public class ExamplesUtil {
                         example = generateExampleForRefModel(generateMissingExamples, simpleRef, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                     } else if (generateMissingExamples) {
                         if (schema instanceof ComposedModel) {
-                            //FIXME: getProperties() may throw NullPointerException
-                            example = exampleMapForProperties(((ObjectType) ModelUtils.getType(schema, definitions, definitionDocumentResolver)).getProperties(), definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
+                            ObjectType objectType = (ObjectType) ModelUtils.getType(schema, definitions, definitionDocumentResolver);
+                            if(objectType != null) {
+                                example = exampleMapForProperties(
+                                        objectType.getProperties(),
+                                        definitions,
+                                        definitionDocumentResolver,
+                                        markupDocBuilder,
+                                        new HashMap<>()
+                                );
+                            }
                         } else if (schema instanceof ArrayModel) {
                             example = generateExampleForArrayModel((ArrayModel) schema, definitions, definitionDocumentResolver, markupDocBuilder, new HashMap<>());
                         } else {
@@ -128,6 +145,8 @@ public class ExamplesUtil {
                         }
                     }
                 }
+
+                requestPathGenerator.updateBodyParameterValue(parameter, example);
             } else if (parameter instanceof AbstractSerializableParameter) {
                 if (generateMissingExamples) {
                     Object abstractSerializableParameterExample;
@@ -148,18 +167,15 @@ public class ExamplesUtil {
                         }
                     }
                     if (parameter instanceof HeaderParameter) {
-                        example = parameter.getName() + ":\"" + ((HeaderParameter) parameter).getType() + "\"";
-                    } else if (parameter instanceof PathParameter) {
-                        String pathExample = (String) examples.get("path");
-                        pathExample = pathExample.replace('{' + parameter.getName() + '}', encodeExampleForUrl(abstractSerializableParameterExample));
-                        example = pathExample;
-                    } else if (parameter instanceof QueryParameter) {
-                        if (parameter.getRequired()) {
-                            String path = (String) examples.get("path");
-                            String separator = path.contains("?") ? "&" : "?";
-                            String pathExample = path + separator + parameter.getName() + "=" + encodeExampleForUrl(abstractSerializableParameterExample);
-                            examples.put("path", pathExample);
+                        if(requestPathGenerator.getClass() == BasicPathExample.class) {
+                            example = parameter.getName() + ":\"" + ((HeaderParameter) parameter).getType() + "\"";
+                        } else {
+                            requestPathGenerator.updateHeaderParameterValue(parameter, abstractSerializableParameterExample);
                         }
+                    } else if (parameter instanceof PathParameter) {
+                        requestPathGenerator.updatePathParameterValue(parameter, abstractSerializableParameterExample);
+                    } else if (parameter instanceof QueryParameter) {
+                        requestPathGenerator.updateQueryParameterValue(parameter, abstractSerializableParameterExample);
                     } else {
                         example = abstractSerializableParameterExample;
                     }
@@ -171,6 +187,7 @@ public class ExamplesUtil {
 
             if (example != null)
                 examples.put(parameter.getIn(), example);
+
         }
 
         return examples;
@@ -196,7 +213,7 @@ public class ExamplesUtil {
      * @param example the example value
      * @return encoded example value
      */
-    private static String encodeExampleForUrl(Object example) {
+    public static String encodeExampleForUrl(Object example) {
         try {
             return URLEncoder.encode(String.valueOf(example), "UTF-8");
         } catch (UnsupportedEncodingException exception) {

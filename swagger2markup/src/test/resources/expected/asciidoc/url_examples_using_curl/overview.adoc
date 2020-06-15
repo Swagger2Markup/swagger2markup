@@ -1,0 +1,18 @@
+= Generated examples in URLs
+
+
+[[_overview]]
+== Overview
+
+=== Version information
+[%hardbreaks]
+__Version__ : 0.0.1
+
+
+=== URI scheme
+[%hardbreaks]
+__BasePath__ : /v1
+__Schemes__ : HTTP
+
+
+

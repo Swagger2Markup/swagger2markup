@@ -1,0 +1,108 @@
+
+[[_definitions]]
+== Definitions
+
+[[_category]]
+=== Category
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**name** +
+__optional__|The name of the category +
+**Default** : `"DefaultCategory"` +
+**Length** : `0 - 255` +
+**Pattern** : `"[A-Za-zäöüÄÖÜß]{0,255}"` +
+**Example** : `"FoobarCategory"`|string
+|===
+
+
+[[_order]]
+=== Order
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**complete** +
+__optional__|**Example** : `true`|boolean
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**petId** +
+__optional__|**Example** : `0`|integer (int64)
+|**quantity** +
+__optional__|**Default** : `0` +
+**Minimum value** : `0` +
+**Maximum value** : `10000` +
+**Example** : `10`|integer (int32)
+|**shipDate** +
+__optional__|**Example** : `"1970-01-01T00:00:00Z"`|string (date-time)
+|**status** +
+__optional__|Order Status +
+**Example** : `"Ordered"`|enum (Ordered, Cancelled)
+|===
+
+
+[[_pet]]
+=== Pet
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**category** +
+__optional__|**Example** : <<_category>>|<<_category,Category>>
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**name** +
+__required__|**Example** : `"doggie"`|string
+|**photoUrls** +
+__required__|**Example** : `[ "string" ]`|< string > array
+|**status** +
+__optional__|pet status in the store, +
+**Example** : `"Dead"`|enum (Dead, Alive)
+|**tags** +
+__optional__|**Example** : `[ "<<_tag>>" ]`|< <<_tag,Tag>> > array
+|===
+
+
+[[_tag]]
+=== Tag
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**name** +
+__optional__|**Example** : `"string"`|string
+|===
+
+
+[[_user]]
+=== User
+
+[options="header", cols=".^3a,.^11a,.^4a"]
+|===
+|Name|Description|Schema
+|**email** +
+__optional__|**Example** : `"string"`|string
+|**firstName** +
+__optional__|**Example** : `"string"`|string
+|**id** +
+__optional__|**Example** : `0`|integer (int64)
+|**lastName** +
+__optional__|**Example** : `"string"`|string
+|**password** +
+__optional__|**Example** : `"string"`|string
+|**phone** +
+__optional__|**Example** : `"string"`|string
+|**userStatus** +
+__optional__|User Status +
+**Example** : `0`|integer (int32)
+|**username** +
+__optional__|**Example** : `"string"`|string
+|===
+
+
+
