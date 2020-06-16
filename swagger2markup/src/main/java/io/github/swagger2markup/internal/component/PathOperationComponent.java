@@ -46,8 +46,8 @@ import org.apache.commons.text.StringEscapeUtils;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static io.github.swagger2markup.PageBreakLocations.*;
 import static io.github.swagger2markup.SwaggerLabels.*;
-import static io.github.swagger2markup.SwaggerPageBreakLocations.*;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.copyMarkupDocBuilder;
 import static io.github.swagger2markup.internal.utils.MarkupDocBuilderUtils.markupDescription;
 import static io.github.swagger2markup.spi.PathsDocumentExtension.Context;
