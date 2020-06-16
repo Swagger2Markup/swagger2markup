@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.config.*;
 import io.github.swagger2markup.utils.URIUtils;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.commons.configuration2.Configuration;

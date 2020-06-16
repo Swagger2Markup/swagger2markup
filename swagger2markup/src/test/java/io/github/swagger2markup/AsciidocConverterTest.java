@@ -17,10 +17,6 @@ package io.github.swagger2markup;
 
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.config.GroupBy;
-import io.github.swagger2markup.config.Language;
-import io.github.swagger2markup.config.MarkupLanguage;
-import io.github.swagger2markup.config.OrderBy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
@@ -124,6 +120,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
+                .withOutputLanguage(Language.BR)
                 .withTagOrdering(OrderBy.AS_IS)
                 .withParameterOrdering(OrderBy.AS_IS)
                 .withOperationOrdering(OrderBy.AS_IS)
@@ -610,7 +607,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withSwaggerMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.ASCIIDOC)
+                .withSwaggerMarkupLanguage(MarkupLanguage.ASCIIDOC)
                 .build();
 
         Swagger2MarkupConverter.from(file).withConfig(config).build()

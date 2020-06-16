@@ -16,8 +16,6 @@
 package io.github.swagger2markup;
 
 
-import io.github.swagger2markup.config.Labels;
-
 import java.util.ResourceBundle;
 
 public class SwaggerLabels extends Labels {

@@ -13,33 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package io.github.swagger2markup;
 
-package io.github.swagger2markup.config;
-
-import java.util.Locale;
-
-/**
- * @author Maksim Myshkin
- */
-public enum Language {
-    EN(Locale.ENGLISH),
-    RU(new Locale("ru")),
-    FR(Locale.FRENCH),
-    DE(Locale.GERMAN),
-    TR(new Locale("tr")),
-    ZH(Locale.CHINESE),
-    ES(new Locale("es")),
-    BR(new Locale("pt", "BR")),
-    JA(Locale.JAPANESE),
-    PL(new Locale("pl"));
-
-    private final Locale lang;
-
-    Language(final Locale lang) {
-        this.lang = lang;
-    }
-
-    public Locale toLocale() {
-        return lang;
-    }
+public enum OrderBy {
+    AS_IS,
+    NATURAL,
+    CUSTOM
 }

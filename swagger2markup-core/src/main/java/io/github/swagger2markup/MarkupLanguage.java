@@ -17,7 +17,7 @@
  *
  */
 
-package io.github.swagger2markup.config;
+package io.github.swagger2markup;
 
 import java.util.Arrays;
 import java.util.List;

@@ -22,13 +22,13 @@ allprojects {
     group 'io.github.swagger2markup'
     description = 'swagger2markup Build'
 
-    repositories {
+    repositories {        
+        jcenter()
+        mavenCentral()
         maven {
             name "OSS Snapshots"
             url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
         }
-        jcenter()
-        mavenCentral()
     }
 }
 artifactoryPublish.skip = true // apply to all projects except the root

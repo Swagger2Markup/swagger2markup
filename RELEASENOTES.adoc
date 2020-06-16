@@ -163,7 +163,7 @@
 * PR #294: Examples always start with a newline if there is other content in the same cell
 * PR 307: Include required parameters in example request
 
-=== Version 1.4.0
+=== Version 2.0.0
 * Added openapi2markup to support OpenAPI v3
 * Issue #409: Fixed JSON response example
 

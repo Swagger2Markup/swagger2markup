@@ -17,9 +17,8 @@
 package io.github.swagger2markup.extension;
 
 import io.github.swagger2markup.OpenSchema2MarkupConfig;
-import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 import io.github.swagger2markup.OpenAPI2MarkupConverter;
-import io.github.swagger2markup.config.Labels;
+import io.github.swagger2markup.Labels;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.vavr.Function2;
 import org.slf4j.Logger;

@@ -21,7 +21,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.config.MarkupLanguage;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -128,7 +127,7 @@ public class MarkdownConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.MARKDOWN)
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)
@@ -152,7 +151,7 @@ public class MarkdownConverterTest {
 
         //When
         Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder()
-                .withMarkupLanguage(io.github.swagger2markup.config.MarkupLanguage.MARKDOWN)
+                .withMarkupLanguage(MarkupLanguage.MARKDOWN)
                 .build();
         Swagger2MarkupConverter.from(file)
                 .withConfig(config)

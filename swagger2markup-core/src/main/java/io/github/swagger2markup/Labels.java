@@ -13,13 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.config;
+package io.github.swagger2markup;
 
-/**
- * GroupBy enum for ordering
- */
-public enum GroupBy {
-    AS_IS,
-    TAGS,
-    REGEX
+import java.util.ResourceBundle;
+
+public class Labels {
+
+    private ResourceBundle resourceBundle;
+
+    public Labels(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+    }
+
+    /**
+     * Gets a label for the given key from this resource bundle.
+     *
+     * @param key the key for the desired label
+     * @return the label for the given key
+     */
+    public String getLabel(String key) {
+        return resourceBundle.getString(key);
+    }
 }

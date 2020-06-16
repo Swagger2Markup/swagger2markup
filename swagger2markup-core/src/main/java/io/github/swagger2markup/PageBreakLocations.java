@@ -13,11 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.config;
+package io.github.swagger2markup;
 
 /**
  * Marker interface for PageBreak enums
  */
-public interface PageBreakLocations {
-
+public enum PageBreakLocations {
+    BEFORE_OPERATION,
+    BEFORE_OPERATION_DESCRIPTION,
+    BEFORE_OPERATION_PARAMETERS,
+    BEFORE_OPERATION_RESPONSES,
+    BEFORE_OPERATION_CONSUMES,
+    BEFORE_OPERATION_PRODUCES,
+    BEFORE_OPERATION_EXAMPLE_REQUEST,
+    BEFORE_OPERATION_EXAMPLE_RESPONSE,
+    BEFORE_DEFINITION,
+    AFTER_OPERATION,
+    AFTER_OPERATION_DESCRIPTION,
+    AFTER_OPERATION_PARAMETERS,
+    AFTER_OPERATION_RESPONSES,
+    AFTER_OPERATION_CONSUMES,
+    AFTER_OPERATION_PRODUCES,
+    AFTER_OPERATION_EXAMPLE_REQUEST,
+    AFTER_OPERATION_EXAMPLE_RESPONSE,
+    AFTER_DEFINITION
 }

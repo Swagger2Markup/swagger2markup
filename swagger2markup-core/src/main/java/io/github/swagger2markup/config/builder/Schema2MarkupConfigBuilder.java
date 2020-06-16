@@ -17,7 +17,7 @@
 package io.github.swagger2markup.config.builder;
 
 import com.google.common.collect.Ordering;
-import io.github.swagger2markup.Schema2MarkupProperties;
+import io.github.swagger2markup.*;
 import io.github.swagger2markup.config.*;
 import io.github.swagger2markup.model.Parameter;
 import io.github.swagger2markup.model.PathOperation;

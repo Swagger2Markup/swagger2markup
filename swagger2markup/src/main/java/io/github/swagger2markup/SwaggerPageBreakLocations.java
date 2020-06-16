@@ -15,7 +15,7 @@
  */
 package io.github.swagger2markup;
 
-public enum SwaggerPageBreakLocations implements io.github.swagger2markup.config.PageBreakLocations {
+public enum SwaggerPageBreakLocations implements PageBreakLocations {
     BEFORE_OPERATION,
     BEFORE_OPERATION_DESCRIPTION,
     BEFORE_OPERATION_PARAMETERS,

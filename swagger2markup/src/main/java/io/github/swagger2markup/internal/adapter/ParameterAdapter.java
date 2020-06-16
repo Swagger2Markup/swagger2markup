@@ -109,7 +109,7 @@ public class ParameterAdapter {
     }
 
     public String displayDescription(MarkupDocBuilder markupDocBuilder) {
-        io.github.swagger2markup.config.MarkupLanguage schemaMarkupLanguage = config.getSchemaMarkupLanguage();
+        io.github.swagger2markup.MarkupLanguage schemaMarkupLanguage = config.getSchemaMarkupLanguage();
         return markupDescription(MarkupLanguage.valueOf(schemaMarkupLanguage.name()), markupDocBuilder, getDescription());
     }
 

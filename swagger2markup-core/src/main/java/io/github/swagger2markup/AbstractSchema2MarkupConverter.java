@@ -15,7 +15,6 @@
  */
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.config.Labels;
 import io.github.swagger2markup.config.Schema2MarkupConfig;
 import io.github.swagger2markup.extension.Schema2MarkupExtensionRegistry;
 import org.apache.commons.lang3.Validate;

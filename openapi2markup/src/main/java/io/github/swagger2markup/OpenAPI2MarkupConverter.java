@@ -16,8 +16,6 @@
 package io.github.swagger2markup;
 
 import io.github.swagger2markup.adoc.ast.impl.DocumentImpl;
-import io.github.swagger2markup.config.Labels;
-import io.github.swagger2markup.config.MarkupLanguage;
 import io.github.swagger2markup.config.OpenAPILabels;
 import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 import io.github.swagger2markup.extension.OpenAPI2MarkupExtensionRegistry;

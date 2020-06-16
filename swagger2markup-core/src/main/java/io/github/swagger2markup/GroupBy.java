@@ -13,10 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.config;
+package io.github.swagger2markup;
 
-public enum OrderBy {
+/**
+ * GroupBy enum for ordering
+ */
+public enum GroupBy {
     AS_IS,
-    NATURAL,
-    CUSTOM
+    TAGS,
+    REGEX
 }

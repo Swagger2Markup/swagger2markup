@@ -1,7 +1,7 @@
 package io.github.swagger2markup.config;
 
+import io.github.swagger2markup.Labels;
 import io.github.swagger2markup.OpenSchema2MarkupConfig;
-import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 
 import java.util.ResourceBundle;
 

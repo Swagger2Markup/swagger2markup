@@ -17,7 +17,7 @@ package io.github.swagger2markup.internal.component;
 
 
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.config.GroupBy;
+import io.github.swagger2markup.GroupBy;
 import io.github.swagger2markup.internal.adapter.ParameterAdapter;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.ObjectType;

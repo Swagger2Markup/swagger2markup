@@ -13,25 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.swagger2markup.config;
 
-import java.util.ResourceBundle;
+package io.github.swagger2markup;
 
-public class Labels {
+import java.util.Locale;
 
-    private ResourceBundle resourceBundle;
+/**
+ * @author Maksim Myshkin
+ */
+public enum Language {
+    EN(Locale.ENGLISH),
+    RU(new Locale("ru")),
+    FR(Locale.FRENCH),
+    DE(Locale.GERMAN),
+    TR(new Locale("tr")),
+    ZH(Locale.CHINESE),
+    ES(new Locale("es")),
+    BR(new Locale("pt", "BR")),
+    JA(Locale.JAPANESE),
+    PL(new Locale("pl"));
 
-    public Labels(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
+    private final Locale lang;
+
+    Language(final Locale lang) {
+        this.lang = lang;
     }
 
-    /**
-     * Gets a label for the given key from this resource bundle.
-     *
-     * @param key the key for the desired label
-     * @return the label for the given key
-     */
-    public String getLabel(String key) {
-        return resourceBundle.getString(key);
+    public Locale toLocale() {
+        return lang;
     }
 }

@@ -18,9 +18,9 @@ package io.github.swagger2markup.builder;
 import com.google.common.collect.Ordering;
 import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupProperties;
-import io.github.swagger2markup.config.GroupBy;
-import io.github.swagger2markup.config.Language;
-import io.github.swagger2markup.config.OrderBy;
+import io.github.swagger2markup.GroupBy;
+import io.github.swagger2markup.Language;
+import io.github.swagger2markup.OrderBy;
 import io.github.swagger2markup.markup.builder.MarkupLanguage;
 import org.junit.Test;
 
