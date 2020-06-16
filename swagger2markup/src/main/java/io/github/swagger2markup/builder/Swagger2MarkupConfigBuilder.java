@@ -32,14 +32,6 @@ public class Swagger2MarkupConfigBuilder extends Schema2MarkupConfigBuilder<Swag
     }
 
     @Override
-    protected DefaultSchema2MarkupConfig createConfigInstance() {
-        if(config == null) {
-            config = new Swagger2MarkupConfig();
-        }
-        return config;
-    }
-
-    @Override
     public Swagger2MarkupConfig build() {
         buildNaturalOrdering();
         return config;
