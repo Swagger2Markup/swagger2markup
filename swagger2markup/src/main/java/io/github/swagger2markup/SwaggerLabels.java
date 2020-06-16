@@ -15,7 +15,7 @@
  */
 package io.github.swagger2markup;
 
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
+
 import io.github.swagger2markup.config.Labels;
 
 import java.util.ResourceBundle;

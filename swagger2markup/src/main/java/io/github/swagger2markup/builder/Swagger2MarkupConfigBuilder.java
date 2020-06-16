@@ -11,8 +11,7 @@ import org.apache.commons.configuration2.PropertiesConfiguration;
 import java.util.Map;
 import java.util.Properties;
 
-public class Swagger2MarkupConfigBuilder extends Schema2MarkupConfigBuilder {
-    protected Swagger2MarkupConfig config;
+public class Swagger2MarkupConfigBuilder extends Schema2MarkupConfigBuilder<Swagger2MarkupConfigBuilder, Swagger2MarkupConfig> {
 
     public Swagger2MarkupConfigBuilder() {
         this(new PropertiesConfiguration());
@@ -27,7 +26,9 @@ public class Swagger2MarkupConfigBuilder extends Schema2MarkupConfigBuilder {
     }
 
     public Swagger2MarkupConfigBuilder(Configuration configuration) {
-        super(new Schema2MarkupProperties(getCompositeConfiguration(configuration)), configuration);
+        super(Swagger2MarkupConfigBuilder.class,
+                new Swagger2MarkupConfig(),
+                new Schema2MarkupProperties(getCompositeConfiguration(configuration)), configuration);
     }
 
     @Override

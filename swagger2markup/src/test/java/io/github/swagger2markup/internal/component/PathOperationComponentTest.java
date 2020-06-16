@@ -15,10 +15,10 @@
  */
 package io.github.swagger2markup.internal.component;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.internal.resolver.DefinitionDocumentResolverFromOperation;
 import io.github.swagger2markup.internal.resolver.SecurityDocumentResolver;
 import io.github.swagger2markup.internal.utils.PathUtils;

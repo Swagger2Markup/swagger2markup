@@ -16,8 +16,8 @@
 package io.github.swagger2markup.internal.adapter;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter.SwaggerContext;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.internal.resolver.DocumentResolver;
 import io.github.swagger2markup.internal.type.*;
 import io.github.swagger2markup.internal.utils.ExamplesUtil;

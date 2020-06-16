@@ -257,10 +257,10 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
     }
 
     public static class OpenAPIContext extends Context<OpenAPI> {
-        private OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config;
+        private OpenSchema2MarkupConfig config;
         private OpenAPI2MarkupExtensionRegistry extensionRegistry;
 
-        public OpenAPIContext(OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config,
+        public OpenAPIContext(OpenSchema2MarkupConfig config,
                               OpenAPI2MarkupExtensionRegistry extensionRegistry,
                               OpenAPI schema, URI swaggerLocation, Labels labels) {
             super(config, extensionRegistry, schema, swaggerLocation, labels);
@@ -269,7 +269,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
         }
 
         @Override
-        public OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig getConfig() {
+        public OpenSchema2MarkupConfig getConfig() {
             return config;
         }
 
@@ -286,7 +286,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
     public static class Builder {
         private final OpenAPI openAPI;
         private final URI schemaLocation;
-        private OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config;
+        private OpenSchema2MarkupConfig config;
         private OpenAPI2MarkupExtensionRegistry extensionRegistry;
 
         /**
@@ -337,7 +337,7 @@ public class OpenAPI2MarkupConverter extends AbstractSchema2MarkupConverter<Open
             return openAPI;
         }
 
-        public Builder withConfig(OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config) {
+        public Builder withConfig(OpenSchema2MarkupConfig config) {
             Validate.notNull(config, "config must not be null");
             this.config = config;
             return this;

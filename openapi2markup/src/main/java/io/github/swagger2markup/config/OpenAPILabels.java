@@ -1,5 +1,6 @@
 package io.github.swagger2markup.config;
 
+import io.github.swagger2markup.OpenSchema2MarkupConfig;
 import io.github.swagger2markup.config.builder.OpenAPI2MarkupConfigBuilder;
 
 import java.util.ResourceBundle;
@@ -65,7 +66,7 @@ public class OpenAPILabels extends Labels {
     public static final String TABLE_TITLE_SECURITY = "table_title_security";
     public static final String TABLE_TITLE_SERVER_VARIABLES = "table_title_server_variables";
 
-    public OpenAPILabels(OpenAPI2MarkupConfigBuilder.OpenSchema2MarkupConfig config) {
+    public OpenAPILabels(OpenSchema2MarkupConfig config) {
         super(ResourceBundle.getBundle("io/github/swagger2markup/lang/labels", config.getLanguage().toLocale()));
     }
 }

@@ -39,7 +39,7 @@ import java.util.regex.PatternSyntaxException;
 
 import static io.github.swagger2markup.Schema2MarkupProperties.*;
 
-public abstract class Schema2MarkupConfigBuilder {
+public abstract class Schema2MarkupConfigBuilder<T extends Schema2MarkupConfigBuilder, C extends Schema2MarkupConfigBuilder.DefaultSchema2MarkupConfig> {
 
     public static final Ordering<PathOperation> OPERATION_METHOD_NATURAL_ORDERING = Ordering
             .explicit("POST", "GET", "PUT",
@@ -55,12 +55,18 @@ public abstract class Schema2MarkupConfigBuilder {
             .natural()
             .onResultOf(Parameter::getName);
 
-    private static final String PROPERTIES_DEFAULT = "io/github/swagger2markup/config/default.properties";
-    private DefaultSchema2MarkupConfig config;
+    static final String PROPERTIES_DEFAULT = "io/github/swagger2markup/config/default.properties";
+    protected C config;
 
-    public Schema2MarkupConfigBuilder(Schema2MarkupProperties schema2MarkupProperties,
+    //reference to self as the subclass type
+    private final T self;
+
+    public Schema2MarkupConfigBuilder(final Class<T> selfClass,
+                                      C config,
+                                      Schema2MarkupProperties schema2MarkupProperties,
                                       Configuration configuration) {
-        this.config = createConfigInstance();
+        this.self = selfClass.cast(this);
+        this.config = config;
 
         config.listDelimiterEnabled = schema2MarkupProperties.getBoolean(LIST_DELIMITER_ENABLED, false);
         config.listDelimiter = schema2MarkupProperties.getString(LIST_DELIMITER, ",").charAt(0);
@@ -149,14 +155,12 @@ public abstract class Schema2MarkupConfigBuilder {
             config.responseOrdering = Ordering.natural();
     }
 
-    protected abstract DefaultSchema2MarkupConfig createConfigInstance();
-
     /**
      * Builds the OpenApi2MarkupConfig.
      *
      * @return the OpenApi2MarkupConfig
      */
-    public abstract DefaultSchema2MarkupConfig build();
+    public abstract C build();
 
     /**
      * Specifies the markup language which should be used to generate the files.
@@ -164,10 +168,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param markupLanguage the markup language which is used to generate the files
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withMarkupLanguage(MarkupLanguage markupLanguage) {
+    public T withMarkupLanguage(MarkupLanguage markupLanguage) {
         Validate.notNull(markupLanguage, "%s must not be null", "outputLanguage");
         config.markupLanguage = markupLanguage;
-        return this;
+        return self;
     }
 
     /**
@@ -176,10 +180,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param markupLanguage the markup language used in Swagger descriptions
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withSwaggerMarkupLanguage(MarkupLanguage markupLanguage) {
+    public T withSwaggerMarkupLanguage(MarkupLanguage markupLanguage) {
         Validate.notNull(markupLanguage, "%s must not be null", "outputLanguage");
         config.schemaMarkupLanguage = markupLanguage;
-        return this;
+        return self;
     }
 
     /**
@@ -187,9 +191,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withGeneratedExamples() {
+    public T withGeneratedExamples() {
         config.generatedExamplesEnabled = true;
-        return this;
+        return self;
     }
 
     /**
@@ -197,9 +201,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withSeparatedDefinitions() {
+    public T withSeparatedDefinitions() {
         config.separatedDefinitionsEnabled = true;
-        return this;
+        return self;
     }
 
 
@@ -208,9 +212,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withSeparatedOperations() {
+    public T withSeparatedOperations() {
         config.separatedOperationsEnabled = true;
-        return this;
+        return self;
     }
 
     /**
@@ -218,9 +222,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withListDelimiter() {
+    public T withListDelimiter() {
         config.listDelimiterEnabled = true;
-        return this;
+        return self;
     }
 
     /**
@@ -229,11 +233,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param delimiter the delimiter
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withListDelimiter(Character delimiter) {
+    public T withListDelimiter(Character delimiter) {
         Validate.notNull(delimiter, "%s must not be null", "delimiter");
         config.listDelimiter = delimiter;
         config.listDelimiterEnabled = true;
-        return this;
+        return self;
     }
 
 
@@ -243,10 +247,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param pathsGroupedBy the GroupBy enum
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withPathsGroupedBy(GroupBy pathsGroupedBy) {
+    public T withPathsGroupedBy(GroupBy pathsGroupedBy) {
         Validate.notNull(pathsGroupedBy, "%s must not be null", "pathsGroupedBy");
         config.pathsGroupedBy = pathsGroupedBy;
-        return this;
+        return self;
     }
 
     /**
@@ -256,10 +260,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @return this builder
      * @throws PatternSyntaxException when pattern cannot be compiled
      */
-    public Schema2MarkupConfigBuilder withHeaderRegex(String headerRegex) {
+    public T withHeaderRegex(String headerRegex) {
         Validate.notNull(headerRegex, "%s must not be null", headerRegex);
         config.headerPattern = Pattern.compile(headerRegex);
-        return this;
+        return self;
     }
 
     /**
@@ -268,10 +272,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param language the enum
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withOutputLanguage(Language language) {
+    public T withOutputLanguage(Language language) {
         Validate.notNull(language, "%s must not be null", "language");
         config.language = language;
-        return this;
+        return self;
     }
 
     /**
@@ -279,9 +283,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withoutInlineSchema() {
+    public T withoutInlineSchema() {
         config.inlineSchemaEnabled = false;
-        return this;
+        return self;
     }
 
     /**
@@ -292,11 +296,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param orderBy tag ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withTagOrdering(OrderBy orderBy) {
+    public T withTagOrdering(OrderBy orderBy) {
         Validate.notNull(orderBy, "%s must not be null", "orderBy");
         Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         config.tagOrderBy = orderBy;
-        return this;
+        return self;
     }
 
     /**
@@ -305,11 +309,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param tagOrdering tag ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withTagOrdering(Comparator<String> tagOrdering) {
+    public T withTagOrdering(Comparator<String> tagOrdering) {
         Validate.notNull(tagOrdering, "%s must not be null", "tagOrdering");
         config.tagOrderBy = OrderBy.CUSTOM;
         config.tagOrdering = tagOrdering;
-        return this;
+        return self;
     }
 
     /**
@@ -320,11 +324,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param orderBy operation ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withOperationOrdering(OrderBy orderBy) {
+    public T withOperationOrdering(OrderBy orderBy) {
         Validate.notNull(orderBy, "%s must not be null", "orderBy");
         Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         config.operationOrderBy = orderBy;
-        return this;
+        return self;
     }
 
     /**
@@ -333,11 +337,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param operationOrdering operation ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withOperationOrdering(Comparator<PathOperation> operationOrdering) {
+    public T withOperationOrdering(Comparator<PathOperation> operationOrdering) {
         Validate.notNull(operationOrdering, "%s must not be null", "operationOrdering");
         config.operationOrderBy = OrderBy.CUSTOM;
         config.operationOrdering = operationOrdering;
-        return this;
+        return self;
     }
 
     /**
@@ -348,11 +352,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param orderBy definition ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withDefinitionOrdering(OrderBy orderBy) {
+    public T withDefinitionOrdering(OrderBy orderBy) {
         Validate.notNull(orderBy, "%s must not be null", "orderBy");
         Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         config.definitionOrderBy = orderBy;
-        return this;
+        return self;
     }
 
     /**
@@ -361,11 +365,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param definitionOrdering definition ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withDefinitionOrdering(Comparator<String> definitionOrdering) {
+    public T withDefinitionOrdering(Comparator<String> definitionOrdering) {
         Validate.notNull(definitionOrdering, "%s must not be null", "definitionOrdering");
         config.definitionOrderBy = OrderBy.CUSTOM;
         config.definitionOrdering = definitionOrdering;
-        return this;
+        return self;
     }
 
     /**
@@ -376,11 +380,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param orderBy parameter ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withParameterOrdering(OrderBy orderBy) {
+    public T withParameterOrdering(OrderBy orderBy) {
         Validate.notNull(orderBy, "%s must not be null", "orderBy");
         Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         config.parameterOrderBy = orderBy;
-        return this;
+        return self;
     }
 
     /**
@@ -389,12 +393,12 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param parameterOrdering parameter ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withParameterOrdering(Comparator<Parameter> parameterOrdering) {
+    public T withParameterOrdering(Comparator<Parameter> parameterOrdering) {
         Validate.notNull(parameterOrdering, "%s must not be null", "parameterOrdering");
 
         config.parameterOrderBy = OrderBy.CUSTOM;
         config.parameterOrdering = parameterOrdering;
-        return this;
+        return self;
     }
 
     /**
@@ -405,11 +409,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param orderBy property ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withPropertyOrdering(OrderBy orderBy) {
+    public T withPropertyOrdering(OrderBy orderBy) {
         Validate.notNull(orderBy, "%s must not be null", "orderBy");
         Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         config.propertyOrderBy = orderBy;
-        return this;
+        return self;
     }
 
     /**
@@ -418,12 +422,12 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param propertyOrdering property ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withPropertyOrdering(Comparator<String> propertyOrdering) {
+    public T withPropertyOrdering(Comparator<String> propertyOrdering) {
         Validate.notNull(propertyOrdering, "%s must not be null", "propertyOrdering");
 
         config.propertyOrderBy = OrderBy.CUSTOM;
         config.propertyOrdering = propertyOrdering;
-        return this;
+        return self;
     }
 
     /**
@@ -434,11 +438,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param orderBy response ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withResponseOrdering(OrderBy orderBy) {
+    public T withResponseOrdering(OrderBy orderBy) {
         Validate.notNull(orderBy, "%s must not be null", "orderBy");
         Validate.isTrue(orderBy != OrderBy.CUSTOM, "You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         config.responseOrderBy = orderBy;
-        return this;
+        return self;
     }
 
     /**
@@ -447,12 +451,12 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param responseOrdering response ordering
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withResponseOrdering(Comparator<String> responseOrdering) {
+    public T withResponseOrdering(Comparator<String> responseOrdering) {
         Validate.notNull(responseOrdering, "%s must not be null", "responseOrdering");
 
         config.responseOrderBy = OrderBy.CUSTOM;
         config.responseOrdering = responseOrdering;
-        return this;
+        return self;
     }
 
     /**
@@ -461,11 +465,11 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param prefix Prefix to document in all inter-document cross-references.
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withInterDocumentCrossReferences(String prefix) {
+    public T withInterDocumentCrossReferences(String prefix) {
         Validate.notNull(prefix, "%s must not be null", "prefix");
         config.interDocumentCrossReferencesEnabled = true;
         config.interDocumentCrossReferencesPrefix = prefix;
-        return this;
+        return self;
     }
 
     /**
@@ -473,9 +477,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withInterDocumentCrossReferences() {
+    public T withInterDocumentCrossReferences() {
         config.interDocumentCrossReferencesEnabled = true;
-        return this;
+        return self;
     }
 
     /**
@@ -483,9 +487,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withFlatBody() {
+    public T withFlatBody() {
         config.flatBodyEnabled = true;
-        return this;
+        return self;
     }
 
     /**
@@ -493,9 +497,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withoutPathSecuritySection() {
+    public T withoutPathSecuritySection() {
         config.pathSecuritySectionEnabled = false;
-        return this;
+        return self;
     }
 
     /**
@@ -503,9 +507,9 @@ public abstract class Schema2MarkupConfigBuilder {
      *
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withBasePathPrefix() {
+    public T withBasePathPrefix() {
         config.basePathPrefixEnabled = true;
-        return this;
+        return self;
     }
 
     /**
@@ -514,10 +518,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param anchorPrefix anchor prefix.
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withAnchorPrefix(String anchorPrefix) {
+    public T withAnchorPrefix(String anchorPrefix) {
         Validate.notNull(anchorPrefix, "%s must not be null", "anchorPrefix");
         config.anchorPrefix = anchorPrefix;
-        return this;
+        return self;
     }
 
     /**
@@ -526,10 +530,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param locations List of locations to create new pages
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withPageBreaks(List<PageBreakLocations> locations) {
+    public T withPageBreaks(List<PageBreakLocations> locations) {
         Validate.notNull(locations, "%s must not be null", "locations");
         config.pageBreakLocations = locations;
-        return this;
+        return self;
     }
 
     /**
@@ -538,10 +542,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param lineSeparator the lineSeparator
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withLineSeparator(LineSeparator lineSeparator) {
+    public T withLineSeparator(LineSeparator lineSeparator) {
         Validate.notNull(lineSeparator, "%s must no be null", "lineSeparator");
         config.lineSeparator = lineSeparator;
-        return this;
+        return self;
     }
 
     /**
@@ -550,10 +554,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param requestExamplesFormat `basic`, `curl` or `invoke-webrequest`
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesFormat(String requestExamplesFormat) {
+    public T withRequestExamplesFormat(String requestExamplesFormat) {
         Validate.notNull(requestExamplesFormat, "%s must not be null", requestExamplesFormat);
         config.requestExamplesFormat = requestExamplesFormat;
-        return this;
+        return self;
     }
 
     /**
@@ -562,10 +566,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param requestExamplesSourceFormat any string or `default`
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesSourceFormat(String requestExamplesSourceFormat) {
+    public T withRequestExamplesSourceFormat(String requestExamplesSourceFormat) {
         Validate.notNull(requestExamplesSourceFormat, "%s must not be null", requestExamplesSourceFormat);
         config.requestExamplesSourceFormat = requestExamplesSourceFormat;
-        return this;
+        return self;
     }
 
     /**
@@ -574,10 +578,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param requestExamplesHost  `hide`, `inherit` or string with hostname to be used in request example
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesHost(String requestExamplesHost) {
+    public T withRequestExamplesHost(String requestExamplesHost) {
         Validate.notNull(requestExamplesHost, "%s must not ber null", requestExamplesHost);
         config.requestExamplesHost = requestExamplesHost;
-        return this;
+        return self;
     }
 
     /**
@@ -586,10 +590,10 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param requestExamplesSchema `hide`, `inherit` or string with schema name to be used in request example
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesSchema(String requestExamplesSchema) {
+    public T withRequestExamplesSchema(String requestExamplesSchema) {
         Validate.notNull(requestExamplesSchema, "%s must not be null", requestExamplesSchema);
         config.requestExamplesSchema = requestExamplesSchema;
-        return this;
+        return self;
     }
 
     /**
@@ -599,9 +603,9 @@ public abstract class Schema2MarkupConfigBuilder {
      * @return this builder
      * @throws PatternSyntaxException when pattern cannot be compiled
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesHideBasePath(boolean requestExamplesHideBasePath) {
+    public T withRequestExamplesHideBasePath(boolean requestExamplesHideBasePath) {
         config.requestExamplesHideBasePath = requestExamplesHideBasePath;
-        return this;
+        return self;
     }
 
     /**
@@ -610,9 +614,9 @@ public abstract class Schema2MarkupConfigBuilder {
      * @param requestExamplesIncludeAllQueryParams false if example request should contain only required params
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesIncludeAllQueryParams(boolean requestExamplesIncludeAllQueryParams) {
+    public T withRequestExamplesIncludeAllQueryParams(boolean requestExamplesIncludeAllQueryParams) {
         config.requestExamplesIncludeAllQueryParams = requestExamplesIncludeAllQueryParams;
-        return this;
+        return self;
     }
 
     /**
@@ -623,10 +627,10 @@ public abstract class Schema2MarkupConfigBuilder {
      *      brackets as param name suffix.
      * @return this builder
      */
-    public Schema2MarkupConfigBuilder withRequestExamplesQueryArrayStyle(String requestExamplesQueryArrayStyle) {
+    public T withRequestExamplesQueryArrayStyle(String requestExamplesQueryArrayStyle) {
         Validate.notNull(requestExamplesQueryArrayStyle, "%s must not be null", requestExamplesQueryArrayStyle);
         config.requestExamplesQueryArrayStyle = requestExamplesQueryArrayStyle;
-        return this;
+        return self;
     }
 
     protected static CompositeConfiguration getCompositeConfiguration(Configuration configuration) {
@@ -641,59 +645,59 @@ public abstract class Schema2MarkupConfigBuilder {
      * Default implementation of {@link Schema2MarkupConfig}
      */
     public static class DefaultSchema2MarkupConfig implements Schema2MarkupConfig {
-        private MarkupLanguage markupLanguage;
-        private MarkupLanguage schemaMarkupLanguage;
-        private boolean generatedExamplesEnabled;
+        MarkupLanguage markupLanguage;
+        MarkupLanguage schemaMarkupLanguage;
+        boolean generatedExamplesEnabled;
 
-        private String requestExamplesFormat;
-        private String requestExamplesSourceFormat;
-        private String requestExamplesHost;
-        private String requestExamplesSchema;
-        private boolean requestExamplesHideBasePath;
-        private boolean requestExamplesIncludeAllQueryParams;
-        private String requestExamplesQueryArrayStyle;
+        String requestExamplesFormat;
+        String requestExamplesSourceFormat;
+        String requestExamplesHost;
+        String requestExamplesSchema;
+        boolean requestExamplesHideBasePath;
+        boolean requestExamplesIncludeAllQueryParams;
+        String requestExamplesQueryArrayStyle;
 
-        private boolean hostnameEnabled;
-        private boolean basePathPrefixEnabled;
-        private boolean separatedDefinitionsEnabled;
-        private boolean separatedOperationsEnabled;
-        private GroupBy pathsGroupedBy;
-        private Language language;
-        private boolean inlineSchemaEnabled;
-        private OrderBy tagOrderBy;
-        private Comparator<String> tagOrdering;
-        private OrderBy operationOrderBy;
-        private Comparator<PathOperation> operationOrdering;
-        private OrderBy definitionOrderBy;
-        private Comparator<String> definitionOrdering;
-        private OrderBy parameterOrderBy;
-        private Comparator<Parameter> parameterOrdering;
-        private OrderBy propertyOrderBy;
-        private Comparator<String> propertyOrdering;
-        private OrderBy responseOrderBy;
-        private Comparator<String> responseOrdering;
-        private boolean interDocumentCrossReferencesEnabled;
-        private String interDocumentCrossReferencesPrefix;
-        private boolean flatBodyEnabled;
-        private boolean pathSecuritySectionEnabled;
-        private String anchorPrefix;
-        private LineSeparator lineSeparator;
+        boolean hostnameEnabled;
+        boolean basePathPrefixEnabled;
+        boolean separatedDefinitionsEnabled;
+        boolean separatedOperationsEnabled;
+        GroupBy pathsGroupedBy;
+        Language language;
+        boolean inlineSchemaEnabled;
+        OrderBy tagOrderBy;
+        Comparator<String> tagOrdering;
+        OrderBy operationOrderBy;
+        Comparator<PathOperation> operationOrdering;
+        OrderBy definitionOrderBy;
+        Comparator<String> definitionOrdering;
+        OrderBy parameterOrderBy;
+        Comparator<Parameter> parameterOrdering;
+        OrderBy propertyOrderBy;
+        Comparator<String> propertyOrdering;
+        OrderBy responseOrderBy;
+        Comparator<String> responseOrdering;
+        boolean interDocumentCrossReferencesEnabled;
+        String interDocumentCrossReferencesPrefix;
+        boolean flatBodyEnabled;
+        boolean pathSecuritySectionEnabled;
+        String anchorPrefix;
+        LineSeparator lineSeparator;
 
-        private String overviewDocument;
-        private String pathsDocument;
-        private String definitionsDocument;
-        private String securityDocument;
-        private String separatedOperationsFolder;
-        private String separatedDefinitionsFolder;
-        private Character listDelimiter;
-        private boolean listDelimiterEnabled;
-        private int asciidocPegdownTimeoutMillis;
+        String overviewDocument;
+        String pathsDocument;
+        String definitionsDocument;
+        String securityDocument;
+        String separatedOperationsFolder;
+        String separatedDefinitionsFolder;
+        Character listDelimiter;
+        boolean listDelimiterEnabled;
+        int asciidocPegdownTimeoutMillis;
 
-        private List<PageBreakLocations> pageBreakLocations;
+        List<PageBreakLocations> pageBreakLocations;
 
-        private Pattern headerPattern;
+        Pattern headerPattern;
 
-        private Schema2MarkupProperties extensionsProperties;
+        Schema2MarkupProperties extensionsProperties;
 
         @Override
         public MarkupLanguage getMarkupLanguage() {

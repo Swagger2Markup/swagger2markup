@@ -16,8 +16,8 @@
 
 package io.github.swagger2markup.spi;
 
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
-import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder.Swagger2MarkupConfig;
 import io.github.swagger2markup.config.Labels;
 import io.github.swagger2markup.markup.builder.MarkupDocBuilder;
 import io.vavr.Function2;

@@ -16,6 +16,7 @@
 package io.github.swagger2markup.internal.component;
 
 import io.github.swagger2markup.AsciidocConverterTest;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupConverter;
 import io.github.swagger2markup.assertions.DiffUtils;
 import io.github.swagger2markup.builder.Swagger2MarkupConfigBuilder;
@@ -51,7 +52,7 @@ public class BodyParameterComponentTest extends AbstractComponentTest {
     public void testBodyParameterComponent() throws URISyntaxException {
         //Given
         Path file = Paths.get(AsciidocConverterTest.class.getResource("/yaml/swagger_petstore.yaml").toURI());
-        Swagger2MarkupConfigBuilder.Swagger2MarkupConfig config = (Swagger2MarkupConfigBuilder.Swagger2MarkupConfig) new Swagger2MarkupConfigBuilder().withFlatBody().build();
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder().withFlatBody().build();
         Swagger2MarkupConverter converter = Swagger2MarkupConverter.from(file).withConfig(config).build();
         Swagger swagger = converter.getContext().getSchema();
 

@@ -16,6 +16,7 @@
 package io.github.swagger2markup.builder;
 
 import com.google.common.collect.Ordering;
+import io.github.swagger2markup.Swagger2MarkupConfig;
 import io.github.swagger2markup.Swagger2MarkupProperties;
 import io.github.swagger2markup.config.GroupBy;
 import io.github.swagger2markup.config.Language;
@@ -43,7 +44,7 @@ public class Swagger2MarkupConfigBuilderTest {
         configMap.put("swagger2markup.uniqueId1.customProperty1", "123");
         configMap.put("swagger2markup.uniqueId1.customProperty2", "123");
 
-        Swagger2MarkupConfigBuilder.Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap)
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(configMap)
                 .build();
 
         assertThat(config.getAnchorPrefix()).isNull();
@@ -93,7 +94,7 @@ public class Swagger2MarkupConfigBuilderTest {
         Properties properties = new Properties();
         properties.load(Swagger2MarkupConfigBuilderTest.class.getResourceAsStream("/config/config.properties"));
 
-        Swagger2MarkupConfigBuilder.Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(properties).build();
+        Swagger2MarkupConfig config = new Swagger2MarkupConfigBuilder(properties).build();
 
         assertThat(config.getAnchorPrefix()).isEqualTo("anchorPrefix");
         assertThat(config.getDefinitionOrderBy()).isEqualTo(OrderBy.AS_IS);
@@ -149,8 +150,10 @@ public class Swagger2MarkupConfigBuilderTest {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
         builder.withTagOrdering(Ordering.<String>natural());
-        assertThat(builder.config.getTagOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getTagOrdering()).isEqualTo(Ordering.natural());
+
+        Swagger2MarkupConfig config = builder.build();
+        assertThat(config.getTagOrderBy()).isEqualTo(OrderBy.CUSTOM);
+        assertThat(config.getTagOrdering()).isEqualTo(Ordering.natural());
 
         try {
             builder.withOperationOrdering(OrderBy.CUSTOM);
@@ -158,8 +161,9 @@ public class Swagger2MarkupConfigBuilderTest {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
         builder.withOperationOrdering(Swagger2MarkupConfigBuilder.OPERATION_PATH_NATURAL_ORDERING);
-        assertThat(builder.config.getOperationOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.OPERATION_PATH_NATURAL_ORDERING);
+        config = builder.build();
+        assertThat(config.getOperationOrderBy()).isEqualTo(OrderBy.CUSTOM);
+        assertThat(config.getOperationOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.OPERATION_PATH_NATURAL_ORDERING);
 
         try {
             builder.withDefinitionOrdering(OrderBy.CUSTOM);
@@ -167,8 +171,9 @@ public class Swagger2MarkupConfigBuilderTest {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
         builder.withDefinitionOrdering(Ordering.<String>natural());
-        assertThat(builder.config.getDefinitionOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
+        config = builder.build();
+        assertThat(config.getDefinitionOrderBy()).isEqualTo(OrderBy.CUSTOM);
+        assertThat(config.getDefinitionOrdering()).isEqualTo(Ordering.natural());
 
         try {
             builder.withParameterOrdering(OrderBy.CUSTOM);
@@ -176,8 +181,9 @@ public class Swagger2MarkupConfigBuilderTest {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
         builder.withParameterOrdering(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING);
-        assertThat(builder.config.getParameterOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING);
+        config = builder.build();
+        assertThat(config.getParameterOrderBy()).isEqualTo(OrderBy.CUSTOM);
+        assertThat(config.getParameterOrdering()).isEqualTo(Swagger2MarkupConfigBuilder.PARAMETER_NAME_NATURAL_ORDERING);
 
         try {
             builder.withPropertyOrdering(OrderBy.CUSTOM);
@@ -185,8 +191,9 @@ public class Swagger2MarkupConfigBuilderTest {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
         builder.withPropertyOrdering(Ordering.<String>natural());
-        assertThat(builder.config.getPropertyOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getPropertyOrdering()).isEqualTo(Ordering.natural());
+        config = builder.build();
+        assertThat(config.getPropertyOrderBy()).isEqualTo(OrderBy.CUSTOM);
+        assertThat(config.getPropertyOrdering()).isEqualTo(Ordering.natural());
 
         try {
             builder.withResponseOrdering(OrderBy.CUSTOM);
@@ -194,13 +201,15 @@ public class Swagger2MarkupConfigBuilderTest {
             assertThat(e.getMessage()).isEqualTo("You must provide a custom comparator if orderBy == OrderBy.CUSTOM");
         }
         builder.withResponseOrdering(Ordering.<String>natural());
-        assertThat(builder.config.getResponseOrderBy()).isEqualTo(OrderBy.CUSTOM);
-        assertThat(builder.config.getResponseOrdering()).isEqualTo(Ordering.natural());
+        config = builder.build();
+        assertThat(config.getResponseOrderBy()).isEqualTo(OrderBy.CUSTOM);
+        assertThat(config.getResponseOrdering()).isEqualTo(Ordering.natural());
         
-        assertThat(builder.config.isListDelimiterEnabled()).isEqualTo(false);
+        assertThat(config.isListDelimiterEnabled()).isEqualTo(false);
         builder.withListDelimiter();
-        assertThat(builder.config.getListDelimiter()).isEqualTo(Character.valueOf(','));
-        assertThat(builder.config.isListDelimiterEnabled()).isEqualTo(true);
+        config = builder.build();
+        assertThat(config.getListDelimiter()).isEqualTo(Character.valueOf(','));
+        assertThat(config.isListDelimiterEnabled()).isEqualTo(true);
         
     }
     
@@ -208,9 +217,12 @@ public class Swagger2MarkupConfigBuilderTest {
     public void testConfigBuilderListDelimiter() {
         Swagger2MarkupConfigBuilder builder = new Swagger2MarkupConfigBuilder();
 
-        assertThat(builder.config.isListDelimiterEnabled()).isEqualTo(false);
+        builder.withListDelimiter();
+        Swagger2MarkupConfig config = builder.build();
+        assertThat(config.isListDelimiterEnabled()).isEqualTo(true);
         builder.withListDelimiter(Character.valueOf('|'));
-        assertThat(builder.config.getListDelimiter()).isEqualTo(Character.valueOf('|'));
-        assertThat(builder.config.isListDelimiterEnabled()).isEqualTo(true);
+        config = builder.build();
+        assertThat(config.getListDelimiter()).isEqualTo(Character.valueOf('|'));
+        assertThat(config.isListDelimiterEnabled()).isEqualTo(true);
     }
 }
