@@ -16,7 +16,7 @@ public class Delimiters {
     public static final String DELIMITER_THEMATIC_BREAK = "'''";
     public static final String DELIMITER_VERSE = "____";
     public static final String DOCUMENT_TITLE = "=";
-    public static final String LINE_SEPARATOR = "\n";
+    public static final String LINE_SEPARATOR = System.getProperty("line.separator");
     public static final String MARKER_LIST_ITEM = "*";
     public static final String MARKER_D_LIST_ITEM = ":";
     public static final String STYLE_HORIZONTAL = "horizontal";
