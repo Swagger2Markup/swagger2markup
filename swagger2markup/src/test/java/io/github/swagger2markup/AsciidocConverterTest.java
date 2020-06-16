@@ -868,7 +868,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -892,7 +892,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .build();
 
         Swagger2MarkupConverter.from(swaggerJsonString)
@@ -916,7 +916,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .withGeneratedExamples()
                 .build();
 
@@ -941,7 +941,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .withRequestExamplesFormat("curl")
                 .withGeneratedExamples()
                 .build();
@@ -967,7 +967,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .withRequestExamplesFormat("invoke-webrequest")
                 .withGeneratedExamples()
                 .build();
@@ -993,7 +993,7 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withPageBreaks(new ArrayList<>(asList(SwaggerPageBreakLocations.BEFORE_OPERATION, SwaggerPageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
+                .withPageBreaks(new ArrayList<>(asList(PageBreakLocations.BEFORE_OPERATION, PageBreakLocations.BEFORE_OPERATION_EXAMPLE_REQUEST)))
                 .withGeneratedExamples()
                 .withRequestExamplesFormat("curl")
                 .withRequestExamplesHideBasePath(false)
