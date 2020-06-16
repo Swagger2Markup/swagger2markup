@@ -120,7 +120,6 @@ public class AsciidocConverterTest {
 
         //When
         Swagger2MarkupConfig config =  new Swagger2MarkupConfigBuilder()
-                .withOutputLanguage(Language.BR)
                 .withTagOrdering(OrderBy.AS_IS)
                 .withParameterOrdering(OrderBy.AS_IS)
                 .withOperationOrdering(OrderBy.AS_IS)
