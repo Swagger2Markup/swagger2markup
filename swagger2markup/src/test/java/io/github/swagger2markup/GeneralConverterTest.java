@@ -48,8 +48,8 @@ public class GeneralConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(URI.create("http://petstore.swagger.io/v2/swagger.json")).build()
-                .toFolder(outputDirectory);
+        Swagger2MarkupConverter.from(URI.create("https://petstore.swagger.io/v2/swagger.json")).build()
+            .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
@@ -108,8 +108,8 @@ public class GeneralConverterTest {
         FileUtils.deleteQuietly(outputDirectory.toFile());
 
         //When
-        Swagger2MarkupConverter.from(new URL("http://petstore.swagger.io/v2/swagger.json")).build()
-                .toFolder(outputDirectory);
+        Swagger2MarkupConverter.from(new URL("https://petstore.swagger.io/v2/swagger.json")).build()
+            .toFolder(outputDirectory);
 
         //Then
         String[] files = outputDirectory.toFile().list();
