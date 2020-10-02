@@ -327,9 +327,9 @@ public final class PropertyAdapter {
     }
 
     /**
-     * Retrieves the minimum value of a property
+     * Retrieves the maximum value of a property
      *
-     * @return the minimum value of the property
+     * @return the maximum value of the property
      */
     public Optional<BigDecimal> getMax() {
         if (property instanceof BaseIntegerProperty) {
