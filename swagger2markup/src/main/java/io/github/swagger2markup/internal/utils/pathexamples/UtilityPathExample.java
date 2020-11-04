@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * Date: 05/06/2020
  * Time: 03:34
  *
- * @author Klaus Schwartz <mailto:klaus@eraga.net>
+ * @author Klaus Schwartz &lt;mailto:klaus@eraga.net&gt;
  */
 abstract public class UtilityPathExample extends BasicPathExample {
     Logger log = LoggerFactory.getLogger(this.getClass());

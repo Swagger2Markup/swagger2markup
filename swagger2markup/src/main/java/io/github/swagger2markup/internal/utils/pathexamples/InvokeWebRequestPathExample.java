@@ -13,7 +13,7 @@ import java.util.Map;
  * Date: 05/06/2020
  * Time: 01:44
  *
- * @author Klaus Schwartz <mailto:klaus@eraga.net>
+ * @author Klaus Schwartz &lt;mailto:klaus@eraga.net&gt;
  */
 public class InvokeWebRequestPathExample extends UtilityPathExample {
     /**
