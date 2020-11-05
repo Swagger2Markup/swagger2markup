@@ -17,7 +17,7 @@ import static io.github.swagger2markup.internal.utils.ExamplesUtil.encodeExample
  * Date: 05/06/2020
  * Time: 01:43
  *
- * @author Klaus Schwartz <mailto:klaus@eraga.net>
+ * @author Klaus Schwartz &lt;mailto:klaus@eraga.net&gt;
  */
 public class BasicPathExample implements PathExample {
     protected final Swagger2MarkupConverter.SwaggerContext context;

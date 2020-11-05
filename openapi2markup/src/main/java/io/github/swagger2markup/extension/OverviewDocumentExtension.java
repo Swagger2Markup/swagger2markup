@@ -37,6 +37,7 @@ public abstract class OverviewDocumentExtension extends AbstractExtension {
 
         /**
          * @param position   the current position
+         * @param document   document object
          */
         public Context(Position position, Document document) {
             super(document);

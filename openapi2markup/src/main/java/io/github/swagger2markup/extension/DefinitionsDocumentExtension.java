@@ -55,6 +55,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
         /**
          * @param position   the current position
+         * @param document   document object
          */
         public Context(Position position, Document document) {
             super(document);
@@ -64,6 +65,7 @@ public abstract class DefinitionsDocumentExtension extends AbstractExtension {
 
         /**
          * @param position       the current position
+         * @param document       document object
          * @param definitionName the name of the current definition
          * @param model          the current Model of the definition
          */
