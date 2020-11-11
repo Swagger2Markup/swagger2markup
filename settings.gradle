@@ -6,5 +6,4 @@ include 'swagger2markup-builder'
 include 'swagger2markup-documentation'
 include 'swagger2markup'
 include 'swagger2markup-core'
-include 'openapi2markup'
 
