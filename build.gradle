@@ -135,4 +135,5 @@ artifactory {
         clientConfig.proxy.host = System.properties['https.proxyHost']
         clientConfig.proxy.port = System.properties['https.proxyPort'].toInteger()
     }
+    print("Hiiii")
 }
