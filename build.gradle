@@ -72,6 +72,7 @@ nexusPublishing {
 
 sonarqube {
     properties {
+        property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.projectName", "swagger2markup"
         property "sonar.projectKey", "swagger2markup_swagger2markup"
         property "sonar.links.homepage", "https://github.com/Swagger2Markup/swagger2markup"
