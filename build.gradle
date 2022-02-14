@@ -75,12 +75,9 @@ nexusPublishing {
 
 sonarqube {
     properties {
-        property "sonar.projectName", "swagger2markup"
-        property "sonar.projectKey", "swagger2markup_swagger2markup"
-        property "sonar.links.homepage", "https://github.com/Swagger2Markup/swagger2markup"
-        property "sonar.links.ci", "https://travis-ci.org/Swagger2Markup/swagger2markup"
-        property "sonar.links.scm", "https://github.com/Swagger2Markup/swagger2markup"
-        property "sonar.links.issue", "https://github.com/Swagger2Markup/swagger2markup/issues"
+        property "sonar.projectKey", "ShubhamRwt_swagger2markup"
+        property "sonar.organization", "shubhamrwt"
+        property "sonar.host.url", "https://sonarcloud.io"
         property "sonar.language", "java"
     }
 }
