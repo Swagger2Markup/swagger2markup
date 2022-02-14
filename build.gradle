@@ -1,10 +1,11 @@
 plugins {
-    id "org.sonarqube" version "3.3"
+    id "org.sonarqube" version "2.7"
     id "com.jfrog.bintray" version "1.8.4"
     id "me.champeau.gradle.jmh" version "0.4.8"
     id 'org.asciidoctor.convert' version '1.6.0'
     id "com.jfrog.artifactory" version "4.9.5"
     id "org.ajoberstar.github-pages" version "1.7.2"
+    id "io.github.gradle-nexus.publish-plugin"  version "1.1.0"
 }
 apply plugin: 'idea'
 apply from: "${rootDir}/libraries.gradle"
@@ -43,7 +44,6 @@ configure(project.coreProjects) {
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
     apply from: "${rootDir}/publishing.gradle"
     apply plugin: 'jacoco'
 
@@ -67,11 +67,21 @@ configure(project.coreProjects) {
     }
 }
 
+nexusPublishing {
+    repositories {
+        sonatype()
+    }
+}
+
 sonarqube {
     properties {
-        property "sonar.projectKey", "ShubhamRwt_swagger2markup"
-        property "sonar.organization", "shubhamrwt"
-        property "sonar.host.url", "https://sonarcloud.io"
+        property "sonar.projectName", "swagger2markup"
+        property "sonar.projectKey", "swagger2markup_swagger2markup"
+        property "sonar.links.homepage", "https://github.com/Swagger2Markup/swagger2markup"
+        property "sonar.links.ci", "https://travis-ci.org/Swagger2Markup/swagger2markup"
+        property "sonar.links.scm", "https://github.com/Swagger2Markup/swagger2markup"
+        property "sonar.links.issue", "https://github.com/Swagger2Markup/swagger2markup/issues"
+        property "sonar.language", "java"
     }
 }
 def allTestCoverageFile = "$buildDir/jacoco/allTestCoverage.exec"
@@ -109,31 +119,4 @@ tasks.check.dependsOn tasks.jacocoTestReport
 
 test {
     dependsOn(subprojects.test) // required by cobertura to aggregate report
-}
-
-artifactory {
-    contextUrl = 'https://oss.jfrog.org'
-    resolve {
-        repository {
-            repoKey = 'libs-release'
-            maven = true
-        }
-    }
-    publish {
-        repository {
-            repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
-            //when using oss.jfrog.org the credentials are from Bintray. For local build we expect them to be found in
-            //~/.gradle/gradle.properties, otherwise to be set in the build server
-            username = project.hasProperty('bintrayUsername') ? project.bintrayUsername : System.getenv('BINTRAY_USER')
-            password = project.hasProperty('bintrayApiKey') ? project.bintrayApiKey : System.getenv('BINTRAY_KEY')
-        }
-        defaults {
-            publications('mavenJava')
-        }
-    }
-    if (System.properties['https.proxyHost']) {
-        clientConfig.proxy.host = System.properties['https.proxyHost']
-        clientConfig.proxy.port = System.properties['https.proxyPort'].toInteger()
-    }
-    print("Hiiii")
 }
