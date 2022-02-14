@@ -1,9 +1,7 @@
 plugins {
     id "org.sonarqube" version "2.7"
-    id "com.jfrog.bintray" version "1.8.4"
     id "me.champeau.gradle.jmh" version "0.4.8"
     id 'org.asciidoctor.convert' version '1.6.0'
-    id "com.jfrog.artifactory" version "4.9.5"
     id "org.ajoberstar.github-pages" version "1.7.2"
     id "io.github.gradle-nexus.publish-plugin"  version "1.1.0"
 }
@@ -17,7 +15,6 @@ ext {
 allprojects {
     apply plugin: 'jacoco'
     apply plugin: 'me.champeau.gradle.jmh'
-    apply plugin: 'com.jfrog.artifactory'
 
     version = '2.0.0-SNAPSHOT'
     group 'io.github.swagger2markup'
@@ -32,7 +29,7 @@ allprojects {
         }
     }
 }
-artifactoryPublish.skip = true // apply to all projects except the root
+//artifactoryPublish.skip = true // apply to all projects except the root
 
 ext {
     coreProjects = subprojects.findAll {
@@ -112,7 +109,6 @@ subprojects {
 }
 
 tasks.check.dependsOn tasks.jacocoTestReport
-
 
 test {
     dependsOn(subprojects.test) // required by cobertura to aggregate report
