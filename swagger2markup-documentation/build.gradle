@@ -1,7 +1,7 @@
 apply plugin: 'org.asciidoctor.convert'
 apply plugin: 'org.ajoberstar.github-pages'
 
-artifactoryPublish.skip=true
+//artifactoryPublish.skip=true
 sonarqube.skipProject=true
 
 asciidoctor.dependsOn test

@@ -20,15 +20,15 @@ package io.github.swagger2markup.markup.builder;
 
 public enum LineSeparator {
     /**
-     * Line separator for Unix systems (<tt>\n</tt>).
+     * Line separator for Unix systems (<code>\n</code>).
      */
     UNIX("\n"),
     /**
-     * Line separator for Windows systems (<tt>\r\n</tt>).
+     * Line separator for Windows systems (<code>\r\n</code>).
      */
     WINDOWS("\r\n"),
     /**
-     * Line separator for Macintosh systems (<tt>\r</tt>).
+     * Line separator for Macintosh systems (<code>\r</code>).
      */
     MAC("\r");
 
