@@ -21,12 +21,7 @@ allprojects {
     description = 'swagger2markup Build'
 
     repositories {        
-        jcenter()
         mavenCentral()
-        maven {
-            name "OSS Snapshots"
-            url "https://oss.jfrog.org/artifactory/oss-snapshot-local"
-        }
     }
 }
 //artifactoryPublish.skip = true // apply to all projects except the root
