@@ -44,6 +44,10 @@ artifacts {
     archives javadocJar
 }
 
+signing {
+    sign publishing.publications
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {

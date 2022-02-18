@@ -35,6 +35,7 @@ ext {
 
 configure(project.coreProjects) {
     apply plugin: 'java'
+    apply plugin: 'signing'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply from: "${rootDir}/publishing.gradle"
