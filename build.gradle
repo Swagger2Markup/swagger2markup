@@ -34,6 +34,7 @@ ext {
 }
 
 configure(project.coreProjects) {
+    apply plugin: 'signing'
     apply plugin: 'java'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'

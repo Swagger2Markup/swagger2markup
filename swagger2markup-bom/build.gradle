@@ -2,6 +2,9 @@ description = "swagger2markup bom"
 
 apply plugin: 'maven-publish'
 
+def projectArtifactId = 'swagger2markup'
+def projectUrl = 'https://github.com/Swagger2Markup/swagger2markup'
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -13,6 +16,10 @@ publishing {
                 license.appendNode('name', 'Apache-2.0')
                 license.appendNode('url', 'https://github.com/Swagger2Markup/swagger2markup/blob/master/LICENSE.txt')
                 license.appendNode('distribution', 'repo')
+
+                root.appendNode('name', projectArtifactId)
+                root.appendNode('url', projectUrl)
+                root.appendNode('description', project.description)
 
                 asNode().appendNode('scm').appendNode('url', 'https://github.com/Swagger2Markup/swagger2markup.git')
 
