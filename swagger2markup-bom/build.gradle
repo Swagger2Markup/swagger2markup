@@ -2,11 +2,17 @@ description = "swagger2markup bom"
 
 apply plugin: 'maven-publish'
 
+def projectArtifactId = 'swagger2markup'
+def url = 'https://github.com/Swagger2Markup/swagger2markup'
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
             pom.withXml {
+                def devs = ['RobWin': 'Robert Winkler',
+                            'austek': 'Ali Ustek']
+
                 asNode().appendNode('packaging', 'pom')
 
                 def license = asNode().appendNode('licenses').appendNode('license')
@@ -28,6 +34,13 @@ publishing {
                     dep.appendNode('groupId').value = it.group
                     dep.appendNode('artifactId').value = it.name
                     dep.appendNode('version').value = it.version
+                }
+
+                def developers = root.appendNode('developers')
+                devs.each {
+                    def d = developers.appendNode('developer')
+                    d.appendNode('id', it.key)
+                    d.appendNode('name', it.value)
                 }
             }
         }

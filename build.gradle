@@ -29,7 +29,7 @@ allprojects {
 
 ext {
     coreProjects = subprojects.findAll {
-        p -> !p.name.contains("documentation") && !p.name.endsWith("-bom")
+        p -> !p.name.endsWith("-bom")
     }
 }
 
