@@ -9,7 +9,7 @@ apply plugin: 'idea'
 apply from: "${rootDir}/libraries.gradle"
 
 ext {
-    releaseVersion = '1.3.3'
+    releaseVersion = '1.3.4'
 }
 
 allprojects {
