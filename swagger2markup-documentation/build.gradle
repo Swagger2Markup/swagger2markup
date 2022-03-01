@@ -1,5 +1,14 @@
-apply plugin: 'org.asciidoctor.convert'
+apply plugin: "org.asciidoctor.convert"
 apply plugin: 'org.ajoberstar.github-pages'
+
+dependencies {
+
+    configurations.all {
+        resolutionStrategy.force dependencyOverrides.jnrConstants
+        resolutionStrategy.force dependencyOverrides.jnrEnxio
+        resolutionStrategy.force dependencyOverrides.jnrPosix
+    }
+}
 
 //artifactoryPublish.skip=true
 sonarqube.skipProject=true
@@ -10,7 +19,7 @@ asciidoctor {
     sources {
         include 'index.adoc'
     }
-    backends = ['html5', 'pdf']
+    backends = ['html5']
     attributes = [
             doctype: 'book',
             toc: 'left',
