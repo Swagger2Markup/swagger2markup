@@ -6,3 +6,5 @@ build
 /.classpath
 /.project
 /.settings/
+*.ipr
+*.iws
