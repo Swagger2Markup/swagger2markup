@@ -35,6 +35,7 @@ ext {
 
 configure(project.coreProjects) {
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply from: "${rootDir}/publishing.gradle"
@@ -100,6 +101,10 @@ subprojects {
         // exclude subprojects that don't produce a jar file or by design.
         if (!project.name.equals('swagger2markup-bom') && !project.name.equals('swagger2markup-documentation')) {
             jar {
+                into("META-INF/maven/$project.group/$project.name") {
+                    from {generatePomFileForMavenJavaPublication}
+                    rename ".*", "pom.xml"
+                }
                 inputs.property('moduleName', moduleName)
                 manifest.attributes(
                         'Automatic-Module-Name': moduleName

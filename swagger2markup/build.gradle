@@ -28,7 +28,7 @@ dependencies {
     implementation implLibraries.guava
     implementation implLibraries.paleo
     implementation implLibraries.slf4j
-    implementation implLibraries.swaggerV2
+    api implLibraries.swaggerV2
     implementation implLibraries.vavr
     testImplementation testLibraries.assertj
     testImplementation testLibraries.assertjDiff
