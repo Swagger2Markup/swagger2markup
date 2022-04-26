@@ -304,13 +304,6 @@ public interface Schema2MarkupConfig {
     List<PageBreakLocations> getPageBreakLocations();
 
     /**
-     * Returns custom timeout value.
-     *
-     * @return custom timeout value
-     */
-    int getAsciidocPegdownTimeoutMillis();
-
-    /**
      * Returns format name which should be used to format request example string.
      *
      * @return `basic`, `curl` or `invoke-webrequest`

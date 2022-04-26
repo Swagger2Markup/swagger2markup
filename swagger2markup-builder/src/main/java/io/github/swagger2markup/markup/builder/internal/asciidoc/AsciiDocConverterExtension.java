@@ -1,29 +1,29 @@
 package io.github.swagger2markup.markup.builder.internal.asciidoc;
 
-import org.pegdown.Extensions;
-import org.pegdown.PegDownProcessor;
-import org.pegdown.ast.RootNode;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.util.ast.Node;
+import com.vladsch.flexmark.util.data.MutableDataSet;
 
-import nl.jworks.markdown_to_asciidoc.Converter;
-import nl.jworks.markdown_to_asciidoc.ToAsciiDocSerializer;
+public class AsciiDocConverterExtension {
 
-public class AsciiDocConverterExtension extends Converter {
+    private static final Parser parser;
+    private static final HtmlRenderer renderer;
+
+    static {
+        MutableDataSet options = new MutableDataSet();
+        parser = Parser.builder(options).build();
+        renderer = HtmlRenderer.builder(options).build();
+    }
 
     /**
      * Converts markdown to asciidoc.
      *
      * @param markdown the markdown source to convert
-     * @param timeoutMills parsing timeout
      * @return asciidoc format
      */
     public static String convertMarkdownToAsciiDoc(String markdown, long timeoutMills) {
-        PegDownProcessor processor = new PegDownProcessor(Extensions.ALL, timeoutMills);
-        // insert blank line before fenced code block if necessary
-        if (markdown.contains("```")) {
-            markdown = markdown.replaceAll("(?m)(?<!\n\n)(\\s*)```(\\w*\n)((?:\\1[^\n]*\n)+)\\1```", "\n$1```$2$3$1```");
-        }
-        char[] markDown = markdown.toCharArray();
-        RootNode rootNode = processor.parseMarkdown(markDown);
-        return new ToAsciiDocSerializer(rootNode, markdown).toAsciiDoc();
+        Node document = parser.parse(markdown);
+        return renderer.render(document);
     }
 }
