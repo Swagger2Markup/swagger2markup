@@ -400,8 +400,7 @@ public class Swagger2MarkupConverter extends AbstractSchema2MarkupConverter<Swag
             if (config.getLineSeparator() != null) {
                 lineSeparator = LineSeparator.valueOf(config.getLineSeparator().name());
             }
-            return MarkupDocBuilders.documentBuilder(markupLanguage, lineSeparator,
-                    config.getAsciidocPegdownTimeoutMillis()).withAnchorPrefix(config.getAnchorPrefix());
+            return MarkupDocBuilders.documentBuilder(markupLanguage, lineSeparator).withAnchorPrefix(config.getAnchorPrefix());
         }
     }
 

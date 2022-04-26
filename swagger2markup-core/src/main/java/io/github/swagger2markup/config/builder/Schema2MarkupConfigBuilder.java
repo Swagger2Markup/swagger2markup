@@ -123,7 +123,6 @@ public abstract class Schema2MarkupConfigBuilder<T extends Schema2MarkupConfigBu
         Configuration swagger2markupConfiguration = schema2MarkupProperties.getConfiguration().subset(PROPERTIES_PREFIX);
         Configuration extensionsConfiguration = swagger2markupConfiguration.subset(EXTENSION_PREFIX);
         config.extensionsProperties = new Schema2MarkupProperties(extensionsConfiguration);
-        config.asciidocPegdownTimeoutMillis = schema2MarkupProperties.getRequiredInt(ASCIIDOC_PEGDOWN_TIMEOUT);
     }
 
     /**
@@ -691,7 +690,6 @@ public abstract class Schema2MarkupConfigBuilder<T extends Schema2MarkupConfigBu
         String separatedDefinitionsFolder;
         Character listDelimiter;
         boolean listDelimiterEnabled;
-        int asciidocPegdownTimeoutMillis;
 
         List<PageBreakLocations> pageBreakLocations;
 
@@ -892,11 +890,6 @@ public abstract class Schema2MarkupConfigBuilder<T extends Schema2MarkupConfigBu
         @Override
         public List<PageBreakLocations> getPageBreakLocations() {
             return pageBreakLocations;
-        }
-
-        @Override
-        public int getAsciidocPegdownTimeoutMillis() {
-            return asciidocPegdownTimeoutMillis;
         }
 
         @Override

@@ -8,9 +8,8 @@ dependencies {
     implementation implLibraries.commonsCodec
     implementation implLibraries.commonsLang3
     implementation implLibraries.commonsIO
-    implementation implLibraries.mark2Ascii
     implementation implLibraries.slf4j
-    implementation implLibraries.pegdown
+    implementation implLibraries.flexmarkJava
     testImplementation testLibraries.assertjDiff
     testImplementation testLibraries.junit
     testImplementation testLibraries.logback

@@ -60,26 +60,19 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
     protected static final int MAX_TITLE_LEVEL = 5;
     protected static final String NEW_LINES = "\\r\\n|\\r|\\n";
     protected static final String WHITESPACE = " ";
-    protected static final int ASCIIDOC_PEGDOWN_DEFUALT_MILLIS = 2000;
 
     protected StringBuilder documentBuilder = new StringBuilder();
     protected String newLine;
-    protected int asciidocPegdownTimeoutMillis;
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
     protected String anchorPrefix = null;
 
     public AbstractMarkupDocBuilder() {
-        this(System.getProperty("line.separator"), ASCIIDOC_PEGDOWN_DEFUALT_MILLIS);
+        this(System.getProperty("line.separator"));
     }
 
     public AbstractMarkupDocBuilder(String newLine) {
-        this(newLine, ASCIIDOC_PEGDOWN_DEFUALT_MILLIS);
-    }
-
-    public AbstractMarkupDocBuilder(String newLine, int asciidocPegdownTimeoutMillis) {
         this.newLine = newLine;
-        this.asciidocPegdownTimeoutMillis = asciidocPegdownTimeoutMillis;
     }
 
     protected abstract MarkupLanguage getMarkupLanguage();
@@ -420,7 +413,7 @@ public abstract class AbstractMarkupDocBuilder implements MarkupDocBuilder {
             return markupText;
         else {
             if (markupLanguage == MarkupLanguage.MARKDOWN && getMarkupLanguage() == MarkupLanguage.ASCIIDOC) {
-                return AsciiDocConverterExtension.convertMarkdownToAsciiDoc(markupText, asciidocPegdownTimeoutMillis) + newLine;
+                return AsciiDocConverterExtension.convertMarkdownToAsciiDoc(markupText) + newLine;
             } else {
                 return markupText;
             }
